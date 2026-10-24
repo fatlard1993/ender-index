@@ -2,10 +2,10 @@ import { mkdir, mkdtemp, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 
+import { readMods } from 'ender-launcher/metadata';
 import { scanJar } from 'ender-launcher/scan';
 
 import { releases, repository } from './github';
-import { readMods } from './metadata';
 import { updateRecord } from './record';
 import { buildSearch } from './search';
 
