@@ -95,3 +95,43 @@ describe('the response cache', () => {
 		}
 	});
 });
+
+describe('releases switched off', () => {
+	const answering = status => {
+		const original = globalThis.fetch;
+
+		globalThis.fetch = async () => new Response('{}', { status });
+
+		return () => (globalThis.fetch = original);
+	};
+
+	test('read as none on Codeberg, which answers 404', async () => {
+		const restore = answering(404);
+
+		try {
+			expect(await (await import('../src/codeberg')).releases('a/b')).toEqual([]);
+		} finally {
+			restore();
+		}
+	});
+
+	test('read as none on GitLab, which answers 403', async () => {
+		const restore = answering(403);
+
+		try {
+			expect(await (await import('../src/gitlab')).releases('a/b')).toEqual([]);
+		} finally {
+			restore();
+		}
+	});
+
+	test('but other failures still fail', async () => {
+		const restore = answering(500);
+
+		try {
+			await expect((await import('../src/codeberg')).releases('a/b')).rejects.toThrow('Codeberg 500');
+		} finally {
+			restore();
+		}
+	});
+});

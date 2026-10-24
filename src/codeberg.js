@@ -4,7 +4,8 @@ const API = 'https://codeberg.org/api/v1';
 const get = async path => {
 	const response = await fetch(`${API}${path}`, { headers: { accept: 'application/json' } });
 
-	if (!response.ok) throw new Error(`Codeberg ${response.status} for ${path}`);
+	if (!response.ok)
+		throw Object.assign(new Error(`Codeberg ${response.status} for ${path}`), { status: response.status });
 
 	return response.json();
 };
@@ -22,8 +23,19 @@ export const repository = async fullName => {
 	};
 };
 
+/** A repository with releases switched off answers 404 for them, which is a repository with no releases. */
+const releaseList = async fullName => {
+	try {
+		return await get(`/repos/${fullName}/releases?limit=30`);
+	} catch (error) {
+		if (error.status === 404) return [];
+
+		throw error;
+	}
+};
+
 export const releases = async fullName =>
-	(await get(`/repos/${fullName}/releases?limit=30`)).map(release => ({
+	(await releaseList(fullName)).map(release => ({
 		tag_name: release.tag_name,
 		published_at: release.published_at,
 		prerelease: release.prerelease,
