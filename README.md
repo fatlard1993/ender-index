@@ -2,14 +2,14 @@
 
 Minecraft mods found where their source lives, described by their own jars, and scanned every night.
 
-There is nothing to sign up for and nothing to describe twice. A repository is in the index because it looks like a mod and ships like one: loader metadata in its source tree, and jars attached to its GitHub releases. Everything else is read from what it already publishes.
+There is nothing to sign up for and nothing to describe twice. A repository is in the index because it looks like a mod and ships like one: loader metadata in its source tree, and jars attached to its releases on GitHub, Codeberg or GitLab. Everything else is read from what it already publishes.
 
 ## Getting in
 
 1. Keep your loader's metadata where your build expects it: `src/main/resources/fabric.mod.json`, `quilt.mod.json`, or `META-INF/mods.toml` / `META-INF/neoforge.mods.toml`.
-2. Attach the built jar to each GitHub release. If you publish with `mc-publish`, that is its `github-token` input.
+2. Attach the built jar to each release. On GitHub, if you publish with `mc-publish`, that is its `github-token` input. On GitLab, a release link whose URL ends in the jar's file name.
 
-Discovery searches for the metadata once a week. To be crawled sooner, add `owner/repo` to [`data/repos.txt`](data/repos.txt) in a pull request.
+Discovery searches GitHub for the metadata once a week. Codeberg and GitLab have no code search across repositories, so there discovery goes by topic: `minecraft-mod`, `fabric-mod`, `fabricmc`, `forge-mod`, `neoforge`, `neoforge-mod` or `quilt-mod`. To be crawled sooner, or without a topic, add a line to [`data/repos.txt`](data/repos.txt) in a pull request: `owner/repo` for GitHub, `codeberg:owner/repo`, or `gitlab:group/project`.
 
 ## What is recorded
 
@@ -30,7 +30,9 @@ The same scanner runs in the client when it updates a mod, so a finding here and
 ```
 data/repos.txt              what is crawled, one owner/repo per line
 data/known-bad.json         [{ "sha256", "reason" }]
-data/mods/<owner>/<repo>.json   a repository and its watched releases
+data/mods/<owner>/<repo>.json   a GitHub repository and its watched releases
+data/mods/codeberg.org/...      the same for Codeberg
+data/mods/gitlab.com/...        and for GitLab
 data/search.json            one summary per repository, for listing without fetching every record
 ```
 

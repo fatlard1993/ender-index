@@ -1,8 +1,13 @@
 module.exports = {
 	skipWords: [
+		'codeberg',
 		'ender',
+		'etag',
+		'fabricmc',
 		'forge',
+		'forgejo',
 		'gh',
+		'gitlab',
 		'gradle',
 		'hasher',
 		'jar',

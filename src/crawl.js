@@ -1,11 +1,13 @@
-import { mkdir, mkdtemp, readdir, rm } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 
 import { readMods } from 'ender-launcher/metadata';
 import { scanJar } from 'ender-launcher/scan';
 
-import { RateLimited, lastFetched, releases, repository, repositoryPath, saveCache } from './github';
+import * as codeberg from './codeberg';
+import * as github from './github';
+import * as gitlab from './gitlab';
 import { updateRecord } from './record';
 import { buildSearch } from './search';
 
@@ -31,7 +33,22 @@ export const readRepos = async () =>
 		.map(line => line.trim())
 		.filter(line => line !== '' && !line.startsWith('#'));
 
-export const recordPath = fullName => join(DATA, 'mods', `${fullName}.json`);
+const HOSTS = { github, codeberg, gitlab };
+
+/** Where each host's records live. A dotted directory cannot collide with a GitHub owner, whose names have no dots. */
+const DIRECTORIES = { github: '', codeberg: 'codeberg.org', gitlab: 'gitlab.com' };
+
+/** A line of repos.txt: `owner/repo` on GitHub, or `codeberg:owner/repo`, `gitlab:group/project`. */
+export const parseLine = line => {
+	const separator = line.indexOf(':');
+	const host = separator === -1 ? 'github' : line.slice(0, separator);
+
+	if (HOSTS[host] === undefined) throw new Error(`Unknown host "${host}" in "${line}"`);
+
+	return { host, name: separator === -1 ? line : line.slice(separator + 1) };
+};
+
+export const recordPath = ({ host, name }) => join(DATA, 'mods', DIRECTORIES[host], `${name}.json`);
 
 /** Download one asset, hash it on the way in, read its mods and scan it. */
 const inspector = (scratch, knownBad) => async asset => {
@@ -63,29 +80,32 @@ const inspector = (scratch, knownBad) => async asset => {
 	}
 };
 
-const crawlOne = async (fullName, { now, inspect }) => {
-	const path = recordPath(fullName);
-	const [repo, listed, record] = await Promise.all([repository(fullName), releases(fullName), readJson(path)]);
-	const result = await updateRecord({ record, repo, releases: listed, now, inspect });
+const crawlOne = async (line, { now, inspect }) => {
+	const { host, name } = parseLine(line);
+	const path = recordPath({ host, name });
+	const [repo, listed, record] = await Promise.all([
+		HOSTS[host].repository(name),
+		HOSTS[host].releases(name),
+		readJson(path),
+	]);
+	const result = await updateRecord({ record, repo, releases: listed, now, inspect, host });
 
 	if (result.record) await writeJson(path, result.record);
 
 	return result.events;
 };
 
-const recordFiles = async () => {
-	const owners = await readdir(join(DATA, 'mods')).catch(() => []);
-	const files = await Promise.all(
-		owners.map(async owner => (await readdir(join(DATA, 'mods', owner))).map(file => join(DATA, 'mods', owner, file))),
-	);
-
-	return files.flat().filter(file => file.endsWith('.json'));
-};
+const recordFiles = async () =>
+	[...new Bun.Glob('**/*.json').scanSync(join(DATA, 'mods'))].map(file => join(DATA, 'mods', file));
 
 export const crawl = async ({ only } = {}) => {
 	const now = new Date().toISOString();
 	const listed = only ?? (await readRepos());
-	const ages = new Map(await Promise.all(listed.map(async name => [name, await lastFetched(repositoryPath(name))])));
+	const ages = new Map(
+		await Promise.all(
+			listed.map(async line => [line, line.includes(':') ? 0 : await github.lastFetched(github.repositoryPath(line))]),
+		),
+	);
 	// Least recently fetched first, so a crawl cut short by the rate limit resumes where it stopped.
 	const repos = [...listed].sort((a, b) => ages.get(a) - ages.get(b));
 	const knownBad = new Map(
@@ -107,7 +127,7 @@ export const crawl = async ({ only } = {}) => {
 					console.log(`${event.type.padEnd(7)} ${event.repo} ${event.tag} ${event.asset}`);
 				}
 			} catch (error) {
-				if (error instanceof RateLimited) {
+				if (error instanceof github.RateLimited) {
 					stopped = `Stopped at the rate limit after ${index} of ${repos.length}; ${error.message}, and the rest are crawled first next time`;
 
 					break;
@@ -119,7 +139,7 @@ export const crawl = async ({ only } = {}) => {
 		}
 	} finally {
 		await rm(scratch, { recursive: true, force: true });
-		await saveCache();
+		await github.saveCache();
 	}
 
 	if (stopped) console.log(stopped);

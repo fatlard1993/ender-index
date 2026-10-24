@@ -10,9 +10,9 @@ export const WINDOW = 5;
 export const modAssets = release =>
 	(release.assets ?? []).filter(asset => asset.name.endsWith('.jar') && !NOT_A_MOD.test(asset.name));
 
-const about = repo => ({
+const about = (repo, host) => ({
 	repo: repo.full_name,
-	host: 'github',
+	host,
 	description: repo.description ?? undefined,
 	stars: repo.stargazers_count,
 	archived: repo.archived,
@@ -29,7 +29,7 @@ const about = repo => ({
  * same name: a re-upload. A re-upload with different bytes keeps the old hash in `replaced`, because
  * a release changed after people installed it is the thing most worth knowing about.
  */
-export const updateRecord = async ({ record, repo, releases, now, inspect }) => {
+export const updateRecord = async ({ record, repo, releases, now, inspect, host = 'github' }) => {
 	const events = [];
 	const known = new Map(structuredClone(record?.releases ?? []).map(release => [release.tag, release]));
 	const watched = releases.filter(release => !release.draft && modAssets(release).length > 0).slice(0, WINDOW);
@@ -105,7 +105,7 @@ export const updateRecord = async ({ record, repo, releases, now, inspect }) => 
 
 	return {
 		record: {
-			...about(repo),
+			...about(repo, host),
 			releases: [...known.values()].sort((a, b) => Date.parse(b.published) - Date.parse(a.published)),
 		},
 		events,

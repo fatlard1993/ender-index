@@ -1,7 +1,9 @@
 import { join } from 'node:path';
 
 import { DATA, readRepos } from './crawl';
+import * as codeberg from './codeberg';
 import { RateLimited, searchCode } from './github';
+import * as gitlab from './gitlab';
 
 /** Where each loader keeps its metadata in a source tree. Finding one is how a repository says it is a mod. */
 export const MANIFESTS = [
@@ -10,6 +12,8 @@ export const MANIFESTS = [
 	'filename:mods.toml path:META-INF',
 	'filename:neoforge.mods.toml path:META-INF',
 ];
+
+export const TOPICS = ['minecraft-mod', 'fabric-mod', 'fabricmc', 'forge-mod', 'neoforge', 'neoforge-mod', 'quilt-mod'];
 
 /** Code search answers at most 1000 results per query, so each query is asked once per file size band. */
 const SIZES = ['size:<500', 'size:500..999', 'size:1000..1499', 'size:1500..2499', 'size:>=2500'];
@@ -67,6 +71,19 @@ export const discover = async () => {
 		if (!(error instanceof RateLimited)) throw error;
 
 		console.log(`Stopped searching at the rate limit; ${error.message}. Keeping the ${found.size} found so far.`);
+	}
+
+	// Codeberg and GitLab offer no code search across repositories, so there a topic is the sign.
+	for (const [host, adapter] of Object.entries({ codeberg, gitlab })) {
+		for (const topic of TOPICS) {
+			try {
+				for (const name of await adapter.withTopic(topic)) found.add(`${host}:${name}`);
+			} catch (error) {
+				console.error(`${host} topic ${topic} :: ${error.message}`);
+			}
+		}
+
+		console.log(`${host} topics :: ${found.size} repositories so far`);
 	}
 
 	const existing = await readRepos();
