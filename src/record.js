@@ -46,7 +46,8 @@ export const updateRecord = async ({ record, repo, releases, now, inspect, host 
 		for (const asset of current) {
 			const existing = recorded.assets.find(candidate => candidate.name === asset.name);
 
-			if (existing?.id === asset.id && existing.inspection === INSPECTION) continue;
+			if (existing?.id === asset.id && existing.inspection === INSPECTION && existing.metadataError === undefined)
+				continue;
 
 			let inspected;
 

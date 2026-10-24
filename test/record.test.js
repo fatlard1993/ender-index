@@ -87,6 +87,19 @@ describe('a repository record', () => {
 		expect(second.record.releases[0].assets[0].inspection).toBe(INSPECTION);
 	});
 
+	test('an asset whose metadata could not be read is read again, since the reader may have learned how', async () => {
+		const first = await update(undefined, [release('1.0', [asset('mod.jar', 1)])], async () => ({
+			sha256: 'hash-1',
+			metadataError: 'JSON Parse error',
+		}));
+		const again = inspector();
+		const second = await update(first.record, [release('1.0', [asset('mod.jar', 1)])], again.inspect);
+
+		expect(again.seen).toEqual([1]);
+		expect(second.events).toEqual([]);
+		expect(second.record.releases[0].assets[0].metadataError).toBeUndefined();
+	});
+
 	test('a re-upload of the same bytes is not news', async () => {
 		const first = await update(undefined, [release('1.0', [asset('mod.jar', 1)])], inspector().inspect);
 		const second = await update(
