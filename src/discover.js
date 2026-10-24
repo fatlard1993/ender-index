@@ -22,6 +22,25 @@ const NOT_A_MOD_PATH = /(^|\/)(test|tests|fixtures?|examples?|samples?)\//i;
 export const reposFrom = items =>
 	items.filter(item => !NOT_A_MOD_PATH.test(item.path)).map(item => item.repository.full_name);
 
+/** Code search also limits requests per minute; a reset that close is waited out rather than ending the search. */
+const WAIT_AT_MOST = 2 * 60 * 1000;
+
+const searchWaiting = async (query, page) => {
+	for (;;) {
+		try {
+			return await searchCode(query, page);
+		} catch (error) {
+			const wait = error instanceof RateLimited ? error.resetAt - Date.now() + 1000 : Infinity;
+
+			if (wait > WAIT_AT_MOST) throw error;
+
+			console.log(`Waiting ${Math.ceil(wait / 1000)}s for the search rate limit`);
+
+			await Bun.sleep(Math.max(wait, 0));
+		}
+	}
+};
+
 export const discover = async () => {
 	const found = new Set();
 	const queries = MANIFESTS.flatMap(manifest => SIZES.map(size => `${manifest} ${size}`));
@@ -33,7 +52,7 @@ export const discover = async () => {
 	try {
 		for (const query of queries) {
 			for (let page = 1; page <= 10; ++page) {
-				const { items = [], total_count: total } = await searchCode(query, page);
+				const { items = [], total_count: total } = await searchWaiting(query, page);
 
 				for (const repo of reposFrom(items)) found.add(repo);
 

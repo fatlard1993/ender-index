@@ -1,6 +1,8 @@
 const unique = (items, key) => [...new Map(items.map(item => [key(item), item])).values()];
 
-const live = release => release.assets.filter(asset => asset.error === undefined && asset.gone === undefined);
+/** A jar counts when it was read, is still published, and declares a mod: an installer or a standalone tool beside the source does not. */
+const live = release =>
+	release.assets.filter(asset => asset.error === undefined && asset.gone === undefined && asset.mods?.length > 0);
 
 const usable = release => live(release).length > 0;
 

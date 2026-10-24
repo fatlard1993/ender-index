@@ -48,7 +48,13 @@ export const saveCache = async () => {
 /** When a cached response for this path was last fetched or confirmed, or 0 for never. */
 export const lastFetched = async path => (await cache())[path]?.fetched ?? 0;
 
-export class RateLimited extends Error {}
+export class RateLimited extends Error {
+	constructor(message, resetAt) {
+		super(message);
+
+		this.resetAt = resetAt;
+	}
+}
 
 /**
  * GET an API path. With `keep`, the response is cached as `keep` trims it and asked for again
@@ -75,12 +81,10 @@ export const request = async (path, keep) => {
 
 		if (limited && (response.status === 403 || response.status === 429)) {
 			const reset = response.headers.get('x-ratelimit-reset');
+			const retryAfter = response.headers.get('retry-after');
+			const resetAt = reset ? Number(reset) * 1000 : Date.now() + Number(retryAfter ?? 60) * 1000;
 
-			throw new RateLimited(
-				reset
-					? `the rate limit resets at ${new Date(Number(reset) * 1000).toISOString()}`
-					: 'GitHub asked to slow down',
-			);
+			throw new RateLimited(`the rate limit resets at ${new Date(resetAt).toISOString()}`, resetAt);
 		}
 
 		throw new Error(`GitHub ${response.status} for ${path}`);

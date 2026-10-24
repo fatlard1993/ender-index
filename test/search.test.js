@@ -67,6 +67,17 @@ describe('the search file', () => {
 		expect(entries.map(entry => `${entry.repo}@${entry.latest.tag}`)).toEqual(['b/mod@1.0']);
 	});
 
+	test('a repository whose jars declare no mod is not listed', () => {
+		const entries = buildSearch([
+			record('a/installer', [{ tag: '1.0', prerelease: false, assets: [asset({ mods: [] })] }]),
+			record('b/tool', [
+				{ tag: '1.0', prerelease: false, assets: [asset({ mods: undefined, metadataError: 'bad json' })] },
+			]),
+		]);
+
+		expect(entries).toEqual([]);
+	});
+
 	test('says when any release of a repository had an asset replaced', () => {
 		const [entry] = buildSearch([
 			record('a/mod', [{ tag: '1.0', prerelease: false, assets: [asset({ replaced: [{ id: 1, sha256: 'y' }] })] }]),
