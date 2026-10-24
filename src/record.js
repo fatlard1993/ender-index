@@ -106,7 +106,6 @@ export const updateRecord = async ({ record, repo, releases, now, inspect }) => 
 	return {
 		record: {
 			...about(repo),
-			checked: now,
 			releases: [...known.values()].sort((a, b) => Date.parse(b.published) - Date.parse(a.published)),
 		},
 		events,

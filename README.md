@@ -46,7 +46,6 @@ A record:
 	"license": "MIT",
 	"created": "...",
 	"pushed": "...",
-	"checked": "...",
 	"releases": [
 		{
 			"tag": "1.0.4",
