@@ -25,9 +25,10 @@ const about = (repo, host) => ({
  * Bring a repository's record up to date with what its releases now carry.
  *
  * `inspect` downloads one asset and returns its sha256, the mods it declares and its scan. An asset
- * is inspected once, when first seen, and again only when GitHub reports a different asset under the
- * same name: a re-upload. A re-upload with different bytes keeps the old hash in `replaced`, because
- * a release changed after people installed it is the thing most worth knowing about.
+ * is inspected once, when first seen, and again only when the host reports a different asset under the
+ * same name, or the same asset leading somewhere else: a GitLab link keeps its id when its URL is edited.
+ * Different bytes from either keep the old hash in `replaced`, because a release changed after people
+ * installed it is the thing most worth knowing about.
  */
 export const updateRecord = async ({ record, repo, releases, now, inspect, host = 'github' }) => {
 	const events = [];
@@ -46,7 +47,12 @@ export const updateRecord = async ({ record, repo, releases, now, inspect, host 
 		for (const asset of current) {
 			const existing = recorded.assets.find(candidate => candidate.name === asset.name);
 
-			if (existing?.id === asset.id && existing.inspection === INSPECTION && existing.metadataError === undefined)
+			if (
+				existing?.id === asset.id &&
+				existing.url === asset.browser_download_url &&
+				existing.inspection === INSPECTION &&
+				existing.metadataError === undefined
+			)
 				continue;
 
 			let inspected;
@@ -78,7 +84,7 @@ export const updateRecord = async ({ record, repo, releases, now, inspect, host 
 				continue;
 			}
 
-			const changed = existing.sha256 !== entry.sha256;
+			const changed = existing.sha256 !== undefined && existing.sha256 !== entry.sha256;
 
 			entry.replaced = [
 				...(existing.replaced ?? []),

@@ -140,6 +140,32 @@ describe('a repository record', () => {
 		expect(again.seen).toEqual([]);
 	});
 
+	test('a link edited to lead elsewhere under the same id is read again, and new bytes are a swap', async () => {
+		const first = await update(undefined, [release('1.0', [asset('mod.jar', 1)])], inspector().inspect);
+		const edited = { ...asset('mod.jar', 1), browser_download_url: 'https://example.invalid/elsewhere/mod.jar' };
+		const second = await update(first.record, [release('1.0', [edited])], inspector({ 1: 'hash-other' }).inspect);
+		const [entry] = second.record.releases[0].assets;
+
+		expect(second.events.map(event => event.type)).toEqual(['swapped']);
+		expect(entry.url).toBe('https://example.invalid/elsewhere/mod.jar');
+		expect(entry.replaced).toEqual([{ id: 1, sha256: 'hash-1', until: '2026-10-23T00:00:00Z' }]);
+	});
+
+	test('an asset that failed and now reads replaces nothing, since nothing could install it', async () => {
+		const failing = async () => {
+			throw new Error('Not a zip archive');
+		};
+		const first = await update(undefined, [release('1.0', [asset('mod.jar', 1)])], failing);
+		const fixed = { ...asset('mod.jar', 1), browser_download_url: 'https://example.invalid/raw/mod.jar' };
+		const second = await update(first.record, [release('1.0', [fixed])], inspector().inspect);
+		const [entry] = second.record.releases[0].assets;
+
+		expect(second.events).toEqual([]);
+		expect(entry.sha256).toBe('hash-1');
+		expect(entry.error).toBeUndefined();
+		expect(entry.replaced).toBeUndefined();
+	});
+
 	test(`only the newest ${WINDOW} releases are watched, and older records are kept`, async () => {
 		const many = Array.from({ length: WINDOW + 2 }, (_, index) =>
 			release(`1.${index}`, [asset('mod.jar', 100 + index)], 20 - index),
