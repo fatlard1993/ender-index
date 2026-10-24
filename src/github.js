@@ -8,6 +8,7 @@ export const CACHE = join(import.meta.dir, '..', '.cache', 'responses.json');
 
 let cachedToken;
 let responses;
+let loading;
 
 /** Actions provides GITHUB_TOKEN; on a workstation the `gh` CLI has one. Code search refuses to run without either. */
 const token = async () => {
@@ -28,14 +29,17 @@ const token = async () => {
 	return cachedToken;
 };
 
-const cache = async () => {
-	if (responses === undefined) {
+/** Loaded once however many callers ask at the same moment; each parse of a large cache costs its size again. */
+const cache = () => {
+	loading ??= (async () => {
 		const file = Bun.file(CACHE);
 
 		responses = (await file.exists()) ? await file.json() : {};
-	}
 
-	return responses;
+		return responses;
+	})();
+
+	return loading;
 };
 
 export const saveCache = async () => {

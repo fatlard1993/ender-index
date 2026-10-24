@@ -5,7 +5,8 @@ const API = 'https://gitlab.com/api/v4';
 const get = async path => {
 	const response = await fetch(`${API}${path}`, { headers: { accept: 'application/json' } });
 
-	if (!response.ok) throw new Error(`GitLab ${response.status} for ${path}`);
+	if (!response.ok)
+		throw Object.assign(new Error(`GitLab ${response.status} for ${path}`), { status: response.status });
 
 	return response.json();
 };
@@ -36,8 +37,19 @@ export const assetOf = link => {
 	return { id: link.id, name: decodeURIComponent(basename(new URL(url).pathname)), browser_download_url: url };
 };
 
+/** A project with releases switched off answers 403 for them, which is a project with no releases. */
+const releaseList = async fullName => {
+	try {
+		return await get(`${project(fullName)}/releases?per_page=30`);
+	} catch (error) {
+		if (error.status === 403) return [];
+
+		throw error;
+	}
+};
+
 export const releases = async fullName =>
-	(await get(`${project(fullName)}/releases?per_page=30`)).map(release => ({
+	(await releaseList(fullName)).map(release => ({
 		tag_name: release.tag_name,
 		published_at: release.released_at,
 		prerelease: Boolean(release.upcoming_release),

@@ -70,3 +70,28 @@ describe('downloads', () => {
 		}
 	});
 });
+
+describe('the response cache', () => {
+	test('is read once however many ask for it at once', async () => {
+		const { CACHE, lastFetched } = await import('../src/github');
+		const original = Bun.file;
+		let reads = 0;
+
+		await Bun.write(CACHE, JSON.stringify({ '/repos/a/b': { etag: 'x', fetched: 5, body: {} } }));
+
+		Bun.file = (...args) => {
+			if (args[0] === CACHE) ++reads;
+
+			return original(...args);
+		};
+
+		try {
+			const ages = await Promise.all(Array.from({ length: 50 }, () => lastFetched('/repos/a/b')));
+
+			expect(ages.every(age => age === 5)).toBe(true);
+			expect(reads).toBe(1);
+		} finally {
+			Bun.file = original;
+		}
+	});
+});
