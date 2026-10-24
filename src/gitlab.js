@@ -29,10 +29,12 @@ export const repository = async fullName => {
 
 /**
  * GitLab release assets are links, named for display rather than by file, and they may point
- * anywhere. The file name a crawl filters on is the last segment of where the link leads.
+ * anywhere. The file name a crawl filters on is the last segment of where the link leads. A link to a
+ * CI job's artifact under `artifacts/file/` leads to GitLab's page about the file; `artifacts/raw/`
+ * is the file.
  */
 export const assetOf = link => {
-	const url = link.direct_asset_url ?? link.url;
+	const url = (link.direct_asset_url ?? link.url).replace(/(\/-\/jobs\/\d+\/artifacts)\/file\//, '$1/raw/');
 
 	return { id: link.id, name: decodeURIComponent(basename(new URL(url).pathname)), browser_download_url: url };
 };

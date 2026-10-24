@@ -37,6 +37,13 @@ describe('repositories on other hosts', () => {
 		});
 		expect(assetOf({ id: 2, name: 'Modrinth', url: 'https://modrinth.com/mod/x' }).name).toBe('x');
 	});
+
+	test("a link to a CI job's artifact is read from the file, not GitLab's page about it", () => {
+		expect(
+			assetOf({ id: 3, url: 'https://gitlab.com/g/p/-/jobs/42/artifacts/file/build/libs/mod-1.0.jar' })
+				.browser_download_url,
+		).toBe('https://gitlab.com/g/p/-/jobs/42/artifacts/raw/build/libs/mod-1.0.jar');
+	});
 });
 
 describe('downloads', () => {
