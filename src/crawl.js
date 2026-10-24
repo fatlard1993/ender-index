@@ -114,6 +114,8 @@ export const crawl = async ({ only } = {}) => {
 	const scratch = await mkdtemp(join(tmpdir(), 'ender-index-'));
 	const inspect = inspector(scratch, knownBad);
 	const failures = [];
+	// A crawl the runner kills commits nothing, so it stops itself while there is time to commit.
+	const deadline = Date.now() + Number(process.env.CRAWL_MINUTES ?? Infinity) * 60_000;
 	let stopped;
 
 	console.log(
@@ -122,6 +124,12 @@ export const crawl = async ({ only } = {}) => {
 
 	try {
 		for (const [index, fullName] of repos.entries()) {
+			if (Date.now() > deadline) {
+				stopped = `Stopped at the time budget after ${index} of ${repos.length}; the rest are crawled first next time`;
+
+				break;
+			}
+
 			try {
 				for (const event of await crawlOne(fullName, { now, inspect })) {
 					console.log(`${event.type.padEnd(7)} ${event.repo} ${event.tag} ${event.asset}`);
