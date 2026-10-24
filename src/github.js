@@ -1,6 +1,13 @@
+import { mkdir } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+
 const API = 'https://api.github.com';
 
+/** Responses kept between crawls, so an unchanged one is answered 304, which GitHub does not count against the rate limit. */
+export const CACHE = join(import.meta.dir, '..', '.cache', 'responses.json');
+
 let cachedToken;
+let responses;
 
 /** Actions provides GITHUB_TOKEN; on a workstation the `gh` CLI has one. Code search refuses to run without either. */
 const token = async () => {
@@ -21,25 +28,105 @@ const token = async () => {
 	return cachedToken;
 };
 
-export const request = async path => {
-	const response = await fetch(`${API}${path}`, {
-		headers: { accept: 'application/vnd.github+json', authorization: `Bearer ${await token()}` },
-	});
+const cache = async () => {
+	if (responses === undefined) {
+		const file = Bun.file(CACHE);
 
-	if (!response.ok) {
-		const reset = response.headers.get('x-ratelimit-reset');
-		const limited = response.headers.get('x-ratelimit-remaining') === '0';
-		const when = limited && reset ? `; the limit resets at ${new Date(Number(reset) * 1000).toISOString()}` : '';
-
-		throw new Error(`GitHub ${response.status} for ${path}${when}`);
+		responses = (await file.exists()) ? await file.json() : {};
 	}
 
-	return response.json();
+	return responses;
 };
 
-export const repository = fullName => request(`/repos/${fullName}`);
+export const saveCache = async () => {
+	if (responses === undefined) return;
 
-export const releases = fullName => request(`/repos/${fullName}/releases?per_page=30`);
+	await mkdir(dirname(CACHE), { recursive: true });
+	await Bun.write(CACHE, JSON.stringify(responses));
+};
+
+/** When a cached response for this path was last fetched or confirmed, or 0 for never. */
+export const lastFetched = async path => (await cache())[path]?.fetched ?? 0;
+
+export class RateLimited extends Error {}
+
+/**
+ * GET an API path. With `keep`, the response is cached as `keep` trims it and asked for again
+ * conditionally, and an unchanged answer comes from the cache.
+ */
+export const request = async (path, keep) => {
+	const cached = keep && (await cache())[path];
+	const response = await fetch(`${API}${path}`, {
+		headers: {
+			accept: 'application/vnd.github+json',
+			authorization: `Bearer ${await token()}`,
+			...(cached ? { 'if-none-match': cached.etag } : {}),
+		},
+	});
+
+	if (response.status === 304 && cached) {
+		cached.fetched = Date.now();
+
+		return cached.body;
+	}
+
+	if (!response.ok) {
+		const limited = response.headers.get('x-ratelimit-remaining') === '0' || response.headers.has('retry-after');
+
+		if (limited && (response.status === 403 || response.status === 429)) {
+			const reset = response.headers.get('x-ratelimit-reset');
+
+			throw new RateLimited(
+				reset
+					? `the rate limit resets at ${new Date(Number(reset) * 1000).toISOString()}`
+					: 'GitHub asked to slow down',
+			);
+		}
+
+		throw new Error(`GitHub ${response.status} for ${path}`);
+	}
+
+	const body = await response.json();
+
+	if (!keep) return body;
+
+	const kept = keep(body);
+	const etag = response.headers.get('etag');
+
+	if (etag) (await cache())[path] = { etag, fetched: Date.now(), body: kept };
+
+	return kept;
+};
+
+const repositoryFields = repo => ({
+	full_name: repo.full_name,
+	description: repo.description,
+	stargazers_count: repo.stargazers_count,
+	archived: repo.archived,
+	license: repo.license && { spdx_id: repo.license.spdx_id },
+	created_at: repo.created_at,
+	pushed_at: repo.pushed_at,
+});
+
+const releaseFields = list =>
+	list.map(release => ({
+		tag_name: release.tag_name,
+		published_at: release.published_at,
+		prerelease: release.prerelease,
+		draft: release.draft,
+		assets: (release.assets ?? []).map(({ id, name, size, browser_download_url }) => ({
+			id,
+			name,
+			size,
+			browser_download_url,
+		})),
+	}));
+
+export const repositoryPath = fullName => `/repos/${fullName}`;
+
+export const repository = fullName => request(repositoryPath(fullName), repositoryFields);
+
+export const releases = fullName => request(`/repos/${fullName}/releases?per_page=30`, releaseFields);
 
 export const searchCode = (query, page = 1) =>
 	request(`/search/code?${new URLSearchParams({ q: query, per_page: '100', page: String(page) })}`);

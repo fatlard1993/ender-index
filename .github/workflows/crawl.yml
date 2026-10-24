@@ -31,6 +31,11 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install
         working-directory: ender-index
+      - uses: actions/cache/restore@v4
+        with:
+          path: ender-index/.cache
+          key: crawl-${{ github.run_id }}
+          restore-keys: crawl-
       - name: discover
         if: inputs.discover || github.event.schedule == '17 3 * * 0'
         run: bun run discover
@@ -52,6 +57,11 @@ jobs:
           git add data
           git diff --cached --quiet || git commit -m "Crawl $(date -u +%F)"
           git push
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: ender-index/.cache
+          key: crawl-${{ github.run_id }}
       - name: report a failed crawl
         if: steps.crawl.outcome == 'failure'
         run: exit 1

@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { readMods } from 'ender-launcher/metadata';
 import { scanJar } from 'ender-launcher/scan';
 
-import { releases, repository } from './github';
+import { RateLimited, lastFetched, releases, repository, repositoryPath, saveCache } from './github';
 import { updateRecord } from './record';
 import { buildSearch } from './search';
 
@@ -84,32 +84,45 @@ const recordFiles = async () => {
 
 export const crawl = async ({ only } = {}) => {
 	const now = new Date().toISOString();
-	const repos = only ?? (await readRepos());
+	const listed = only ?? (await readRepos());
+	const ages = new Map(await Promise.all(listed.map(async name => [name, await lastFetched(repositoryPath(name))])));
+	// Least recently fetched first, so a crawl cut short by the rate limit resumes where it stopped.
+	const repos = [...listed].sort((a, b) => ages.get(a) - ages.get(b));
 	const knownBad = new Map(
 		(await readJson(join(DATA, 'known-bad.json'), [])).map(entry => [entry.sha256, entry.reason]),
 	);
 	const scratch = await mkdtemp(join(tmpdir(), 'ender-index-'));
 	const inspect = inspector(scratch, knownBad);
 	const failures = [];
+	let stopped;
 
 	console.log(
 		`Crawling ${repos.length} repositories; each new release jar is downloaded and scanned, so this takes a while`,
 	);
 
 	try {
-		for (const fullName of repos) {
+		for (const [index, fullName] of repos.entries()) {
 			try {
 				for (const event of await crawlOne(fullName, { now, inspect })) {
 					console.log(`${event.type.padEnd(7)} ${event.repo} ${event.tag} ${event.asset}`);
 				}
 			} catch (error) {
+				if (error instanceof RateLimited) {
+					stopped = `Stopped at the rate limit after ${index} of ${repos.length}; ${error.message}, and the rest are crawled first next time`;
+
+					break;
+				}
+
 				failures.push(fullName);
 				console.error(`failed  ${fullName} :: ${error.message}`);
 			}
 		}
 	} finally {
 		await rm(scratch, { recursive: true, force: true });
+		await saveCache();
 	}
+
+	if (stopped) console.log(stopped);
 
 	const records = await Promise.all((await recordFiles()).map(file => Bun.file(file).json()));
 

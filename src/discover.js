@@ -1,7 +1,7 @@
 import { join } from 'node:path';
 
 import { DATA, readRepos } from './crawl';
-import { searchCode } from './github';
+import { RateLimited, searchCode } from './github';
 
 /** Where each loader keeps its metadata in a source tree. Finding one is how a repository says it is a mod. */
 export const MANIFESTS = [
@@ -30,18 +30,24 @@ export const discover = async () => {
 		`Searching ${queries.length} queries at ten requests a minute; this takes up to ${Math.ceil((queries.length * 10 * PAUSE) / 60_000)} minutes`,
 	);
 
-	for (const query of queries) {
-		for (let page = 1; page <= 10; ++page) {
-			const { items = [], total_count: total } = await searchCode(query, page);
+	try {
+		for (const query of queries) {
+			for (let page = 1; page <= 10; ++page) {
+				const { items = [], total_count: total } = await searchCode(query, page);
 
-			for (const repo of reposFrom(items)) found.add(repo);
+				for (const repo of reposFrom(items)) found.add(repo);
 
-			await Bun.sleep(PAUSE);
+				await Bun.sleep(PAUSE);
 
-			if (page * 100 >= Math.min(total, 1000)) break;
+				if (page * 100 >= Math.min(total, 1000)) break;
+			}
+
+			console.log(`${query} :: ${found.size} repositories so far`);
 		}
+	} catch (error) {
+		if (!(error instanceof RateLimited)) throw error;
 
-		console.log(`${query} :: ${found.size} repositories so far`);
+		console.log(`Stopped searching at the rate limit; ${error.message}. Keeping the ${found.size} found so far.`);
 	}
 
 	const existing = await readRepos();
