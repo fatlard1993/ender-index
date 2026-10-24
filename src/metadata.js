@@ -1,4 +1,4 @@
-import { listEntries, readEntry } from 'ender-launcher/archive';
+import { listEntries, readEntry, zipEntries } from 'ender-launcher/archive';
 
 const text = async (jar, name) => (await readEntry(jar, name))?.toString('utf8');
 
@@ -9,7 +9,7 @@ const manifestValue = (manifest, key) => {
 	return unwrapped.match(new RegExp(`^${key}: *(.*)$`, 'm'))?.[1]?.trim();
 };
 
-const fabric = (json, loader = 'fabric') => ({
+const fabric = (json, loader = 'fabric', bundled = []) => ({
 	loader,
 	id: json.id,
 	version: json.version,
@@ -18,9 +18,10 @@ const fabric = (json, loader = 'fabric') => ({
 	minecraft: [json.depends?.minecraft].flat().filter(Boolean).join(' || ') || undefined,
 	environment: json.environment ?? '*',
 	depends: Object.keys(json.depends ?? {}),
+	provides: [...(json.provides ?? []), ...bundled],
 });
 
-const quilt = json => {
+const quilt = (json, bundled = []) => {
 	const loader = json.quilt_loader ?? {};
 	const depends = (loader.depends ?? []).map(dependency =>
 		typeof dependency === 'string' ? { id: dependency } : dependency,
@@ -37,7 +38,34 @@ const quilt = json => {
 			undefined,
 		environment: json.minecraft?.environment ?? '*',
 		depends: depends.map(dependency => dependency.id),
+		provides: [...(loader.provides ?? []).map(provided => provided.id ?? provided), ...bundled],
 	};
+};
+
+const NESTED_LIMIT = 64 * 1024 * 1024;
+
+/**
+ * The mod ids of the jars Fabric and Quilt load from inside this one. Fabric API is one release jar
+ * holding dozens of modules, and other mods depend on those modules by their own ids.
+ */
+const bundledIds = async (jar, entries) => {
+	const ids = [];
+
+	for (const name of entries) {
+		if (!name.startsWith('META-INF/jars/') || !name.endsWith('.jar')) continue;
+
+		try {
+			for (const entry of zipEntries(await readEntry(jar, name))) {
+				if (entry.name === 'fabric.mod.json') ids.push(JSON.parse(entry.read(NESTED_LIMIT).toString('utf8')).id);
+				if (entry.name === 'quilt.mod.json')
+					ids.push(JSON.parse(entry.read(NESTED_LIMIT).toString('utf8')).quilt_loader?.id);
+			}
+		} catch {
+			// A nested jar that cannot be read provides nothing that can be named; the scan reports it as unreadable.
+		}
+	}
+
+	return ids.filter(Boolean);
 };
 
 /**
@@ -77,10 +105,12 @@ const toml = (source, loader, manifest) => {
 export const readMods = async jar => {
 	const entries = new Set(await listEntries(jar));
 	const manifest = entries.has('META-INF/MANIFEST.MF') ? await text(jar, 'META-INF/MANIFEST.MF') : undefined;
+	const bundled = await bundledIds(jar, entries);
 	const mods = [];
 
-	if (entries.has('fabric.mod.json')) mods.push(fabric(JSON.parse(await text(jar, 'fabric.mod.json'))));
-	if (entries.has('quilt.mod.json')) mods.push(quilt(JSON.parse(await text(jar, 'quilt.mod.json'))));
+	if (entries.has('fabric.mod.json'))
+		mods.push(fabric(JSON.parse(await text(jar, 'fabric.mod.json')), 'fabric', bundled));
+	if (entries.has('quilt.mod.json')) mods.push(quilt(JSON.parse(await text(jar, 'quilt.mod.json')), bundled));
 	if (entries.has('META-INF/neoforge.mods.toml'))
 		mods.push(...toml(await text(jar, 'META-INF/neoforge.mods.toml'), 'neoforge', manifest));
 	if (entries.has('META-INF/mods.toml')) mods.push(...toml(await text(jar, 'META-INF/mods.toml'), 'forge', manifest));

@@ -1,6 +1,9 @@
 /** Gradle publishes these beside the real artifact; none of them is a mod. */
 const NOT_A_MOD = /-(sources|javadoc|dev|api|slim|shadow)\.jar$/i;
 
+/** Raised when what an inspection records changes, so assets already recorded are read again. */
+export const INSPECTION = 2;
+
 /** Releases looked at per crawl, newest first. Older ones stay recorded but are no longer watched. */
 export const WINDOW = 5;
 
@@ -43,7 +46,7 @@ export const updateRecord = async ({ record, repo, releases, now, inspect }) => 
 		for (const asset of current) {
 			const existing = recorded.assets.find(candidate => candidate.name === asset.name);
 
-			if (existing?.id === asset.id) continue;
+			if (existing?.id === asset.id && existing.inspection === INSPECTION) continue;
 
 			let inspected;
 
@@ -53,7 +56,14 @@ export const updateRecord = async ({ record, repo, releases, now, inspect }) => 
 				inspected = { error: error.message };
 			}
 
-			const entry = { id: asset.id, name: asset.name, url: asset.browser_download_url, size: asset.size, ...inspected };
+			const entry = {
+				id: asset.id,
+				name: asset.name,
+				url: asset.browser_download_url,
+				size: asset.size,
+				inspection: INSPECTION,
+				...inspected,
+			};
 
 			if (existing === undefined) {
 				recorded.assets.push(entry);

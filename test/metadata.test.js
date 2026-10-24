@@ -53,8 +53,22 @@ describe('mods declared in a built jar', () => {
 				minecraft: '1.21.1 || 1.21.2',
 				environment: 'client',
 				depends: ['fabricloader', 'minecraft'],
+				provides: [],
 			},
 		]);
+	});
+
+	// Fabric API ships its modules as nested jars, and mods depend on the modules by name.
+	test('a fabric jar provides the mods nested inside it, and what it declares it provides', async () => {
+		const module = await jar({ 'fabric.mod.json': JSON.stringify({ id: 'fabric-screen-api-v1', version: '1' }) });
+		const path = await jar({
+			'fabric.mod.json': JSON.stringify({ id: 'fabric-api', version: '1', provides: ['fabric'] }),
+			'META-INF/jars/fabric-screen-api-v1.jar': await Bun.file(module).bytes(),
+			'META-INF/jars/broken.jar': 'not a jar',
+		});
+		const [mod] = await readMods(path);
+
+		expect(mod.provides).toEqual(['fabric', 'fabric-screen-api-v1']);
 	});
 
 	test('quilt', async () => {

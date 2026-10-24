@@ -27,7 +27,26 @@ describe('the search file', () => {
 			{ loader: 'fabric', id: 'mod', name: 'Mod', minecraft: '>=1.21', environment: '*' },
 		]);
 		expect(entry.latest.capabilities).toEqual(['network']);
+		expect(entry.latest.provides).toEqual([]);
 		expect(entry.replaced).toBe(false);
+	});
+
+	test('lists every loader and game range any watched release targets', () => {
+		const [entry] = buildSearch([
+			record('a/mod', [
+				{ tag: '2.0', prerelease: false, assets: [asset()] },
+				{
+					tag: '1.0',
+					prerelease: false,
+					assets: [asset({ mods: [{ loader: 'neoforge', id: 'mod', minecraft: '[1.21,1.22)' }] })],
+				},
+			]),
+		]);
+
+		expect(entry.targets).toEqual([
+			{ loader: 'fabric', minecraft: '>=1.21' },
+			{ loader: 'neoforge', minecraft: '[1.21,1.22)' },
+		]);
 	});
 
 	test('falls back to a prerelease when that is all there is', () => {

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { WINDOW, updateRecord } from '../src/record';
+import { INSPECTION, WINDOW, updateRecord } from '../src/record';
 
 const repo = { full_name: 'a/mod', stargazers_count: 3, archived: false, license: { spdx_id: 'MIT' } };
 
@@ -72,6 +72,19 @@ describe('a repository record', () => {
 		expect(second.events.map(event => event.type)).toEqual(['swapped']);
 		expect(entry.sha256).toBe('hash-2');
 		expect(entry.replaced).toEqual([{ id: 1, sha256: 'hash-1', until: '2026-10-23T00:00:00Z' }]);
+	});
+
+	test('an asset recorded by an older inspection is read again, without calling it a swap', async () => {
+		const first = await update(undefined, [release('1.0', [asset('mod.jar', 1)])], inspector().inspect);
+
+		first.record.releases[0].assets[0].inspection = INSPECTION - 1;
+
+		const again = inspector();
+		const second = await update(first.record, [release('1.0', [asset('mod.jar', 1)])], again.inspect);
+
+		expect(again.seen).toEqual([1]);
+		expect(second.events).toEqual([]);
+		expect(second.record.releases[0].assets[0].inspection).toBe(INSPECTION);
 	});
 
 	test('a re-upload of the same bytes is not news', async () => {
