@@ -166,6 +166,25 @@ describe('a repository record', () => {
 		expect(entry.replaced).toBeUndefined();
 	});
 
+	test('links to files of one name are recorded apart, and none is taken for a swap of another', async () => {
+		const links = [
+			{ ...asset('mod.jar', 1), browser_download_url: 'https://example.invalid/1.7/mod.jar' },
+			{ ...asset('mod.jar', 2), browser_download_url: 'https://example.invalid/1.8/mod.jar' },
+		];
+		const first = await update(undefined, [release('1.0', links)], inspector().inspect);
+		const again = inspector();
+		const second = await update(first.record, [release('1.0', links)], again.inspect);
+
+		expect(first.record.releases[0].assets.map(entry => entry.sha256)).toEqual(['hash-1', 'hash-2']);
+		expect(again.seen).toEqual([]);
+		expect(second.events).toEqual([]);
+
+		const third = await update(second.record, [release('1.0', [links[1]])], inspector().inspect);
+
+		expect(third.events.map(event => event.type)).toEqual(['gone']);
+		expect(third.record.releases[0].assets.find(entry => entry.id === 1).gone).toBe('2026-10-23T00:00:00Z');
+	});
+
 	test(`only the newest ${WINDOW} releases are watched, and older records are kept`, async () => {
 		const many = Array.from({ length: WINDOW + 2 }, (_, index) =>
 			release(`1.${index}`, [asset('mod.jar', 100 + index)], 20 - index),

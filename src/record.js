@@ -43,9 +43,14 @@ export const updateRecord = async ({ record, repo, releases, now, inspect, host 
 			assets: [],
 		};
 		const current = modAssets(release);
+		const currentIds = new Set(current.map(asset => asset.id));
 
 		for (const asset of current) {
-			const existing = recorded.assets.find(candidate => candidate.name === asset.name);
+			// A GitHub re-upload keeps the name under a new id. GitLab allows several links to files of one
+			// name, so a name alone is matched only to an asset that has left the release.
+			const existing =
+				recorded.assets.find(candidate => candidate.id === asset.id) ??
+				recorded.assets.find(candidate => candidate.name === asset.name && !currentIds.has(candidate.id));
 
 			if (
 				existing?.id === asset.id &&
@@ -99,7 +104,7 @@ export const updateRecord = async ({ record, repo, releases, now, inspect, host 
 		}
 
 		for (const asset of recorded.assets) {
-			if (asset.gone === undefined && !current.some(candidate => candidate.name === asset.name)) {
+			if (asset.gone === undefined && !currentIds.has(asset.id)) {
 				asset.gone = now;
 				events.push({ type: 'gone', repo: repo.full_name, tag: release.tag_name, asset: asset.name });
 			}
