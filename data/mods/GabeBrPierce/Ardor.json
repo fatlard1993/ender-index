@@ -1,0 +1,169 @@
+{
+	"repo": "GabeBrPierce/Ardor",
+	"host": "github",
+	"description": "Voice-driven AI Minecraft companion mod (Fabric): push-to-talk -> STT -> LLM -> TTS, with an in-house action IR, A* pathfinder, and Baritone integration.",
+	"stars": 0,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-09-12T23:27:35Z",
+	"pushed": "2026-09-26T17:10:05Z",
+	"releases": [
+		{
+			"tag": "v1.0.0",
+			"published": "2026-09-12T23:29:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 560134380,
+					"name": "ardor-1.0.0.jar",
+					"url": "https://github.com/GabeBrPierce/Ardor/releases/download/v1.0.0/ardor-1.0.0.jar",
+					"size": 469668,
+					"inspection": 2,
+					"sha256": "ac18655427d1a2fe827a4880905ad383f02d5dec8863c24a8ec2cbd4a4c41383",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "ardor",
+							"version": "1.0.0",
+							"name": "Ardor",
+							"description": "A voice-driven AI Minecraft companion: push-to-talk -> STT -> LLM -> TTS, with an in-house action layer and pathfinder.",
+							"minecraft": "~26.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"cloth-config",
+								"modmenu"
+							],
+							"provides": []
+						}
+					],
+					"scan": {
+						"classes": 166,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/ardor/llm/ChatCompletionClient.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/ardor/llm/LlmServerManager.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							},
+							"exec": {
+								"com/ardor/stt/WhisperTranscriber.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/ardor/tts/PiperSpeaker.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/ardor/agent/AgentOps.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/ardor/llm/LlmServerManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"127.0.0.1": [
+								"com/ardor/config/ArdorConfig.class",
+								"com/ardor/client/ArdorSettingsScreen.class",
+								"com/ardor/client/TaskPlannerScreen.class"
+							],
+							"api.groq.com": [
+								"com/ardor/client/ChatListener.class",
+								"com/ardor/voice/VoicePipeline.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 560134379,
+					"name": "baritone-api-fabric-1.18.0.jar",
+					"url": "https://github.com/GabeBrPierce/Ardor/releases/download/v1.0.0/baritone-api-fabric-1.18.0.jar",
+					"size": 4820809,
+					"inspection": 2,
+					"sha256": "beec850e73591ab1dc81cb359d1d224ef3230a35d21dc6e72f8e8d287e7b79d2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baritone",
+							"version": "1.18.0",
+							"name": "Baritone",
+							"description": "Google Maps for Blockgame",
+							"minecraft": "26.1.*",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft"
+							],
+							"provides": [
+								"dev_babbaj_nether-pathfinder"
+							]
+						}
+					],
+					"scan": {
+						"classes": 520,
+						"jars": [
+							"META-INF/jars/nether-pathfinder-1.6.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/nether-pathfinder-1.6.jar!dev/babbaj/pathfinder/NetherPathfinder.class": [
+									"java/lang/System.load"
+								]
+							},
+							"unsafe": {
+								"META-INF/jars/nether-pathfinder-1.6.jar!dev/babbaj/pathfinder/Octree.class": [
+									"sun/misc/Unsafe.getByte",
+									"sun/misc/Unsafe.getShort",
+									"sun/misc/Unsafe.putByte"
+								],
+								"baritone/api/utils/BlockOptionalMeta$ServerLevelStub.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								],
+								"baritone/et.class": [
+									"sun/misc/Unsafe.setMemory"
+								]
+							},
+							"exec": {
+								"baritone/api/utils/NotificationHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"baritone/api/utils/Helper.class",
+								"baritone/u.class"
+							],
+							"www.dominos.com": [
+								"baritone/w.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			]
+		}
+	]
+}
