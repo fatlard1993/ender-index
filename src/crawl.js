@@ -6,6 +6,7 @@ import { readMods } from 'ender-launcher/metadata';
 import { scanJar } from 'ender-launcher/scan';
 
 import * as codeberg from './codeberg';
+import { fetchSteady } from './fetch';
 import * as github from './github';
 import * as gitlab from './gitlab';
 import { updateRecord } from './record';
@@ -55,7 +56,7 @@ export const recordPath = ({ host, name }) => join(DATA, 'mods', DIRECTORIES[hos
  * links carry none), so the limit is enforced on the bytes as they arrive.
  */
 export const download = async (url, path) => {
-	const response = await fetch(url);
+	const response = await fetchSteady(url);
 
 	if (!response.ok) throw new Error(`download answered ${response.status}`);
 

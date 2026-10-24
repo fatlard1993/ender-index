@@ -133,12 +133,49 @@ describe('releases switched off', () => {
 	});
 
 	test('but other failures still fail', async () => {
-		const restore = answering(500);
+		const restore = answering(401);
 
 		try {
-			await expect((await import('../src/codeberg')).releases('a/b')).rejects.toThrow('Codeberg 500');
+			await expect((await import('../src/codeberg')).releases('a/b')).rejects.toThrow('Codeberg 401');
 		} finally {
 			restore();
+		}
+	});
+});
+
+describe('a request', () => {
+	const serving = statuses => {
+		let asked = 0;
+		const server = Bun.serve({ port: 0, fetch: () => new Response('ok', { status: statuses[asked++] ?? 200 }) });
+
+		return { server, url: `http://localhost:${server.port}/`, asked: () => asked };
+	};
+
+	test('is asked again after a server error', async () => {
+		const { fetchSteady } = await import('../src/fetch');
+		const { server, url, asked } = serving([502, 503]);
+
+		try {
+			expect((await fetchSteady(url, undefined, { pauses: [0, 0] })).status).toBe(200);
+			expect(asked()).toBe(3);
+		} finally {
+			server.stop();
+		}
+	});
+
+	test('gives the last server error back when it persists, and other answers at once', async () => {
+		const { fetchSteady } = await import('../src/fetch');
+		const failing = serving([500, 500, 500]);
+		const missing = serving([404]);
+
+		try {
+			expect((await fetchSteady(failing.url, undefined, { pauses: [0, 0] })).status).toBe(500);
+			expect(failing.asked()).toBe(3);
+			expect((await fetchSteady(missing.url, undefined, { pauses: [0, 0] })).status).toBe(404);
+			expect(missing.asked()).toBe(1);
+		} finally {
+			failing.server.stop();
+			missing.server.stop();
 		}
 	});
 });

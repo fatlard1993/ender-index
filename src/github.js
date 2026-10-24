@@ -1,6 +1,8 @@
 import { mkdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
+import { fetchSteady } from './fetch';
+
 const API = 'https://api.github.com';
 
 /** Responses kept between crawls, so an unchanged one is answered 304, which GitHub does not count against the rate limit. */
@@ -66,7 +68,7 @@ export class RateLimited extends Error {
  */
 export const request = async (path, keep) => {
 	const cached = keep && (await cache())[path];
-	const response = await fetch(`${API}${path}`, {
+	const response = await fetchSteady(`${API}${path}`, {
 		headers: {
 			accept: 'application/vnd.github+json',
 			authorization: `Bearer ${await token()}`,

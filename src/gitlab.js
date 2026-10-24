@@ -1,9 +1,11 @@
 import { basename } from 'node:path';
 
+import { fetchSteady } from './fetch';
+
 const API = 'https://gitlab.com/api/v4';
 
 const get = async path => {
-	const response = await fetch(`${API}${path}`, { headers: { accept: 'application/json' } });
+	const response = await fetchSteady(`${API}${path}`, { headers: { accept: 'application/json' } });
 
 	if (!response.ok)
 		throw Object.assign(new Error(`GitLab ${response.status} for ${path}`), { status: response.status });

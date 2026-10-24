@@ -1,8 +1,10 @@
+import { fetchSteady } from './fetch';
+
 /** Codeberg runs Forgejo, whose API answers in nearly GitHub's shapes. */
 const API = 'https://codeberg.org/api/v1';
 
 const get = async path => {
-	const response = await fetch(`${API}${path}`, { headers: { accept: 'application/json' } });
+	const response = await fetchSteady(`${API}${path}`, { headers: { accept: 'application/json' } });
 
 	if (!response.ok)
 		throw Object.assign(new Error(`Codeberg ${response.status} for ${path}`), { status: response.status });
