@@ -14,7 +14,7 @@ import { buildSearch } from './search';
 export const DATA = join(import.meta.dir, '..', 'data');
 
 /** Larger than any mod jar has reason to be; past it, the asset is recorded as refused rather than fetched. */
-const MAX_DOWNLOAD = 256 * 1024 * 1024;
+export const MAX_DOWNLOAD = 256 * 1024 * 1024;
 
 const readJson = async (path, fallback) => {
 	const file = Bun.file(path);
@@ -50,21 +50,51 @@ export const parseLine = line => {
 
 export const recordPath = ({ host, name }) => join(DATA, 'mods', DIRECTORIES[host], `${name}.json`);
 
+/**
+ * Stream a download to disk, hashing it on the way. Hosts do not all declare a size (GitLab release
+ * links carry none), so the limit is enforced on the bytes as they arrive.
+ */
+export const download = async (url, path) => {
+	const response = await fetch(url);
+
+	if (!response.ok) throw new Error(`download answered ${response.status}`);
+
+	const declared = Number(response.headers.get('content-length'));
+
+	if (declared > MAX_DOWNLOAD) {
+		await response.body?.cancel();
+
+		throw new Error(`${declared} bytes is past the ${MAX_DOWNLOAD} byte limit`);
+	}
+
+	const hasher = new Bun.CryptoHasher('sha256');
+	const writer = Bun.file(path).writer();
+	let written = 0;
+
+	try {
+		for await (const chunk of response.body) {
+			written += chunk.byteLength;
+
+			if (written > MAX_DOWNLOAD) throw new Error(`past the ${MAX_DOWNLOAD} byte limit`);
+
+			hasher.update(chunk);
+			writer.write(chunk);
+		}
+	} finally {
+		await writer.end();
+	}
+
+	return hasher.digest('hex');
+};
+
 /** Download one asset, hash it on the way in, read its mods and scan it. */
 const inspector = (scratch, knownBad) => async asset => {
 	if (asset.size > MAX_DOWNLOAD) throw new Error(`${asset.size} bytes is past the ${MAX_DOWNLOAD} byte limit`);
 
-	const response = await fetch(asset.browser_download_url);
-
-	if (!response.ok) throw new Error(`download answered ${response.status}`);
-
-	const bytes = new Uint8Array(await response.arrayBuffer());
-	const sha256 = new Bun.CryptoHasher('sha256').update(bytes).digest('hex');
 	const path = join(scratch, `${asset.id}.jar`);
 
-	await Bun.write(path, bytes);
-
 	try {
+		const sha256 = await download(asset.browser_download_url, path);
 		let mods;
 		let metadataError;
 

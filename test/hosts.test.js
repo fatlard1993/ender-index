@@ -38,3 +38,35 @@ describe('repositories on other hosts', () => {
 		expect(assetOf({ id: 2, name: 'Modrinth', url: 'https://modrinth.com/mod/x' }).name).toBe('x');
 	});
 });
+
+describe('downloads', () => {
+	test('stop at the limit when the host declares no size', async () => {
+		const { download, MAX_DOWNLOAD } = await import('../src/crawl');
+		const chunk = new Uint8Array(1024 * 1024);
+		let sent = 0;
+		const server = Bun.serve({
+			port: 0,
+			fetch: () =>
+				new Response(
+					new ReadableStream({
+						pull(controller) {
+							if (sent > MAX_DOWNLOAD + chunk.length) return controller.close();
+
+							sent += chunk.length;
+							controller.enqueue(chunk);
+						},
+					}),
+				),
+		});
+		const path = join(import.meta.dir, '..', '.cache', 'oversized.jar');
+
+		try {
+			await expect(download(`http://localhost:${server.port}/big.jar`, path)).rejects.toThrow('byte limit');
+		} finally {
+			server.stop();
+			await Bun.file(path)
+				.delete?.()
+				.catch(() => {});
+		}
+	});
+});
