@@ -1,0 +1,57 @@
+name: crawl
+
+on:
+  schedule:
+    - cron: '17 4 * * *'
+    - cron: '17 3 * * 0'
+  workflow_dispatch:
+    inputs:
+      discover:
+        description: Search for new mod repositories before crawling
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency: crawl
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ender-index
+      - uses: actions/checkout@v4
+        with:
+          repository: fatlard1993/ender-launcher
+          path: ender-launcher
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+        working-directory: ender-index
+      - name: discover
+        if: inputs.discover || github.event.schedule == '17 3 * * 0'
+        run: bun run discover
+        working-directory: ender-index
+        env:
+          GITHUB_TOKEN: ${{ secrets.CRAWL_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: crawl
+        id: crawl
+        run: bun run crawl
+        working-directory: ender-index
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.CRAWL_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: commit
+        working-directory: ender-index
+        run: |
+          git config user.name 'ender-index'
+          git config user.email 'ender-index@users.noreply.github.com'
+          git add data
+          git diff --cached --quiet || git commit -m "Crawl $(date -u +%F)"
+          git push
+      - name: report a failed crawl
+        if: steps.crawl.outcome == 'failure'
+        run: exit 1
