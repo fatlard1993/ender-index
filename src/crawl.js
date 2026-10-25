@@ -129,10 +129,15 @@ const crawlOne = async (line, { now, inspect }) => {
 		return result.events;
 	}
 
+	// A renamed repository answers under its new name; its record is kept under that one, where search
+	// and the launcher look for it.
+	const canonical = recordPath({ host, name: repo.full_name ?? name });
+	const recorded = canonical === path ? record : ((await readJson(canonical)) ?? record);
 	const listed = await HOSTS[host].releases(name);
-	const result = await updateRecord({ record, repo, releases: listed, now, inspect, host });
+	const result = await updateRecord({ record: recorded, repo, releases: listed, now, inspect, host });
 
-	if (result.record) await writeJson(path, result.record);
+	if (result.record) await writeJson(canonical, result.record);
+	if (canonical !== path) await rm(path, { force: true });
 
 	return result.events;
 };
