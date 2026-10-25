@@ -3,7 +3,6 @@ name: crawl
 on:
   schedule:
     - cron: '17 4 * * *'
-    - cron: '17 3 * * 0'
   workflow_dispatch:
     inputs:
       discover:
@@ -24,6 +23,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: ender-index
+          ref: main
       - uses: actions/checkout@v4
         with:
           repository: fatlard1993/ender-launcher
@@ -39,8 +39,9 @@ jobs:
           key: crawl-${{ github.run_id }}
           restore-keys: crawl-
       - name: discover
-        if: inputs.discover || github.event.schedule == '17 3 * * 0'
-        run: bun run discover
+        if: inputs.discover || github.event_name == 'schedule'
+        run: |
+          if [ '${{ inputs.discover }}' = true ] || [ "$(date -u +%u)" = 7 ]; then bun run discover; else echo 'Discovery runs on Sundays'; fi
         working-directory: ender-index
         env:
           GITHUB_TOKEN: ${{ secrets.CRAWL_TOKEN || secrets.GITHUB_TOKEN }}
