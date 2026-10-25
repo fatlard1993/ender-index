@@ -42,9 +42,9 @@ export const assetOf = link => {
 };
 
 /** A project with releases switched off answers 403 for them, which is a project with no releases. */
-const releaseList = async fullName => {
+const releaseList = async (fullName, page) => {
 	try {
-		return await get(`${project(fullName)}/releases?per_page=30`);
+		return await get(`${project(fullName)}/releases?per_page=30${page > 1 ? `&page=${page}` : ''}`);
 	} catch (error) {
 		if (error.status === 403) return [];
 
@@ -52,8 +52,8 @@ const releaseList = async fullName => {
 	}
 };
 
-export const releases = async fullName =>
-	(await releaseList(fullName)).map(release => ({
+export const releases = async (fullName, page = 1) =>
+	(await releaseList(fullName, page)).map(release => ({
 		tag_name: release.tag_name,
 		published_at: release.released_at,
 		prerelease: Boolean(release.upcoming_release),

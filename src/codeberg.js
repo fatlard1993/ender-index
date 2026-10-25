@@ -26,9 +26,9 @@ export const repository = async fullName => {
 };
 
 /** A repository with releases switched off answers 404 for them, which is a repository with no releases. */
-const releaseList = async fullName => {
+const releaseList = async (fullName, page) => {
 	try {
-		return await get(`/repos/${fullName}/releases?limit=30`);
+		return await get(`/repos/${fullName}/releases?limit=30${page > 1 ? `&page=${page}` : ''}`);
 	} catch (error) {
 		if (error.status === 404) return [];
 
@@ -36,8 +36,8 @@ const releaseList = async fullName => {
 	}
 };
 
-export const releases = async fullName =>
-	(await releaseList(fullName)).map(release => ({
+export const releases = async (fullName, page = 1) =>
+	(await releaseList(fullName, page)).map(release => ({
 		tag_name: release.tag_name,
 		published_at: release.published_at,
 		prerelease: release.prerelease,

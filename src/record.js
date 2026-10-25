@@ -7,6 +7,48 @@ export const INSPECTION = 2;
 /** Releases looked at per crawl, newest first. Older ones stay recorded but are no longer watched. */
 export const WINDOW = 5;
 
+/** Releases a host answers per page, and the pages of history read once per repository. */
+export const PAGE = 30;
+export const PAGES = 10;
+
+/** Raised when more history should be read, so repositories already recorded have theirs read again. */
+export const HISTORY = 1;
+
+/** Game versions besides the window whose newest release is also looked at, newest first. */
+export const VERSION_LIMIT = 24;
+
+/** The game versions a release's tag or jar names mention, among those given. */
+const versionsNamed = (release, gameVersions) =>
+	new Set(
+		[release.tag_name, ...modAssets(release).map(asset => asset.name)]
+			.flatMap(name => name.split(/[^\d.]+/))
+			.map(token => token.replace(/^\.+|\.+$/g, ''))
+			.filter(token => gameVersions.has(token)),
+	);
+
+/**
+ * The releases worth downloading: the newest few, and the newest naming each game version. A project
+ * releasing per game version pushes its builds for older versions off the first page within weeks,
+ * and those are what most instances run. The name only chooses what is downloaded; what a jar
+ * supports is still read from the jar.
+ */
+export const watchedReleases = (releases, gameVersions = new Set()) => {
+	const candidates = releases.filter(release => !release.draft && modAssets(release).length > 0);
+	const watched = new Set(candidates.slice(0, WINDOW));
+	const covered = new Set();
+
+	for (const release of candidates) {
+		const named = [...versionsNamed(release, gameVersions)].filter(version => !covered.has(version));
+
+		if (named.length === 0 || covered.size >= VERSION_LIMIT) continue;
+
+		for (const version of named) covered.add(version);
+		watched.add(release);
+	}
+
+	return candidates.filter(release => watched.has(release));
+};
+
 export const modAssets = release =>
 	(release.assets ?? []).filter(asset => asset.name.endsWith('.jar') && !NOT_A_MOD.test(asset.name));
 
@@ -30,10 +72,10 @@ const about = (repo, host) => ({
  * Different bytes from either keep the old hash in `replaced`, because a release changed after people
  * installed it is the thing most worth knowing about.
  */
-export const updateRecord = async ({ record, repo, releases, now, inspect, host = 'github' }) => {
+export const updateRecord = async ({ record, repo, releases, now, inspect, host = 'github', gameVersions }) => {
 	const events = [];
 	const known = new Map(structuredClone(record?.releases ?? []).map(release => [release.tag, release]));
-	const watched = releases.filter(release => !release.draft && modAssets(release).length > 0).slice(0, WINDOW);
+	const watched = watchedReleases(releases, gameVersions);
 
 	for (const release of watched) {
 		const recorded = known.get(release.tag_name) ?? {

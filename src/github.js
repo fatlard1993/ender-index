@@ -136,7 +136,11 @@ export const repositoryPath = fullName => `/repos/${fullName}`;
 
 export const repository = fullName => request(repositoryPath(fullName), repositoryFields);
 
-export const releases = fullName => request(`/repos/${fullName}/releases?per_page=30`, releaseFields);
+/** The first page is kept and asked about conditionally each crawl; a deeper page is read once, so it is not kept. */
+export const releases = async (fullName, page = 1) =>
+	page === 1
+		? request(`/repos/${fullName}/releases?per_page=30`, releaseFields)
+		: releaseFields(await request(`/repos/${fullName}/releases?per_page=30&page=${page}`));
 
 export const searchCode = (query, page = 1) =>
 	request(`/search/code?${new URLSearchParams({ q: query, per_page: '100', page: String(page) })}`);

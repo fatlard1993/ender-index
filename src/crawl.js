@@ -9,7 +9,7 @@ import * as codeberg from './codeberg';
 import { fetchSteady } from './fetch';
 import * as github from './github';
 import * as gitlab from './gitlab';
-import { updateRecord, vanish } from './record';
+import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
 import { buildSearch } from './search';
 
 export const DATA = join(import.meta.dir, '..', 'data');
@@ -111,7 +111,28 @@ const inspector = (scratch, knownBad) => async asset => {
 	}
 };
 
-const crawlOne = async (line, { now, inspect }) => {
+const MANIFEST = 'https://piston-meta.mojang.com/mc/game/version_manifest_v2.json';
+
+/** Releases from 1.7.10 on: older ones are rarely modded, and their short ids are mostly mod versions. */
+const releasedGameVersions = async () => {
+	try {
+		const response = await fetchSteady(MANIFEST);
+
+		if (!response.ok) throw new Error(`answered ${response.status}`);
+
+		const releases = (await response.json()).versions
+			.filter(version => version.type === 'release')
+			.map(version => version.id);
+
+		return new Set(releases.slice(0, releases.indexOf('1.7.10') + 1));
+	} catch (error) {
+		console.error(`The game version list could not be read (${error.message}); only the newest releases are watched`);
+
+		return new Set();
+	}
+};
+
+const crawlOne = async (line, { now, inspect, gameVersions }) => {
 	const { host, name } = parseLine(line);
 	const path = recordPath({ host, name });
 	const record = await readJson(path);
@@ -133,10 +154,18 @@ const crawlOne = async (line, { now, inspect }) => {
 	// and the launcher look for it.
 	const canonical = recordPath({ host, name: repo.full_name ?? name });
 	const recorded = canonical === path ? record : ((await readJson(canonical)) ?? record);
-	const listed = await HOSTS[host].releases(name);
-	const result = await updateRecord({ record: recorded, repo, releases: listed, now, inspect, host });
+	const listed = [...(await HOSTS[host].releases(name))];
 
-	if (result.record) await writeJson(canonical, result.record);
+	if (recorded?.history !== HISTORY) {
+		for (let page = 2, last = listed; last.length === PAGE && page <= PAGES; ++page) {
+			last = await HOSTS[host].releases(name, page);
+			listed.push(...last);
+		}
+	}
+
+	const result = await updateRecord({ record: recorded, repo, releases: listed, now, inspect, host, gameVersions });
+
+	if (result.record) await writeJson(canonical, { ...result.record, history: HISTORY });
 	if (canonical !== path) await rm(path, { force: true });
 
 	return result.events;
@@ -160,6 +189,7 @@ export const crawl = async ({ only } = {}) => {
 	);
 	const scratch = await mkdtemp(join(tmpdir(), 'ender-index-'));
 	const inspect = inspector(scratch, knownBad);
+	const gameVersions = await releasedGameVersions();
 	const failures = [];
 	// A crawl the runner kills commits nothing, so it stops itself while there is time to commit.
 	const deadline = Date.now() + Number(process.env.CRAWL_MINUTES ?? Infinity) * 60_000;
@@ -178,7 +208,7 @@ export const crawl = async ({ only } = {}) => {
 			}
 
 			try {
-				for (const event of await crawlOne(fullName, { now, inspect })) {
+				for (const event of await crawlOne(fullName, { now, inspect, gameVersions })) {
 					console.log([event.type.padEnd(7), event.repo, event.tag, event.asset].filter(Boolean).join(' '));
 				}
 			} catch (error) {

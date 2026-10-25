@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { INSPECTION, WINDOW, updateRecord, vanish } from '../src/record';
+import { INSPECTION, VERSION_LIMIT, WINDOW, updateRecord, vanish, watchedReleases } from '../src/record';
 
 const repo = { full_name: 'a/mod', stargazers_count: 3, archived: false, license: { spdx_id: 'MIT' } };
 
@@ -231,5 +231,42 @@ describe('a repository its host no longer has', () => {
 		);
 
 		expect(back.record.gone).toBeUndefined();
+	});
+});
+
+describe('the releases worth downloading', () => {
+	const games = new Set(['26.3', '1.21.1', '1.20.1', '1.12.2']);
+	const tags = list => list.map(entry => entry.tag_name);
+
+	test('are the newest few, and the newest naming each game version', () => {
+		const releases = [
+			...Array.from({ length: WINDOW }, (_, index) =>
+				release(`0.${200 - index}.0+26.3`, [asset(`api-0.${200 - index}.0+26.3.jar`, index)]),
+			),
+			release('0.116.7+1.21.1', [asset('api-0.116.7+1.21.1.jar', 10)]),
+			release('0.116.6+1.21.1', [asset('api-0.116.6+1.21.1.jar', 11)]),
+			release('mc1.20.1-0.92.2', [asset('api-0.92.2.jar', 12)]),
+		];
+
+		expect(tags(watchedReleases(releases, games))).toEqual([
+			...tags(releases.slice(0, WINDOW)),
+			'0.116.7+1.21.1',
+			'mc1.20.1-0.92.2',
+		]);
+	});
+
+	test('do not take a mod version that is no game version for one', () => {
+		const releases = Array.from({ length: WINDOW + 3 }, (_, index) =>
+			release(`v1.${index}.3`, [asset(`mod-1.${index}.3.jar`, index)]),
+		);
+
+		expect(watchedReleases(releases, games)).toHaveLength(WINDOW);
+	});
+
+	test(`stop adding game versions after ${VERSION_LIMIT}`, () => {
+		const many = new Set(Array.from({ length: VERSION_LIMIT + 5 }, (_, index) => `1.${index}`));
+		const releases = [...many].map((version, index) => release(`mod+${version}`, [asset(`mod+${version}.jar`, index)]));
+
+		expect(watchedReleases(releases, many)).toHaveLength(VERSION_LIMIT);
 	});
 });
