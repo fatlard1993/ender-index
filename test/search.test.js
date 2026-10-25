@@ -67,6 +67,16 @@ describe('the search file', () => {
 		expect(entries.map(entry => `${entry.repo}@${entry.latest.tag}`)).toEqual(['b/mod@1.0']);
 	});
 
+	test('a repository its host no longer has is not listed', () => {
+		const releases = [{ tag: '1.0', prerelease: false, assets: [asset()] }];
+
+		expect(
+			buildSearch([{ ...record('a/gone', releases), gone: '2026-10-25' }, record('b/mod', releases)]).map(
+				entry => entry.repo,
+			),
+		).toEqual(['b/mod']);
+	});
+
 	test('a repository whose jars declare no mod is not listed', () => {
 		const entries = buildSearch([
 			record('a/installer', [{ tag: '1.0', prerelease: false, assets: [asset({ mods: [] })] }]),

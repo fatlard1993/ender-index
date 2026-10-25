@@ -123,3 +123,12 @@ export const updateRecord = async ({ record, repo, releases, now, inspect, host 
 		events,
 	};
 };
+
+/**
+ * A repository its host answers 404 for was deleted or made private. Its record is kept, marked, since a
+ * private repository can come back, and that is news only the first time it is seen.
+ */
+export const vanish = ({ record, name, now }) =>
+	record === undefined || record.gone !== undefined
+		? { record, events: [] }
+		: { record: { ...record, gone: now }, events: [{ type: 'vanished', repo: name }] };

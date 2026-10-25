@@ -9,7 +9,7 @@ import * as codeberg from './codeberg';
 import { fetchSteady } from './fetch';
 import * as github from './github';
 import * as gitlab from './gitlab';
-import { updateRecord } from './record';
+import { updateRecord, vanish } from './record';
 import { buildSearch } from './search';
 
 export const DATA = join(import.meta.dir, '..', 'data');
@@ -114,11 +114,22 @@ const inspector = (scratch, knownBad) => async asset => {
 const crawlOne = async (line, { now, inspect }) => {
 	const { host, name } = parseLine(line);
 	const path = recordPath({ host, name });
-	const [repo, listed, record] = await Promise.all([
-		HOSTS[host].repository(name),
-		HOSTS[host].releases(name),
-		readJson(path),
-	]);
+	const record = await readJson(path);
+	let repo;
+
+	try {
+		repo = await HOSTS[host].repository(name);
+	} catch (error) {
+		if (error.status !== 404) throw error;
+
+		const result = vanish({ record, name, now });
+
+		if (result.events.length > 0) await writeJson(path, result.record);
+
+		return result.events;
+	}
+
+	const listed = await HOSTS[host].releases(name);
 	const result = await updateRecord({ record, repo, releases: listed, now, inspect, host });
 
 	if (result.record) await writeJson(path, result.record);
@@ -163,7 +174,7 @@ export const crawl = async ({ only } = {}) => {
 
 			try {
 				for (const event of await crawlOne(fullName, { now, inspect })) {
-					console.log(`${event.type.padEnd(7)} ${event.repo} ${event.tag} ${event.asset}`);
+					console.log([event.type.padEnd(7), event.repo, event.tag, event.asset].filter(Boolean).join(' '));
 				}
 			} catch (error) {
 				if (error instanceof github.RateLimited) {

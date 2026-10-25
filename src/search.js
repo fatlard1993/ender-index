@@ -51,6 +51,7 @@ export const summarize = record => {
 
 export const buildSearch = records =>
 	records
+		.filter(record => record.gone === undefined)
 		.map(summarize)
 		.filter(entry => entry.latest !== undefined)
 		.sort((a, b) => a.repo.localeCompare(b.repo));

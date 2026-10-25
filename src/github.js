@@ -93,7 +93,7 @@ export const request = async (path, keep) => {
 			throw new RateLimited(`the rate limit resets at ${new Date(resetAt).toISOString()}`, resetAt);
 		}
 
-		throw new Error(`GitHub ${response.status} for ${path}`);
+		throw Object.assign(new Error(`GitHub ${response.status} for ${path}`), { status: response.status });
 	}
 
 	const body = await response.json();

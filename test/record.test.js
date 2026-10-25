@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { INSPECTION, WINDOW, updateRecord } from '../src/record';
+import { INSPECTION, WINDOW, updateRecord, vanish } from '../src/record';
 
 const repo = { full_name: 'a/mod', stargazers_count: 3, archived: false, license: { spdx_id: 'MIT' } };
 
@@ -203,5 +203,33 @@ describe('a repository record', () => {
 		await update(first.record, [release('1.0', [asset('mod.jar', 2)])], inspector().inspect);
 
 		expect(first.record).toEqual(before);
+	});
+});
+
+describe('a repository its host no longer has', () => {
+	test('has its record marked once, and is news only then', async () => {
+		const { record } = await update(undefined, [release('1.0', [asset('mod.jar', 1)])], inspector().inspect);
+		const first = vanish({ record, name: 'a/mod', now: '2026-10-25' });
+		const again = vanish({ record: first.record, name: 'a/mod', now: '2026-10-26' });
+
+		expect(first.record.gone).toBe('2026-10-25');
+		expect(first.events).toEqual([{ type: 'vanished', repo: 'a/mod' }]);
+		expect(again.record.gone).toBe('2026-10-25');
+		expect(again.events).toEqual([]);
+	});
+
+	test('that was never recorded is not news', () => {
+		expect(vanish({ record: undefined, name: 'a/mod', now: '2026-10-25' }).events).toEqual([]);
+	});
+
+	test('is recorded afresh, unmarked, when it comes back', async () => {
+		const { record } = await update(undefined, [release('1.0', [asset('mod.jar', 1)])], inspector().inspect);
+		const back = await update(
+			vanish({ record, name: 'a/mod', now: '2026-10-25' }).record,
+			[release('1.0', [asset('mod.jar', 1)])],
+			inspector().inspect,
+		);
+
+		expect(back.record.gone).toBeUndefined();
 	});
 });
