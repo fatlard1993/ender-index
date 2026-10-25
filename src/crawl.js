@@ -55,17 +55,17 @@ export const recordPath = ({ host, name }) => join(DATA, 'mods', DIRECTORIES[hos
  * Stream a download to disk, hashing it on the way. Hosts do not all declare a size (GitLab release
  * links carry none), so the limit is enforced on the bytes as they arrive.
  */
-export const download = async (url, path) => {
+export const download = async (url, path, { limit = MAX_DOWNLOAD } = {}) => {
 	const response = await fetchSteady(url);
 
 	if (!response.ok) throw new Error(`download answered ${response.status}`);
 
 	const declared = Number(response.headers.get('content-length'));
 
-	if (declared > MAX_DOWNLOAD) {
+	if (declared > limit) {
 		await response.body?.cancel();
 
-		throw new Error(`${declared} bytes is past the ${MAX_DOWNLOAD} byte limit`);
+		throw new Error(`${declared} bytes is past the ${limit} byte limit`);
 	}
 
 	const hasher = new Bun.CryptoHasher('sha256');
@@ -76,7 +76,7 @@ export const download = async (url, path) => {
 		for await (const chunk of response.body) {
 			written += chunk.byteLength;
 
-			if (written > MAX_DOWNLOAD) throw new Error(`past the ${MAX_DOWNLOAD} byte limit`);
+			if (written > limit) throw new Error(`past the ${limit} byte limit`);
 
 			hasher.update(chunk);
 			writer.write(chunk);
