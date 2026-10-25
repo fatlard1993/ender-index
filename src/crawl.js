@@ -105,7 +105,11 @@ const inspector = (scratch, knownBad) => async asset => {
 			metadataError = error.message;
 		}
 
-		return { sha256, mods, metadataError, scan: await scanJar(path), knownBad: knownBad.get(sha256) };
+		try {
+			return { sha256, mods, metadataError, scan: await scanJar(path), knownBad: knownBad.get(sha256) };
+		} catch (error) {
+			return { sha256, error: error.message, knownBad: knownBad.get(sha256) };
+		}
 	} finally {
 		await rm(path, { force: true });
 	}
@@ -209,7 +213,11 @@ export const crawl = async ({ only } = {}) => {
 
 			try {
 				for (const event of await crawlOne(fullName, { now, inspect, gameVersions })) {
-					console.log([event.type.padEnd(7), event.repo, event.tag, event.asset].filter(Boolean).join(' '));
+					console.log(
+						[event.type.padEnd(7), event.repo, event.tag, event.asset, event.error && `:: ${event.error}`]
+							.filter(Boolean)
+							.join(' '),
+					);
 				}
 			} catch (error) {
 				if (error instanceof github.RateLimited) {

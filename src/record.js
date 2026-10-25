@@ -49,6 +49,9 @@ export const watchedReleases = (releases, gameVersions = new Set()) => {
 	return candidates.filter(release => watched.has(release));
 };
 
+/** The bytes came down and the reader could not open them; a later reader may. A download that failed has no hash. */
+const readerFailed = asset => asset.error !== undefined && asset.sha256 !== undefined;
+
 export const modAssets = release =>
 	(release.assets ?? []).filter(asset => asset.name.endsWith('.jar') && !NOT_A_MOD.test(asset.name));
 
@@ -98,7 +101,8 @@ export const updateRecord = async ({ record, repo, releases, now, inspect, host 
 				existing?.id === asset.id &&
 				existing.url === asset.browser_download_url &&
 				existing.inspection === INSPECTION &&
-				existing.metadataError === undefined
+				existing.metadataError === undefined &&
+				!readerFailed(existing)
 			)
 				continue;
 
@@ -126,6 +130,7 @@ export const updateRecord = async ({ record, repo, releases, now, inspect, host 
 					repo: repo.full_name,
 					tag: release.tag_name,
 					asset: asset.name,
+					error: inspected.error,
 				});
 
 				continue;

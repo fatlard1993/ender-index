@@ -100,6 +100,30 @@ describe('a repository record', () => {
 		expect(second.record.releases[0].assets[0].metadataError).toBeUndefined();
 	});
 
+	test('a jar the reader could not open is read again, and the reason it failed is reported', async () => {
+		const first = await update(undefined, [release('1.0', [asset('mod.jar', 1)])], async () => ({
+			sha256: 'hash-1',
+			error: 'Corrupt zip central directory',
+		}));
+		const again = inspector();
+		const second = await update(first.record, [release('1.0', [asset('mod.jar', 1)])], again.inspect);
+
+		expect(first.events[0]).toMatchObject({ type: 'failed', error: 'Corrupt zip central directory' });
+		expect(again.seen).toEqual([1]);
+		expect(second.record.releases[0].assets[0].error).toBeUndefined();
+	});
+
+	test('a download that failed is not tried again each crawl', async () => {
+		const first = await update(undefined, [release('1.0', [asset('mod.jar', 1)])], async () => {
+			throw new Error('download answered 404');
+		});
+		const again = inspector();
+
+		await update(first.record, [release('1.0', [asset('mod.jar', 1)])], again.inspect);
+
+		expect(again.seen).toEqual([]);
+	});
+
 	test('a re-upload of the same bytes is not news', async () => {
 		const first = await update(undefined, [release('1.0', [asset('mod.jar', 1)])], inspector().inspect);
 		const second = await update(
