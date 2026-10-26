@@ -83,7 +83,7 @@ const filtersLabel = ({ side, released, host, sort, avoid }) => {
 const isTypingInField = target =>
 	target?.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target?.tagName);
 
-const resultCard = ({ entry, sharing, unproven }, versions, { minecraft }) => {
+const resultCard = ({ entry, sharing, unproven, author }, versions, { minecraft }) => {
 	const host = entry.host ?? 'github';
 	const title = titleOf(entry);
 	const fitting = fittingVersions(entry, versions, { minecraft });
@@ -112,6 +112,7 @@ const resultCard = ({ entry, sharing, unproven }, versions, { minecraft }) => {
 										`${count(entry.stars ?? 0)} stars`,
 										entry.downloads === undefined ? '' : `${count(entry.downloads)} downloads`,
 										entry.usedBy ? `used by ${count(entry.usedBy)}` : '',
+										author ? `by the author of ${author}` : '',
 									]
 										.filter(Boolean)
 										.join(' · '),

@@ -13,7 +13,7 @@ import {
 } from '@vanilla-bean/components';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
-import { HOSTS, sharing } from 'ender-launcher/rank';
+import { HOSTS, authorOf, sharing } from 'ender-launcher/rank';
 
 import { collection } from './collection';
 import { loadListing } from './data';
@@ -329,6 +329,7 @@ export default class ModPage extends View {
 		const redrawControls = () => controls.content([collectButton(entry), ...installControls(entry)]);
 		const watched = (record.releases ?? []).filter(release => release.assets.length > 0);
 		const shares = entry.shares ?? sharing(entry, listing);
+		const author = authorOf(entry, listing);
 
 		document.title = `${title} :: ender index`;
 		collection.subscribe(redrawControls, signal);
@@ -354,6 +355,7 @@ export default class ModPage extends View {
 										textContent: `${entry.repo} on ${HOSTS[entry.host ?? 'github'] ?? 'GitHub'}`,
 									}),
 									...(record.license ? [new Meta({ textContent: record.license })] : []),
+									...(author ? [new Meta({ textContent: `by the author of ${author}` })] : []),
 								],
 							}),
 							...(record.description ? [paragraph(record.description)] : []),

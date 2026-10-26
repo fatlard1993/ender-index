@@ -166,6 +166,22 @@ describe('discovery', () => {
 		expect(shares('copy/client')).toBe('declares "sodium", as real/sodium does');
 		expect(shares('own/mod')).toBe('');
 		expect(shares('real/sodium')).toBe('');
+		expect(entries.find(entry => entry.repo === 'real/sodium').author).toBe('');
+	});
+
+	test('names the established repository of the same owner that vouches for a new one', () => {
+		const declaring = id => [
+			{ tag: '1.0', prerelease: false, assets: [asset({ mods: [{ loader: 'fabric', id, name: id, depends: [] }] })] },
+		];
+		const entries = buildSearch([
+			record('maker/famous', declaring('famous'), { stars: 900 }),
+			record('maker/fresh', declaring('fresh'), { stars: 0 }),
+			record('stranger/fresh', declaring('other'), { stars: 0 }),
+		]);
+		const author = repo => entries.find(entry => entry.repo === repo).author;
+
+		expect(author('maker/fresh')).toBe('maker/famous');
+		expect(author('stranger/fresh')).toBe('');
 	});
 
 	test('a manifest under a test or example directory does not make a repository a mod', () => {
