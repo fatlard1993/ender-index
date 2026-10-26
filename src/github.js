@@ -5,7 +5,11 @@ import { fetchSteady } from './fetch';
 
 const API = 'https://api.github.com';
 
-/** Responses kept between crawls, so an unchanged one is answered 304, which GitHub does not count against the rate limit. */
+/**
+ * Responses kept between crawls, so an unchanged one is answered 304, which GitHub does not count against
+ * the rate limit. GitHub's ETag varies with the token, and Actions issues a new one each run, so this
+ * pays only with a token that outlasts the run: CRAWL_TOKEN.
+ */
 export const CACHE = join(import.meta.dir, '..', '.cache', 'responses.json');
 
 let cachedToken;
