@@ -38,6 +38,7 @@ module.exports = {
 		'polar',
 		'quilt',
 		'ratelimit',
+		'readmes',
 		'referrerpolicy',
 		'renderer',
 		'repo',
