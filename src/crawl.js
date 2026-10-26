@@ -234,7 +234,7 @@ export const crawl = async ({ only } = {}) => {
 	};
 
 	console.log(
-		`Crawling ${repos.length} repositories; each new release jar is downloaded and scanned, so this takes a while`,
+		`Crawling ${repos.length === 1 ? 'one repository' : `${repos.length} repositories`}; each new release jar is downloaded and scanned, so this takes a while`,
 	);
 
 	try {
