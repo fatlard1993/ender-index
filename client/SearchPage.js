@@ -26,7 +26,6 @@ import {
 	INDEX,
 	LOADERS,
 	RELEASED,
-	REPOSITORY,
 	SIDES,
 	SORTS,
 	fittingVersions,
@@ -44,7 +43,7 @@ import {
 	titleOf,
 	writeQuery,
 } from './search';
-import { Chip, Command, Meta, Row, Stack, Title, Warning, about, avatar, copyCommand, count } from './ui';
+import { Chip, Command, Meta, Row, Stack, Title, Warning, about, avatar, copyCommand, count, headerLinks } from './ui';
 
 const PAGE_SIZE = 25;
 
@@ -452,7 +451,7 @@ export default class SearchPage extends View {
 			new Toolbar({
 				variant: 'bar',
 				heading: 'ender index',
-				append: [new Link({ variant: 'flat', href: REPOSITORY, target: '_blank', textContent: 'Source' })],
+				append: headerLinks(),
 			}),
 			scrolling,
 		]);

@@ -19,7 +19,6 @@ import { collection } from './collection';
 import { loadListing } from './data';
 import {
 	CAPABILITIES,
-	REPOSITORY,
 	aboutOf,
 	supportOf,
 	fileSize,
@@ -35,7 +34,21 @@ import {
 } from './search';
 import { collectButton, installControls } from './controls';
 import { local } from './local';
-import { Chip, Command, Meta, Row, Stack, Warning, about, avatar, copyCommand, count, date, loadJson } from './ui';
+import {
+	Chip,
+	Command,
+	Meta,
+	Row,
+	Stack,
+	Warning,
+	about,
+	avatar,
+	copyCommand,
+	count,
+	date,
+	headerLinks,
+	loadJson,
+} from './ui';
 
 const Heading = styled.Component(
 	() => `
@@ -276,7 +289,7 @@ export default class ModPage extends View {
 			new Toolbar({
 				variant: 'bar',
 				heading: 'ender index',
-				append: [back, new Link({ variant: 'flat', href: REPOSITORY, target: '_blank', textContent: 'Source' })],
+				append: [back, ...headerLinks()],
 			}),
 			new Content({ column: 900, style: { paddingBlock: '12px' }, append: body }),
 		]);

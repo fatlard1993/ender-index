@@ -1,4 +1,6 @@
-import { Component, Notify, copyToClipboard, styled } from '@vanilla-bean/components';
+import { Component, Icon, Link, Notify, copyToClipboard, styled, theme } from '@vanilla-bean/components';
+
+import { REPOSITORY, SPONSOR } from './search';
 
 export const count = number => number.toLocaleString('en-US');
 
@@ -127,3 +129,16 @@ export const about = found =>
 					append: [found.text, ...(found.from ? [new Meta({ tag: 'span', textContent: ` (${found.from})` })] : [])],
 				}),
 			];
+
+/** The header's links to the index's own source and to supporting it. */
+export const headerLinks = () => [
+	new Link({
+		variant: 'flat',
+		href: SPONSOR,
+		target: '_blank',
+		tooltip: 'Support ender and the index',
+		style: { display: 'inline-flex', flexDirection: 'row', alignItems: 'center', gap: theme.space.xs },
+		append: [new Icon({ icon: 'heart', style: { color: theme.colors.danger } }), 'Sponsor'],
+	}),
+	new Link({ variant: 'flat', href: REPOSITORY, target: '_blank', textContent: 'Source' }),
+];
