@@ -11,6 +11,7 @@ import {
 	Toolbar,
 	View,
 	debounce,
+	styled,
 	theme,
 } from '@vanilla-bean/components';
 import { HOSTS, rank } from 'ender-launcher/rank';
@@ -43,6 +44,40 @@ import {
 import { Chip, Command, Meta, Row, Stack, Title, Warning, avatar, copyCommand, count, paragraph } from './ui';
 
 const PAGE_SIZE = 25;
+
+/** The filters past the first row: always shown on a wide screen, folded on a phone until asked for. */
+const MoreFilters = styled.Component(
+	({ media, space }) => `
+		display: flex;
+		flex-direction: column;
+		gap: ${space.xs};
+
+		@media ${media.phone} {
+			&.folded {
+				display: none;
+			}
+		}
+	`,
+);
+
+const PhoneOnly = styled(
+	Button,
+	({ media }) => `
+		flex: none;
+
+		@media ${media.wide} {
+			&.vbc-button {
+				display: none;
+			}
+		}
+	`,
+);
+
+const filtersLabel = ({ side, released, host, sort, avoid }) => {
+	const active = [side, released, host, sort !== 'best', avoid.length > 0].filter(Boolean).length;
+
+	return active > 0 ? `Filters (${active})` : 'Filters';
+};
 
 // Typing anywhere searches, except into a field, whose keys are its own
 const isTypingInField = target =>
@@ -195,6 +230,7 @@ export default class SearchPage extends View {
 
 		const restart = () => {
 			shown = PAGE_SIZE;
+			labelFolding();
 			render();
 		};
 
@@ -221,6 +257,7 @@ export default class SearchPage extends View {
 
 		const loader = new Tabs({
 			variant: 'segmented',
+			style: { maxWidth: '100%', overflowX: 'auto' },
 			tabs: [{ id: 'any', label: 'Any' }, ...Object.entries(LOADERS).map(([id, label]) => ({ id, label }))],
 			selected: state.loader ?? 'any',
 			onChange: ({ value }) => {
@@ -331,16 +368,9 @@ export default class SearchPage extends View {
 			}
 		});
 
-		const scrolling = new Content({
-			column: 900,
-			style: { paddingBlock: '12px' },
+		const moreFilters = new MoreFilters({
+			addClass: 'folded',
 			append: [
-				new Meta({
-					tag: 'p',
-					textContent:
-						'Minecraft mods found where their source lives. Every jar here came from the releases of its own repository and was scanned by ender: what its code can reach is a finding, not a verdict.',
-				}),
-				new Toolbar({ style: { margin: '12px 0 4px' }, append: [search, minecraft, loader] }),
 				new Toolbar({
 					gap: 8,
 					style: { margin: '4px 0' },
@@ -352,6 +382,29 @@ export default class SearchPage extends View {
 					],
 				}),
 				avoiding,
+			],
+		});
+
+		const foldButton = new PhoneOnly({
+			variant: 'flat',
+			icon: 'sliders',
+			textContent: filtersLabel(state),
+			onPointerPress: () => moreFilters.toggleClass('folded'),
+		});
+
+		const labelFolding = () => (foldButton.options.textContent = filtersLabel(state));
+
+		const scrolling = new Content({
+			column: 900,
+			style: { paddingBlock: '12px' },
+			append: [
+				new Meta({
+					tag: 'p',
+					textContent:
+						'Minecraft mods found where their source lives. Every jar here came from the releases of its own repository and was scanned by ender: what its code can reach is a finding, not a verdict.',
+				}),
+				new Toolbar({ style: { margin: '12px 0 4px' }, append: [search, minecraft, loader, foldButton] }),
+				moreFilters,
 				localBar,
 				status,
 				new Stack({ style: { marginTop: '12px' }, append: [results, more] }),
