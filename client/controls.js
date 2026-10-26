@@ -19,7 +19,7 @@ export const collectButton = entry => {
 		variant: collected ? undefined : 'flat',
 		intent: collected ? 'success' : undefined,
 		textContent: collected ? 'Collected' : 'Collect',
-		title: collected ? 'Take it out of the collection' : 'Gather it with others to install together',
+		tooltip: collected ? 'Take it out of the collection' : 'Gather it with others to install together',
 		onPointerPress: () => collection.toggle(entry, titleOf(entry)),
 	});
 };
@@ -62,7 +62,7 @@ export const installControls = entry => {
 			icon: look.icon,
 			variant: installed ? 'flat' : undefined,
 			textContent: look.text,
-			title: installed ? `Drop it from ${local.selected}` : `Add it and what it needs to ${local.selected}`,
+			tooltip: installed ? `Drop it from ${local.selected}` : `Add it and what it needs to ${local.selected}`,
 			disabled: busy,
 			onPointerPress: () => runLocally(installed ? 'drop' : 'add', [entry]),
 		}),

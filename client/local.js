@@ -1,3 +1,5 @@
+import { readStorage, writeStorage } from '@vanilla-bean/components';
+
 import { collectionKey } from './search';
 import { loadJson } from './ui';
 
@@ -12,14 +14,6 @@ const state = { instances: [], selected: undefined, installed: new Set(), busy: 
 
 const notify = () => {
 	for (const listener of listeners) listener(state);
-};
-
-const remembered = () => {
-	try {
-		return localStorage.getItem(SELECTED_KEY) ?? undefined;
-	} catch {
-		return undefined;
-	}
 };
 
 /** Every repository the instance holds, asked for or pulled in by another, keyed the way the collection keys them. */
@@ -48,7 +42,7 @@ const detect = async () => {
 
 	state.instances = (await response.json()).filter(instance => instance.type === 'client');
 
-	const wanted = remembered();
+	const wanted = readStorage(SELECTED_KEY);
 
 	state.selected = (
 		state.instances.find(instance => instance.name === wanted) ??
@@ -96,11 +90,7 @@ export const local = {
 	select: async name => {
 		state.selected = name;
 
-		try {
-			localStorage.setItem(SELECTED_KEY, name);
-		} catch {
-			// Not remembered past this page
-		}
+		writeStorage(SELECTED_KEY, name);
 
 		state.installed = new Set();
 		notify();

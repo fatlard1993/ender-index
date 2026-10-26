@@ -48,7 +48,7 @@ export default class CollectionBar extends Bar {
 							variant: 'flat',
 							icon: open ? 'chevron-down' : 'chevron-up',
 							textContent: `${items.length} collected`,
-							title: open ? 'Hide the list' : 'Show the list',
+							tooltip: open ? 'Hide the list' : 'Show the list',
 							onPointerPress: () => {
 								open = !open;
 								draw(collection.items);
@@ -73,7 +73,7 @@ export default class CollectionBar extends Bar {
 						new Button({
 							variant: 'flat',
 							icon: 'trash',
-							title: 'Empty the collection',
+							tooltip: 'Empty the collection',
 							onPointerPress: collection.clear,
 						}),
 					],
@@ -89,7 +89,7 @@ export default class CollectionBar extends Bar {
 												new Button({
 													variant: 'flat',
 													icon: 'xmark',
-													title: `Take ${item.title ?? item.repo} out`,
+													tooltip: `Take ${item.title ?? item.repo} out`,
 													onPointerPress: () => collection.toggle(item),
 												}),
 												new Link({ href: `#${modPath(item)}`, textContent: item.title ?? item.repo }),

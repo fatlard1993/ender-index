@@ -4,17 +4,6 @@ export const count = number => number.toLocaleString('en-US');
 
 export const date = iso => (iso ? new Date(iso).toLocaleDateString('en-US', { dateStyle: 'medium' }) : '');
 
-/** A whole view under the router: a column the toolbar sits atop and the content scrolls in. */
-export const View = styled.Component(
-	() => `
-		display: flex;
-		flex-direction: column;
-		flex: 1;
-		min-width: 0;
-		min-height: 0;
-	`,
-);
-
 export const Stack = styled.Component(
 	({ space }) => `
 		display: flex;

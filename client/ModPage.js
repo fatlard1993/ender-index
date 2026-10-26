@@ -1,4 +1,15 @@
-import { Button, Card, Component, Content, EmptyState, Link, Toolbar, styled, theme } from '@vanilla-bean/components';
+import {
+	Button,
+	Card,
+	Component,
+	Content,
+	EmptyState,
+	Link,
+	Toolbar,
+	styled,
+	theme,
+	View,
+} from '@vanilla-bean/components';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import { HOSTS, sharing } from 'ender-launcher/rank';
@@ -21,21 +32,7 @@ import {
 } from './search';
 import { collectButton, installControls } from './controls';
 import { local } from './local';
-import {
-	Chip,
-	Command,
-	Meta,
-	Row,
-	Stack,
-	View,
-	Warning,
-	avatar,
-	copyCommand,
-	count,
-	date,
-	loadJson,
-	paragraph,
-} from './ui';
+import { Chip, Command, Meta, Row, Stack, Warning, avatar, copyCommand, count, date, loadJson, paragraph } from './ui';
 
 const Heading = styled.Component(
 	() => `

@@ -9,6 +9,7 @@ import {
 	Select,
 	Tabs,
 	Toolbar,
+	View,
 	debounce,
 	theme,
 } from '@vanilla-bean/components';
@@ -39,7 +40,7 @@ import {
 	titleOf,
 	writeQuery,
 } from './search';
-import { Chip, Command, Meta, Row, Stack, Title, View, Warning, avatar, copyCommand, count, paragraph } from './ui';
+import { Chip, Command, Meta, Row, Stack, Title, Warning, avatar, copyCommand, count, paragraph } from './ui';
 
 const PAGE_SIZE = 25;
 
@@ -55,7 +56,7 @@ const resultCard = ({ entry, sharing, unproven }, versions, { minecraft }) => {
 		new Row({
 			style: { flexWrap: 'nowrap', alignItems: 'flex-start', gap: theme.space.md },
 			append: [
-				new Link({ href: `#${modPath(entry)}`, title: `Read about ${title}`, append: avatar(pictureUrl(entry)) }),
+				new Link({ href: `#${modPath(entry)}`, tooltip: `Read about ${title}`, append: avatar(pictureUrl(entry)) }),
 				new Stack({
 					style: { flex: '1', minWidth: '0', gap: theme.space.sm },
 					append: [
@@ -252,7 +253,7 @@ export default class SearchPage extends View {
 					const chip = new Button({
 						variant: 'chip',
 						textContent: capability,
-						title: CAPABILITIES[capability],
+						tooltip: CAPABILITIES[capability],
 						onPointerPress: () => {
 							state.avoid = state.avoid.includes(capability)
 								? state.avoid.filter(avoided => avoided !== capability)

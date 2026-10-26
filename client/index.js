@@ -1,9 +1,8 @@
-import { Page, Router } from '@vanilla-bean/components';
+import { Page, Router, View } from '@vanilla-bean/components';
 
 import CollectionBar from './CollectionBar';
 import ModPage from './ModPage';
 import SearchPage from './SearchPage';
-import { View } from './ui';
 
 import '@vanilla-bean/components/app/reloadOnBuild';
 
