@@ -21,7 +21,8 @@ import {
 	repositoryUrl,
 	titleOf,
 } from './search';
-import { collectButton } from './SearchPage';
+import { collectButton, installControls } from './controls';
+import { local } from './local';
 import {
 	Chip,
 	Command,
@@ -325,11 +326,14 @@ export default class ModPage extends View {
 		const downloadTotal = new Stat({ append: [new Component({ tag: 'strong', textContent: '…' }), 'downloads'] });
 		const releases = new Stack();
 		const readme = new Stack({ append: new EmptyState({ loading: true, title: 'Fetching the readme' }) });
-		const collect = new Component({ append: collectButton(entry, title) });
+		const controls = new Row({ append: [collectButton(entry), ...installControls(entry)] });
+		const redrawControls = () => controls.content([collectButton(entry), ...installControls(entry)]);
 		const watched = (record.releases ?? []).filter(release => release.assets.length > 0);
 
 		document.title = `${title} :: ender index`;
-		collection.subscribe(() => collect.content(collectButton(entry, title)), signal);
+		collection.subscribe(redrawControls, signal);
+		local.subscribe(redrawControls, signal);
+		local.ready().then(redrawControls);
 
 		const drawReleases = downloads => releases.content(watched.map(release => releaseCard(entry, release, downloads)));
 
@@ -365,7 +369,7 @@ export default class ModPage extends View {
 				append: [
 					new Command({ tag: 'code', textContent: command }),
 					new Button({ icon: 'copy', variant: 'flat', title: 'Copy', onPointerPress: () => copyCommand(command) }),
-					collect,
+					controls,
 				],
 			}),
 			new Row({

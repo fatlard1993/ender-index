@@ -6,6 +6,15 @@ Search it at **[fatlard1993.github.io/ender-index](https://fatlard1993.github.io
 
 There is nothing to sign up for and nothing to describe twice. A repository is in the index because it looks like a mod and ships like one: loader metadata in its source tree, and jars attached to its releases on GitHub, Codeberg or GitLab. Everything else is read from what it already publishes.
 
+## On your own machine
+
+```sh
+bun install
+bun run local
+```
+
+The same pages at `http://localhost:7460`, with your ender instances beside them: pick one, and each mod says whether it is installed, with a button to add or drop it, and the collection installs in one press. It runs the `ender` on your `PATH` (or `ENDER`), answers only pages it served itself, and adds nothing but the `gh:`, `cb:`, `gl:`, `mr:` and `cf:` specs search writes.
+
 ## Getting in
 
 1. Keep your loader's metadata where your build expects it: `src/main/resources/fabric.mod.json`, `quilt.mod.json`, or `META-INF/mods.toml` / `META-INF/neoforge.mods.toml`.

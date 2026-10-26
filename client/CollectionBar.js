@@ -1,6 +1,8 @@
 import { Button, Component, Link, styled, theme } from '@vanilla-bean/components';
 
 import { collection } from './collection';
+import { runLocally } from './controls';
+import { local } from './local';
 import { installAllCommand, modPath } from './search';
 import { Command, Row, Stack, copyCommand } from './ui';
 
@@ -37,7 +39,7 @@ export default class CollectionBar extends Bar {
 				return;
 			}
 
-			const command = installAllCommand(items);
+			const command = installAllCommand(items, { instance: local.selected });
 
 			this.content([
 				new Row({
@@ -53,7 +55,21 @@ export default class CollectionBar extends Bar {
 							},
 						}),
 						new Command({ tag: 'code', textContent: command, style: { flex: '1', minWidth: '12em' } }),
-						new Button({ icon: 'copy', textContent: 'Copy', onPointerPress: () => copyCommand(command) }),
+						new Button({
+							icon: 'copy',
+							variant: local.selected ? 'flat' : undefined,
+							textContent: 'Copy',
+							onPointerPress: () => copyCommand(command),
+						}),
+						...(local.selected
+							? [
+									new Button({
+										icon: 'download',
+										textContent: `Install all into ${local.selected}`,
+										onPointerPress: () => runLocally('add', collection.items),
+									}),
+								]
+							: []),
 						new Button({ variant: 'flat', icon: 'trash', title: 'Empty the collection', onPointerPress: collection.clear }),
 					],
 				}),
@@ -83,6 +99,7 @@ export default class CollectionBar extends Bar {
 		};
 
 		collection.subscribe(draw, this.signal);
+		local.subscribe(() => draw(collection.items), this.signal);
 		draw(collection.items);
 	}
 }

@@ -2,7 +2,9 @@ import { Button, Card, Content, EmptyState, Input, Link, Notify, Select, Tabs, T
 import { HOSTS, rank } from 'ender-launcher/rank';
 
 import { collection } from './collection';
+import { collectButton, installControls, instancePicker } from './controls';
 import { loadListing, loadVersions } from './data';
+import { local } from './local';
 import {
 	CAPABILITIES,
 	INDEX,
@@ -23,19 +25,6 @@ import {
 import { Chip, Command, Meta, Row, Stack, Title, View, Warning, avatar, copyCommand, count, paragraph } from './ui';
 
 const PAGE_SIZE = 25;
-
-export const collectButton = (entry, title) => {
-	const collected = collection.has(entry);
-
-	return new Button({
-		icon: collected ? 'check' : 'plus',
-		variant: collected ? undefined : 'flat',
-		intent: collected ? 'success' : undefined,
-		textContent: collected ? 'Collected' : 'Collect',
-		title: collected ? 'Take it out of the collection' : 'Gather it with others to install together',
-		onPointerPress: () => collection.toggle(entry, title),
-	});
-};
 
 const resultCard = ({ entry, sharing }, versions, { minecraft }) => {
 	const host = entry.host ?? 'github';
@@ -94,7 +83,8 @@ const resultCard = ({ entry, sharing }, versions, { minecraft }) => {
 							append: [
 								new Command({ tag: 'code', textContent: command }),
 								new Button({ icon: 'copy', variant: 'flat', title: 'Copy', onPointerPress: () => copyCommand(command) }),
-								collectButton(entry, title),
+								collectButton(entry),
+								...installControls(entry),
 								minecraft
 									? new Link({ href: releasesUrl(entry), target: '_blank', textContent: 'Releases' })
 									: new Link({ href: releaseUrl(entry), target: '_blank', textContent: `Release ${entry.latest.tag}` }),
@@ -227,6 +217,26 @@ export default class SearchPage extends View {
 			});
 
 		collection.subscribe(() => draw(), this.signal);
+		local.subscribe(() => draw(), this.signal);
+
+		const localBar = new Row();
+
+		local.ready().then(available => {
+			if (!available || this.signal.aborted) return;
+
+			localBar.content([new Meta({ textContent: 'Installing into' }), instancePicker()]);
+
+			// Filters follow the instance, so what is offered is what it can load
+			const chosen = local.instances.find(instance => instance.name === local.selected);
+
+			if (chosen && !state.minecraft && !state.loader) {
+				state.minecraft = chosen.minecraft;
+				state.loader = chosen.loader?.type in LOADERS ? chosen.loader.type : undefined;
+				minecraft.options.value = state.minecraft;
+				loader.options.selected = state.loader ?? 'any';
+				restart();
+			}
+		});
 
 		const scrolling = new Content({
 			column: 900,
@@ -238,6 +248,7 @@ export default class SearchPage extends View {
 						'Minecraft mods found where their source lives. Every jar here came from the releases of its own repository and was scanned by ender: what its code can reach is a finding, not a verdict.',
 				}),
 				new Toolbar({ style: { margin: '12px 0 4px' }, append: [search, minecraft, loader] }),
+				localBar,
 				status,
 				new Stack({ style: { marginTop: '12px' }, append: [results, more] }),
 			],
