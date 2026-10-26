@@ -1,11 +1,14 @@
 module.exports = {
 	skipWords: [
+		'classloading',
 		'codeberg',
 		'ender',
 		'etag',
 		'fabricmc',
+		'fontsource',
 		'forge',
 		'forgejo',
+		'fortawesome',
 		'gh',
 		'gitlab',
 		'gradle',
@@ -13,7 +16,10 @@ module.exports = {
 		'jar',
 		'jars',
 		'javadoc',
+		'kode',
+		'mc',
 		'minecraft',
+		'mojang',
 		'neo',
 		'neoforge',
 		'quilt',
@@ -27,5 +33,7 @@ module.exports = {
 		'unpack',
 		'unwrapped',
 		'vnd',
+		'webfonts',
+		'woff2',
 	],
 };

@@ -2,6 +2,8 @@
 
 Minecraft mods found where their source lives, described by their own jars, and scanned every night.
 
+Search it at **[fatlard1993.github.io/ender-index](https://fatlard1993.github.io/ender-index/)**, or from a terminal with [ender](https://github.com/fatlard1993/ender-launcher)'s `ender search`. Both rank the same way.
+
 There is nothing to sign up for and nothing to describe twice. A repository is in the index because it looks like a mod and ships like one: loader metadata in its source tree, and jars attached to its releases on GitHub, Codeberg or GitLab. Everything else is read from what it already publishes.
 
 ## Getting in

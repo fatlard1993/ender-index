@@ -17,4 +17,11 @@ module.exports = [
 			'import/no-unresolved': ['warn', { ignore: ['^ender-launcher/'] }],
 		},
 	},
+	{
+		files: ['client/**/*.js', 'scripts/**/*.js', 'test/**/*.js'],
+		rules: {
+			// The resolver does not read package exports maps, which is how ender exposes its ranking.
+			'import/no-unresolved': ['warn', { ignore: ['^bun', '^ender-launcher/', '^@vanilla-bean/components/app$'] }],
+		},
+	},
 ];
