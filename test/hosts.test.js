@@ -1,3 +1,5 @@
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, test } from 'bun:test';
 
@@ -67,7 +69,8 @@ describe('downloads', () => {
 					}),
 				),
 		});
-		const path = join(import.meta.dir, '..', '.cache', 'oversized.jar');
+		const directory = await mkdtemp(join(tmpdir(), 'ender-download-'));
+		const path = join(directory, 'oversized.jar');
 
 		try {
 			await expect(download(`http://localhost:${server.port}/big.jar`, path, { limit })).rejects.toThrow(
@@ -75,9 +78,7 @@ describe('downloads', () => {
 			);
 		} finally {
 			server.stop();
-			await Bun.file(path)
-				.delete?.()
-				.catch(() => {});
+			await rm(directory, { recursive: true, force: true });
 		}
 	});
 });

@@ -1,3 +1,6 @@
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { describe, expect, test } from 'bun:test';
 
 import { copyLibraryStylesheets } from '../scripts/buildSite';
@@ -130,15 +133,19 @@ describe('the search page', () => {
 	});
 
 	test('the stylesheets the page links come with the fonts they name, since Pages serves only files', async () => {
-		const out = `${import.meta.dir}/../.cache/site-test`;
+		const out = await mkdtemp(join(tmpdir(), 'ender-site-'));
 
-		await copyLibraryStylesheets(out);
+		try {
+			await copyLibraryStylesheets(out);
 
-		expect(await Bun.file(`${out}/@fortawesome/fontawesome-free/css/all.css`).exists()).toBe(true);
-		expect(await Bun.file(`${out}/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2`).exists()).toBe(true);
-		expect(
-			await Bun.file(`${out}/@fontsource-variable/kode-mono/files/kode-mono-latin-wght-normal.woff2`).exists(),
-		).toBe(true);
+			expect(await Bun.file(`${out}/@fortawesome/fontawesome-free/css/all.css`).exists()).toBe(true);
+			expect(await Bun.file(`${out}/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2`).exists()).toBe(true);
+			expect(
+				await Bun.file(`${out}/@fontsource-variable/kode-mono/files/kode-mono-latin-wght-normal.woff2`).exists(),
+			).toBe(true);
+		} finally {
+			await rm(out, { recursive: true, force: true });
+		}
 	});
 });
 
