@@ -24,6 +24,21 @@ export const copyLibraryStylesheets = async (out = OUT) => {
 	}
 };
 
+/**
+ * Files the library's styles reach by a path from the page rather than through a stylesheet: the code font is declared
+ * in a style the library writes at runtime.
+ */
+export const LIBRARY_FILES = ['@vanilla-bean/components/FontWithASyntaxHighlighter-Regular.woff2'];
+
+export const copyLibraryFiles = async (out = OUT) => {
+	const library = dirname(Bun.resolveSync('@vanilla-bean/components/package.json', import.meta.dir));
+
+	for (const file of LIBRARY_FILES) {
+		await mkdir(dirname(join(out, file)), { recursive: true });
+		await Bun.write(join(out, file), Bun.file(join(library, relative('@vanilla-bean/components', file))));
+	}
+};
+
 if (import.meta.main) {
 	const { success, logs } = await buildClient({ publicPath: '' });
 
@@ -34,6 +49,7 @@ if (import.meta.main) {
 	}
 
 	await copyLibraryStylesheets();
+	await copyLibraryFiles();
 
 	console.log(`Built the search page into ${OUT}`);
 }

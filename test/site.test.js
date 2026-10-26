@@ -2,8 +2,18 @@ import { describe, expect, test } from 'bun:test';
 
 import { copyLibraryStylesheets } from '../scripts/buildSite';
 import {
+	avatarUrl,
+	collectionKey,
+	downloadCounts,
+	fileSize,
 	fittingVersions,
+	installAllCommand,
 	installCommand,
+	modPath,
+	readmeSources,
+	readmeUrl,
+	recordUrl,
+	releasesApi,
 	readQuery,
 	releaseUrl,
 	releasedVersions,
@@ -86,5 +96,73 @@ describe('the search page', () => {
 		expect(
 			await Bun.file(`${out}/@fontsource-variable/kode-mono/files/kode-mono-latin-wght-normal.woff2`).exists(),
 		).toBe(true);
+	});
+});
+
+describe('a mod page', () => {
+	test('is addressed by host and repository, with a nested GitLab group kept to one segment', () => {
+		expect(modPath(entry())).toBe('/mod/github/CaffeineMC/lithium');
+		expect(modPath(entry({ host: 'gitlab', repo: 'group/sub/project' }))).toBe('/mod/gitlab/group%2Fsub/project');
+	});
+
+	test("reads the repository's record from where the index keeps each host's", () => {
+		expect(recordUrl(entry(), 'https://x')).toBe('https://x/mods/CaffeineMC/lithium.json');
+		expect(recordUrl(entry({ host: 'codeberg' }), 'https://x')).toBe('https://x/mods/codeberg.org/CaffeineMC/lithium.json');
+	});
+
+	test('pictures a GitHub owner and leaves the hosts that need a request to find one', () => {
+		expect(avatarUrl(entry())).toBe('https://github.com/CaffeineMC.png?size=96');
+		expect(avatarUrl(entry({ host: 'codeberg' }))).toBeUndefined();
+	});
+
+	test("resolves a readme's links from the repository root", () => {
+		const { raw, page } = readmeSources(entry());
+
+		expect(readmeUrl('docs/shot.png', raw)).toBe('https://raw.githubusercontent.com/CaffeineMC/lithium/HEAD/docs/shot.png');
+		expect(readmeUrl('/docs/shot.png', raw)).toBe(readmeUrl('./docs/shot.png', raw));
+		expect(readmeUrl('LICENSE', page)).toBe('https://github.com/CaffeineMC/lithium/blob/HEAD/LICENSE');
+		expect(readmeUrl('#install', raw)).toBe('#install');
+		expect(readmeUrl('https://example.com/a.png', raw)).toBe('https://example.com/a.png');
+		expect(readmeUrl('https://github.com/a/b/blob/main/shot.png', raw)).toBe(
+			'https://raw.githubusercontent.com/a/b/main/shot.png',
+		);
+	});
+
+	test('fetches a GitLab readme through its API, which answers a page from another origin', () => {
+		expect(readmeSources(entry({ host: 'gitlab', repo: 'g/p' })).candidates[0]).toBe(
+			'https://gitlab.com/api/v4/projects/g%2Fp/repository/files/README.md/raw?ref=HEAD',
+		);
+	});
+
+	test('counts downloads by tag and file, where the host reports them', () => {
+		const counts = downloadCounts([
+			{ tag_name: '1.0', assets: [{ name: 'a.jar', download_count: 5 }] },
+			{ tag_name: '0.9', assets: [{ name: 'a.jar' }] },
+		]);
+
+		expect(counts.get('1.0/a.jar')).toBe(5);
+		expect(counts.get('0.9/a.jar')).toBe(0);
+		expect(releasesApi(entry({ host: 'gitlab' }))).toBeUndefined();
+	});
+
+	test('says a jar size the way a reader would', () => {
+		expect(fileSize(51234)).toBe('50 KB');
+		expect(fileSize(3 * 1024 * 1024)).toBe('3.0 MB');
+		expect(fileSize(10)).toBe('1 KB');
+	});
+});
+
+describe('a collection', () => {
+	test('installs in one line, every mod by the spec ender reads back', () => {
+		const collected = [entry(), entry({ host: 'codeberg', repo: 'a/b' })];
+
+		expect(installAllCommand(collected)).toBe('ender add gh:CaffeineMC/lithium cb:a/b');
+		expect(installAllCommand(collected, { instance: 'suite' })).toBe(
+			'ender add gh:CaffeineMC/lithium cb:a/b --instance suite',
+		);
+	});
+
+	test('tells the same repository on two hosts apart', () => {
+		expect(collectionKey(entry())).not.toBe(collectionKey(entry({ host: 'codeberg' })));
 	});
 });

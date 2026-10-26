@@ -1,125 +1,45 @@
-import {
-	Button,
-	Card,
-	Component,
-	Content,
-	EmptyState,
-	Input,
-	Link,
-	Notify,
-	Select,
-	Tabs,
-	Toolbar,
-	copyToClipboard,
-	debounce,
-	styled,
-	theme,
-} from '@vanilla-bean/components';
+import { Button, Card, Content, EmptyState, Input, Link, Notify, Select, Tabs, Toolbar, debounce, theme } from '@vanilla-bean/components';
 import { HOSTS, rank } from 'ender-launcher/rank';
 
+import { collection } from './collection';
+import { loadListing, loadVersions } from './data';
 import {
 	CAPABILITIES,
 	INDEX,
 	LOADERS,
-	MANIFEST,
 	REPOSITORY,
+	avatarUrl,
 	fittingVersions,
 	installCommand,
 	loadersOf,
+	modPath,
 	readQuery,
 	releaseUrl,
-	releasedVersions,
 	releasesUrl,
 	repositoryUrl,
 	titleOf,
 	writeQuery,
 } from './search';
+import { Chip, Command, Meta, Row, Stack, Title, View, Warning, avatar, copyCommand, count, paragraph } from './ui';
 
 const PAGE_SIZE = 25;
 
-const count = number => number.toLocaleString('en-US');
+export const collectButton = (entry, title) => {
+	const collected = collection.has(entry);
 
-const Stack = styled.Component(
-	({ space }) => `
-		display: flex;
-		flex-direction: column;
-		gap: ${space.md};
-	`,
-);
-
-const Row = styled.Component(
-	({ space }) => `
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: ${space.sm};
-	`,
-);
-
-const Meta = styled.Component(
-	({ colors }) => `
-		color: ${colors.muted};
-		font-size: 0.85em;
-	`,
-);
-
-const Title = styled.Component(
-	() => `
-		font-weight: bold;
-		font-size: 1.1em;
-	`,
-);
-
-const Chip = styled.Component(
-	({ colors, radius, space }) => `
-		border: 1px solid ${colors.border};
-		border-radius: ${radius.pill};
-		padding: 0 ${space.sm};
-		font-size: 0.8em;
-
-		&.finding {
-			border-color: ${colors.alpha(colors.warning, 0.6)};
-			color: ${colors.warning};
-		}
-	`,
-);
-
-const Warning = styled.Component(
-	({ colors }) => `
-		color: ${colors.warning};
-		font-size: 0.9em;
-	`,
-);
-
-const Command = styled.Component(
-	({ colors, radius, space }) => `
-		background: ${colors.overlay};
-		border-radius: ${radius.sm};
-		padding: ${space.xs} ${space.sm};
-		font-size: 0.9em;
-		user-select: all;
-	`,
-);
-
-const loadJson = async (url, signal) => {
-	const response = await fetch(url, { signal });
-
-	if (!response.ok) throw new Error(`${url} answered ${response.status}`);
-
-	return response.json();
-};
-
-const copyCommand = async command => {
-	const copied = await copyToClipboard(command);
-
-	new Notify({
-		intent: copied ? 'success' : 'warning',
-		content: copied ? `Copied ${command}` : 'The clipboard is out of reach here; select the command and copy it',
+	return new Button({
+		icon: collected ? 'check' : 'plus',
+		variant: collected ? undefined : 'flat',
+		intent: collected ? 'success' : undefined,
+		textContent: collected ? 'Collected' : 'Collect',
+		title: collected ? 'Take it out of the collection' : 'Gather it with others to install together',
+		onPointerPress: () => collection.toggle(entry, title),
 	});
 };
 
 const resultCard = ({ entry, sharing }, versions, { minecraft }) => {
 	const host = entry.host ?? 'github';
+	const title = titleOf(entry);
 	const fitting = fittingVersions(entry, versions, { minecraft });
 	const command = installCommand(entry);
 	const capabilities = entry.latest?.capabilities ?? [];
@@ -127,56 +47,73 @@ const resultCard = ({ entry, sharing }, versions, { minecraft }) => {
 	return new Card(
 		{ accent: sharing || entry.replaced ? theme.colors.warning : undefined },
 		new Row({
+			style: { flexWrap: 'nowrap', alignItems: 'flex-start', gap: theme.space.md },
 			append: [
-				new Title({ textContent: titleOf(entry) }),
-				new Link({
-					href: repositoryUrl(entry),
-					target: '_blank',
-					textContent: host === 'github' ? entry.repo : `${entry.repo} on ${HOSTS[host]}`,
+				new Link({ href: `#${modPath(entry)}`, title: `Read about ${title}`, append: avatar(avatarUrl(entry)) }),
+				new Stack({
+					style: { flex: '1', minWidth: '0', gap: theme.space.sm },
+					append: [
+						new Row({
+							append: [
+								new Link({ href: `#${modPath(entry)}`, append: new Title({ textContent: title }) }),
+								new Link({
+									href: repositoryUrl(entry),
+									target: '_blank',
+									textContent: host === 'github' ? entry.repo : `${entry.repo} on ${HOSTS[host]}`,
+								}),
+								new Meta({ textContent: `${count(entry.stars ?? 0)} stars` }),
+							],
+						}),
+						...(entry.description ? [paragraph(entry.description)] : []),
+						new Row({
+							append: [
+								...loadersOf(entry).map(loader => new Chip({ textContent: loader })),
+								...(fitting.versions.length > 0
+									? [
+											new Chip({
+												textContent: `${fitting.versions.join(', ')}${fitting.more > 0 ? ` +${fitting.more}` : ''}`,
+												title: 'The newest Minecraft releases its jars declare',
+											}),
+										]
+									: []),
+								...capabilities.map(
+									capability =>
+										new Chip({
+											addClass: 'finding',
+											textContent: `reaches ${capability}`,
+											title: CAPABILITIES[capability],
+										}),
+								),
+							],
+						}),
+						...(sharing ? [new Warning({ textContent: `It ${sharing}: check you have the one you mean` })] : []),
+						...(entry.replaced
+							? [new Warning({ textContent: 'A jar in one of its releases was changed after publishing' })]
+							: []),
+						new Row({
+							append: [
+								new Command({ tag: 'code', textContent: command }),
+								new Button({ icon: 'copy', variant: 'flat', title: 'Copy', onPointerPress: () => copyCommand(command) }),
+								collectButton(entry, title),
+								minecraft
+									? new Link({ href: releasesUrl(entry), target: '_blank', textContent: 'Releases' })
+									: new Link({ href: releaseUrl(entry), target: '_blank', textContent: `Release ${entry.latest.tag}` }),
+							],
+						}),
+					],
 				}),
-				new Meta({ textContent: `${count(entry.stars ?? 0)} stars` }),
-			],
-		}),
-		...(entry.description ? [new Component({ tag: 'p', textContent: entry.description, style: { margin: 0 } })] : []),
-		new Row({
-			append: [
-				...loadersOf(entry).map(loader => new Chip({ textContent: loader })),
-				...(fitting.versions.length > 0
-					? [
-							new Chip({
-								textContent: `${fitting.versions.join(', ')}${fitting.more > 0 ? ` +${fitting.more}` : ''}`,
-								title: 'The newest Minecraft releases its jars declare',
-							}),
-						]
-					: []),
-				...capabilities.map(
-					capability =>
-						new Chip({ addClass: 'finding', textContent: `reaches ${capability}`, title: CAPABILITIES[capability] }),
-				),
-			],
-		}),
-		...(sharing ? [new Warning({ textContent: `It ${sharing}: check you have the one you mean` })] : []),
-		...(entry.replaced
-			? [new Warning({ textContent: 'A jar in one of its releases was changed after publishing' })]
-			: []),
-		new Row({
-			append: [
-				new Command({ tag: 'code', textContent: command }),
-				new Button({ icon: 'copy', variant: 'flat', title: 'Copy', onPointerPress: () => copyCommand(command) }),
-				minecraft
-					? new Link({ href: releasesUrl(entry), target: '_blank', textContent: 'Releases' })
-					: new Link({ href: releaseUrl(entry), target: '_blank', textContent: `Release ${entry.latest.tag}` }),
 			],
 		}),
 	);
 };
 
-export default class SearchPage extends Component {
+export default class SearchPage extends View {
 	build() {
 		const state = readQuery(location.search);
 		let entries;
 		let versions = [];
 		let shown = PAGE_SIZE;
+		let ranked = [];
 
 		const results = new Stack({ append: new EmptyState({ loading: true, title: 'Loading the index' }) });
 		const status = new Meta();
@@ -184,33 +121,44 @@ export default class SearchPage extends Component {
 			variant: 'flat',
 			textContent: 'Show more',
 			style: { display: 'none', alignSelf: 'center' },
-			onPointerPress: () => {
-				shown += PAGE_SIZE;
-				render();
-			},
+			onPointerPress: () => showMore(),
 		});
 
-		const render = () => {
-			if (entries === undefined) return;
-
-			history.replaceState(null, '', `${location.pathname}${writeQuery(state)}`);
-
-			const ranked = rank(entries, state.query, state);
-
-			status.content(
-				`${count(ranked.length)} of ${count(entries.length)} indexed repositories${state.query.trim() ? '' : ', by stars'}`,
-			);
+		const draw = () => {
 			results.content(
 				ranked.length > 0
 					? ranked.slice(0, shown).map(found => resultCard(found, versions, state))
 					: new EmptyState({
 							icon: 'magnifying-glass',
 							title: 'No mods match',
-							message:
-								'Every word has to appear in a mod id, name or description, and its jars have to fit the filters',
+							message: 'Every word has to appear in a mod id, name or description, and its jars have to fit the filters',
 						}),
 			);
 			more.elem.style.display = ranked.length > shown ? '' : 'none';
+		};
+
+		const render = () => {
+			if (entries === undefined) return;
+
+			history.replaceState(null, '', `${location.pathname}${writeQuery(state)}${location.hash}`);
+
+			ranked = rank(entries, state.query, state);
+			status.content(
+				`${count(ranked.length)} of ${count(entries.length)} indexed repositories${state.query.trim() ? '' : ', by stars'}`,
+			);
+			draw();
+		};
+
+		const showMore = () => {
+			if (ranked.length <= shown) return;
+
+			shown += PAGE_SIZE;
+			draw();
+		};
+
+		const restart = () => {
+			shown = PAGE_SIZE;
+			render();
 		};
 
 		const search = new Input({
@@ -220,8 +168,7 @@ export default class SearchPage extends Component {
 			style: { flex: '1', minWidth: '12em', width: 'auto' },
 			onInput: debounce(({ target: { value } }) => {
 				state.query = value;
-				shown = PAGE_SIZE;
-				render();
+				restart();
 			}, 150),
 		});
 
@@ -231,8 +178,7 @@ export default class SearchPage extends Component {
 			style: { width: 'auto' },
 			onChange: ({ target: { value } }) => {
 				state.minecraft = value || undefined;
-				shown = PAGE_SIZE;
-				render();
+				restart();
 			},
 		});
 
@@ -242,27 +188,24 @@ export default class SearchPage extends Component {
 			selected: state.loader ?? 'any',
 			onChange: ({ value }) => {
 				state.loader = value === 'any' ? undefined : value;
-				shown = PAGE_SIZE;
-				render();
+				restart();
 			},
 		});
 
-		const versionList = loadJson(MANIFEST, this.signal)
-			.then(releasedVersions)
-			.catch(error => {
-				if (error.name === 'AbortError') return [];
-
-				new Notify({
-					intent: 'warning',
-					content: `Mojang's version list did not load (${error.message}), so results do not say which versions they fit`,
-				});
-
-				return [];
+		const versionList = loadVersions().catch(error => {
+			new Notify({
+				intent: 'warning',
+				content: `Mojang's version list did not load (${error.message}), so results do not say which versions they fit`,
 			});
 
-		Promise.all([loadJson(`${INDEX}/search.json`, this.signal), versionList])
+			return [];
+		});
+
+		Promise.all([loadListing(), versionList])
 			.then(([listing, released]) => {
-				entries = listing.filter(entry => !entry.archived);
+				if (this.signal.aborted) return;
+
+				entries = listing;
 				versions = released;
 				minecraft.options.options = [
 					{ label: 'Any Minecraft', value: '' },
@@ -272,7 +215,7 @@ export default class SearchPage extends Component {
 				render();
 			})
 			.catch(error => {
-				if (error.name === 'AbortError') return;
+				if (this.signal.aborted) return;
 
 				results.content(
 					new EmptyState({
@@ -283,26 +226,39 @@ export default class SearchPage extends Component {
 				);
 			});
 
+		collection.subscribe(() => draw(), this.signal);
+
+		const scrolling = new Content({
+			column: 900,
+			style: { paddingBlock: '12px' },
+			append: [
+				new Meta({
+					tag: 'p',
+					textContent:
+						'Minecraft mods found where their source lives. Every jar here came from the releases of its own repository and was scanned by ender: what its code can reach is a finding, not a verdict.',
+				}),
+				new Toolbar({ style: { margin: '12px 0 4px' }, append: [search, minecraft, loader] }),
+				status,
+				new Stack({ style: { marginTop: '12px' }, append: [results, more] }),
+			],
+		});
+
+		// The next page loads as the reader nears the end, a screen ahead, so the button is only met when nothing does
+		const nearTheEnd = new IntersectionObserver(([seen]) => seen.isIntersecting && showMore(), {
+			root: scrolling.elem,
+			rootMargin: '0px 0px 100% 0px',
+		});
+
+		nearTheEnd.observe(more.elem);
+		this.signal.addEventListener('abort', () => nearTheEnd.disconnect());
+
 		this.content([
 			new Toolbar({
 				variant: 'bar',
 				heading: 'ender index',
 				append: [new Link({ variant: 'flat', href: REPOSITORY, target: '_blank', textContent: 'Source' })],
 			}),
-			new Content({
-				column: 900,
-				style: { paddingBlock: '12px' },
-				append: [
-					new Meta({
-						tag: 'p',
-						textContent:
-							'Minecraft mods found where their source lives. Every jar here came from the releases of its own repository and was scanned by ender: what its code can reach is a finding, not a verdict.',
-					}),
-					new Toolbar({ style: { margin: '12px 0 4px' }, append: [search, minecraft, loader] }),
-					status,
-					new Stack({ style: { marginTop: '12px' }, append: [results, more] }),
-				],
-			}),
+			scrolling,
 		]);
 
 		search.elem.focus();
