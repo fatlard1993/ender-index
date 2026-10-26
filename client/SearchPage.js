@@ -3,6 +3,7 @@ import {
 	Card,
 	Content,
 	EmptyState,
+	Icon,
 	Input,
 	Link,
 	Notify,
@@ -39,6 +40,7 @@ import {
 	releasesUrl,
 	repositoryUrl,
 	aboutOf,
+	supportOf,
 	titleOf,
 	writeQuery,
 } from './search';
@@ -83,6 +85,25 @@ const filtersLabel = ({ side, released, host, sort, avoid }) => {
 // Typing anywhere searches, except into a field, whose keys are its own
 const isTypingInField = target =>
 	target?.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target?.tagName);
+
+/** The first way its author takes support, named; the mod's page lists every one. */
+const supportLink = entry => {
+	const [first, ...rest] = supportOf(entry);
+
+	if (first === undefined) return [];
+
+	return [
+		new Link({
+			variant: 'flat',
+			href: first.url,
+			target: '_blank',
+			attributes: { rel: 'noopener noreferrer' },
+			style: { display: 'inline-flex', flexDirection: 'row', alignItems: 'center', gap: theme.space.xs },
+			append: [new Icon({ icon: 'heart', style: { color: theme.colors.danger } }), 'Support'],
+			tooltip: `Support the author on ${first.label}${rest.length > 0 ? `, or ${rest.length} other ${rest.length === 1 ? 'way' : 'ways'} on its page` : ''}`,
+		}),
+	];
+};
 
 const resultCard = ({ entry, sharing, unproven, author }, versions, { minecraft }) => {
 	const host = entry.host ?? 'github';
@@ -170,6 +191,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, { minecraft 
 								}),
 								collectButton(entry),
 								...installControls(entry),
+								...supportLink(entry),
 								minecraft
 									? new Link({ href: releasesUrl(entry), target: '_blank', textContent: 'Releases' })
 									: new Link({ href: releaseUrl(entry), target: '_blank', textContent: `Release ${entry.latest.tag}` }),

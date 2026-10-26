@@ -15,6 +15,7 @@ import {
 	pictureUrl,
 	readmeSources,
 	readmeUrl,
+	supportOf,
 	recordUrl,
 	readQuery,
 	refine,
@@ -125,6 +126,23 @@ describe('the search page', () => {
 		expect(repos({ sort: 'stars' })).toEqual(['b/old', 'a/best', 'd/codeberg', 'c/network']);
 		expect(repos({ sort: 'downloads' })[0]).toBe('c/network');
 		expect(repos({ sort: 'used' })[0]).toBe('c/network');
+	});
+
+	test('names each way to support an author for where it leads, a custom link by its site', () => {
+		expect(
+			supportOf(
+				entry({
+					funding: [
+						{ platform: 'ko_fi', url: 'https://ko-fi.com/maker' },
+						{ platform: 'custom', url: 'https://www.example.com/tip' },
+					],
+				}),
+			),
+		).toEqual([
+			{ url: 'https://ko-fi.com/maker', label: 'Ko-fi' },
+			{ url: 'https://www.example.com/tip', label: 'example.com' },
+		]);
+		expect(supportOf(entry())).toEqual([]);
 	});
 
 	test('a repository whose jars name no mods is called by its own name', () => {

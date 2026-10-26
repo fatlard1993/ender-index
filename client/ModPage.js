@@ -21,6 +21,7 @@ import {
 	CAPABILITIES,
 	REPOSITORY,
 	aboutOf,
+	supportOf,
 	fileSize,
 	installCommand,
 	loadersOf,
@@ -387,6 +388,28 @@ export default class ModPage extends View {
 					stat(date(record.pushed), 'last pushed'),
 				],
 			}),
+			...(supportOf(entry).length > 0
+				? [
+						new SectionLabel({ level: 2, textContent: 'Support the author', style: { marginTop: theme.space.xl } }),
+						new Row({
+							append: supportOf(entry).map(
+								({ url, label }) =>
+									new Link({
+										variant: 'raised',
+										href: url,
+										target: '_blank',
+										attributes: { rel: 'noopener noreferrer' },
+										textContent: label,
+									}),
+							),
+						}),
+						new Meta({
+							tag: 'p',
+							textContent:
+								'From the FUNDING.yml its author keeps on the repository or their account. The index takes no share.',
+						}),
+					]
+				: []),
 			new SectionLabel({ level: 2, textContent: 'Readme', style: { marginTop: theme.space.xl } }),
 			readme,
 			new SectionLabel({
