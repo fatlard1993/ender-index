@@ -148,9 +148,12 @@ describe('releases switched off', () => {
 });
 
 describe('a request', () => {
-	const serving = statuses => {
+	const serving = (statuses, headers) => {
 		let asked = 0;
-		const server = Bun.serve({ port: 0, fetch: () => new Response('ok', { status: statuses[asked++] ?? 200 }) });
+		const server = Bun.serve({
+			port: 0,
+			fetch: () => new Response('ok', { status: statuses[asked++] ?? 200, headers }),
+		});
 
 		return { server, url: `http://localhost:${server.port}/`, asked: () => asked };
 	};
@@ -180,6 +183,26 @@ describe('a request', () => {
 		} finally {
 			failing.server.stop();
 			missing.server.stop();
+		}
+	});
+
+	test('waits as long as a 429 asks when that is short, and gives back one that asks for longer', async () => {
+		const { fetchSteady } = await import('../src/fetch');
+		const soon = serving([429, 429], { 'retry-after': '0' });
+		const later = serving([429], { 'retry-after': '3600' });
+		const reset = serving([429], { 'ratelimit-reset': String(Math.floor(Date.now() / 1000)) });
+
+		try {
+			expect((await fetchSteady(soon.url, undefined, { pauses: [0, 0] })).status).toBe(200);
+			expect(soon.asked()).toBe(3);
+			expect((await fetchSteady(later.url, undefined, { pauses: [0, 0] })).status).toBe(429);
+			expect(later.asked()).toBe(1);
+			expect((await fetchSteady(reset.url, undefined, { pauses: [0, 0] })).status).toBe(200);
+			expect(reset.asked()).toBe(2);
+		} finally {
+			soon.server.stop();
+			later.server.stop();
+			reset.server.stop();
 		}
 	});
 });
