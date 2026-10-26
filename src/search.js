@@ -1,4 +1,4 @@
-import { providerOf, requiredIds } from 'ender-launcher/rank';
+import { providerOf, requiredIds, sharing } from 'ender-launcher/rank';
 
 const unique = (items, key) => [...new Map(items.map(item => [key(item), item])).values()];
 
@@ -114,6 +114,8 @@ export const buildSearch = records => {
 		.map(summarize)
 		.filter(entry => entry.latest !== undefined)
 		.sort((a, b) => a.repo.localeCompare(b.repo));
+
+	for (const entry of entries) entry.shares = sharing(entry, entries);
 
 	return countDependents(entries, listed);
 };

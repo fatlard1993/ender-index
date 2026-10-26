@@ -1,7 +1,7 @@
 import { Button, Card, Component, Content, EmptyState, Link, Toolbar, styled, theme } from '@vanilla-bean/components';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
-import { HOSTS } from 'ender-launcher/rank';
+import { HOSTS, sharing } from 'ender-launcher/rank';
 
 import { collection } from './collection';
 import { loadListing } from './data';
@@ -310,7 +310,7 @@ export default class ModPage extends View {
 
 				if (signal.aborted) return;
 
-				this.show(entry, record);
+				this.show(entry, record, listing);
 			})
 			.catch(error => {
 				if (signal.aborted) return;
@@ -323,7 +323,7 @@ export default class ModPage extends View {
 		this.body = body;
 	}
 
-	show(entry, record) {
+	show(entry, record, listing) {
 		const { signal } = this;
 		const title = titleOf(entry);
 		const command = installCommand(entry);
@@ -332,6 +332,7 @@ export default class ModPage extends View {
 		const controls = new Row({ append: [collectButton(entry), ...installControls(entry)] });
 		const redrawControls = () => controls.content([collectButton(entry), ...installControls(entry)]);
 		const watched = (record.releases ?? []).filter(release => release.assets.length > 0);
+		const shares = entry.shares ?? sharing(entry, listing);
 
 		document.title = `${title} :: ender index`;
 		collection.subscribe(redrawControls, signal);
@@ -365,6 +366,7 @@ export default class ModPage extends View {
 					}),
 				],
 			}),
+			...(shares ? [new Warning({ textContent: `It ${shares}: check you have the one you mean` })] : []),
 			...(entry.replaced
 				? [new Warning({ textContent: 'A jar in one of its releases was changed after publishing' })]
 				: []),

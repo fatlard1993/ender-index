@@ -152,6 +152,22 @@ describe('discovery', () => {
 		expect(usedBy('me/library')).toBe(1);
 	});
 
+	test("says when its mod has an established one's id or name, and says nothing otherwise", () => {
+		const declaring = (id, name) => [
+			{ tag: '1.0', prerelease: false, assets: [asset({ mods: [{ loader: 'fabric', id, name, depends: [] }] })] },
+		];
+		const entries = buildSearch([
+			record('real/sodium', declaring('sodium', 'Sodium'), { stars: 500 }),
+			record('copy/client', declaring('sodium', 'Sodium'), { stars: 0 }),
+			record('own/mod', declaring('other', 'Other'), { stars: 0 }),
+		]);
+		const shares = repo => entries.find(entry => entry.repo === repo).shares;
+
+		expect(shares('copy/client')).toBe('declares "sodium", as real/sodium does');
+		expect(shares('own/mod')).toBe('');
+		expect(shares('real/sodium')).toBe('');
+	});
+
 	test('a manifest under a test or example directory does not make a repository a mod', () => {
 		const items = [
 			{ path: 'src/main/resources/fabric.mod.json', repository: { full_name: 'a/mod' } },
