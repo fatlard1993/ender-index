@@ -1,0 +1,38 @@
+# vbc's shared CI (templates/ci.yml), run beside the ender-launcher checkout the index depends on by path. It has no
+# .lld.md documents, so the lld steps are left out.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Read-only token: checkout persists it into .git/config, and the next steps run the branch's own scripts
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ender-index
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: fatlard1993/ender-launcher
+          path: ender-launcher
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+      - run: bun install --frozen-lockfile
+        working-directory: ender-index
+      - run: bun run lint
+        working-directory: ender-index
+      - run: bun test
+        working-directory: ender-index
+      - run: bun run build:site
+        working-directory: ender-index

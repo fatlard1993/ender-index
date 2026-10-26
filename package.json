@@ -7,6 +7,8 @@
 	"author": "fatlard1993",
 	"license": "MIT",
 	"scripts": {
+		"prepare": "bun run prepare:githooks",
+		"prepare:githooks": "[ -n \"$CI\" ] && exit 0 || (git config --local core.hooksPath .githooks || echo 'Cannot set core.hooksPath -- push checks will not run')",
 		"discover": "bun src/discover.js",
 		"crawl": "bun src/crawl.js",
 		"test": "bun test",
