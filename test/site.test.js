@@ -16,6 +16,7 @@ import {
 	recordUrl,
 	releasesApi,
 	readQuery,
+	refine,
 	releaseUrl,
 	releasedVersions,
 	releasesUrl,
@@ -39,9 +40,24 @@ describe('the search page', () => {
 		const state = { query: ' fabric api ', minecraft: '1.21.1', loader: 'fabric' };
 
 		expect(writeQuery(state)).toBe('?q=fabric+api&mc=1.21.1&loader=fabric');
-		expect(readQuery(writeQuery(state))).toEqual({ query: 'fabric api', minecraft: '1.21.1', loader: 'fabric' });
+		expect(readQuery(writeQuery(state))).toMatchObject({ query: 'fabric api', minecraft: '1.21.1', loader: 'fabric' });
 		expect(writeQuery({ query: '' })).toBe('');
-		expect(readQuery('?loader=bukkit')).toEqual({ query: '', minecraft: undefined, loader: undefined });
+		expect(readQuery('?loader=bukkit&sort=random&avoid=network,teleport')).toMatchObject({
+			loader: undefined,
+			sort: 'best',
+			avoid: ['network'],
+		});
+
+		const filtered = {
+			query: 'x',
+			side: 'client',
+			released: '365',
+			host: 'codeberg',
+			sort: 'downloads',
+			avoid: ['exec'],
+		};
+
+		expect(readQuery(writeQuery(filtered))).toMatchObject(filtered);
 	});
 
 	test("each host's pages are where that host keeps them", () => {
@@ -80,6 +96,34 @@ describe('the search page', () => {
 			versions: ['1.21.1'],
 			more: 1,
 		});
+	});
+
+	test('filters narrow the ranked results and a sort reorders them, ties kept in ranked order', () => {
+		const now = Date.parse('2026-10-26T00:00:00Z');
+		const found = (repo, extra) => ({
+			entry: entry({
+				repo,
+				latest: { tag: '1', published: '2026-10-01T00:00:00Z', mods: [], capabilities: [] },
+				...extra,
+			}),
+		});
+		const ranked = [
+			found('a/best', { stars: 5, downloads: 10, environment: 'client' }),
+			found('b/old', { stars: 9, latest: { published: '2024-01-01T00:00:00Z', mods: [], capabilities: [] } }),
+			found('c/network', { stars: 1, downloads: 900, usedBy: 4, latest: { mods: [], capabilities: ['network'] } }),
+			found('d/codeberg', { stars: 5, host: 'codeberg', environment: 'server' }),
+		];
+		const repos = (state = {}) => refine(ranked, state, now).map(({ entry }) => entry.repo);
+
+		expect(repos()).toEqual(['a/best', 'b/old', 'c/network', 'd/codeberg']);
+		expect(repos({ side: 'client' })).toEqual(['a/best']);
+		expect(repos({ side: 'both' })).toEqual(['b/old', 'c/network']);
+		expect(repos({ released: '365' })).toEqual(['a/best', 'd/codeberg']);
+		expect(repos({ host: 'codeberg' })).toEqual(['d/codeberg']);
+		expect(repos({ avoid: ['network'] })).toEqual(['a/best', 'b/old', 'd/codeberg']);
+		expect(repos({ sort: 'stars' })).toEqual(['b/old', 'a/best', 'd/codeberg', 'c/network']);
+		expect(repos({ sort: 'downloads' })[0]).toBe('c/network');
+		expect(repos({ sort: 'used' })[0]).toBe('c/network');
 	});
 
 	test('a repository whose jars name no mods is called by its own name', () => {

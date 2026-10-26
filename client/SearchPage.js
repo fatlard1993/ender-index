@@ -22,13 +22,17 @@ import {
 	CAPABILITIES,
 	INDEX,
 	LOADERS,
+	RELEASED,
 	REPOSITORY,
+	SIDES,
+	SORTS,
 	fittingVersions,
 	installCommand,
 	loadersOf,
 	modPath,
 	pictureUrl,
 	readQuery,
+	refine,
 	releaseUrl,
 	releasesUrl,
 	repositoryUrl,
@@ -63,7 +67,17 @@ const resultCard = ({ entry, sharing, unproven }, versions, { minecraft }) => {
 									target: '_blank',
 									textContent: host === 'github' ? entry.repo : `${entry.repo} on ${HOSTS[host]}`,
 								}),
-								new Meta({ textContent: `${count(entry.stars ?? 0)} stars` }),
+								new Meta({
+									textContent: [
+										`${count(entry.stars ?? 0)} stars`,
+										entry.downloads === undefined ? '' : `${count(entry.downloads)} downloads`,
+										entry.usedBy ? `used by ${count(entry.usedBy)}` : '',
+									]
+										.filter(Boolean)
+										.join(' · '),
+									title:
+										'Downloads are those its host counts for the releases the index read; used by counts the indexed mods that require it',
+								}),
 							],
 						}),
 						...(entry.description ? [paragraph(entry.description)] : []),
@@ -158,10 +172,12 @@ export default class SearchPage extends View {
 
 			history.replaceState(null, '', `${location.pathname}${writeQuery(state)}${location.hash}`);
 
-			ranked = rank(entries, state.query, state);
-			status.content(
-				`${count(ranked.length)} of ${count(entries.length)} indexed repositories${state.query.trim() ? '' : ', by stars'}`,
-			);
+			ranked = refine(rank(entries, state.query, state), state);
+
+			const bestOrder = state.query.trim() ? 'best match first' : 'by stars';
+			const order = state.sort === 'best' ? bestOrder : SORTS[state.sort].toLowerCase();
+
+			status.content(`${count(ranked.length)} of ${count(entries.length)} indexed repositories, ${order}`);
 			draw();
 		};
 
@@ -206,6 +222,51 @@ export default class SearchPage extends View {
 				state.loader = value === 'any' ? undefined : value;
 				restart();
 			},
+		});
+
+		const choice = (key, choices, any) =>
+			new Select({
+				options: [{ label: any, value: '' }, ...Object.entries(choices).map(([value, label]) => ({ label, value }))],
+				value: state[key] ?? '',
+				style: { width: 'auto' },
+				onChange: ({ target: { value } }) => {
+					state[key] = value || undefined;
+					restart();
+				},
+			});
+
+		const sort = new Select({
+			options: Object.entries(SORTS).map(([value, label]) => ({ label, value })),
+			value: state.sort,
+			style: { width: 'auto' },
+			onChange: ({ target: { value } }) => {
+				state.sort = value;
+				restart();
+			},
+		});
+
+		const avoiding = new Row({
+			append: [
+				new Meta({ textContent: 'Hide what reaches' }),
+				...Object.keys(CAPABILITIES).map(capability => {
+					const chip = new Button({
+						variant: 'chip',
+						textContent: capability,
+						title: CAPABILITIES[capability],
+						onPointerPress: () => {
+							state.avoid = state.avoid.includes(capability)
+								? state.avoid.filter(avoided => avoided !== capability)
+								: [...state.avoid, capability];
+							chip.elem.classList.toggle('selected', state.avoid.includes(capability));
+							restart();
+						},
+					});
+
+					chip.elem.classList.toggle('selected', state.avoid.includes(capability));
+
+					return chip;
+				}),
+			],
 		});
 
 		const versionList = loadVersions().catch(error => {
@@ -274,6 +335,17 @@ export default class SearchPage extends View {
 						'Minecraft mods found where their source lives. Every jar here came from the releases of its own repository and was scanned by ender: what its code can reach is a finding, not a verdict.',
 				}),
 				new Toolbar({ style: { margin: '12px 0 4px' }, append: [search, minecraft, loader] }),
+				new Toolbar({
+					gap: 8,
+					style: { margin: '4px 0' },
+					append: [
+						choice('side', SIDES, 'Any side'),
+						choice('released', RELEASED, 'Released any time'),
+						choice('host', HOSTS, 'Any host'),
+						sort,
+					],
+				}),
+				avoiding,
 				localBar,
 				status,
 				new Stack({ style: { marginTop: '12px' }, append: [results, more] }),

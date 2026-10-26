@@ -1,4 +1,4 @@
-import { fit } from 'ender-launcher/rank';
+import { HOSTS, fit } from 'ender-launcher/rank';
 import { specFor } from 'ender-launcher/spec';
 
 export const INDEX = 'https://raw.githubusercontent.com/fatlard1993/ender-index/main/data';
@@ -9,28 +9,86 @@ export const REPOSITORY = 'https://github.com/fatlard1993/ender-index';
 
 export const LOADERS = { fabric: 'Fabric', quilt: 'Quilt', forge: 'Forge', neoforge: 'NeoForge' };
 
+export const SIDES = { client: 'Client only', server: 'Server only', both: 'Client and server' };
+
+export const RELEASED = { 90: 'Released in 3 months', 365: 'Released in a year', 730: 'Released in 2 years' };
+
+export const SORTS = {
+	best: 'Best match',
+	stars: 'Most stars',
+	downloads: 'Most downloads',
+	used: 'Most used',
+	released: 'Newest release',
+	pushed: 'Recently pushed',
+	name: 'Name',
+};
+
+const REACHABLE = ['network', 'exec', 'native', 'classloading', 'unsafe'];
+
+const oneOf = (value, choices) => (value in choices ? value : undefined);
+
 /** What a page address asks for, so a search can be linked to. */
 export const readQuery = search => {
 	const params = new URLSearchParams(search);
-	const loader = params.get('loader');
 
 	return {
 		query: params.get('q') ?? '',
 		minecraft: params.get('mc') || undefined,
-		loader: loader in LOADERS ? loader : undefined,
+		loader: oneOf(params.get('loader'), LOADERS),
+		side: oneOf(params.get('side'), SIDES),
+		released: oneOf(params.get('released'), RELEASED),
+		host: oneOf(params.get('host'), HOSTS),
+		sort: oneOf(params.get('sort'), SORTS) ?? 'best',
+		avoid: (params.get('avoid') ?? '').split(',').filter(capability => REACHABLE.includes(capability)),
 	};
 };
 
-export const writeQuery = ({ query, minecraft, loader }) => {
+export const writeQuery = ({ query, minecraft, loader, side, released, host, sort, avoid = [] }) => {
 	const params = new URLSearchParams();
 
 	if (query?.trim()) params.set('q', query.trim());
 	if (minecraft) params.set('mc', minecraft);
 	if (loader) params.set('loader', loader);
+	if (side) params.set('side', side);
+	if (released) params.set('released', released);
+	if (host) params.set('host', host);
+	if (sort && sort !== 'best') params.set('sort', sort);
+	if (avoid.length > 0) params.set('avoid', avoid.join(','));
 
 	const written = params.toString();
 
 	return written ? `?${written}` : '';
+};
+
+const DAY = 24 * 60 * 60 * 1000;
+
+const time = date => (date ? Date.parse(date) : 0);
+
+const ORDER = {
+	stars: entry => entry.stars ?? 0,
+	downloads: entry => entry.downloads ?? 0,
+	used: entry => entry.usedBy ?? 0,
+	released: entry => time(entry.latest?.published),
+	pushed: entry => time(entry.pushed),
+};
+
+/**
+ * Ranked results narrowed by the filters the ranking does not know, and put in the order asked for.
+ * Ties keep the ranking's order, so the best match among equals comes first.
+ */
+export const refine = (ranked, { side, released, host, sort = 'best', avoid = [] }, now = Date.now()) => {
+	const kept = ranked.filter(
+		({ entry }) =>
+			(!side || (entry.environment ?? 'both') === side) &&
+			(!released || time(entry.latest?.published) >= now - Number(released) * DAY) &&
+			(!host || (entry.host ?? 'github') === host) &&
+			!(entry.latest?.capabilities ?? []).some(capability => avoid.includes(capability)),
+	);
+
+	if (sort === 'name') return kept.toSorted((a, b) => titleOf(a.entry).localeCompare(titleOf(b.entry)));
+	if (!(sort in ORDER)) return kept;
+
+	return kept.toSorted((a, b) => ORDER[sort](b.entry) - ORDER[sort](a.entry));
 };
 
 const SITES = { github: 'https://github.com', codeberg: 'https://codeberg.org', gitlab: 'https://gitlab.com' };

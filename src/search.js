@@ -83,7 +83,7 @@ export const summarize = record => {
 
 /**
  * How many listed repositories require a mod each one provides, by the client's own rule for which
- * repository a required id names on the requirer's loader: a copy of a mod's id, or a port to another
+ * repository a required id names on the requiring mod's loader: a copy of a mod's id, or a port to another
  * loader, is not credited with the mods that need it.
  */
 const countDependents = (entries, records) => {
