@@ -63,6 +63,7 @@ export const kindOf = path => {
 	if (path.startsWith('/search/')) return 'code search';
 	if (/\/releases\?.*&page=/.test(path)) return 'history pages';
 	if (path.includes('/releases')) return 'releases';
+	if (path.endsWith('/readme')) return 'readmes';
 
 	return 'repository';
 };

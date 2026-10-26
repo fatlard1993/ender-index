@@ -18,20 +18,28 @@ const askedToWait = response => {
 };
 
 /**
+ * How long a 429 that says nothing is waited out: a minute, the window GitLab counts its anonymous requests over. Its
+ * limit is per address, and a CI runner shares its address with whoever else it serves.
+ */
+const UNSAID_WAIT = 60 * 1000;
+
+/**
  * fetch, asked again after a server error or a network failure, and after a 429 that says how long to wait when that
  * is not long; any other answer is returned as it came.
  */
-export const fetchSteady = async (url, init, { pauses = PAUSES } = {}) => {
+export const fetchSteady = async (url, init, { pauses = PAUSES, unsaid = UNSAID_WAIT } = {}) => {
 	for (let attempt = 0, slowed = 0; ; ++attempt) {
 		let failure;
 
 		try {
 			const response = await fetch(url, init);
-			const wait = response.status === 429 && slowed < SLOW_DOWNS ? askedToWait(response) : undefined;
+			const wait = response.status === 429 && slowed < SLOW_DOWNS ? (askedToWait(response) ?? unsaid) : undefined;
 
 			if (wait !== undefined && wait <= WAIT_AT_MOST) {
 				await response.body?.cancel();
-				console.error(`waiting ${Math.ceil(wait / 1000)}s: ${new URL(url).host} answered 429`);
+				console.error(
+					`waiting ${Math.ceil(wait / 1000)}s: ${new URL(url).host} answered 429${askedToWait(response) === undefined ? ', saying for how long nowhere' : ''}`,
+				);
 				await Bun.sleep(wait);
 				++slowed;
 				--attempt;

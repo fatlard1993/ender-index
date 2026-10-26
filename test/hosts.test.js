@@ -242,7 +242,7 @@ describe('a request', () => {
 		}
 	});
 
-	test('waits as long as a 429 asks when that is short, and gives back one that asks for longer', async () => {
+	test('waits as long as a 429 asks when that is short, a minute when it does not say, and gives back one that asks for longer', async () => {
 		const { fetchSteady } = await import('../src/fetch');
 		const soon = serving([429, 429], { 'retry-after': '0' });
 		const later = serving([429], { 'retry-after': '3600' });
@@ -255,6 +255,15 @@ describe('a request', () => {
 			expect(later.asked()).toBe(1);
 			expect((await fetchSteady(reset.url, undefined, { pauses: [0, 0] })).status).toBe(200);
 			expect(reset.asked()).toBe(2);
+
+			const unsaid = serving([429, 429]);
+
+			try {
+				expect((await fetchSteady(unsaid.url, undefined, { pauses: [0, 0], unsaid: 0 })).status).toBe(200);
+				expect(unsaid.asked()).toBe(3);
+			} finally {
+				unsaid.server.stop();
+			}
 		} finally {
 			soon.server.stop();
 			later.server.stop();
@@ -277,6 +286,7 @@ describe('the rate limit', () => {
 		expect(kindOf('/repos/a/b/releases?per_page=30')).toBe('releases');
 		expect(kindOf('/repos/a/b/releases?per_page=30&page=3')).toBe('history pages');
 		expect(kindOf('/search/code?q=x')).toBe('code search');
+		expect(kindOf('/repos/a/b/readme')).toBe('readmes');
 
 		expect(
 			spendingLine({
