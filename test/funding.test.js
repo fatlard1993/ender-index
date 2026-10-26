@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { parseFunding } from '../src/funding';
+import { parseFunding, supportLinks } from '../src/funding';
 
 describe('a FUNDING.yml', () => {
 	test("names each platform's page for its handles, and custom addresses as they are", () => {
@@ -40,6 +40,27 @@ describe('a FUNDING.yml', () => {
 	test('names a link once however often the file repeats it', () => {
 		expect(parseFunding('github: maker\ngithub: [maker]')).toEqual([
 			{ platform: 'github', url: 'https://github.com/sponsors/maker' },
+		]);
+	});
+});
+
+describe("a jar's links", () => {
+	test('ask for support by the site they lead to, or by a key that says so', () => {
+		expect(
+			supportLinks([
+				{ name: 'sources', url: 'https://github.com/a/m' },
+				{ name: 'modmenu.discord', url: 'https://discord.gg/x' },
+				{ name: 'modmenu.kofi', url: 'https://ko-fi.com/a' },
+				{ name: 'homepage', url: 'https://github.com/sponsors/a' },
+				{ name: 'modmenu.donate', url: 'https://example.com/give' },
+				{ name: 'support', url: 'https://www.paypal.com/donate?id=1' },
+				{ name: 'wiki', url: 'https://www.paypal.com/us/home' },
+			]),
+		).toEqual([
+			{ platform: 'ko_fi', url: 'https://ko-fi.com/a' },
+			{ platform: 'github', url: 'https://github.com/sponsors/a' },
+			{ platform: 'custom', url: 'https://example.com/give' },
+			{ platform: 'custom', url: 'https://www.paypal.com/donate?id=1' },
 		]);
 	});
 });

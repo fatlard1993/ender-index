@@ -76,3 +76,37 @@ export const parseFunding = yaml => {
 
 /** Where a repository's FUNDING.yml may be, in the order GitHub looks. */
 export const FUNDING_PATHS = ['.github/FUNDING.yml', 'FUNDING.yml', 'docs/FUNDING.yml'];
+
+/** The sites a link to which asks for support, by host, to the FUNDING.yml platform each is. */
+const SUPPORT_SITES = {
+	'ko-fi.com': 'ko_fi',
+	'patreon.com': 'patreon',
+	'opencollective.com': 'open_collective',
+	'liberapay.com': 'liberapay',
+	'buymeacoffee.com': 'buy_me_a_coffee',
+	'polar.sh': 'polar',
+	'thanks.dev': 'thanks_dev',
+	'paypal.me': 'custom',
+	'boosty.to': 'custom',
+};
+
+/** A link's key that says it is for support, though the site it leads to is not one known for it. */
+const SUPPORT_KEY = /donat|sponsor|patreon|kofi|ko-fi|paypal|coffee|funding|\btips?$/i;
+
+const platformOf = ({ name, url }) => {
+	const { hostname, pathname } = new URL(url);
+	const host = hostname.replace(/^www\./, '');
+
+	if (host === 'github.com' && pathname.startsWith('/sponsors/')) return 'github';
+	if (host === 'paypal.com' && /^\/(donate|paypalme)/.test(pathname)) return 'custom';
+	if (SUPPORT_SITES[host]) return SUPPORT_SITES[host];
+
+	return SUPPORT_KEY.test(name) ? 'custom' : undefined;
+};
+
+/**
+ * Of the links a jar's mods give, those that ask for support, as FUNDING.yml's are: by the site they lead to, or a key
+ * that says so.
+ */
+export const supportLinks = links =>
+	links.map(link => ({ platform: platformOf(link), url: link.url })).filter(({ platform }) => platform !== undefined);

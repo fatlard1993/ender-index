@@ -203,6 +203,37 @@ describe('discovery', () => {
 		expect(none.summary).toBeUndefined();
 	});
 
+	test('lists how its author takes support, from FUNDING.yml and then its jars, each link once', () => {
+		const [entry] = buildSearch([
+			record(
+				'a/mod',
+				[
+					{
+						tag: '1.0',
+						prerelease: false,
+						assets: [
+							asset({
+								funding: [
+									{ platform: 'ko_fi', url: 'https://ko-fi.com/a' },
+									{ platform: 'github', url: 'https://github.com/sponsors/a' },
+								],
+							}),
+						],
+					},
+				],
+				{ funding: [{ platform: 'github', url: 'https://github.com/sponsors/a' }] },
+			),
+		]);
+
+		expect(entry.funding).toEqual([
+			{ platform: 'github', url: 'https://github.com/sponsors/a', from: 'repository' },
+			{ platform: 'ko_fi', url: 'https://ko-fi.com/a', from: 'jar' },
+		]);
+		expect(
+			buildSearch([record('b/none', [{ tag: '1.0', prerelease: false, assets: [asset()] }])])[0].funding,
+		).toBeUndefined();
+	});
+
 	test('a manifest under a test or example directory does not make a repository a mod', () => {
 		const items = [
 			{ path: 'src/main/resources/fabric.mod.json', repository: { full_name: 'a/mod' } },

@@ -2,7 +2,7 @@ import { mkdir, mkdtemp, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 
-import { readIcon, readMods } from 'ender-launcher/metadata';
+import { readIcon, readLinks, readMods } from 'ender-launcher/metadata';
 import { scanJar } from 'ender-launcher/scan';
 
 import * as codeberg from './codeberg';
@@ -11,7 +11,7 @@ import * as github from './github';
 import * as gitlab from './gitlab';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
 import { buildSearch, latestAssets } from './search';
-import { FUNDING_PATHS, parseFunding } from './funding';
+import { FUNDING_PATHS, parseFunding, supportLinks } from './funding';
 import { rawUrl } from './raw';
 import { readmeSummary } from './summary';
 
@@ -138,6 +138,9 @@ export const keepIcon = async (jar, icons = ICONS) => {
 	return name;
 };
 
+/** The links a jar's mods give that ask for support; none when its metadata cannot be read for them. */
+const jarFunding = async jar => supportLinks(await readLinks(jar).catch(() => []));
+
 /** Download one asset, hash it on the way in, read its mods and icon and scan it. */
 const inspector = (scratch, knownBad) => async asset => {
 	if (asset.size > MAX_DOWNLOAD) throw new Error(`${asset.size} bytes is past the ${MAX_DOWNLOAD} byte limit`);
@@ -156,9 +159,10 @@ const inspector = (scratch, knownBad) => async asset => {
 		}
 
 		const icon = await keepIcon(path);
+		const funding = await jarFunding(path);
 
 		try {
-			return { sha256, mods, metadataError, icon, scan: await scanJar(path), knownBad: knownBad.get(sha256) };
+			return { sha256, mods, metadataError, icon, funding, scan: await scanJar(path), knownBad: knownBad.get(sha256) };
 		} catch (error) {
 			return { sha256, error: error.message, knownBad: knownBad.get(sha256) };
 		}
@@ -200,6 +204,27 @@ export const fillIcons = async (record, scratch, icons = ICONS) => {
 	}
 
 	return filled;
+};
+
+/**
+ * Jars of the release a repository is listed by that were read before their support links were, given them. Only
+ * that release's are fetched again, as for icons.
+ */
+export const fillFunding = async (record, scratch) => {
+	for (const asset of latestAssets(record)) {
+		if (asset.funding !== undefined) continue;
+
+		const path = join(scratch, `links-${asset.sha256}.jar`);
+
+		try {
+			// Bytes other than those scanned are not this asset's; the next crawl reads them as a swap.
+			if ((await download(asset.url, path)) === asset.sha256) asset.funding = await jarFunding(path);
+		} catch (error) {
+			console.error(`links   ${record.repo} ${asset.name} :: ${error.message}`);
+		} finally {
+			await rm(path, { force: true });
+		}
+	}
 };
 
 /** Remove the icons no record names, left by a mod that changed its icon or left the index. */
@@ -353,6 +378,7 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners }) =
 
 	if (result.record) {
 		await fillIcons(result.record, scratch);
+		await fillFunding(result.record, scratch);
 		const readme = await readmeOf({ host, name, repo, recorded });
 
 		await writeJson(canonical, {

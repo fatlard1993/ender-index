@@ -55,6 +55,17 @@ const summaryOf = record => {
 	return record.readmeSummary ? { text: record.readmeSummary, from: 'readme' } : undefined;
 };
 
+/** How its author takes support: their FUNDING.yml first, then what the listed release's jars link to, each once. */
+const fundingOf = (record, assets) => {
+	const seen = new Set();
+	const links = [
+		...(record.funding ?? []).map(link => ({ ...link, from: 'repository' })),
+		...assets.flatMap(asset => asset.funding ?? []).map(link => ({ ...link, from: 'jar' })),
+	].filter(({ url }) => !seen.has(url) && seen.add(url));
+
+	return links.length > 0 ? links : undefined;
+};
+
 /** One line of the search file: what a client needs to list a repository without fetching its record. */
 export const summarize = record => {
 	const latest = latestRelease(record);
@@ -65,7 +76,7 @@ export const summarize = record => {
 		host: record.host,
 		description: record.description,
 		summary: summaryOf(record),
-		funding: record.funding?.length > 0 ? record.funding : undefined,
+		funding: fundingOf(record, assets),
 		stars: record.stars,
 		archived: record.archived,
 		license: record.license,

@@ -1,5 +1,6 @@
 module.exports = {
 	skipWords: [
+		'boosty',
 		'buymeacoffee',
 		'classloading',
 		'codeberg',
@@ -32,6 +33,7 @@ module.exports = {
 		'noreferrer',
 		'opencollective',
 		'patreon',
+		'paypal',
 		'pixelated',
 		'polar',
 		'quilt',

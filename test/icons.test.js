@@ -4,7 +4,7 @@ import { deflateSync } from 'node:zlib';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test';
 
-import { ICON_SIZE, fillIcons, keepIcon, pruneIcons, shrinkIcon } from '../src/crawl';
+import { ICON_SIZE, fillFunding, fillIcons, keepIcon, pruneIcons, shrinkIcon } from '../src/crawl';
 import { summarize } from '../src/search';
 
 const SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
@@ -141,5 +141,37 @@ describe('icons', () => {
 		expect(await shrinkIcon(small)).toBe(small);
 		expect(large.type).toBe('webp');
 		expect(await new Bun.Image(large.bytes).metadata()).toMatchObject({ width: ICON_SIZE, height: ICON_SIZE });
+	});
+
+	test("support links are read for the listed release's jars read before them, once", async () => {
+		const path = await jar({
+			'fabric.mod.json': JSON.stringify({
+				id: 'a',
+				custom: {
+					modmenu: { links: { 'modmenu.kofi': 'https://ko-fi.com/a', 'modmenu.discord': 'https://discord.gg/a' } },
+				},
+			}),
+		});
+		let asked = 0;
+		const server = Bun.serve({
+			port: 0,
+			fetch: () => {
+				++asked;
+
+				return new Response(Bun.file(path));
+			},
+		});
+
+		try {
+			const record = recordOf([{ url: `http://localhost:${server.port}/mod.jar`, sha256: await sha256(path) }]);
+
+			await fillFunding(record, directory);
+			await fillFunding(record, directory);
+
+			expect(record.releases[0].assets[0].funding).toEqual([{ platform: 'ko_fi', url: 'https://ko-fi.com/a' }]);
+			expect(asked).toBe(1);
+		} finally {
+			server.stop();
+		}
 	});
 });
