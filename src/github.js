@@ -54,6 +54,36 @@ export const saveCache = async () => {
 /** When a cached response for this path was last fetched or confirmed, or 0 for never. */
 export const lastFetched = async path => (await cache())[path]?.fetched ?? 0;
 
+/** What a path costs is filed under: deep history pages are read once, the rest on every crawl. */
+export const kindOf = path => {
+	if (path.startsWith('/search/')) return 'code search';
+	if (/\/releases\?.*&page=/.test(path)) return 'history pages';
+	if (path.includes('/releases')) return 'releases';
+
+	return 'repository';
+};
+
+const spending = { full: {}, unchanged: 0 };
+
+/**
+ * Requests answered in full, by kind, which are what the rate limit counts, and those answered 304,
+ * which it does not; with the limit as the last answer left it.
+ */
+export const spent = () => structuredClone(spending);
+
+const note = (path, response) => {
+	const remaining = response.headers.get('x-ratelimit-remaining');
+
+	if (response.status === 304) ++spending.unchanged;
+	else if (remaining !== '0') spending.full[kindOf(path)] = (spending.full[kindOf(path)] ?? 0) + 1;
+
+	// Code search has a limit of its own, reported in the same headers.
+	if (remaining !== null && response.headers.get('x-ratelimit-resource') === 'core') {
+		spending.remaining = Number(remaining);
+		spending.resetAt = Number(response.headers.get('x-ratelimit-reset')) * 1000;
+	}
+};
+
 export class RateLimited extends Error {
 	constructor(message, resetAt) {
 		super(message);
@@ -75,6 +105,8 @@ export const request = async (path, keep) => {
 			...(cached ? { 'if-none-match': cached.etag } : {}),
 		},
 	});
+
+	note(path, response);
 
 	if (response.status === 304 && cached) {
 		cached.fetched = Date.now();

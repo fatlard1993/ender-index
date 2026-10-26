@@ -1,7 +1,8 @@
 import { join } from 'node:path';
 import { describe, expect, test } from 'bun:test';
 
-import { DATA, parseLine, recordPath } from '../src/crawl';
+import { DATA, parseLine, recordPath, spendingLine } from '../src/crawl';
+import { kindOf } from '../src/github';
 import { assetOf } from '../src/gitlab';
 
 describe('repositories on other hosts', () => {
@@ -180,5 +181,28 @@ describe('a request', () => {
 			failing.server.stop();
 			missing.server.stop();
 		}
+	});
+});
+
+describe('the rate limit', () => {
+	test('is reported by what spent it, since only requests answered in full count', () => {
+		expect(kindOf('/repos/a/b')).toBe('repository');
+		expect(kindOf('/repos/a/b/releases?per_page=30')).toBe('releases');
+		expect(kindOf('/repos/a/b/releases?per_page=30&page=3')).toBe('history pages');
+		expect(kindOf('/search/code?q=x')).toBe('code search');
+
+		expect(
+			spendingLine({
+				full: { releases: 120, repository: 1480 },
+				unchanged: 6200,
+				remaining: 0,
+				resetAt: Date.parse('2026-10-25T20:00:00Z'),
+			}),
+		).toBe(
+			'GitHub answered 1,600 requests in full (repository 1,480, releases 120) and 6,200 unchanged, which the rate limit does not count; 0 left until 2026-10-25T20:00:00.000Z',
+		);
+		expect(spendingLine({ full: {}, unchanged: 0 })).toBe(
+			'GitHub answered 0 requests in full and 0 unchanged, which the rate limit does not count',
+		);
 	});
 });

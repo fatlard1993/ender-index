@@ -175,6 +175,19 @@ const crawlOne = async (line, { now, inspect, gameVersions }) => {
 	return result.events;
 };
 
+const count = number => number.toLocaleString('en-US');
+
+/** Where the crawl spent the GitHub rate limit, which counts only requests answered in full. */
+export const spendingLine = ({ full, unchanged, remaining, resetAt }) => {
+	const kinds = Object.entries(full).sort(([, a], [, b]) => b - a);
+	const total = kinds.reduce((sum, [, number]) => sum + number, 0);
+	const breakdown =
+		kinds.length > 0 ? ` (${kinds.map(([kind, number]) => `${kind} ${count(number)}`).join(', ')})` : '';
+	const left = remaining === undefined ? '' : `; ${count(remaining)} left until ${new Date(resetAt).toISOString()}`;
+
+	return `GitHub answered ${count(total)} requests in full${breakdown} and ${count(unchanged)} unchanged, which the rate limit does not count${left}`;
+};
+
 const recordFiles = async () =>
 	[...new Bun.Glob('**/*.json').scanSync(join(DATA, 'mods'))].map(file => join(DATA, 'mods', file));
 
@@ -236,6 +249,8 @@ export const crawl = async ({ only } = {}) => {
 	}
 
 	if (stopped) console.log(stopped);
+
+	console.log(spendingLine(github.spent()));
 
 	const records = await Promise.all((await recordFiles()).map(file => Bun.file(file).json()));
 
