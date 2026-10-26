@@ -406,7 +406,7 @@ export default class ModPage extends View {
 						new Meta({
 							tag: 'p',
 							textContent:
-								'From the FUNDING.yml its author keeps on the repository or their account. The index takes no share.',
+								"From the author's own FUNDING.yml and the links their mod gives in Mod Menu. The index takes no share.",
 						}),
 					]
 				: []),
