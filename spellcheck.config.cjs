@@ -37,6 +37,7 @@ module.exports = {
 		'uint',
 		'uint8',
 		'unpack',
+		'unregister',
 		'unwrapped',
 		'vnd',
 		'webfonts',
