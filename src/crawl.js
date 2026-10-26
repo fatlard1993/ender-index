@@ -6,7 +6,7 @@ import { readIcon, readLinks, readMods } from 'ender-launcher/metadata';
 import { scanJar } from 'ender-launcher/scan';
 
 import * as codeberg from './codeberg';
-import { fetchSteady } from './fetch';
+import { fetchSteady, RateLimited } from './fetch';
 import * as github from './github';
 import * as gitlab from './gitlab';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
@@ -269,7 +269,7 @@ const readmeOf = async ({ host, name, repo, recorded }) => {
 	try {
 		return await HOSTS[host].readme(name);
 	} catch (error) {
-		if (error instanceof github.RateLimited) throw error;
+		if (error instanceof RateLimited) throw error;
 
 		console.error(`readme  ${name} :: ${error.message}`);
 
@@ -442,7 +442,7 @@ export const crawl = async ({ only } = {}) => {
 			try {
 				return await crawlOne(fullName, options);
 			} catch (error) {
-				const wait = error instanceof github.RateLimited ? waitForReset(error.resetAt, deadline) : undefined;
+				const wait = error instanceof RateLimited ? waitForReset(error.resetAt, deadline) : undefined;
 
 				if (wait === undefined) throw error;
 
@@ -475,7 +475,7 @@ export const crawl = async ({ only } = {}) => {
 					);
 				}
 			} catch (error) {
-				if (error instanceof github.RateLimited) {
+				if (error instanceof RateLimited) {
 					stopped = `Stopped at the rate limit after ${index} of ${repos.length}; ${error.message}, past the time budget, and the rest are crawled first next time`;
 
 					break;

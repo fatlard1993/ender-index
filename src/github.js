@@ -1,7 +1,7 @@
 import { mkdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
-import { fetchSteady } from './fetch';
+import { fetchSteady, RateLimited } from './fetch';
 
 const API = 'https://api.github.com';
 
@@ -88,14 +88,6 @@ const note = (path, response) => {
 		spending.resetAt = Number(response.headers.get('x-ratelimit-reset')) * 1000;
 	}
 };
-
-export class RateLimited extends Error {
-	constructor(message, resetAt) {
-		super(message);
-
-		this.resetAt = resetAt;
-	}
-}
 
 /**
  * GET an API path. With `keep`, the response is cached as `keep` trims it and asked for again

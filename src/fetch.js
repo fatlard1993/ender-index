@@ -7,7 +7,7 @@ const WAIT_AT_MOST = 2 * 60 * 1000;
 const SLOW_DOWNS = 5;
 
 /** How long a 429 asks to be left alone: Retry-After in seconds, or GitLab's RateLimit-Reset as a time. */
-const askedToWait = response => {
+export const askedToWait = response => {
 	const after = Number(response.headers.get('retry-after') ?? Number.NaN);
 
 	if (!Number.isNaN(after)) return after * 1000;
@@ -22,6 +22,22 @@ const askedToWait = response => {
  * limit is per address, and a CI runner shares its address with whoever else it serves.
  */
 const UNSAID_WAIT = 60 * 1000;
+
+/** A host's rate limit, which lifts at resetAt; the crawl waits for that when its time budget allows. */
+export class RateLimited extends Error {
+	constructor(message, resetAt) {
+		super(message);
+
+		this.resetAt = resetAt;
+	}
+}
+
+/** The RateLimited a 429 that asked for longer than fetchSteady waits stands for. */
+export const limitedBy = (host, response) => {
+	const resetAt = Date.now() + (askedToWait(response) ?? UNSAID_WAIT);
+
+	return new RateLimited(`${host} asks to be left alone until ${new Date(resetAt).toISOString()}`, resetAt);
+};
 
 /**
  * fetch, asked again after a server error or a network failure, and after a 429 that says how long to wait when that

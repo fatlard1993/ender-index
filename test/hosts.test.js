@@ -273,6 +273,18 @@ describe('a request', () => {
 });
 
 describe('the rate limit', () => {
+	test("a host's 429 that asks for longer than a short wait is its rate limit, lifting when it says", async () => {
+		const { limitedBy, RateLimited } = await import('../src/fetch');
+		const now = Date.now();
+		const limited = limitedBy('GitLab', new Response(null, { status: 429, headers: { 'retry-after': '600' } }));
+		const unsaid = limitedBy('Codeberg', new Response(null, { status: 429 }));
+
+		expect(limited).toBeInstanceOf(RateLimited);
+		expect(limited.resetAt - now).toBeWithin(600_000, 601_000);
+		expect(limited.message).toStartWith('GitLab asks to be left alone until ');
+		expect(unsaid.resetAt - now).toBeWithin(60_000, 61_000);
+	});
+
 	test('is waited out when it resets inside the time budget, and stops the crawl when it does not', () => {
 		const now = 1_000_000;
 

@@ -1,4 +1,4 @@
-import { fetchSteady } from './fetch';
+import { fetchSteady, limitedBy } from './fetch';
 
 /** Codeberg runs Forgejo, whose API answers in nearly GitHub's shapes. */
 const API = 'https://codeberg.org/api/v1';
@@ -6,6 +6,7 @@ const API = 'https://codeberg.org/api/v1';
 const get = async path => {
 	const response = await fetchSteady(`${API}${path}`, { headers: { accept: 'application/json' } });
 
+	if (response.status === 429) throw limitedBy('Codeberg', response);
 	if (!response.ok)
 		throw Object.assign(new Error(`Codeberg ${response.status} for ${path}`), { status: response.status });
 

@@ -2,7 +2,8 @@ import { join } from 'node:path';
 
 import { DATA, readRepos } from './crawl';
 import * as codeberg from './codeberg';
-import { RateLimited, searchCode } from './github';
+import { RateLimited } from './fetch';
+import { searchCode } from './github';
 import * as gitlab from './gitlab';
 
 /** Where each loader keeps its metadata in a source tree. Finding one is how a repository says it is a mod. */

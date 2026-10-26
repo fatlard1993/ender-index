@@ -1,12 +1,13 @@
 import { basename } from 'node:path';
 
-import { fetchSteady } from './fetch';
+import { fetchSteady, limitedBy } from './fetch';
 
 const API = 'https://gitlab.com/api/v4';
 
 const get = async path => {
 	const response = await fetchSteady(`${API}${path}`, { headers: { accept: 'application/json' } });
 
+	if (response.status === 429) throw limitedBy('GitLab', response);
 	if (!response.ok)
 		throw Object.assign(new Error(`GitLab ${response.status} for ${path}`), { status: response.status });
 
