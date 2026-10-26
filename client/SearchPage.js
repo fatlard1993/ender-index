@@ -44,6 +44,10 @@ import { Chip, Command, Meta, Row, Stack, Title, Warning, avatar, copyCommand, c
 
 const PAGE_SIZE = 25;
 
+// Typing anywhere searches, except into a field, whose keys are its own
+const isTypingInField = target =>
+	target?.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target?.tagName);
+
 const resultCard = ({ entry, sharing, unproven }, versions, { minecraft }) => {
 	const host = entry.host ?? 'github';
 	const title = titleOf(entry);
@@ -300,6 +304,7 @@ export default class SearchPage extends View {
 						icon: 'triangle-exclamation',
 						title: 'The index did not load',
 						message: `${INDEX}/search.json: ${error.message}`,
+						action: { textContent: 'Try again', onPointerPress: () => this.render() },
 					}),
 				);
 			});
@@ -372,5 +377,16 @@ export default class SearchPage extends View {
 		]);
 
 		search.elem.focus();
+
+		document.addEventListener(
+			'keydown',
+			event => {
+				if (isTypingInField(event.target) || event.ctrlKey || event.metaKey || event.altKey) return;
+
+				if (event.key === '/') event.preventDefault();
+				if (event.key === '/' || event.key.length === 1) search.elem.focus();
+			},
+			{ signal: this.signal },
+		);
 	}
 }

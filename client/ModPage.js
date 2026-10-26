@@ -5,10 +5,11 @@ import {
 	Content,
 	EmptyState,
 	Link,
+	SectionLabel,
 	Toolbar,
+	View,
 	styled,
 	theme,
-	View,
 } from '@vanilla-bean/components';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
@@ -39,13 +40,6 @@ const Heading = styled.Component(
 		margin: 0;
 		font-size: 1.6em;
 		overflow-wrap: anywhere;
-	`,
-);
-
-const Section = styled.Component(
-	({ space }) => `
-		margin: ${space.xl} 0 ${space.sm};
-		font-size: 1.15em;
 	`,
 );
 
@@ -313,7 +307,12 @@ export default class ModPage extends View {
 				if (signal.aborted) return;
 
 				body.content(
-					new EmptyState({ icon: 'triangle-exclamation', title: 'The index did not load', message: error.message }),
+					new EmptyState({
+						icon: 'triangle-exclamation',
+						title: 'The index did not load',
+						message: error.message,
+						action: { textContent: 'Try again', onPointerPress: () => this.render() },
+					}),
 				);
 			});
 
@@ -385,10 +384,11 @@ export default class ModPage extends View {
 					stat(date(record.pushed), 'last pushed'),
 				],
 			}),
-			new Section({ tag: 'h2', textContent: 'Readme' }),
+			new SectionLabel({ level: 2, textContent: 'Readme', style: { marginTop: theme.space.xl } }),
 			readme,
-			new Section({
-				tag: 'h2',
+			new SectionLabel({
+				level: 2,
+				style: { marginTop: theme.space.xl },
 				textContent: `The newest ${watched.length === 1 ? 'release' : `${watched.length} releases`} with jars`,
 			}),
 			new Meta({
