@@ -8,11 +8,11 @@ import { loadListing } from './data';
 import {
 	CAPABILITIES,
 	REPOSITORY,
-	avatarUrl,
 	downloadCounts,
 	fileSize,
 	installCommand,
 	loadersOf,
+	pictureUrl,
 	readmeSources,
 	readmeUrl,
 	recordUrl,
@@ -348,7 +348,7 @@ export default class ModPage extends View {
 			new Row({
 				style: { flexWrap: 'nowrap', alignItems: 'flex-start', gap: theme.space.lg },
 				append: [
-					avatar(avatarUrl(entry, 192), 96),
+					avatar(pictureUrl(entry, 192), 96),
 					new Stack({
 						style: { flex: '1', minWidth: '0', gap: theme.space.sm },
 						append: [

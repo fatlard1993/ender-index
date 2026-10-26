@@ -6,11 +6,21 @@ const live = release =>
 
 const usable = release => live(release).length > 0;
 
+/** The release a repository is listed by: its newest full release with a mod in it, or failing that its newest. */
+export const latestRelease = record =>
+	record.releases.find(release => !release.prerelease && usable(release)) ?? record.releases.find(usable);
+
+/** The jars of that release worth reading, which a crawl also takes the icon from. */
+export const latestAssets = record => {
+	const latest = latestRelease(record);
+
+	return latest ? live(latest) : [];
+};
+
 /** One line of the search file: what a client needs to list a repository without fetching its record. */
 export const summarize = record => {
-	const latest =
-		record.releases.find(release => !release.prerelease && usable(release)) ?? record.releases.find(usable);
-	const assets = latest ? live(latest) : [];
+	const latest = latestRelease(record);
+	const assets = latestAssets(record);
 
 	return {
 		repo: record.repo,
@@ -20,6 +30,7 @@ export const summarize = record => {
 		archived: record.archived,
 		license: record.license,
 		pushed: record.pushed,
+		icon: assets.find(asset => asset.icon)?.icon,
 		replaced: record.releases.some(release => release.assets.some(asset => asset.replaced !== undefined)),
 		targets: unique(
 			record.releases

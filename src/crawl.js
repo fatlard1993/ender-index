@@ -1,8 +1,8 @@
-import { mkdir, mkdtemp, rm } from 'node:fs/promises';
+import { mkdir, mkdtemp, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 
-import { readMods } from 'ender-launcher/metadata';
+import { readIcon, readMods } from 'ender-launcher/metadata';
 import { scanJar } from 'ender-launcher/scan';
 
 import * as codeberg from './codeberg';
@@ -10,9 +10,12 @@ import { fetchSteady } from './fetch';
 import * as github from './github';
 import * as gitlab from './gitlab';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
-import { buildSearch } from './search';
+import { buildSearch, latestAssets } from './search';
 
 export const DATA = join(import.meta.dir, '..', 'data');
+
+/** Icons are kept by the hash of their bytes, so a mod whose icon never changes stores it once. */
+export const ICONS = join(DATA, 'icons');
 
 /** Larger than any mod jar has reason to be; past it, the asset is recorded as refused rather than fetched. */
 export const MAX_DOWNLOAD = 256 * 1024 * 1024;
@@ -23,7 +26,7 @@ const readJson = async (path, fallback) => {
 	return (await file.exists()) ? file.json() : fallback;
 };
 
-const writeJson = async (path, value) => {
+export const writeJson = async (path, value) => {
 	await mkdir(dirname(path), { recursive: true });
 	await Bun.write(path, `${JSON.stringify(value, undefined, '\t')}\n`);
 };
@@ -88,7 +91,51 @@ export const download = async (url, path, { limit = MAX_DOWNLOAD } = {}) => {
 	return hasher.digest('hex');
 };
 
-/** Download one asset, hash it on the way in, read its mods and scan it. */
+/** Twice the largest a page draws an icon. A jar's 1024 pixel icon would otherwise cost the repository a hundred small ones. */
+export const ICON_SIZE = 128;
+
+/** An icon larger than a page draws, scaled to fit; one that fits keeps its own bytes, so pixel art stays exact. */
+export const shrinkIcon = async icon => {
+	const { width, height } = await new Bun.Image(icon.bytes).metadata();
+	const scale = ICON_SIZE / Math.max(width, height);
+
+	if (scale >= 1) return icon;
+
+	const resized = new Bun.Image(icon.bytes).resize(
+		Math.max(1, Math.round(width * scale)),
+		Math.max(1, Math.round(height * scale)),
+	);
+
+	return { type: 'webp', bytes: Buffer.from(await resized.webp().bytes()) };
+};
+
+/** The jar's icon kept among the others, named for the page to fetch; null when it declares none a page can show. */
+export const keepIcon = async (jar, icons = ICONS) => {
+	let icon;
+
+	try {
+		const declared = await readIcon(jar);
+
+		// An icon the image reader cannot open would show as a broken picture
+		icon = declared && (await shrinkIcon(declared));
+	} catch {
+		return null;
+	}
+
+	if (icon === undefined) return null;
+
+	const name = `${new Bun.CryptoHasher('sha256').update(icon.bytes).digest('hex')}.${icon.type}`;
+	const file = Bun.file(join(icons, name));
+
+	if (!(await file.exists())) {
+		await mkdir(icons, { recursive: true });
+		await Bun.write(file, icon.bytes);
+	}
+
+	return name;
+};
+
+/** Download one asset, hash it on the way in, read its mods and icon and scan it. */
 const inspector = (scratch, knownBad) => async asset => {
 	if (asset.size > MAX_DOWNLOAD) throw new Error(`${asset.size} bytes is past the ${MAX_DOWNLOAD} byte limit`);
 
@@ -105,14 +152,61 @@ const inspector = (scratch, knownBad) => async asset => {
 			metadataError = error.message;
 		}
 
+		const icon = await keepIcon(path);
+
 		try {
-			return { sha256, mods, metadataError, scan: await scanJar(path), knownBad: knownBad.get(sha256) };
+			return { sha256, mods, metadataError, icon, scan: await scanJar(path), knownBad: knownBad.get(sha256) };
 		} catch (error) {
 			return { sha256, error: error.message, knownBad: knownBad.get(sha256) };
 		}
 	} finally {
 		await rm(path, { force: true });
 	}
+};
+
+/**
+ * Jars of the release a repository is listed by that were read before icons were, given theirs. Only that release's
+ * are fetched again: the page shows one icon per mod, and every jar a crawl inspects from now on is read for one.
+ */
+export const fillIcons = async (record, scratch, icons = ICONS) => {
+	const assets = latestAssets(record);
+	let filled = 0;
+
+	if (assets.some(asset => asset.icon)) return filled;
+
+	for (const asset of assets) {
+		if (asset.icon !== undefined) continue;
+
+		const path = join(scratch, `icon-${asset.sha256}.jar`);
+
+		try {
+			const sha256 = await download(asset.url, path);
+
+			// Bytes other than those scanned are not this asset's; the next crawl reads them as a swap.
+			if (sha256 !== asset.sha256) continue;
+
+			asset.icon = await keepIcon(path, icons);
+			++filled;
+
+			if (asset.icon) break;
+		} catch (error) {
+			console.error(`icon    ${record.repo} ${asset.name} :: ${error.message}`);
+		} finally {
+			await rm(path, { force: true });
+		}
+	}
+
+	return filled;
+};
+
+/** Remove the icons no record names, left by a mod that changed its icon or left the index. */
+export const pruneIcons = async (records, icons = ICONS) => {
+	const named = new Set(
+		records.flatMap(record => record.releases.flatMap(release => release.assets.map(asset => asset.icon))),
+	);
+	const files = await readdir(icons).catch(() => []);
+
+	await Promise.all(files.filter(file => !named.has(file)).map(file => rm(join(icons, file))));
 };
 
 const MANIFEST = 'https://piston-meta.mojang.com/mc/game/version_manifest_v2.json';
@@ -136,7 +230,7 @@ const releasedGameVersions = async () => {
 	}
 };
 
-const crawlOne = async (line, { now, inspect, gameVersions }) => {
+const crawlOne = async (line, { now, inspect, gameVersions, scratch }) => {
 	const { host, name } = parseLine(line);
 	const path = recordPath({ host, name });
 	const record = await readJson(path);
@@ -169,7 +263,10 @@ const crawlOne = async (line, { now, inspect, gameVersions }) => {
 
 	const result = await updateRecord({ record: recorded, repo, releases: listed, now, inspect, host, gameVersions });
 
-	if (result.record) await writeJson(canonical, { ...result.record, history: HISTORY });
+	if (result.record) {
+		await fillIcons(result.record, scratch);
+		await writeJson(canonical, { ...result.record, history: HISTORY });
+	}
 	if (canonical !== path) await rm(path, { force: true });
 
 	return result.events;
@@ -192,7 +289,7 @@ export const spendingLine = ({ full, unchanged, remaining, resetAt }) => {
 	return `GitHub answered ${count(total)} requests in full${breakdown} and ${count(unchanged)} unchanged, which the rate limit does not count${left}`;
 };
 
-const recordFiles = async () =>
+export const recordFiles = async () =>
 	[...new Bun.Glob('**/*.json').scanSync(join(DATA, 'mods'))].map(file => join(DATA, 'mods', file));
 
 export const crawl = async ({ only } = {}) => {
@@ -246,7 +343,7 @@ export const crawl = async ({ only } = {}) => {
 			}
 
 			try {
-				for (const event of await crawlWaiting(fullName, { now, inspect, gameVersions })) {
+				for (const event of await crawlWaiting(fullName, { now, inspect, gameVersions, scratch })) {
 					console.log(
 						[event.type.padEnd(7), event.repo, event.tag, event.asset, event.error && `:: ${event.error}`]
 							.filter(Boolean)
@@ -276,6 +373,7 @@ export const crawl = async ({ only } = {}) => {
 	const records = await Promise.all((await recordFiles()).map(file => Bun.file(file).json()));
 
 	await writeJson(join(DATA, 'search.json'), buildSearch(records));
+	await pruneIcons(records);
 
 	console.log(`${records.length} repositories indexed; ${failures.length} could not be crawled`);
 

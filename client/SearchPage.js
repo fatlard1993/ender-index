@@ -23,11 +23,11 @@ import {
 	INDEX,
 	LOADERS,
 	REPOSITORY,
-	avatarUrl,
 	fittingVersions,
 	installCommand,
 	loadersOf,
 	modPath,
+	pictureUrl,
 	readQuery,
 	releaseUrl,
 	releasesUrl,
@@ -51,7 +51,7 @@ const resultCard = ({ entry, sharing }, versions, { minecraft }) => {
 		new Row({
 			style: { flexWrap: 'nowrap', alignItems: 'flex-start', gap: theme.space.md },
 			append: [
-				new Link({ href: `#${modPath(entry)}`, title: `Read about ${title}`, append: avatar(avatarUrl(entry)) }),
+				new Link({ href: `#${modPath(entry)}`, title: `Read about ${title}`, append: avatar(pictureUrl(entry)) }),
 				new Stack({
 					style: { flex: '1', minWidth: '0', gap: theme.space.sm },
 					append: [

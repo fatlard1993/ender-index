@@ -92,6 +92,10 @@ export const recordUrl = (entry, base = INDEX) =>
 export const avatarUrl = (entry, size = 96) =>
 	(entry.host ?? 'github') === 'github' ? `https://github.com/${entry.repo.split('/')[0]}.png?size=${size}` : undefined;
 
+/** The icon its jar declares, kept by the crawl, and failing that its owner's picture. */
+export const pictureUrl = (entry, size = 96, base = INDEX) =>
+	entry.icon ? `${base}/icons/${entry.icon}` : avatarUrl(entry, size);
+
 const README_NAMES = ['README.md', 'readme.md', 'Readme.md', 'README.MD', 'README'];
 
 /**

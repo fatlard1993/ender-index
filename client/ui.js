@@ -93,12 +93,20 @@ export const Avatar = styled.Component(
 	`,
 );
 
-export const avatar = (url, size = 48) =>
-	new Avatar({
+export const avatar = (url, size = 48) => {
+	const picture = new Avatar({
 		tag: url ? 'img' : 'div',
 		...(url ? { attributes: { src: url, alt: '', loading: 'lazy', referrerpolicy: 'no-referrer' } } : {}),
 		style: { width: `${size}px`, height: `${size}px` },
 	});
+
+	// Mod icons are mostly pixel art, which smoothing blurs when it is drawn larger than it was made
+	picture.elem.addEventListener('load', () => {
+		if (picture.elem.naturalWidth < size) picture.elem.style.imageRendering = 'pixelated';
+	});
+
+	return picture;
+};
 
 export const loadJson = async (url, signal) => {
 	const response = await fetch(url, { signal });

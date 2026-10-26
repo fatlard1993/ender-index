@@ -10,6 +10,7 @@ import {
 	installAllCommand,
 	installCommand,
 	modPath,
+	pictureUrl,
 	readmeSources,
 	readmeUrl,
 	recordUrl,
@@ -115,6 +116,11 @@ describe('a mod page', () => {
 	test('pictures a GitHub owner and leaves the hosts that need a request to find one', () => {
 		expect(avatarUrl(entry())).toBe('https://github.com/CaffeineMC.png?size=96');
 		expect(avatarUrl(entry({ host: 'codeberg' }))).toBeUndefined();
+	});
+
+	test("shows the mod's own icon before its owner's picture", () => {
+		expect(pictureUrl(entry({ icon: 'abc.png' }), 96, 'https://x')).toBe('https://x/icons/abc.png');
+		expect(pictureUrl(entry())).toBe('https://github.com/CaffeineMC.png?size=96');
 	});
 
 	test("resolves a readme's links from the repository root", () => {
