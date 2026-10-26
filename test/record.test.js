@@ -124,6 +124,18 @@ describe('a repository record', () => {
 		expect(again.seen).toEqual([]);
 	});
 
+	test("a jar's download count is kept current without reading it again", async () => {
+		const counted = (id, downloads) => ({ ...asset('mod.jar', id), download_count: downloads });
+		const first = await update(undefined, [release('1.0', [counted(1, 5)])], inspector().inspect);
+		const again = inspector();
+		const second = await update(first.record, [release('1.0', [counted(1, 9)])], again.inspect);
+
+		expect(first.record.releases[0].assets[0].downloads).toBe(5);
+		expect(again.seen).toEqual([]);
+		expect(second.record.releases[0].assets[0].downloads).toBe(9);
+		expect(second.events).toEqual([]);
+	});
+
 	test('a re-upload of the same bytes is not news', async () => {
 		const first = await update(undefined, [release('1.0', [asset('mod.jar', 1)])], inspector().inspect);
 		const second = await update(

@@ -103,8 +103,11 @@ export const updateRecord = async ({ record, repo, releases, now, inspect, host 
 				existing.inspection === INSPECTION &&
 				existing.metadataError === undefined &&
 				!readerFailed(existing)
-			)
+			) {
+				if (asset.download_count !== undefined) existing.downloads = asset.download_count;
+
 				continue;
+			}
 
 			let inspected;
 
@@ -119,6 +122,7 @@ export const updateRecord = async ({ record, repo, releases, now, inspect, host 
 				name: asset.name,
 				url: asset.browser_download_url,
 				size: asset.size,
+				downloads: asset.download_count,
 				inspection: INSPECTION,
 				...inspected,
 			};

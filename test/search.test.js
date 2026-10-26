@@ -11,7 +11,7 @@ const asset = extra => ({
 	...extra,
 });
 
-const record = (repo, releases) => ({ repo, host: 'github', stars: 1, releases });
+const record = (repo, releases, extra) => ({ repo, host: 'github', stars: 1, releases, ...extra });
 
 describe('the search file', () => {
 	test('lists the newest release that is not a prerelease, with what it declares and can reach', () => {
@@ -98,6 +98,60 @@ describe('the search file', () => {
 });
 
 describe('discovery', () => {
+	test('counts the downloads its hosts report for every jar read, and nothing for a host that reports none', () => {
+		const [counted, uncounted] = buildSearch([
+			record('a/counted', [
+				{ tag: '2.0', prerelease: false, assets: [asset({ downloads: 30 })] },
+				{ tag: '1.0', prerelease: false, assets: [asset({ downloads: 12, gone: '2026-10-01' })] },
+			]),
+			record('b/uncounted', [{ tag: '1.0', prerelease: false, assets: [asset()] }], { host: 'gitlab' }),
+		]);
+
+		expect(counted.downloads).toBe(42);
+		expect(uncounted.downloads).toBeUndefined();
+	});
+
+	test('says which side its mods run on', () => {
+		const side = environment =>
+			buildSearch([
+				record('a/mod', [
+					{ tag: '1.0', prerelease: false, assets: [asset({ mods: [{ ...asset().mods[0], environment }] })] },
+				]),
+			])[0].environment;
+
+		expect(side('client')).toBe('client');
+		expect(side('server')).toBe('server');
+		expect(side('*')).toBe('both');
+		expect(side(undefined)).toBe('both');
+	});
+
+	test('counts the repositories that require its mod, by the rule the client resolves them by', () => {
+		const requiring = depends => ({
+			tag: '1.0',
+			prerelease: false,
+			assets: [asset({ mods: [{ loader: 'fabric', id: `needs-${depends}`, depends: [depends, 'minecraft'] }] })],
+		});
+		const providing = id => ({
+			tag: '1.0',
+			prerelease: false,
+			assets: [asset({ mods: [{ loader: 'fabric', id, name: id, depends: [] }] })],
+		});
+		const entries = buildSearch([
+			record('real/sodium', [providing('sodium')], { stars: 500 }),
+			record('copy/sodium', [providing('sodium')], { stars: 0 }),
+			record('a/iris', [requiring('sodium')]),
+			record('b/addon', [requiring('sodium')]),
+			record('me/library', [providing('library')], { stars: 0 }),
+			record('me/mod', [requiring('library')]),
+			record('you/mod', [requiring('library')]),
+		]);
+		const usedBy = repo => entries.find(entry => entry.repo === repo).usedBy;
+
+		expect(usedBy('real/sodium')).toBe(2);
+		expect(usedBy('copy/sodium')).toBeUndefined();
+		expect(usedBy('me/library')).toBe(1);
+	});
+
 	test('a manifest under a test or example directory does not make a repository a mod', () => {
 		const items = [
 			{ path: 'src/main/resources/fabric.mod.json', repository: { full_name: 'a/mod' } },

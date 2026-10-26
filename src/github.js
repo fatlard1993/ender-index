@@ -160,11 +160,12 @@ const releaseFields = list =>
 		published_at: release.published_at,
 		prerelease: release.prerelease,
 		draft: release.draft,
-		assets: (release.assets ?? []).map(({ id, name, size, browser_download_url }) => ({
+		assets: (release.assets ?? []).map(({ id, name, size, browser_download_url, download_count }) => ({
 			id,
 			name,
 			size,
 			browser_download_url,
+			download_count,
 		})),
 	}));
 
