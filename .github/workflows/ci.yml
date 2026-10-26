@@ -25,9 +25,11 @@ jobs:
           repository: fatlard1993/ender-launcher
           path: ender-launcher
           persist-credentials: false
+      # By its download address: asked for by version, setup-bun asks GitHub's API where it is, which a crawl running
+      # alongside may have spent the repository's hour of
       - uses: oven-sh/setup-bun@v2
         with:
-          bun-version: 1.4.0
+          bun-download-url: https://github.com/oven-sh/bun/releases/download/bun-v1.4.0/bun-linux-x64.zip
       - run: bun install --frozen-lockfile
         working-directory: ender-index
       - run: bun run lint
