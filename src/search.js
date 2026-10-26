@@ -65,6 +65,7 @@ export const summarize = record => {
 		host: record.host,
 		description: record.description,
 		summary: summaryOf(record),
+		funding: record.funding?.length > 0 ? record.funding : undefined,
 		stars: record.stars,
 		archived: record.archived,
 		license: record.license,

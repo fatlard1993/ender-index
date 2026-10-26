@@ -11,6 +11,8 @@ import * as github from './github';
 import * as gitlab from './gitlab';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
 import { buildSearch, latestAssets } from './search';
+import { FUNDING_PATHS, parseFunding } from './funding';
+import { rawUrl } from './raw';
 import { readmeSummary } from './summary';
 
 export const DATA = join(import.meta.dir, '..', 'data');
@@ -250,14 +252,6 @@ const readmeOf = async ({ host, name, repo, recorded }) => {
 	}
 };
 
-/** A readme's own text, by the host's file URLs rather than its API, which a rate limit counts. */
-const README_RAW = {
-	github: (name, path) => `https://raw.githubusercontent.com/${name}/HEAD/${path}`,
-	codeberg: (name, path) => `https://codeberg.org/api/v1/repos/${name}/raw/${path}`,
-	gitlab: (name, path) =>
-		`https://gitlab.com/api/v4/projects/${encodeURIComponent(name)}/repository/files/${encodeURIComponent(path)}/raw?ref=HEAD`,
-};
-
 /**
  * For a repository that describes itself nowhere, its readme's first paragraph, read once and kept. A readme that does
  * not load leaves it unknown, to be read next crawl.
@@ -267,7 +261,7 @@ const readmeSummaryOf = async ({ host, name, repo, recorded, readme }) => {
 	if (recorded?.readmeSummary !== undefined) return recorded.readmeSummary;
 
 	try {
-		const response = await fetchSteady(README_RAW[host](name, readme));
+		const response = await fetchSteady(rawUrl(host, name, readme));
 
 		if (response.ok) return readmeSummary(await response.text());
 
@@ -279,7 +273,52 @@ const readmeSummaryOf = async ({ host, name, repo, recorded, readme }) => {
 	return undefined;
 };
 
-const crawlOne = async (line, { now, inspect, gameVersions, scratch }) => {
+const WEEK = 7 * 24 * 60 * 60 * 1000;
+
+/** The first of these files that loads, parsed, or [] when none is there; undefined when a host failed to answer. */
+const fundingFrom = async (host, name, paths) => {
+	for (const path of paths) {
+		const response = await fetchSteady(rawUrl(host, name, path));
+
+		if (response.ok) return parseFunding(await response.text());
+
+		await response.body?.cancel();
+
+		if (response.status !== 404) throw new Error(`${path} answered ${response.status}`);
+	}
+
+	return [];
+};
+
+/**
+ * How a repository's author takes support: its FUNDING.yml, or on GitHub its owner's, which GitHub shows for every
+ * repository of theirs without one. Read again weekly; an answer that fails keeps what was known.
+ */
+export const fundingOf = async ({ host, name, recorded, now, owners }) => {
+	const known = { funding: recorded?.funding, fundingChecked: recorded?.fundingChecked };
+
+	if (known.fundingChecked && Date.parse(now) - Date.parse(known.fundingChecked) < WEEK) return known;
+
+	try {
+		let funding = await fundingFrom(host, name, FUNDING_PATHS);
+
+		if (funding.length === 0 && host === 'github') {
+			const owner = name.split('/')[0];
+
+			if (!owners.has(owner))
+				owners.set(owner, fundingFrom(host, `${owner}/.github`, ['FUNDING.yml', '.github/FUNDING.yml']));
+			funding = await owners.get(owner);
+		}
+
+		return { funding, fundingChecked: now };
+	} catch (error) {
+		console.error(`funding ${name} :: ${error.message}`);
+
+		return known;
+	}
+};
+
+const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners }) => {
 	const { host, name } = parseLine(line);
 	const path = recordPath({ host, name });
 	const record = await readJson(path);
@@ -320,6 +359,7 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch }) => {
 			...result.record,
 			readme,
 			readmeSummary: await readmeSummaryOf({ host, name, repo, recorded, readme }),
+			...(await fundingOf({ host, name: repo.full_name ?? name, recorded, now, owners })),
 			history: HISTORY,
 		});
 	}
@@ -365,6 +405,8 @@ export const crawl = async ({ only } = {}) => {
 	const inspect = inspector(scratch, knownBad);
 	const gameVersions = await releasedGameVersions();
 	const failures = [];
+	// An owner's FUNDING.yml stands for each of their repositories without one, so it is read once a crawl
+	const owners = new Map();
 	// A crawl the runner kills commits nothing, so it stops itself while there is time to commit.
 	const deadline = Date.now() + Number(process.env.CRAWL_MINUTES ?? Infinity) * 60_000;
 	let stopped;
@@ -399,7 +441,7 @@ export const crawl = async ({ only } = {}) => {
 			}
 
 			try {
-				for (const event of await crawlWaiting(fullName, { now, inspect, gameVersions, scratch })) {
+				for (const event of await crawlWaiting(fullName, { now, inspect, gameVersions, scratch, owners })) {
 					console.log(
 						[event.type.padEnd(7), event.repo, event.tag, event.asset, event.error && `:: ${event.error}`]
 							.filter(Boolean)
