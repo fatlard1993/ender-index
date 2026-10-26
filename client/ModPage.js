@@ -234,7 +234,10 @@ const releaseCard = (entry, release, downloads) =>
 								append: [
 									new Link({ href: asset.url, textContent: asset.name }),
 									new Meta({
-										textContent: [fileSize(asset.size), downloaded === undefined ? '' : `${count(downloaded)} downloads`]
+										textContent: [
+											fileSize(asset.size),
+											downloaded === undefined ? '' : `${count(downloaded)} downloads`,
+										]
 											.filter(Boolean)
 											.join(' · '),
 									}),
@@ -313,7 +316,9 @@ export default class ModPage extends View {
 			.catch(error => {
 				if (signal.aborted) return;
 
-				body.content(new EmptyState({ icon: 'triangle-exclamation', title: 'The index did not load', message: error.message }));
+				body.content(
+					new EmptyState({ icon: 'triangle-exclamation', title: 'The index did not load', message: error.message }),
+				);
 			});
 
 		this.body = body;
@@ -364,7 +369,9 @@ export default class ModPage extends View {
 					}),
 				],
 			}),
-			...(entry.replaced ? [new Warning({ textContent: 'A jar in one of its releases was changed after publishing' })] : []),
+			...(entry.replaced
+				? [new Warning({ textContent: 'A jar in one of its releases was changed after publishing' })]
+				: []),
 			new Row({
 				append: [
 					new Command({ tag: 'code', textContent: command }),
@@ -377,14 +384,19 @@ export default class ModPage extends View {
 				append: [
 					new Stat({ append: [new Component({ tag: 'strong', textContent: count(record.stars ?? 0) }), 'stars'] }),
 					downloadTotal,
-					new Stat({ append: [new Component({ tag: 'strong', textContent: date(entry.latest?.published) }), 'latest release'] }),
+					new Stat({
+						append: [new Component({ tag: 'strong', textContent: date(entry.latest?.published) }), 'latest release'],
+					}),
 					new Stat({ append: [new Component({ tag: 'strong', textContent: date(record.created) }), 'created'] }),
 					new Stat({ append: [new Component({ tag: 'strong', textContent: date(record.pushed) }), 'last pushed'] }),
 				],
 			}),
 			new Section({ tag: 'h2', textContent: 'Readme' }),
 			readme,
-			new Section({ tag: 'h2', textContent: `The newest ${watched.length === 1 ? 'release' : `${watched.length} releases`} with jars` }),
+			new Section({
+				tag: 'h2',
+				textContent: `The newest ${watched.length === 1 ? 'release' : `${watched.length} releases`} with jars`,
+			}),
 			new Meta({
 				tag: 'p',
 				textContent:
@@ -430,14 +442,17 @@ export default class ModPage extends View {
 						if (!anchor) return;
 
 						event.preventDefault();
-						prose.elem.querySelector(`[id="${CSS.escape(anchor.getAttribute('href').slice(1))}"]`)?.scrollIntoView({ behavior: 'smooth' });
+						prose.elem
+							.querySelector(`[id="${CSS.escape(anchor.getAttribute('href').slice(1))}"]`)
+							?.scrollIntoView({ behavior: 'smooth' });
 					},
 					{ signal },
 				);
 				readme.content(prose);
 			})
 			.catch(error => {
-				if (error.name !== 'AbortError') readme.content(new Meta({ tag: 'p', textContent: `The readme did not load: ${error.message}` }));
+				if (error.name !== 'AbortError')
+					readme.content(new Meta({ tag: 'p', textContent: `The readme did not load: ${error.message}` }));
 			});
 	}
 }

@@ -31,7 +31,10 @@ export const runLocally = async (verb, entries) => {
 	try {
 		const output = await local[verb](entries, specOf);
 
-		new Notify({ intent: 'success', content: `${verb === 'add' ? 'Installed' : 'Removed'} ${named} in ${local.selected}` });
+		new Notify({
+			intent: 'success',
+			content: `${verb === 'add' ? 'Installed' : 'Removed'} ${named} in ${local.selected}`,
+		});
 
 		return output;
 	} catch (error) {

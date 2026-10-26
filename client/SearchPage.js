@@ -1,4 +1,17 @@
-import { Button, Card, Content, EmptyState, Input, Link, Notify, Select, Tabs, Toolbar, debounce, theme } from '@vanilla-bean/components';
+import {
+	Button,
+	Card,
+	Content,
+	EmptyState,
+	Input,
+	Link,
+	Notify,
+	Select,
+	Tabs,
+	Toolbar,
+	debounce,
+	theme,
+} from '@vanilla-bean/components';
 import { HOSTS, rank } from 'ender-launcher/rank';
 
 import { collection } from './collection';
@@ -82,7 +95,12 @@ const resultCard = ({ entry, sharing }, versions, { minecraft }) => {
 						new Row({
 							append: [
 								new Command({ tag: 'code', textContent: command }),
-								new Button({ icon: 'copy', variant: 'flat', title: 'Copy', onPointerPress: () => copyCommand(command) }),
+								new Button({
+									icon: 'copy',
+									variant: 'flat',
+									title: 'Copy',
+									onPointerPress: () => copyCommand(command),
+								}),
 								collectButton(entry),
 								...installControls(entry),
 								minecraft
@@ -121,7 +139,8 @@ export default class SearchPage extends View {
 					: new EmptyState({
 							icon: 'magnifying-glass',
 							title: 'No mods match',
-							message: 'Every word has to appear in a mod id, name or description, and its jars have to fit the filters',
+							message:
+								'Every word has to appear in a mod id, name or description, and its jars have to fit the filters',
 						}),
 			);
 			more.elem.style.display = ranked.length > shown ? '' : 'none';

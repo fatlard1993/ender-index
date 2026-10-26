@@ -70,7 +70,12 @@ export default class CollectionBar extends Bar {
 									}),
 								]
 							: []),
-						new Button({ variant: 'flat', icon: 'trash', title: 'Empty the collection', onPointerPress: collection.clear }),
+						new Button({
+							variant: 'flat',
+							icon: 'trash',
+							title: 'Empty the collection',
+							onPointerPress: collection.clear,
+						}),
 					],
 				}),
 				...(open

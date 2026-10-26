@@ -12,11 +12,15 @@ const request = (path, { method = 'GET', host = 'localhost:7460', origin } = {})
 describe('the local server', () => {
 	test('answers a page served from this machine', () => {
 		expect(allowed(request('/api/instances'), 7460)).toBe(true);
-		expect(allowed(request('/api/instances/a/add', { method: 'POST', origin: 'http://localhost:7460' }), 7460)).toBe(true);
+		expect(allowed(request('/api/instances/a/add', { method: 'POST', origin: 'http://localhost:7460' }), 7460)).toBe(
+			true,
+		);
 	});
 
 	test("refuses another site's page asking it to change an instance", () => {
-		expect(allowed(request('/api/instances/a/add', { method: 'POST', origin: 'https://evil.example' }), 7460)).toBe(false);
+		expect(allowed(request('/api/instances/a/add', { method: 'POST', origin: 'https://evil.example' }), 7460)).toBe(
+			false,
+		);
 		expect(allowed(request('/api/instances/a/add', { method: 'POST' }), 7460)).toBe(false);
 	});
 

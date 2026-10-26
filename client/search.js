@@ -131,7 +131,10 @@ export const readmeUrl = (href, resolve) => {
 	if (!href || href.startsWith('#')) return href;
 
 	if (/^[a-z][a-z\d+.-]*:/i.test(href) || href.startsWith('//')) {
-		return href.replace(/^https:\/\/github\.com\/([^/]+\/[^/]+)\/(?:blob|raw)\//, 'https://raw.githubusercontent.com/$1/');
+		return href.replace(
+			/^https:\/\/github\.com\/([^/]+\/[^/]+)\/(?:blob|raw)\//,
+			'https://raw.githubusercontent.com/$1/',
+		);
 	}
 
 	return resolve(href.replace(/^\.?\/+/, ''));

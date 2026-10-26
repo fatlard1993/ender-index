@@ -107,7 +107,9 @@ describe('a mod page', () => {
 
 	test("reads the repository's record from where the index keeps each host's", () => {
 		expect(recordUrl(entry(), 'https://x')).toBe('https://x/mods/CaffeineMC/lithium.json');
-		expect(recordUrl(entry({ host: 'codeberg' }), 'https://x')).toBe('https://x/mods/codeberg.org/CaffeineMC/lithium.json');
+		expect(recordUrl(entry({ host: 'codeberg' }), 'https://x')).toBe(
+			'https://x/mods/codeberg.org/CaffeineMC/lithium.json',
+		);
 	});
 
 	test('pictures a GitHub owner and leaves the hosts that need a request to find one', () => {
@@ -118,7 +120,9 @@ describe('a mod page', () => {
 	test("resolves a readme's links from the repository root", () => {
 		const { raw, page } = readmeSources(entry());
 
-		expect(readmeUrl('docs/shot.png', raw)).toBe('https://raw.githubusercontent.com/CaffeineMC/lithium/HEAD/docs/shot.png');
+		expect(readmeUrl('docs/shot.png', raw)).toBe(
+			'https://raw.githubusercontent.com/CaffeineMC/lithium/HEAD/docs/shot.png',
+		);
 		expect(readmeUrl('/docs/shot.png', raw)).toBe(readmeUrl('./docs/shot.png', raw));
 		expect(readmeUrl('LICENSE', page)).toBe('https://github.com/CaffeineMC/lithium/blob/HEAD/LICENSE');
 		expect(readmeUrl('#install', raw)).toBe('#install');
