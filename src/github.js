@@ -179,5 +179,16 @@ export const releases = async (fullName, page = 1) =>
 		? request(`/repos/${fullName}/releases?per_page=30`, releaseFields)
 		: releaseFields(await request(`/repos/${fullName}/releases?per_page=30&page=${page}`));
 
+/** The path of the readme GitHub shows for a repository, or null when it has none. */
+export const readme = async fullName => {
+	try {
+		return (await request(`/repos/${fullName}/readme`)).path;
+	} catch (error) {
+		if (error.status === 404) return null;
+
+		throw error;
+	}
+};
+
 export const searchCode = (query, page = 1) =>
 	request(`/search/code?${new URLSearchParams({ q: query, per_page: '100', page: String(page) })}`);

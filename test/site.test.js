@@ -180,6 +180,18 @@ describe('a mod page', () => {
 		);
 	});
 
+	test('fetches the readme the crawl found, resolving its links from where it sits', () => {
+		const found = readmeSources(entry(), '.github/README.md');
+
+		expect(found.candidates).toEqual(['https://raw.githubusercontent.com/CaffeineMC/lithium/HEAD/.github/README.md']);
+		expect(readmeUrl('shot.png', found.raw)).toBe(
+			'https://raw.githubusercontent.com/CaffeineMC/lithium/HEAD/.github/shot.png',
+		);
+		expect(readmeUrl('/LICENSE', found.page)).toBe('https://github.com/CaffeineMC/lithium/blob/HEAD/LICENSE');
+		expect(readmeSources(entry(), null).candidates).toEqual([]);
+		expect(readmeSources(entry()).candidates).toHaveLength(5);
+	});
+
 	test('fetches a GitLab readme through its API, which answers a page from another origin', () => {
 		expect(readmeSources(entry({ host: 'gitlab', repo: 'g/p' })).candidates[0]).toBe(
 			'https://gitlab.com/api/v4/projects/g%2Fp/repository/files/README.md/raw?ref=HEAD',

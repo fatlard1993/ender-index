@@ -230,6 +230,25 @@ const releasedGameVersions = async () => {
 	}
 };
 
+/**
+ * Where a repository's readme is: GitLab says it with the project each crawl, the others are asked once and it is
+ * kept. A failure leaves it unknown, to be asked again next crawl, rather than failing the repository.
+ */
+const readmeOf = async ({ host, name, repo, recorded }) => {
+	if (repo.readme !== undefined) return repo.readme;
+	if (recorded?.readme !== undefined) return recorded.readme;
+
+	try {
+		return await HOSTS[host].readme(name);
+	} catch (error) {
+		if (error instanceof github.RateLimited) throw error;
+
+		console.error(`readme  ${name} :: ${error.message}`);
+
+		return undefined;
+	}
+};
+
 const crawlOne = async (line, { now, inspect, gameVersions, scratch }) => {
 	const { host, name } = parseLine(line);
 	const path = recordPath({ host, name });
@@ -265,7 +284,11 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch }) => {
 
 	if (result.record) {
 		await fillIcons(result.record, scratch);
-		await writeJson(canonical, { ...result.record, history: HISTORY });
+		await writeJson(canonical, {
+			...result.record,
+			readme: await readmeOf({ host, name, repo, recorded }),
+			history: HISTORY,
+		});
 	}
 	if (canonical !== path) await rm(path, { force: true });
 

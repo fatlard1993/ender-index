@@ -162,8 +162,8 @@ const renderReadme = (markdown, sources) => {
 	return purify.sanitize(marked.parse(markdown, { renderer, gfm: true }), { ADD_ATTR: ['target'] });
 };
 
-const fetchReadme = async (entry, signal) => {
-	const sources = readmeSources(entry);
+const fetchReadme = async (entry, readme, signal) => {
+	const sources = readmeSources(entry, readme);
 
 	for (const candidate of sources.candidates) {
 		const response = await fetch(candidate, { signal }).catch(error => {
@@ -399,12 +399,20 @@ export default class ModPage extends View {
 			releases,
 		]);
 
-		fetchReadme(entry, signal)
+		fetchReadme(entry, record.readme, signal)
 			.then(found => {
 				if (signal.aborted) return;
 
 				if (found === undefined) {
-					readme.content(new Meta({ tag: 'p', textContent: 'No readme was found at the root of the repository.' }));
+					readme.content(
+						new Meta({
+							tag: 'p',
+							textContent:
+								record.readme === null
+									? 'The repository has no readme.'
+									: 'No readme was found at the root of the repository.',
+						}),
+					);
 
 					return;
 				}

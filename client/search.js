@@ -156,33 +156,46 @@ export const pictureUrl = (entry, size = 96, base = INDEX) =>
 
 const README_NAMES = ['README.md', 'readme.md', 'Readme.md', 'README.MD', 'README'];
 
-/**
- * Where a repository's readme can be fetched from a page, tried in order, and where the files it links to are: raw
- * for an image, the host's own page for a link. Each of these answers a browser's cross-origin request.
- */
-export const readmeSources = entry => {
-	const { repo } = entry;
-
-	if (entry.host === 'codeberg') {
+/** How each host's readme and the files beside it are reached from a page on another origin. */
+const README_HOSTS = {
+	github: repo => ({
+		fetch: path => `https://raw.githubusercontent.com/${repo}/HEAD/${path}`,
+		raw: path => `https://raw.githubusercontent.com/${repo}/HEAD/${path}`,
+		page: path => `https://github.com/${repo}/blob/HEAD/${path}`,
+	}),
+	codeberg: repo => {
 		const raw = path => `https://codeberg.org/api/v1/repos/${repo}/raw/${path}`;
 
-		return { candidates: README_NAMES.map(raw), raw, page: raw };
-	}
+		return { fetch: raw, raw, page: raw };
+	},
+	gitlab: repo => ({
+		fetch: path =>
+			`https://gitlab.com/api/v4/projects/${encodeURIComponent(repo)}/repository/files/${encodeURIComponent(path)}/raw?ref=HEAD`,
+		raw: path => `https://gitlab.com/${repo}/-/raw/HEAD/${path}`,
+		page: path => `https://gitlab.com/${repo}/-/blob/HEAD/${path}`,
+	}),
+};
 
-	if (entry.host === 'gitlab') {
-		return {
-			candidates: README_NAMES.map(
-				name =>
-					`https://gitlab.com/api/v4/projects/${encodeURIComponent(repo)}/repository/files/${encodeURIComponent(name)}/raw?ref=HEAD`,
-			),
-			raw: path => `https://gitlab.com/${repo}/-/raw/HEAD/${path}`,
-			page: path => `https://gitlab.com/${repo}/-/blob/HEAD/${path}`,
-		};
-	}
+/** The readme paths to try: the one the crawl found, none when it found none, and the usual names for a record from before. */
+const readmeCandidates = readme => {
+	if (readme === null) return [];
 
-	const raw = path => `https://raw.githubusercontent.com/${repo}/HEAD/${path}`;
+	return readme === undefined ? README_NAMES : [readme];
+};
 
-	return { candidates: README_NAMES.map(raw), raw, page: path => `https://github.com/${repo}/blob/HEAD/${path}` };
+/**
+ * Where a repository's readme can be fetched from a page, tried in order, and where the files it links to are: raw
+ * for an image, the host's own page for a link, from the readme's own directory unless the link starts at the root.
+ */
+export const readmeSources = (entry, readme) => {
+	const hosted = README_HOSTS[entry.host ?? 'github'](entry.repo);
+	const directory = readme?.includes('/') ? readme.slice(0, readme.lastIndexOf('/') + 1) : '';
+	const from =
+		resolve =>
+		(path, { root } = {}) =>
+			resolve(root ? path : `${directory}${path}`);
+
+	return { candidates: readmeCandidates(readme).map(hosted.fetch), raw: from(hosted.raw), page: from(hosted.page) };
 };
 
 /**
@@ -199,7 +212,7 @@ export const readmeUrl = (href, resolve) => {
 		);
 	}
 
-	return resolve(href.replace(/^\.?\/+/, ''));
+	return resolve(href.replace(/^\.?\/+/, ''), { root: href.startsWith('/') });
 };
 
 /** Where a host lists releases with what each asset was downloaded; GitLab does not count them. */

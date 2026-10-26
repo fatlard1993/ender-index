@@ -36,6 +36,22 @@ const releaseList = async (fullName, page) => {
 	}
 };
 
+const README = /^readme(\.(md|markdown|txt|rst|org))?$/i;
+
+/** The readme at the root of a repository, as Forgejo shows one, or null when there is none. */
+export const readme = async fullName => {
+	try {
+		return (
+			(await get(`/repos/${fullName}/contents`)).find(file => file.type === 'file' && README.test(file.name))?.path ??
+			null
+		);
+	} catch (error) {
+		if (error.status === 404) return null;
+
+		throw error;
+	}
+};
+
 export const releases = async (fullName, page = 1) =>
 	(await releaseList(fullName, page)).map(release => ({
 		tag_name: release.tag_name,

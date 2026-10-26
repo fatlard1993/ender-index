@@ -15,6 +15,9 @@ const get = async path => {
 
 const project = fullName => `/projects/${encodeURIComponent(fullName)}`;
 
+/** GitLab names a project's readme by its page, `.../-/blob/<ref>/<path>`; the path is what a page fetches. */
+export const readmePath = url => (url ? decodeURIComponent(url.replace(/^.*?\/-\/blob\/[^/]+\//, '')) : null);
+
 export const repository = async fullName => {
 	const repo = await get(`${project(fullName)}?license=true`);
 
@@ -26,6 +29,7 @@ export const repository = async fullName => {
 		license: repo.license && { spdx_id: repo.license.key },
 		created_at: repo.created_at,
 		pushed_at: repo.last_activity_at,
+		readme: readmePath(repo.readme_url),
 	};
 };
 

@@ -147,6 +147,61 @@ describe('releases switched off', () => {
 	});
 });
 
+describe('a readme', () => {
+	const answering = (body, status = 200) => {
+		const original = globalThis.fetch;
+		const token = process.env.GITHUB_TOKEN;
+
+		globalThis.fetch = async () => Response.json(body, { status });
+		process.env.GITHUB_TOKEN = 'test';
+
+		return () => {
+			globalThis.fetch = original;
+			process.env.GITHUB_TOKEN = token;
+			if (token === undefined) delete process.env.GITHUB_TOKEN;
+		};
+	};
+
+	test('is the one GitHub shows, or none when it answers 404', async () => {
+		const { readme } = await import('../src/github');
+		let restore = answering({ path: 'docs/README.md' });
+
+		try {
+			expect(await readme('a/b')).toBe('docs/README.md');
+		} finally {
+			restore();
+		}
+
+		restore = answering({ message: 'Not Found' }, 404);
+
+		try {
+			expect(await readme('a/b')).toBeNull();
+		} finally {
+			restore();
+		}
+	});
+
+	test('is the readme file at the root on Codeberg', async () => {
+		const restore = answering([
+			{ type: 'dir', name: 'readme', path: 'readme' },
+			{ type: 'file', name: 'README.md', path: 'README.md' },
+		]);
+
+		try {
+			expect(await (await import('../src/codeberg')).readme('a/b')).toBe('README.md');
+		} finally {
+			restore();
+		}
+	});
+
+	test('is named by the page GitLab gives for it', async () => {
+		const { readmePath } = await import('../src/gitlab');
+
+		expect(readmePath('https://gitlab.com/g/p/-/blob/main/docs/Read%20Me.md')).toBe('docs/Read Me.md');
+		expect(readmePath(null)).toBeNull();
+	});
+});
+
 describe('a request', () => {
 	const serving = (statuses, headers) => {
 		let asked = 0;
