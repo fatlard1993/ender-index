@@ -115,3 +115,15 @@ export const copyCommand = async command => {
 };
 
 export const paragraph = textContent => new Component({ tag: 'p', textContent, style: { margin: 0 } });
+
+/** A repository's own description, or its summary marked with where it came from. */
+export const about = found =>
+	found === undefined
+		? []
+		: [
+				new Component({
+					tag: 'p',
+					style: { margin: 0 },
+					append: [found.text, ...(found.from ? [new Meta({ tag: 'span', textContent: ` (${found.from})` })] : [])],
+				}),
+			];

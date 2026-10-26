@@ -184,6 +184,25 @@ describe('discovery', () => {
 		expect(author('stranger/fresh')).toBe('');
 	});
 
+	test('summarizes a repository that describes itself nowhere, by its jar unless a template wrote it, or its readme', () => {
+		const describing = description => [
+			{ tag: '1.0', prerelease: false, assets: [asset({ mods: [{ ...asset().mods[0], description }] })] },
+		];
+		const [described, jar, template, none] = buildSearch([
+			record('a/described', describing('From the jar'), { description: 'Its own words' }),
+			record('b/jar', describing('Ships you can walk on')),
+			record('c/template', describing('This is an example description! Tell everyone what your mod is about!'), {
+				readmeSummary: 'From the readme',
+			}),
+			record('d/none', describing(undefined)),
+		]);
+
+		expect(described.summary).toBeUndefined();
+		expect(jar.summary).toEqual({ text: 'Ships you can walk on', from: 'jar' });
+		expect(template.summary).toEqual({ text: 'From the readme', from: 'readme' });
+		expect(none.summary).toBeUndefined();
+	});
+
 	test('a manifest under a test or example directory does not make a repository a mod', () => {
 		const items = [
 			{ path: 'src/main/resources/fabric.mod.json', repository: { full_name: 'a/mod' } },

@@ -1,5 +1,7 @@
 import { authorOf, providerOf, requiredIds, sharing } from 'ender-launcher/rank';
 
+import { informative, shorten } from './summary';
+
 const unique = (items, key) => [...new Map(items.map(item => [key(item), item])).values()];
 
 /** A jar counts when it was read, is still published, and declares a mod: an installer or a standalone tool beside the source does not. */
@@ -36,6 +38,23 @@ const environmentOf = mods => {
 	return sides.size === 1 && (sides.has('client') || sides.has('server')) ? [...sides][0] : 'both';
 };
 
+/**
+ * What says what a repository is when it does not: the description its jar declares, unless a template wrote it, or
+ * else its readme's first paragraph, each with where it came from.
+ */
+const summaryOf = record => {
+	if (record.description) return undefined;
+
+	const declared = jars(record)
+		.flatMap(asset => asset.mods ?? [])
+		.map(mod => mod.description)
+		.find(informative);
+
+	if (declared) return { text: shorten(declared), from: 'jar' };
+
+	return record.readmeSummary ? { text: record.readmeSummary, from: 'readme' } : undefined;
+};
+
 /** One line of the search file: what a client needs to list a repository without fetching its record. */
 export const summarize = record => {
 	const latest = latestRelease(record);
@@ -45,6 +64,7 @@ export const summarize = record => {
 		repo: record.repo,
 		host: record.host,
 		description: record.description,
+		summary: summaryOf(record),
 		stars: record.stars,
 		archived: record.archived,
 		license: record.license,

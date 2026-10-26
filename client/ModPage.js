@@ -20,6 +20,7 @@ import { loadListing } from './data';
 import {
 	CAPABILITIES,
 	REPOSITORY,
+	aboutOf,
 	fileSize,
 	installCommand,
 	loadersOf,
@@ -33,7 +34,7 @@ import {
 } from './search';
 import { collectButton, installControls } from './controls';
 import { local } from './local';
-import { Chip, Command, Meta, Row, Stack, Warning, avatar, copyCommand, count, date, loadJson, paragraph } from './ui';
+import { Chip, Command, Meta, Row, Stack, Warning, about, avatar, copyCommand, count, date, loadJson } from './ui';
 
 const Heading = styled.Component(
 	() => `
@@ -358,7 +359,7 @@ export default class ModPage extends View {
 									...(author ? [new Meta({ textContent: `by the author of ${author}` })] : []),
 								],
 							}),
-							...(record.description ? [paragraph(record.description)] : []),
+							...about(aboutOf(entry)),
 							new Row({ append: loadersOf(entry).map(loader => new Chip({ textContent: loader })) }),
 						],
 					}),

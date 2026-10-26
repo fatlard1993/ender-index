@@ -119,6 +119,16 @@ export const fittingVersions = (entry, versions, { minecraft, shown = 3 } = {}) 
 	return { versions: named.slice(0, shown), more: Math.max(0, named.length - shown) };
 };
 
+const SUMMARY_SOURCES = { jar: 'from its jar', readme: 'from its readme' };
+
+/** What a repository says it is, or the crawl's summary of it with where that came from. */
+export const aboutOf = entry => {
+	if (entry.description) return { text: entry.description };
+	if (entry.summary) return { text: entry.summary.text, from: SUMMARY_SOURCES[entry.summary.from] };
+
+	return undefined;
+};
+
 export const titleOf = entry =>
 	[...new Set((entry.latest?.mods ?? []).map(mod => mod.name ?? mod.id))].join(', ') || entry.repo;
 

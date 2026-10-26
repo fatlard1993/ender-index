@@ -11,6 +11,7 @@ import * as github from './github';
 import * as gitlab from './gitlab';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
 import { buildSearch, latestAssets } from './search';
+import { readmeSummary } from './summary';
 
 export const DATA = join(import.meta.dir, '..', 'data');
 
@@ -249,6 +250,35 @@ const readmeOf = async ({ host, name, repo, recorded }) => {
 	}
 };
 
+/** A readme's own text, by the host's file URLs rather than its API, which a rate limit counts. */
+const README_RAW = {
+	github: (name, path) => `https://raw.githubusercontent.com/${name}/HEAD/${path}`,
+	codeberg: (name, path) => `https://codeberg.org/api/v1/repos/${name}/raw/${path}`,
+	gitlab: (name, path) =>
+		`https://gitlab.com/api/v4/projects/${encodeURIComponent(name)}/repository/files/${encodeURIComponent(path)}/raw?ref=HEAD`,
+};
+
+/**
+ * For a repository that describes itself nowhere, its readme's first paragraph, read once and kept. A readme that does
+ * not load leaves it unknown, to be read next crawl.
+ */
+const readmeSummaryOf = async ({ host, name, repo, recorded, readme }) => {
+	if (repo.description || !readme) return undefined;
+	if (recorded?.readmeSummary !== undefined) return recorded.readmeSummary;
+
+	try {
+		const response = await fetchSteady(README_RAW[host](name, readme));
+
+		if (response.ok) return readmeSummary(await response.text());
+
+		console.error(`summary ${name} :: its readme answered ${response.status}`);
+	} catch (error) {
+		console.error(`summary ${name} :: ${error.message}`);
+	}
+
+	return undefined;
+};
+
 const crawlOne = async (line, { now, inspect, gameVersions, scratch }) => {
 	const { host, name } = parseLine(line);
 	const path = recordPath({ host, name });
@@ -284,9 +314,12 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch }) => {
 
 	if (result.record) {
 		await fillIcons(result.record, scratch);
+		const readme = await readmeOf({ host, name, repo, recorded });
+
 		await writeJson(canonical, {
 			...result.record,
-			readme: await readmeOf({ host, name, repo, recorded }),
+			readme,
+			readmeSummary: await readmeSummaryOf({ host, name, repo, recorded, readme }),
 			history: HISTORY,
 		});
 	}

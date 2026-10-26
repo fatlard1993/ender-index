@@ -38,10 +38,11 @@ import {
 	releaseUrl,
 	releasesUrl,
 	repositoryUrl,
+	aboutOf,
 	titleOf,
 	writeQuery,
 } from './search';
-import { Chip, Command, Meta, Row, Stack, Title, Warning, avatar, copyCommand, count, paragraph } from './ui';
+import { Chip, Command, Meta, Row, Stack, Title, Warning, about, avatar, copyCommand, count } from './ui';
 
 const PAGE_SIZE = 25;
 
@@ -121,7 +122,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, { minecraft 
 								}),
 							],
 						}),
-						...(entry.description ? [paragraph(entry.description)] : []),
+						...about(aboutOf(entry)),
 						new Row({
 							append: [
 								...loadersOf(entry).map(loader => new Chip({ textContent: loader })),
