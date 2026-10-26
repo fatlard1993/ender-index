@@ -43,10 +43,11 @@ export const readQuery = search => {
 		host: oneOf(params.get('host'), HOSTS),
 		sort: oneOf(params.get('sort'), SORTS) ?? 'best',
 		avoid: (params.get('avoid') ?? '').split(',').filter(capability => REACHABLE.includes(capability)),
+		support: params.get('support') === '1',
 	};
 };
 
-export const writeQuery = ({ query, minecraft, loader, side, released, host, sort, avoid = [] }) => {
+export const writeQuery = ({ query, minecraft, loader, side, released, host, sort, avoid = [], support }) => {
 	const params = new URLSearchParams();
 
 	if (query?.trim()) params.set('q', query.trim());
@@ -57,6 +58,7 @@ export const writeQuery = ({ query, minecraft, loader, side, released, host, sor
 	if (host) params.set('host', host);
 	if (sort && sort !== 'best') params.set('sort', sort);
 	if (avoid.length > 0) params.set('avoid', avoid.join(','));
+	if (support) params.set('support', '1');
 
 	const written = params.toString();
 
@@ -79,12 +81,13 @@ const ORDER = {
  * Ranked results narrowed by the filters the ranking does not know, and put in the order asked for.
  * Ties keep the ranking's order, so the best match among equals comes first.
  */
-export const refine = (ranked, { side, released, host, sort = 'best', avoid = [] }, now = Date.now()) => {
+export const refine = (ranked, { side, released, host, sort = 'best', avoid = [], support }, now = Date.now()) => {
 	const kept = ranked.filter(
 		({ entry }) =>
 			(!side || (entry.environment ?? 'both') === side) &&
 			(!released || time(entry.latest?.published) >= now - Number(released) * DAY) &&
 			(!host || (entry.host ?? 'github') === host) &&
+			(!support || (entry.funding?.length ?? 0) > 0) &&
 			!(entry.latest?.capabilities ?? []).some(capability => avoid.includes(capability)),
 	);
 

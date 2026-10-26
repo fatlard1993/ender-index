@@ -57,6 +57,7 @@ describe('the search page', () => {
 			host: 'codeberg',
 			sort: 'downloads',
 			avoid: ['exec'],
+			support: true,
 		};
 
 		expect(readQuery(writeQuery(filtered))).toMatchObject(filtered);
@@ -113,7 +114,12 @@ describe('the search page', () => {
 			found('a/best', { stars: 5, downloads: 10, environment: 'client' }),
 			found('b/old', { stars: 9, latest: { published: '2024-01-01T00:00:00Z', mods: [], capabilities: [] } }),
 			found('c/network', { stars: 1, downloads: 900, usedBy: 4, latest: { mods: [], capabilities: ['network'] } }),
-			found('d/codeberg', { stars: 5, host: 'codeberg', environment: 'server' }),
+			found('d/codeberg', {
+				stars: 5,
+				host: 'codeberg',
+				environment: 'server',
+				funding: [{ platform: 'ko_fi', url: 'https://ko-fi.com/d' }],
+			}),
 		];
 		const repos = (state = {}) => refine(ranked, state, now).map(({ entry }) => entry.repo);
 
@@ -123,6 +129,7 @@ describe('the search page', () => {
 		expect(repos({ released: '365' })).toEqual(['a/best', 'd/codeberg']);
 		expect(repos({ host: 'codeberg' })).toEqual(['d/codeberg']);
 		expect(repos({ avoid: ['network'] })).toEqual(['a/best', 'b/old', 'd/codeberg']);
+		expect(repos({ support: true })).toEqual(['d/codeberg']);
 		expect(repos({ sort: 'stars' })).toEqual(['b/old', 'a/best', 'd/codeberg', 'c/network']);
 		expect(repos({ sort: 'downloads' })[0]).toBe('c/network');
 		expect(repos({ sort: 'used' })[0]).toBe('c/network');

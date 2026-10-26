@@ -75,8 +75,8 @@ const PhoneOnly = styled(
 	`,
 );
 
-const filtersLabel = ({ side, released, host, sort, avoid }) => {
-	const active = [side, released, host, sort !== 'best', avoid.length > 0].filter(Boolean).length;
+const filtersLabel = ({ side, released, host, sort, avoid, support }) => {
+	const active = [side, released, host, sort !== 'best', avoid.length > 0, support].filter(Boolean).length;
 
 	return active > 0 ? `Filters (${active})` : 'Filters';
 };
@@ -314,8 +314,23 @@ export default class SearchPage extends View {
 			},
 		});
 
+		const supporting = new Button({
+			variant: 'chip',
+			icon: 'heart',
+			textContent: 'Takes support',
+			tooltip: 'Only mods whose author says how to support them',
+			onPointerPress: () => {
+				state.support = !state.support;
+				supporting.elem.classList.toggle('selected', state.support);
+				restart();
+			},
+		});
+
+		supporting.elem.classList.toggle('selected', state.support);
+
 		const avoiding = new Row({
 			append: [
+				supporting,
 				new Meta({ textContent: 'Hide what reaches' }),
 				...Object.keys(CAPABILITIES).map(capability => {
 					const chip = new Button({
