@@ -39,7 +39,7 @@ import { Chip, Command, Meta, Row, Stack, Title, View, Warning, avatar, copyComm
 
 const PAGE_SIZE = 25;
 
-const resultCard = ({ entry, sharing }, versions, { minecraft }) => {
+const resultCard = ({ entry, sharing, unproven }, versions, { minecraft }) => {
 	const host = entry.host ?? 'github';
 	const title = titleOf(entry);
 	const fitting = fittingVersions(entry, versions, { minecraft });
@@ -47,7 +47,7 @@ const resultCard = ({ entry, sharing }, versions, { minecraft }) => {
 	const capabilities = entry.latest?.capabilities ?? [];
 
 	return new Card(
-		{ accent: sharing || entry.replaced ? theme.colors.warning : undefined },
+		{ accent: sharing || unproven || entry.replaced ? theme.colors.warning : undefined },
 		new Row({
 			style: { flexWrap: 'nowrap', alignItems: 'flex-start', gap: theme.space.md },
 			append: [
@@ -89,6 +89,13 @@ const resultCard = ({ entry, sharing }, versions, { minecraft }) => {
 							],
 						}),
 						...(sharing ? [new Warning({ textContent: `It ${sharing}: check you have the one you mean` })] : []),
+						...(unproven
+							? [
+									new Warning({
+										textContent: `Few stars, and ${unproven}. Any jar can claim a mod's name: make sure this is the one you mean`,
+									}),
+								]
+							: []),
 						...(entry.replaced
 							? [new Warning({ textContent: 'A jar in one of its releases was changed after publishing' })]
 							: []),
