@@ -8,7 +8,6 @@ import { loadListing } from './data';
 import {
 	CAPABILITIES,
 	REPOSITORY,
-	downloadCounts,
 	fileSize,
 	installCommand,
 	loadersOf,
@@ -17,7 +16,6 @@ import {
 	readmeUrl,
 	recordUrl,
 	releaseUrl,
-	releasesApi,
 	repositoryUrl,
 	titleOf,
 } from './search';
@@ -127,6 +125,8 @@ const Prose = styled.Component(
 	`,
 );
 
+const stat = (value, label) => new Stat({ append: [new Component({ tag: 'strong', textContent: value }), label] });
+
 const slug = text =>
 	text
 		.toLowerCase()
@@ -206,7 +206,7 @@ const capabilityList = scan =>
 		return details;
 	});
 
-const releaseCard = (entry, release, downloads) =>
+const releaseCard = (entry, release) =>
 	new Card(
 		{},
 		new Stack({
@@ -224,7 +224,6 @@ const releaseCard = (entry, release, downloads) =>
 					],
 				}),
 				...release.assets.map(asset => {
-					const downloaded = downloads?.get(`${release.tag}/${asset.name}`);
 					const mods = asset.mods ?? [];
 
 					return new Stack({
@@ -236,7 +235,7 @@ const releaseCard = (entry, release, downloads) =>
 									new Meta({
 										textContent: [
 											fileSize(asset.size),
-											downloaded === undefined ? '' : `${count(downloaded)} downloads`,
+											asset.downloads === undefined ? '' : `${count(asset.downloads)} downloads`,
 										]
 											.filter(Boolean)
 											.join(' · '),
@@ -328,7 +327,6 @@ export default class ModPage extends View {
 		const { signal } = this;
 		const title = titleOf(entry);
 		const command = installCommand(entry);
-		const downloadTotal = new Stat({ append: [new Component({ tag: 'strong', textContent: '…' }), 'downloads'] });
 		const releases = new Stack();
 		const readme = new Stack({ append: new EmptyState({ loading: true, title: 'Fetching the readme' }) });
 		const controls = new Row({ append: [collectButton(entry), ...installControls(entry)] });
@@ -340,9 +338,7 @@ export default class ModPage extends View {
 		local.subscribe(redrawControls, signal);
 		local.ready().then(redrawControls);
 
-		const drawReleases = downloads => releases.content(watched.map(release => releaseCard(entry, release, downloads)));
-
-		drawReleases();
+		releases.content(watched.map(release => releaseCard(entry, release)));
 
 		this.body.content([
 			new Row({
@@ -382,13 +378,12 @@ export default class ModPage extends View {
 			new Row({
 				style: { marginTop: theme.space.md },
 				append: [
-					new Stat({ append: [new Component({ tag: 'strong', textContent: count(record.stars ?? 0) }), 'stars'] }),
-					downloadTotal,
-					new Stat({
-						append: [new Component({ tag: 'strong', textContent: date(entry.latest?.published) }), 'latest release'],
-					}),
-					new Stat({ append: [new Component({ tag: 'strong', textContent: date(record.created) }), 'created'] }),
-					new Stat({ append: [new Component({ tag: 'strong', textContent: date(record.pushed) }), 'last pushed'] }),
+					stat(count(record.stars ?? 0), 'stars'),
+					...(entry.downloads === undefined ? [] : [stat(count(entry.downloads), 'downloads')]),
+					...(entry.usedBy ? [stat(count(entry.usedBy), 'used by')] : []),
+					stat(date(entry.latest?.published), 'latest release'),
+					stat(date(record.created), 'created'),
+					stat(date(record.pushed), 'last pushed'),
 				],
 			}),
 			new Section({ tag: 'h2', textContent: 'Readme' }),
@@ -404,22 +399,6 @@ export default class ModPage extends View {
 			}),
 			releases,
 		]);
-
-		const api = releasesApi(entry);
-
-		if (api === undefined) downloadTotal.elem.remove();
-		else {
-			loadJson(api, signal)
-				.then(listed => {
-					const downloads = downloadCounts(listed);
-
-					downloadTotal.elem.firstChild.textContent = count([...downloads.values()].reduce((sum, n) => sum + n, 0));
-					drawReleases(downloads);
-				})
-				.catch(error => {
-					if (error.name !== 'AbortError') downloadTotal.elem.remove();
-				});
-		}
 
 		fetchReadme(entry, signal)
 			.then(found => {

@@ -4,7 +4,6 @@ import { copyLibraryStylesheets } from '../scripts/buildSite';
 import {
 	avatarUrl,
 	collectionKey,
-	downloadCounts,
 	fileSize,
 	fittingVersions,
 	installAllCommand,
@@ -14,7 +13,6 @@ import {
 	readmeSources,
 	readmeUrl,
 	recordUrl,
-	releasesApi,
 	readQuery,
 	refine,
 	releaseUrl,
@@ -186,17 +184,6 @@ describe('a mod page', () => {
 		expect(readmeSources(entry({ host: 'gitlab', repo: 'g/p' })).candidates[0]).toBe(
 			'https://gitlab.com/api/v4/projects/g%2Fp/repository/files/README.md/raw?ref=HEAD',
 		);
-	});
-
-	test('counts downloads by tag and file, where the host reports them', () => {
-		const counts = downloadCounts([
-			{ tag_name: '1.0', assets: [{ name: 'a.jar', download_count: 5 }] },
-			{ tag_name: '0.9', assets: [{ name: 'a.jar' }] },
-		]);
-
-		expect(counts.get('1.0/a.jar')).toBe(5);
-		expect(counts.get('0.9/a.jar')).toBe(0);
-		expect(releasesApi(entry({ host: 'gitlab' }))).toBeUndefined();
 	});
 
 	test('says a jar size the way a reader would', () => {

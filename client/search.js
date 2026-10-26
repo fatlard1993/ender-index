@@ -203,20 +203,6 @@ export const readmeUrl = (href, resolve) => {
 };
 
 /** Where a host lists releases with what each asset was downloaded; GitLab does not count them. */
-export const releasesApi = entry =>
-	({
-		github: `https://api.github.com/repos/${entry.repo}/releases?per_page=100`,
-		codeberg: `https://codeberg.org/api/v1/repos/${entry.repo}/releases?limit=50`,
-	})[entry.host ?? 'github'];
-
-/** Downloads by release tag and file name, as both hosts' release listings report them. */
-export const downloadCounts = releases =>
-	new Map(
-		releases.flatMap(release =>
-			(release.assets ?? []).map(asset => [`${release.tag_name}/${asset.name}`, asset.download_count ?? 0]),
-		),
-	);
-
 export const collectionKey = entry => `${entry.host ?? 'github'}:${entry.repo}`;
 
 /** One line that adds every collected mod; ender resolves each and what they require together. */
