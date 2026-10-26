@@ -90,10 +90,12 @@ export const handle = async request => {
 };
 
 if (import.meta.main) {
-	const { code, output } = await ender(['ls', '--names']);
+	const { code, output } = await ender(['ls', '--json']);
 
 	if (code !== 0) {
-		console.error(`ender did not answer (${output || `is "${ENDER}" on PATH?`}), so there is nothing to manage here`);
+		console.error(
+			`ender did not list its instances as JSON (${output || `is "${ENDER}" on PATH?`}). An ender older than ls --json cannot be managed from here; update it and run this again.`,
+		);
 		process.exit(1);
 	}
 
