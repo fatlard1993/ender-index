@@ -175,6 +175,10 @@ const crawlOne = async (line, { now, inspect, gameVersions }) => {
 	return result.events;
 };
 
+/** How long to wait for the rate limit to reset, or undefined when the reset comes too late to crawl on. */
+export const waitForReset = (resetAt, deadline, now = Date.now()) =>
+	resetAt + 5000 < deadline ? Math.max(resetAt + 5000 - now, 0) : undefined;
+
 const count = number => number.toLocaleString('en-US');
 
 /** Where the crawl spent the GitHub rate limit, which counts only requests answered in full. */
@@ -212,6 +216,23 @@ export const crawl = async ({ only } = {}) => {
 	const deadline = Date.now() + Number(process.env.CRAWL_MINUTES ?? Infinity) * 60_000;
 	let stopped;
 
+	const crawlWaiting = async (fullName, options) => {
+		for (;;) {
+			try {
+				return await crawlOne(fullName, options);
+			} catch (error) {
+				const wait = error instanceof github.RateLimited ? waitForReset(error.resetAt, deadline) : undefined;
+
+				if (wait === undefined) throw error;
+
+				console.log(`Waiting ${Math.ceil(wait / 60_000)} minutes at the rate limit; ${error.message}`);
+
+				await github.saveCache();
+				await Bun.sleep(wait);
+			}
+		}
+	};
+
 	console.log(
 		`Crawling ${repos.length} repositories; each new release jar is downloaded and scanned, so this takes a while`,
 	);
@@ -225,7 +246,7 @@ export const crawl = async ({ only } = {}) => {
 			}
 
 			try {
-				for (const event of await crawlOne(fullName, { now, inspect, gameVersions })) {
+				for (const event of await crawlWaiting(fullName, { now, inspect, gameVersions })) {
 					console.log(
 						[event.type.padEnd(7), event.repo, event.tag, event.asset, event.error && `:: ${event.error}`]
 							.filter(Boolean)
@@ -234,7 +255,7 @@ export const crawl = async ({ only } = {}) => {
 				}
 			} catch (error) {
 				if (error instanceof github.RateLimited) {
-					stopped = `Stopped at the rate limit after ${index} of ${repos.length}; ${error.message}, and the rest are crawled first next time`;
+					stopped = `Stopped at the rate limit after ${index} of ${repos.length}; ${error.message}, past the time budget, and the rest are crawled first next time`;
 
 					break;
 				}

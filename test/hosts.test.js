@@ -1,7 +1,7 @@
 import { join } from 'node:path';
 import { describe, expect, test } from 'bun:test';
 
-import { DATA, parseLine, recordPath, spendingLine } from '../src/crawl';
+import { DATA, parseLine, recordPath, spendingLine, waitForReset } from '../src/crawl';
 import { kindOf } from '../src/github';
 import { assetOf } from '../src/gitlab';
 
@@ -185,6 +185,14 @@ describe('a request', () => {
 });
 
 describe('the rate limit', () => {
+	test('is waited out when it resets inside the time budget, and stops the crawl when it does not', () => {
+		const now = 1_000_000;
+
+		expect(waitForReset(now + 60_000, now + 3_600_000, now)).toBe(65_000);
+		expect(waitForReset(now - 60_000, now + 3_600_000, now)).toBe(0);
+		expect(waitForReset(now + 3_600_000, now + 60_000, now)).toBeUndefined();
+	});
+
 	test('is reported by what spent it, since only requests answered in full count', () => {
 		expect(kindOf('/repos/a/b')).toBe('repository');
 		expect(kindOf('/repos/a/b/releases?per_page=30')).toBe('releases');
