@@ -1,4 +1,6 @@
-import { join, normalize } from 'node:path';
+import { join } from 'node:path';
+
+import { requestMatch, serve, serveStatic } from '@vanilla-bean/components/app';
 
 const BUILD = join(import.meta.dir, '..', 'client', 'build');
 
@@ -61,32 +63,34 @@ const change = async (request, name, verb) => {
 	return json({ ok: code === 0, output }, code === 0 ? 200 : 502);
 };
 
+const notAnInstance = () => json({ error: 'Not an instance name' }, 400);
+
+const api = async request => {
+	if (requestMatch('GET', '/api/instances', request)) return enderJson(['ls', '--json']);
+
+	const shown = requestMatch('GET', '/api/instances/:name', request);
+
+	if (shown) return INSTANCE.test(shown.name) ? enderJson(['info', shown.name, '--json']) : notAnInstance();
+
+	for (const verb of ['add', 'drop']) {
+		const asked = requestMatch('POST', `/api/instances/:name/${verb}`, request);
+
+		if (asked) return INSTANCE.test(asked.name) ? change(request, asked.name, verb) : notAnInstance();
+	}
+
+	if (new URL(request.url).pathname.startsWith('/api/')) return json({ error: 'Not found' }, 404);
+};
+
+/**
+ * vbc's serve refuses a write whose origin is not its host, but a name rebound to this address is its own host, and
+ * this server runs ender: allowed holds the host to this machine first.
+ */
 export const handle = async request => {
 	if (!allowed(request)) return new Response('Only a page served from this machine may ask', { status: 403 });
 
-	const { pathname } = new URL(request.url);
-	const [, api, resource, name, action] = pathname.split('/');
-
-	if (api === 'api') {
-		if (resource !== 'instances') return json({ error: 'Not found' }, 404);
-
-		if (name === undefined) return enderJson(['ls', '--json']);
-
-		if (!INSTANCE.test(name)) return json({ error: 'Not an instance name' }, 400);
-
-		if (request.method === 'GET' && action === undefined) return enderJson(['info', name, '--json']);
-
-		if (request.method === 'POST' && (action === 'add' || action === 'drop')) return change(request, name, action);
-
-		return json({ error: 'Not found' }, 404);
-	}
-
-	const path = normalize(join(BUILD, pathname.endsWith('/') ? `${pathname}index.html` : pathname));
-	const file = Bun.file(path);
-
-	if (!path.startsWith(BUILD) || !(await file.exists())) return new Response('Not found', { status: 404 });
-
-	return new Response(file);
+	return (
+		(await api(request)) ?? (await serveStatic(request, { root: BUILD })) ?? new Response('Not found', { status: 404 })
+	);
 };
 
 if (import.meta.main) {
@@ -99,7 +103,7 @@ if (import.meta.main) {
 		process.exit(1);
 	}
 
-	Bun.serve({ hostname: '127.0.0.1', port: PORT, fetch: handle });
+	await serve({ hostname: '127.0.0.1', port: PORT, router: handle, build: { publicPath: '' } });
 
 	console.log(`The index, managing this machine's instances, is at http://localhost:${PORT}`);
 }

@@ -5,6 +5,8 @@ import ModPage from './ModPage';
 import SearchPage from './SearchPage';
 import { View } from './ui';
 
+import '@vanilla-bean/components/app/reloadOnBuild';
+
 new Page({
 	appendTo: document.body,
 	append: new View({
