@@ -135,6 +135,7 @@ const countDependents = (entries, records) => {
 		);
 
 		for (const provider of named) provider.usedBy = (provider.usedBy ?? 0) + 1;
+		if (named.size > 0) requiring.needs = [...named].map(provider => `${provider.host}:${provider.repo}`);
 	}
 
 	return entries;

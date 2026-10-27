@@ -125,7 +125,7 @@ describe('discovery', () => {
 		expect(side(undefined)).toBe('both');
 	});
 
-	test('counts the repositories that require its mod, by the rule the client resolves them by', () => {
+	test('counts the repositories that require its mod, and names those each needs, by the rule the client resolves them by', () => {
 		const requiring = depends => ({
 			tag: '1.0',
 			prerelease: false,
@@ -150,6 +150,8 @@ describe('discovery', () => {
 		expect(usedBy('real/sodium')).toBe(2);
 		expect(usedBy('copy/sodium')).toBeUndefined();
 		expect(usedBy('me/library')).toBe(1);
+		expect(entries.find(entry => entry.repo === 'a/iris').needs).toEqual(['github:real/sodium']);
+		expect(entries.find(entry => entry.repo === 'real/sodium').needs).toBeUndefined();
 	});
 
 	test("says when its mod has an established one's id or name, and says nothing otherwise", () => {
