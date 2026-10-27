@@ -353,6 +353,19 @@ describe("one host's rate limit", () => {
 		expect(outcome).toEqual({ failures: [], stopped: [] });
 	});
 
+	test('crawled several at once, sets the limited host aside for every one of them, and crawls each repository once', async () => {
+		setSystemTime(new Date('2026-10-27T10:00:00Z'));
+
+		const { asked, crawlRepo } = limitedOnce('gitlab', 60_000);
+		const lines = ['gitlab:a/x', 'gitlab:a/y', ...Array.from({ length: 10 }, (_, at) => `b/${at}`)];
+		const outcome = await crawlEach(lines, { crawlRepo, sleep, parallel: 4, deadline: Date.now() + 3_600_000 });
+
+		expect(outcome).toEqual({ failures: [], stopped: [] });
+		expect(asked.filter(line => line === 'gitlab:a/x')).toHaveLength(2);
+		expect(new Set(asked)).toEqual(new Set(lines));
+		expect(asked.length).toBe(lines.length + 1);
+	});
+
 	test('past the time budget, leaves its repositories for the next crawl and says how many', async () => {
 		setSystemTime(new Date('2026-10-27T10:00:00Z'));
 

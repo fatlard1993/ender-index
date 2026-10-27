@@ -454,14 +454,20 @@ export const spendingLine = ({ full, unchanged, remaining, resetAt }) => {
 	return `GitHub answered ${count(total)} requests in full${breakdown} and ${count(unchanged)} unchanged, which the rate limit does not count${left}`;
 };
 
+/** Repositories crawled at once: most of a crawl is waiting on hosts, and GitHub asks that few requests be concurrent. */
+const PARALLEL = 6;
+
 const minutes = wait => `${Math.ceil(wait / 60_000)} ${Math.ceil(wait / 60_000) === 1 ? 'minute' : 'minutes'}`;
 
 /**
- * Crawls each repository in order. A host that answers with its rate limit has the rest of its repositories set
- * aside, so one host's limit holds back no other's; they are crawled once it lifts, while that is inside the time
+ * Crawls each repository in order, `parallel` at a time. A host that answers with its rate limit has the rest of its
+ * repositories set aside, so one host's limit holds back no other's; they are crawled once it lifts, while that is inside the time
  * budget, and first in the next crawl when it is not.
  */
-export const crawlEach = async (repos, { crawlRepo, deadline, sleep = Bun.sleep, beforeWait = async () => {} }) => {
+export const crawlEach = async (
+	repos,
+	{ crawlRepo, deadline, parallel = 1, sleep = Bun.sleep, beforeWait = async () => {} },
+) => {
 	const failures = [];
 	const stopped = [];
 	const limits = new Map();
@@ -469,14 +475,13 @@ export const crawlEach = async (repos, { crawlRepo, deadline, sleep = Bun.sleep,
 
 	while (waiting.length > 0) {
 		const later = [];
-
-		for (const line of waiting) {
+		const visit = async line => {
 			const { host } = parseLine(line);
 
 			if (Date.now() > deadline || limits.get(host)?.resetAt > Date.now()) {
 				later.push(line);
 
-				continue;
+				return;
 			}
 
 			try {
@@ -486,14 +491,23 @@ export const crawlEach = async (repos, { crawlRepo, deadline, sleep = Bun.sleep,
 					failures.push(line);
 					console.error(`failed  ${line} :: ${error.message}`);
 
-					continue;
+					return;
 				}
+
+				if (!(limits.get(host)?.resetAt > Date.now()))
+					console.log(`Setting the rest from ${HOST_NAMES[host]} aside at its rate limit; ${error.message}`);
 
 				limits.set(host, error);
 				later.push(line);
-				console.log(`Setting the rest from ${HOST_NAMES[host]} aside at its rate limit; ${error.message}`);
 			}
-		}
+		};
+		let next = 0;
+
+		await Promise.all(
+			Array.from({ length: Math.min(parallel, waiting.length) }, async () => {
+				while (next < waiting.length) await visit(waiting[next++]);
+			}),
+		);
 
 		if (later.length === 0) break;
 
@@ -568,6 +582,7 @@ export const crawl = async ({ only } = {}) => {
 	try {
 		outcome = await crawlEach(repos, {
 			deadline,
+			parallel: Number(process.env.CRAWL_PARALLEL ?? PARALLEL),
 			beforeWait: () => github.saveCache(),
 			crawlRepo: async fullName => {
 				for (const event of await crawlOne(fullName, { now, inspect, gameVersions, scratch, owners })) {
