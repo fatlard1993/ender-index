@@ -3,6 +3,7 @@ import {
 	Component,
 	Link,
 	Notify,
+	Toolbar,
 	TooltipWrapper,
 	copyToClipboard,
 	styled,
@@ -161,12 +162,73 @@ export const about = found =>
 				}),
 			];
 
-/** The header's links: the index's mods and packs, and its own repository, where GitHub shows how to sponsor it. */
-export const headerLinks = () => [
-	new Link({ variant: 'flat', href: '#/', textContent: 'Mods' }),
-	new Link({ variant: 'flat', href: '#/packs', textContent: 'Packs' }),
-	new Link({ variant: 'flat', href: REPOSITORY, target: '_blank', textContent: 'GitHub' }),
-];
+const Places = styled.Component(
+	({ colors, space }) => `
+		display: flex;
+		flex: 1;
+		align-items: center;
+		gap: ${space.xs};
+		margin-left: ${space.md};
+
+		& > a[aria-current='page'] {
+			color: ${colors.white};
+			text-decoration: underline;
+			text-underline-offset: 4px;
+		}
+	`,
+);
+
+const PLACES = { mods: { label: 'Mods', href: '#/' }, packs: { label: 'Packs', href: '#/packs' } };
+
+/**
+ * Every page's bar: the index's own places beside its name, the current one marked and the mods keeping the search
+ * they were left with, and on the far side the link that leaves it, to its repository, where GitHub shows how to
+ * sponsor it.
+ */
+export const siteBar = at =>
+	new Toolbar({
+		variant: 'bar',
+		heading: 'ender index',
+		append: [
+			new Places({
+				tag: 'nav',
+				append: Object.entries(PLACES).map(
+					([place, { label, href }]) =>
+						new Link({
+							variant: 'flat',
+							href: place === 'mods' ? `${location.search}${href}` : href,
+							textContent: label,
+							...(place === at ? { attributes: { 'aria-current': 'page' } } : {}),
+						}),
+				),
+			}),
+			new Link({ variant: 'flat', href: REPOSITORY, target: '_blank', textContent: 'GitHub' }),
+		],
+	});
+
+const Crumbs = styled.Component(
+	({ colors, space }) => `
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: ${space.xs};
+		color: ${colors.muted};
+		font-size: 0.9em;
+	`,
+);
+
+/** Where a page is within the index: each step back a link, the page itself last. */
+export const breadcrumbs = (...steps) =>
+	new Crumbs({
+		tag: 'nav',
+		attributes: { 'aria-label': 'Breadcrumb' },
+		append: steps.flatMap((step, at) => [
+			...(at > 0 ? ['/'] : []),
+			step.href
+				? new Link({ href: step.href, textContent: step.label })
+				: new Component({ tag: 'span', textContent: step.label, attributes: { 'aria-current': 'page' } }),
+		]),
+	});
 
 const Screenshots = styled.Component(
 	({ colors, media, radius, space }) => `

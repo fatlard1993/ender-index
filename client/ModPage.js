@@ -71,10 +71,10 @@ import {
 	count,
 	date,
 	fetchReadme,
-	headerLinks,
+	breadcrumbs,
+	siteBar,
 	hint,
 	loadJson,
-	screenshots,
 	TILES,
 	tiles,
 } from './ui';
@@ -526,16 +526,12 @@ export default class ModPage extends View {
 	build() {
 		const repo = `${this.options.owner}/${this.options.name}`;
 		const host = this.options.host;
-		const back = new Link({ variant: 'flat', href: `${location.search}#/`, textContent: 'Back to search' });
 		const body = new Stack({ append: new EmptyState({ loading: true, title: `Loading ${repo}` }) });
 
+		this.crumbs = new Stack({ append: breadcrumbs({ label: 'Mods', href: `${location.search}#/` }, { label: repo }) });
 		this.content([
-			new Toolbar({
-				variant: 'bar',
-				heading: 'ender index',
-				append: [back, ...headerLinks()],
-			}),
-			new Content({ column: 900, style: { paddingBlock: '12px' }, append: body }),
+			siteBar('mods'),
+			new Content({ column: 900, style: { paddingBlock: '12px' }, append: [this.crumbs, body] }),
 		]);
 
 		const { signal } = this;

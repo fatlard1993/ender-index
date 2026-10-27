@@ -6,7 +6,6 @@ import {
 	Input,
 	Link,
 	Select,
-	Toolbar,
 	View,
 	debounce,
 	theme,
@@ -14,7 +13,7 @@ import {
 
 import { loadListing, loadPacks } from './data';
 import { LOADERS, collectionKey, packFits, repositoryUrl } from './search';
-import { Chip, Command, Meta, Row, Stack, Title, about, copyCommand, count, date, headerLinks, tiles } from './ui';
+import { Chip, Command, Meta, Row, Stack, Title, about, copyCommand, count, date, siteBar, tiles } from './ui';
 
 const FORMATS = { ender: 'ender pack', packwiz: 'packwiz', mrpack: '.mrpack' };
 
@@ -128,7 +127,7 @@ export default class PacksPage extends View {
 		});
 
 		this.content([
-			new Toolbar({ variant: 'bar', heading: 'ender index', append: headerLinks() }),
+			siteBar('packs'),
 			new Content({
 				column: 900,
 				style: { paddingBlock: '12px' },

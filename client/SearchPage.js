@@ -65,7 +65,7 @@ import {
 	count,
 	date,
 	fetchReadme,
-	headerLinks,
+	siteBar,
 	hint,
 	loadJson,
 	screenshots,
@@ -694,14 +694,7 @@ export default class SearchPage extends View {
 		nearTheEnd.observe(more.elem);
 		this.signal.addEventListener('abort', () => nearTheEnd.disconnect());
 
-		this.content([
-			new Toolbar({
-				variant: 'bar',
-				heading: 'ender index',
-				append: headerLinks(),
-			}),
-			scrolling,
-		]);
+		this.content([siteBar('mods'), scrolling]);
 
 		search.elem.focus();
 
