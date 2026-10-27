@@ -1,6 +1,7 @@
 import { authorOf, providerOf, requiredIds, sharing } from 'ender-launcher/rank';
 
 import { informative, shorten } from './summary';
+import { coalesce, tagsOf } from './tags';
 
 const unique = (items, key) => [...new Map(items.map(item => [key(item), item])).values()];
 
@@ -141,7 +142,53 @@ const countDependents = (entries, records) => {
 	return entries;
 };
 
-export const buildSearch = records => {
+/** The mod ids whose own jars add blocks, items or entities: a relation to one says what a mod is about. */
+const addingIds = records => {
+	const ids = new Set();
+
+	for (const record of records) {
+		for (const asset of latestAssets(record)) {
+			const names = asset.content?.names ?? {};
+
+			if (['block', 'item', 'entity'].some(kind => names[kind]?.length > 0))
+				for (const mod of asset.mods ?? []) ids.add(mod.id);
+		}
+	}
+
+	return ids;
+};
+
+/** What each listed repository is about, and the themes the whole index comes down to. */
+export const themesOf = records => {
+	const listed = records.filter(record => record.gone === undefined);
+	const adding = addingIds(listed);
+
+	return coalesce(
+		new Map(
+			listed.map(record => {
+				const assets = latestAssets(record);
+				const mods = assets.flatMap(asset => asset.mods ?? []);
+
+				return [
+					`${record.host}:${record.repo}`,
+					tagsOf({
+						mods,
+						contents: assets.map(asset => asset.content),
+						texts: [
+							record.description,
+							record.readmeSummary,
+							record.repo.split('/').at(-1).replaceAll(/[-_.]/g, ' '),
+							...mods.flatMap(mod => [mod.name, mod.description]),
+						],
+						adds: id => adding.has(id),
+					}),
+				];
+			}),
+		),
+	);
+};
+
+export const buildSearch = (records, themes = themesOf(records)) => {
 	const listed = records.filter(record => record.gone === undefined);
 	const entries = listed
 		.map(summarize)
@@ -151,6 +198,10 @@ export const buildSearch = records => {
 	for (const entry of entries) {
 		entry.shares = sharing(entry, entries);
 		entry.author = authorOf(entry, entries);
+
+		const tags = themes.each.get(`${entry.host}:${entry.repo}`);
+
+		if (tags?.length > 0) entry.tags = tags;
 	}
 
 	return countDependents(entries, listed);

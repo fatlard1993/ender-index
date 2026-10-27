@@ -11,7 +11,7 @@ import { fetchSteady, RateLimited } from './fetch';
 import * as github from './github';
 import * as gitlab from './gitlab';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
-import { buildSearch, latestAssets } from './search';
+import { buildSearch, latestAssets, themesOf } from './search';
 import { FUNDING_PATHS, parseFunding, supportLinks } from './funding';
 import { rawUrl } from './raw';
 import { readmeSummary } from './summary';
@@ -566,7 +566,10 @@ export const crawl = async ({ only } = {}) => {
 
 	const records = await Promise.all((await recordFiles()).map(file => Bun.file(file).json()));
 
-	await writeJson(join(DATA, 'search.json'), buildSearch(records));
+	const themes = themesOf(records);
+
+	await writeJson(join(DATA, 'search.json'), buildSearch(records, themes));
+	await writeJson(join(DATA, 'tags.json'), themes.themes);
 	await pruneIcons(records);
 
 	console.log(`${records.length} repositories indexed; ${outcome.failures.length} could not be crawled`);
