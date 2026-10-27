@@ -8,7 +8,7 @@ import {
 	Link,
 	SectionLabel,
 	Select,
-	Toolbar,
+	Tabs,
 	View,
 	styled,
 	theme,
@@ -280,6 +280,49 @@ const notIndexed = entry => {
 			],
 		}),
 	];
+};
+
+const Pictures = styled.Component(
+	({ colors, radius, space }) => `
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+		gap: ${space.sm};
+
+		& img {
+			display: block;
+			width: 100%;
+			aspect-ratio: 16 / 10;
+			object-fit: cover;
+			border-radius: ${radius.md};
+			background: ${colors.raised};
+		}
+	`,
+);
+
+const PICTURES_SHOWN = 40;
+
+/** Every picture of the mod its readme shows and its repository keeps, each opening at full size. */
+const pictureGrid = (title, shots) => {
+	const grid = new Pictures({
+		append: shots.map(url => {
+			const link = new Link({
+				href: url,
+				target: '_blank',
+				attributes: { rel: 'noopener noreferrer' },
+				tooltip: 'Open the full picture',
+				append: new Component({
+					tag: 'img',
+					attributes: { src: url, alt: `A picture of ${title}`, loading: 'lazy', referrerpolicy: 'no-referrer' },
+				}),
+			});
+
+			link.elem.querySelector('img').addEventListener('error', () => link.elem.remove());
+
+			return link;
+		}),
+	});
+
+	return [grid];
 };
 
 const fitsLabel = ({ minecraft, loader }) =>
@@ -586,23 +629,54 @@ export default class ModPage extends View {
 		const others = sameAuthor(entry, listing);
 		const related = relatedGroups(entry, listing);
 		const owner = ownerName(entry);
-		const section = textContent => new SectionLabel({ level: 2, textContent, style: { marginTop: theme.space.xl } });
-		const sections = {
-			readme: section('Readme'),
-			downloads: section('Downloads'),
-			author: section(`More from ${owner}`),
-			related: section('Related'),
+		const sources = readmeSources(entry, record.readme);
+		const pictures = (record.pictures ?? []).map(path => sources.raw(path, { root: true }));
+		const panels = {
+			readme,
+			gallery,
+			downloads: new Stack({
+				append: [
+					new Meta({
+						tag: 'p',
+						textContent:
+							'The newest releases with jars, each jar downloaded and read by the crawl. What its code can reach is a finding, not a verdict: an update checker reaches the network.',
+					}),
+					...downloads.panel,
+				],
+			}),
+			related: new Stack({ append: related }),
+			author: new Stack({
+				append: [
+					tiles(others, others.length),
+					new Link({ href: authorPath(entry), textContent: `Every mod of ${owner}'s, in the search` }),
+				],
+			}),
 		};
-		const jump = (label, heading) =>
-			new Button({
-				variant: 'flat',
-				textContent: label,
-				onPointerPress: () => heading.elem.scrollIntoView({ behavior: 'smooth' }),
-			});
+		const tabsFor = shots => [
+			{ id: 'readme', label: 'Readme' },
+			...(shots.length > 0 ? [{ id: 'gallery', label: 'Gallery', count: shots.length }] : []),
+			{ id: 'downloads', label: 'Downloads', count: downloads.count },
+			...(related.length > 0 ? [{ id: 'related', label: 'Related' }] : []),
+			...(others.length > 0 ? [{ id: 'author', label: `More from ${owner}`, count: others.length }] : []),
+		];
+		const tabs = new Tabs({
+			tabs: tabsFor(pictures),
+			panels,
+			selected: 'readme',
+			style: { marginTop: theme.space.lg, overflowY: 'hidden' },
+		});
+		const showGallery = shots => {
+			gallery.content(pictureGrid(title, shots));
+			tabs.options.tabs = tabsFor(shots);
+		};
+
+		showGallery(pictures);
+
 		const shares = entry.shares ?? sharing(entry, listing);
 		const author = authorOf(entry, listing);
 
 		document.title = `${title} :: ender index`;
+		this.crumbs.content(breadcrumbs({ label: 'Mods', href: `${location.search}#/` }, { label: title }));
 		collection.subscribe(redrawControls, signal);
 		local.subscribe(redrawControls, signal);
 		local.ready().then(redrawControls);
@@ -650,7 +724,6 @@ export default class ModPage extends View {
 					}),
 				],
 			}),
-			gallery,
 			...(shares ? [new Warning({ textContent: `It ${shares}: check you have the one you mean` })] : []),
 			...(entry.replaced
 				? [new Warning({ textContent: 'A jar in one of its releases was changed after publishing' })]
@@ -695,39 +768,8 @@ export default class ModPage extends View {
 						}),
 					]
 				: []),
-			new Row({
-				style: { marginTop: theme.space.lg },
-				append: [
-					jump('Readme', sections.readme),
-					jump(`Downloads (${count(downloads.count)})`, sections.downloads),
-					...(others.length > 0 ? [jump(`More from ${owner} (${count(others.length)})`, sections.author)] : []),
-					...(related.length > 0 ? [jump('Related', sections.related)] : []),
-				],
-			}),
-			sections.readme,
-			readme,
-			sections.downloads,
-			new Meta({
-				tag: 'p',
-				textContent:
-					'The newest releases with jars, each jar downloaded and read by the crawl. What its code can reach is a finding, not a verdict: an update checker reaches the network.',
-			}),
-			...downloads.panel,
-			...(others.length > 0
-				? [
-						sections.author,
-						tiles(others),
-						...(others.length > TILES
-							? [
-									new Link({
-										href: authorPath(entry),
-										textContent: `All ${count(others.length + 1)} of ${owner}'s mods`,
-									}),
-								]
-							: []),
-					]
-				: []),
-			...(related.length > 0 ? [sections.related, ...related] : []),
+			tabs,
+			...Object.values(panels),
 		]);
 
 		fetchReadme(entry, record.readme, signal)
@@ -748,7 +790,7 @@ export default class ModPage extends View {
 					return;
 				}
 
-				gallery.content(screenshots(title, screenshotsOf(found.markdown, found.sources.raw)));
+				showGallery([...new Set([...screenshotsOf(found.markdown, found.sources.raw, PICTURES_SHOWN), ...pictures])]);
 
 				const prose = new Prose();
 
