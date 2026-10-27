@@ -10,6 +10,7 @@ import {
 	theme,
 } from '@vanilla-bean/components';
 
+import { local } from './local';
 import { REPOSITORY, aboutOf, modPath, pictureUrl, readmeSources, titleOf } from './search';
 
 export const count = number => number.toLocaleString('en-US');
@@ -163,12 +164,18 @@ export const about = found =>
 			];
 
 const Places = styled.Component(
-	({ colors, space }) => `
+	({ colors, media, space }) => `
 		display: flex;
-		flex: 1;
 		align-items: center;
 		gap: ${space.xs};
 		margin-left: ${space.md};
+
+		@media ${media.wide} {
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			margin-left: 0;
+		}
 
 		& > a[aria-current='page'] {
 			color: ${colors.white};
@@ -177,6 +184,22 @@ const Places = styled.Component(
 		}
 	`,
 );
+
+/** Where ender, the launcher that installs what the index lists, says how to get it. */
+export const LAUNCHER = 'https://github.com/fatlard1993/ender-launcher#getting-started';
+
+/**
+ * Shown only on a page ender is not serving: there it is the launcher's own, and the way to get ender is no news.
+ * Hidden until that is known, so it does not show and vanish.
+ */
+export const forStrangers = component => {
+	component.elem.style.display = 'none';
+	local.ready().then(served => {
+		if (!served) component.elem.style.display = '';
+	});
+
+	return component;
+};
 
 const PLACES = { mods: { label: 'Mods', href: '#/' }, packs: { label: 'Packs', href: '#/packs' } };
 
@@ -189,6 +212,7 @@ export const siteBar = at =>
 	new Toolbar({
 		variant: 'bar',
 		heading: 'ender index',
+		style: { position: 'relative' },
 		append: [
 			new Places({
 				tag: 'nav',
@@ -202,7 +226,13 @@ export const siteBar = at =>
 						}),
 				),
 			}),
-			new Link({ variant: 'flat', href: REPOSITORY, target: '_blank', textContent: 'GitHub' }),
+			new Row({
+				style: { marginLeft: 'auto', flexWrap: 'nowrap' },
+				append: [
+					forStrangers(new Link({ variant: 'flat', href: LAUNCHER, target: '_blank', textContent: 'Get ender' })),
+					new Link({ variant: 'flat', href: REPOSITORY, target: '_blank', textContent: 'GitHub' }),
+				],
+			}),
 		],
 	});
 

@@ -71,7 +71,9 @@ import {
 	count,
 	date,
 	fetchReadme,
+	LAUNCHER,
 	breadcrumbs,
+	forStrangers,
 	siteBar,
 	hint,
 	loadJson,
@@ -735,6 +737,15 @@ export default class ModPage extends View {
 					controls,
 				],
 			}),
+			forStrangers(
+				new Meta({
+					tag: 'p',
+					append: [
+						'The command installs it with ender, the launcher this index is made for, with what it needs. ',
+						new Link({ href: LAUNCHER, target: '_blank', textContent: 'Get ender' }),
+					],
+				}),
+			),
 			downloads.best,
 			new Row({
 				style: { marginTop: theme.space.md },
