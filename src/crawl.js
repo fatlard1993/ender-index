@@ -308,7 +308,7 @@ const readmeSummaryOf = async ({ host, name, repo, recorded, readme }) => {
 	if (recorded?.readmeSummary !== undefined) return recorded.readmeSummary;
 
 	try {
-		const response = await fetchSteady(rawUrl(host, name, readme));
+		const response = await fetchSteady(rawUrl(host, name, readme), { headers: HOSTS[host].requestHeaders?.() });
 
 		if (response.ok) return readmeSummary(await response.text());
 
@@ -325,7 +325,7 @@ const WEEK = 7 * 24 * 60 * 60 * 1000;
 /** The first of these files that loads, parsed, or [] when none is there; undefined when a host failed to answer. */
 const fundingFrom = async (host, name, paths) => {
 	for (const path of paths) {
-		const response = await fetchSteady(rawUrl(host, name, path));
+		const response = await fetchSteady(rawUrl(host, name, path), { headers: HOSTS[host].requestHeaders?.() });
 
 		if (response.ok) return parseFunding(await response.text());
 

@@ -4,8 +4,14 @@ import { fetchSteady, limitedBy } from './fetch';
 
 const API = 'https://gitlab.com/api/v4';
 
+/** A token raises GitLab's limit from its hourly anonymous allowance; without one the crawl waits that out. */
+export const requestHeaders = () => ({
+	accept: 'application/json',
+	...(process.env.GITLAB_TOKEN ? { 'private-token': process.env.GITLAB_TOKEN } : {}),
+});
+
 const get = async path => {
-	const response = await fetchSteady(`${API}${path}`, { headers: { accept: 'application/json' } });
+	const response = await fetchSteady(`${API}${path}`, { headers: requestHeaders() });
 
 	if (response.status === 429) throw limitedBy('GitLab', response);
 	if (!response.ok)
