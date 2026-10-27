@@ -5,6 +5,7 @@ import * as codeberg from './codeberg';
 import { RateLimited } from './fetch';
 import { searchCode } from './github';
 import * as gitlab from './gitlab';
+import { modrinthSources } from './modrinth';
 
 /** Where each loader keeps its metadata in a source tree. Finding one is how a repository says it is a mod. */
 export const MANIFESTS = [
@@ -87,13 +88,45 @@ export const discover = async () => {
 		console.log(`${host} topics :: ${found.size} repositories so far`);
 	}
 
+	// Most Modrinth mods link their source. Those on a host the index crawls are kept apart from what was found on the
+	// hosts themselves, which comes first, and the slugs kept so a mod needed but not indexed can be pointed at its
+	// source.
+	let fromModrinth = [];
+
+	try {
+		console.log('Reading the source links of every Modrinth mod; this takes about six minutes');
+
+		const sources = await modrinthSources();
+
+		fromModrinth = [...new Set(sources.values())];
+		await Bun.write(
+			join(DATA, 'sources.json'),
+			`${JSON.stringify(Object.fromEntries([...sources].sort(([a], [b]) => a.localeCompare(b))), null, '\t')}\n`,
+		);
+		console.log(`Modrinth sources :: ${fromModrinth.length} repositories linked`);
+	} catch (error) {
+		console.error(`Modrinth sources :: ${error.message}; searching went on without them`);
+	}
+
 	const existing = await readRepos();
 	const header = (await Bun.file(join(DATA, 'repos.txt')).text()).split('\n').filter(line => line.startsWith('#'));
 	const merged = [...new Set([...existing, ...found])].sort((a, b) => a.localeCompare(b));
 
 	await Bun.write(join(DATA, 'repos.txt'), `${[...header, ...merged].join('\n')}\n`);
 
-	console.log(`${merged.length - existing.length} new repositories; ${merged.length} in all`);
+	const own = new Set(merged);
+	const onlyModrinth = fromModrinth.filter(line => !own.has(line)).sort((a, b) => a.localeCompare(b));
+
+	if (fromModrinth.length > 0) {
+		await Bun.write(
+			join(DATA, 'modrinth-repos.txt'),
+			`# Known only from a Modrinth project's source link; crawled after every repository found on its host.\n${onlyModrinth.join('\n')}\n`,
+		);
+	}
+
+	console.log(
+		`${merged.length - existing.length} new repositories; ${merged.length} found on their hosts, and ${onlyModrinth.length} more known only from Modrinth`,
+	);
 
 	return 0;
 };

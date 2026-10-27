@@ -31,6 +31,7 @@ module.exports = {
 		'mc',
 		'minecraft',
 		'minmax',
+		'modrinth',
 		'mojang',
 		'neo',
 		'neoforge',

@@ -35,11 +35,32 @@ export const writeJson = async (path, value) => {
 	await Bun.write(path, `${JSON.stringify(value, undefined, '\t')}\n`);
 };
 
-export const readRepos = async () =>
-	(await Bun.file(join(DATA, 'repos.txt')).text())
+const readLines = async file =>
+	(
+		await Bun.file(join(DATA, file))
+			.text()
+			.catch(() => '')
+	)
 		.split('\n')
 		.map(line => line.trim())
 		.filter(line => line !== '' && !line.startsWith('#'));
+
+/** The repositories found on their own hosts: by code search, by topic, or listed by hand. */
+export const readRepos = () => readLines('repos.txt');
+
+/** The repositories known only from a Modrinth project's source link, crawled after every one found on its host. */
+export const readModrinthRepos = () => readLines('modrinth-repos.txt');
+
+/**
+ * The order a crawl takes repositories in: every one found on its own host before any known only from Modrinth, and
+ * within each, the least recently fetched first, so a crawl cut short resumes where it stopped.
+ */
+export const crawlOrder = (found, fromModrinth, ageOf) => {
+	const own = new Set(found);
+	const oldestFirst = lines => [...lines].sort((a, b) => ageOf(a) - ageOf(b));
+
+	return [...oldestFirst(found), ...oldestFirst(new Set(fromModrinth.filter(line => !own.has(line))))];
+};
 
 const HOSTS = { github, codeberg, gitlab };
 
@@ -516,14 +537,17 @@ export const recordFiles = async () =>
 
 export const crawl = async ({ only } = {}) => {
 	const now = new Date().toISOString();
-	const listed = only ?? (await readRepos());
+	const found = only ?? (await readRepos());
+	const fromModrinth = only ? [] : await readModrinthRepos();
 	const ages = new Map(
 		await Promise.all(
-			listed.map(async line => [line, line.includes(':') ? 0 : await github.lastFetched(github.repositoryPath(line))]),
+			[...found, ...fromModrinth].map(async line => [
+				line,
+				line.includes(':') ? 0 : await github.lastFetched(github.repositoryPath(line)),
+			]),
 		),
 	);
-	// Least recently fetched first, so a crawl cut short by the rate limit resumes where it stopped.
-	const repos = [...listed].sort((a, b) => ages.get(a) - ages.get(b));
+	const repos = crawlOrder(found, fromModrinth, line => ages.get(line));
 	const knownBad = new Map(
 		(await readJson(join(DATA, 'known-bad.json'), [])).map(entry => [entry.sha256, entry.reason]),
 	);

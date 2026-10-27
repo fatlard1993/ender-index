@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, setSystemTime, test } from 'bun:test';
 
-import { DATA, crawlEach, parseLine, recordPath, spendingLine, waitForReset } from '../src/crawl';
+import { DATA, crawlEach, crawlOrder, parseLine, recordPath, spendingLine, waitForReset } from '../src/crawl';
 import { RateLimited } from '../src/fetch';
 import { kindOf } from '../src/github';
 import { assetOf } from '../src/gitlab';
@@ -366,6 +366,20 @@ describe("one host's rate limit", () => {
 		expect(asked).toEqual(['gitlab:a/x', 'b/z']);
 		expect(outcome.stopped).toEqual([
 			"gitlab asks to be left alone, past the time budget; 2 of GitLab's repositories are crawled first next time",
+		]);
+	});
+});
+
+describe('the order a crawl takes repositories in', () => {
+	test("every one found on its host before any known only from Modrinth, however new Modrinth's are", () => {
+		const ages = { 'a/old': 10, 'a/older': 5, 'm/new': 0, 'm/never': 0, 'a/both': 20 };
+
+		expect(crawlOrder(['a/old', 'a/both', 'a/older'], ['m/new', 'a/both', 'm/never'], line => ages[line])).toEqual([
+			'a/older',
+			'a/old',
+			'a/both',
+			'm/new',
+			'm/never',
 		]);
 	});
 });
