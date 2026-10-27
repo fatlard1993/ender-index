@@ -27,6 +27,7 @@ import {
 	authorPath,
 	lineUrl,
 	rangeLabel,
+	readmeSources,
 	screenshotsOf,
 	tagPath,
 	supportOf,
@@ -401,8 +402,24 @@ const downloadRow = ({ asset }) => {
 
 const RELEASES_SHOWN = 3;
 
+/** A release's notes, folded under its jars: rendered as its readme is, its links leading back to its repository. */
+const releaseNotes = (release, sources) => {
+	if (!release.notes) return [];
+
+	const details = new Component({ tag: 'details' });
+	const prose = new Prose();
+
+	prose.elem.innerHTML = renderReadme(release.notes, sources);
+	details.append(
+		new Component({ tag: 'summary', append: new Meta({ tag: 'span', textContent: 'Release notes' }) }),
+		prose,
+	);
+
+	return [details];
+};
+
 /** The jars that match, under the release each came in, newest first; past the first few, folded until asked for. */
-const downloadList = (entry, matching) => {
+const downloadList = (entry, matching, sources) => {
 	const releases = [...new Set(matching.map(({ release }) => release))];
 	const cards = releases.map(
 		release =>
@@ -423,6 +440,7 @@ const downloadList = (entry, matching) => {
 							],
 						}),
 						...matching.filter(download => download.release === release).map(downloadRow),
+						...releaseNotes(release, sources),
 					],
 				}),
 			),
@@ -449,6 +467,7 @@ const downloadList = (entry, matching) => {
  */
 const downloadsPanel = (entry, record) => {
 	const downloads = downloadsOf(record);
+	const sources = readmeSources(entry, record.readme);
 	const choice = { ...readQuery(location.search), text: '' };
 	const best = new Row();
 	const shown = new Meta();
@@ -479,7 +498,7 @@ const downloadsPanel = (entry, record) => {
 		shown.content(`${count(matching.length)} of ${count(downloads.length)} jars`);
 		list.content(
 			matching.length > 0
-				? downloadList(entry, matching)
+				? downloadList(entry, matching, sources)
 				: new EmptyState({
 						icon: 'magnifying-glass',
 						title: 'No jar matches',
