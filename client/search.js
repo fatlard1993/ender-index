@@ -39,6 +39,9 @@ const authorOf = value => {
 	return HOSTS[host] && owner ? `${host}:${owner.toLowerCase()}` : undefined;
 };
 
+/** Where the page lists every mod the index gave a theme. */
+export const tagPath = tag => `${writeQuery({ tag })}#/`;
+
 /** Where the page lists every mod an entry's owner has in the index. */
 export const authorPath = entry => `${writeQuery({ author: ownerOf(entry) })}#/`;
 
@@ -56,10 +59,23 @@ export const readQuery = search => {
 		avoid: (params.get('avoid') ?? '').split(',').filter(capability => REACHABLE.includes(capability)),
 		support: params.get('support') === '1',
 		author: authorOf(params.get('author')),
+		tag: params.get('tag')?.trim().toLowerCase() || undefined,
 	};
 };
 
-export const writeQuery = ({ query, minecraft, loader, side, released, host, sort, avoid = [], support, author }) => {
+export const writeQuery = ({
+	query,
+	minecraft,
+	loader,
+	side,
+	released,
+	host,
+	sort,
+	avoid = [],
+	support,
+	author,
+	tag,
+}) => {
 	const params = new URLSearchParams();
 
 	if (query?.trim()) params.set('q', query.trim());
@@ -72,6 +88,7 @@ export const writeQuery = ({ query, minecraft, loader, side, released, host, sor
 	if (avoid.length > 0) params.set('avoid', avoid.join(','));
 	if (support) params.set('support', '1');
 	if (author) params.set('author', author.replace(/^github:/, ''));
+	if (tag) params.set('tag', tag);
 
 	const written = params.toString();
 
@@ -96,7 +113,7 @@ const ORDER = {
  */
 export const refine = (
 	ranked,
-	{ side, released, host, sort = 'best', avoid = [], support, author },
+	{ side, released, host, sort = 'best', avoid = [], support, author, tag },
 	now = Date.now(),
 ) => {
 	const kept = ranked.filter(
@@ -106,6 +123,7 @@ export const refine = (
 			(!host || (entry.host ?? 'github') === host) &&
 			(!support || (entry.funding?.length ?? 0) > 0) &&
 			(!author || ownerOf(entry) === author) &&
+			(!tag || (entry.tags ?? []).includes(tag)) &&
 			!(entry.latest?.capabilities ?? []).some(capability => avoid.includes(capability)),
 	);
 

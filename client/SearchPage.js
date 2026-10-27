@@ -21,7 +21,7 @@ import { ownerName } from 'ender-launcher/support';
 
 import { collection } from './collection';
 import { collectButton, installControls, instancePicker } from './controls';
-import { loadListing, loadVersions } from './data';
+import { loadListing, loadThemes, loadVersions } from './data';
 import { local } from './local';
 import {
 	CAPABILITIES,
@@ -31,6 +31,7 @@ import {
 	SIDES,
 	SORTS,
 	authorPath,
+	tagPath,
 	collectionKey,
 	fittingVersions,
 	installCommand,
@@ -98,8 +99,8 @@ const PhoneOnly = styled(
 	`,
 );
 
-const filtersLabel = ({ side, released, host, sort, avoid, support }) => {
-	const active = [side, released, host, sort !== 'best', avoid.length > 0, support].filter(Boolean).length;
+const filtersLabel = ({ side, released, host, sort, avoid, support, tag }) => {
+	const active = [side, released, host, sort !== 'best', avoid.length > 0, support, tag].filter(Boolean).length;
 
 	return active > 0 ? `Filters (${active})` : 'Filters';
 };
@@ -272,6 +273,25 @@ const cautionsOf = (entry, { sharing, unproven }) =>
 const opensCard = event =>
 	!event.target.closest('a, button, input, select, code, .vbc-button') && !getSelection()?.toString();
 
+const THEMES_SHOWN = 4;
+
+/** Its first themes, each leading to every mod of that theme: here, in place, and to a new tab by its address. */
+const themeChips = (entry, pickTheme) =>
+	(entry.tags ?? []).slice(0, THEMES_SHOWN).map(
+		tag =>
+			new Link({
+				href: tagPath(tag),
+				tooltip: `Every mod the index gave the theme ${tag}`,
+				append: new Chip({ textContent: tag }),
+				onPointerPress: event => {
+					if (event.ctrlKey || event.metaKey || event.shiftKey || event.button === 1) return;
+
+					event.preventDefault();
+					pickTheme(tag);
+				},
+			}),
+	);
+
 /** A repository's name in two parts: its owner, to every mod of theirs here, and the rest, to its host. */
 const repositoryLinks = entry => {
 	const host = entry.host ?? 'github';
@@ -292,7 +312,7 @@ const repositoryLinks = entry => {
 	});
 };
 
-const resultCard = ({ entry, sharing, unproven, author }, versions, state, entries, open) => {
+const resultCard = ({ entry, sharing, unproven, author }, versions, state, entries, open, pickTheme) => {
 	const { minecraft } = state;
 	const title = titleOf(entry);
 	const fitting = fittingVersions(entry, versions, { minecraft });
@@ -347,6 +367,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 									({ label, text }) => new Chip({ addClass: 'finding', textContent: label, tooltip: hint(text) }),
 								),
 								...loadersOf(entry).map(loader => new Chip({ textContent: loader })),
+								...themeChips(entry, pickTheme),
 								...(fitting.versions.length > 0
 									? [
 											new Chip({
@@ -426,7 +447,7 @@ export default class SearchPage extends View {
 		const draw = () => {
 			results.content(
 				ranked.length > 0
-					? ranked.slice(0, shown).map(found => resultCard(found, versions, state, entries, open))
+					? ranked.slice(0, shown).map(found => resultCard(found, versions, state, entries, open, pickTheme))
 					: new EmptyState({
 							icon: 'magnifying-glass',
 							title: 'No mods match',
@@ -448,24 +469,38 @@ export default class SearchPage extends View {
 			const order = state.sort === 'best' ? bestOrder : SORTS[state.sort].toLowerCase();
 
 			status.content([
-				...(state.author
-					? [
-							new Button({
-								variant: 'flat',
-								icon: 'xmark',
-								textContent: `by ${state.author.replace(/^github:/, '')}`,
-								tooltip: 'Show every author again',
-								onPointerPress: () => {
-									state.author = undefined;
-									restart();
-								},
-							}),
-						]
-					: []),
+				...removable('author', `by ${state.author?.replace(/^github:/, '')}`, 'Show every author again'),
+				...removable('tag', `themed ${state.tag}`, 'Show every theme again'),
 				`${count(ranked.length)} of ${count(entries.length)} indexed repositories, ${order}`,
 			]);
 			draw();
 		};
+
+		/** A filter set from a link, shown with the count and taken off from there. */
+		function removable(key, label, tooltip) {
+			if (!state[key]) return [];
+
+			return [
+				new Button({
+					variant: 'flat',
+					icon: 'xmark',
+					textContent: label,
+					tooltip,
+					onPointerPress: () => {
+						state[key] = undefined;
+						if (key === 'tag') theme.options.value = '';
+						restart();
+					},
+				}),
+			];
+		}
+
+		function pickTheme(tag) {
+			state.tag = tag;
+			theme.options.value = tag;
+			restart();
+			scrolling.elem.scrollTo?.({ top: 0, behavior: 'smooth' });
+		}
 
 		const showMore = () => {
 			if (ranked.length <= shown) return;
@@ -522,6 +557,25 @@ export default class SearchPage extends View {
 					restart();
 				},
 			});
+
+		const theme = new Select({
+			options: [{ label: 'Any theme', value: '' }, ...(state.tag ? [state.tag] : [])],
+			value: state.tag ?? '',
+			style: { width: 'auto' },
+			onChange: ({ target: { value } }) => {
+				state.tag = value || undefined;
+				restart();
+			},
+		});
+
+		loadThemes().then(themes => {
+			theme.options.options = [
+				{ label: 'Any theme', value: '' },
+				...themes.map(({ tag, count: held }) => ({ label: `${tag} (${count(held)})`, value: tag })),
+				...(state.tag && !themes.some(found => found.tag === state.tag) ? [state.tag] : []),
+			];
+			theme.options.value = state.tag ?? '';
+		});
 
 		const sort = new Select({
 			options: Object.entries(SORTS).map(([value, label]) => ({ label, value })),
@@ -639,6 +693,7 @@ export default class SearchPage extends View {
 						choice('side', SIDES, 'Any side'),
 						choice('released', RELEASED, 'Released any time'),
 						choice('host', HOSTS, 'Any host'),
+						theme,
 						sort,
 					],
 				}),

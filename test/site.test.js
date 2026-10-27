@@ -20,6 +20,7 @@ import {
 	recordUrl,
 	readQuery,
 	authorPath,
+	tagPath,
 	refine,
 	releaseUrl,
 	releasedVersions,
@@ -67,6 +68,8 @@ describe('the search page', () => {
 		expect(readQuery('?author=FatLard1993').author).toBe('github:fatlard1993');
 		expect(readQuery('?author=codeberg:enjarai').author).toBe('codeberg:enjarai');
 		expect(readQuery('?author=sourcehut:x').author).toBeUndefined();
+		expect(readQuery(writeQuery({ tag: 'ship' })).tag).toBe('ship');
+		expect(tagPath('ship')).toBe('?tag=ship#/');
 		expect(authorPath(entry({ host: 'gitlab', repo: 'Group/p' }))).toBe('?author=gitlab%3Agroup#/');
 	});
 
@@ -118,7 +121,7 @@ describe('the search page', () => {
 			}),
 		});
 		const ranked = [
-			found('a/best', { stars: 5, downloads: 10, environment: 'client' }),
+			found('a/best', { stars: 5, downloads: 10, environment: 'client', tags: ['ship'] }),
 			found('b/old', { stars: 9, latest: { published: '2024-01-01T00:00:00Z', mods: [], capabilities: [] } }),
 			found('c/network', { stars: 1, downloads: 900, usedBy: 4, latest: { mods: [], capabilities: ['network'] } }),
 			found('d/codeberg', {
@@ -139,6 +142,7 @@ describe('the search page', () => {
 		expect(repos({ support: true })).toEqual(['d/codeberg']);
 		expect(repos({ author: 'github:b' })).toEqual(['b/old']);
 		expect(repos({ author: 'github:d' })).toEqual([]);
+		expect(repos({ tag: 'ship' })).toEqual(['a/best']);
 		expect(repos({ sort: 'stars' })).toEqual(['b/old', 'a/best', 'd/codeberg', 'c/network']);
 		expect(repos({ sort: 'downloads' })[0]).toBe('c/network');
 		expect(repos({ sort: 'used' })[0]).toBe('c/network');

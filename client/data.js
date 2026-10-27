@@ -3,6 +3,7 @@ import { loadJson } from './ui';
 
 let listing;
 let versions;
+let themes;
 
 /** The index's listing, fetched once however many pages ask: it is the size of every repository's summary. */
 export const loadListing = () => {
@@ -23,4 +24,15 @@ export const loadVersions = () => {
 		});
 
 	return versions;
+};
+
+/** The themes the index's tags came down to, the commonest first, or none when they do not load. */
+export const loadThemes = () => {
+	themes ??= loadJson(`${INDEX}/tags.json`).catch(() => {
+		themes = undefined;
+
+		return [];
+	});
+
+	return themes;
 };
