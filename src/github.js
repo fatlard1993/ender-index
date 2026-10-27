@@ -2,6 +2,7 @@ import { mkdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
 import { fetchSteady, RateLimited } from './fetch';
+import { notesOf } from './record';
 
 const API = 'https://api.github.com';
 
@@ -153,6 +154,7 @@ const releaseFields = list =>
 		published_at: release.published_at,
 		prerelease: release.prerelease,
 		draft: release.draft,
+		body: notesOf(release.body),
 		assets: (release.assets ?? []).map(({ id, name, size, browser_download_url, download_count }) => ({
 			id,
 			name,

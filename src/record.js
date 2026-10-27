@@ -66,6 +66,21 @@ const about = (repo, host) => ({
 	pushed: repo.pushed_at,
 });
 
+/** The most of a release's notes kept: a changelog generated from every commit can run to tens of thousands. */
+export const NOTES_KEPT = 4000;
+
+/** A release's notes as its author wrote them, cut at a line past the length kept; none when it has none. */
+export const notesOf = body => {
+	const text = (body ?? '').replaceAll('\r\n', '\n').trim();
+
+	if (text === '') return undefined;
+	if (text.length <= NOTES_KEPT) return text;
+
+	const cut = text.slice(0, NOTES_KEPT);
+
+	return `${cut.slice(0, Math.max(cut.lastIndexOf('\n'), NOTES_KEPT / 2))}\n\n...`;
+};
+
 /**
  * Bring a repository's record up to date with what its releases now carry.
  *
@@ -87,6 +102,11 @@ export const updateRecord = async ({ record, repo, releases, now, inspect, host 
 			prerelease: release.prerelease,
 			assets: [],
 		};
+		const notes = notesOf(release.body);
+
+		if (notes) recorded.notes = notes;
+		else delete recorded.notes;
+
 		const current = modAssets(release);
 		const currentIds = new Set(current.map(asset => asset.id));
 

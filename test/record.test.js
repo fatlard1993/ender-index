@@ -1,6 +1,15 @@
 import { describe, expect, test } from 'bun:test';
 
-import { INSPECTION, VERSION_LIMIT, WINDOW, updateRecord, vanish, watchedReleases } from '../src/record';
+import {
+	INSPECTION,
+	NOTES_KEPT,
+	VERSION_LIMIT,
+	WINDOW,
+	notesOf,
+	updateRecord,
+	vanish,
+	watchedReleases,
+} from '../src/record';
 
 const repo = { full_name: 'a/mod', stargazers_count: 3, archived: false, license: { spdx_id: 'MIT' } };
 
@@ -44,6 +53,26 @@ describe('a repository record', () => {
 		expect(record.license).toBe('MIT');
 		expect(record.releases[0].assets.map(entry => entry.name)).toEqual(['mod-1.0.jar']);
 		expect(events.map(event => event.type)).toEqual(['new']);
+	});
+
+	test("keeps a release's notes as its author last wrote them, and none for a release without", async () => {
+		const noted = body => ({ ...release('1.0', [asset('mod.jar', 1)]), body });
+		const first = await update(undefined, [noted('Fixed\r\n- boats sinking')], inspector().inspect);
+
+		expect(first.record.releases[0].notes).toBe('Fixed\n- boats sinking');
+
+		const edited = await update(first.record, [noted('  ')], inspector().inspect);
+
+		expect(edited.record.releases[0]).not.toHaveProperty('notes');
+	});
+
+	test("cuts a release's notes past the length kept, at a line", () => {
+		const long = Array.from({ length: 400 }, (_, at) => `- change number ${at}`).join('\n');
+		const kept = notesOf(long);
+
+		expect(kept.length).toBeLessThanOrEqual(NOTES_KEPT + 5);
+		expect(kept.endsWith('\n\n...')).toBe(true);
+		expect(kept.split('\n').at(-3)).toMatch(/^- change number \d+$/);
 	});
 
 	test('a repository with no jar in any release has no record', async () => {

@@ -68,6 +68,7 @@ export const releases = async (fullName, page = 1) =>
 		tag_name: release.tag_name,
 		published_at: release.released_at,
 		prerelease: Boolean(release.upcoming_release),
+		body: release.description,
 		draft: false,
 		assets: (release.assets?.links ?? []).map(assetOf),
 	}));

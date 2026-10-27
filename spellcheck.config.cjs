@@ -4,6 +4,7 @@ module.exports = {
 		'biomes',
 		'boosty',
 		'buymeacoffee',
+		'changelog',
 		'classloading',
 		'codeberg',
 		'ender',

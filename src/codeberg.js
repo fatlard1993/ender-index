@@ -58,6 +58,7 @@ export const releases = async (fullName, page = 1) =>
 		tag_name: release.tag_name,
 		published_at: release.published_at,
 		prerelease: release.prerelease,
+		body: release.body,
 		draft: release.draft,
 		assets: (release.assets ?? []).map(({ id, name, size, browser_download_url, download_count }) => ({
 			id,
