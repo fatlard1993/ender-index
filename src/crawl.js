@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 
 import { readIcon, readLinks, readMods } from 'ender-launcher/metadata';
+import { HOSTS as HOST_NAMES } from 'ender-launcher/rank';
 import { scanJar } from 'ender-launcher/scan';
 
 import * as codeberg from './codeberg';
@@ -411,6 +412,84 @@ export const spendingLine = ({ full, unchanged, remaining, resetAt }) => {
 	return `GitHub answered ${count(total)} requests in full${breakdown} and ${count(unchanged)} unchanged, which the rate limit does not count${left}`;
 };
 
+const minutes = wait => `${Math.ceil(wait / 60_000)} ${Math.ceil(wait / 60_000) === 1 ? 'minute' : 'minutes'}`;
+
+/**
+ * Crawls each repository in order. A host that answers with its rate limit has the rest of its repositories set
+ * aside, so one host's limit holds back no other's; they are crawled once it lifts, while that is inside the time
+ * budget, and first in the next crawl when it is not.
+ */
+export const crawlEach = async (repos, { crawlRepo, deadline, sleep = Bun.sleep, beforeWait = async () => {} }) => {
+	const failures = [];
+	const stopped = [];
+	const limits = new Map();
+	let waiting = repos;
+
+	while (waiting.length > 0) {
+		const later = [];
+
+		for (const line of waiting) {
+			const { host } = parseLine(line);
+
+			if (Date.now() > deadline || limits.get(host)?.resetAt > Date.now()) {
+				later.push(line);
+
+				continue;
+			}
+
+			try {
+				await crawlRepo(line);
+			} catch (error) {
+				if (!(error instanceof RateLimited)) {
+					failures.push(line);
+					console.error(`failed  ${line} :: ${error.message}`);
+
+					continue;
+				}
+
+				limits.set(host, error);
+				later.push(line);
+				console.log(`Setting the rest from ${HOST_NAMES[host]} aside at its rate limit; ${error.message}`);
+			}
+		}
+
+		if (later.length === 0) break;
+
+		if (Date.now() > deadline) {
+			stopped.push(
+				`Stopped at the time budget with ${later.length} of ${repos.length} left; they are crawled first next time`,
+			);
+
+			break;
+		}
+
+		const hosts = [...new Set(later.map(line => parseLine(line).host))];
+		const first = hosts.toSorted((a, b) => limits.get(a).resetAt - limits.get(b).resetAt)[0];
+		const wait = waitForReset(limits.get(first).resetAt, deadline);
+
+		if (wait === undefined) {
+			for (const host of hosts) {
+				const left = later.filter(line => parseLine(line).host === host).length;
+
+				stopped.push(
+					`${limits.get(host).message}, past the time budget; ${left} of ${HOST_NAMES[host]}'s repositories are crawled first next time`,
+				);
+			}
+
+			break;
+		}
+
+		console.log(
+			`Waiting ${minutes(wait)} for ${HOST_NAMES[first]}'s rate limit, with ${later.length} repositories set aside`,
+		);
+		await beforeWait();
+		await sleep(wait);
+		waiting = later;
+	}
+
+	return { failures, stopped };
+};
+
 export const recordFiles = async () =>
 	[...new Bun.Glob('**/*.json').scanSync(join(DATA, 'mods'))].map(file => join(DATA, 'mods', file));
 
@@ -430,67 +509,37 @@ export const crawl = async ({ only } = {}) => {
 	const scratch = await mkdtemp(join(tmpdir(), 'ender-index-'));
 	const inspect = inspector(scratch, knownBad);
 	const gameVersions = await releasedGameVersions();
-	const failures = [];
 	// An owner's FUNDING.yml stands for each of their repositories without one, so it is read once a crawl
 	const owners = new Map();
 	// A crawl the runner kills commits nothing, so it stops itself while there is time to commit.
 	const deadline = Date.now() + Number(process.env.CRAWL_MINUTES ?? Infinity) * 60_000;
-	let stopped;
-
-	const crawlWaiting = async (fullName, options) => {
-		for (;;) {
-			try {
-				return await crawlOne(fullName, options);
-			} catch (error) {
-				const wait = error instanceof RateLimited ? waitForReset(error.resetAt, deadline) : undefined;
-
-				if (wait === undefined) throw error;
-
-				console.log(`Waiting ${Math.ceil(wait / 60_000)} minutes at the rate limit; ${error.message}`);
-
-				await github.saveCache();
-				await Bun.sleep(wait);
-			}
-		}
-	};
 
 	console.log(
 		`Crawling ${repos.length === 1 ? 'one repository' : `${repos.length} repositories`}; each new release jar is downloaded and scanned, so this takes a while`,
 	);
 
+	let outcome;
+
 	try {
-		for (const [index, fullName] of repos.entries()) {
-			if (Date.now() > deadline) {
-				stopped = `Stopped at the time budget after ${index} of ${repos.length}; the rest are crawled first next time`;
-
-				break;
-			}
-
-			try {
-				for (const event of await crawlWaiting(fullName, { now, inspect, gameVersions, scratch, owners })) {
+		outcome = await crawlEach(repos, {
+			deadline,
+			beforeWait: () => github.saveCache(),
+			crawlRepo: async fullName => {
+				for (const event of await crawlOne(fullName, { now, inspect, gameVersions, scratch, owners })) {
 					console.log(
 						[event.type.padEnd(7), event.repo, event.tag, event.asset, event.error && `:: ${event.error}`]
 							.filter(Boolean)
 							.join(' '),
 					);
 				}
-			} catch (error) {
-				if (error instanceof RateLimited) {
-					stopped = `Stopped at the rate limit after ${index} of ${repos.length}; ${error.message}, past the time budget, and the rest are crawled first next time`;
-
-					break;
-				}
-
-				failures.push(fullName);
-				console.error(`failed  ${fullName} :: ${error.message}`);
-			}
-		}
+			},
+		});
 	} finally {
 		await rm(scratch, { recursive: true, force: true });
 		await github.saveCache();
 	}
 
-	if (stopped) console.log(stopped);
+	for (const line of outcome.stopped) console.log(line);
 
 	console.log(spendingLine(github.spent()));
 
@@ -499,9 +548,9 @@ export const crawl = async ({ only } = {}) => {
 	await writeJson(join(DATA, 'search.json'), buildSearch(records));
 	await pruneIcons(records);
 
-	console.log(`${records.length} repositories indexed; ${failures.length} could not be crawled`);
+	console.log(`${records.length} repositories indexed; ${outcome.failures.length} could not be crawled`);
 
-	return failures.length > 0 ? 1 : 0;
+	return outcome.failures.length > 0 ? 1 : 0;
 };
 
 if (import.meta.main) process.exit(await crawl({ only: process.argv.length > 2 ? process.argv.slice(2) : undefined }));

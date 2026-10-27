@@ -119,7 +119,7 @@ export const request = async (path, keep) => {
 			const retryAfter = response.headers.get('retry-after');
 			const resetAt = reset ? Number(reset) * 1000 : Date.now() + Number(retryAfter ?? 60) * 1000;
 
-			throw new RateLimited(`the rate limit resets at ${new Date(resetAt).toISOString()}`, resetAt);
+			throw new RateLimited(`GitHub's rate limit resets at ${new Date(resetAt).toISOString()}`, resetAt);
 		}
 
 		throw Object.assign(new Error(`GitHub ${response.status} for ${path}`), { status: response.status });

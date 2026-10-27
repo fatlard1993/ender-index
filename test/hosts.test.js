@@ -1,9 +1,10 @@
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { describe, expect, test } from 'bun:test';
+import { afterEach, describe, expect, setSystemTime, test } from 'bun:test';
 
-import { DATA, parseLine, recordPath, spendingLine, waitForReset } from '../src/crawl';
+import { DATA, crawlEach, parseLine, recordPath, spendingLine, waitForReset } from '../src/crawl';
+import { RateLimited } from '../src/fetch';
 import { kindOf } from '../src/github';
 import { assetOf } from '../src/gitlab';
 
@@ -313,5 +314,58 @@ describe('the rate limit', () => {
 		expect(spendingLine({ full: {}, unchanged: 0 })).toBe(
 			'GitHub answered 0 requests in full and 0 unchanged, which the rate limit does not count',
 		);
+	});
+});
+
+describe("one host's rate limit", () => {
+	afterEach(() => setSystemTime());
+
+	const limitedOnce = (host, resetIn) => {
+		const asked = [];
+		let limited = false;
+
+		return {
+			asked,
+			crawlRepo: async line => {
+				asked.push(line);
+
+				if (line.startsWith(`${host}:`) && !limited) {
+					limited = true;
+
+					throw new RateLimited(`${host} asks to be left alone`, Date.now() + resetIn);
+				}
+			},
+		};
+	};
+	const sleep = async wait => setSystemTime(new Date(Date.now() + wait));
+
+	test("holds back no other host's repositories, and crawls its own when it lifts", async () => {
+		setSystemTime(new Date('2026-10-27T10:00:00Z'));
+
+		const { asked, crawlRepo } = limitedOnce('gitlab', 60_000);
+		const outcome = await crawlEach(['gitlab:a/x', 'gitlab:a/y', 'b/z'], {
+			crawlRepo,
+			sleep,
+			deadline: Date.now() + 3_600_000,
+		});
+
+		expect(asked).toEqual(['gitlab:a/x', 'b/z', 'gitlab:a/x', 'gitlab:a/y']);
+		expect(outcome).toEqual({ failures: [], stopped: [] });
+	});
+
+	test('past the time budget, leaves its repositories for the next crawl and says how many', async () => {
+		setSystemTime(new Date('2026-10-27T10:00:00Z'));
+
+		const { asked, crawlRepo } = limitedOnce('gitlab', 3_600_000);
+		const outcome = await crawlEach(['gitlab:a/x', 'gitlab:a/y', 'b/z'], {
+			crawlRepo,
+			sleep,
+			deadline: Date.now() + 60_000,
+		});
+
+		expect(asked).toEqual(['gitlab:a/x', 'b/z']);
+		expect(outcome.stopped).toEqual([
+			"gitlab asks to be left alone, past the time budget; 2 of GitLab's repositories are crawled first next time",
+		]);
 	});
 });
