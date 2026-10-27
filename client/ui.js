@@ -1,6 +1,6 @@
-import { Component, Icon, Link, Notify, copyToClipboard, styled, theme } from '@vanilla-bean/components';
+import { Component, Link, Notify, copyToClipboard, styled } from '@vanilla-bean/components';
 
-import { REPOSITORY, SPONSOR } from './search';
+import { REPOSITORY } from './search';
 
 export const count = number => number.toLocaleString('en-US');
 
@@ -130,15 +130,7 @@ export const about = found =>
 				}),
 			];
 
-/** The header's links to the index's own source and to supporting it. */
+/** The header's link to the index's own repository, where GitHub shows how to sponsor it. */
 export const headerLinks = () => [
-	new Link({
-		variant: 'flat',
-		href: SPONSOR,
-		target: '_blank',
-		tooltip: 'Support ender and the index',
-		style: { display: 'inline-flex', flexDirection: 'row', alignItems: 'center', gap: theme.space.xs },
-		append: [new Icon({ icon: 'heart', style: { color: theme.colors.danger } }), 'Sponsor'],
-	}),
-	new Link({ variant: 'flat', href: REPOSITORY, target: '_blank', textContent: 'Source' }),
+	new Link({ variant: 'flat', href: REPOSITORY, target: '_blank', textContent: 'GitHub' }),
 ];

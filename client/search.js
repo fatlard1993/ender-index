@@ -8,7 +8,6 @@ export const MANIFEST = 'https://piston-meta.mojang.com/mc/game/version_manifest
 export const REPOSITORY = 'https://github.com/fatlard1993/ender-index';
 
 /** Where the index itself, and ender, are supported. */
-export const SPONSOR = 'https://github.com/sponsors/fatlard1993';
 
 export const LOADERS = { fabric: 'Fabric', quilt: 'Quilt', forge: 'Forge', neoforge: 'NeoForge' };
 
