@@ -545,7 +545,7 @@ export const crawlEach = async (
 		}
 
 		console.log(
-			`Waiting ${minutes(wait)} for ${HOST_NAMES[first]}'s rate limit, with ${later.length} repositories set aside`,
+			`Waiting ${minutes(wait)} for ${HOST_NAMES[first]}'s rate limit, with ${later.length} ${later.length === 1 ? 'repository' : 'repositories'} set aside`,
 		);
 		await beforeWait();
 		await sleep(wait);
