@@ -1,4 +1,4 @@
-import { HOSTS, fit } from 'ender-launcher/rank';
+import { HOSTS, fit, ownerOf } from 'ender-launcher/rank';
 import { specFor } from 'ender-launcher/spec';
 
 export const INDEX = 'https://raw.githubusercontent.com/fatlard1993/ender-index/main/data';
@@ -30,6 +30,18 @@ const REACHABLE = ['network', 'exec', 'native', 'classloading', 'unsafe'];
 const oneOf = (value, choices) => (value in choices ? value : undefined);
 
 /** What a page address asks for, so a search can be linked to. */
+/** An author as the address names one: a GitHub owner bare, any other host's as `host:owner`. */
+const authorOf = value => {
+	if (!value) return undefined;
+
+	const [host, owner] = value.includes(':') ? value.split(':') : ['github', value];
+
+	return HOSTS[host] && owner ? `${host}:${owner.toLowerCase()}` : undefined;
+};
+
+/** Where the page lists every mod an entry's owner has in the index. */
+export const authorPath = entry => `${writeQuery({ author: ownerOf(entry) })}#/`;
+
 export const readQuery = search => {
 	const params = new URLSearchParams(search);
 
@@ -43,10 +55,11 @@ export const readQuery = search => {
 		sort: oneOf(params.get('sort'), SORTS) ?? 'best',
 		avoid: (params.get('avoid') ?? '').split(',').filter(capability => REACHABLE.includes(capability)),
 		support: params.get('support') === '1',
+		author: authorOf(params.get('author')),
 	};
 };
 
-export const writeQuery = ({ query, minecraft, loader, side, released, host, sort, avoid = [], support }) => {
+export const writeQuery = ({ query, minecraft, loader, side, released, host, sort, avoid = [], support, author }) => {
 	const params = new URLSearchParams();
 
 	if (query?.trim()) params.set('q', query.trim());
@@ -58,6 +71,7 @@ export const writeQuery = ({ query, minecraft, loader, side, released, host, sor
 	if (sort && sort !== 'best') params.set('sort', sort);
 	if (avoid.length > 0) params.set('avoid', avoid.join(','));
 	if (support) params.set('support', '1');
+	if (author) params.set('author', author.replace(/^github:/, ''));
 
 	const written = params.toString();
 
@@ -80,13 +94,18 @@ const ORDER = {
  * Ranked results narrowed by the filters the ranking does not know, and put in the order asked for.
  * Ties keep the ranking's order, so the best match among equals comes first.
  */
-export const refine = (ranked, { side, released, host, sort = 'best', avoid = [], support }, now = Date.now()) => {
+export const refine = (
+	ranked,
+	{ side, released, host, sort = 'best', avoid = [], support, author },
+	now = Date.now(),
+) => {
 	const kept = ranked.filter(
 		({ entry }) =>
 			(!side || (entry.environment ?? 'both') === side) &&
 			(!released || time(entry.latest?.published) >= now - Number(released) * DAY) &&
 			(!host || (entry.host ?? 'github') === host) &&
 			(!support || (entry.funding?.length ?? 0) > 0) &&
+			(!author || ownerOf(entry) === author) &&
 			!(entry.latest?.capabilities ?? []).some(capability => avoid.includes(capability)),
 	);
 

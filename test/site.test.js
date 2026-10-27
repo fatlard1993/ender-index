@@ -19,6 +19,7 @@ import {
 	supportOf,
 	recordUrl,
 	readQuery,
+	authorPath,
 	refine,
 	releaseUrl,
 	releasedVersions,
@@ -62,6 +63,11 @@ describe('the search page', () => {
 		};
 
 		expect(readQuery(writeQuery(filtered))).toMatchObject(filtered);
+		expect(writeQuery({ author: 'github:fatlard1993' })).toBe('?author=fatlard1993');
+		expect(readQuery('?author=FatLard1993').author).toBe('github:fatlard1993');
+		expect(readQuery('?author=codeberg:enjarai').author).toBe('codeberg:enjarai');
+		expect(readQuery('?author=sourcehut:x').author).toBeUndefined();
+		expect(authorPath(entry({ host: 'gitlab', repo: 'Group/p' }))).toBe('?author=gitlab%3Agroup#/');
 	});
 
 	test("each host's pages are where that host keeps them", () => {
@@ -131,6 +137,8 @@ describe('the search page', () => {
 		expect(repos({ host: 'codeberg' })).toEqual(['d/codeberg']);
 		expect(repos({ avoid: ['network'] })).toEqual(['a/best', 'b/old', 'd/codeberg']);
 		expect(repos({ support: true })).toEqual(['d/codeberg']);
+		expect(repos({ author: 'github:b' })).toEqual(['b/old']);
+		expect(repos({ author: 'github:d' })).toEqual([]);
 		expect(repos({ sort: 'stars' })).toEqual(['b/old', 'a/best', 'd/codeberg', 'c/network']);
 		expect(repos({ sort: 'downloads' })[0]).toBe('c/network');
 		expect(repos({ sort: 'used' })[0]).toBe('c/network');

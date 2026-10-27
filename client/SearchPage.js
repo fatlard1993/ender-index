@@ -17,6 +17,7 @@ import {
 	theme,
 } from '@vanilla-bean/components';
 import { HOSTS, providerOf, rank, requiredIds } from 'ender-launcher/rank';
+import { ownerName } from 'ender-launcher/support';
 
 import { collection } from './collection';
 import { collectButton, installControls, instancePicker } from './controls';
@@ -29,6 +30,7 @@ import {
 	RELEASED,
 	SIDES,
 	SORTS,
+	authorPath,
 	collectionKey,
 	fittingVersions,
 	installCommand,
@@ -270,9 +272,28 @@ const cautionsOf = (entry, { sharing, unproven }) =>
 const opensCard = event =>
 	!event.target.closest('a, button, input, select, code, .vbc-button') && !getSelection()?.toString();
 
+/** A repository's name in two parts: its owner, to every mod of theirs here, and the rest, to its host. */
+const repositoryLinks = entry => {
+	const host = entry.host ?? 'github';
+	const owner = ownerName(entry);
+
+	return new Component({
+		tag: 'span',
+		append: [
+			new Link({ href: authorPath(entry), textContent: owner, tooltip: `Every mod of ${owner}'s in the index` }),
+			'/',
+			new Link({
+				href: repositoryUrl(entry),
+				target: '_blank',
+				textContent: entry.repo.slice(owner.length + 1),
+				tooltip: `Its repository on ${HOSTS[host]}`,
+			}),
+		],
+	});
+};
+
 const resultCard = ({ entry, sharing, unproven, author }, versions, state, entries, open) => {
 	const { minecraft } = state;
-	const host = entry.host ?? 'github';
 	const title = titleOf(entry);
 	const fitting = fittingVersions(entry, versions, { minecraft });
 	const command = installCommand(entry);
@@ -304,11 +325,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 						new Row({
 							append: [
 								new Link({ href: `#${modPath(entry)}`, append: new Title({ textContent: title }) }),
-								new Link({
-									href: repositoryUrl(entry),
-									target: '_blank',
-									textContent: host === 'github' ? entry.repo : `${entry.repo} on ${HOSTS[host]}`,
-								}),
+								repositoryLinks(entry),
 								new Meta({
 									textContent: [
 										`${count(entry.stars ?? 0)} stars`,
@@ -430,7 +447,23 @@ export default class SearchPage extends View {
 			const bestOrder = state.query.trim() ? 'best match first' : 'by stars';
 			const order = state.sort === 'best' ? bestOrder : SORTS[state.sort].toLowerCase();
 
-			status.content(`${count(ranked.length)} of ${count(entries.length)} indexed repositories, ${order}`);
+			status.content([
+				...(state.author
+					? [
+							new Button({
+								variant: 'flat',
+								icon: 'xmark',
+								textContent: `by ${state.author.replace(/^github:/, '')}`,
+								tooltip: 'Show every author again',
+								onPointerPress: () => {
+									state.author = undefined;
+									restart();
+								},
+							}),
+						]
+					: []),
+				`${count(ranked.length)} of ${count(entries.length)} indexed repositories, ${order}`,
+			]);
 			draw();
 		};
 
