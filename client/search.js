@@ -379,3 +379,18 @@ export const installAllCommand = (entries, { instance } = {}) =>
 /** Bytes as a reader says them. */
 export const fileSize = bytes =>
 	bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
+
+/** Whether a pack fits what was chosen: its game version, its loader, and every word typed in its name or text. */
+export const packFits = (pack, { query = '', minecraft, loader }) => {
+	const text = `${pack.name} ${pack.repo} ${pack.description ?? ''}`.toLowerCase();
+
+	return (
+		(!minecraft || pack.minecraft === minecraft) &&
+		(!loader || pack.loader === loader) &&
+		query
+			.toLowerCase()
+			.split(/\s+/)
+			.filter(Boolean)
+			.every(word => text.includes(word))
+	);
+};

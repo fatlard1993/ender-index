@@ -22,6 +22,7 @@ import {
 	authorPath,
 	tagPath,
 	lineUrl,
+	packFits,
 	rangeLabel,
 	refine,
 	releaseUrl,
@@ -91,6 +92,22 @@ describe('the search page', () => {
 		expect(rangeLabel('[1.20,)')).toBe('1.20 and later');
 		expect(rangeLabel('*')).toBe('any version');
 		expect(rangeLabel('1.21.x-ish weird')).toBe('1.21.x-ish weird');
+	});
+
+	test('a pack fits the game version, loader and words chosen, each only when chosen', () => {
+		const pack = {
+			name: 'Ship Life',
+			repo: 'me/ship-life',
+			description: 'Boats and pirates',
+			minecraft: '26.3',
+			loader: 'fabric',
+		};
+
+		expect(packFits(pack, {})).toBe(true);
+		expect(packFits(pack, { query: 'pirates ship', minecraft: '26.3', loader: 'fabric' })).toBe(true);
+		expect(packFits(pack, { minecraft: '1.21.1' })).toBe(false);
+		expect(packFits(pack, { loader: 'forge' })).toBe(false);
+		expect(packFits(pack, { query: 'trains' })).toBe(false);
 	});
 
 	test("each host's pages are where that host keeps them", () => {

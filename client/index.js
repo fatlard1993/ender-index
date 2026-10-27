@@ -2,6 +2,7 @@ import { Page, Router, View } from '@vanilla-bean/components';
 
 import CollectionBar from './CollectionBar';
 import ModPage from './ModPage';
+import PacksPage from './PacksPage';
 import SearchPage from './SearchPage';
 
 import '@vanilla-bean/components/app/reloadOnBuild';
@@ -11,7 +12,7 @@ new Page({
 	append: new View({
 		append: [
 			new Router({
-				views: { '/': SearchPage, '/mod/:host/:owner/:name': ModPage },
+				views: { '/': SearchPage, '/packs': PacksPage, '/mod/:host/:owner/:name': ModPage },
 				onRenderView: () => (document.title = 'ender index'),
 			}),
 			new CollectionBar(),

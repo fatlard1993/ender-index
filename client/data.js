@@ -4,6 +4,7 @@ import { loadJson } from './ui';
 let listing;
 let versions;
 let themes;
+let packs;
 
 /** The index's listing, fetched once however many pages ask: it is the size of every repository's summary. */
 export const loadListing = () => {
@@ -35,4 +36,17 @@ export const loadThemes = () => {
 	});
 
 	return themes;
+};
+
+/** The packs the index lists, fetched once; none before a crawl has listed any. */
+export const loadPacks = () => {
+	packs ??= fetch(`${INDEX}/packs.json`).then(async response => {
+		if (response.status === 404) return [];
+		if (!response.ok) throw new Error(`${INDEX}/packs.json answered ${response.status}`);
+
+		return response.json();
+	});
+	packs.catch(() => (packs = undefined));
+
+	return packs;
 };

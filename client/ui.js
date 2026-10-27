@@ -1,6 +1,15 @@
-import { Component, Link, Notify, TooltipWrapper, copyToClipboard, styled } from '@vanilla-bean/components';
+import {
+	Card,
+	Component,
+	Link,
+	Notify,
+	TooltipWrapper,
+	copyToClipboard,
+	styled,
+	theme,
+} from '@vanilla-bean/components';
 
-import { REPOSITORY, readmeSources } from './search';
+import { REPOSITORY, aboutOf, modPath, pictureUrl, readmeSources, titleOf } from './search';
 
 export const count = number => number.toLocaleString('en-US');
 
@@ -152,8 +161,10 @@ export const about = found =>
 				}),
 			];
 
-/** The header's link to the index's own repository, where GitHub shows how to sponsor it. */
+/** The header's links: the index's mods and packs, and its own repository, where GitHub shows how to sponsor it. */
 export const headerLinks = () => [
+	new Link({ variant: 'flat', href: '#/', textContent: 'Mods' }),
+	new Link({ variant: 'flat', href: '#/packs', textContent: 'Packs' }),
 	new Link({ variant: 'flat', href: REPOSITORY, target: '_blank', textContent: 'GitHub' }),
 ];
 
@@ -215,3 +226,48 @@ export const screenshots = (title, shots) => {
 
 	return shots.length > 0 ? [strip] : [];
 };
+
+/** Room for a tile per mod, as many to a row as the column fits. */
+const Tiles = styled.Component(
+	({ space }) => `
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+		gap: ${space.sm};
+	`,
+);
+
+const Clamped = styled.Component(
+	({ colors }) => `
+		color: ${colors.muted};
+		font-size: 0.85em;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	`,
+);
+
+export const TILES = 6;
+
+/** A mod in a few lines, leading to its page. */
+const modTile = other =>
+	new Card(
+		{ tag: 'a', attributes: { href: `#${modPath(other)}` }, interactive: true },
+		new Row({
+			style: { flexWrap: 'nowrap', alignItems: 'flex-start' },
+			append: [
+				avatar(pictureUrl(other, 80), 40),
+				new Stack({
+					style: { minWidth: '0', gap: theme.space.xs },
+					append: [
+						new Title({ textContent: titleOf(other) }),
+						...(aboutOf(other) ? [new Clamped({ textContent: aboutOf(other).text })] : []),
+						new Meta({ textContent: `${other.repo} · ${count(other.stars ?? 0)} stars` }),
+					],
+				}),
+			],
+		}),
+	);
+
+/** Up to a row or two of mods, each a tile leading to its page. */
+export const tiles = (mods, most = TILES) => new Tiles({ append: mods.slice(0, most).map(modTile) });

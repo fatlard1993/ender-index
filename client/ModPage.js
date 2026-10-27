@@ -34,7 +34,6 @@ import {
 	fileSize,
 	installCommand,
 	loadersOf,
-	modPath,
 	pictureUrl,
 	readQuery,
 	readmeUrl,
@@ -65,7 +64,6 @@ import {
 	Meta,
 	Row,
 	Stack,
-	Title,
 	Warning,
 	about,
 	avatar,
@@ -77,6 +75,8 @@ import {
 	hint,
 	loadJson,
 	screenshots,
+	TILES,
+	tiles,
 } from './ui';
 
 const Heading = styled.Component(
@@ -226,50 +226,6 @@ const capabilityList = scan =>
 
 		return details;
 	});
-
-/** Room for a tile per mod, as many to a row as the column fits. */
-const Tiles = styled.Component(
-	({ space }) => `
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-		gap: ${space.sm};
-	`,
-);
-
-const Clamped = styled.Component(
-	({ colors }) => `
-		color: ${colors.muted};
-		font-size: 0.85em;
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-	`,
-);
-
-const TILES = 6;
-
-/** A mod in a few lines, leading to its page. */
-const modTile = other =>
-	new Card(
-		{ tag: 'a', attributes: { href: `#${modPath(other)}` }, interactive: true },
-		new Row({
-			style: { flexWrap: 'nowrap', alignItems: 'flex-start' },
-			append: [
-				avatar(pictureUrl(other, 80), 40),
-				new Stack({
-					style: { minWidth: '0', gap: theme.space.xs },
-					append: [
-						new Title({ textContent: titleOf(other) }),
-						...(aboutOf(other) ? [new Clamped({ textContent: aboutOf(other).text })] : []),
-						new Meta({ textContent: `${other.repo} · ${count(other.stars ?? 0)} stars` }),
-					],
-				}),
-			],
-		}),
-	);
-
-const tiles = mods => new Tiles({ append: mods.slice(0, TILES).map(modTile) });
 
 const groupLabel = (label, mods) =>
 	new SectionLabel({
