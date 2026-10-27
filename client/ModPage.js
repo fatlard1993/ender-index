@@ -25,6 +25,7 @@ import {
 	LOADERS,
 	aboutOf,
 	authorPath,
+	lineUrl,
 	tagPath,
 	supportOf,
 	fileSize,
@@ -281,15 +282,43 @@ const relatedGroups = (entry, listing) => {
 	const clashes = clashesWith(entry, listing);
 	const alike = similarTo(entry, listing, { leaving: [...needs, ...needed, ...works, ...clashes] });
 
+	const missing = notIndexed(entry);
+
 	return [
-		['What it needs', needs],
+		['What it needs', needs, missing],
 		['What needs it', needed],
 		['Works with', works],
 		['Does not work with', clashes],
 		['Alike in theme', alike],
 	]
-		.filter(([, mods]) => mods.length > 0)
-		.flatMap(([label, mods]) => [groupLabel(label, mods), tiles(mods)]);
+		.filter(([, mods, more = []]) => mods.length > 0 || more.length > 0)
+		.flatMap(([label, mods, more = []]) => [
+			groupLabel(label, mods),
+			...(mods.length > 0 ? [tiles(mods)] : []),
+			...more,
+		]);
+};
+
+/** What it needs that the index has no repository it can trust for, each linked to its source when that is known. */
+const notIndexed = entry => {
+	const missing = entry.missing ?? [];
+
+	if (missing.length === 0) return [];
+
+	return [
+		new Meta({
+			tag: 'p',
+			append: [
+				'Not in the index, as its jars are not on releases the crawl reads: ',
+				...missing.flatMap(({ id, source }, at) => [
+					...(at > 0 ? [', '] : []),
+					source
+						? new Link({ href: lineUrl(source), target: '_blank', textContent: id, tooltip: `Its source, ${source}` })
+						: id,
+				]),
+			],
+		}),
+	];
 };
 
 const fitsLabel = ({ minecraft, loader }) =>

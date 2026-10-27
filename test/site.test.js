@@ -21,6 +21,7 @@ import {
 	readQuery,
 	authorPath,
 	tagPath,
+	lineUrl,
 	refine,
 	releaseUrl,
 	releasedVersions,
@@ -70,6 +71,8 @@ describe('the search page', () => {
 		expect(readQuery('?author=sourcehut:x').author).toBeUndefined();
 		expect(readQuery(writeQuery({ tag: 'ship' })).tag).toBe('ship');
 		expect(tagPath('ship')).toBe('?tag=ship#/');
+		expect(lineUrl('maruohon/litematica')).toBe('https://github.com/maruohon/litematica');
+		expect(lineUrl('gitlab:group/sub/p')).toBe('https://gitlab.com/group/sub/p');
 		expect(authorPath(entry({ host: 'gitlab', repo: 'Group/p' }))).toBe('?author=gitlab%3Agroup#/');
 	});
 

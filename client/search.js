@@ -137,6 +137,13 @@ const SITES = { github: 'https://github.com', codeberg: 'https://codeberg.org', 
 
 export const repositoryUrl = entry => `${SITES[entry.host ?? 'github']}/${entry.repo}`;
 
+/** Where a repository named as repos.txt names one, `owner/repo` on GitHub or `host:owner/repo`, can be read. */
+export const lineUrl = line => {
+	const [host, repo] = line.includes(':') ? line.split(':') : ['github', line];
+
+	return repositoryUrl({ host, repo });
+};
+
 /** GitLab puts its releases behind the `/-/` it keeps its own pages under. */
 export const releasesUrl = entry => `${repositoryUrl(entry)}/${entry.host === 'gitlab' ? '-/' : ''}releases`;
 

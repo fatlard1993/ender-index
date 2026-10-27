@@ -31,6 +31,7 @@ import {
 	SIDES,
 	SORTS,
 	authorPath,
+	lineUrl,
 	tagPath,
 	collectionKey,
 	fittingVersions,
@@ -217,12 +218,26 @@ const needs = (entry, record, entries, fits) => {
 
 		return provider
 			? new Link({ href: `#${modPath(provider)}`, textContent: titleOf(provider), tooltip: provider.repo })
-			: new Component({ tag: 'span', textContent: id, title: 'No indexed repository can be trusted to provide it' });
+			: missingName(entry, id);
 	});
 
 	return [
 		new Meta({ tag: 'div', append: ['Needs ', ...named.flatMap((name, at) => (at === 0 ? [name] : [', ', name]))] }),
 	];
+};
+
+/** A needed mod no indexed repository can be trusted for: linked to its source when that is known, else named. */
+const missingName = (entry, id) => {
+	const source = entry.missing?.find(found => found.id === id)?.source;
+
+	return source
+		? new Link({
+				href: lineUrl(source),
+				target: '_blank',
+				textContent: id,
+				tooltip: `Not in the index; its source is ${source}`,
+			})
+		: new Component({ tag: 'span', textContent: id, title: 'No indexed repository can be trusted to provide it' });
 };
 
 /** What an opened card adds: the readme's pictures, the dates and license, and what the latest release needs. */
