@@ -8,6 +8,7 @@ import {
 	crawlEach,
 	crawlOrder,
 	parseLine,
+	pictureFiles,
 	recordPath,
 	spendingLine,
 	waitForReset,
@@ -423,5 +424,23 @@ describe('the search file', () => {
 		} finally {
 			await rm(directory, { recursive: true, force: true });
 		}
+	});
+});
+
+describe("a repository's pictures", () => {
+	test('are its images outside its sources and builds, and not its icon or logo', () => {
+		expect(
+			pictureFiles([
+				'screenshots/sailing.png',
+				'docs/img/helm.jpg',
+				'.github/images/demo.gif',
+				'banner.png',
+				'src/main/resources/assets/boats/textures/item/helm.png',
+				'src/main/resources/assets/boats/icon.png',
+				'build/tmp/x.png',
+				'logo.webp',
+				'README.md',
+			]),
+		).toEqual(['screenshots/sailing.png', 'docs/img/helm.jpg', '.github/images/demo.gif']);
 	});
 });

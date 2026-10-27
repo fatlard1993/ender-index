@@ -396,6 +396,41 @@ export const fundingOf = async ({ host, name, recorded, now, owners }) => {
 	}
 };
 
+const PICTURE = /\.(png|jpe?g|gif|webp)$/i;
+
+/** Where a repository keeps what is not a picture of its mod: the game's textures in its sources, and its builds. */
+const NOT_PICTURES = /(^|\/)(src|build|run|gradle|\.gradle|node_modules|libs?|textures?|lang)\//i;
+
+/** A file named as a project's mark rather than a picture of it. */
+const MARK = /(^|\/)(icon|logo|badge|banner)[^/]*$/i;
+
+export const PICTURES_KEPT = 40;
+
+/** Of a repository's files, the pictures of its mod: an image outside its sources and builds, and not its mark. */
+export const pictureFiles = paths =>
+	paths.filter(path => PICTURE.test(path) && !NOT_PICTURES.test(path) && !MARK.test(path)).slice(0, PICTURES_KEPT);
+
+/**
+ * The pictures a repository keeps of its mod, by path. GitHub lists a repository's files in one request, which is
+ * spent again weekly; on another host, none are looked for.
+ */
+export const picturesOf = async ({ host, name, recorded, now }) => {
+	const known = { pictures: recorded?.pictures, picturesChecked: recorded?.picturesChecked };
+
+	if (host !== 'github') return {};
+	if (known.picturesChecked && Date.parse(now) - Date.parse(known.picturesChecked) < WEEK) return known;
+
+	try {
+		return { pictures: pictureFiles(await github.filesOf(name)), picturesChecked: now };
+	} catch (error) {
+		if (error instanceof RateLimited) throw error;
+
+		console.error(`pictures ${name} :: ${error.message}`);
+
+		return known;
+	}
+};
+
 const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners }) => {
 	const { host, name } = parseLine(line);
 	const path = recordPath({ host, name });
@@ -439,6 +474,7 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners }) =
 			readme,
 			readmeSummary: await readmeSummaryOf({ host, name, repo, recorded, readme }),
 			...(await fundingOf({ host, name: repo.full_name ?? name, recorded, now, owners })),
+			...(await picturesOf({ host, name: repo.full_name ?? name, recorded, now })),
 			history: HISTORY,
 		});
 	}
