@@ -185,8 +185,8 @@ const Places = styled.Component(
 	`,
 );
 
-/** Where ender, the launcher that installs what the index lists, says how to get it. */
-export const LAUNCHER = 'https://github.com/fatlard1993/ender-launcher#getting-started';
+/** Where the index says how to get ender, the launcher that installs what it lists. */
+export const LAUNCHER = '#/get';
 
 /**
  * Shown only on a page ender is not serving: there it is the launcher's own, and the way to get ender is no news.
@@ -229,7 +229,7 @@ export const siteBar = at =>
 			new Row({
 				style: { marginLeft: 'auto', flexWrap: 'nowrap' },
 				append: [
-					forStrangers(new Link({ variant: 'flat', href: LAUNCHER, target: '_blank', textContent: 'Get ender' })),
+					forStrangers(new Link({ variant: 'flat', href: LAUNCHER, textContent: 'Get ender' })),
 					new Link({ variant: 'flat', href: REPOSITORY, target: '_blank', textContent: 'GitHub' }),
 				],
 			}),

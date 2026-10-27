@@ -323,3 +323,16 @@ describe('a collection', () => {
 		expect(collectionKey(entry())).not.toBe(collectionKey(entry({ host: 'codeberg' })));
 	});
 });
+
+describe('the Get ender page', () => {
+	test("offers first the line for the visitor's own system", async () => {
+		const { INSTALLS, systemOf } = await import('../client/GetPage');
+
+		expect(systemOf('Mozilla/5.0 (Windows NT 10.0; Win64; x64)')).toBe('windows');
+		expect(systemOf('Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0)')).toBe('unix');
+		expect(systemOf('Mozilla/5.0 (X11; Linux x86_64)')).toBe('unix');
+		expect(INSTALLS.unix.command).toBe(
+			'curl -fsSL https://raw.githubusercontent.com/fatlard1993/ender-launcher/main/install.sh | sh',
+		);
+	});
+});
