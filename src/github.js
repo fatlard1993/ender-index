@@ -61,7 +61,9 @@ export const lastFetched = async path => (await cache())[path]?.fetched ?? 0;
 
 /** What a path costs is filed under: deep history pages are read once, the rest on every crawl. */
 export const kindOf = path => {
-	if (path.startsWith('/search/')) return 'code search';
+	if (path.startsWith('/search/code')) return 'code search';
+	if (path.startsWith('/search/')) return 'repository search';
+	if (path.includes('/git/trees/')) return 'trees';
 	if (/\/releases\?.*&page=/.test(path)) return 'history pages';
 	if (path.includes('/releases')) return 'releases';
 	if (path.endsWith('/readme')) return 'readmes';
@@ -187,3 +189,12 @@ export const readme = async fullName => {
 
 export const searchCode = (query, page = 1) =>
 	request(`/search/code?${new URLSearchParams({ q: query, per_page: '100', page: String(page) })}`);
+
+export const searchRepositories = (query, page = 1) =>
+	request(`/search/repositories?${new URLSearchParams({ q: query, per_page: '100', page: String(page) })}`);
+
+/** Every file path in a repository at its default branch, in one request. */
+export const filesOf = async fullName =>
+	((await request(`/repos/${fullName}/git/trees/HEAD?recursive=1`)).tree ?? [])
+		.filter(item => item.type === 'blob')
+		.map(item => item.path);

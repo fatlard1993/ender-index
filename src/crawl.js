@@ -11,6 +11,7 @@ import { fetchSteady, RateLimited } from './fetch';
 import * as github from './github';
 import * as gitlab from './gitlab';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
+import { buildPacks, crawlPack } from './packs';
 import { buildSearch, latestAssets, themesOf } from './search';
 import { FUNDING_PATHS, parseFunding, supportLinks } from './funding';
 import { rawUrl } from './raw';
@@ -44,7 +45,7 @@ export const writeJsonLines = async (path, items) => {
 	await Bun.write(path, `[\n${items.map(item => JSON.stringify(item)).join(',\n')}\n]\n`);
 };
 
-const readLines = async file =>
+export const readLines = async file =>
 	(
 		await Bun.file(join(DATA, file))
 			.text()
@@ -555,6 +556,47 @@ export const crawlEach = async (
 	return { failures, stopped };
 };
 
+const PACKS = join(DATA, 'packs');
+
+const packPath = name => join(PACKS, `${name}.json`);
+
+/**
+ * Read each pack repository once, after the mods and inside the same time budget: those found on GitHub before any
+ * known only from Modrinth, and within each the least recently read first. A repository with no pack left loses its
+ * record. Packs are read from GitHub alone, where nearly all of them are kept.
+ */
+const crawlPacks = async ({ deadline, scratch, now, parallel }) => {
+	const onGitHub = line => !line.includes(':');
+	const found = (await readLines('packs.txt')).filter(onGitHub);
+	const fromModrinth = (await readLines('modrinth-packs.txt')).filter(onGitHub);
+	const ages = new Map(
+		await Promise.all(
+			[...found, ...fromModrinth].map(async line => [line, Date.parse((await readJson(packPath(line)))?.fetched) || 0]),
+		),
+	);
+	const lines = crawlOrder(found, fromModrinth, line => ages.get(line));
+
+	if (lines.length > 0) console.log(`Reading ${lines.length} pack repositories`);
+
+	return crawlEach(lines, {
+		deadline,
+		parallel,
+		beforeWait: () => github.saveCache(),
+		crawlRepo: async name => {
+			const recorded = await readJson(packPath(name));
+			const pack = await crawlPack(name, { recorded, scratch: join(scratch, 'packs'), now });
+
+			if (pack) await writeJson(packPath(name), pack);
+			else if (recorded) await rm(packPath(name), { force: true });
+		},
+	});
+};
+
+const packFiles = async () =>
+	(await readdir(PACKS).catch(() => undefined))
+		? [...new Bun.Glob('**/*.json').scanSync(PACKS)].map(file => join(PACKS, file))
+		: [];
+
 export const recordFiles = async () =>
 	[...new Bun.Glob('**/*.json').scanSync(join(DATA, 'mods'))].map(file => join(DATA, 'mods', file));
 
@@ -587,11 +629,13 @@ export const crawl = async ({ only } = {}) => {
 	);
 
 	let outcome;
+	let packOutcome = { failures: [], stopped: [] };
+	const parallel = Number(process.env.CRAWL_PARALLEL ?? PARALLEL);
 
 	try {
 		outcome = await crawlEach(repos, {
 			deadline,
-			parallel: Number(process.env.CRAWL_PARALLEL ?? PARALLEL),
+			parallel,
 			beforeWait: () => github.saveCache(),
 			crawlRepo: async fullName => {
 				for (const event of await crawlOne(fullName, { now, inspect, gameVersions, scratch, owners })) {
@@ -603,12 +647,14 @@ export const crawl = async ({ only } = {}) => {
 				}
 			},
 		});
+
+		if (!only) packOutcome = await crawlPacks({ deadline, scratch, now, parallel });
 	} finally {
 		await rm(scratch, { recursive: true, force: true });
 		await github.saveCache();
 	}
 
-	for (const line of outcome.stopped) console.log(line);
+	for (const line of [...outcome.stopped, ...packOutcome.stopped]) console.log(line);
 
 	console.log(spendingLine(github.spent()));
 
@@ -616,16 +662,21 @@ export const crawl = async ({ only } = {}) => {
 
 	const themes = themesOf(records);
 
+	const search = buildSearch(records, themes, await readJson(join(DATA, 'sources.json'), {}));
+	const packs = await Promise.all((await packFiles()).map(file => Bun.file(file).json()));
+
+	await writeJsonLines(join(DATA, 'search.json'), search);
 	await writeJsonLines(
-		join(DATA, 'search.json'),
-		buildSearch(records, themes, await readJson(join(DATA, 'sources.json'), {})),
+		join(DATA, 'packs.json'),
+		buildPacks(packs, search, records, await readJson(join(DATA, 'modrinth-ids.json'), {})),
 	);
 	await writeJson(join(DATA, 'tags.json'), themes.themes);
 	await pruneIcons(records);
 
 	console.log(`${records.length} repositories indexed; ${outcome.failures.length} could not be crawled`);
+	console.log(`${packs.length} packs listed; ${packOutcome.failures.length} pack repositories could not be read`);
 
-	return outcome.failures.length > 0 ? 1 : 0;
+	return outcome.failures.length + packOutcome.failures.length > 0 ? 1 : 0;
 };
 
 if (import.meta.main) process.exit(await crawl({ only: process.argv.length > 2 ? process.argv.slice(2) : undefined }));
