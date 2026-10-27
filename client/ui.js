@@ -1,4 +1,4 @@
-import { Component, Link, Notify, copyToClipboard, styled } from '@vanilla-bean/components';
+import { Component, Link, Notify, TooltipWrapper, copyToClipboard, styled } from '@vanilla-bean/components';
 
 import { REPOSITORY, readmeSources } from './search';
 
@@ -37,7 +37,8 @@ export const Title = styled.Component(
 	`,
 );
 
-export const Chip = styled.Component(
+export const Chip = styled(
+	TooltipWrapper,
 	({ colors, radius, space }) => `
 		border: 1px solid ${colors.border};
 		border-radius: ${radius.pill};
@@ -55,6 +56,12 @@ export const Chip = styled.Component(
 		}
 	`,
 );
+
+/**
+ * A tooltip for a sentence: one is never scrolled, since it lets the pointer through, so it is given the height its
+ * text takes rather than a popover's default.
+ */
+export const hint = textContent => ({ textContent, maxHeight: 320 });
 
 export const Warning = styled.Component(
 	({ colors }) => `

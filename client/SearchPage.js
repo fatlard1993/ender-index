@@ -62,6 +62,7 @@ import {
 	date,
 	fetchReadme,
 	headerLinks,
+	hint,
 	loadJson,
 } from './ui';
 
@@ -326,14 +327,14 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 						new Row({
 							append: [
 								...cautions.map(
-									({ label, text }) => new Chip({ addClass: 'finding', textContent: label, title: text }),
+									({ label, text }) => new Chip({ addClass: 'finding', textContent: label, tooltip: hint(text) }),
 								),
 								...loadersOf(entry).map(loader => new Chip({ textContent: loader })),
 								...(fitting.versions.length > 0
 									? [
 											new Chip({
 												textContent: `${fitting.versions.join(', ')}${fitting.more > 0 ? ` +${fitting.more}` : ''}`,
-												title: 'The newest Minecraft releases its jars declare',
+												tooltip: hint('The newest Minecraft releases its jars declare'),
 											}),
 										]
 									: []),
@@ -342,7 +343,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 										new Chip({
 											addClass: 'finding',
 											textContent: `reaches ${capability}`,
-											title: CAPABILITIES[capability],
+											tooltip: hint(CAPABILITIES[capability]),
 										}),
 								),
 							],

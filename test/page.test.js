@@ -110,9 +110,11 @@ describe('the search page', () => {
 	test('says when the mod a search names is claimed by nothing established', async () => {
 		const page = await mount('?q=sodium');
 
-		const caution = [...document.querySelectorAll('[title]')].find(chip => chip.textContent === 'few stars');
+		const caution = [...document.querySelectorAll('.finding')].find(chip => chip.textContent.startsWith('few stars'));
 
-		expect(caution.getAttribute('title')).toContain('no repository with 50 stars or more declares "Sodium"');
+		expect(caution.querySelector('.tooltip').textContent).toContain(
+			'no repository with 50 stars or more declares "Sodium"',
+		);
 		expect(document.body.textContent).toContain('ender add gh:copy/client');
 		page.destroy();
 	});
