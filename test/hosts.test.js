@@ -444,3 +444,47 @@ describe("a repository's pictures", () => {
 		).toEqual(['screenshots/sailing.png', 'docs/img/helm.jpg', '.github/images/demo.gif']);
 	});
 });
+
+describe("a personal token's allowance", () => {
+	test("is not spent past the reserve kept for its owner, which waits for the hour's reset", async () => {
+		const original = globalThis.fetch;
+		const token = process.env.GITHUB_TOKEN;
+		const resetAt = Math.floor(Date.now() / 1000) + 600;
+		let asked = 0;
+
+		globalThis.fetch = async () => {
+			++asked;
+
+			return Response.json(
+				{ full_name: 'a/b' },
+				{
+					headers: {
+						'x-ratelimit-remaining': '900',
+						'x-ratelimit-reset': String(resetAt),
+						'x-ratelimit-resource': 'core',
+					},
+				},
+			);
+		};
+		process.env.GITHUB_TOKEN = 'test';
+		process.env.CRAWL_RESERVE = '1000';
+
+		try {
+			const github = await import('../src/github');
+
+			await github.request('/repos/a/b');
+
+			const refused = await github.request('/repos/a/c').catch(error => error);
+
+			expect(refused).toBeInstanceOf((await import('../src/fetch')).RateLimited);
+			expect(refused.resetAt).toBe(resetAt * 1000);
+			expect(asked).toBe(1);
+		} finally {
+			globalThis.fetch = original;
+			process.env.GITHUB_TOKEN = token;
+			if (token === undefined) delete process.env.GITHUB_TOKEN;
+			delete process.env.CRAWL_RESERVE;
+		}
+	});
+});
+

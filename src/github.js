@@ -96,7 +96,22 @@ const note = (path, response) => {
  * GET an API path. With `keep`, the response is cached as `keep` trims it and asked for again
  * conditionally, and an unchanged answer comes from the cache.
  */
+/**
+ * Requests left untouched for whoever the token belongs to: a personal token's hourly allowance is all of its owner's
+ * tools', not the crawl's alone. CRAWL_RESERVE sets it; none by default, as the Actions token is the repository's own.
+ */
+const reserve = () => Number(process.env.CRAWL_RESERVE ?? 0);
+
 export const request = async (path, keep) => {
+	const { remaining, resetAt } = spending;
+
+	if (remaining !== undefined && remaining <= reserve() && Date.now() < resetAt && !path.startsWith('/search/')) {
+		throw new RateLimited(
+			`GitHub's rate limit is down to the ${reserve()} kept for its token's owner until ${new Date(resetAt).toISOString()}`,
+			resetAt,
+		);
+	}
+
 	const cached = keep && (await cache())[path];
 	const response = await fetchSteady(`${API}${path}`, {
 		headers: {

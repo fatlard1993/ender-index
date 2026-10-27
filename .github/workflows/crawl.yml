@@ -55,6 +55,8 @@ jobs:
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.CRAWL_TOKEN || secrets.GITHUB_TOKEN }}
+          # A personal token's hour is all of its owner's tools'; the crawl leaves them this much of it
+          CRAWL_RESERVE: ${{ secrets.CRAWL_TOKEN && '1000' || '0' }}
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
           CRAWL_MINUTES: 240
       - name: commit
