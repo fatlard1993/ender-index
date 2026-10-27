@@ -119,7 +119,10 @@ export const summarize = record => {
  * own rule for which repository an id names on the mod's loader: a copy of a mod's id, or a port to another loader,
  * is not credited with the mods that name it.
  */
-const relate = (entries, records) => {
+/** Where Modrinth says a mod id's source is, by the slug it is most often published under: the id itself. */
+const sourceOf = (id, sources) => sources[id] ?? sources[id.replaceAll('_', '-')];
+
+const relate = (entries, records, sources = {}) => {
 	const byRepo = new Map(entries.map(entry => [`${entry.host}:${entry.repo}`, entry]));
 
 	for (const record of records) {
@@ -138,6 +141,15 @@ const relate = (entries, records) => {
 					.filter(provider => provider !== undefined && provider !== requiring),
 			);
 		const named = resolved(requiredIds(mods));
+		const missing = requiredIds(mods).filter(
+			id => !loaders.some(loader => providerOf(id, entries, requiring, { loader }) !== undefined),
+		);
+
+		if (missing.length > 0)
+			requiring.missing = missing.map(id => ({
+				id,
+				...(sourceOf(id, sources) ? { source: sourceOf(id, sources) } : {}),
+			}));
 
 		for (const provider of named) provider.usedBy = (provider.usedBy ?? 0) + 1;
 
@@ -200,7 +212,7 @@ export const themesOf = records => {
 	);
 };
 
-export const buildSearch = (records, themes = themesOf(records)) => {
+export const buildSearch = (records, themes = themesOf(records), sources = {}) => {
 	const listed = records.filter(record => record.gone === undefined);
 	const entries = listed
 		.map(summarize)
@@ -216,5 +228,5 @@ export const buildSearch = (records, themes = themesOf(records)) => {
 		if (tags?.length > 0) entry.tags = tags;
 	}
 
-	return relate(entries, listed);
+	return relate(entries, listed, sources);
 };

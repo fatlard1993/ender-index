@@ -592,7 +592,10 @@ export const crawl = async ({ only } = {}) => {
 
 	const themes = themesOf(records);
 
-	await writeJson(join(DATA, 'search.json'), buildSearch(records, themes));
+	await writeJson(
+		join(DATA, 'search.json'),
+		buildSearch(records, themes, await readJson(join(DATA, 'sources.json'), {})),
+	);
 	await writeJson(join(DATA, 'tags.json'), themes.themes);
 	await pruneIcons(records);
 

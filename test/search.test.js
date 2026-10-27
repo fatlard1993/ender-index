@@ -154,6 +154,21 @@ describe('discovery', () => {
 		expect(entries.find(entry => entry.repo === 'real/sodium').needs).toBeUndefined();
 	});
 
+	test('names what its mods need that no indexed repository can be trusted for, with its source when known', () => {
+		const needing = [
+			{
+				tag: '1.0',
+				prerelease: false,
+				assets: [
+					asset({ mods: [{ loader: 'fabric', id: 'filler', depends: ['litematica', 'malilib', 'minecraft'] }] }),
+				],
+			},
+		];
+		const [entry] = buildSearch([record('me/filler', needing)], undefined, { litematica: 'maruohon/litematica' });
+
+		expect(entry.missing).toEqual([{ id: 'litematica', source: 'maruohon/litematica' }, { id: 'malilib' }]);
+	});
+
 	test('names the repositories its mods suggest, break and conflict with, as it names those they need', () => {
 		const declaring = relations => [
 			{
