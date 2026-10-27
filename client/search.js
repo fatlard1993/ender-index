@@ -232,6 +232,32 @@ export const readmeUrl = (href, resolve) => {
 	return resolve(href.replace(/^\.?\/+/, ''), { root: href.startsWith('/') });
 };
 
+/** Images a readme shows that are not a picture of the mod: badges, buttons asking for support, chat invites. */
+const NOT_A_SCREENSHOT =
+	/shields\.io|badgen\.net|badge|forthebadge|\.svg($|\?)|ko-fi\.com|buymeacoffee|patreon|paypal|discord(app)?\.(com|gg)|bstats\.org|wakatime/i;
+
+/** An image under this many pixels wide, by its own width attribute, is an icon or a button. */
+const SMALLEST_SCREENSHOT = 100;
+
+const IMAGE = /!\[[^\]]*\]\(\s*<?([^)\s>]+)|<img\b([^>]*)>/gi;
+
+/** The pictures a readme shows of its mod, in its order, as addresses that load: at most `most` of them. */
+export const screenshotsOf = (markdown, raw, most = 6) => {
+	const shots = [];
+
+	for (const [, markdownSource, tag] of markdown.replaceAll(/```[\s\S]*?```/g, '').matchAll(IMAGE)) {
+		const source = markdownSource ?? tag.match(/\bsrc\s*=\s*["']([^"']+)["']/i)?.[1];
+		const width = Number(tag?.match(/\bwidth\s*=\s*["']?(\d+)/i)?.[1] ?? Number.POSITIVE_INFINITY);
+		const url = source && readmeUrl(source, raw);
+
+		if (!url || !/^https?:/.test(url) || NOT_A_SCREENSHOT.test(url) || width < SMALLEST_SCREENSHOT) continue;
+		if (!shots.includes(url)) shots.push(url);
+		if (shots.length === most) break;
+	}
+
+	return shots;
+};
+
 /** Where a host lists releases with what each asset was downloaded; GitLab does not count them. */
 export const collectionKey = entry => `${entry.host ?? 'github'}:${entry.repo}`;
 

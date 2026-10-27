@@ -25,7 +25,6 @@ import {
 	installCommand,
 	loadersOf,
 	pictureUrl,
-	readmeSources,
 	readmeUrl,
 	recordUrl,
 	releaseUrl,
@@ -46,6 +45,7 @@ import {
 	copyCommand,
 	count,
 	date,
+	fetchReadme,
 	headerLinks,
 	loadJson,
 } from './ui';
@@ -175,20 +175,6 @@ const renderReadme = (markdown, sources) => {
 	});
 
 	return purify.sanitize(marked.parse(markdown, { renderer, gfm: true }), { ADD_ATTR: ['target'] });
-};
-
-const fetchReadme = async (entry, readme, signal) => {
-	const sources = readmeSources(entry, readme);
-
-	for (const candidate of sources.candidates) {
-		const response = await fetch(candidate, { signal }).catch(error => {
-			if (error.name === 'AbortError') throw error;
-		});
-
-		if (response?.ok) return { markdown: await response.text(), sources };
-	}
-
-	return undefined;
 };
 
 const capabilityList = scan =>

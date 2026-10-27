@@ -1,6 +1,6 @@
 import { Component, Link, Notify, copyToClipboard, styled } from '@vanilla-bean/components';
 
-import { REPOSITORY } from './search';
+import { REPOSITORY, readmeSources } from './search';
 
 export const count = number => number.toLocaleString('en-US');
 
@@ -105,6 +105,21 @@ export const loadJson = async (url, signal) => {
 	if (!response.ok) throw new Error(`${url} answered ${response.status}`);
 
 	return response.json();
+};
+
+/** A repository's readme and where its relative links lead, or undefined when none of its candidates loads. */
+export const fetchReadme = async (entry, readme, signal) => {
+	const sources = readmeSources(entry, readme);
+
+	for (const candidate of sources.candidates) {
+		const response = await fetch(candidate, { signal }).catch(error => {
+			if (error.name === 'AbortError') throw error;
+		});
+
+		if (response?.ok) return { markdown: await response.text(), sources };
+	}
+
+	return undefined;
 };
 
 export const copyCommand = async command => {

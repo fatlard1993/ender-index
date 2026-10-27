@@ -35,7 +35,24 @@ let SearchPage;
 
 beforeAll(async () => {
 	restore = browser({
-		responses: { '/search.json': listing, 'version_manifest_v2.json': { versions: [{ id: '26.3', type: 'release' }] } },
+		responses: {
+			'/search.json': listing,
+			'version_manifest_v2.json': { versions: [{ id: '26.3', type: 'release' }] },
+			'/mods/CaffeineMC/lithium.json': {
+				repo: 'CaffeineMC/lithium',
+				license: 'LGPL-3.0',
+				created: '2019-07-01T00:00:00Z',
+				pushed: '2026-10-20T00:00:00Z',
+				readme: 'README.md',
+				releases: [
+					{
+						tag: '1.0',
+						assets: [{ name: 'lithium.jar', mods: [{ id: 'lithium', depends: ['fabricloader', 'sodium'] }] }],
+					},
+				],
+			},
+			'CaffeineMC/lithium/HEAD/README.md': '![shields](https://img.shields.io/x) A mod.\n\n![The farm](docs/farm.png)',
+		},
 	});
 	({ default: SearchPage } = await import('../client/SearchPage'));
 });
@@ -64,6 +81,29 @@ describe('the search page', () => {
 
 		expect(text).toContain('3 of 3 indexed repositories, by stars');
 		expect(text.indexOf('Lithium')).toBeLessThan(text.indexOf('Backpacks'));
+		page.destroy();
+	});
+
+	test('opens a card in place to show its pictures, dates and needs, and closes it again', async () => {
+		const page = await mount('');
+		const card = [...document.querySelectorAll('[class*="Card"]')].find(found => found.textContent.includes('Lithium'));
+
+		card.querySelector('p').click();
+		await settle(() => card.textContent.includes('Everything about Lithium'));
+
+		expect([...card.querySelectorAll('img')].map(img => img.getAttribute('src'))).toContain(
+			'https://raw.githubusercontent.com/CaffeineMC/lithium/HEAD/docs/farm.png',
+		);
+		expect(card.textContent).toContain('LGPL-3.0');
+		expect(card.textContent).toContain('Needs');
+		expect(card.textContent).toContain('sodium');
+
+		const toggle = [...card.querySelectorAll('button')].find(button => button.textContent.includes('Less'));
+
+		expect(toggle.getAttribute('aria-expanded')).toBe('true');
+		toggle.click();
+		await settle(() => toggle.textContent.includes('More'));
+		expect(toggle.getAttribute('aria-expanded')).toBe('false');
 		page.destroy();
 	});
 

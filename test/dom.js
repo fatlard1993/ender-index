@@ -11,7 +11,9 @@ export const browser = ({ url = 'http://localhost/ender-index/', responses = {} 
 		const address = String(request?.url ?? request);
 		const found = Object.entries(responses).find(([ending]) => address.endsWith(ending));
 
-		return found ? Response.json(found[1]) : new Response('', { status: 404 });
+		if (found === undefined) return new Response('', { status: 404 });
+
+		return typeof found[1] === 'string' ? new Response(found[1]) : Response.json(found[1]);
 	};
 
 	return () => GlobalRegistrator.unregister();

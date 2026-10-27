@@ -1,6 +1,7 @@
 import {
 	Button,
 	Card,
+	Component,
 	Content,
 	EmptyState,
 	Icon,
@@ -15,7 +16,7 @@ import {
 	styled,
 	theme,
 } from '@vanilla-bean/components';
-import { HOSTS, rank } from 'ender-launcher/rank';
+import { HOSTS, providerOf, rank, requiredIds } from 'ender-launcher/rank';
 
 import { collection } from './collection';
 import { collectButton, installControls, instancePicker } from './controls';
@@ -28,22 +29,41 @@ import {
 	RELEASED,
 	SIDES,
 	SORTS,
+	collectionKey,
 	fittingVersions,
 	installCommand,
 	loadersOf,
 	modPath,
 	pictureUrl,
 	readQuery,
+	recordUrl,
 	refine,
 	releaseUrl,
 	releasesUrl,
 	repositoryUrl,
 	aboutOf,
+	screenshotsOf,
 	supportOf,
 	titleOf,
 	writeQuery,
 } from './search';
-import { Chip, Command, Meta, Row, Stack, Title, Warning, about, avatar, copyCommand, count, headerLinks } from './ui';
+import {
+	Chip,
+	Command,
+	Meta,
+	Row,
+	Stack,
+	Title,
+	Warning,
+	about,
+	avatar,
+	copyCommand,
+	count,
+	date,
+	fetchReadme,
+	headerLinks,
+	loadJson,
+} from './ui';
 
 const PAGE_SIZE = 25;
 
@@ -104,23 +124,166 @@ const supportLink = entry => {
 	];
 };
 
-const resultCard = ({ entry, sharing, unproven, author }, versions, { minecraft }) => {
+const Screenshots = styled.Component(
+	({ colors, media, radius, space }) => `
+		display: flex;
+		gap: ${space.sm};
+		overflow-x: auto;
+		scroll-snap-type: x proximity;
+		padding-bottom: ${space.xs};
+
+		& img {
+			display: block;
+			height: 180px;
+			max-width: 320px;
+			object-fit: cover;
+			border-radius: ${radius.md};
+			background: ${colors.raised};
+			scroll-snap-align: start;
+		}
+
+		@media ${media.phone} {
+			& img {
+				height: 140px;
+				max-width: 240px;
+			}
+		}
+	`,
+);
+
+/** A mod's record and its readme's screenshots, asked for once a page however often its card opens. */
+const opened = new Map();
+
+const detailsOf = entry => {
+	const key = collectionKey(entry);
+
+	if (!opened.has(key)) {
+		const loading = loadJson(recordUrl(entry)).then(async record => {
+			const readme = await fetchReadme(entry, record.readme);
+
+			return { record, shots: readme ? screenshotsOf(readme.markdown, readme.sources.raw) : [] };
+		});
+
+		opened.set(key, loading);
+		loading.catch(() => opened.delete(key));
+	}
+
+	return opened.get(key);
+};
+
+const screenshots = (title, shots) => {
+	const strip = new Screenshots({
+		append: shots.map(url => {
+			const link = new Link({
+				href: url,
+				target: '_blank',
+				attributes: { rel: 'noopener noreferrer' },
+				tooltip: 'Open the full picture',
+				append: new Component({
+					tag: 'img',
+					attributes: {
+						src: url,
+						alt: `A picture from the readme of ${title}`,
+						loading: 'lazy',
+						referrerpolicy: 'no-referrer',
+					},
+				}),
+			});
+
+			link.elem.querySelector('img').addEventListener('error', () => {
+				link.elem.remove();
+				if (strip.elem.childElementCount === 0) strip.elem.remove();
+			});
+
+			return link;
+		}),
+	});
+
+	return shots.length > 0 ? [strip] : [];
+};
+
+const needs = (entry, record, entries, fits) => {
+	const latest = (record.releases ?? []).find(release => release.tag === entry.latest?.tag);
+	const ids = requiredIds((latest?.assets ?? []).flatMap(asset => asset.mods ?? []));
+
+	if (ids.length === 0) return [];
+
+	const named = ids.map(id => {
+		const provider = providerOf(id, entries, entry, fits);
+
+		return provider
+			? new Link({ href: `#${modPath(provider)}`, textContent: titleOf(provider), tooltip: provider.repo })
+			: new Component({ tag: 'span', textContent: id, title: 'No indexed repository can be trusted to provide it' });
+	});
+
+	return [
+		new Meta({ tag: 'div', append: ['Needs ', ...named.flatMap((name, at) => (at === 0 ? [name] : [', ', name]))] }),
+	];
+};
+
+/** What an opened card adds: the readme's pictures, the dates and license, and what the latest release needs. */
+const cardDetails = (entry, entries, { minecraft, loader }) => {
+	const title = titleOf(entry);
+	const details = new Stack({
+		style: { gap: theme.space.sm, marginTop: theme.space.md },
+		append: new Meta({ textContent: `Reading ${title}'s record and readme` }),
+	});
+
+	detailsOf(entry)
+		.then(({ record, shots }) =>
+			details.content([
+				...screenshots(title, shots),
+				new Meta({
+					textContent: [
+						entry.latest?.published && `released ${date(entry.latest.published)}`,
+						record.created && `created ${date(record.created)}`,
+						record.pushed && `last pushed ${date(record.pushed)}`,
+						record.license,
+						SIDES[entry.environment ?? 'both'],
+					]
+						.filter(Boolean)
+						.join(' · '),
+				}),
+				...needs(entry, record, entries, { minecraft, loader }),
+				new Link({ href: `#${modPath(entry)}`, textContent: `Everything about ${title}` }),
+			]),
+		)
+		.catch(error => details.content(new Warning({ textContent: `${title}'s record did not load: ${error.message}` })));
+
+	return details;
+};
+
+/** A click on a card's own surface, not on a link, a button, a command to select, or after selecting text. */
+const opensCard = event =>
+	!event.target.closest('a, button, input, select, code, .vbc-button') && !getSelection()?.toString();
+
+const resultCard = ({ entry, sharing, unproven, author }, versions, state, entries, open) => {
+	const { minecraft } = state;
 	const host = entry.host ?? 'github';
 	const title = titleOf(entry);
 	const fitting = fittingVersions(entry, versions, { minecraft });
 	const command = installCommand(entry);
 	const capabilities = entry.latest?.capabilities ?? [];
 
-	return new Card(
-		{ accent: sharing || unproven || entry.replaced ? theme.colors.warning : undefined },
+	const key = collectionKey(entry);
+	const toggle = new Button({
+		variant: 'flat',
+		icon: 'chevron-down',
+		textContent: 'More',
+		attributes: { 'aria-expanded': 'false' },
+		onPointerPress: () => setOpen(!open.has(key)),
+	});
+	let details;
+
+	const card = new Card(
+		{
+			accent: sharing || unproven || entry.replaced ? theme.colors.warning : undefined,
+			onPointerPress: event => opensCard(event) && setOpen(!open.has(key)),
+		},
 		new Row({
 			style: { flexWrap: 'nowrap', alignItems: 'flex-start', gap: theme.space.md },
 			append: [
-				new Link({
-					href: `#${modPath(entry)}`,
-					tooltip: `Read about ${title}`,
-					append: avatar(pictureUrl(entry, 160), 80),
-				}),
+				avatar(pictureUrl(entry, 160), 80),
 				new Stack({
 					style: { flex: '1', minWidth: '0', gap: theme.space.sm },
 					append: [
@@ -194,6 +357,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, { minecraft 
 								minecraft
 									? new Link({ href: releasesUrl(entry), target: '_blank', textContent: 'Releases' })
 									: new Link({ href: releaseUrl(entry), target: '_blank', textContent: `Release ${entry.latest.tag}` }),
+								toggle,
 							],
 						}),
 					],
@@ -201,6 +365,21 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, { minecraft 
 			],
 		}),
 	);
+	function setOpen(opening) {
+		if (opening) open.add(key);
+		else open.delete(key);
+
+		details ??= cardDetails(entry, entries, state);
+		if (opening && !details.elem.isConnected) card.append(details);
+		details.elem.style.display = opening ? '' : 'none';
+		toggle.options.icon = opening ? 'chevron-up' : 'chevron-down';
+		toggle.options.textContent = opening ? 'Less' : 'More';
+		toggle.elem.setAttribute('aria-expanded', String(opening));
+	}
+
+	if (open.has(key)) setOpen(true);
+
+	return card;
 };
 
 export default class SearchPage extends View {
@@ -210,6 +389,7 @@ export default class SearchPage extends View {
 		let versions = [];
 		let shown = PAGE_SIZE;
 		let ranked = [];
+		const open = new Set();
 
 		const results = new Stack({ append: new EmptyState({ loading: true, title: 'Loading the index' }) });
 		const status = new Meta();
@@ -223,7 +403,7 @@ export default class SearchPage extends View {
 		const draw = () => {
 			results.content(
 				ranked.length > 0
-					? ranked.slice(0, shown).map(found => resultCard(found, versions, state))
+					? ranked.slice(0, shown).map(found => resultCard(found, versions, state, entries, open))
 					: new EmptyState({
 							icon: 'magnifying-glass',
 							title: 'No mods match',

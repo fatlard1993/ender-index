@@ -15,6 +15,7 @@ import {
 	pictureUrl,
 	readmeSources,
 	readmeUrl,
+	screenshotsOf,
 	supportOf,
 	recordUrl,
 	readQuery,
@@ -222,6 +223,28 @@ describe('a mod page', () => {
 		expect(readmeUrl('/LICENSE', found.page)).toBe('https://github.com/CaffeineMC/lithium/blob/HEAD/LICENSE');
 		expect(readmeSources(entry(), null).candidates).toEqual([]);
 		expect(readmeSources(entry()).candidates).toHaveLength(5);
+	});
+
+	test("a readme's screenshots are its pictures of the mod, resolved, and not its badges or buttons", () => {
+		const { raw } = readmeSources(entry());
+		const markdown = [
+			'[![Modrinth](https://img.shields.io/modrinth/dt/lithium)](https://modrinth.com/mod/lithium)',
+			'![CI](https://github.com/a/b/actions/workflows/ci.yml/badge.svg)',
+			'![A sorting machine](docs/sorter.png)',
+			'<img src="https://ko-fi.com/img/githubbutton_sm.svg">',
+			'<img width="32" src="icon.png">',
+			'<p align="center"><img src="https://example.com/farm.gif" width="600"></p>',
+			'```md',
+			'![not shown](in-code.png)',
+			'```',
+			'![again](./docs/sorter.png)',
+		].join('\n\n');
+
+		expect(screenshotsOf(markdown, raw)).toEqual([
+			'https://raw.githubusercontent.com/CaffeineMC/lithium/HEAD/docs/sorter.png',
+			'https://example.com/farm.gif',
+		]);
+		expect(screenshotsOf('![a](a.png) ![b](b.png) ![c](c.png)', raw, 2)).toHaveLength(2);
 	});
 
 	test('fetches a GitLab readme through its API, which answers a page from another origin', () => {
