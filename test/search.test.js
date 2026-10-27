@@ -154,6 +154,34 @@ describe('discovery', () => {
 		expect(entries.find(entry => entry.repo === 'real/sodium').needs).toBeUndefined();
 	});
 
+	test('names the repositories its mods suggest, break and conflict with, as it names those they need', () => {
+		const declaring = relations => [
+			{
+				tag: '1.0',
+				prerelease: false,
+				assets: [asset({ mods: [{ loader: 'fabric', id: 'mine', depends: [], ...relations }] })],
+			},
+		];
+		const providing = id => [
+			{ tag: '1.0', prerelease: false, assets: [asset({ mods: [{ loader: 'fabric', id, name: id, depends: [] }] })] },
+		];
+		const entries = buildSearch([
+			record('me/mod', declaring({ suggests: ['jei', 'unknown'], breaks: ['optifine'], conflicts: ['old'] })),
+			record('mezz/jei', providing('jei'), { stars: 900 }),
+			record('sp/optifine', providing('optifine'), { stars: 900 }),
+			record('a/old', providing('old'), { stars: 900 }),
+		]);
+		const mine = entries.find(entry => entry.repo === 'me/mod');
+
+		expect(mine).toMatchObject({
+			suggests: ['github:mezz/jei'],
+			breaks: ['github:sp/optifine'],
+			conflicts: ['github:a/old'],
+		});
+		expect(mine.needs).toBeUndefined();
+		expect(entries.find(entry => entry.repo === 'mezz/jei').usedBy).toBeUndefined();
+	});
+
 	test("says when its mod has an established one's id or name, and says nothing otherwise", () => {
 		const declaring = (id, name) => [
 			{ tag: '1.0', prerelease: false, assets: [asset({ mods: [{ loader: 'fabric', id, name, depends: [] }] })] },

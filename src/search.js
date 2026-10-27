@@ -115,11 +115,11 @@ export const summarize = record => {
 };
 
 /**
- * How many listed repositories require a mod each one provides, by the client's own rule for which
- * repository a required id names on the requiring mod's loader: a copy of a mod's id, or a port to another
- * loader, is not credited with the mods that need it.
+ * The repositories each one's mods need, suggest, break and conflict with, and how many need each, by the client's
+ * own rule for which repository an id names on the mod's loader: a copy of a mod's id, or a port to another loader,
+ * is not credited with the mods that name it.
  */
-const countDependents = (entries, records) => {
+const relate = (entries, records) => {
 	const byRepo = new Map(entries.map(entry => [`${entry.host}:${entry.repo}`, entry]));
 
 	for (const record of records) {
@@ -129,14 +129,26 @@ const countDependents = (entries, records) => {
 
 		const mods = latestAssets(record).flatMap(asset => asset.mods ?? []);
 		const loaders = [...new Set(mods.map(mod => mod.loader))];
-		const named = new Set(
-			requiredIds(mods)
-				.flatMap(id => loaders.map(loader => providerOf(id, entries, requiring, { loader })))
-				.filter(provider => provider !== undefined && provider !== requiring),
-		);
+		const own = new Set(mods.flatMap(mod => [mod.id, ...(mod.provides ?? [])]));
+		const resolved = ids =>
+			new Set(
+				[...new Set(ids)]
+					.filter(id => !own.has(id))
+					.flatMap(id => loaders.map(loader => providerOf(id, entries, requiring, { loader })))
+					.filter(provider => provider !== undefined && provider !== requiring),
+			);
+		const named = resolved(requiredIds(mods));
 
 		for (const provider of named) provider.usedBy = (provider.usedBy ?? 0) + 1;
-		if (named.size > 0) requiring.needs = [...named].map(provider => `${provider.host}:${provider.repo}`);
+
+		for (const [field, found] of [
+			['needs', named],
+			['suggests', resolved(mods.flatMap(mod => mod.suggests ?? []))],
+			['breaks', resolved(mods.flatMap(mod => mod.breaks ?? []))],
+			['conflicts', resolved(mods.flatMap(mod => mod.conflicts ?? []))],
+		]) {
+			if (found.size > 0) requiring[field] = [...found].map(provider => `${provider.host}:${provider.repo}`);
+		}
 	}
 
 	return entries;
@@ -204,5 +216,5 @@ export const buildSearch = (records, themes = themesOf(records)) => {
 		if (tags?.length > 0) entry.tags = tags;
 	}
 
-	return countDependents(entries, listed);
+	return relate(entries, listed);
 };
