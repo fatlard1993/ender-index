@@ -404,8 +404,7 @@ export default class ModPage extends View {
 						}),
 						new Meta({
 							tag: 'p',
-							textContent:
-								"From the author's own FUNDING.yml and the links their mod gives in Mod Menu. The index takes no share.",
+							textContent: "From the author's own FUNDING.yml and the links their mod gives in Mod Menu.",
 						}),
 					]
 				: []),
