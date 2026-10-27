@@ -608,6 +608,7 @@ export default class ModPage extends View {
 		const title = titleOf(entry);
 		const command = installCommand(entry);
 		const readme = new Stack({ append: new EmptyState({ loading: true, title: 'Fetching the readme' }) });
+		const gallery = new Stack();
 		const controls = new Row({ append: [collectButton(entry), ...installControls(entry)] });
 		const redrawControls = () => controls.content([collectButton(entry), ...installControls(entry)]);
 		const downloads = downloadsPanel(entry, record);
@@ -678,6 +679,7 @@ export default class ModPage extends View {
 					}),
 				],
 			}),
+			gallery,
 			...(shares ? [new Warning({ textContent: `It ${shares}: check you have the one you mean` })] : []),
 			...(entry.replaced
 				? [new Warning({ textContent: 'A jar in one of its releases was changed after publishing' })]
@@ -774,6 +776,8 @@ export default class ModPage extends View {
 
 					return;
 				}
+
+				gallery.content(screenshots(title, screenshotsOf(found.markdown, found.sources.raw)));
 
 				const prose = new Prose();
 

@@ -68,6 +68,7 @@ import {
 	headerLinks,
 	hint,
 	loadJson,
+	screenshots,
 } from './ui';
 
 const PAGE_SIZE = 25;
@@ -129,33 +130,6 @@ const supportLink = entry => {
 	];
 };
 
-const Screenshots = styled.Component(
-	({ colors, media, radius, space }) => `
-		display: flex;
-		gap: ${space.sm};
-		overflow-x: auto;
-		scroll-snap-type: x proximity;
-		padding-bottom: ${space.xs};
-
-		& img {
-			display: block;
-			height: 180px;
-			max-width: 320px;
-			object-fit: cover;
-			border-radius: ${radius.md};
-			background: ${colors.raised};
-			scroll-snap-align: start;
-		}
-
-		@media ${media.phone} {
-			& img {
-				height: 140px;
-				max-width: 240px;
-			}
-		}
-	`,
-);
-
 /** A mod's record and its readme's screenshots, asked for once a page however often its card opens. */
 const opened = new Map();
 
@@ -174,37 +148,6 @@ const detailsOf = entry => {
 	}
 
 	return opened.get(key);
-};
-
-const screenshots = (title, shots) => {
-	const strip = new Screenshots({
-		append: shots.map(url => {
-			const link = new Link({
-				href: url,
-				target: '_blank',
-				attributes: { rel: 'noopener noreferrer' },
-				tooltip: 'Open the full picture',
-				append: new Component({
-					tag: 'img',
-					attributes: {
-						src: url,
-						alt: `A picture from the readme of ${title}`,
-						loading: 'lazy',
-						referrerpolicy: 'no-referrer',
-					},
-				}),
-			});
-
-			link.elem.querySelector('img').addEventListener('error', () => {
-				link.elem.remove();
-				if (strip.elem.childElementCount === 0) strip.elem.remove();
-			});
-
-			return link;
-		}),
-	});
-
-	return shots.length > 0 ? [strip] : [];
 };
 
 const needs = (entry, record, entries, fits) => {

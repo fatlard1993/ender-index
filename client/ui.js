@@ -156,3 +156,62 @@ export const about = found =>
 export const headerLinks = () => [
 	new Link({ variant: 'flat', href: REPOSITORY, target: '_blank', textContent: 'GitHub' }),
 ];
+
+const Screenshots = styled.Component(
+	({ colors, media, radius, space }) => `
+		display: flex;
+		gap: ${space.sm};
+		overflow-x: auto;
+		scroll-snap-type: x proximity;
+		padding-bottom: ${space.xs};
+
+		& img {
+			display: block;
+			height: 180px;
+			max-width: 320px;
+			object-fit: cover;
+			border-radius: ${radius.md};
+			background: ${colors.raised};
+			scroll-snap-align: start;
+		}
+
+		@media ${media.phone} {
+			& img {
+				height: 140px;
+				max-width: 240px;
+			}
+		}
+	`,
+);
+
+/** A row of the pictures a readme shows of its mod, each opening at full size; one that does not load is let go. */
+export const screenshots = (title, shots) => {
+	const strip = new Screenshots({
+		append: shots.map(url => {
+			const link = new Link({
+				href: url,
+				target: '_blank',
+				attributes: { rel: 'noopener noreferrer' },
+				tooltip: 'Open the full picture',
+				append: new Component({
+					tag: 'img',
+					attributes: {
+						src: url,
+						alt: `A picture from the readme of ${title}`,
+						loading: 'lazy',
+						referrerpolicy: 'no-referrer',
+					},
+				}),
+			});
+
+			link.elem.querySelector('img').addEventListener('error', () => {
+				link.elem.remove();
+				if (strip.elem.childElementCount === 0) strip.elem.remove();
+			});
+
+			return link;
+		}),
+	});
+
+	return shots.length > 0 ? [strip] : [];
+};
