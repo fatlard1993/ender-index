@@ -4,8 +4,10 @@ import {
 	Component,
 	Content,
 	EmptyState,
+	Input,
 	Link,
 	SectionLabel,
+	Select,
 	Toolbar,
 	View,
 	styled,
@@ -14,23 +16,43 @@ import {
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import { HOSTS, authorOf, sharing } from 'ender-launcher/rank';
+import { ownerName } from 'ender-launcher/support';
 
 import { collection } from './collection';
-import { loadListing } from './data';
+import { loadListing, loadVersions } from './data';
 import {
 	CAPABILITIES,
+	LOADERS,
 	aboutOf,
+	authorPath,
+	tagPath,
 	supportOf,
 	fileSize,
 	installCommand,
 	loadersOf,
+	modPath,
 	pictureUrl,
+	readQuery,
 	readmeUrl,
 	recordUrl,
 	releaseUrl,
 	repositoryUrl,
 	titleOf,
+	writeQuery,
 } from './search';
+import {
+	bestDownload,
+	downloadLoaders,
+	downloadVersions,
+	downloadsOf,
+	matchingDownloads,
+	clashesWith,
+	neededBy,
+	needsOf,
+	sameAuthor,
+	similarTo,
+	worksWith,
+} from './related';
 import { collectButton, installControls } from './controls';
 import { local } from './local';
 import {
@@ -39,6 +61,7 @@ import {
 	Meta,
 	Row,
 	Stack,
+	Title,
 	Warning,
 	about,
 	avatar,
@@ -198,69 +221,294 @@ const capabilityList = scan =>
 		return details;
 	});
 
-const releaseCard = (entry, release) =>
-	new Card(
-		{},
-		new Stack({
-			style: { gap: theme.space.sm },
-			append: [
-				new Row({
-					append: [
-						new Link({
-							href: releaseUrl({ ...entry, latest: release }),
-							target: '_blank',
-							append: new Component({ tag: 'strong', textContent: release.tag }),
-						}),
-						new Meta({ textContent: date(release.published) }),
-						...(release.prerelease ? [new Chip({ textContent: 'prerelease' })] : []),
-					],
-				}),
-				...release.assets.map(asset => {
-					const mods = asset.mods ?? [];
+/** Room for a tile per mod, as many to a row as the column fits. */
+const Tiles = styled.Component(
+	({ space }) => `
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+		gap: ${space.sm};
+	`,
+);
 
-					return new Stack({
-						style: { gap: theme.space.xs, paddingLeft: theme.space.md },
-						append: [
-							new Row({
-								append: [
-									new Link({ href: asset.url, textContent: asset.name }),
-									new Meta({
-										textContent: [
-											fileSize(asset.size),
-											asset.downloads === undefined ? '' : `${count(asset.downloads)} downloads`,
-										]
-											.filter(Boolean)
-											.join(' · '),
-									}),
-									...(asset.gone ? [new Warning({ textContent: `gone since ${date(asset.gone)}` })] : []),
-									...(asset.replaced ? [new Warning({ textContent: 'changed after publishing' })] : []),
-								],
-							}),
-							...mods.map(
-								mod =>
-									new Meta({
-										tag: 'div',
-										textContent: [
-											`${mod.name ?? mod.id} ${mod.version ?? ''}`,
-											mod.loader,
-											mod.minecraft && `Minecraft ${mod.minecraft}`,
-											mod.environment && mod.environment !== '*' && `${mod.environment} only`,
-											mod.depends?.length && `needs ${mod.depends.join(', ')}`,
-										]
-											.filter(Boolean)
-											.join(' · '),
-									}),
-							),
-							...capabilityList(asset.scan),
-							...(Object.keys(asset.scan?.hosts ?? {}).length > 0
-								? [new Meta({ tag: 'div', textContent: `Names hosts: ${Object.keys(asset.scan.hosts).join(', ')}` })]
-								: []),
-						],
-					});
+const Clamped = styled.Component(
+	({ colors }) => `
+		color: ${colors.muted};
+		font-size: 0.85em;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	`,
+);
+
+const TILES = 6;
+
+/** A mod in a few lines, leading to its page. */
+const modTile = other =>
+	new Card(
+		{ tag: 'a', attributes: { href: `#${modPath(other)}` }, interactive: true },
+		new Row({
+			style: { flexWrap: 'nowrap', alignItems: 'flex-start' },
+			append: [
+				avatar(pictureUrl(other, 80), 40),
+				new Stack({
+					style: { minWidth: '0', gap: theme.space.xs },
+					append: [
+						new Title({ textContent: titleOf(other) }),
+						...(aboutOf(other) ? [new Clamped({ textContent: aboutOf(other).text })] : []),
+						new Meta({ textContent: `${other.repo} · ${count(other.stars ?? 0)} stars` }),
+					],
 				}),
 			],
 		}),
 	);
+
+const tiles = mods => new Tiles({ append: mods.slice(0, TILES).map(modTile) });
+
+const groupLabel = (label, mods) =>
+	new SectionLabel({
+		textContent: mods.length > TILES ? `${label} (${count(mods.length)}, the most starred ${TILES})` : label,
+	});
+
+/**
+ * What it needs and what needs it, what its author or theirs says works with it or does not, and other authors' mods
+ * sharing its themes: the empty ones left out.
+ */
+const relatedGroups = (entry, listing) => {
+	const needs = needsOf(entry, listing);
+	const needed = neededBy(entry, listing);
+	const works = worksWith(entry, listing);
+	const clashes = clashesWith(entry, listing);
+	const alike = similarTo(entry, listing, { leaving: [...needs, ...needed, ...works, ...clashes] });
+
+	return [
+		['What it needs', needs],
+		['What needs it', needed],
+		['Works with', works],
+		['Does not work with', clashes],
+		['Alike in theme', alike],
+	]
+		.filter(([, mods]) => mods.length > 0)
+		.flatMap(([label, mods]) => [groupLabel(label, mods), tiles(mods)]);
+};
+
+const fitsLabel = ({ minecraft, loader }) =>
+	[minecraft && `Minecraft ${minecraft}`, loader && LOADERS[loader]].filter(Boolean).join(' with ') || 'any version';
+
+/** What a jar's code reaches, folded: a finding to look into, not something every reader needs open. */
+const findings = scan => {
+	const reached = Object.keys(scan?.capabilities ?? {});
+	const hosts = Object.keys(scan?.hosts ?? {});
+
+	if (reached.length === 0 && hosts.length === 0) return [];
+
+	const details = new Component({ tag: 'details' });
+
+	details.append(
+		new Component({
+			tag: 'summary',
+			append: new Meta({
+				tag: 'span',
+				textContent: [
+					reached.length > 0 && `Its code reaches ${reached.join(', ')}`,
+					hosts.length > 0 && `names ${hosts.length === 1 ? 'a host' : `${hosts.length} hosts`}`,
+				]
+					.filter(Boolean)
+					.join('; '),
+			}),
+		}),
+		...capabilityList(scan),
+		...(hosts.length > 0 ? [new Meta({ tag: 'div', textContent: `Names hosts: ${hosts.join(', ')}` })] : []),
+	);
+
+	return [details];
+};
+
+const downloadRow = ({ asset }) => {
+	const mods = asset.mods ?? [];
+	const loaders = [...new Set(mods.map(mod => mod.loader).filter(Boolean))];
+	const ranges = [...new Set(mods.map(mod => mod.minecraft).filter(Boolean))];
+
+	return new Stack({
+		style: { gap: theme.space.xs, paddingLeft: theme.space.md },
+		append: [
+			new Row({
+				append: [
+					asset.gone
+						? new Component({ tag: 'span', textContent: asset.name })
+						: new Link({ href: asset.url, textContent: asset.name, tooltip: 'Download this jar' }),
+					...loaders.map(loader => new Chip({ textContent: LOADERS[loader] ?? loader })),
+					...ranges.map(range => new Chip({ textContent: `Minecraft ${range}` })),
+					new Meta({
+						textContent: [
+							fileSize(asset.size),
+							asset.downloads === undefined ? '' : `${count(asset.downloads)} downloads`,
+						]
+							.filter(Boolean)
+							.join(' · '),
+					}),
+					...(asset.gone ? [new Warning({ textContent: `gone since ${date(asset.gone)}` })] : []),
+					...(asset.replaced ? [new Warning({ textContent: 'changed after publishing' })] : []),
+				],
+			}),
+			...(mods.length > 1
+				? [
+						new Meta({
+							tag: 'div',
+							textContent: `Holds ${mods.map(mod => `${mod.name ?? mod.id} ${mod.version ?? ''}`.trim()).join(', ')}`,
+						}),
+					]
+				: []),
+			...findings(asset.scan),
+		],
+	});
+};
+
+const RELEASES_SHOWN = 3;
+
+/** The jars that match, under the release each came in, newest first; past the first few, folded until asked for. */
+const downloadList = (entry, matching) => {
+	const releases = [...new Set(matching.map(({ release }) => release))];
+	const cards = releases.map(
+		release =>
+			new Card(
+				{},
+				new Stack({
+					style: { gap: theme.space.sm },
+					append: [
+						new Row({
+							append: [
+								new Link({
+									href: releaseUrl({ ...entry, latest: release }),
+									target: '_blank',
+									append: new Component({ tag: 'strong', textContent: release.tag }),
+								}),
+								new Meta({ textContent: date(release.published) }),
+								...(release.prerelease ? [new Chip({ textContent: 'prerelease' })] : []),
+							],
+						}),
+						...matching.filter(download => download.release === release).map(downloadRow),
+					],
+				}),
+			),
+	);
+
+	if (cards.length <= RELEASES_SHOWN) return cards;
+
+	const older = new Stack({ style: { display: 'none' }, append: cards.slice(RELEASES_SHOWN) });
+	const unfold = new Button({
+		variant: 'flat',
+		textContent: `Show ${count(cards.length - RELEASES_SHOWN)} older ${cards.length - RELEASES_SHOWN === 1 ? 'release' : 'releases'}`,
+		onPointerPress: () => {
+			older.elem.style.display = '';
+			unfold.elem.remove();
+		},
+	});
+
+	return [...cards.slice(0, RELEASES_SHOWN), unfold, older];
+};
+
+/**
+ * The jars to choose from, narrowed by game version, loader and words, and the one to offer first. The version and
+ * loader start as the search had them and are written back to the address, so the search keeps them too.
+ */
+const downloadsPanel = (entry, record) => {
+	const downloads = downloadsOf(record);
+	const choice = { ...readQuery(location.search), text: '' };
+	const best = new Row();
+	const shown = new Meta();
+	const list = new Stack();
+
+	const draw = () => {
+		const found = bestDownload(downloads, choice);
+		const matching = matchingDownloads(downloads, choice);
+
+		history.replaceState(
+			null,
+			'',
+			`${location.pathname}${writeQuery({ ...readQuery(location.search), minecraft: choice.minecraft, loader: choice.loader })}${location.hash}`,
+		);
+		best.content(
+			found
+				? [
+						new Link({
+							variant: 'raised',
+							href: found.asset.url,
+							textContent: `Download ${found.asset.name}`,
+							tooltip: `The newest jar for ${fitsLabel(choice)}`,
+						}),
+						new Meta({ textContent: `${found.release.tag} · ${date(found.release.published)} · ${fitsLabel(choice)}` }),
+					]
+				: [new Meta({ textContent: `No jar here is for ${fitsLabel(choice)}` })],
+		);
+		shown.content(`${count(matching.length)} of ${count(downloads.length)} jars`);
+		list.content(
+			matching.length > 0
+				? downloadList(entry, matching)
+				: new EmptyState({
+						icon: 'magnifying-glass',
+						title: 'No jar matches',
+						message: `None of its jars is for ${fitsLabel(choice)}${choice.text ? ` and names "${choice.text}"` : ''}`,
+					}),
+		);
+	};
+
+	const minecraft = new Select({
+		options: [{ label: 'Any Minecraft', value: '' }, ...(choice.minecraft ? [choice.minecraft] : [])],
+		value: choice.minecraft ?? '',
+		style: { width: 'auto' },
+		onChange: ({ target: { value } }) => {
+			choice.minecraft = value || undefined;
+			draw();
+		},
+	});
+	const loaders = downloadLoaders(downloads);
+	const loader = new Select({
+		options: [
+			{ label: 'Any loader', value: '' },
+			...loaders.map(value => ({ label: LOADERS[value] ?? value, value })),
+			...(choice.loader && !loaders.includes(choice.loader)
+				? [{ label: LOADERS[choice.loader], value: choice.loader }]
+				: []),
+		],
+		value: choice.loader ?? '',
+		style: { width: 'auto' },
+		onChange: ({ target: { value } }) => {
+			choice.loader = value || undefined;
+			draw();
+		},
+	});
+	const text = new Input({
+		type: 'search',
+		placeholder: 'Filter by release, file or version',
+		style: { flex: '1', minWidth: '12em', width: 'auto' },
+		onInput: ({ target: { value } }) => {
+			choice.text = value;
+			draw();
+		},
+	});
+
+	loadVersions()
+		.then(versions => {
+			const offered = downloadVersions(downloads, versions);
+
+			minecraft.options.options = [
+				{ label: 'Any Minecraft', value: '' },
+				...offered,
+				...(choice.minecraft && !offered.includes(choice.minecraft) ? [choice.minecraft] : []),
+			];
+			minecraft.options.value = choice.minecraft ?? '';
+		})
+		.catch(() => {});
+
+	draw();
+
+	return {
+		best,
+		count: downloads.length,
+		panel: [new Row({ append: [minecraft, loader, text] }), shown, list],
+	};
+};
 
 export default class ModPage extends View {
 	static schema = { host: {}, owner: {}, name: {} };
@@ -324,11 +572,26 @@ export default class ModPage extends View {
 		const { signal } = this;
 		const title = titleOf(entry);
 		const command = installCommand(entry);
-		const releases = new Stack();
 		const readme = new Stack({ append: new EmptyState({ loading: true, title: 'Fetching the readme' }) });
 		const controls = new Row({ append: [collectButton(entry), ...installControls(entry)] });
 		const redrawControls = () => controls.content([collectButton(entry), ...installControls(entry)]);
-		const watched = (record.releases ?? []).filter(release => release.assets.length > 0);
+		const downloads = downloadsPanel(entry, record);
+		const others = sameAuthor(entry, listing);
+		const related = relatedGroups(entry, listing);
+		const owner = ownerName(entry);
+		const section = textContent => new SectionLabel({ level: 2, textContent, style: { marginTop: theme.space.xl } });
+		const sections = {
+			readme: section('Readme'),
+			downloads: section('Downloads'),
+			author: section(`More from ${owner}`),
+			related: section('Related'),
+		};
+		const jump = (label, heading) =>
+			new Button({
+				variant: 'flat',
+				textContent: label,
+				onPointerPress: () => heading.elem.scrollIntoView({ behavior: 'smooth' }),
+			});
 		const shares = entry.shares ?? sharing(entry, listing);
 		const author = authorOf(entry, listing);
 
@@ -336,8 +599,6 @@ export default class ModPage extends View {
 		collection.subscribe(redrawControls, signal);
 		local.subscribe(redrawControls, signal);
 		local.ready().then(redrawControls);
-
-		releases.content(watched.map(release => releaseCard(entry, release)));
 
 		this.body.content([
 			new Row({
@@ -355,12 +616,29 @@ export default class ModPage extends View {
 										target: '_blank',
 										textContent: `${entry.repo} on ${HOSTS[entry.host ?? 'github'] ?? 'GitHub'}`,
 									}),
+									new Link({
+										href: authorPath(entry),
+										textContent: `Every mod of ${owner}'s`,
+										tooltip: `Search the index for ${owner}'s mods alone`,
+									}),
 									...(record.license ? [new Meta({ textContent: record.license })] : []),
 									...(author ? [new Meta({ textContent: `by the author of ${author}` })] : []),
 								],
 							}),
 							...about(aboutOf(entry)),
-							new Row({ append: loadersOf(entry).map(loader => new Chip({ textContent: loader })) }),
+							new Row({
+								append: [
+									...loadersOf(entry).map(loader => new Chip({ textContent: loader })),
+									...(entry.tags ?? []).map(
+										tag =>
+											new Link({
+												href: tagPath(tag),
+												tooltip: `Every mod the index gave the theme ${tag}`,
+												append: new Chip({ textContent: tag }),
+											}),
+									),
+								],
+							}),
 						],
 					}),
 				],
@@ -376,6 +654,7 @@ export default class ModPage extends View {
 					controls,
 				],
 			}),
+			downloads.best,
 			new Row({
 				style: { marginTop: theme.space.md },
 				append: [
@@ -408,19 +687,39 @@ export default class ModPage extends View {
 						}),
 					]
 				: []),
-			new SectionLabel({ level: 2, textContent: 'Readme', style: { marginTop: theme.space.xl } }),
-			readme,
-			new SectionLabel({
-				level: 2,
-				style: { marginTop: theme.space.xl },
-				textContent: `The newest ${watched.length === 1 ? 'release' : `${watched.length} releases`} with jars`,
+			new Row({
+				style: { marginTop: theme.space.lg },
+				append: [
+					jump('Readme', sections.readme),
+					jump(`Downloads (${count(downloads.count)})`, sections.downloads),
+					...(others.length > 0 ? [jump(`More from ${owner} (${count(others.length)})`, sections.author)] : []),
+					...(related.length > 0 ? [jump('Related', sections.related)] : []),
+				],
 			}),
+			sections.readme,
+			readme,
+			sections.downloads,
 			new Meta({
 				tag: 'p',
 				textContent:
-					'Each jar was downloaded and read by the crawl. What its code can reach is a finding, not a verdict: an update checker reaches the network.',
+					'The newest releases with jars, each jar downloaded and read by the crawl. What its code can reach is a finding, not a verdict: an update checker reaches the network.',
 			}),
-			releases,
+			...downloads.panel,
+			...(others.length > 0
+				? [
+						sections.author,
+						tiles(others),
+						...(others.length > TILES
+							? [
+									new Link({
+										href: authorPath(entry),
+										textContent: `All ${count(others.length + 1)} of ${owner}'s mods`,
+									}),
+								]
+							: []),
+					]
+				: []),
+			...(related.length > 0 ? [sections.related, ...related] : []),
 		]);
 
 		fetchReadme(entry, record.readme, signal)
