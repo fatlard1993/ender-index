@@ -480,7 +480,7 @@ export default class SearchPage extends View {
 
 			ranked = refine(rank(entries, state.query, state), state);
 
-			const bestOrder = state.query.trim() ? 'best match first' : 'by stars';
+			const bestOrder = state.query.trim() ? 'best match first' : 'most relied on first';
 			const order = state.sort === 'best' ? bestOrder : SORTS[state.sort].toLowerCase();
 
 			status.content([

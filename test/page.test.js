@@ -75,11 +75,11 @@ const mount = async search => {
 };
 
 describe('the search page', () => {
-	test('lists everything by stars before anything is typed', async () => {
+	test('lists everything, the most relied on first, before anything is typed', async () => {
 		const page = await mount('');
 		const text = document.body.textContent;
 
-		expect(text).toContain('3 of 3 indexed repositories, by stars');
+		expect(text).toContain('3 of 3 indexed repositories, most relied on first');
 		expect(text.indexOf('Lithium')).toBeLessThan(text.indexOf('Backpacks'));
 		page.destroy();
 	});
