@@ -2,7 +2,7 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { DATA, fillIcons, pruneIcons, recordFiles, writeJson } from '../src/crawl';
+import { DATA, fillIcons, pruneIcons, recordFiles, writeJson, writeJsonLines } from '../src/crawl';
 import { buildSearch } from '../src/search';
 
 /** Read icons for every record at once, rather than as each nightly crawl reaches it. Only release downloads are made, which the GitHub rate limit does not count. */
@@ -32,7 +32,7 @@ try {
 	await rm(scratch, { recursive: true, force: true });
 }
 
-await writeJson(join(DATA, 'search.json'), buildSearch(records));
+await writeJsonLines(join(DATA, 'search.json'), buildSearch(records));
 await pruneIcons(records);
 
 console.log(

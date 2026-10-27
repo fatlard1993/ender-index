@@ -35,6 +35,15 @@ export const writeJson = async (path, value) => {
 	await Bun.write(path, `${JSON.stringify(value, undefined, '\t')}\n`);
 };
 
+/**
+ * A list as JSON with each item on a line of its own: near the size of JSON with no spacing, which every page that
+ * searches downloads, while a crawl's commit still shows which items changed.
+ */
+export const writeJsonLines = async (path, items) => {
+	await mkdir(dirname(path), { recursive: true });
+	await Bun.write(path, `[\n${items.map(item => JSON.stringify(item)).join(',\n')}\n]\n`);
+};
+
 const readLines = async file =>
 	(
 		await Bun.file(join(DATA, file))
@@ -607,7 +616,7 @@ export const crawl = async ({ only } = {}) => {
 
 	const themes = themesOf(records);
 
-	await writeJson(
+	await writeJsonLines(
 		join(DATA, 'search.json'),
 		buildSearch(records, themes, await readJson(join(DATA, 'sources.json'), {})),
 	);

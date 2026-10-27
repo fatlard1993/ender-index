@@ -3,7 +3,16 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, setSystemTime, test } from 'bun:test';
 
-import { DATA, crawlEach, crawlOrder, parseLine, recordPath, spendingLine, waitForReset } from '../src/crawl';
+import {
+	DATA,
+	crawlEach,
+	crawlOrder,
+	parseLine,
+	recordPath,
+	spendingLine,
+	waitForReset,
+	writeJsonLines,
+} from '../src/crawl';
 import { RateLimited } from '../src/fetch';
 import { kindOf } from '../src/github';
 import { assetOf } from '../src/gitlab';
@@ -394,5 +403,25 @@ describe('the order a crawl takes repositories in', () => {
 			'm/new',
 			'm/never',
 		]);
+	});
+});
+
+describe('the search file', () => {
+	test('reads back as it was written, an entry to a line', async () => {
+		const directory = await mkdtemp(join(tmpdir(), 'ender-lines-'));
+		const path = join(directory, 'search.json');
+		const entries = [
+			{ repo: 'a/b', tags: ['ship'] },
+			{ repo: 'c/d', description: 'Line\nbreak' },
+		];
+
+		try {
+			await writeJsonLines(path, entries);
+
+			expect(await Bun.file(path).json()).toEqual(entries);
+			expect((await Bun.file(path).text()).split('\n')).toHaveLength(entries.length + 3);
+		} finally {
+			await rm(directory, { recursive: true, force: true });
+		}
 	});
 });
