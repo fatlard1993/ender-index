@@ -2,7 +2,7 @@ import { mkdir, mkdtemp, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 
-import { readIcon, readLinks, readMods } from 'ender-launcher/metadata';
+import { readContent, readIcon, readLinks, readMods } from 'ender-launcher/metadata';
 import { HOSTS as HOST_NAMES } from 'ender-launcher/rank';
 import { scanJar } from 'ender-launcher/scan';
 
@@ -142,6 +142,9 @@ export const keepIcon = async (jar, icons = ICONS) => {
 /** The links a jar's mods give that ask for support; none when its metadata cannot be read for them. */
 const jarFunding = async jar => supportLinks(await readLinks(jar).catch(() => []));
 
+/** What a jar adds, or null when its files cannot be read for it, so it is not asked again. */
+const jarContent = async jar => readContent(jar).catch(() => null);
+
 /** Download one asset, hash it on the way in, read its mods and icon and scan it. */
 const inspector = (scratch, knownBad) => async asset => {
 	if (asset.size > MAX_DOWNLOAD) throw new Error(`${asset.size} bytes is past the ${MAX_DOWNLOAD} byte limit`);
@@ -161,9 +164,19 @@ const inspector = (scratch, knownBad) => async asset => {
 
 		const icon = await keepIcon(path);
 		const funding = await jarFunding(path);
+		const content = await jarContent(path);
 
 		try {
-			return { sha256, mods, metadataError, icon, funding, scan: await scanJar(path), knownBad: knownBad.get(sha256) };
+			return {
+				sha256,
+				mods,
+				metadataError,
+				icon,
+				funding,
+				content,
+				scan: await scanJar(path),
+				knownBad: knownBad.get(sha256),
+			};
 		} catch (error) {
 			return { sha256, error: error.message, knownBad: knownBad.get(sha256) };
 		}
@@ -208,20 +221,28 @@ export const fillIcons = async (record, scratch, icons = ICONS) => {
 };
 
 /**
- * Jars of the release a repository is listed by that were read before their support links were, given them. Only
- * that release's are fetched again, as for icons.
+ * Jars of the release a repository is listed by that were read before all a jar says for itself was: its support
+ * links, what it adds, and what its mods suggest, break and conflict with. Each is fetched again once, as for icons,
+ * and given what it lacks; one without content was read before relations were too, so its mods are read again.
  */
-export const fillFunding = async (record, scratch) => {
+export const fillJars = async (record, scratch) => {
 	for (const asset of latestAssets(record)) {
-		if (asset.funding !== undefined) continue;
+		if (asset.funding !== undefined && asset.content !== undefined) continue;
 
-		const path = join(scratch, `links-${asset.sha256}.jar`);
+		const path = join(scratch, `again-${asset.sha256}.jar`);
 
 		try {
 			// Bytes other than those scanned are not this asset's; the next crawl reads them as a swap.
-			if ((await download(asset.url, path)) === asset.sha256) asset.funding = await jarFunding(path);
+			if ((await download(asset.url, path)) !== asset.sha256) continue;
+
+			asset.funding ??= await jarFunding(path);
+
+			if (asset.content === undefined) {
+				asset.content = await jarContent(path);
+				asset.mods = await readMods(path).catch(() => asset.mods);
+			}
 		} catch (error) {
-			console.error(`links   ${record.repo} ${asset.name} :: ${error.message}`);
+			console.error(`again   ${record.repo} ${asset.name} :: ${error.message}`);
 		} finally {
 			await rm(path, { force: true });
 		}
@@ -379,7 +400,7 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners }) =
 
 	if (result.record) {
 		await fillIcons(result.record, scratch);
-		await fillFunding(result.record, scratch);
+		await fillJars(result.record, scratch);
 		const readme = await readmeOf({ host, name, repo, recorded });
 
 		await writeJson(canonical, {
