@@ -1,9 +1,9 @@
 import { join } from 'node:path';
 
-import { DATA, readRepos } from './crawl';
+import { DATA, readLines, readRepos } from './crawl';
 import * as codeberg from './codeberg';
 import { RateLimited } from './fetch';
-import { searchCode } from './github';
+import { searchCode, searchRepositories } from './github';
 import * as gitlab from './gitlab';
 import { modrinthSources } from './modrinth';
 
@@ -47,6 +47,70 @@ const searchWaiting = async (query, page) => {
 	}
 };
 
+/** How a pack at a repository's root is found: its ender pack, or packwiz's pack.toml, which names packwiz. */
+export const PACK_FILES = ['filename:ender.pack.json', 'filename:pack.toml packwiz'];
+
+/** The topics a repository of .mrpack releases goes by; a release's files cannot be searched for. */
+export const PACK_TOPICS = ['minecraft-modpack', 'mrpack', 'packwiz'];
+
+/** Repository search allows thirty requests a minute. */
+const REPOSITORY_PAUSE = 2100;
+
+/** The repositories whose found file is at their root, which is where a pack is read from. */
+export const packsFrom = items => items.filter(item => !item.path.includes('/')).map(item => item.repository.full_name);
+
+const sorted = lines => [...new Set(lines)].sort((a, b) => a.localeCompare(b));
+
+/** A list of repositories, its header comment kept. */
+const writeList = async (file, lines, header) => {
+	const kept = (
+		await Bun.file(join(DATA, file))
+			.text()
+			.catch(() => header)
+	)
+		.split('\n')
+		.filter(line => line.startsWith('#'));
+
+	await Bun.write(join(DATA, file), `${[...(kept.length > 0 ? kept : [header]), ...lines].join('\n')}\n`);
+};
+
+/** Pack repositories found on GitHub: by a pack file at their root, or by the topics .mrpack repositories go by. */
+const findPacks = async () => {
+	const found = new Set();
+
+	try {
+		for (const query of PACK_FILES) {
+			for (let page = 1; page <= 10; ++page) {
+				const { items = [], total_count: total } = await searchWaiting(query, page);
+
+				for (const repo of packsFrom(items)) found.add(repo);
+
+				await Bun.sleep(PAUSE);
+
+				if (page * 100 >= Math.min(total, 1000)) break;
+			}
+		}
+
+		for (const topic of PACK_TOPICS) {
+			for (let page = 1; page <= 10; ++page) {
+				const { items = [], total_count: total } = await searchRepositories(`topic:${topic}`, page);
+
+				for (const repo of items) found.add(repo.full_name);
+
+				await Bun.sleep(REPOSITORY_PAUSE);
+
+				if (page * 100 >= Math.min(total, 1000)) break;
+			}
+		}
+	} catch (error) {
+		if (!(error instanceof RateLimited)) throw error;
+
+		console.log(`Stopped searching for packs at the rate limit; ${error.message}. Keeping the ${found.size} found.`);
+	}
+
+	return found;
+};
+
 export const discover = async () => {
 	const found = new Set();
 	const queries = MANIFESTS.flatMap(manifest => SIZES.map(size => `${manifest} ${size}`));
@@ -88,45 +152,51 @@ export const discover = async () => {
 		console.log(`${host} topics :: ${found.size} repositories so far`);
 	}
 
-	// Most Modrinth mods link their source. Those on a host the index crawls are kept apart from what was found on the
-	// hosts themselves, which comes first, and the slugs kept so a mod needed but not indexed can be pointed at its
-	// source.
-	let fromModrinth = [];
-
-	try {
-		console.log('Reading the source links of every Modrinth mod; this takes about six minutes');
-
-		const sources = await modrinthSources();
-
-		fromModrinth = [...new Set(sources.values())];
-		await Bun.write(
-			join(DATA, 'sources.json'),
-			`${JSON.stringify(Object.fromEntries([...sources].sort(([a], [b]) => a.localeCompare(b))), null, '\t')}\n`,
-		);
-		console.log(`Modrinth sources :: ${fromModrinth.length} repositories linked`);
-	} catch (error) {
-		console.error(`Modrinth sources :: ${error.message}; searching went on without them`);
-	}
-
 	const existing = await readRepos();
-	const header = (await Bun.file(join(DATA, 'repos.txt')).text()).split('\n').filter(line => line.startsWith('#'));
-	const merged = [...new Set([...existing, ...found])].sort((a, b) => a.localeCompare(b));
+	const merged = sorted([...existing, ...found]);
 
-	await Bun.write(join(DATA, 'repos.txt'), `${[...header, ...merged].join('\n')}\n`);
+	await writeList('repos.txt', merged, '# Mod repositories found on their hosts');
 
-	const own = new Set(merged);
-	const onlyModrinth = fromModrinth.filter(line => !own.has(line)).sort((a, b) => a.localeCompare(b));
+	console.log('Searching GitHub for pack repositories');
 
-	if (fromModrinth.length > 0) {
-		await Bun.write(
-			join(DATA, 'modrinth-repos.txt'),
-			`# Known only from a Modrinth project's source link; crawled after every repository found on its host.\n${onlyModrinth.join('\n')}\n`,
+	const packs = sorted([...(await readLines('packs.txt')), ...(await findPacks())]);
+
+	await writeList('packs.txt', packs, '# Pack repositories found on their hosts');
+	console.log(`${packs.length} pack repositories found on their hosts`);
+
+	// Most Modrinth projects link their source. Those on a host the index crawls are kept apart from what was found on
+	// the hosts themselves, which comes first; a mod's slug and id are kept with its source, so a mod needed but not
+	// indexed can be pointed at its source, and a pack's Modrinth mods matched to the index.
+	try {
+		console.log('Reading the source links of every Modrinth mod and modpack; this takes about seven minutes');
+
+		const mods = await modrinthSources();
+		const modpacks = await modrinthSources({ type: 'modpack' });
+		const own = new Set(merged);
+		const ownPacks = new Set(packs);
+		const asJson = map =>
+			`${JSON.stringify(Object.fromEntries([...map].sort(([a], [b]) => a.localeCompare(b))), null, '\t')}\n`;
+
+		await Bun.write(join(DATA, 'sources.json'), asJson(mods.sources));
+		await Bun.write(join(DATA, 'modrinth-ids.json'), asJson(mods.ids));
+		await writeList(
+			'modrinth-repos.txt',
+			sorted([...mods.sources.values()].filter(line => !own.has(line))),
+			"# Known only from a Modrinth project's source link; crawled after every repository found on its host.",
 		);
+		await writeList(
+			'modrinth-packs.txt',
+			sorted([...modpacks.sources.values()].filter(line => !ownPacks.has(line))),
+			"# Packs known only from a Modrinth modpack's source link; crawled after every pack found on its host.",
+		);
+		console.log(
+			`Modrinth :: ${mods.sources.size} mods and ${modpacks.sources.size} modpacks link a source the index crawls`,
+		);
+	} catch (error) {
+		console.error(`Modrinth sources :: ${error.message}; discovery went on without them`);
 	}
 
-	console.log(
-		`${merged.length - existing.length} new repositories; ${merged.length} found on their hosts, and ${onlyModrinth.length} more known only from Modrinth`,
-	);
+	console.log(`${merged.length - existing.length} new repositories; ${merged.length} found on their hosts`);
 
 	return 0;
 };

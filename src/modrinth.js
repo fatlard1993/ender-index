@@ -13,7 +13,8 @@ const PAGE = 100;
 const get = async path => {
 	const response = await fetchSteady(`${API}${path}`, { headers: { 'user-agent': AGENT, accept: 'application/json' } });
 
-	if (!response.ok) throw Object.assign(new Error(`Modrinth ${response.status} for ${path}`), { status: response.status });
+	if (!response.ok)
+		throw Object.assign(new Error(`Modrinth ${response.status} for ${path}`), { status: response.status });
 
 	return response.json();
 };
@@ -50,12 +51,13 @@ export const lineOf = url => {
 };
 
 /**
- * Every Modrinth mod whose source is on a host the index crawls, as its slug and repos.txt line, read page by page
- * at the pace Modrinth allows. Takes about six minutes for the whole of it.
+ * Every Modrinth project of a type whose source is on a host the index crawls, by its slug and by its id, each to the
+ * repos.txt line of its source, read page by page at the pace Modrinth allows. Takes about six minutes for its mods.
  */
-export const modrinthSources = async ({ pause = PAUSE, pages = Infinity } = {}) => {
+export const modrinthSources = async ({ type = 'mod', pause = PAUSE, pages = Infinity } = {}) => {
 	const sources = new Map();
-	const facets = encodeURIComponent(JSON.stringify([['project_type:mod']]));
+	const ids = new Map();
+	const facets = encodeURIComponent(JSON.stringify([[`project_type:${type}`]]));
 
 	for (let page = 0, total = Infinity; page * PAGE < total && page < pages; ++page) {
 		const found = await get(`/search?facets=${facets}&limit=${PAGE}&offset=${page * PAGE}&index=newest`);
@@ -63,18 +65,21 @@ export const modrinthSources = async ({ pause = PAUSE, pages = Infinity } = {}) 
 		total = found.total_hits;
 		await Bun.sleep(pause);
 
-		const ids = found.hits.map(hit => hit.project_id);
+		const asked = found.hits.map(hit => hit.project_id);
 
-		if (ids.length === 0) break;
+		if (asked.length === 0) break;
 
-		for (const project of await get(`/projects?ids=${encodeURIComponent(JSON.stringify(ids))}`)) {
+		for (const project of await get(`/projects?ids=${encodeURIComponent(JSON.stringify(asked))}`)) {
 			const line = project.source_url && lineOf(project.source_url);
 
-			if (line) sources.set(project.slug, line);
+			if (!line) continue;
+
+			sources.set(project.slug, line);
+			ids.set(project.id, line);
 		}
 
 		await Bun.sleep(pause);
 	}
 
-	return sources;
+	return { sources, ids };
 };
