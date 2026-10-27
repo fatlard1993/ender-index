@@ -22,6 +22,7 @@ import {
 	authorPath,
 	tagPath,
 	lineUrl,
+	rangeLabel,
 	refine,
 	releaseUrl,
 	releasedVersions,
@@ -74,6 +75,22 @@ describe('the search page', () => {
 		expect(lineUrl('maruohon/litematica')).toBe('https://github.com/maruohon/litematica');
 		expect(lineUrl('gitlab:group/sub/p')).toBe('https://gitlab.com/group/sub/p');
 		expect(authorPath(entry({ host: 'gitlab', repo: 'Group/p' }))).toBe('?author=gitlab%3Agroup#/');
+	});
+
+	test('a game version range reads as a player would say it, and one of another shape as written', () => {
+		expect(rangeLabel('>=1.21.3 <=1.21.4')).toBe('1.21.3 to 1.21.4');
+		expect(rangeLabel('>=26.1 <26.2-')).toBe('26.1.x');
+		expect(rangeLabel('>=1.21 <1.21.5')).toBe('1.21 up to 1.21.5');
+		expect(rangeLabel('>=1.20.1')).toBe('1.20.1 and later');
+		expect(rangeLabel('1.21.1 || 1.21.2')).toBe('1.21.1, 1.21.2');
+		expect(rangeLabel('~1.21.1')).toBe('1.21.1+');
+		expect(rangeLabel('1.21.1')).toBe('1.21.1');
+		expect(rangeLabel('[1.21.1,1.21.2)')).toBe('1.21.1');
+		expect(rangeLabel('[1.21,1.22)')).toBe('1.21.x');
+		expect(rangeLabel('[1.20,1.21]')).toBe('1.20 to 1.21');
+		expect(rangeLabel('[1.20,)')).toBe('1.20 and later');
+		expect(rangeLabel('*')).toBe('any version');
+		expect(rangeLabel('1.21.x-ish weird')).toBe('1.21.x-ish weird');
 	});
 
 	test("each host's pages are where that host keeps them", () => {

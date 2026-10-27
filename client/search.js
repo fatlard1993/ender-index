@@ -160,6 +160,69 @@ export const releasedVersions = manifest =>
  * The game versions to name on an entry: the one searched for first, then the newest its jars declare,
  * and how many more they fit.
  */
+const version = text => text.trim().replace(/-$/, '');
+
+/** Whether `upper` is the version just past every release of `lower`'s line: 26.2 after 26.1, 1.22 after 1.21.4. */
+const nextLine = (lower, upper) => {
+	const [a, b] = [lower.split('.'), upper.split('.')];
+
+	return (
+		b.length >= 2 &&
+		a.slice(0, b.length - 1).join('.') === b.slice(0, -1).join('.') &&
+		Number(b.at(-1)) === Number(a[b.length - 1]) + 1
+	);
+};
+
+/** A version and every patch of it: 26.1.x for 26.1, while 1.21.1 has no patches of its own to stand for. */
+const withPatches = lower => (lower.split('.').length >= 3 ? lower : `${lower}.x`);
+
+const BOUND = /^(>=|>|<=|<)\s*([\w.+-]+)$/;
+
+/**
+ * A game version range as a player reads it, in the common shapes jars write them: Fabric's `>=1.21 <=1.21.4` and
+ * `~1.21.1`, alternatives joined by `||`, and Forge's `[1.21.1,1.21.2)`. One in any other shape is shown as written.
+ */
+export const rangeLabel = range => {
+	const text = (range ?? '').trim();
+
+	if (text === '' || text === '*') return 'any version';
+	if (text.includes('||')) return text.split('||').map(rangeLabel).join(', ');
+
+	const maven = text.match(/^\[\s*([^,\]]+)\s*,\s*([^\])]*)\s*([\])])$/);
+
+	if (maven) {
+		const [, lower, upper, close] = maven;
+
+		if (upper === '') return `${version(lower)} and later`;
+		if (close === ']') return `${version(lower)} to ${version(upper)}`;
+
+		return nextLine(version(lower), version(upper))
+			? withPatches(version(lower))
+			: `${version(lower)} up to ${version(upper)}`;
+	}
+
+	if (/^[=~^]?\s*[\d][\w.+-]*$/.test(text)) {
+		const plain = version(text.replace(/^[=~^]\s*/, ''));
+
+		return text.startsWith('^') || text.startsWith('~') ? `${plain}+` : plain;
+	}
+
+	const bounds = text.split(/\s+/).map(part => part.match(BOUND));
+
+	if (bounds.some(bound => bound === null)) return text;
+
+	const lower = bounds.find(([, operator]) => operator.startsWith('>'));
+	const upper = bounds.find(([, operator]) => operator.startsWith('<'));
+
+	if (lower && !upper) return `${version(lower[2])} and later`;
+	if (upper && !lower) return `up to ${version(upper[2])}`;
+	if (upper[1] === '<=') return `${version(lower[2])} to ${version(upper[2])}`;
+
+	return nextLine(version(lower[2]), version(upper[2]))
+		? withPatches(version(lower[2]))
+		: `${version(lower[2])} up to ${version(upper[2])}`;
+};
+
 export const fittingVersions = (entry, versions, { minecraft, shown = 3 } = {}) => {
 	const fitting = versions.filter(version => fit(entry.targets, { minecraft: version }) === 2);
 	const named =

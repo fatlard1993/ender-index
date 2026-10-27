@@ -26,6 +26,8 @@ import {
 	aboutOf,
 	authorPath,
 	lineUrl,
+	rangeLabel,
+	screenshotsOf,
 	tagPath,
 	supportOf,
 	fileSize,
@@ -71,7 +73,9 @@ import {
 	date,
 	fetchReadme,
 	headerLinks,
+	hint,
 	loadJson,
+	screenshots,
 } from './ui';
 
 const Heading = styled.Component(
@@ -367,7 +371,9 @@ const downloadRow = ({ asset }) => {
 						? new Component({ tag: 'span', textContent: asset.name })
 						: new Link({ href: asset.url, textContent: asset.name, tooltip: 'Download this jar' }),
 					...loaders.map(loader => new Chip({ textContent: LOADERS[loader] ?? loader })),
-					...ranges.map(range => new Chip({ textContent: `Minecraft ${range}` })),
+					...ranges.map(
+						range => new Chip({ textContent: `Minecraft ${rangeLabel(range)}`, tooltip: hint(`Declared as ${range}`) }),
+					),
 					new Meta({
 						textContent: [
 							fileSize(asset.size),
