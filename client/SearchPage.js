@@ -222,7 +222,7 @@ const needs = (entry, record, entries, fits) => {
 };
 
 /** What an opened card adds: the readme's pictures, the dates and license, and what the latest release needs. */
-const cardDetails = (entry, entries, { minecraft, loader }) => {
+const cardDetails = (entry, entries, { minecraft, loader }, cautions) => {
 	const title = titleOf(entry);
 	const details = new Stack({
 		style: { gap: theme.space.sm, marginTop: theme.space.md },
@@ -232,6 +232,7 @@ const cardDetails = (entry, entries, { minecraft, loader }) => {
 	detailsOf(entry)
 		.then(({ record, shots }) =>
 			details.content([
+				...cautions.map(({ text }) => new Warning({ textContent: text })),
 				...screenshots(title, shots),
 				new Meta({
 					textContent: [
@@ -253,6 +254,17 @@ const cardDetails = (entry, entries, { minecraft, loader }) => {
 	return details;
 };
 
+/** Why a result may not be the mod it looks like, each as a chip's label and the sentence behind it. */
+const cautionsOf = (entry, { sharing, unproven }) =>
+	[
+		unproven && {
+			label: 'few stars',
+			text: `Few stars, and ${unproven}. Any jar can claim a mod's name: make sure this is the one you mean`,
+		},
+		sharing && { label: 'possible duplicate', text: `It ${sharing}: check you have the one you mean` },
+		entry.replaced && { label: 'jar changed', text: 'A jar in one of its releases was changed after publishing' },
+	].filter(Boolean);
+
 /** A click on a card's own surface, not on a link, a button, a command to select, or after selecting text. */
 const opensCard = event =>
 	!event.target.closest('a, button, input, select, code, .vbc-button') && !getSelection()?.toString();
@@ -266,6 +278,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 	const capabilities = entry.latest?.capabilities ?? [];
 
 	const key = collectionKey(entry);
+	const cautions = cautionsOf(entry, { sharing, unproven });
 	const toggle = new Button({
 		variant: 'flat',
 		icon: 'chevron-down',
@@ -277,7 +290,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 
 	const card = new Card(
 		{
-			accent: sharing || unproven || entry.replaced ? theme.colors.warning : undefined,
+			accent: cautions.length > 0 ? theme.colors.warning : undefined,
 			onPointerPress: event => opensCard(event) && setOpen(!open.has(key)),
 		},
 		new Row({
@@ -312,6 +325,9 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 						...about(aboutOf(entry)),
 						new Row({
 							append: [
+								...cautions.map(
+									({ label, text }) => new Chip({ addClass: 'finding', textContent: label, title: text }),
+								),
 								...loadersOf(entry).map(loader => new Chip({ textContent: loader })),
 								...(fitting.versions.length > 0
 									? [
@@ -331,17 +347,6 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 								),
 							],
 						}),
-						...(sharing ? [new Warning({ textContent: `It ${sharing}: check you have the one you mean` })] : []),
-						...(unproven
-							? [
-									new Warning({
-										textContent: `Few stars, and ${unproven}. Any jar can claim a mod's name: make sure this is the one you mean`,
-									}),
-								]
-							: []),
-						...(entry.replaced
-							? [new Warning({ textContent: 'A jar in one of its releases was changed after publishing' })]
-							: []),
 						new Row({
 							append: [
 								new Command({ tag: 'code', textContent: command }),
@@ -369,7 +374,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 		if (opening) open.add(key);
 		else open.delete(key);
 
-		details ??= cardDetails(entry, entries, state);
+		details ??= cardDetails(entry, entries, state, cautions);
 		if (opening && !details.elem.isConnected) card.append(details);
 		details.elem.style.display = opening ? '' : 'none';
 		toggle.options.icon = opening ? 'chevron-up' : 'chevron-down';
