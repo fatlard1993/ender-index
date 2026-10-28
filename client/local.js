@@ -10,7 +10,7 @@ const REPOSITORY_SOURCES = new Set(['github', 'codeberg', 'gitlab']);
 
 const listeners = new Set();
 
-const state = { instances: [], selected: undefined, installed: new Set(), busy: new Set() };
+const state = { all: [], instances: [], selected: undefined, installed: new Set(), busy: new Set() };
 
 const notify = () => {
 	for (const listener of listeners) listener(state);
@@ -40,7 +40,8 @@ const detect = async () => {
 
 	if (!response?.ok || !response.headers.get('content-type')?.includes('json')) return false;
 
-	state.instances = (await response.json()).filter(instance => instance.type === 'client');
+	state.all = await response.json();
+	state.instances = state.all.filter(instance => instance.type === 'client');
 
 	const wanted = readStorage(SELECTED_KEY);
 
@@ -78,12 +79,61 @@ const change = async (verb, specs, keys) => {
 	}
 };
 
+/** Ask ender something through the page's own server, or throw what it said went wrong. */
+const call = async (method, path, body) => {
+	const response = await fetch(`./api/${path}`, {
+		method,
+		headers: { 'content-type': 'application/json' },
+		...(body === undefined ? {} : { body: JSON.stringify(body) }),
+	});
+	const result = await response.json().catch(() => ({}));
+
+	if (!response.ok) throw new Error(result.error ?? result.output ?? `ender answered ${response.status}`);
+
+	return result;
+};
+
+/** The instances again, after one was made, imported or deleted; the chosen one kept while it is still there. */
+const reload = async () => {
+	state.all = await call('GET', 'instances');
+	state.instances = state.all.filter(instance => instance.type === 'client');
+
+	if (!state.instances.some(instance => instance.name === state.selected)) state.selected = state.instances[0]?.name;
+
+	await refresh().catch(() => {});
+	notify();
+};
+
+const named = name => `instances/${encodeURIComponent(name)}`;
+
+const thenReload = async work => {
+	try {
+		return await work;
+	} finally {
+		await reload().catch(() => notify());
+	}
+};
+
 export const local = {
 	/** Whether this page can manage the instances on this machine. */
 	ready: () => (detected ??= detect().catch(() => false)),
 	get instances() {
 		return state.instances;
 	},
+	/** Every instance on this machine, servers too. */
+	get all() {
+		return state.all;
+	},
+	reload,
+	details: name => call('GET', named(name)),
+	create: wanted => thenReload(call('POST', 'instances', wanted)),
+	importPack: source => thenReload(call('POST', 'import', { source })),
+	update: name => thenReload(call('POST', `${named(name)}/update`)),
+	launch: (name, { update = false } = {}) => call('POST', `${named(name)}/launch`, { update }),
+	remove: name => thenReload(call('DELETE', named(name))),
+	publishInstance: name => call('POST', `${named(name)}/gist`),
+	dropFrom: (name, specs) => thenReload(call('POST', `${named(name)}/drop`, { specs })),
+	publishPack: pack => call('POST', 'gists', { pack }),
 	get selected() {
 		return state.selected;
 	},

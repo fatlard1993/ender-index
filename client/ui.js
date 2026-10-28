@@ -202,7 +202,21 @@ export const forStrangers = component => {
 	return component;
 };
 
-const PLACES = { mods: { label: 'Mods', href: '#/' }, packs: { label: 'Packs', href: '#/packs' } };
+/** Shown only when ender serves the page, as ender web does: what only this machine's ender can do. */
+export const forLocal = component => {
+	component.elem.style.display = 'none';
+	local.ready().then(served => {
+		if (served) component.elem.style.display = '';
+	});
+
+	return component;
+};
+
+const PLACES = {
+	mods: { label: 'Mods', href: '#/' },
+	packs: { label: 'Packs', href: '#/packs' },
+	instances: { label: 'Instances', href: '#/instances', local: true },
+};
 
 /**
  * Every page's bar: the index's own places beside its name, the current one marked and the mods keeping the search
@@ -217,15 +231,16 @@ export const siteBar = at =>
 		append: [
 			new Places({
 				tag: 'nav',
-				append: Object.entries(PLACES).map(
-					([place, { label, href }]) =>
-						new Link({
-							variant: 'flat',
-							href: place === 'mods' ? `${location.search}${href}` : href,
-							textContent: label,
-							...(place === at ? { attributes: { 'aria-current': 'page' } } : {}),
-						}),
-				),
+				append: Object.entries(PLACES).map(([place, { label, href, local: localOnly }]) => {
+					const link = new Link({
+						variant: 'flat',
+						href: place === 'mods' ? `${location.search}${href}` : href,
+						textContent: label,
+						...(place === at ? { attributes: { 'aria-current': 'page' } } : {}),
+					});
+
+					return localOnly ? forLocal(link) : link;
+				}),
 			}),
 			new Row({
 				style: { marginLeft: 'auto', flexWrap: 'nowrap' },

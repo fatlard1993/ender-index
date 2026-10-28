@@ -3,6 +3,7 @@ import { Button, Component, Link, styled, theme } from '@vanilla-bean/components
 import { collection } from './collection';
 import { runLocally } from './controls';
 import { local } from './local';
+import { packDialog } from './packMaker';
 import { installAllCommand, modPath } from './search';
 import { Command, Row, Stack, copyCommand } from './ui';
 
@@ -70,6 +71,13 @@ export default class CollectionBar extends Bar {
 									}),
 								]
 							: []),
+						new Button({
+							variant: 'flat',
+							icon: 'box',
+							textContent: 'Make a pack',
+							tooltip: 'An ender pack of these mods, to share or to make an instance of',
+							onPointerPress: () => packDialog(collection.items),
+						}),
 						new Button({
 							variant: 'flat',
 							icon: 'trash',
