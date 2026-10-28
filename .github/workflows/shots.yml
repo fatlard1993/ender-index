@@ -1,0 +1,38 @@
+name: shots
+
+on:
+  schedule:
+    - cron: '41 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency: shots
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SHOTS_TOKEN: ${{ secrets.SHOTS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        if: env.SHOTS_TOKEN != ''
+      # By its download address: asked for by version, setup-bun asks GitHub's API where it is, which a crawl running
+      # alongside may have spent the repository's hour of
+      - uses: oven-sh/setup-bun@v2
+        if: env.SHOTS_TOKEN != ''
+        with:
+          bun-download-url: https://github.com/oven-sh/bun/releases/download/bun-v1.4.0/bun-linux-x64.zip
+      - name: publish
+        if: env.SHOTS_TOKEN != ''
+        run: |
+          bun src/shots.js
+          git config user.name 'ender-index'
+          git config user.email 'ender-index@users.noreply.github.com'
+          git add data/shots data/shots.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Shots'
+          git pull --rebase
+          git push
