@@ -36,6 +36,7 @@ module.exports = {
 		'labelled',
 		'lfx',
 		'liberapay',
+		'lightbox',
 		'matcher',
 		'mc',
 		'metafile',

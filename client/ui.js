@@ -1,6 +1,7 @@
 import {
 	Card,
 	Component,
+	Dialog,
 	Link,
 	Notify,
 	Toolbar,
@@ -363,3 +364,69 @@ const modTile = other =>
 
 /** Up to a row or two of mods, each a tile leading to its page. */
 export const tiles = (mods, most = TILES) => new Tiles({ append: mods.slice(0, most).map(modTile) });
+
+const Lightbox = styled.Component(
+	({ radius, space }) => `
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: ${space.sm};
+
+		& > img {
+			display: block;
+			max-width: 100%;
+			max-height: calc(90vh - 180px);
+			object-fit: contain;
+			border-radius: ${radius.md};
+		}
+	`,
+);
+
+/** Whether a click on a link was a plain one, rather than one asking for a new tab or window. */
+export const plainClick = event => event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey;
+
+/**
+ * Pictures shown one at a time in a large dialog, from the one pressed: Previous and Next, or the arrow keys, step
+ * through them, each with its caption, and a link opens the file itself.
+ */
+export const lightbox = (title, pictures, start = 0) => {
+	let at = start;
+	const image = new Component({ tag: 'img', attributes: { referrerpolicy: 'no-referrer' } });
+	const caption = new Component({ style: { alignSelf: 'stretch' } });
+	const where = new Meta();
+	const original = new Link({
+		target: '_blank',
+		attributes: { rel: 'noopener noreferrer' },
+		textContent: 'Open the file',
+	});
+	const show = () => {
+		const picture = pictures[at];
+
+		image.elem.src = picture.url;
+		image.elem.alt = picture.alt ?? `A picture of ${title}`;
+		caption.content(picture.caption ?? []);
+		where.elem.textContent = pictures.length > 1 ? `${at + 1} of ${pictures.length}` : '';
+		original.elem.href = picture.url;
+	};
+	const step = by => {
+		at = (at + by + pictures.length) % pictures.length;
+		show();
+	};
+	const keys = event => {
+		if (event.key === 'ArrowRight') step(1);
+		if (event.key === 'ArrowLeft') step(-1);
+	};
+	const dialog = new Dialog({
+		header: title,
+		size: 'large',
+		onClose: () => document.removeEventListener('keydown', keys),
+		body: new Lightbox({ append: [image, caption, new Row({ append: [where, original] })] }),
+		buttons: pictures.length > 1 ? ['Previous', 'Next', 'Close'] : ['Close'],
+		onButtonPress: ({ button, closeDialog }) => (button === 'Close' ? closeDialog() : step(button === 'Next' ? 1 : -1)),
+	});
+
+	document.addEventListener('keydown', keys);
+	show();
+
+	return dialog;
+};

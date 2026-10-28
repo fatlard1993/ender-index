@@ -76,6 +76,8 @@ import {
 	date,
 	fetchReadme,
 	LAUNCHER,
+	lightbox,
+	plainClick,
 	breadcrumbs,
 	forStrangers,
 	siteBar,
@@ -291,7 +293,7 @@ const notIndexed = entry => {
 const Pictures = styled.Component(
 	({ colors, radius, space }) => `
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
 		gap: ${space.sm};
 
 		& img {
@@ -307,7 +309,10 @@ const Pictures = styled.Component(
 
 const PICTURES_SHOWN = 40;
 
-/** Every picture of the mod its readme shows and its repository keeps, each opening at full size. */
+/**
+ * Every picture of the mod its readme shows and its repository keeps, each opening large in a dialog that steps
+ * through those still showing; one that does not load is let go.
+ */
 const pictureGrid = (title, shots) => {
 	const grid = new Pictures({
 		append: shots.map(url => {
@@ -315,7 +320,7 @@ const pictureGrid = (title, shots) => {
 				href: url,
 				target: '_blank',
 				attributes: { rel: 'noopener noreferrer' },
-				tooltip: 'Open the full picture',
+				tooltip: 'Show it large',
 				append: new Component({
 					tag: 'img',
 					attributes: { src: url, alt: `A picture of ${title}`, loading: 'lazy', referrerpolicy: 'no-referrer' },
@@ -323,6 +328,19 @@ const pictureGrid = (title, shots) => {
 			});
 
 			link.elem.querySelector('img').addEventListener('error', () => link.elem.remove());
+			link.elem.addEventListener('click', event => {
+				if (!plainClick(event)) return;
+
+				event.preventDefault();
+
+				const showing = [...grid.elem.querySelectorAll('a')].map(found => found.href);
+
+				lightbox(
+					title,
+					showing.map(found => ({ url: found })),
+					showing.indexOf(link.elem.href),
+				);
+			});
 
 			return link;
 		}),
@@ -339,39 +357,60 @@ const Story = styled.Component(
 	`,
 );
 
-/** A player's shot: the picture, opening at full size, the story they told, and who told it. */
-const playerShot = (title, shot, byKey) => {
-	const url = `${INDEX}/${shot.image}`;
+const shotUrl = shot => `${INDEX}/${shot.image}`;
+
+/** Who shared a shot and when, and the other indexed mods it shows. */
+const sharedBy = (title, shot, byKey) => {
 	const others = (shot.mods ?? []).map(key => byKey.get(key)).filter(entry => entry && titleOf(entry) !== title);
+
+	return new Meta({
+		append: [
+			'From ',
+			new Link({ href: shot.issue, target: '_blank', textContent: shot.by }),
+			...(shot.at ? [`, ${date(shot.at)}`] : []),
+			...others.flatMap((entry, at) => [
+				at === 0 ? '. It shows ' : ', ',
+				new Link({ href: `#${modPath(entry)}`, textContent: titleOf(entry) }),
+				...(at === others.length - 1 ? [' too'] : []),
+			]),
+		],
+	});
+};
+
+/** A player's shot: the picture, opening large among the rest with their stories, the story told, and who told it. */
+const playerShot = (title, shot, shared, byKey) => {
+	const url = shotUrl(shot);
+	const link = new Link({
+		href: url,
+		target: '_blank',
+		tooltip: 'Show it large',
+		append: new Component({
+			tag: 'img',
+			attributes: { src: url, alt: `A player's shot of ${title}`, loading: 'lazy' },
+		}),
+	});
+
+	link.elem.addEventListener('click', event => {
+		if (!plainClick(event)) return;
+
+		event.preventDefault();
+		lightbox(
+			title,
+			shared.map(other => ({
+				url: shotUrl(other),
+				alt: `A player's shot of ${title}`,
+				caption: [new Story({ tag: 'p', textContent: other.story }), sharedBy(title, other, byKey)],
+			})),
+			shared.indexOf(shot),
+		);
+	});
 
 	return new Stack({
 		style: { gap: 0 },
 		append: [
-			new Pictures({
-				style: { gridTemplateColumns: '1fr' },
-				append: new Link({
-					href: url,
-					target: '_blank',
-					tooltip: 'Open the full picture',
-					append: new Component({
-						tag: 'img',
-						attributes: { src: url, alt: `A player's shot of ${title}`, loading: 'lazy' },
-					}),
-				}),
-			}),
+			new Pictures({ style: { gridTemplateColumns: '1fr' }, append: link }),
 			new Story({ tag: 'p', textContent: shot.story }),
-			new Meta({
-				append: [
-					'From ',
-					new Link({ href: shot.issue, target: '_blank', textContent: shot.by }),
-					...(shot.at ? [`, ${date(shot.at)}`] : []),
-					...others.flatMap((entry, at) => [
-						at === 0 ? '. It shows ' : ', ',
-						new Link({ href: `#${modPath(entry)}`, textContent: titleOf(entry) }),
-						...(at === others.length - 1 ? [' too'] : []),
-					]),
-				],
-			}),
+			sharedBy(title, shot, byKey),
 		],
 	});
 };
@@ -380,7 +419,12 @@ const playerShot = (title, shot, byKey) => {
 const playerShotsOf = (entry, title, { shared, byKey, problem }) => [
 	...(problem ? [new Meta({ tag: 'p', textContent: `The shots players shared did not load: ${problem}` })] : []),
 	...(shared.length > 0
-		? [new Stack({ style: { gap: theme.space.lg }, append: shared.map(shot => playerShot(title, shot, byKey)) })]
+		? [
+				new Stack({
+					style: { gap: theme.space.lg },
+					append: shared.map(shot => playerShot(title, shot, shared, byKey)),
+				}),
+			]
 		: []),
 	new Meta({
 		tag: 'p',
