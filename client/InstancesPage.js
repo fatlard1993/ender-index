@@ -17,30 +17,18 @@ import { specFor } from 'ender-launcher/spec';
 
 import { collection } from './collection';
 import { loadVersions } from './data';
-import { local } from './local';
+import { lastSaid, local } from './local';
 import { instanceNameOf, packDialog } from './packMaker';
 import { LOADERS } from './search';
-import { Chip, Command, LAUNCHER, Meta, Row, Stack, Title, siteBar } from './ui';
+import { Chip, Command, LAUNCHER, Meta, Row, Stack, Title, Warning, siteBar } from './ui';
 
 const SHAREABLE = new Set(['github', 'codeberg', 'gitlab', 'modrinth', 'curseforge']);
 
 const PACK_LOADERS = ['fabric', 'quilt', 'forge', 'neoforge', 'vanilla'];
 
-/** What ender said last, shortened to what a toast can hold. */
-const tail = text => (text.length > 300 ? `…${text.slice(-300)}` : text);
+const told = (intent, content) => new Notify({ intent, content });
 
-/** ender's own verdict on what it did, its last ok, !! or xx line, rather than every step it printed on the way. */
-export const summaryOf = output => {
-	const lines = (output ?? '')
-		.split('\n')
-		.map(line => line.trim())
-		.filter(Boolean);
-	const verdicts = lines.filter(line => /^(ok|!!|xx) /.test(line));
-
-	return tail((verdicts.at(-1) ?? lines.at(-1) ?? 'Done').replace(/^(ok|!!|xx) /, ''));
-};
-
-/** A checkbox with its words beside it, as small as the buttons it sits among. */
+/** A checkbox with its words beside it. */
 const checkbox = (text, checked, onChange) =>
 	new Component({
 		tag: 'label',
@@ -51,7 +39,38 @@ const checkbox = (text, checked, onChange) =>
 		],
 	});
 
-const told = (intent, content) => new Notify({ intent, content });
+/** What a job is doing, or how it ended, in a line. */
+export const jobLine = job => {
+	if (job === undefined) return '';
+	if (job.state === 'running') return `${job.title}: ${lastSaid(job.lines) || 'starting'}`;
+	if (job.state === 'done') return `${job.title}: done`;
+
+	const said = lastSaid(job.lines);
+
+	return job.error ?? `${job.title} failed (ender exited ${job.code})${said ? `: ${said}` : ''}`;
+};
+
+/** What ender printed for a job, kept as it grows. */
+const outputView = () =>
+	new Command({
+		tag: 'pre',
+		style: { display: 'none', maxHeight: '260px', overflow: 'auto', whiteSpace: 'pre-wrap', margin: 0 },
+	});
+
+const showOutput = (view, job, open) => {
+	view.elem.style.display = open && job ? '' : 'none';
+	view.elem.textContent = job?.lines.join('\n') ?? '';
+	view.elem.scrollTop = view.elem.scrollHeight;
+};
+
+/** What each card had open, kept when the list is drawn again. */
+const opened = new Map();
+
+const openedFor = name => {
+	if (!opened.has(name)) opened.set(name, { mods: false, output: false, updateFirst: true });
+
+	return opened.get(name);
+};
 
 /** The mods an instance chose, each removable when the page may name it, which a jar on disk or a build is not. */
 const modList = (manifest, onDrop) =>
@@ -78,22 +97,40 @@ const modList = (manifest, onDrop) =>
 		});
 	});
 
-/** One instance: what it is, and what can be done with it from here. */
-const instanceCard = instance => {
-	const busy = new Meta();
-	const mods = new Stack({ style: { display: 'none', gap: theme.space.xs } });
-	let updateFirst = true;
-	const working = async (doing, work, done) => {
-		busy.elem.textContent = doing;
+/** One instance: what it is, what it is doing, and what can be done with it from here. */
+const instanceCard = (instance, signal) => {
+	const open = openedFor(instance.name);
+	const status = new Meta();
+	const output = outputView();
+	const mods = new Stack({ style: { display: open.mods ? '' : 'none', gap: theme.space.xs } });
+	const actions = [];
+	const action = options => {
+		const button = new Button(options);
 
+		actions.push(button);
+
+		return button;
+	};
+	const showJob = () => {
+		const job = local.jobFor(instance.name);
+		const working = job?.state === 'running';
+
+		for (const button of actions) button.elem.disabled = working;
+
+		status.elem.textContent = jobLine(job);
+		showOutput(output, job, open.output);
+	};
+	/** Start a job on this instance, and say how it ended when it does. */
+	const runJob = async (starting, { done, quietWhenDone = false } = {}) => {
 		try {
-			const result = await work();
+			const job = await starting();
 
-			if (done) told('success', done(result));
+			showJob();
+			await local.finished(job, { reloading: !quietWhenDone });
+
+			if (!quietWhenDone) told('success', done ?? `${job.title}: done`);
 		} catch (error) {
-			told('danger', `${instance.name}: ${summaryOf(error.message)}`);
-		} finally {
-			busy.elem.textContent = '';
+			told('danger', `${instance.name}: ${error.message}`);
 		}
 	};
 	const showMods = async () => {
@@ -106,20 +143,35 @@ const instanceCard = instance => {
 				(manifest.mods ?? []).length === 0
 					? new Meta({ textContent: 'No mods chosen yet: add them from the Mods page' })
 					: modList(manifest, spec =>
-							working(
-								`Removing ${spec}`,
-								() => local.dropFrom(instance.name, [spec]),
-								() => `Removed ${spec}`,
-							).then(showMods),
+							runJob(() => local.dropFrom(instance.name, [spec]), { done: `Removed ${spec}` }).then(showMods),
 						),
 			);
 		} catch (error) {
 			mods.content(new Meta({ textContent: `Its mods did not load: ${error.message}` }));
 		}
 	};
+	const publish = async fresh => {
+		status.elem.textContent = 'Publishing its chosen mods as a secret gist';
+
+		try {
+			const { url, line, updated, left = [] } = await local.publishInstance(instance.name, { fresh });
+
+			told(
+				'success',
+				`${updated ? 'Updated' : 'Published'} at ${url}; ${line} installs it anywhere${left.length > 0 ? `. Left out, as only this machine has them: ${left.join(', ')}` : ''}`,
+			);
+		} catch (error) {
+			told('danger', `${instance.name} was not published: ${error.message}`);
+		} finally {
+			showJob();
+		}
+	};
 	const client = instance.type === 'client';
 
-	return new Card(
+	if (open.mods) showMods();
+	local.watchJobs(showJob, signal);
+
+	const card = new Card(
 		{},
 		new Stack({
 			style: { gap: theme.space.sm },
@@ -143,55 +195,53 @@ const instanceCard = instance => {
 					append: [
 						...(client
 							? [
-									new Button({
+									action({
 										icon: 'play',
 										textContent: 'Launch',
 										onPointerPress: () =>
-											working(
-												'Starting it',
-												() => local.launch(instance.name, { update: updateFirst }),
-												({ log }) => `Launching ${instance.name}; the game window opens when it is ready (log: ${log})`,
-											),
+											runJob(() => local.launch(instance.name, { update: open.updateFirst }), {
+												quietWhenDone: true,
+											}),
 									}),
-									checkbox('update first', updateFirst, ({ target: { checked } }) => {
-										updateFirst = checked;
+									checkbox('update first', open.updateFirst, ({ target: { checked } }) => {
+										open.updateFirst = checked;
 									}),
 								]
 							: []),
-						new Button({
+						action({
 							icon: 'rotate',
 							variant: 'flat',
 							textContent: 'Update',
-							onPointerPress: () =>
-								working(
-									'Updating; ender fetches what changed',
-									() => local.update(instance.name),
-									() => `Updated ${instance.name}`,
-								),
+							onPointerPress: () => runJob(() => local.update(instance.name)),
 						}),
 						new Button({
 							icon: 'chevron-down',
 							variant: 'flat',
 							textContent: 'Mods',
 							onPointerPress: () => {
-								const opening = mods.elem.style.display === 'none';
-
-								mods.elem.style.display = opening ? '' : 'none';
-								if (opening) showMods();
+								open.mods = !open.mods;
+								mods.elem.style.display = open.mods ? '' : 'none';
+								if (open.mods) showMods();
 							},
 						}),
 						new Button({
+							icon: 'terminal',
+							variant: 'flat',
+							textContent: 'Output',
+							title: 'What ender printed for the last job here',
+							onPointerPress: () => {
+								open.output = !open.output;
+								showJob();
+							},
+						}),
+						action({
 							icon: 'share',
 							variant: 'flat',
 							textContent: 'Publish as gist',
-							onPointerPress: () =>
-								working(
-									'Publishing its chosen mods as a secret gist',
-									() => local.publishInstance(instance.name),
-									({ url, line }) => `Published at ${url}; ${line} installs it anywhere`,
-								),
+							title: 'Publish its chosen mods; publishing again updates the same gist',
+							onPointerPress: () => publish(false),
 						}),
-						new Button({
+						action({
 							icon: 'trash',
 							variant: 'flat',
 							textContent: 'Delete',
@@ -199,30 +249,54 @@ const instanceCard = instance => {
 								if (
 									await Dialog.confirm({
 										header: `Delete ${instance.name}?`,
-										body: 'ender forgets the instance. Its game directory, with its worlds, stays on disk.',
+										body: "ender forgets the instance. Its game directory, worlds included, is kept: moved into kept/ in ender's data directory if it is inside the instance.",
 										confirmLabel: 'Delete',
 										intent: 'danger',
 									})
 								)
-									working(
-										'Deleting it',
-										() => local.remove(instance.name),
-										() => `Deleted ${instance.name}`,
-									);
+									runJob(() => local.remove(instance.name));
 							},
 						}),
-						busy,
 					],
 				}),
+				status,
+				output,
 				mods,
 			],
 		}),
 	);
+
+	showJob();
+
+	return card;
+};
+
+/** A job's progress on a status line, until it ends; then how it ended, with the instances read again. */
+const runInto = async (status, starting) => {
+	status.elem.textContent = 'Asking ender';
+
+	const controller = new AbortController();
+
+	try {
+		const job = await starting();
+		const show = () => {
+			status.elem.textContent = jobLine(job);
+		};
+
+		show();
+		local.watchJobs(show, controller.signal);
+		await local.finished(job);
+		told('success', `${job.title}: done`);
+	} catch (error) {
+		status.elem.textContent = `It did not work: ${error.message}`;
+	} finally {
+		controller.abort();
+	}
 };
 
 /** Make an instance from a pack anyone can point at, or from a list: the mods collected, and any named by spec. */
 const newInstance = () => {
-	const status = new Meta();
+	const status = new Meta({ style: { whiteSpace: 'pre-wrap' } });
 	const source = new Input({
 		placeholder: 'A gist link, gh:owner/repo, or an https link to a pack',
 		style: { flex: '1' },
@@ -240,18 +314,6 @@ const newInstance = () => {
 		placeholder: 'More mods, one to a line, as search writes them: gh:owner/repo, mr:sodium',
 		attributes: { rows: 3 },
 	});
-	const run = async (doing, work) => {
-		status.elem.textContent = doing;
-
-		try {
-			const { output } = await work();
-
-			status.elem.textContent = '';
-			told('success', summaryOf(output));
-		} catch (error) {
-			status.elem.textContent = `It did not work: ${summaryOf(error.message)}`;
-		}
-	};
 
 	loadVersions()
 		.then(versions => {
@@ -273,10 +335,7 @@ const newInstance = () => {
 							new Button({
 								icon: 'download',
 								textContent: 'Import',
-								onPointerPress: () =>
-									run('Importing; ender fetches the pack and what it names', () =>
-										local.importPack(source.elem.value.trim()),
-									),
+								onPointerPress: () => runInto(status, () => local.importPack(source.elem.value.trim())),
 							}),
 						],
 					}),
@@ -321,7 +380,12 @@ const newInstance = () => {
 										icon: 'plus',
 										textContent: 'Make it',
 										onPointerPress: () => {
-											const wanted = instanceNameOf(choice.name || 'instance');
+											if (!choice.name.trim()) {
+												status.elem.textContent = 'Give it a name first';
+
+												return;
+											}
+
 											const listed = [
 												...(choice.withCollected
 													? collection.items.map(item => specFor(item.host ?? 'github', item.repo))
@@ -332,9 +396,9 @@ const newInstance = () => {
 													.filter(Boolean),
 											];
 
-											run(`Making ${wanted}; ender fetches the game and the mods, which takes a while`, () =>
+											runInto(status, () =>
 												local.create({
-													name: wanted,
+													name: instanceNameOf(choice.name),
 													...(choice.minecraft ? { minecraft: choice.minecraft } : {}),
 													loader: choice.loader,
 													specs: [...new Set(listed)],
@@ -372,12 +436,24 @@ export default class InstancesPage extends View {
 		this.content([siteBar('instances'), new Content({ column: 900, style: { paddingBlock: '12px' }, append: body })]);
 
 		const list = new Stack();
-		const drawList = () =>
-			list.content(
-				local.all.length === 0
-					? new Meta({ tag: 'p', textContent: 'No instances yet: make one above.' })
-					: local.all.map(instanceCard),
-			);
+		let drawn;
+		let cards;
+		/** Drawn again only when the instances change, so a card keeps what it shows while its job runs. */
+		const drawList = () => {
+			const shape = JSON.stringify([local.error, local.all]);
+
+			if (shape === drawn) return;
+
+			drawn = shape;
+			cards?.abort();
+			cards = new AbortController();
+			if (local.error) list.content(new Warning({ textContent: local.error }));
+			else if (local.all.length === 0)
+				list.content(new Meta({ tag: 'p', textContent: 'No instances yet: make one above.' }));
+			else list.content(local.all.map(instance => instanceCard(instance, cards.signal)));
+		};
+
+		this.signal.addEventListener('abort', () => cards?.abort());
 
 		local.ready().then(served => {
 			if (this.signal.aborted) return;

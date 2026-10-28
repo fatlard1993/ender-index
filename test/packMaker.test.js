@@ -5,11 +5,13 @@ import { browser } from './dom';
 let restore;
 let maker;
 let instances;
+let local;
 
 beforeAll(async () => {
 	restore = browser();
 	maker = await import('../client/packMaker');
 	instances = await import('../client/InstancesPage');
+	local = await import('../client/local');
 });
 
 afterAll(() => restore());
@@ -43,15 +45,34 @@ describe('making a pack', () => {
 	});
 });
 
-describe('what the instances page says ender did', () => {
-	test("is ender's last verdict line, not every step it printed", () => {
+describe('what the instances page says of a job', () => {
+	test('is what it is doing while it runs, without the marks ender puts on its lines', () => {
 		expect(
-			instances.summaryOf(
-				'ok Imported justfatpack-client :: Minecraft 26.3\n  game dir /x\n:: Syncing mods\n:: 8 mods in place',
-			),
-		).toBe('Imported justfatpack-client :: Minecraft 26.3');
-		expect(instances.summaryOf('!! 1 mod did not update\nok Launched')).toBe('Launched');
-		expect(instances.summaryOf(':: only steps')).toBe(':: only steps');
-		expect(instances.summaryOf('')).toBe('Done');
+			instances.jobLine({ title: 'Importing gist:abc', state: 'running', lines: [':: Reading the pack', ''] }),
+		).toBe('Importing gist:abc: Reading the pack');
+		expect(instances.jobLine({ title: 'Updating family', state: 'running', lines: [] })).toBe(
+			'Updating family: starting',
+		);
+		expect(instances.jobLine({ title: 'Updating family', state: 'done', code: 0, lines: ['ok 3 mods'] })).toBe(
+			'Updating family: done',
+		);
+		expect(instances.jobLine(undefined)).toBe('');
+	});
+
+	test('is how it failed, in its own last words, when it did', () => {
+		const failed = {
+			title: 'Playing family',
+			state: 'failed',
+			code: 1,
+			lines: [':: Starting', 'xx Java was not found'],
+		};
+
+		expect(instances.jobLine(failed)).toBe('Playing family failed (ender exited 1): Java was not found');
+		expect(local.failureOf(failed)).toBe(
+			'Playing family did not finish (ender exited 1): :: Starting\nxx Java was not found',
+		);
+		expect(local.failureOf({ ...failed, state: 'lost', error: 'ender web stopped answering' })).toBe(
+			'ender web stopped answering',
+		);
 	});
 });

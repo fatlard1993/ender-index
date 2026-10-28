@@ -2,7 +2,7 @@ import { Button, Dialog, Input, Label, Link, Notify, Select, copyToClipboard } f
 import { specFor } from 'ender-launcher/spec';
 
 import { loadVersions } from './data';
-import { local } from './local';
+import { lastSaid, local } from './local';
 import { LOADERS, readQuery } from './search';
 import { Command, Meta, Row, Stack } from './ui';
 
@@ -147,21 +147,26 @@ export const packDialog = items => {
 				textContent: 'Make an instance of it',
 				onPointerPress: async () => {
 					const wanted = instanceNameOf(choice.name);
-
-					result.content(
-						new Meta({ textContent: `Making ${wanted}; ender fetches the game and the mods, which takes a while` }),
-					);
+					const watching = new AbortController();
 
 					try {
-						await local.create({
+						const job = await local.create({
 							name: wanted,
 							minecraft: choice.minecraft,
 							loader: choice.loader,
 							specs: current().mods,
 						});
+
+						local.watchJobs(
+							() => result.content(new Meta({ textContent: lastSaid(job.lines) || `Making ${wanted}` })),
+							watching.signal,
+						);
+						await local.finished(job);
 						result.content(new Meta({ textContent: `Made ${wanted}: it is on the Instances page` }));
 					} catch (error) {
 						result.content(new Meta({ textContent: `${wanted} was not made: ${error.message}` }));
+					} finally {
+						watching.abort();
 					}
 				},
 			}),

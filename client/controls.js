@@ -8,9 +8,6 @@ import { Chip } from './ui';
 
 const specOf = entry => specFor(entry.host ?? 'github', entry.repo);
 
-/** The last lines ender printed, which say what it did or why it could not. */
-const tail = output => (output ?? '').split('\n').filter(Boolean).slice(-3).join('\n');
-
 export const collectButton = entry => {
 	const collected = collection.has(entry);
 
@@ -38,7 +35,7 @@ export const runLocally = async (verb, entries) => {
 
 		return output;
 	} catch (error) {
-		new Notify({ intent: 'danger', content: `${named}: ${tail(error.message)}` });
+		new Notify({ intent: 'danger', content: `${named}: ${error.message}` });
 	}
 };
 
