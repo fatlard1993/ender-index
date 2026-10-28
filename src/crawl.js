@@ -597,7 +597,13 @@ const PACKS = join(DATA, 'packs');
 const packPath = name => join(PACKS, `${name}.json`);
 
 /**
- * Read each pack repository once, after the mods and inside the same time budget: those found on GitHub before any
+ * The most of a crawl's time packs are read in, before the mods take the rest: a backlog of mods would otherwise spend
+ * every crawl's whole budget, and no pack would be read at all.
+ */
+const PACK_SHARE = 1 / 6;
+
+/**
+ * Read each pack repository once, before the mods and within PACK_SHARE of the time budget: those found on GitHub before any
  * known only from Modrinth, and within each the least recently read first. A repository with no pack left loses its
  * record. Packs are read from GitHub alone, where nearly all of them are kept.
  */
@@ -658,7 +664,8 @@ export const crawl = async ({ only } = {}) => {
 	// An owner's FUNDING.yml stands for each of their repositories without one, so it is read once a crawl
 	const owners = new Map();
 	// A crawl the runner kills commits nothing, so it stops itself while there is time to commit.
-	const deadline = Date.now() + Number(process.env.CRAWL_MINUTES ?? Infinity) * 60_000;
+	const minutes = Number(process.env.CRAWL_MINUTES ?? Infinity);
+	const deadline = Date.now() + minutes * 60_000;
 
 	console.log(
 		`Crawling ${repos.length === 1 ? 'one repository' : `${repos.length} repositories`}; each new release jar is downloaded and scanned, so this takes a while`,
@@ -669,6 +676,15 @@ export const crawl = async ({ only } = {}) => {
 	const parallel = Number(process.env.CRAWL_PARALLEL ?? PARALLEL);
 
 	try {
+		if (!only) {
+			packOutcome = await crawlPacks({
+				deadline: Math.min(deadline, Date.now() + minutes * PACK_SHARE * 60_000),
+				scratch,
+				now,
+				parallel,
+			});
+		}
+
 		outcome = await crawlEach(repos, {
 			deadline,
 			parallel,
@@ -683,8 +699,6 @@ export const crawl = async ({ only } = {}) => {
 				}
 			},
 		});
-
-		if (!only) packOutcome = await crawlPacks({ deadline, scratch, now, parallel });
 	} finally {
 		await rm(scratch, { recursive: true, force: true });
 		await github.saveCache();
