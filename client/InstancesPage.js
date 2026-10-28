@@ -294,14 +294,13 @@ const runInto = async (status, starting) => {
 	}
 };
 
-/** Make an instance from a pack anyone can point at, or from a list: the mods collected, and any named by spec. */
-const newInstance = () => {
+const newInstance = signal => {
 	const status = new Meta({ style: { whiteSpace: 'pre-wrap' } });
 	const source = new Input({
 		placeholder: 'A gist link, gh:owner/repo, or an https link to a pack',
 		style: { flex: '1' },
 	});
-	const choice = { name: '', minecraft: '', loader: 'fabric', withCollected: collection.items.length > 0 };
+	const choice = { name: '', minecraft: '', loader: 'fabric', withCollected: false };
 	const minecraft = new Select({
 		options: [{ label: 'The newest release', value: '' }],
 		value: '',
@@ -311,9 +310,35 @@ const newInstance = () => {
 	});
 	const specs = new Input({
 		tag: 'textarea',
-		placeholder: 'More mods, one to a line, as search writes them: gh:owner/repo, mr:sodium',
+		placeholder: 'More mods, one to a line: gh:owner/repo, mr:sodium',
 		attributes: { rows: 3 },
 	});
+
+	const withCollected = new Component({ tag: 'span' });
+	const packOfCollected = new Component({ tag: 'span' });
+	const drawCollected = items => {
+		choice.withCollected = items.length > 0 && (choice.withCollected || withCollected.elem.childElementCount === 0);
+		withCollected.content(
+			items.length > 0
+				? checkbox(`with the ${items.length} mods collected`, choice.withCollected, ({ target: { checked } }) => {
+						choice.withCollected = checked;
+					})
+				: [],
+		);
+		packOfCollected.content(
+			items.length > 0
+				? new Button({
+						icon: 'share',
+						variant: 'flat',
+						textContent: 'Make a pack of the collected mods',
+						onPointerPress: () => packDialog(collection.items),
+					})
+				: [],
+		);
+	};
+
+	drawCollected(collection.items);
+	collection.subscribe(drawCollected, signal);
 
 	loadVersions()
 		.then(versions => {
@@ -362,17 +387,7 @@ const newInstance = () => {
 									}),
 								],
 							}),
-							...(collection.items.length > 0
-								? [
-										checkbox(
-											`with the ${collection.items.length} mods collected`,
-											choice.withCollected,
-											({ target: { checked } }) => {
-												choice.withCollected = checked;
-											},
-										),
-									]
-								: []),
+							withCollected,
 							specs,
 							new Row({
 								append: [
@@ -406,16 +421,7 @@ const newInstance = () => {
 											);
 										},
 									}),
-									...(collection.items.length > 0
-										? [
-												new Button({
-													icon: 'share',
-													variant: 'flat',
-													textContent: 'Make a pack of the collected mods',
-													onPointerPress: () => packDialog(collection.items),
-												}),
-											]
-										: []),
+									packOfCollected,
 								],
 							}),
 						],
@@ -476,7 +482,7 @@ export default class InstancesPage extends View {
 				return;
 			}
 
-			body.content([new Title({ tag: 'h1', textContent: 'Instances' }), newInstance(), list]);
+			body.content([new Title({ tag: 'h1', textContent: 'Instances' }), newInstance(this.signal), list]);
 			drawList();
 			local.subscribe(drawList, this.signal);
 		});
