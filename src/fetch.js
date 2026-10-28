@@ -6,6 +6,12 @@ const WAIT_AT_MOST = 2 * 60 * 1000;
 
 const SLOW_DOWNS = 5;
 
+/**
+ * How long one request may take, its body included, before it counts as failed and is asked again. A connection that
+ * stalls answers nothing and errors nothing: without a limit a single one held a crawl until its runner was stopped.
+ */
+export const REQUEST_LIMIT = 3 * 60 * 1000;
+
 /** How long a 429 asks to be left alone: Retry-After in seconds, or GitLab's RateLimit-Reset as a time. */
 export const askedToWait = response => {
 	const after = Number(response.headers.get('retry-after') ?? Number.NaN);
@@ -43,12 +49,16 @@ export const limitedBy = (host, response) => {
  * fetch, asked again after a server error or a network failure, and after a 429 that says how long to wait when that
  * is not long; any other answer is returned as it came.
  */
-export const fetchSteady = async (url, init, { pauses = PAUSES, unsaid = UNSAID_WAIT } = {}) => {
+export const fetchSteady = async (url, init, { pauses = PAUSES, unsaid = UNSAID_WAIT, limit = REQUEST_LIMIT } = {}) => {
 	for (let attempt = 0, slowed = 0; ; ++attempt) {
 		let failure;
 
 		try {
-			const response = await fetch(url, init);
+			const timeout = AbortSignal.timeout(limit);
+			const response = await fetch(url, {
+				...init,
+				signal: init?.signal ? AbortSignal.any([init.signal, timeout]) : timeout,
+			});
 			const wait = response.status === 429 && slowed < SLOW_DOWNS ? (askedToWait(response) ?? unsaid) : undefined;
 
 			if (wait !== undefined && wait <= WAIT_AT_MOST) {
@@ -68,9 +78,11 @@ export const fetchSteady = async (url, init, { pauses = PAUSES, unsaid = UNSAID_
 			await response.body?.cancel();
 			failure = `answered ${response.status}`;
 		} catch (error) {
-			if (attempt === pauses.length) throw error;
+			const said = error.name === 'TimeoutError' ? new Error(`took longer than ${limit / 1000}s`) : error;
 
-			failure = error.message;
+			if (attempt === pauses.length) throw said;
+
+			failure = said.message;
 		}
 
 		console.error(`retrying in ${pauses[attempt] / 1000}s: ${new URL(url).host} ${failure}`);

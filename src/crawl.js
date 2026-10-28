@@ -539,9 +539,26 @@ const minutes = wait => `${Math.ceil(wait / 60_000)} ${Math.ceil(wait / 60_000) 
  * repositories set aside, so one host's limit holds back no other's; they are crawled once it lifts, while that is inside the time
  * budget, and first in the next crawl when it is not.
  */
+/**
+ * The longest one repository may take. Each request has its own limit, but a repository is many of them, and a worker
+ * held on one past the deadline holds the whole crawl there.
+ */
+export const REPO_LIMIT = 15 * 60 * 1000;
+
+const within = (work, limit) => {
+	let timer;
+
+	return Promise.race([
+		work.finally(() => clearTimeout(timer)),
+		new Promise((_, reject) => {
+			timer = setTimeout(() => reject(new Error(`took longer than ${limit / 60_000} minutes`)), limit);
+		}),
+	]);
+};
+
 export const crawlEach = async (
 	repos,
-	{ crawlRepo, deadline, parallel = 1, sleep = Bun.sleep, beforeWait = async () => {} },
+	{ crawlRepo, deadline, parallel = 1, sleep = Bun.sleep, beforeWait = async () => {}, repoLimit = REPO_LIMIT },
 ) => {
 	const failures = [];
 	const stopped = [];
@@ -560,7 +577,7 @@ export const crawlEach = async (
 			}
 
 			try {
-				await crawlRepo(line);
+				await within(crawlRepo(line), repoLimit);
 			} catch (error) {
 				if (!(error instanceof RateLimited)) {
 					failures.push(line);
@@ -671,6 +688,27 @@ const packFiles = async () =>
 export const recordFiles = async () =>
 	[...new Bun.Glob('**/*.json').scanSync(join(DATA, 'mods'))].map(file => join(DATA, 'mods', file));
 
+/**
+ * What the site reads, from every record and pack on disk: the search, the packs and the tags. Kept apart from the
+ * crawl so a crawl stopped partway still leaves the site the records it wrote.
+ */
+export const writeLists = async () => {
+	const records = await Promise.all((await recordFiles()).map(file => Bun.file(file).json()));
+	const themes = themesOf(records);
+	const search = buildSearch(records, themes, await readJson(join(DATA, 'sources.json'), {}));
+	const packs = await Promise.all((await packFiles()).map(file => Bun.file(file).json()));
+
+	await writeJsonLines(join(DATA, 'search.json'), search);
+	await writeJsonLines(
+		join(DATA, 'packs.json'),
+		buildPacks(packs, search, records, await readJson(join(DATA, 'modrinth-ids.json'), {})),
+	);
+	await writeJson(join(DATA, 'tags.json'), themes.themes);
+	await pruneIcons(records);
+
+	return { records, packs };
+};
+
 export const crawl = async ({ only } = {}) => {
 	const now = new Date().toISOString();
 	const found = only ?? (await readRepos());
@@ -737,20 +775,7 @@ export const crawl = async ({ only } = {}) => {
 
 	console.log(spendingLine(github.spent()));
 
-	const records = await Promise.all((await recordFiles()).map(file => Bun.file(file).json()));
-
-	const themes = themesOf(records);
-
-	const search = buildSearch(records, themes, await readJson(join(DATA, 'sources.json'), {}));
-	const packs = await Promise.all((await packFiles()).map(file => Bun.file(file).json()));
-
-	await writeJsonLines(join(DATA, 'search.json'), search);
-	await writeJsonLines(
-		join(DATA, 'packs.json'),
-		buildPacks(packs, search, records, await readJson(join(DATA, 'modrinth-ids.json'), {})),
-	);
-	await writeJson(join(DATA, 'tags.json'), themes.themes);
-	await pruneIcons(records);
+	const { records, packs } = await writeLists();
 
 	console.log(`${records.length} repositories indexed; ${outcome.failures.length} could not be crawled`);
 	console.log(`${packs.length} packs listed; ${packOutcome.failures.length} pack repositories could not be read`);

@@ -48,17 +48,25 @@ jobs:
         working-directory: ender-index
         env:
           GITHUB_TOKEN: ${{ secrets.CRAWL_TOKEN || secrets.GITHUB_TOKEN }}
+      # Under the job's limit, so a crawl that overruns its budget is stopped here and the lists and commit below still run
       - name: crawl
         id: crawl
         run: bun run crawl
         working-directory: ender-index
         continue-on-error: true
+        timeout-minutes: 300
         env:
           GITHUB_TOKEN: ${{ secrets.CRAWL_TOKEN || secrets.GITHUB_TOKEN }}
           # A personal token's hour is all of its owner's tools'; the crawl leaves them this much of it
           CRAWL_RESERVE: ${{ secrets.CRAWL_TOKEN && '1000' || '0' }}
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
           CRAWL_MINUTES: 240
+      # Again from what is on disk: a crawl stopped by its step's limit wrote records but never listed them
+      - name: lists
+        if: always() && steps.crawl.outcome != 'success'
+        run: bun run lists
+        working-directory: ender-index
+        timeout-minutes: 20
       - name: commit
         if: always()
         working-directory: ender-index

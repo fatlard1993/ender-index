@@ -393,6 +393,48 @@ describe("one host's rate limit", () => {
 	});
 });
 
+describe('a crawl held up', () => {
+	test('sets a repository aside that takes past its limit, and goes on to the rest', async () => {
+		setSystemTime();
+
+		const asked = [];
+		const outcome = await crawlEach(['a/stalls', 'b/fine'], {
+			crawlRepo: async line => {
+				asked.push(line);
+
+				if (line === 'a/stalls') await new Promise(() => {});
+			},
+			deadline: Date.now() + 60_000,
+			repoLimit: 50,
+		});
+
+		expect(asked).toEqual(['a/stalls', 'b/fine']);
+		expect(outcome.failures).toEqual(['a/stalls']);
+	});
+
+	test('a request that never answers is given up on at its limit and asked again', async () => {
+		const { fetchSteady } = await import('../src/fetch');
+		let asked = 0;
+		const server = Bun.serve({
+			port: 0,
+			fetch: () => {
+				asked++;
+
+				return new Promise(() => {});
+			},
+		});
+
+		try {
+			await expect(
+				fetchSteady(`http://localhost:${server.port}/`, undefined, { pauses: [0], limit: 100 }),
+			).rejects.toThrow('took longer than 0.1s');
+			expect(asked).toBe(2);
+		} finally {
+			server.stop(true);
+		}
+	});
+});
+
 describe('the order a crawl takes repositories in', () => {
 	test("every one found on its host before any known only from Modrinth, however new Modrinth's are", () => {
 		const ages = { 'a/old': 10, 'a/older': 5, 'm/new': 0, 'm/never': 0, 'a/both': 20 };
@@ -487,4 +529,3 @@ describe("a personal token's allowance", () => {
 		}
 	});
 });
-
