@@ -19,7 +19,8 @@ import { HOSTS, authorOf, sharing } from 'ender-launcher/rank';
 import { ownerName } from 'ender-launcher/support';
 
 import { collection } from './collection';
-import { loadListing, loadShots, loadVersions } from './data';
+import { loadListing, loadPacks, loadShots, loadVersions } from './data';
+import { packCard } from './packs';
 import { shareUrl } from './shots';
 import {
 	CAPABILITIES,
@@ -764,6 +765,7 @@ export default class ModPage extends View {
 				],
 			}),
 			related: new Stack({ append: related }),
+			packs: new Stack(),
 			author: new Stack({
 				append: [
 					tiles(others, others.length),
@@ -771,12 +773,13 @@ export default class ModPage extends View {
 				],
 			}),
 		};
-		const tabsFor = ({ shared, pictures: shots }) => [
+		const tabsFor = ({ shared, pictures: shots, packs = [] }) => [
 			{ id: 'readme', label: 'Readme' },
 			...(shots.length > 0 ? [{ id: 'gallery', label: 'Gallery', count: shots.length }] : []),
 			{ id: 'players', label: 'Player shots', count: shared.length },
 			{ id: 'downloads', label: 'Downloads', count: downloads.count },
 			...(related.length > 0 ? [{ id: 'related', label: 'Related' }] : []),
+			...(packs.length > 0 ? [{ id: 'packs', label: 'Packs', count: packs.length }] : []),
 			...(others.length > 0 ? [{ id: 'author', label: `More from ${owner}`, count: others.length }] : []),
 		];
 		const tabs = new Tabs({
@@ -794,6 +797,20 @@ export default class ModPage extends View {
 		};
 
 		showGallery({});
+		loadPacks()
+			.then(found => {
+				if (signal.aborted) return;
+
+				const using = found.filter(pack => pack.matched.includes(collectionKey(entry)));
+
+				panels.packs.content([
+					new Meta({ tag: 'p', textContent: `The packs that name ${title}, the most starred first.` }),
+					...using.map(packCard),
+				]);
+				Object.assign(shown, { packs: using });
+				tabs.options.tabs = tabsFor(shown);
+			})
+			.catch(() => {});
 		loadShots()
 			.then(byMod => !signal.aborted && showGallery({ shared: byMod[collectionKey(entry)] ?? [] }))
 			.catch(error => !signal.aborted && showGallery({ problem: error.message }));

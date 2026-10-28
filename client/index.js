@@ -4,6 +4,7 @@ import CollectionBar from './CollectionBar';
 import GetPage from './GetPage';
 import InstancesPage from './InstancesPage';
 import ModPage from './ModPage';
+import PackPage from './PackPage';
 import PacksPage from './PacksPage';
 import SearchPage from './SearchPage';
 
@@ -17,6 +18,7 @@ new Page({
 				views: {
 					'/': SearchPage,
 					'/packs': PacksPage,
+					'/pack/:host/:owner/:name': PackPage,
 					'/get': GetPage,
 					'/instances': InstancesPage,
 					'/mod/:host/:owner/:name': ModPage,

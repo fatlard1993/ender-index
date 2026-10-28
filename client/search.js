@@ -380,13 +380,60 @@ export const installAllCommand = (entries, { instance } = {}) =>
 export const fileSize = bytes =>
 	bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
 
-/** Whether a pack fits what was chosen: its game version, its loader, and every word typed in its name or text. */
-export const packFits = (pack, { query = '', minecraft, loader }) => {
+export const PACK_SORTS = {
+	stars: 'Most stars',
+	indexed: 'Most mods in the index',
+	pushed: 'Pushed most recently',
+	mods: 'Most mods',
+	name: 'Name',
+};
+
+export const PACK_FORMATS = { ender: 'ender pack', packwiz: 'packwiz', mrpack: '.mrpack' };
+
+/** How much of a pack comes from where the index reads it. */
+export const PACK_JARS = { indexed: 'Every mod in the index', found: 'Every jar found' };
+
+export const readPackQuery = search => {
+	const params = new URLSearchParams(search);
+
+	return {
+		query: params.get('q') ?? '',
+		minecraft: params.get('mc') || undefined,
+		loader: oneOf(params.get('loader'), LOADERS),
+		format: oneOf(params.get('format'), PACK_FORMATS),
+		jars: oneOf(params.get('jars'), PACK_JARS),
+		sort: oneOf(params.get('sort'), PACK_SORTS) ?? 'stars',
+	};
+};
+
+export const writePackQuery = ({ query, minecraft, loader, format, jars, sort }) => {
+	const params = new URLSearchParams();
+
+	if (query) params.set('q', query);
+	if (minecraft) params.set('mc', minecraft);
+	if (loader) params.set('loader', loader);
+	if (format) params.set('format', format);
+	if (jars) params.set('jars', jars);
+	if (sort && sort !== 'stars') params.set('sort', sort);
+
+	const written = params.toString();
+
+	return written ? `?${written}` : '';
+};
+
+/**
+ * Whether a pack fits what was chosen: its game version, its loader, its format, how much of it comes from where the
+ * index reads it, and every word typed in its name or text.
+ */
+export const packFits = (pack, { query = '', minecraft, loader, format, jars }) => {
 	const text = `${pack.name} ${pack.repo} ${pack.description ?? ''}`.toLowerCase();
 
 	return (
 		(!minecraft || pack.minecraft === minecraft) &&
 		(!loader || pack.loader === loader) &&
+		(!format || pack.formats.includes(format)) &&
+		(jars !== 'indexed' || pack.matched.length === pack.count) &&
+		(jars !== 'found' || !pack.missing) &&
 		query
 			.toLowerCase()
 			.split(/\s+/)
@@ -394,3 +441,17 @@ export const packFits = (pack, { query = '', minecraft, loader }) => {
 			.every(word => text.includes(word))
 	);
 };
+
+const PACK_ORDERS = {
+	stars: (a, b) => (b.stars ?? 0) - (a.stars ?? 0),
+	indexed: (a, b) => b.matched.length - a.matched.length,
+	pushed: (a, b) => (b.pushed ?? '').localeCompare(a.pushed ?? ''),
+	mods: (a, b) => b.count - a.count,
+	name: (a, b) => a.name.localeCompare(b.name),
+};
+
+export const sortPacks = (packs, sort = 'stars') =>
+	packs.toSorted((a, b) => PACK_ORDERS[sort](a, b) || a.repo.localeCompare(b.repo));
+
+/** Where a pack's own page is. */
+export const packPath = pack => `#/pack/${pack.host ?? 'github'}/${pack.repo}`;
