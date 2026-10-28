@@ -53,9 +53,12 @@ export const loadPacks = () => {
 
 let shots;
 
-/** The players' shots that were looked over and shown, by the mods they show; none before any are. */
+/**
+ * The players' shots that were looked over and shown, by the mods they show; none before any are. GitHub serves it to
+ * be kept five minutes, which would hide a shot just published from anyone who looked before it was.
+ */
 export const loadShots = () => {
-	shots ??= fetch(`${INDEX}/shots.json`).then(async response => {
+	shots ??= fetch(`${INDEX}/shots.json`, { cache: 'no-cache' }).then(async response => {
 		if (response.status === 404) return {};
 		if (!response.ok) throw new Error(`${INDEX}/shots.json answered ${response.status}`);
 
