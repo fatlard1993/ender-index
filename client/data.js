@@ -50,3 +50,18 @@ export const loadPacks = () => {
 
 	return packs;
 };
+
+let shots;
+
+/** The players' shots that were looked over and shown, by the mods they show; none before any are. */
+export const loadShots = () => {
+	shots ??= fetch(`${INDEX}/shots.json`).then(async response => {
+		if (response.status === 404) return {};
+		if (!response.ok) throw new Error(`${INDEX}/shots.json answered ${response.status}`);
+
+		return response.json();
+	});
+	shots.catch(() => (shots = undefined));
+
+	return shots;
+};

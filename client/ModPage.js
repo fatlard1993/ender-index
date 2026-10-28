@@ -19,9 +19,12 @@ import { HOSTS, authorOf, sharing } from 'ender-launcher/rank';
 import { ownerName } from 'ender-launcher/support';
 
 import { collection } from './collection';
-import { loadListing, loadVersions } from './data';
+import { loadListing, loadShots, loadVersions } from './data';
+import { sharePath, sharingOpen } from './shots';
 import {
 	CAPABILITIES,
+	INDEX,
+	collectionKey,
 	LOADERS,
 	aboutOf,
 	authorPath,
@@ -34,6 +37,7 @@ import {
 	fileSize,
 	installCommand,
 	loadersOf,
+	modPath,
 	pictureUrl,
 	readQuery,
 	readmeUrl,
@@ -326,6 +330,76 @@ const pictureGrid = (title, shots) => {
 
 	return [grid];
 };
+
+const Story = styled.Component(
+	({ space }) => `
+		white-space: pre-line;
+		margin: 0;
+		margin-top: ${space.xs};
+	`,
+);
+
+/** A player's shot: the picture, opening at full size, the story they told, and who told it. */
+const playerShot = (title, shot, byKey) => {
+	const url = `${INDEX}/${shot.image}`;
+	const others = (shot.mods ?? []).map(key => byKey.get(key)).filter(entry => entry && titleOf(entry) !== title);
+
+	return new Stack({
+		style: { gap: 0 },
+		append: [
+			new Pictures({
+				style: { gridTemplateColumns: '1fr' },
+				append: new Link({
+					href: url,
+					target: '_blank',
+					tooltip: 'Open the full picture',
+					append: new Component({
+						tag: 'img',
+						attributes: { src: url, alt: `A player's shot of ${title}`, loading: 'lazy' },
+					}),
+				}),
+			}),
+			new Story({ tag: 'p', textContent: shot.story }),
+			new Meta({
+				append: [
+					`From ${shot.name ?? 'a player'}`,
+					...(shot.at ? [`, ${date(shot.at)}`] : []),
+					...others.flatMap((entry, at) => [
+						at === 0 ? '. It shows ' : ', ',
+						new Link({ href: `#${modPath(entry)}`, textContent: titleOf(entry) }),
+						...(at === others.length - 1 ? [' too'] : []),
+					]),
+				],
+			}),
+		],
+	});
+};
+
+/** What players shared of it first, then where to share one, then the pictures its readme and repository keep. */
+const galleryOf = (entry, title, { shared, pictures, byKey, problem }) => [
+	...(problem ? [new Meta({ tag: 'p', textContent: `The shots players shared did not load: ${problem}` })] : []),
+	...(shared.length > 0
+		? [new Stack({ style: { gap: theme.space.lg }, append: shared.map(shot => playerShot(title, shot, byKey)) })]
+		: []),
+	...(sharingOpen()
+		? [
+				new Meta({
+					tag: 'p',
+					append: [
+						shared.length > 0 ? 'Played with it? ' : 'No player has shared a shot of it yet. ',
+						new Link({ href: sharePath([collectionKey(entry)]), textContent: 'Share a shot' }),
+						' from your game, and the story behind it.',
+					],
+				}),
+			]
+		: []),
+	...(pictures.length > 0
+		? [
+				...(shared.length > 0 ? [new SectionLabel({ level: 2, textContent: 'From its repository' })] : []),
+				...pictureGrid(title, pictures),
+			]
+		: []),
+];
 
 const fitsLabel = ({ minecraft, loader }) =>
 	[minecraft && `Minecraft ${minecraft}`, loader && LOADERS[loader]].filter(Boolean).join(' with ') || 'any version';
@@ -654,25 +728,32 @@ export default class ModPage extends View {
 				],
 			}),
 		};
-		const tabsFor = shots => [
+		const tabsFor = ({ shared, pictures: shots }) => [
 			{ id: 'readme', label: 'Readme' },
-			...(shots.length > 0 ? [{ id: 'gallery', label: 'Gallery', count: shots.length }] : []),
+			...(shared.length + shots.length > 0 || sharingOpen()
+				? [{ id: 'gallery', label: 'Gallery', count: shared.length + shots.length }]
+				: []),
 			{ id: 'downloads', label: 'Downloads', count: downloads.count },
 			...(related.length > 0 ? [{ id: 'related', label: 'Related' }] : []),
 			...(others.length > 0 ? [{ id: 'author', label: `More from ${owner}`, count: others.length }] : []),
 		];
 		const tabs = new Tabs({
-			tabs: tabsFor(pictures),
+			tabs: tabsFor({ shared: [], pictures }),
 			panels,
 			selected: 'readme',
 			style: { marginTop: theme.space.lg, overflowY: 'hidden' },
 		});
-		const showGallery = shots => {
-			gallery.content(pictureGrid(title, shots));
-			tabs.options.tabs = tabsFor(shots);
+		const shown = { shared: [], pictures, byKey: new Map(listing.map(other => [collectionKey(other), other])) };
+		const showGallery = found => {
+			Object.assign(shown, found);
+			gallery.content(galleryOf(entry, title, shown));
+			tabs.options.tabs = tabsFor(shown);
 		};
 
-		showGallery(pictures);
+		showGallery({});
+		loadShots()
+			.then(byMod => !signal.aborted && showGallery({ shared: byMod[collectionKey(entry)] ?? [] }))
+			.catch(error => !signal.aborted && showGallery({ problem: error.message }));
 
 		const shares = entry.shares ?? sharing(entry, listing);
 		const author = authorOf(entry, listing);
@@ -801,7 +882,9 @@ export default class ModPage extends View {
 					return;
 				}
 
-				showGallery([...new Set([...screenshotsOf(found.markdown, found.sources.raw, PICTURES_SHOWN), ...pictures])]);
+				showGallery({
+					pictures: [...new Set([...screenshotsOf(found.markdown, found.sources.raw, PICTURES_SHOWN), ...pictures])],
+				});
 
 				const prose = new Prose();
 

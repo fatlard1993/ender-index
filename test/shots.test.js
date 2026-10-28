@@ -191,3 +191,23 @@ describe('publishing shots', () => {
 		}
 	});
 });
+
+describe('sharing from the site', () => {
+	test('opens with the mods chosen and those an instance offers, each by key or by id', async () => {
+		const { askedFor, sharePath } = await import('../client/shots');
+
+		expect(sharePath(['github:a/boats'])).toBe('?mod=github%3Aa%2Fboats#/share');
+		expect(askedFor('?mod=github:a/boats&mod=sodium&from=gitlab:group/sub/mod&from=lithium&from=')).toEqual({
+			chosen: { keys: ['github:a/boats'], ids: ['sodium'] },
+			offered: { keys: ['gitlab:group/sub/mod'], ids: ['lithium'] },
+		});
+	});
+
+	test('sends a picture scaled down to fit, never up', async () => {
+		const { SHOT_WIDEST, fitWithin } = await import('../client/shots');
+
+		expect(fitWithin(3840, 2160)).toEqual({ width: SHOT_WIDEST, height: 1080 });
+		expect(fitWithin(1080, 2400)).toEqual({ width: 864, height: SHOT_WIDEST });
+		expect(fitWithin(800, 600)).toEqual({ width: 800, height: 600 });
+	});
+});

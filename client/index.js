@@ -5,6 +5,7 @@ import GetPage from './GetPage';
 import ModPage from './ModPage';
 import PacksPage from './PacksPage';
 import SearchPage from './SearchPage';
+import SharePage from './SharePage';
 
 import '@vanilla-bean/components/app/reloadOnBuild';
 
@@ -13,7 +14,13 @@ new Page({
 	append: new View({
 		append: [
 			new Router({
-				views: { '/': SearchPage, '/packs': PacksPage, '/get': GetPage, '/mod/:host/:owner/:name': ModPage },
+				views: {
+					'/': SearchPage,
+					'/packs': PacksPage,
+					'/get': GetPage,
+					'/share': SharePage,
+					'/mod/:host/:owner/:name': ModPage,
+				},
 				onRenderView: () => (document.title = 'ender index'),
 			}),
 			new CollectionBar(),
