@@ -21,7 +21,6 @@ export const collectButton = entry => {
 	});
 };
 
-/** Run ender on this machine and say how it went. */
 export const runLocally = async (verb, entries) => {
 	const named = entries.length === 1 ? titleOf(entries[0]) : `${entries.length} mods`;
 
@@ -45,7 +44,6 @@ const BUTTON_LOOKS = {
 	missing: { icon: 'download', text: 'Install' },
 };
 
-/** On this machine only: whether the chosen instance has it, and the button that changes that. */
 export const installControls = entry => {
 	if (local.selected === undefined) return [];
 
@@ -66,7 +64,6 @@ export const installControls = entry => {
 	];
 };
 
-/** The instance that installing changes, chosen once for every page. */
 export const instancePicker = () =>
 	new Select({
 		options: local.instances.map(instance => ({

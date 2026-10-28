@@ -43,15 +43,12 @@ export const installedKeys = shown =>
 			.map(mod => `${mod.source}:${mod.id}`),
 	);
 
-/** The last thing a job printed, without ender's marks for what kind of line it is. */
 export const lastSaid = lines => (lines.findLast(line => line.trim()) ?? '').replace(/^(ok|!!|xx|::) /, '');
 
-/** Why a job did not do its work, in its own last words. */
 export const failureOf = job =>
 	job.error ??
 	`${job.title} did not finish (ender exited ${job.code})${job.lines.length > 0 ? `: ${job.lines.slice(-3).join('\n')}` : ''}`;
 
-/** Ask ender something through the page's own server, or throw what it said went wrong. */
 const call = async (method, path, body) => {
 	const response = await fetch(`./api/${path}`, {
 		method,
@@ -74,7 +71,6 @@ const refresh = async () => {
 	notify();
 };
 
-/** The instances again; the chosen one kept while it is still there, else the one chosen last, the active, the first. */
 const reload = async () => {
 	try {
 		state.all = await call('GET', 'instances');
@@ -103,7 +99,6 @@ const reload = async () => {
 
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
-/** Read a job's output as it grows, until it ends or ender web stops answering. */
 const follow = async job => {
 	while (job.state === 'running') {
 		await sleep(FOLLOW_EVERY);
@@ -154,7 +149,6 @@ const detect = async () => {
 
 let detected;
 
-/** A job seen through: the instances read again after it, and its failure thrown. */
 const finished = async (job, { reloading = true } = {}) => {
 	await job.done;
 
@@ -181,7 +175,6 @@ const change = async (verb, specs, keys) => {
 };
 
 export const local = {
-	/** Whether this page can manage the instances on this machine. */
 	ready: () => (detected ??= detect().catch(() => false)),
 	get instances() {
 		return state.instances;
@@ -190,7 +183,6 @@ export const local = {
 	get all() {
 		return state.all;
 	},
-	/** Why the instances could not be read, while they cannot. */
 	get error() {
 		return state.error;
 	},
@@ -204,7 +196,6 @@ export const local = {
 	remove: name => start('DELETE', named(name)),
 	dropFrom: (name, specs) => start('POST', `${named(name)}/drop`, { specs }),
 	finished,
-	/** The job last started on this instance. */
 	jobFor: name => [...state.jobs.values()].findLast(job => job.instance === name),
 	watchJobs: (listener, signal) => listen(jobListeners, listener, signal),
 	publishInstance: (name, { fresh = false } = {}) => call('POST', `${named(name)}/gist`, fresh ? { fresh } : {}),

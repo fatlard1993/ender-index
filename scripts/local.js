@@ -1,7 +1,7 @@
 import { join } from 'node:path';
 
 import { serve, serveStatic } from '@vanilla-bean/components/app';
-import { allowed, collect, webApi } from 'ender-launcher/web';
+import { REFUSED, allowed, collect, webApi } from 'ender-launcher/web';
 
 const BUILD = join(import.meta.dir, '..', 'client', 'build');
 
@@ -21,7 +21,7 @@ const api = webApi({ command });
  * this server runs ender: allowed holds the host to this machine first.
  */
 export const handle = async request => {
-	if (!allowed(request, PORT)) return new Response('Only a page served from this machine may ask', { status: 403 });
+	if (!allowed(request, PORT)) return new Response(REFUSED, { status: 403 });
 
 	return (
 		(await api(request)) ?? (await serveStatic(request, { root: BUILD })) ?? new Response('Not found', { status: 404 })

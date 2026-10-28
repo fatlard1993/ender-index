@@ -6,9 +6,6 @@ import { lastSaid, local } from './local';
 import { LOADERS, readQuery } from './search';
 import { Command, Meta, Row, Stack } from './ui';
 
-const PACK_LOADERS = ['fabric', 'quilt', 'forge', 'neoforge'];
-
-/** An ender pack of these mods: what each was chosen as, for ender to resolve what they need where it is installed. */
 export const packOf = ({ name, minecraft, loader, items }) => ({
 	name,
 	minecraft,
@@ -16,7 +13,7 @@ export const packOf = ({ name, minecraft, loader, items }) => ({
 	mods: items.map(item => specFor(item.host ?? 'github', item.repo)),
 });
 
-/** A pack's name as an instance name, by the rule ender holds instance names to: no spaces, nothing a path could use. */
+/** Held to ender's rule for instance names. */
 export const instanceNameOf = name =>
 	name
 		.trim()
@@ -87,10 +84,6 @@ const publish = async (pack, result) => {
 	]);
 };
 
-/**
- * A dialog making a pack of a list of mods: its name, game version and loader, the pack as it reads, and ways to keep
- * it: copied, downloaded, published as a gist, or on this machine, made into an instance.
- */
 export const packDialog = items => {
 	const asked = readQuery(location.search);
 	const choice = { name: 'My pack', minecraft: asked.minecraft, loader: asked.loader ?? 'fabric' };
@@ -116,7 +109,7 @@ export const packDialog = items => {
 		},
 	});
 	const loader = new Select({
-		options: PACK_LOADERS.map(value => ({ label: LOADERS[value] ?? value, value })),
+		options: Object.entries(LOADERS).map(([value, label]) => ({ label, value })),
 		value: choice.loader,
 		onChange: ({ target: { value } }) => {
 			choice.loader = value;

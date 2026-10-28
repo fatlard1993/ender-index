@@ -202,7 +202,7 @@ export const forStrangers = component => {
 	return component;
 };
 
-/** Shown only when ender serves the page, as ender web does: what only this machine's ender can do. */
+/** Shown only when ender serves the page: what only this machine's ender can do. */
 export const forLocal = component => {
 	component.elem.style.display = 'none';
 	local.ready().then(served => {

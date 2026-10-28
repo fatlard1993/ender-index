@@ -22,13 +22,12 @@ import { instanceNameOf, packDialog } from './packMaker';
 import { LOADERS } from './search';
 import { Chip, Command, LAUNCHER, Meta, Row, Stack, Title, Warning, siteBar } from './ui';
 
-const SHAREABLE = new Set(['github', 'codeberg', 'gitlab', 'modrinth', 'curseforge']);
+const NAMEABLE_SOURCES = new Set(['github', 'codeberg', 'gitlab', 'modrinth', 'curseforge']);
 
-const PACK_LOADERS = ['fabric', 'quilt', 'forge', 'neoforge', 'vanilla'];
+const INSTANCE_LOADERS = { ...LOADERS, vanilla: 'Vanilla' };
 
 const told = (intent, content) => new Notify({ intent, content });
 
-/** A checkbox with its words beside it. */
 const checkbox = (text, checked, onChange) =>
 	new Component({
 		tag: 'label',
@@ -39,7 +38,6 @@ const checkbox = (text, checked, onChange) =>
 		],
 	});
 
-/** What a job is doing, or how it ended, in a line. */
 export const jobLine = job => {
 	if (job === undefined) return '';
 	if (job.state === 'running') return `${job.title}: ${lastSaid(job.lines) || 'starting'}`;
@@ -50,7 +48,6 @@ export const jobLine = job => {
 	return job.error ?? `${job.title} failed (ender exited ${job.code})${said ? `: ${said}` : ''}`;
 };
 
-/** What ender printed for a job, kept as it grows. */
 const outputView = () =>
 	new Command({
 		tag: 'pre',
@@ -63,7 +60,7 @@ const showOutput = (view, job, open) => {
 	view.elem.scrollTop = view.elem.scrollHeight;
 };
 
-/** What each card had open, kept when the list is drawn again. */
+/** What each card had open, which outlives the card when the list is drawn again. */
 const opened = new Map();
 
 const openedFor = name => {
@@ -72,10 +69,9 @@ const openedFor = name => {
 	return opened.get(name);
 };
 
-/** The mods an instance chose, each removable when the page may name it, which a jar on disk or a build is not. */
 const modList = (manifest, onDrop) =>
 	(manifest.mods ?? []).map(mod => {
-		const shareable = SHAREABLE.has(mod.source);
+		const shareable = NAMEABLE_SOURCES.has(mod.source);
 		const spec = shareable ? specFor(mod.source, mod.id) : undefined;
 		const shown = manifest.installed?.find(found => found.key === `${mod.source}:${mod.id ?? mod.path ?? mod.url}`);
 
@@ -97,7 +93,6 @@ const modList = (manifest, onDrop) =>
 		});
 	});
 
-/** One instance: what it is, what it is doing, and what can be done with it from here. */
 const instanceCard = (instance, signal) => {
 	const open = openedFor(instance.name);
 	const status = new Meta();
@@ -120,7 +115,6 @@ const instanceCard = (instance, signal) => {
 		status.elem.textContent = jobLine(job);
 		showOutput(output, job, open.output);
 	};
-	/** Start a job on this instance, and say how it ended when it does. */
 	const runJob = async (starting, { done, quietWhenDone = false } = {}) => {
 		try {
 			const job = await starting();
@@ -184,7 +178,7 @@ const instanceCard = (instance, signal) => {
 							textContent: [
 								instance.type,
 								`Minecraft ${instance.minecraft}`,
-								LOADERS[instance.loader?.type] ?? instance.loader?.type,
+								INSTANCE_LOADERS[instance.loader?.type] ?? instance.loader?.type,
 							]
 								.filter(Boolean)
 								.join(' · '),
@@ -271,7 +265,6 @@ const instanceCard = (instance, signal) => {
 	return card;
 };
 
-/** A job's progress on a status line, until it ends; then how it ended, with the instances read again. */
 const runInto = async (status, starting) => {
 	status.elem.textContent = 'Asking ender';
 
@@ -379,7 +372,7 @@ const newInstance = signal => {
 									}),
 									minecraft,
 									new Select({
-										options: PACK_LOADERS.map(value => ({ label: LOADERS[value] ?? value, value })),
+										options: Object.entries(INSTANCE_LOADERS).map(([value, label]) => ({ label, value })),
 										value: choice.loader,
 										onChange: ({ target: { value } }) => {
 											choice.loader = value;

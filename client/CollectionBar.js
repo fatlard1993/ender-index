@@ -25,7 +25,6 @@ const Bar = styled.Component(
 	`,
 );
 
-/** The mods gathered so far, and the one line that installs them all. */
 export default class CollectionBar extends Bar {
 	build() {
 		let open = false;
