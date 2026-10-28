@@ -9,11 +9,12 @@ There is nothing to sign up for and nothing to describe twice. A repository is i
 ## On your own machine
 
 ```sh
-bun install
-bun run local
+ender web
 ```
 
-The same pages at `http://localhost:7460`, with your ender instances beside them: pick one, and each mod says whether it is installed, with a button to add or drop it, and the collection installs in one press. It runs the `ender` on your `PATH` (or `ENDER`), answers only pages it served itself, and adds nothing but the `gh:`, `cb:`, `gl:`, `mr:` and `cf:` specs search writes.
+The same pages at `http://localhost:7460`, with your ender instances beside them: pick one, and each mod says whether it is installed, with a button to add or drop it, and the collection installs in one press. Every [ender](https://github.com/fatlard1993/ender-launcher) release carries these pages; it answers only pages it served itself, and adds nothing but the `gh:`, `cb:`, `gl:`, `mr:` and `cf:` specs search writes.
+
+To work on the pages themselves, `bun install` and `bun run local` serve them from this checkout, running the `ender` on your `PATH` (or `ENDER`) with the same checks.
 
 ## Getting in
 
