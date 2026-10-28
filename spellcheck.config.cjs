@@ -21,6 +21,7 @@ module.exports = {
 		'gitlab',
 		'gl',
 		'gradle',
+		'graphql',
 		'hasher',
 		'homebrew',
 		'ies',

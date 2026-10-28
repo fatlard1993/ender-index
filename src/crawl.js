@@ -58,8 +58,33 @@ export const readLines = async file =>
 /** The repositories found on their own hosts: by code search, by topic, or listed by hand. */
 export const readRepos = () => readLines('repos.txt');
 
-/** The repositories known only from a Modrinth project's source link, crawled after every one found on its host. */
-export const readModrinthRepos = () => readLines('modrinth-repos.txt');
+/** The Modrinth-only repositories found with no jar in their newest releases, each by the day it was looked at. */
+export const NO_JARS = 'modrinth-no-jars.json';
+
+/** How long a repository found with no jar is left before it is looked at again: an author can start attaching them. */
+export const RECHECK_DAYS = 30;
+
+const DAY = 24 * 60 * 60 * 1000;
+
+/** Whether a repository found with no jar on this day is still left alone. */
+export const restingOn = (checked, now = Date.now()) =>
+	checked !== undefined && now - Date.parse(checked) < RECHECK_DAYS * DAY;
+
+export const readNoJars = () => readJson(join(DATA, NO_JARS), {});
+
+/**
+ * The repositories known only from a Modrinth project's source link, crawled after every one found on its host. Those
+ * the triage found no jar in lately are left out, unless `resting` asks for them too.
+ */
+export const readModrinthRepos = async ({ resting = false } = {}) => {
+	const lines = await readLines('modrinth-repos.txt');
+
+	if (resting) return lines;
+
+	const noJars = await readNoJars();
+
+	return lines.filter(line => !restingOn(noJars[line]));
+};
 
 /**
  * The order a crawl takes repositories in: every one found on its own host before any known only from Modrinth, and

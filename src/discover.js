@@ -1,11 +1,12 @@
 import { join } from 'node:path';
 
-import { DATA, readLines, readRepos } from './crawl';
+import { DATA, readLines, readModrinthRepos, readNoJars, readRepos } from './crawl';
 import * as codeberg from './codeberg';
 import { RateLimited } from './fetch';
 import { searchCode, searchRepositories } from './github';
 import * as gitlab from './gitlab';
 import { modrinthSources } from './modrinth';
+import { triage, writeNoJars } from './triage';
 
 /** Where each loader keeps its metadata in a source tree. Finding one is how a repository says it is a mod. */
 export const MANIFESTS = [
@@ -194,6 +195,12 @@ export const discover = async () => {
 		);
 	} catch (error) {
 		console.error(`Modrinth sources :: ${error.message}; discovery went on without them`);
+	}
+
+	try {
+		await writeNoJars(await triage({ lines: await readModrinthRepos({ resting: true }), noJars: await readNoJars() }));
+	} catch (error) {
+		console.error(`Triage :: ${error.message}; the crawl reads every Modrinth-only repository until it runs`);
 	}
 
 	console.log(`${merged.length - existing.length} new repositories; ${merged.length} found on their hosts`);

@@ -213,3 +213,40 @@ export const filesOf = async fullName =>
 	((await request(`/repos/${fullName}/git/trees/HEAD?recursive=1`)).tree ?? [])
 		.filter(item => item.type === 'blob')
 		.map(item => item.path);
+
+/**
+ * POST a GraphQL query, whose rate limit is counted apart from the REST one the crawl spends. A repository that is not
+ * there answers null beside a NOT_FOUND error, which is an answer; any other error is not.
+ */
+export const graphql = async query => {
+	const response = await fetchSteady(`${API}/graphql`, {
+		method: 'POST',
+		headers: { authorization: `Bearer ${await token()}`, 'content-type': 'application/json' },
+		body: JSON.stringify({ query }),
+	});
+
+	if (response.status === 403 || response.status === 429) {
+		const retryAfter = response.headers.get('retry-after');
+		const reset = response.headers.get('x-ratelimit-reset');
+		const resetAt = reset ? Number(reset) * 1000 : Date.now() + Number(retryAfter ?? 60) * 1000;
+
+		throw new RateLimited(`GitHub's GraphQL rate limit resets at ${new Date(resetAt).toISOString()}`, resetAt);
+	}
+
+	if (!response.ok) throw new Error(`GitHub GraphQL answered ${response.status}`);
+
+	const { data, errors = [] } = await response.json();
+	const limited = errors.find(error => error.type === 'RATE_LIMITED');
+
+	if (limited) {
+		const resetAt = Date.parse(data?.rateLimit?.resetAt) || Date.now() + 60 * 60 * 1000;
+
+		throw new RateLimited(`GitHub's GraphQL rate limit resets at ${new Date(resetAt).toISOString()}`, resetAt);
+	}
+
+	const failed = errors.find(error => error.type !== 'NOT_FOUND');
+
+	if (failed || !data) throw new Error(`GitHub GraphQL: ${failed?.message ?? 'no data'}`);
+
+	return data;
+};
