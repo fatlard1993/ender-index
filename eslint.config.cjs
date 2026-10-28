@@ -18,13 +18,6 @@ module.exports = [
 		},
 	},
 	{
-		files: ['worker/**/*.js'],
-		rules: {
-			// A Worker's console is its log, which wrangler tail reads
-			'no-console': 'off',
-		},
-	},
-	{
 		files: ['client/**/*.js', 'scripts/**/*.js', 'test/**/*.js'],
 		rules: {
 			// The resolver does not read package exports maps, which is how ender exposes its ranking.

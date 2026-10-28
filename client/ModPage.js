@@ -20,7 +20,7 @@ import { ownerName } from 'ender-launcher/support';
 
 import { collection } from './collection';
 import { loadListing, loadShots, loadVersions } from './data';
-import { sharePath, sharingOpen } from './shots';
+import { shareUrl } from './shots';
 import {
 	CAPABILITIES,
 	INDEX,
@@ -362,7 +362,8 @@ const playerShot = (title, shot, byKey) => {
 			new Story({ tag: 'p', textContent: shot.story }),
 			new Meta({
 				append: [
-					`From ${shot.name ?? 'a player'}`,
+					'From ',
+					new Link({ href: shot.issue, target: '_blank', textContent: shot.by }),
 					...(shot.at ? [`, ${date(shot.at)}`] : []),
 					...others.flatMap((entry, at) => [
 						at === 0 ? '. It shows ' : ', ',
@@ -381,18 +382,14 @@ const galleryOf = (entry, title, { shared, pictures, byKey, problem }) => [
 	...(shared.length > 0
 		? [new Stack({ style: { gap: theme.space.lg }, append: shared.map(shot => playerShot(title, shot, byKey)) })]
 		: []),
-	...(sharingOpen()
-		? [
-				new Meta({
-					tag: 'p',
-					append: [
-						shared.length > 0 ? 'Played with it? ' : 'No player has shared a shot of it yet. ',
-						new Link({ href: sharePath([collectionKey(entry)]), textContent: 'Share a shot' }),
-						' from your game, and the story behind it.',
-					],
-				}),
-			]
-		: []),
+	new Meta({
+		tag: 'p',
+		append: [
+			shared.length > 0 ? 'Played with it? ' : 'No player has shared a shot of it yet. ',
+			new Link({ href: shareUrl([collectionKey(entry)]), target: '_blank', textContent: 'Share a shot' }),
+			' from your game and the story behind it, with a GitHub account. It shows here once it has been looked over.',
+		],
+	}),
 	...(pictures.length > 0
 		? [
 				...(shared.length > 0 ? [new SectionLabel({ level: 2, textContent: 'From its repository' })] : []),
@@ -730,9 +727,7 @@ export default class ModPage extends View {
 		};
 		const tabsFor = ({ shared, pictures: shots }) => [
 			{ id: 'readme', label: 'Readme' },
-			...(shared.length + shots.length > 0 || sharingOpen()
-				? [{ id: 'gallery', label: 'Gallery', count: shared.length + shots.length }]
-				: []),
+			{ id: 'gallery', label: 'Gallery', count: shared.length + shots.length },
 			{ id: 'downloads', label: 'Downloads', count: downloads.count },
 			...(related.length > 0 ? [{ id: 'related', label: 'Related' }] : []),
 			...(others.length > 0 ? [{ id: 'author', label: `More from ${owner}`, count: others.length }] : []),

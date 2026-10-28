@@ -1,32 +1,41 @@
 name: shots
 
 on:
-  schedule:
-    - cron: '41 * * * *'
+  issues:
+    types: [labeled, unlabeled]
   workflow_dispatch:
 
 permissions:
   contents: write
+  issues: write
 
 concurrency: shots
 
 jobs:
   publish:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.issue.labels.*.name, 'shot')
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    env:
-      SHOTS_TOKEN: ${{ secrets.SHOTS_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-        if: env.SHOTS_TOKEN != ''
+        with:
+          path: ender-index
+      - uses: actions/checkout@v4
+        with:
+          repository: fatlard1993/ender-launcher
+          path: ender-launcher
       # By its download address: asked for by version, setup-bun asks GitHub's API where it is, which a crawl running
       # alongside may have spent the repository's hour of
       - uses: oven-sh/setup-bun@v2
-        if: env.SHOTS_TOKEN != ''
         with:
           bun-download-url: https://github.com/oven-sh/bun/releases/download/bun-v1.4.0/bun-linux-x64.zip
+      - run: bun install
+        working-directory: ender-index
       - name: publish
-        if: env.SHOTS_TOKEN != ''
+        working-directory: ender-index
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SHOT_ISSUE: ${{ github.event.issue.number }}
         run: |
           bun src/shots.js
           git config user.name 'ender-index'

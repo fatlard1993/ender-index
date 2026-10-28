@@ -3,211 +3,206 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, test } from 'bun:test';
 
-import { imageType, issueOf, recordOf, shotFrom } from '../src/shot';
-import { publishShots } from '../src/shots';
-import { handle } from '../worker/index';
+import { shareUrl } from '../client/shots';
+import { fieldsOf, modNamed, shotOf } from '../src/shot';
+import { publishShots, shrink } from '../src/shots';
 
-const PNG = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0]);
+const PICTURE = 'https://github.com/user-attachments/assets/0f0e1d2c-3b4a-5968-7766-554433221100';
 
-const ENV = {
-	QUEUE: 'me/shots',
-	ORIGINS: 'https://example.invalid',
-	GITHUB_TOKEN: 'token',
-	TURNSTILE_SECRET: 'secret',
-};
+const entry = (repo, mods, stars = 0, host = 'github') => ({
+	repo,
+	host,
+	stars,
+	latest: { mods: mods.map(([id, name]) => ({ id, name })) },
+});
+
+const LISTING = [
+	entry('fatlard1993/big-boats', [['bigboats', 'Big Boats']], 3),
+	entry('CaffeineMC/lithium', [['lithium', 'Lithium']], 2000),
+	entry('someone/boats-fork', [['big_boats_fork', 'Big Boats']], 1),
+	entry('group/sub/mod', [['submod', 'Sub Mod']], 1, 'gitlab'),
+];
+
+/** An issue as GitHub files the form: each answer under its label as a heading. */
+const filed = ({ mods = 'Big Boats', picture = `<img alt="shot" src="${PICTURE}" />`, story = 'It flew.' } = {}) =>
+	`### Mods it shows\n\n${mods}\n\n### Picture\n\n${picture}\n\n### Story\n\n${story}`;
+
+const issue = (number, labels, body = filed(), state = 'open') => ({
+	number,
+	state,
+	labels: labels.map(name => ({ name })),
+	body,
+	user: { login: `player${number}` },
+	created_at: `2026-10-${String(number).padStart(2, '0')}T00:00:00Z`,
+	html_url: `https://github.com/me/index/issues/${number}`,
+});
 
 const json = body => new Response(JSON.stringify(body), { headers: { 'content-type': 'application/json' } });
 
-/** A stand-in for GitHub and Turnstile that answers each request by its method and path, and keeps what was asked. */
-const fake = (answers = {}) => {
+/** GitHub as the publishing step meets it, answering by method and path, and keeping what was asked. */
+const fake = (issues, pictures = {}) => {
 	const asked = [];
 	const fetcher = async (url, init = {}) => {
-		const { pathname, search } = new URL(url);
-		const key = `${init.method ?? 'GET'} ${pathname}${search}`;
+		asked.push({
+			key: `${init.method ?? 'GET'} ${url.replace('https://api.github.com/repos/me/index', '')}`,
+			body: init.body,
+		});
 
-		asked.push({ key, body: init.body });
+		if (url.includes('/issues?labels=shot')) return json(issues);
+		if (url.startsWith('https://github.com/user-attachments/')) return pictures[url] ?? new Response('picture');
 
-		const found = Object.entries(answers).find(([pattern]) => key.startsWith(pattern))?.[1];
-
-		return typeof found === 'function' ? found(init) : (found ?? json({}));
+		return json({});
 	};
 
 	return { asked, fetcher };
 };
 
-const send = (fields, { origin = 'https://example.invalid', image = PNG } = {}) => {
-	const form = new FormData();
+const publishing = async (issues, run, options = {}) => {
+	const data = await mkdtemp(join(tmpdir(), 'shots-'));
+	const logged = [];
+	const { asked, fetcher } = fake(issues, options.pictures);
+	const publish = () =>
+		publishShots({
+			repository: 'me/index',
+			token: 't',
+			data,
+			listing: LISTING,
+			labelled: options.labelled,
+			fetcher,
+			shrinkPicture: async bytes => bytes,
+			log: line => logged.push(line),
+		});
 
-	if (image) form.append('image', new File([image], 'shot.png'));
-	form.append('cf-turnstile-response', 'passed');
-	for (const [name, value] of Object.entries(fields)) for (const each of [value].flat()) form.append(name, each);
-
-	return new Request('https://worker.invalid/shots', { method: 'POST', body: form, headers: { origin } });
+	try {
+		await run({ publish, data, asked, logged });
+	} finally {
+		await rm(data, { recursive: true });
+	}
 };
 
 describe('a shot', () => {
-	test('is a PNG, JPEG or WebP by its bytes, whatever it is named', () => {
-		expect(imageType(PNG)).toBe('png');
-		expect(imageType(new Uint8Array([0xff, 0xd8, 0xff, 0xe0]))).toBe('jpg');
-		expect(imageType(new TextEncoder().encode('RIFF\0\0\0\0WEBPVP8 '))).toBe('webp');
-		expect(imageType(new TextEncoder().encode('<svg onload=alert(1)>'))).toBeUndefined();
-	});
-
-	test('needs a story and the mods it shows, each as the site names one', () => {
-		expect(shotFrom({ story: ' ', mods: ['github:a/b'] }).problem).toContain('story');
-		expect(shotFrom({ story: 'x', mods: [] }).problem).toContain('names the mods');
-		expect(shotFrom({ story: 'x', mods: ['github:a/b c'] }).problem).toContain('not a mod');
-		expect(shotFrom({ story: 'x'.repeat(1501), mods: ['github:a/b'] }).problem).toContain('1500');
-		expect(shotFrom({ story: 'x', name: 'Ste\n\nve ', mods: ['github:a/b'] }).shot.name).toBe('Ste ve');
-		expect(shotFrom({ story: ' It flew. ', name: '', mods: ['github:a/b', 'github:a/b'] })).toEqual({
-			shot: { story: 'It flew.', mods: ['github:a/b'] },
+	test("is read from the form's answers, with an answer left empty read as nothing", () => {
+		expect(fieldsOf(filed({ story: '_No response_' }))).toEqual({
+			'Mods it shows': 'Big Boats',
+			Picture: `<img alt="shot" src="${PICTURE}" />`,
+			Story: '',
 		});
 	});
 
-	test("waits in an issue whose record reads back as what was sent, and a reviewer's edit to it is what publishes", () => {
-		const shot = { id: '1', image: '1.png', story: 'It flew.\nThen it fell.', mods: ['github:a/boats'] };
-		const issue = issueOf(shot, 'https://example.invalid/1.png');
-
-		expect(issue.title).toBe('A shot of a/boats');
-		expect(issue.body).toContain('> It flew.\n> Then it fell.');
-		expect(issue.body).toContain('a player who left no name, of [github:a/boats](https://github.com/a/boats)');
-		expect(recordOf(issue.body)).toEqual(shot);
-		expect(recordOf(issue.body.replace('"It flew.', '"It soared.')).story).toStartWith('It soared.');
-		expect(recordOf('no record')).toBeUndefined();
-
-		const forged = { ...shot, story: '```json\n{"id":"2","image":"elsewhere.png"}\n```' };
-
-		expect(recordOf(issueOf(forged, '').body)).toEqual(forged);
-	});
-});
-
-describe('the shots worker', () => {
-	test('takes shots only from the index, and only from a person', async () => {
-		const passing = fake({ 'POST /turnstile': json({ success: true }) }).fetcher;
-		const failing = fake({ 'POST /turnstile': json({ success: false }) }).fetcher;
-
-		expect(
-			(await handle(send({ story: 'x', mods: 'github:a/b' }, { origin: 'https://elsewhere.invalid' }), ENV, passing))
-				.status,
-		).toBe(403);
-		expect((await handle(send({ story: 'x', mods: 'github:a/b' }), ENV, failing)).status).toBe(403);
-		expect((await handle(new Request('https://worker.invalid/other'), ENV, passing)).status).toBe(404);
+	test('names its mods however a player would: key, spec, link, id or name', () => {
+		expect(modNamed('github:fatlard1993/big-boats', LISTING)).toBe('github:fatlard1993/big-boats');
+		expect(modNamed('gh:CaffeineMC/lithium', LISTING)).toBe('github:CaffeineMC/lithium');
+		expect(modNamed('https://github.com/CaffeineMC/lithium/releases', LISTING)).toBe('github:CaffeineMC/lithium');
+		expect(modNamed('https://gitlab.com/group/sub/mod/-/tree/main', LISTING)).toBe('gitlab:group/sub/mod');
+		expect(modNamed('https://fatlard1993.github.io/ender-index/#/mod/github/fatlard1993/big-boats', LISTING)).toBe(
+			'github:fatlard1993/big-boats',
+		);
+		expect(modNamed('- lithium', LISTING)).toBe('github:CaffeineMC/lithium');
+		expect(modNamed('big boats', LISTING)).toBe('github:fatlard1993/big-boats');
+		expect(modNamed('Sodium', LISTING)).toBeUndefined();
 	});
 
-	test('turns away what is not a picture, and says why', async () => {
-		const { fetcher } = fake({ 'POST /turnstile': json({ success: true }) });
-		const response = await handle(
-			send({ story: 'x', mods: 'github:a/b' }, { image: new TextEncoder().encode('<svg/>') }),
-			ENV,
-			fetcher,
+	test('takes its picture only from where GitHub keeps what was dragged in, and says what does not read', () => {
+		const { shot, picture, problems } = shotOf(
+			issue(7, ['shot'], filed({ mods: 'Lithium\nSodium', picture: '![x](https://example.invalid/x.png)' })),
+			LISTING,
 		);
 
-		expect(response.status).toBe(415);
-		expect((await response.json()).problem).toContain('PNG');
+		expect(shot).toMatchObject({ id: 7, by: 'player7', mods: ['github:CaffeineMC/lithium'], story: 'It flew.' });
+		expect(picture).toBeUndefined();
+		expect(problems).toEqual(['Sodium is not a mod the index lists', 'It has no picture dragged or pasted in']);
 	});
 
-	test('files a shot as a branch holding its picture and an issue, and tells the sender neither', async () => {
-		const { asked, fetcher } = fake({
-			'POST /turnstile': json({ success: true }),
-			'GET /repos/me/shots/git/ref/heads/main': json({ object: { sha: 'abc' } }),
-		});
-		const response = await handle(send({ story: 'It flew.', name: 'Steve', mods: ['github:a/boats'] }), ENV, fetcher);
+	test('is shared with the form, the mods it shows filled in', () => {
+		const url = new URL(shareUrl(['github:a/boats', 'lithium']));
 
-		expect(response.status).toBe(202);
-		expect(await response.json()).toEqual({ queued: true });
-
-		const [, , branch, file, issue] = asked;
-		const id = JSON.parse(branch.body).ref.replace('refs/heads/shot/', '');
-
-		expect(file.key).toBe(`PUT /repos/me/shots/contents/${id}.png`);
-		expect(JSON.parse(file.body)).toMatchObject({ branch: `shot/${id}`, content: btoa(String.fromCharCode(...PNG)) });
-		expect(recordOf(JSON.parse(issue.body).body)).toMatchObject({
-			id,
-			image: `${id}.png`,
-			name: 'Steve',
-			mods: ['github:a/boats'],
-		});
-	});
-
-	test('says when GitHub would not take the shot, rather than claiming it was filed', async () => {
-		const { fetcher } = fake({
-			'POST /turnstile': json({ success: true }),
-			'GET /repos/me/shots/git/ref': () => new Response('', { status: 401 }),
-		});
-		const response = await handle(send({ story: 'x', mods: 'github:a/b' }), ENV, fetcher);
-
-		expect(response.status).toBe(502);
+		expect(url.pathname).toEndWith('/issues/new');
+		expect(url.searchParams.get('template')).toBe('shot.yml');
+		expect(url.searchParams.get('mods')).toBe('github:a/boats\nlithium');
 	});
 });
 
 describe('publishing shots', () => {
-	const issue = (number, state, labels, id, at) => ({
-		number,
-		state,
-		labels: labels.map(name => ({ name })),
-		body: issueOf({ id, image: `${id}.png`, story: `story ${id}`, mods: ['github:a/boats'], at }, '', '').body,
-	});
+	test('publishes the shown, newest first, and closes their issues; leaves the rest waiting', () =>
+		publishing(
+			[issue(1, ['shot', 'shown']), issue(2, ['shot', 'shown'], filed(), 'closed'), issue(3, ['shot'])],
+			async ({ publish, data, asked }) => {
+				const byMod = await publish();
 
-	test('publishes the shown, deletes every branch decided on, closes what it published, and keeps the queue open', async () => {
+				expect(byMod['github:fatlard1993/big-boats'].map(shot => shot.id)).toEqual([2, 1]);
+				expect(byMod['github:fatlard1993/big-boats'][0]).toMatchObject({ image: 'shots/2.webp', by: 'player2' });
+				expect((await readdir(join(data, 'shots'))).toSorted()).toEqual(['1.webp', '2.webp']);
+				expect(asked.filter(({ key }) => key.startsWith('PATCH')).map(({ key }) => key)).toEqual(['PATCH /issues/1']);
+			},
+		));
+
+	test('keeps a published shot as it was, whatever its author edits later, and unpublishes it when the label comes off', async () => {
+		let issues = [issue(1, ['shot', 'shown'])];
 		const data = await mkdtemp(join(tmpdir(), 'shots-'));
-		const { asked, fetcher } = fake({
-			'GET /repos/me/shots/issues': json([
-				issue(1, 'open', ['shown'], 'old', '2026-01-01'),
-				issue(2, 'open', ['shown'], 'new', '2026-02-01'),
-				issue(3, 'closed', [], 'refused'),
-				issue(4, 'open', [], 'waiting'),
-				{ number: 5, state: 'open', labels: [], body: 'hand-written' },
-			]),
-			'GET /repos/me/shots/contents/': () => new Response(PNG),
-			'DELETE /repos/me/shots/git/refs/heads/shot/refused': () => new Response('', { status: 404 }),
-		});
-		const logged = [];
-
-		try {
-			await Bun.write(join(data, 'shots', 'unlabelled.png'), PNG);
-
-			const byMod = await publishShots({
-				queue: 'me/shots',
+		const run = () =>
+			publishShots({
+				repository: 'me/index',
 				token: 't',
 				data,
-				fetcher,
-				log: line => logged.push(line),
+				listing: LISTING,
+				fetcher: fake(issues).fetcher,
+				shrinkPicture: async bytes => bytes,
+				log: () => {},
 			});
 
-			expect(byMod['github:a/boats'].map(shot => shot.id)).toEqual(['new', 'old']);
-			expect((await readdir(join(data, 'shots'))).toSorted()).toEqual(['new.png', 'old.png']);
-			expect(asked.map(({ key }) => key)).toEqual(
-				expect.arrayContaining([
-					'DELETE /repos/me/shots/git/refs/heads/shot/refused',
-					'PATCH /repos/me/shots/issues/1',
-					'PATCH /repos/me/shots/issues/2',
-				]),
-			);
-			expect(asked.some(({ key }) => key.includes('waiting'))).toBe(false);
-			expect(logged).toContain('Shot issue #5 has no record that reads; it is left out');
-			expect(logged).toContain('Unpublished unlabelled.png, whose issue is no longer labelled shown');
+		try {
+			await run();
+			issues = [issue(1, ['shot', 'shown'], filed({ story: 'Buy cheap gold' }))];
+			expect((await run())['github:fatlard1993/big-boats'][0].story).toBe('It flew.');
+
+			issues = [issue(1, ['shot'], filed({ story: 'Buy cheap gold' }))];
+			expect(await run()).toEqual({});
+			expect(await readdir(join(data, 'shots'))).toEqual([]);
 		} finally {
 			await rm(data, { recursive: true });
 		}
 	});
+
+	test('tells the issue just labelled what kept it from showing, and only that one', () =>
+		publishing(
+			[issue(4, ['shot', 'shown'], filed({ mods: 'Sodium' })), issue(5, ['shot', 'shown'], filed({ picture: 'none' }))],
+			async ({ publish, asked, logged }) => {
+				expect(await publish()).toEqual({});
+
+				const comments = asked.filter(({ key }) => key.endsWith('/comments'));
+
+				expect(comments.map(({ key }) => key)).toEqual(['POST /issues/4/comments']);
+				expect(JSON.parse(comments[0].body).body).toContain('- Sodium is not a mod the index lists');
+				expect(logged.some(line => line.startsWith('Shot #5: It has no picture'))).toBe(true);
+			},
+			{ labelled: 4 },
+		));
+
+	test('says when a picture does not download, rather than showing a shot without one', () =>
+		publishing(
+			[issue(6, ['shot', 'shown'])],
+			async ({ publish, logged }) => {
+				expect(await publish()).toEqual({});
+				expect(logged).toContain('Shot #6: Its picture did not download: GitHub answered 404');
+			},
+			{ pictures: { [PICTURE]: new Response('', { status: 404 }) } },
+		));
 });
 
-describe('sharing from the site', () => {
-	test('opens with the mods chosen and those an instance offers, each by key or by id', async () => {
-		const { askedFor, sharePath } = await import('../client/shots');
+describe("a shot's picture", () => {
+	test('is kept as WebP at most 1920 on its longest side, and a small one is not enlarged', async () => {
+		const { default: sharp } = await import('sharp');
+		const png = (width, height) =>
+			sharp({ create: { width, height, channels: 3, background: '#336' } })
+				.png()
+				.toBuffer();
 
-		expect(sharePath(['github:a/boats'])).toBe('?mod=github%3Aa%2Fboats#/share');
-		expect(askedFor('?mod=github:a/boats&mod=sodium&from=gitlab:group/sub/mod&from=lithium&from=')).toEqual({
-			chosen: { keys: ['github:a/boats'], ids: ['sodium'] },
-			offered: { keys: ['gitlab:group/sub/mod'], ids: ['lithium'] },
+		expect(await sharp(await shrink(await png(3840, 2160))).metadata()).toMatchObject({
+			format: 'webp',
+			width: 1920,
+			height: 1080,
 		});
-	});
-
-	test('sends a picture scaled down to fit, never up', async () => {
-		const { SHOT_WIDEST, fitWithin } = await import('../client/shots');
-
-		expect(fitWithin(3840, 2160)).toEqual({ width: SHOT_WIDEST, height: 1080 });
-		expect(fitWithin(1080, 2400)).toEqual({ width: 864, height: SHOT_WIDEST });
-		expect(fitWithin(800, 600)).toEqual({ width: 800, height: 600 });
+		expect(await sharp(await shrink(await png(800, 600))).metadata()).toMatchObject({ width: 800, height: 600 });
+		await expect(shrink(new TextEncoder().encode('<svg/>'))).rejects.toThrow();
 	});
 });
