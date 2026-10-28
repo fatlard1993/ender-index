@@ -376,8 +376,8 @@ const playerShot = (title, shot, byKey) => {
 	});
 };
 
-/** What players shared of it first, then where to share one, then the pictures its readme and repository keep. */
-const galleryOf = (entry, title, { shared, pictures, byKey, problem }) => [
+/** What players shared of it, each with its story, then where to share one. */
+const playerShotsOf = (entry, title, { shared, byKey, problem }) => [
 	...(problem ? [new Meta({ tag: 'p', textContent: `The shots players shared did not load: ${problem}` })] : []),
 	...(shared.length > 0
 		? [new Stack({ style: { gap: theme.space.lg }, append: shared.map(shot => playerShot(title, shot, byKey)) })]
@@ -390,12 +390,6 @@ const galleryOf = (entry, title, { shared, pictures, byKey, problem }) => [
 			' from your game and the story behind it, with a GitHub account. It shows here once it has been looked over.',
 		],
 	}),
-	...(pictures.length > 0
-		? [
-				...(shared.length > 0 ? [new SectionLabel({ level: 2, textContent: 'From its repository' })] : []),
-				...pictureGrid(title, pictures),
-			]
-		: []),
 ];
 
 const fitsLabel = ({ minecraft, loader }) =>
@@ -696,6 +690,7 @@ export default class ModPage extends View {
 		const command = installCommand(entry);
 		const readme = new Stack({ append: new EmptyState({ loading: true, title: 'Fetching the readme' }) });
 		const gallery = new Stack();
+		const players = new Stack();
 		const controls = new Row({ append: [collectButton(entry), ...installControls(entry)] });
 		const redrawControls = () => controls.content([collectButton(entry), ...installControls(entry)]);
 		const downloads = downloadsPanel(entry, record);
@@ -707,6 +702,7 @@ export default class ModPage extends View {
 		const panels = {
 			readme,
 			gallery,
+			players,
 			downloads: new Stack({
 				append: [
 					new Meta({
@@ -727,7 +723,8 @@ export default class ModPage extends View {
 		};
 		const tabsFor = ({ shared, pictures: shots }) => [
 			{ id: 'readme', label: 'Readme' },
-			{ id: 'gallery', label: 'Gallery', count: shared.length + shots.length },
+			...(shots.length > 0 ? [{ id: 'gallery', label: 'Gallery', count: shots.length }] : []),
+			{ id: 'players', label: 'Player shots', count: shared.length },
 			{ id: 'downloads', label: 'Downloads', count: downloads.count },
 			...(related.length > 0 ? [{ id: 'related', label: 'Related' }] : []),
 			...(others.length > 0 ? [{ id: 'author', label: `More from ${owner}`, count: others.length }] : []),
@@ -741,7 +738,8 @@ export default class ModPage extends View {
 		const shown = { shared: [], pictures, byKey: new Map(listing.map(other => [collectionKey(other), other])) };
 		const showGallery = found => {
 			Object.assign(shown, found);
-			gallery.content(galleryOf(entry, title, shown));
+			gallery.content(pictureGrid(title, shown.pictures));
+			players.content(playerShotsOf(entry, title, shown));
 			tabs.options.tabs = tabsFor(shown);
 		};
 
