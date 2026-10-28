@@ -754,18 +754,20 @@ export const crawl = async ({ only } = {}) => {
 	let outcome;
 	let packOutcome = { failures: [], stopped: [] };
 	const parallel = Number(process.env.CRAWL_PARALLEL ?? PARALLEL);
+	// CRAWL_PART=packs reads the pack repositories alone, with the whole budget, and no mod
+	const packsOnly = process.env.CRAWL_PART === 'packs';
 
 	try {
 		if (!only) {
 			packOutcome = await crawlPacks({
-				deadline: Math.min(deadline, Date.now() + minutes * PACK_SHARE * 60_000),
+				deadline: packsOnly ? deadline : Math.min(deadline, Date.now() + minutes * PACK_SHARE * 60_000),
 				scratch,
 				now,
 				parallel,
 			});
 		}
 
-		outcome = await crawlEach(repos, {
+		outcome = await crawlEach(packsOnly ? [] : repos, {
 			deadline,
 			parallel,
 			beforeWait: () => github.saveCache(),

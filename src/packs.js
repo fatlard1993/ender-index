@@ -15,6 +15,8 @@ export const MRPACK_LIMIT = 100 * 1024 * 1024;
 
 const MRPACK_INDEX = 'modrinth.index.json';
 
+const METAFILES_AT_ONCE = 8;
+
 /** A file at the head of a repository's default branch, or undefined when it has none. */
 const fileAt = async (name, path) => {
 	const response = await fetchSteady(rawUrl('github', name, path));
@@ -29,11 +31,23 @@ const fileAt = async (name, path) => {
 const packwizMods = async (name, index) => {
 	const listed = packwizMetafiles(index);
 	const metafiles = listed.length > 0 ? listed : (await github.filesOf(name)).filter(path => path.endsWith('.pw.toml'));
+	const sources = new Array(metafiles.length);
+	let next = 0;
+
+	// Several at a time: a pack names a file per mod, two hundred is common, and each is its own request
+	await Promise.all(
+		Array.from({ length: Math.min(METAFILES_AT_ONCE, metafiles.length) }, async () => {
+			while (next < metafiles.length) {
+				const at = next++;
+
+				sources[at] = await fileAt(name, metafiles[at]);
+			}
+		}),
+	);
+
 	const mods = [];
 
-	for (const metafile of metafiles) {
-		const source = await fileAt(name, metafile);
-
+	for (const source of sources) {
 		if (source === undefined) continue;
 
 		const mod = Bun.TOML.parse(source);
