@@ -179,11 +179,14 @@ const slug = text =>
 
 const HEADING_PREFIX = 'readme-';
 
+/** A form in a readme would post from this page's origin, which under ender web is the origin its api trusts. */
+const FORM_TAGS = ['form', 'input', 'button', 'select', 'textarea', 'option'];
+
 /**
  * A readme as safe markup: it is anyone's HTML, so it is sanitized before it is shown, links leave in a new tab, and
  * every relative image and link is pointed back at its repository.
  */
-const renderReadme = (markdown, sources) => {
+export const renderReadme = (markdown, sources) => {
 	const renderer = new marked.Renderer();
 
 	renderer.heading = function ({ tokens, depth }) {
@@ -211,7 +214,10 @@ const renderReadme = (markdown, sources) => {
 		}
 	});
 
-	return purify.sanitize(marked.parse(markdown, { renderer, gfm: true }), { ADD_ATTR: ['target'] });
+	return purify.sanitize(marked.parse(markdown, { renderer, gfm: true }), {
+		ADD_ATTR: ['target'],
+		FORBID_TAGS: FORM_TAGS,
+	});
 };
 
 const capabilityList = scan =>
