@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 
 import { reposFrom } from '../src/discover';
-import { buildSearch } from '../src/search';
+import { buildSearch, holdsNow } from '../src/search';
 
 const asset = extra => ({
 	name: 'mod.jar',
@@ -288,5 +288,57 @@ describe('discovery', () => {
 		];
 
 		expect(reposFrom(items)).toEqual(['a/mod']);
+	});
+});
+
+describe('clashes', () => {
+	const release = mods => ({ tag: '1.0', prerelease: false, assets: [asset({ mods })] });
+	const pandorical = version =>
+		record(
+			'me/pandorical',
+			[release([{ loader: 'fabric', id: 'pandorical', name: 'Pandorical', version, depends: [] }])],
+			{
+				stars: 50,
+			},
+		);
+	const addon = breaksVersions =>
+		record('me/addon', [
+			release([
+				{
+					loader: 'fabric',
+					id: 'addon',
+					name: 'Addon',
+					depends: [],
+					suggests: ['pandorical'],
+					breaks: ['pandorical'],
+					...(breaksVersions ? { breaksVersions } : {}),
+				},
+			]),
+		]);
+	const relationsOf = (...records) => {
+		const found = buildSearch(records).find(entry => entry.repo === 'me/addon');
+
+		return { suggests: found.suggests, breaks: found.breaks };
+	};
+
+	test('a break for the versions before the one released is no clash, and the mod still works with it', () => {
+		expect(relationsOf(pandorical('15.26.0+mc26.3'), addon({ pandorical: '<15.0.0' }))).toEqual({
+			suggests: ['github:me/pandorical'],
+			breaks: undefined,
+		});
+	});
+
+	test('a break whose range holds the version released, or every version, is one', () => {
+		expect(relationsOf(pandorical('14.2.0'), addon({ pandorical: '<15.0.0' })).breaks).toEqual([
+			'github:me/pandorical',
+		]);
+		expect(relationsOf(pandorical('15.26.0'), addon({ pandorical: '*' })).breaks).toEqual(['github:me/pandorical']);
+		expect(relationsOf(pandorical('15.26.0'), addon()).breaks).toEqual(['github:me/pandorical']);
+	});
+
+	test('a range that cannot be read against the version released warns of nothing', () => {
+		expect(holdsNow('<15.0.0', undefined)).toBe(false);
+		expect(holdsNow('<15.0.0', 'not a version')).toBe(false);
+		expect(holdsNow(undefined, undefined)).toBe(true);
 	});
 });

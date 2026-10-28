@@ -281,9 +281,13 @@ export const fillIcons = async (record, scratch, icons = ICONS) => {
  * links, what it adds, and what its mods suggest, break and conflict with. Each is fetched again once, as for icons,
  * and given what it lacks; one without content was read before relations were too, so its mods are read again.
  */
+/** Whether a jar was read before the ranges its breaks and conflicts hold for were kept. */
+export const lacksRanges = asset =>
+	(asset.mods ?? []).some(mod => (mod.breaks && !mod.breaksVersions) || (mod.conflicts && !mod.conflictsVersions));
+
 export const fillJars = async (record, scratch) => {
 	for (const asset of latestAssets(record)) {
-		if (asset.funding !== undefined && asset.content !== undefined) continue;
+		if (asset.funding !== undefined && asset.content !== undefined && !lacksRanges(asset)) continue;
 
 		const path = join(scratch, `again-${asset.sha256}.jar`);
 
@@ -293,10 +297,10 @@ export const fillJars = async (record, scratch) => {
 
 			asset.funding ??= await jarFunding(path);
 
-			if (asset.content === undefined) {
-				asset.content = await jarContent(path);
-				asset.mods = await readMods(path).catch(() => asset.mods);
-			}
+			const unread = asset.content === undefined;
+
+			if (unread) asset.content = await jarContent(path);
+			if (unread || lacksRanges(asset)) asset.mods = await readMods(path).catch(() => asset.mods);
 		} catch (error) {
 			console.error(`again   ${record.repo} ${asset.name} :: ${error.message}`);
 		} finally {

@@ -180,4 +180,34 @@ describe('icons', () => {
 			server.stop();
 		}
 	});
+
+	test('a jar read before breaks kept their ranges is read again for them, once, and nothing else is redone', async () => {
+		const path = await jar({
+			'fabric.mod.json': JSON.stringify({ id: 'a', breaks: { pandorical: '<15.0.0' } }),
+		});
+		let asked = 0;
+		const server = Bun.serve({
+			port: 0,
+			fetch: () => {
+				++asked;
+
+				return new Response(Bun.file(path));
+			},
+		});
+
+		try {
+			const record = recordOf([{ url: `http://localhost:${server.port}/mod.jar`, sha256: await sha256(path) }]);
+			const [asset] = record.releases[0].assets;
+
+			Object.assign(asset, { funding: [], content: { names: {} }, mods: [{ id: 'a', breaks: ['pandorical'] }] });
+			await fillJars(record, directory);
+			await fillJars(record, directory);
+
+			expect(asset.mods[0].breaksVersions).toEqual({ pandorical: '<15.0.0' });
+			expect(asset.content).toEqual({ names: {} });
+			expect(asked).toBe(1);
+		} finally {
+			server.stop();
+		}
+	});
 });

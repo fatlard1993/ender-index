@@ -1,3 +1,4 @@
+import { satisfies } from 'ender-launcher/range';
 import { authorOf, providerOf, requiredIds, sharing } from 'ender-launcher/rank';
 
 import { informative, shorten } from './summary';
@@ -122,8 +123,31 @@ export const summarize = record => {
 /** Where Modrinth says a mod id's source is, by the slug it is most often published under: the id itself. */
 const sourceOf = (id, sources) => sources[id] ?? sources[id.replaceAll('_', '-')];
 
+/** Each repository's newest version of each mod it holds, without build metadata, which ordering ignores. */
+const versionsOf = records =>
+	new Map(
+		records.map(record => [
+			`${record.host}:${record.repo}`,
+			new Map(
+				latestAssets(record)
+					.flatMap(asset => asset.mods ?? [])
+					.filter(mod => typeof mod.version === 'string')
+					.map(mod => [mod.id, mod.version.replace(/\+.*$/, '')]),
+			),
+		]),
+	);
+
+/**
+ * Whether a break or conflict holds against what is released now: one for every version always does; one for a range
+ * only when the provider's newest version of that mod falls in it. A range that cannot be read against its version is
+ * not counted, rather than warning of a clash nothing shows.
+ */
+export const holdsNow = (range, version) =>
+	range === undefined || range === '*' || (version !== undefined && satisfies(version, range) === true);
+
 const relate = (entries, records, sources = {}) => {
 	const byRepo = new Map(entries.map(entry => [`${entry.host}:${entry.repo}`, entry]));
+	const versions = versionsOf(records);
 
 	for (const record of records) {
 		const requiring = byRepo.get(`${record.host}:${record.repo}`);
@@ -141,6 +165,21 @@ const relate = (entries, records, sources = {}) => {
 					.filter(provider => provider !== undefined && provider !== requiring),
 			);
 		const named = resolved(requiredIds(mods));
+		const clashing = field =>
+			new Set(
+				mods.flatMap(mod =>
+					(mod[field] ?? [])
+						.filter(id => !own.has(id))
+						.flatMap(id =>
+							loaders
+								.map(loader => providerOf(id, entries, requiring, { loader }))
+								.filter(provider => provider !== undefined && provider !== requiring)
+								.filter(provider =>
+									holdsNow(mod[`${field}Versions`]?.[id], versions.get(`${provider.host}:${provider.repo}`)?.get(id)),
+								),
+						),
+				),
+			);
 		const missing = requiredIds(mods).filter(
 			id => !loaders.some(loader => providerOf(id, entries, requiring, { loader }) !== undefined),
 		);
@@ -156,8 +195,8 @@ const relate = (entries, records, sources = {}) => {
 		for (const [field, found] of [
 			['needs', named],
 			['suggests', resolved(mods.flatMap(mod => mod.suggests ?? []))],
-			['breaks', resolved(mods.flatMap(mod => mod.breaks ?? []))],
-			['conflicts', resolved(mods.flatMap(mod => mod.conflicts ?? []))],
+			['breaks', clashing('breaks')],
+			['conflicts', clashing('conflicts')],
 		]) {
 			if (found.size > 0) requiring[field] = [...found].map(provider => `${provider.host}:${provider.repo}`);
 		}
