@@ -19,6 +19,49 @@ const get = async path => {
 	return response.json();
 };
 
+const post = async (path, body) => {
+	const response = await fetchSteady(`${API}${path}`, {
+		method: 'POST',
+		headers: { 'user-agent': AGENT, accept: 'application/json', 'content-type': 'application/json' },
+		body: JSON.stringify(body),
+	});
+
+	if (!response.ok)
+		throw Object.assign(new Error(`Modrinth ${response.status} for ${path}`), { status: response.status });
+
+	return response.json();
+};
+
+/** The Modrinth project each of these files is, by its SHA-1: hash -> project id, for the files Modrinth has. */
+export const projectsByHash = async hashes =>
+	hashes.length === 0
+		? new Map()
+		: new Map(
+				Object.entries(await post('/version_files', { hashes, algorithm: 'sha1' })).map(([hash, version]) => [
+					hash.toLowerCase(),
+					version.project_id,
+				]),
+			);
+
+/** What Modrinth says of each of these projects: id -> { slug, title, source }, the source only when it links one. */
+export const projectsById = async ids => {
+	const described = new Map();
+
+	for (let start = 0; start < ids.length; start += PAGE) {
+		const asked = ids.slice(start, start + PAGE);
+
+		for (const project of await get(`/projects?ids=${encodeURIComponent(JSON.stringify(asked))}`)) {
+			described.set(project.id, {
+				slug: project.slug,
+				title: project.title,
+				...(project.source_url ? { source: project.source_url } : {}),
+			});
+		}
+	}
+
+	return described;
+};
+
 const HOST_LINES = { 'github.com': '', 'codeberg.org': 'codeberg:', 'gitlab.com': 'gitlab:' };
 
 /**

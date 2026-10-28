@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 
 import { packsFrom } from '../src/discover';
-import { buildPacks } from '../src/packs';
+import { buildPacks, describeMods, packDemand } from '../src/packs';
 
 const entry = repo => ({ repo, host: 'github' });
 
@@ -47,6 +47,119 @@ describe('the pack listing', () => {
 			install: 'ender import gh:p/pack',
 			formats: ['packwiz'],
 		});
+	});
+
+	test('says of each mod it has not got where its source and its jar are, and counts what comes from Modrinth or nowhere', () => {
+		const [pack] = buildPacks(
+			[
+				{
+					repo: 'p/pack',
+					host: 'github',
+					formats: {
+						packwiz: {
+							mods: [
+								{ name: 'Sodium', file: 'sodium.jar', modrinth: 'AANobbMI' },
+								{ name: 'Gone', file: 'gone.jar', modrinth: 'gone', title: 'Gone Mod', slug: 'gone-mod' },
+								{ name: 'Elsewhere', file: 'e.jar', modrinth: 'el', source: 'https://git.sr.ht/~a/e' },
+								{ name: 'Closed', file: 'c.jar', modrinth: 'cl' },
+								{ name: 'Fresh', file: 'f.jar', url: 'https://github.com/q/fresh/releases/download/v1/f.jar' },
+								{ name: 'Keyed', file: 'k.jar', curseforge: '238222' },
+							],
+						},
+					},
+				},
+			],
+			entries,
+			records,
+			modrinthIds,
+		);
+
+		expect(pack.mods).toEqual([
+			{ name: 'Sodium', key: 'github:d/modrinth' },
+			{
+				name: 'Gone Mod',
+				file: 'gone.jar',
+				source: 'https://github.com/z/not-indexed',
+				jar: 'modrinth',
+				modrinth: 'gone-mod',
+			},
+			{ name: 'Elsewhere', file: 'e.jar', source: 'https://git.sr.ht/~a/e', jar: 'modrinth', modrinth: 'el' },
+			{ name: 'Closed', file: 'c.jar', jar: 'modrinth', modrinth: 'cl' },
+			{ name: 'Fresh', file: 'f.jar', source: 'https://github.com/q/fresh', jar: 'link' },
+			{ name: 'Keyed', file: 'k.jar', jar: 'none' },
+		]);
+		expect(pack).toMatchObject({ count: 6, fromModrinth: 3, unsourced: 2, missing: 1 });
+	});
+
+	test("are told by Modrinth, by a mod's link or else its file's SHA-1, and left as named when Modrinth does not answer", async () => {
+		const mods = [
+			{ file: 'a.jar', url: 'https://cdn.modrinth.com/data/AAA/versions/1/a.jar' },
+			{ file: 'b.jar', curseforge: '1', sha1: 'bbb' },
+			{ file: 'c.jar', curseforge: '2', sha1: 'ccc' },
+		];
+
+		await describeMods(mods, {
+			projectsByHash: async hashes => new Map(hashes.filter(hash => hash === 'bbb').map(hash => [hash, 'BBB'])),
+			projectsById: async ids =>
+				new Map(
+					ids.map(id => [
+						id,
+						{
+							slug: id.toLowerCase(),
+							title: `${id} Mod`,
+							...(id === 'AAA' ? { source: 'https://github.com/a/a' } : {}),
+						},
+					]),
+				),
+		});
+
+		expect(mods).toEqual([
+			{
+				file: 'a.jar',
+				url: 'https://cdn.modrinth.com/data/AAA/versions/1/a.jar',
+				modrinth: 'AAA',
+				slug: 'aaa',
+				title: 'AAA Mod',
+				source: 'https://github.com/a/a',
+			},
+			{ file: 'b.jar', curseforge: '1', sha1: 'bbb', modrinth: 'BBB', slug: 'bbb', title: 'BBB Mod' },
+			{ file: 'c.jar', curseforge: '2', sha1: 'ccc' },
+		]);
+
+		const kept = [{ file: 'd.jar', sha1: 'ddd' }];
+
+		await describeMods(kept, {
+			projectsByHash: async () => {
+				throw new Error('Modrinth 503');
+			},
+			projectsById: async () => new Map(),
+		});
+		expect(kept).toEqual([{ file: 'd.jar', sha1: 'ddd' }]);
+	});
+
+	test('counts the packs using each repository, once a pack however often it names it, for the crawl to read first', () => {
+		const demand = packDemand(
+			[
+				{
+					formats: {
+						packwiz: { mods: [{ modrinth: 'gone' }, { url: 'https://cdn.modrinth.com/data/gone/versions/1/g.jar' }] },
+					},
+				},
+				{
+					formats: {
+						mrpack: { mods: [{ url: 'https://github.com/q/fresh/releases/download/v1/f.jar' }, { modrinth: 'gone' }] },
+					},
+				},
+				{ formats: { packwiz: { mods: [{ source: 'https://codeberg.org/o/m' }] } } },
+			],
+			modrinthIds,
+		);
+
+		expect([...demand]).toEqual([
+			['z/not-indexed', 2],
+			['q/fresh', 1],
+			['codeberg:o/m', 1],
+		]);
 	});
 
 	test("is told by a pack's ender pack before its packwiz one, and by its .mrpack last, installed by its link", () => {

@@ -436,6 +436,22 @@ describe('a crawl held up', () => {
 });
 
 describe('the order a crawl takes repositories in', () => {
+	test('what packs use and the index has never read comes first, the most used first', () => {
+		const ages = { 'a/old': 10, 'a/read': 5, 'm/used': 0, 'a/used': 0 };
+		const demand = new Map([
+			['m/used', 3],
+			['a/used', 1],
+			['a/read', 9],
+		]);
+
+		expect(crawlOrder(['a/old', 'a/read', 'a/used'], ['m/used'], line => ages[line], demand)).toEqual([
+			'm/used',
+			'a/used',
+			'a/read',
+			'a/old',
+		]);
+	});
+
 	test("every one found on its host before any known only from Modrinth, however new Modrinth's are", () => {
 		const ages = { 'a/old': 10, 'a/older': 5, 'm/new': 0, 'm/never': 0, 'a/both': 20 };
 

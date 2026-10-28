@@ -11,7 +11,7 @@ import { fetchSteady, RateLimited } from './fetch';
 import * as github from './github';
 import * as gitlab from './gitlab';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
-import { buildPacks, crawlPack } from './packs';
+import { buildPacks, crawlPack, packDemand } from './packs';
 import { buildSearch, latestAssets, themesOf } from './search';
 import { FUNDING_PATHS, parseFunding, supportLinks } from './funding';
 import { rawUrl } from './raw';
@@ -90,11 +90,14 @@ export const readModrinthRepos = async ({ resting = false } = {}) => {
  * The order a crawl takes repositories in: every one found on its own host before any known only from Modrinth, and
  * within each, the least recently fetched first, so a crawl cut short resumes where it stopped.
  */
-export const crawlOrder = (found, fromModrinth, ageOf) => {
+export const crawlOrder = (found, fromModrinth, ageOf, demand = new Map()) => {
 	const own = new Set(found);
 	const oldestFirst = lines => [...lines].sort((a, b) => ageOf(a) - ageOf(b));
+	const listed = [...oldestFirst(found), ...oldestFirst(new Set(fromModrinth.filter(line => !own.has(line))))];
+	const wanted = listed.filter(line => demand.has(line) && !ageOf(line)).sort((a, b) => demand.get(b) - demand.get(a));
+	const first = new Set(wanted);
 
-	return [...oldestFirst(found), ...oldestFirst(new Set(fromModrinth.filter(line => !own.has(line))))];
+	return [...wanted, ...listed.filter(line => !first.has(line))];
 };
 
 const HOSTS = { github, codeberg, gitlab };
@@ -640,6 +643,9 @@ export const crawlEach = async (
 
 const PACKS = join(DATA, 'packs');
 
+/** Each pack's page: the listing's entry, and every mod it names with where it comes from. */
+const PACK_PAGES = join(DATA, 'pack-pages');
+
 const packPath = name => join(PACKS, `${name}.json`);
 
 /**
@@ -699,10 +705,15 @@ export const writeLists = async () => {
 	const packs = await Promise.all((await packFiles()).map(file => Bun.file(file).json()));
 
 	await writeJsonLines(join(DATA, 'search.json'), search);
+	const built = buildPacks(packs, search, records, await readJson(join(DATA, 'modrinth-ids.json'), {}));
+
 	await writeJsonLines(
 		join(DATA, 'packs.json'),
-		buildPacks(packs, search, records, await readJson(join(DATA, 'modrinth-ids.json'), {})),
+		built.map(({ mods, ...listed }) => listed),
 	);
+	await rm(PACK_PAGES, { recursive: true, force: true });
+
+	for (const pack of built) await writeJson(join(PACK_PAGES, `${pack.repo}.json`), pack);
 	await writeJson(join(DATA, 'tags.json'), themes.themes);
 	await pruneIcons(records);
 
@@ -721,7 +732,9 @@ export const crawl = async ({ only } = {}) => {
 			]),
 		),
 	);
-	const repos = crawlOrder(found, fromModrinth, line => ages.get(line));
+	const modrinthIds = await readJson(join(DATA, 'modrinth-ids.json'), {});
+	const demand = packDemand(await Promise.all((await packFiles()).map(file => Bun.file(file).json())), modrinthIds);
+	const repos = crawlOrder(found, fromModrinth, line => ages.get(line), demand);
 	const knownBad = new Map(
 		(await readJson(join(DATA, 'known-bad.json'), [])).map(entry => [entry.sha256, entry.reason]),
 	);

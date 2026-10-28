@@ -7,6 +7,7 @@ import { packwizMetafiles, packwizPack } from 'ender-launcher/packwiz';
 
 import { fetchSteady } from './fetch';
 import * as github from './github';
+import { lineOf, projectsByHash, projectsById } from './modrinth';
 import { rawUrl } from './raw';
 
 /** The largest .mrpack read: a pack is its index and its overrides, and one past this carries whole worlds. */
@@ -43,6 +44,10 @@ const packwizMods = async (name, index) => {
 			...(mod.download?.url ? { url: mod.download.url } : {}),
 			...(mod.side && mod.side !== 'both' ? { side: mod.side } : {}),
 			...(mod.update?.modrinth?.['mod-id'] ? { modrinth: mod.update.modrinth['mod-id'] } : {}),
+			...(mod.update?.curseforge?.['project-id'] ? { curseforge: String(mod.update.curseforge['project-id']) } : {}),
+			...(mod.download?.['hash-format'] === 'sha1' && mod.download.hash
+				? { sha1: mod.download.hash.toLowerCase() }
+				: {}),
 		});
 	}
 
@@ -85,12 +90,45 @@ const readMrpack = async (asset, scratch) => {
 
 const MRPACK_LOADERS = { 'fabric-loader': 'fabric', 'quilt-loader': 'quilt', forge: 'forge', neoforge: 'neoforge' };
 
+/** Where Modrinth serves a project's files, by the project's id. */
+const MODRINTH_FILE = /^https:\/\/cdn\.modrinth\.com\/data\/([^/]+)\//;
+
+/**
+ * What Modrinth knows of a pack's mods, written onto each: the project a file is, by its link or else by its SHA-1, as
+ * for a CurseForge mod Modrinth also has, and that project's name and source. Modrinth not answering leaves them as
+ * the pack named them.
+ */
+export const describeMods = async (mods, { projectsByHash: byHash, projectsById: byId }) => {
+	try {
+		for (const mod of mods) mod.modrinth ??= mod.url?.match(MODRINTH_FILE)?.[1];
+
+		const unnamed = mods.filter(mod => !mod.modrinth && mod.sha1);
+		const found = await byHash([...new Set(unnamed.map(mod => mod.sha1))]);
+
+		for (const mod of unnamed) if (found.has(mod.sha1)) mod.modrinth = found.get(mod.sha1);
+
+		const described = await byId([...new Set(mods.map(mod => mod.modrinth).filter(Boolean))]);
+
+		for (const mod of mods) {
+			const project = described.get(mod.modrinth);
+
+			if (!project) continue;
+
+			mod.slug = project.slug;
+			mod.title = project.title;
+			if (project.source) mod.source = project.source;
+		}
+	} catch (error) {
+		console.error(`Modrinth did not describe a pack's mods :: ${error.message}`);
+	}
+};
+
 /**
  * A pack repository as the index keeps it: what it says of itself, and the pack in each format it has: an ender pack
  * and a packwiz pack at the head of its default branch, and the newest release's .mrpack. A .mrpack already read is
  * not downloaded again. Undefined when it has none of them.
  */
-export const crawlPack = async (name, { recorded, scratch, now }) => {
+export const crawlPack = async (name, { recorded, scratch, now, modrinth = { projectsByHash, projectsById } }) => {
 	const repo = await github.repository(name);
 	const formats = {};
 	const enderSource = await fileAt(name, ENDER_PACK);
@@ -132,12 +170,21 @@ export const crawlPack = async (name, { recorded, scratch, now }) => {
 				url: found.asset.browser_download_url,
 				mods: (index.files ?? [])
 					.filter(file => file.path?.startsWith('mods/'))
-					.map(file => ({ file: basename(file.path), url: file.downloads?.[0] })),
+					.map(file => ({
+						file: basename(file.path),
+						url: file.downloads?.[0],
+						...(file.hashes?.sha1 ? { sha1: file.hashes.sha1.toLowerCase() } : {}),
+					})),
 			};
 		}
 	}
 
 	if (Object.keys(formats).length === 0) return undefined;
+
+	await describeMods(
+		Object.values(formats).flatMap(format => format.mods.filter(mod => typeof mod === 'object')),
+		modrinth,
+	);
 
 	return {
 		repo: repo.full_name ?? name,
@@ -152,10 +199,15 @@ export const crawlPack = async (name, { recorded, scratch, now }) => {
 
 const RELEASE = /^https:\/\/github\.com\/([^/]+\/[^/]+)\/releases\/download\//;
 
-/** Where Modrinth serves a project's files, by the project's id. */
-const MODRINTH_FILE = /^https:\/\/cdn\.modrinth\.com\/data\/([^/]+)\//;
-
 const keyOfLine = line => (line.includes(':') ? line : `github:${line}`);
+
+const LINE_URLS = { codeberg: 'https://codeberg.org/', gitlab: 'https://gitlab.com/' };
+
+const urlOfLine = line => {
+	const [host, name] = line.includes(':') ? line.split(':') : ['github', line];
+
+	return `${LINE_URLS[host] ?? 'https://github.com/'}${name}`;
+};
 
 /**
  * Which indexed repository a pack's mod is: the one whose release a link downloads from, the one a spec names, the
@@ -179,13 +231,64 @@ const matcher = (entries, records, modrinthIds) => {
 	};
 };
 
+/**
+ * Where a mod the index has not got comes from, as far as anyone says: its source (a release it downloads from, a spec
+ * naming a repository, or the source its Modrinth project links), and where its jar is (Modrinth, another link, or
+ * nowhere a client can fetch without a key, as for CurseForge).
+ */
+export const whereFrom = (mod, modrinthIds = {}) => {
+	const project = mod.modrinth ?? mod.url?.match(MODRINTH_FILE)?.[1];
+	const released = mod.url?.match(RELEASE)?.[1] ?? mod.spec?.match(/^(?:gh|github):(.+)$/)?.[1];
+	const source =
+		(released && `https://github.com/${released}`) ??
+		mod.source ??
+		(project && modrinthIds[project] ? urlOfLine(modrinthIds[project]) : undefined) ??
+		(mod.spec?.startsWith('cb:') ? urlOfLine(`codeberg:${mod.spec.slice(3)}`) : undefined) ??
+		(mod.spec?.startsWith('gl:') ? urlOfLine(`gitlab:${mod.spec.slice(3)}`) : undefined);
+	const fromModrinth = project || mod.spec?.startsWith('mr:');
+	let jar = 'none';
+
+	if (fromModrinth) jar = 'modrinth';
+	else if (mod.url || released) jar = 'link';
+
+	return { ...(source ? { source } : {}), jar, ...(project ? { modrinth: mod.slug ?? project } : {}) };
+};
+
+/** The repositories packs use that the index has not read, by how many packs use each: the crawl reads these first. */
+export const packDemand = (packs, modrinthIds = {}) => {
+	const demand = new Map();
+
+	for (const pack of packs) {
+		const lines = new Set();
+
+		for (const format of Object.values(pack.formats ?? {}))
+			for (const mod of format.mods ?? []) {
+				if (typeof mod !== 'object') continue;
+
+				const project = mod.modrinth ?? mod.url?.match(MODRINTH_FILE)?.[1];
+				const line =
+					mod.url?.match(RELEASE)?.[1] ?? (project && modrinthIds[project]) ?? (mod.source && lineOf(mod.source));
+
+				if (line) lines.add(line);
+			}
+
+		for (const line of lines) demand.set(line, (demand.get(line) ?? 0) + 1);
+	}
+
+	return demand;
+};
+
 const INSTALL = {
 	ender: repo => `ender import gh:${repo}`,
 	packwiz: repo => `ender import gh:${repo}`,
 	mrpack: (repo, format) => `ender import ${format.url}`,
 };
 
-/** The pack listing: each pack repository once, by the format its mods are best told in, with those the index has. */
+/**
+ * The pack listing, and each pack's page: each pack repository once, by the format its mods are best told in, with
+ * each mod the index has, and for the rest, where its source and its jar are. A pack is said to take mods from
+ * Modrinth, and to name some with no jar to be found, by counts the listing carries.
+ */
 export const buildPacks = (packs, entries, records, modrinthIds = {}) => {
 	const match = matcher(entries, records, modrinthIds);
 
@@ -196,8 +299,18 @@ export const buildPacks = (packs, entries, records, modrinthIds = {}) => {
 
 			if (!format) return undefined;
 
-			const mods = format.mods.map(mod => (typeof mod === 'string' ? { spec: mod } : mod));
-			const matched = [...new Set(mods.map(match).filter(Boolean))];
+			const mods = format.mods
+				.map(mod => (typeof mod === 'string' ? { spec: mod } : mod))
+				.map(mod => {
+					const key = match(mod);
+					const name = mod.title ?? mod.name ?? mod.spec ?? mod.file;
+
+					return key
+						? { name, key }
+						: { name, ...(mod.file ? { file: mod.file } : {}), ...whereFrom(mod, modrinthIds) };
+				});
+			const others = mods.filter(mod => !mod.key);
+			const matched = [...new Set(mods.map(mod => mod.key).filter(Boolean))];
 
 			return {
 				repo: pack.repo,
@@ -211,7 +324,11 @@ export const buildPacks = (packs, entries, records, modrinthIds = {}) => {
 				loader: format.loader,
 				count: mods.length,
 				matched,
+				fromModrinth: others.filter(mod => mod.jar === 'modrinth').length,
+				unsourced: others.filter(mod => !mod.source).length,
+				missing: others.filter(mod => mod.jar === 'none').length,
 				install: INSTALL[kind](pack.repo, format),
+				mods,
 			};
 		})
 		.filter(Boolean)
