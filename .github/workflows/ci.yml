@@ -32,6 +32,9 @@ jobs:
           bun-download-url: https://github.com/oven-sh/bun/releases/download/bun-v1.4.0/bun-linux-x64.zip
       - run: bun install --frozen-lockfile
         working-directory: ender-index
+      # The index runs the launcher's own modules from this checkout, so their imports need its packages
+      - run: bun install --frozen-lockfile
+        working-directory: ender-launcher
       - run: bun run lint
         working-directory: ender-index
       - run: bun test
