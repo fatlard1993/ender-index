@@ -16,14 +16,14 @@ export const packOf = ({ name, minecraft, loader, items }) => ({
 	mods: items.map(item => specFor(item.host ?? 'github', item.repo)),
 });
 
-/** A pack's name as an instance name: what ender takes, without spaces or anything a path could use. */
+/** A pack's name as an instance name, by the rule ender holds instance names to: no spaces, nothing a path could use. */
 export const instanceNameOf = name =>
 	name
 		.trim()
 		.toLowerCase()
-		.replaceAll(/[^\w-]+/g, '-')
-		.replaceAll(/^-+|-+$/g, '')
-		.slice(0, 60) || 'pack';
+		.replaceAll(/[^\w.-]+/g, '-')
+		.replaceAll(/^[-.]+|-+$/g, '')
+		.slice(0, 64) || 'pack';
 
 const textOf = pack => `${JSON.stringify(pack, null, '\t')}\n`;
 
@@ -66,17 +66,25 @@ const publish = async (pack, result) => {
 		return;
 	}
 
-	const copied = await copyToClipboard(textOf(pack));
+	// Both begin while the press still counts as one, or a browser may block the new tab and the clipboard
+	const copying = copyToClipboard(textOf(pack));
+	const opened = window.open('https://gist.github.com/', '_blank');
 
-	window.open('https://gist.github.com/', '_blank', 'noopener');
-	result.content(
+	if (opened) opened.opener = null;
+
+	const copied = await copying;
+
+	result.content([
 		new Meta({
 			tag: 'p',
 			textContent: copied
-				? 'The pack is copied. In the gist page that opened, name the file ender.pack.json, paste it, and create a secret gist; then anyone can install it with ender import and the gist link.'
-				: 'The clipboard is out of reach here: download the pack, then in the gist page that opened, name the file ender.pack.json and paste it in.',
+				? "The pack is copied. On GitHub's new gist page, name the file ender.pack.json, paste it, and create a secret gist; then anyone can install it with ender import and the gist link."
+				: "The clipboard is out of reach here: download the pack, then on GitHub's new gist page name the file ender.pack.json and paste it in.",
 		}),
-	);
+		...(opened
+			? []
+			: [new Link({ href: 'https://gist.github.com/', target: '_blank', textContent: 'Open a new gist' })]),
+	]);
 };
 
 /**

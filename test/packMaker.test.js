@@ -39,7 +39,7 @@ describe('making a pack', () => {
 		expect(maker.instanceNameOf('Family Pack!')).toBe('family-pack');
 		expect(maker.instanceNameOf('../../etc')).toBe('etc');
 		expect(maker.instanceNameOf('   ')).toBe('pack');
-		expect(maker.instanceNameOf('x'.repeat(80))).toHaveLength(60);
+		expect(maker.instanceNameOf('x'.repeat(80))).toHaveLength(64);
 	});
 });
 
