@@ -33,6 +33,7 @@ import {
 	rangeLabel,
 	readmeSources,
 	screenshotsOf,
+	slug,
 	tagPath,
 	supportOf,
 	fileSize,
@@ -77,6 +78,7 @@ import {
 	date,
 	fetchReadme,
 	LAUNCHER,
+	authorsPath,
 	lightbox,
 	plainClick,
 	forStrangers,
@@ -153,13 +155,6 @@ export const Prose = styled.Component(
 		}
 	`,
 );
-
-const slug = text =>
-	text
-		.toLowerCase()
-		.trim()
-		.replace(/[^\w\s-]/g, '')
-		.replace(/\s+/g, '-');
 
 const HEADING_PREFIX = 'readme-';
 
@@ -899,7 +894,16 @@ export default class ModPage extends View {
 							textContent: "From the author's own FUNDING.yml and the links their mod gives in Mod Menu.",
 						}),
 					]
-				: []),
+				: [
+						new Meta({
+							tag: 'p',
+							style: { marginTop: theme.space.xl },
+							append: [
+								'The index knows no way to support its author. ',
+								new Link({ href: authorsPath('funding'), textContent: 'Is it yours? Here is how to add one.' }),
+							],
+						}),
+					]),
 			tabs,
 			...Object.values(panels),
 		]);

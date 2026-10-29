@@ -479,3 +479,11 @@ export const similarPacks = (pack, packs, most = 6) => {
 		.sort((a, b) => b.score - a.score || b.shared - a.shared)
 		.slice(0, most);
 };
+
+/** A heading as the id it is linked by. */
+export const slug = text =>
+	text
+		.toLowerCase()
+		.trim()
+		.replace(/[^\w\s-]/g, '')
+		.replace(/\s+/g, '-');

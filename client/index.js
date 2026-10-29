@@ -1,5 +1,6 @@
 import { Page, Router, View } from '@vanilla-bean/components';
 
+import AuthorsPage from './AuthorsPage';
 import CollectionBar from './CollectionBar';
 import GetPage from './GetPage';
 import InstancesPage from './InstancesPage';
@@ -20,6 +21,8 @@ new Page({
 					'/packs': PacksPage,
 					'/pack/:host/:owner/:name': PackPage,
 					'/get': GetPage,
+					'/authors': AuthorsPage,
+					'/authors/:part': AuthorsPage,
 					'/instances': InstancesPage,
 					'/mod/:host/:owner/:name': ModPage,
 				},

@@ -207,6 +207,9 @@ const Places = styled.Component(
 /** Where the index says how to get ender, the launcher that installs what it lists. */
 export const LAUNCHER = '#/get';
 
+/** Where the index tells mod authors what it reads from their repositories, or one part of that. */
+export const authorsPath = part => (part ? `#/authors/${part}` : '#/authors');
+
 /**
  * Shown only on a page ender is not serving: there it is the launcher's own, and the way to get ender is no news.
  * Hidden until that is known, so it does not show and vanish.
