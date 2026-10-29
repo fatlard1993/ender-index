@@ -40,7 +40,7 @@ const section = (title, explained, content) =>
 
 export default class PackPage extends View {
 	build() {
-		const { owner, name } = this.options;
+		const { host, owner, name } = this.options;
 		const repo = `${owner}/${name}`;
 		const crumbs = new Stack({ append: breadcrumbs({ label: 'Packs', href: '#/packs' }, { label: repo }) });
 		const body = new Stack({ append: new EmptyState({ loading: true, title: `Loading ${repo}` }) });
@@ -50,7 +50,7 @@ export default class PackPage extends View {
 			new Content({ column: 900, style: { paddingBlock: '12px' }, append: [crumbs, body] }),
 		]);
 
-		Promise.all([loadPackPage(repo), loadListing().catch(() => [])])
+		Promise.all([loadPackPage(host, repo), loadListing().catch(() => [])])
 			.then(([pack, listing]) => {
 				if (this.signal.aborted) return;
 

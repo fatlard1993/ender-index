@@ -6,7 +6,7 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { buildPacks, describeMods, packDemand, zipEntryByRanges } from '../src/packs';
+import { buildPacks, describeMods, gistPack, packDemand, packPage, zipEntryByRanges } from '../src/packs';
 
 const entry = repo => ({ repo, host: 'github' });
 
@@ -192,6 +192,29 @@ describe('the pack listing', () => {
 
 		expect(both[0]).toMatchObject({ name: 'Ender', matched: ['github:b/named'], install: 'ender import gh:p/both' });
 		expect(both[1].install).toBe('ender import https://github.com/p/released/releases/download/v1/r.mrpack');
+	});
+
+	test('reads an ender pack published to a gist, installed and paged by the gist, not by a repository', async () => {
+		const pack = { name: 'Gisted', minecraft: '26.3', loader: 'fabric', mods: ['gh:b/named'] };
+		const body = {
+			id: 'abc123',
+			owner: { login: 'p' },
+			description: 'ender pack: Gisted',
+			updated_at: '2026-10-28T00:00:00Z',
+			files: { 'ender.pack.json': { truncated: true, raw_url: 'https://gist.example/raw' } },
+		};
+		const read = async url => (url === 'https://gist.example/raw' ? JSON.stringify(pack) : '');
+		const recorded = await gistPack(body, { now: 'now', read });
+
+		expect(await gistPack({ ...body, files: { 'notes.md': { content: '' } } }, { now: 'now' })).toBeUndefined();
+		expect(recorded).toMatchObject({ repo: 'p/abc123', host: 'gist' });
+		expect(recorded).not.toHaveProperty('stars');
+
+		const [listed] = buildPacks([recorded], entries, records);
+
+		expect(listed).toMatchObject({ name: 'Gisted', matched: ['github:b/named'], install: 'ender import gist:abc123' });
+		expect(packPage(listed)).toBe('gist/p/abc123');
+		expect(packPage({ host: 'github', repo: 'p/abc123' })).toBe('p/abc123');
 	});
 
 	test('takes from code search only the repositories whose pack file is at their root', () => {

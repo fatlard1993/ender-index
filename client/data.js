@@ -52,8 +52,8 @@ export const loadPacks = () => {
 };
 
 /** A pack's page: its listing, and each mod it names with where that mod comes from. */
-export const loadPackPage = async repo => {
-	const response = await fetch(`${INDEX}/pack-pages/${repo}.json`);
+export const loadPackPage = async (host, repo) => {
+	const response = await fetch(`${INDEX}/pack-pages/${host === 'gist' ? 'gist/' : ''}${repo}.json`);
 
 	if (response.status === 404) return undefined;
 	if (!response.ok) throw new Error(`${repo}'s page answered ${response.status}`);

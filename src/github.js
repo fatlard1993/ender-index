@@ -208,6 +208,9 @@ export const searchCode = (query, page = 1) =>
 export const searchRepositories = (query, page = 1) =>
 	request(`/search/repositories?${new URLSearchParams({ q: query, per_page: '100', page: String(page) })}`);
 
+/** A gist, with each of its files' contents: a file over a megabyte comes truncated, with a raw_url to the whole of it. */
+export const gist = id => request(`/gists/${id}`);
+
 /** Every file path in a repository at its default branch, in one request. */
 export const filesOf = async fullName =>
 	((await request(`/repos/${fullName}/git/trees/HEAD?recursive=1`)).tree ?? [])

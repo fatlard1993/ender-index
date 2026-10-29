@@ -224,6 +224,10 @@ export const describeMods = async (mods, { projectsByHash: byHash, projectsById:
  * not downloaded again. Undefined when it has none of them.
  */
 export const crawlPack = async (name, { recorded, scratch, now, modrinth = { projectsByHash, projectsById } }) => {
+	const gistId = name.match(GIST_LINE)?.[1];
+
+	if (gistId) return gistPack(await github.gist(gistId), { now });
+
 	const repo = await github.repository(name);
 	const formats = {};
 	const enderSource = await fileAt(name, ENDER_PACK);
@@ -291,6 +295,31 @@ export const crawlPack = async (name, { recorded, scratch, now, modrinth = { pro
 		formats,
 	};
 };
+
+/** A pack line naming a gist, as `ender export --gist` publishes a pack: `gist:<id>`. */
+export const GIST_LINE = /^gist:([\da-f]+)$/i;
+
+/**
+ * A gist's ender pack as the index keeps it, or undefined when the gist holds none. A gist has no star count GitHub
+ * will tell, so it has none here.
+ */
+export const gistPack = async (body, { now, read = url => fetchSteady(url).then(response => response.text()) }) => {
+	const file = body.files?.[ENDER_PACK];
+
+	if (!file) return undefined;
+
+	return {
+		repo: `${body.owner?.login ?? 'anonymous'}/${body.id}`,
+		host: 'gist',
+		description: body.description || undefined,
+		pushed: body.updated_at,
+		fetched: now,
+		formats: { ender: parseEnderPack(file.truncated ? await read(file.raw_url) : file.content) },
+	};
+};
+
+/** Where a pack's page is kept: a repository's by its name, a gist's under gist/ beside them. */
+export const packPage = pack => (pack.host === 'gist' ? `gist/${pack.repo}` : pack.repo);
 
 const RELEASE = /^https:\/\/github\.com\/([^/]+\/[^/]+)\/releases\/download\//;
 
@@ -374,9 +403,9 @@ export const packDemand = (packs, modrinthIds = {}) => {
 };
 
 const INSTALL = {
-	ender: repo => `ender import gh:${repo}`,
-	packwiz: repo => `ender import gh:${repo}`,
-	mrpack: (repo, format) => `ender import ${format.url}`,
+	ender: pack => `ender import ${pack.host === 'gist' ? `gist:${pack.repo.split('/').at(-1)}` : `gh:${pack.repo}`}`,
+	packwiz: pack => `ender import gh:${pack.repo}`,
+	mrpack: (pack, format) => `ender import ${format.url}`,
 };
 
 /**
@@ -422,7 +451,7 @@ export const buildPacks = (packs, entries, records, modrinthIds = {}) => {
 				fromModrinth: others.filter(mod => mod.jar === 'modrinth').length,
 				unsourced: others.filter(mod => !mod.source).length,
 				missing: others.filter(mod => mod.jar === 'none').length,
-				install: INSTALL[kind](pack.repo, format),
+				install: INSTALL[kind](pack, format),
 				mods,
 			};
 		})

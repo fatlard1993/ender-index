@@ -133,7 +133,7 @@ export const refine = (
 	return kept.toSorted((a, b) => ORDER[sort](b.entry) - ORDER[sort](a.entry));
 };
 
-const SITES = { github: 'https://github.com', codeberg: 'https://codeberg.org', gitlab: 'https://gitlab.com' };
+const SITES = { github: 'https://github.com', codeberg: 'https://codeberg.org', gitlab: 'https://gitlab.com', gist: 'https://gist.github.com' };
 
 export const repositoryUrl = entry => `${SITES[entry.host ?? 'github']}/${entry.repo}`;
 

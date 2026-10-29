@@ -11,7 +11,7 @@ import { fetchSteady, RateLimited } from './fetch';
 import * as github from './github';
 import * as gitlab from './gitlab';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
-import { buildPacks, crawlPack, packDemand } from './packs';
+import { GIST_LINE, buildPacks, crawlPack, packDemand, packPage } from './packs';
 import { buildSearch, latestAssets, themesOf } from './search';
 import { FUNDING_PATHS, parseFunding, supportLinks } from './funding';
 import { rawUrl } from './raw';
@@ -646,7 +646,7 @@ const PACKS = join(DATA, 'packs');
 /** Each pack's page: the listing's entry, and every mod it names with where it comes from. */
 const PACK_PAGES = join(DATA, 'pack-pages');
 
-const packPath = name => join(PACKS, `${name}.json`);
+const packPath = name => join(PACKS, `${name.replace(GIST_LINE, 'gist/$1')}.json`);
 
 /**
  * The most of a crawl's time packs are read in, before the mods take the rest: a backlog of mods would otherwise spend
@@ -660,7 +660,7 @@ const PACK_SHARE = 1 / 6;
  * record. Packs are read from GitHub alone, where nearly all of them are kept.
  */
 const crawlPacks = async ({ deadline, scratch, now, parallel }) => {
-	const onGitHub = line => !line.includes(':');
+	const onGitHub = line => !line.includes(':') || GIST_LINE.test(line);
 	const found = (await readLines('packs.txt')).filter(onGitHub);
 	const fromModrinth = (await readLines('modrinth-packs.txt')).filter(onGitHub);
 	const ages = new Map(
@@ -713,7 +713,7 @@ export const writeLists = async () => {
 	);
 	await rm(PACK_PAGES, { recursive: true, force: true });
 
-	for (const pack of built) await writeJson(join(PACK_PAGES, `${pack.repo}.json`), pack);
+	for (const pack of built) await writeJson(join(PACK_PAGES, `${packPage(pack)}.json`), pack);
 	await writeJson(join(DATA, 'tags.json'), themes.themes);
 	await pruneIcons(records);
 

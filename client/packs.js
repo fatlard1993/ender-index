@@ -31,7 +31,7 @@ export const packChips = pack => [
 ];
 
 export const packStats = pack =>
-	[`${count(pack.stars ?? 0)} stars`, pack.pushed && `last pushed ${date(pack.pushed)}`].filter(Boolean).join(' · ');
+	[pack.stars !== undefined && `${count(pack.stars)} stars`, pack.pushed && `last pushed ${date(pack.pushed)}`].filter(Boolean).join(' · ');
 
 export const installRow = pack =>
 	new Row({
