@@ -18,8 +18,9 @@ concurrency: crawl
 jobs:
   crawl:
     runs-on: ubuntu-latest
-    # The crawl's own budget is 240 minutes, after a discovery of up to forty; a job the runner stops commits nothing
-    timeout-minutes: 340
+    # The crawl's own budget is 240 minutes, after a discovery of up to forty and a source check of up to twenty; a job
+    # the runner stops commits nothing
+    timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
         with:
@@ -46,6 +47,14 @@ jobs:
         run: |
           if [ '${{ inputs.discover }}' = true ] || [ "$(date -u +%u)" = 7 ]; then bun run discover; else echo 'Discovery runs on Sundays'; fi
         working-directory: ender-index
+        env:
+          GITHUB_TOKEN: ${{ secrets.CRAWL_TOKEN || secrets.GITHUB_TOKEN }}
+      # The repositories found with no release, looked at for a source that builds; each is due weekly or monthly
+      - name: sources
+        run: bun run sources
+        working-directory: ender-index
+        continue-on-error: true
+        timeout-minutes: 20
         env:
           GITHUB_TOKEN: ${{ secrets.CRAWL_TOKEN || secrets.GITHUB_TOKEN }}
       # Under the job's limit, so a crawl that overruns its budget is stopped here and the lists and commit below still run

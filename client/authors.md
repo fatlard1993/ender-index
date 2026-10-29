@@ -10,7 +10,9 @@ Attach the built jar to a release. A release is where the index and ender take a
 - **Drafts are not read; prereleases are**, and a stable release is offered before them.
 - **Do not replace a jar after publishing.** The index keeps each jar's sha256, and a release whose jar changed is flagged on the mod's page. Publish a new release instead.
 
-A mod with no jar on its releases is not listed. A pack that names it takes the jar from Modrinth when there is one there, and the pack's page says so.
+### No release yet
+
+A mod on GitHub with no jar on its releases is listed by its source, when that builds on its own: one gradle project with its wrapper, its metadata in `src/main/resources`, no submodules, and nothing in `settings.gradle` reaching outside the repository. Its page says it has no built release, and a player installing it has ender build its default branch on their own machine, with a JDK ender fetches. That works, but it is slow, and it asks every player to run your build scripts, so a release is better for everyone.
 
 ## Funding
 

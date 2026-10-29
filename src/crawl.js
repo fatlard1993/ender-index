@@ -25,7 +25,7 @@ export const ICONS = join(DATA, 'icons');
 /** Larger than any mod jar has reason to be; past it, the asset is recorded as refused rather than fetched. */
 export const MAX_DOWNLOAD = 256 * 1024 * 1024;
 
-const readJson = async (path, fallback) => {
+export const readJson = async (path, fallback) => {
 	const file = Bun.file(path);
 
 	return (await file.exists()) ? file.json() : fallback;

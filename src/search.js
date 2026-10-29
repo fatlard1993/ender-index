@@ -12,9 +12,24 @@ const live = release =>
 
 const usable = release => live(release).length > 0;
 
-/** The release a repository is listed by: its newest full release with a mod in it, or failing that its newest. */
+/** A repository with no release, known by a source that builds, as the release a build of it would be. */
+const sourceRelease = ({ source }) =>
+	source && {
+		tag: source.commit.slice(0, 7),
+		published: source.committed,
+		prerelease: false,
+		fromSource: true,
+		assets: [{ name: 'source', mods: source.mods }],
+	};
+
+/**
+ * The release a repository is listed by: its newest full release with a mod in it, or failing that its newest, or
+ * failing that its source.
+ */
 export const latestRelease = record =>
-	record.releases.find(release => !release.prerelease && usable(release)) ?? record.releases.find(usable);
+	record.releases.find(release => !release.prerelease && usable(release)) ??
+	record.releases.find(usable) ??
+	sourceRelease(record);
 
 /** The jars of that release worth reading, which a crawl also takes the icon from. */
 export const latestAssets = record => {
@@ -87,8 +102,10 @@ export const summarize = record => {
 		environment: environmentOf(assets.flatMap(asset => asset.mods ?? [])),
 		icon: assets.find(asset => asset.icon)?.icon,
 		replaced: record.releases.some(release => release.assets.some(asset => asset.replaced !== undefined)),
+		...(latest?.fromSource ? { fromSource: true } : {}),
 		targets: unique(
-			record.releases
+			[latest, ...record.releases]
+				.filter(Boolean)
 				.flatMap(release => live(release).flatMap(asset => asset.mods ?? []))
 				.map(({ loader, minecraft }) => ({ loader, minecraft })),
 			target => `${target.loader} ${target.minecraft}`,
