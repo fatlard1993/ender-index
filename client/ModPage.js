@@ -79,9 +79,9 @@ import {
 	LAUNCHER,
 	lightbox,
 	plainClick,
-	breadcrumbs,
 	forStrangers,
 	siteBar,
+	stat,
 	hint,
 	loadJson,
 	TILES,
@@ -96,23 +96,8 @@ const Heading = styled.Component(
 	`,
 );
 
-const Stat = styled.Component(
-	({ colors, radius, space }) => `
-		display: flex;
-		flex-direction: column;
-		padding: ${space.sm} ${space.md};
-		border: 1px solid ${colors.border};
-		border-radius: ${radius.md};
-		min-width: 7em;
-
-		& > strong {
-			font-size: 1.2em;
-		}
-	`,
-);
-
 /** A readme as its host would show it, kept to this column: wide images and tables scale or scroll, never the page. */
-const Prose = styled.Component(
+export const Prose = styled.Component(
 	({ colors, radius, space }) => `
 		line-height: 1.55;
 		overflow-wrap: anywhere;
@@ -168,8 +153,6 @@ const Prose = styled.Component(
 		}
 	`,
 );
-
-const stat = (value, label) => new Stat({ append: [new Component({ tag: 'strong', textContent: value }), label] });
 
 const slug = text =>
 	text
@@ -689,11 +672,8 @@ export default class ModPage extends View {
 		const host = this.options.host;
 		const body = new Stack({ append: new EmptyState({ loading: true, title: `Loading ${repo}` }) });
 
-		this.crumbs = new Stack({ append: breadcrumbs({ label: 'Mods', href: `${location.search}#/` }, { label: repo }) });
-		this.content([
-			siteBar('mods'),
-			new Content({ column: 900, style: { paddingBlock: '12px' }, append: [this.crumbs, body] }),
-		]);
+		this.bar = siteBar('mods', { label: repo });
+		this.content([this.bar, new Content({ column: 900, style: { paddingBlock: '12px' }, append: body })]);
 
 		const { signal } = this;
 
@@ -819,7 +799,7 @@ export default class ModPage extends View {
 		const author = authorOf(entry, listing);
 
 		document.title = `${title} :: ender index`;
-		this.crumbs.content(breadcrumbs({ label: 'Mods', href: `${location.search}#/` }, { label: title }));
+		this.bar.trail({ label: title });
 		collection.subscribe(redrawControls, signal);
 		local.subscribe(redrawControls, signal);
 		local.ready().then(redrawControls);

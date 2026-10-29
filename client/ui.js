@@ -150,6 +150,24 @@ export const copyCommand = async command => {
 	});
 };
 
+const Stat = styled.Component(
+	({ colors, radius, space }) => `
+		display: flex;
+		flex-direction: column;
+		padding: ${space.sm} ${space.md};
+		border: 1px solid ${colors.border};
+		border-radius: ${radius.md};
+		min-width: 7em;
+
+		& > strong {
+			font-size: 1.2em;
+		}
+	`,
+);
+
+export const stat = (value, label) =>
+	new Stat({ append: [new Component({ tag: 'strong', textContent: value }), label] });
+
 export const paragraph = textContent => new Component({ tag: 'p', textContent, style: { margin: 0 } });
 
 /** A repository's own description, or its summary marked with where it came from. */
@@ -178,7 +196,7 @@ const Places = styled.Component(
 			margin-left: 0;
 		}
 
-		& > a[aria-current='page'] {
+		& > a[aria-current] {
 			color: ${colors.white};
 			text-decoration: underline;
 			text-underline-offset: 4px;
@@ -218,17 +236,87 @@ const PLACES = {
 	instances: { label: 'Instances', href: '#/instances', local: true },
 };
 
+const Trail = styled.Component(
+	({ colors, fontSize, media, space }) => `
+		flex: 1 1 auto;
+		display: flex;
+		align-items: center;
+		gap: ${space.xs};
+		min-width: 0;
+		white-space: nowrap;
+		color: ${colors.muted};
+
+		& > .site {
+			flex-shrink: 0;
+			font-size: ${fontSize.lg};
+			font-weight: 600;
+			color: inherit;
+			text-decoration: none;
+		}
+
+		& > .steps {
+			display: contents;
+		}
+
+		& > .site,
+		& [aria-current='page'] {
+			color: ${colors.white};
+		}
+
+		& [aria-current='page'] {
+			min-width: 0;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		@media ${media.wide} {
+			max-width: calc(50% - 170px);
+		}
+
+		@media ${media.phone} {
+			& .between {
+				display: none;
+			}
+		}
+	`,
+);
+
+/** A page's steps in the bar: each one back a link, the page itself last; only the last shows on a phone. */
+export const trailSteps = (...steps) =>
+	steps.flatMap((step, at) => {
+		const last = at === steps.length - 1;
+		const between = last ? {} : { addClass: 'between' };
+
+		return [
+			new Component({ tag: 'span', textContent: '/', attributes: { 'aria-hidden': 'true' }, ...between }),
+			step.href
+				? new Link({ href: step.href, textContent: step.label, ...between })
+				: new Component({
+						tag: 'span',
+						textContent: step.label,
+						title: step.label,
+						attributes: { 'aria-current': 'page' },
+					}),
+		];
+	});
+
 /**
- * Every page's bar: the index's own places beside its name, the current one marked and the mods keeping the search
- * they were left with, and on the far side the link that leaves it, to its repository, where GitHub shows how to
- * sponsor it.
+ * Every page's bar: the index's name and where the page is within it, the index's own places with the current one
+ * marked and the mods keeping the search they were left with, and on the far side the link that leaves it, to its
+ * repository, where GitHub shows how to sponsor it. Given steps, the bar answers trail(...steps) to retell them once
+ * the page knows what it shows.
  */
-export const siteBar = at =>
-	new Toolbar({
+export const siteBar = (at, ...steps) => {
+	const shown = new Component({ tag: 'span', addClass: 'steps', append: trailSteps(...steps) });
+	const bar = new Toolbar({
 		variant: 'bar',
-		heading: 'ender index',
 		style: { position: 'relative' },
 		append: [
+			new Trail({
+				tag: 'nav',
+				attributes: { 'aria-label': 'Breadcrumb' },
+				append: [new Link({ addClass: 'site', href: `${location.search}#/`, textContent: 'ender index' }), shown],
+			}),
 			new Places({
 				tag: 'nav',
 				append: Object.entries(PLACES).map(([place, { label, href, local: localOnly }]) => {
@@ -236,7 +324,7 @@ export const siteBar = at =>
 						variant: 'flat',
 						href: place === 'mods' ? `${location.search}${href}` : href,
 						textContent: label,
-						...(place === at ? { attributes: { 'aria-current': 'page' } } : {}),
+						...(place === at ? { attributes: { 'aria-current': steps.length > 0 ? 'location' : 'page' } } : {}),
 					});
 
 					return localOnly ? forLocal(link) : link;
@@ -252,29 +340,10 @@ export const siteBar = at =>
 		],
 	});
 
-const Crumbs = styled.Component(
-	({ colors, space }) => `
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: ${space.xs};
-		color: ${colors.muted};
-		font-size: 0.9em;
-	`,
-);
+	bar.trail = (...retold) => shown.content(trailSteps(...retold));
 
-/** Where a page is within the index: each step back a link, the page itself last. */
-export const breadcrumbs = (...steps) =>
-	new Crumbs({
-		tag: 'nav',
-		attributes: { 'aria-label': 'Breadcrumb' },
-		append: steps.flatMap((step, at) => [
-			...(at > 0 ? ['/'] : []),
-			step.href
-				? new Link({ href: step.href, textContent: step.label })
-				: new Component({ tag: 'span', textContent: step.label, attributes: { 'aria-current': 'page' } }),
-		]),
-	});
+	return bar;
+};
 
 const Screenshots = styled.Component(
 	({ colors, media, radius, space }) => `

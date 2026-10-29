@@ -1,6 +1,6 @@
 import { Button, Content, Link, SectionLabel, View, theme } from '@vanilla-bean/components';
 
-import { Command, Meta, Row, Stack, Title, breadcrumbs, copyCommand, siteBar } from './ui';
+import { Command, Meta, Row, Stack, Title, copyCommand, siteBar } from './ui';
 
 const SCRIPTS = 'https://raw.githubusercontent.com/fatlard1993/ender-launcher/main';
 
@@ -31,12 +31,11 @@ export default class GetPage extends View {
 		document.title = 'Get ender :: ender index';
 
 		this.content([
-			siteBar(),
+			siteBar(undefined, { label: 'Get ender' }),
 			new Content({
 				column: 900,
 				style: { paddingBlock: '12px' },
 				append: [
-					breadcrumbs({ label: 'Mods', href: `${location.search}#/` }, { label: 'Get ender' }),
 					new Stack({
 						style: { gap: theme.space.md },
 						append: [
