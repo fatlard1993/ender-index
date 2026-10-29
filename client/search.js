@@ -155,7 +155,13 @@ export const releasesUrl = entry => `${repositoryUrl(entry)}/${entry.host === 'g
 export const releaseUrl = entry =>
 	`${releasesUrl(entry)}/${entry.host === 'gitlab' ? '' : 'tag/'}${encodeURIComponent(entry.latest.tag)}`;
 
-export const installCommand = entry => `ender add ${specFor(entry.host ?? 'github', entry.repo)}`;
+/** What a player takes on in installing a mod its author published no jar of. */
+export const BUILT_FROM_SOURCE =
+	'Its author has published no jar, so ender builds one from its source: that runs its gradle scripts on your machine with your permissions, and a first build takes minutes.';
+
+/** --build is how a player allows ender to build a mod with no jar from its source. */
+export const installCommand = entry =>
+	`ender add ${specFor(entry.host ?? 'github', entry.repo)}${entry.fromSource ? ' --build' : ''}`;
 
 /** Release ids from Mojang's manifest, newest first; snapshots are left out, as mods rarely target them. */
 export const releasedVersions = manifest =>
@@ -378,6 +384,7 @@ export const installAllCommand = (entries, { instance } = {}) =>
 	[
 		'ender add',
 		...entries.map(entry => specFor(entry.host ?? 'github', entry.repo)),
+		...(entries.some(entry => entry.fromSource) ? ['--build'] : []),
 		...(instance ? ['--instance', instance] : []),
 	].join(' ');
 

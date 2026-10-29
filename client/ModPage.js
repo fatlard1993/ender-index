@@ -23,6 +23,7 @@ import { loadListing, loadPacks, loadShots, loadVersions } from './data';
 import { packCard } from './packs';
 import { shareUrl } from './shots';
 import {
+	BUILT_FROM_SOURCE,
 	CAPABILITIES,
 	INDEX,
 	collectionKey,
@@ -846,6 +847,7 @@ export default class ModPage extends View {
 			...(entry.replaced
 				? [new Warning({ textContent: 'A jar in one of its releases was changed after publishing' })]
 				: []),
+			...(entry.fromSource ? [new Warning({ textContent: BUILT_FROM_SOURCE })] : []),
 			new Row({
 				append: [
 					new Command({ tag: 'code', textContent: command }),

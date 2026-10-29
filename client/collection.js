@@ -32,7 +32,10 @@ export const collection = {
 	toggle: (entry, title) => {
 		items = collection.has(entry)
 			? items.filter(item => collectionKey(item) !== collectionKey(entry))
-			: [...items, { host: entry.host ?? 'github', repo: entry.repo, title }];
+			: [
+					...items,
+					{ host: entry.host ?? 'github', repo: entry.repo, title, ...(entry.fromSource ? { fromSource: true } : {}) },
+				];
 		save();
 	},
 	clear: () => {

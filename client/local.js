@@ -158,12 +158,12 @@ const finished = async (job, { reloading = true } = {}) => {
 	return job;
 };
 
-const change = async (verb, specs, keys) => {
+const change = async (verb, specs, keys, { build = false } = {}) => {
 	for (const key of keys) state.busy.add(key);
 	notify();
 
 	try {
-		const job = await finished(await start('POST', `${named(state.selected)}/${verb}`, { specs }), {
+		const job = await finished(await start('POST', `${named(state.selected)}/${verb}`, { specs, ...(build ? { build } : {}) }), {
 			reloading: false,
 		});
 
@@ -214,7 +214,9 @@ export const local = {
 	},
 	isInstalled: entry => state.installed.has(collectionKey(entry)),
 	isBusy: entry => state.busy.has(collectionKey(entry)),
-	add: (entries, specFor) => change('add', entries.map(specFor), entries.map(collectionKey)),
+	/** build allows ender to build what has no jar from its source. */
+	add: (entries, specFor, { build = false } = {}) =>
+		change('add', entries.map(specFor), entries.map(collectionKey), { build }),
 	drop: (entries, specFor) => change('drop', entries.map(specFor), entries.map(collectionKey)),
 	subscribe: (listener, signal) => listen(listeners, listener, signal),
 };

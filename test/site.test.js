@@ -336,3 +336,9 @@ describe('the Get ender page', () => {
 		);
 	});
 });
+
+test('a mod with only its source installs with --build, which allows ender to build it', () => {
+	expect(installCommand({ repo: 'a/b', fromSource: true })).toBe('ender add gh:a/b --build');
+	expect(installCommand({ repo: 'a/b' })).toBe('ender add gh:a/b');
+	expect(installAllCommand([{ repo: 'a/b' }, { repo: 'a/c', fromSource: true }])).toBe('ender add gh:a/b gh:a/c --build');
+});

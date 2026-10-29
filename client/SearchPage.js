@@ -24,6 +24,7 @@ import { collectButton, installControls, instancePicker } from './controls';
 import { loadListing, loadThemes, loadVersions } from './data';
 import { local } from './local';
 import {
+	BUILT_FROM_SOURCE,
 	CAPABILITIES,
 	INDEX,
 	LOADERS,
@@ -225,6 +226,7 @@ const cautionsOf = (entry, { sharing, unproven }) =>
 		},
 		sharing && { label: 'possible duplicate', text: `It ${sharing}: check you have the one you mean` },
 		entry.replaced && { label: 'jar changed', text: 'A jar in one of its releases was changed after publishing' },
+		entry.fromSource && { label: 'no built release', text: BUILT_FROM_SOURCE },
 	].filter(Boolean);
 
 /** A click on a card's own surface, not on a link, a button, a command to select, or after selecting text. */

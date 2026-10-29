@@ -1,9 +1,9 @@
-import { Button, Notify, Select } from '@vanilla-bean/components';
+import { Button, Dialog, Notify, Select } from '@vanilla-bean/components';
 import { specFor } from 'ender-launcher/spec';
 
 import { collection } from './collection';
 import { local } from './local';
-import { titleOf } from './search';
+import { BUILT_FROM_SOURCE, titleOf } from './search';
 import { Chip } from './ui';
 
 const specOf = entry => specFor(entry.host ?? 'github', entry.repo);
@@ -21,11 +21,28 @@ export const collectButton = entry => {
 	});
 };
 
+/** Whether the player allows building the mods among these that have no jar, asked before ender builds any. */
+const allowsBuilding = async entries => {
+	const sourced = entries.filter(entry => entry.fromSource);
+
+	if (sourced.length === 0) return true;
+
+	return Dialog.confirm({
+		header: `Build ${sourced.length === 1 ? titleOf(sourced[0]) : `${sourced.length} mods`} from source?`,
+		body: BUILT_FROM_SOURCE,
+		confirmLabel: 'Build',
+		intent: 'warning',
+	});
+};
+
 export const runLocally = async (verb, entries) => {
 	const named = entries.length === 1 ? titleOf(entries[0]) : `${entries.length} mods`;
+	const building = verb === 'add' && entries.some(entry => entry.fromSource);
+
+	if (building && !(await allowsBuilding(entries))) return undefined;
 
 	try {
-		const output = await local[verb](entries, specOf);
+		const output = await local[verb](entries, specOf, { build: building });
 
 		new Notify({
 			intent: 'success',
