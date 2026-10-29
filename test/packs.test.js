@@ -6,7 +6,8 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { buildPacks, describeMods, gistPack, packDemand, packPage, zipEntryByRanges } from '../src/packs';
+import { RateLimited } from '../src/fetch';
+import { buildPacks, describeMods, fileAt, gistPack, packDemand, packPage, zipEntryByRanges } from '../src/packs';
 
 const entry = repo => ({ repo, host: 'github' });
 
@@ -225,6 +226,15 @@ describe('the pack listing', () => {
 			]),
 		).toEqual(['a/root']);
 	});
+});
+
+test("a pack's file GitHub answers 429 for is its rate limit, set aside rather than failed", async () => {
+	const answering = status => async () => new Response(status === 200 ? 'x' : null, { status });
+
+	await expect(fileAt('a/b', 'pack.toml', { fetching: answering(429) })).rejects.toBeInstanceOf(RateLimited);
+	await expect(fileAt('a/b', 'pack.toml', { fetching: answering(500) })).rejects.toThrow('pack.toml answered 500');
+	expect(await fileAt('a/b', 'pack.toml', { fetching: answering(404) })).toBeUndefined();
+	expect(await fileAt('a/b', 'pack.toml', { fetching: answering(200) })).toBe('x');
 });
 
 describe('a .mrpack on a host that serves ranges', () => {

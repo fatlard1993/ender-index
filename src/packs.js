@@ -5,7 +5,7 @@ import { readEntryJson } from 'ender-launcher/archive';
 import { ENDER_PACK, parseEnderPack } from 'ender-launcher/enderPack';
 import { packwizMetafiles, packwizPack } from 'ender-launcher/packwiz';
 
-import { fetchSteady } from './fetch';
+import { fetchSteady, limitedBy } from './fetch';
 import * as github from './github';
 import { lineOf, projectsByHash, projectsById } from './modrinth';
 import { rawUrl } from './raw';
@@ -17,11 +17,15 @@ const MRPACK_INDEX = 'modrinth.index.json';
 
 const METAFILES_AT_ONCE = 8;
 
-/** A file at the head of a repository's default branch, or undefined when it has none. */
-const fileAt = async (name, path) => {
-	const response = await fetchSteady(rawUrl('github', name, path));
+/**
+ * A file at the head of a repository's default branch, or undefined when it has none. GitHub's raw files answer 429 to
+ * a burst of them, which the crawl waits out or leaves for next time like any rate limit, not a failure of the pack.
+ */
+export const fileAt = async (name, path, { fetching = fetchSteady } = {}) => {
+	const response = await fetching(rawUrl('github', name, path));
 
 	if (response.status === 404) return undefined;
+	if (response.status === 429) throw limitedBy('GitHub', response);
 	if (!response.ok) throw new Error(`${path} answered ${response.status}`);
 
 	return response.text();
