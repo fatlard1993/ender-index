@@ -166,6 +166,7 @@ const readMrpack = async (asset, scratch) => {
 		if (asset.size > MRPACK_LIMIT) {
 			throw new Error(
 				`${asset.name} could not be read by ranges (${error.message}), and at ${asset.size} bytes is past the ${MRPACK_LIMIT} downloaded whole`,
+				{ cause: error },
 			);
 		}
 	}
