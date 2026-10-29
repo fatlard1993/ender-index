@@ -31,13 +31,16 @@ export const packChips = pack => [
 ];
 
 export const packStats = pack =>
-	[pack.stars !== undefined && `${count(pack.stars)} stars`, pack.pushed && `last pushed ${date(pack.pushed)}`].filter(Boolean).join(' · ');
+	[pack.stars !== undefined && `${count(pack.stars)} stars`, pack.pushed && `last pushed ${date(pack.pushed)}`]
+		.filter(Boolean)
+		.join(' · ');
 
-export const installRow = pack =>
+export const installRow = (pack, ...beside) =>
 	new Row({
 		append: [
 			new Command({ tag: 'code', textContent: pack.install }),
 			new Button({ icon: 'copy', variant: 'flat', title: 'Copy', onPointerPress: () => copyCommand(pack.install) }),
+			...beside,
 		],
 	});
 

@@ -133,7 +133,12 @@ export const refine = (
 	return kept.toSorted((a, b) => ORDER[sort](b.entry) - ORDER[sort](a.entry));
 };
 
-const SITES = { github: 'https://github.com', codeberg: 'https://codeberg.org', gitlab: 'https://gitlab.com', gist: 'https://gist.github.com' };
+const SITES = {
+	github: 'https://github.com',
+	codeberg: 'https://codeberg.org',
+	gitlab: 'https://gitlab.com',
+	gist: 'https://gist.github.com',
+};
 
 export const repositoryUrl = entry => `${SITES[entry.host ?? 'github']}/${entry.repo}`;
 
@@ -455,3 +460,22 @@ export const sortPacks = (packs, sort = 'stars') =>
 
 /** Where a pack's own page is. */
 export const packPath = pack => `#/pack/${pack.host ?? 'github'}/${pack.repo}`;
+
+/** Where a pack's mod comes from: the index, when it has it, or else where its jar is. */
+export const kindOf = mod => (mod.key ? 'indexed' : mod.jar);
+
+/** The packs sharing the most of this one's indexed mods, by how much of the two together they share. */
+export const similarPacks = (pack, packs, most = 6) => {
+	const mine = new Set(pack.matched);
+
+	return packs
+		.filter(other => other.repo !== pack.repo || other.host !== pack.host)
+		.map(other => {
+			const shared = other.matched.filter(key => mine.has(key)).length;
+
+			return { other, shared, score: shared / (mine.size + other.matched.length - shared || 1) };
+		})
+		.filter(({ shared }) => shared >= 3)
+		.sort((a, b) => b.score - a.score || b.shared - a.shared)
+		.slice(0, most);
+};

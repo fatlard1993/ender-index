@@ -303,6 +303,9 @@ export const crawlPack = async (name, { recorded, scratch, now, modrinth = { pro
 /** A pack line naming a gist, as `ender export --gist` publishes a pack: `gist:<id>`. */
 export const GIST_LINE = /^gist:([\da-f]+)$/i;
 
+/** How ender export --gist describes the gist it publishes, before the pack's name. */
+const ENDER_DESCRIPTION = /^ender pack: /;
+
 /**
  * A gist's ender pack as the index keeps it, or undefined when the gist holds none. A gist has no star count GitHub
  * will tell, so it has none here.
@@ -312,13 +315,16 @@ export const gistPack = async (body, { now, read = url => fetchSteady(url).then(
 
 	if (!file) return undefined;
 
+	const pack = parseEnderPack(file.truncated ? await read(file.raw_url) : file.content);
+	const description = (body.description ?? '').replace(ENDER_DESCRIPTION, '');
+
 	return {
 		repo: `${body.owner?.login ?? 'anonymous'}/${body.id}`,
 		host: 'gist',
-		description: body.description || undefined,
+		description: description && description !== pack.name ? description : undefined,
 		pushed: body.updated_at,
 		fetched: now,
-		formats: { ender: parseEnderPack(file.truncated ? await read(file.raw_url) : file.content) },
+		formats: { ender: pack },
 	};
 };
 
@@ -450,6 +456,7 @@ export const buildPacks = (packs, entries, records, modrinthIds = {}) => {
 				formats: Object.keys(pack.formats),
 				minecraft: format.minecraft,
 				loader: format.loader,
+				...(format.version ? { version: format.version } : {}),
 				count: mods.length,
 				matched,
 				fromModrinth: others.filter(mod => mod.jar === 'modrinth').length,

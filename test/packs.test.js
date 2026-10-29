@@ -210,6 +210,10 @@ describe('the pack listing', () => {
 		expect(await gistPack({ ...body, files: { 'notes.md': { content: '' } } }, { now: 'now' })).toBeUndefined();
 		expect(recorded).toMatchObject({ repo: 'p/abc123', host: 'gist' });
 		expect(recorded).not.toHaveProperty('stars');
+		expect(recorded.description).toBeUndefined();
+		expect((await gistPack({ ...body, description: 'Our server' }, { now: 'now', read })).description).toBe(
+			'Our server',
+		);
 
 		const [listed] = buildPacks([recorded], entries, records);
 
