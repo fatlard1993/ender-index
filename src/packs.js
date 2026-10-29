@@ -10,7 +10,7 @@ import * as github from './github';
 import { lineOf, projectsByHash, projectsById } from './modrinth';
 import { rawUrl } from './raw';
 
-/** The largest .mrpack read: a pack is its index and its overrides, and one past this carries whole worlds. */
+/** The largest .mrpack downloaded whole, when its host will not serve it by ranges. */
 export const MRPACK_LIMIT = 100 * 1024 * 1024;
 
 const MRPACK_INDEX = 'modrinth.index.json';
@@ -82,8 +82,89 @@ const mrpackRelease = releases => {
 };
 
 /** A .mrpack's index: its name and version, the game and loader it is for, and the files it fetches. */
+/** Bytes from..to of a file, by an HTTP range: the host answers 206 with just those, or the read fails. */
+const bytesOf = async (url, from, to) => {
+	const response = await fetchSteady(url, { headers: { range: `bytes=${from}-${to}` } });
+
+	if (response.status !== 206) throw new Error(`answered ${response.status} to a range`);
+
+	return new Uint8Array(await response.arrayBuffer());
+};
+
+/** A zip's tail holds its directory; this much of it is read first, enough for any pack's. */
+const ZIP_TAIL = 256 * 1024;
+
+/**
+ * One file of a zip on a host that serves byte ranges, read without downloading the rest: the directory at its end,
+ * then that entry alone. A pack's index is a few hundred kilobytes in an archive of up to a gigabyte of overrides.
+ */
+export const zipEntryByRanges = async (url, size, name, { read = bytesOf } = {}) => {
+	const start = Math.max(0, size - ZIP_TAIL);
+	const tail = await read(url, start, size - 1);
+	const view = new DataView(tail.buffer, tail.byteOffset, tail.byteLength);
+	let end = -1;
+
+	for (let at = tail.length - 22; at >= 0; at--) {
+		if (view.getUint32(at, true) === 0x06054b50) {
+			end = at;
+			break;
+		}
+	}
+
+	if (end < 0) throw new Error('no zip directory at its end');
+
+	const entries = view.getUint16(end + 10, true);
+	const directorySize = view.getUint32(end + 12, true);
+	const directoryAt = view.getUint32(end + 16, true);
+
+	if (directoryAt === 0xffffffff) throw new Error('a zip64 archive');
+
+	const directory =
+		directoryAt >= start
+			? tail.subarray(directoryAt - start, directoryAt - start + directorySize)
+			: await read(url, directoryAt, directoryAt + directorySize - 1);
+	const listing = new DataView(directory.buffer, directory.byteOffset, directory.byteLength);
+	const decoder = new TextDecoder();
+
+	for (let at = 0, seen = 0; seen < entries; seen++) {
+		const method = listing.getUint16(at + 10, true);
+		const compressed = listing.getUint32(at + 20, true);
+		const nameLength = listing.getUint16(at + 28, true);
+		const extraLength = listing.getUint16(at + 30, true);
+		const commentLength = listing.getUint16(at + 32, true);
+		const localAt = listing.getUint32(at + 42, true);
+		const entryName = decoder.decode(directory.subarray(at + 46, at + 46 + nameLength));
+
+		if (entryName === name) {
+			const header = await read(url, localAt, localAt + 29);
+			const local = new DataView(header.buffer, header.byteOffset, header.byteLength);
+			const dataAt = localAt + 30 + local.getUint16(26, true) + local.getUint16(28, true);
+			const data = compressed > 0 ? await read(url, dataAt, dataAt + compressed - 1) : new Uint8Array();
+
+			if (method === 0) return data;
+			if (method === 8) return Bun.inflateSync(data);
+
+			throw new Error(`${name} is compressed by method ${method}`);
+		}
+
+		at += 46 + nameLength + extraLength + commentLength;
+	}
+
+	throw new Error(`no ${name} in it`);
+};
+
 const readMrpack = async (asset, scratch) => {
-	if (asset.size > MRPACK_LIMIT) throw new Error(`${asset.name} is ${asset.size} bytes, past the ${MRPACK_LIMIT} read`);
+	try {
+		return JSON.parse(
+			new TextDecoder().decode(await zipEntryByRanges(asset.browser_download_url, asset.size, MRPACK_INDEX)),
+		);
+	} catch (error) {
+		if (asset.size > MRPACK_LIMIT) {
+			throw new Error(
+				`${asset.name} could not be read by ranges (${error.message}), and at ${asset.size} bytes is past the ${MRPACK_LIMIT} downloaded whole`,
+			);
+		}
+	}
 
 	await mkdir(scratch, { recursive: true });
 

@@ -1,7 +1,12 @@
 import { describe, expect, test } from 'bun:test';
 
 import { packsFrom } from '../src/discover';
-import { buildPacks, describeMods, packDemand } from '../src/packs';
+import { randomBytes } from 'node:crypto';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
+import { buildPacks, describeMods, packDemand, zipEntryByRanges } from '../src/packs';
 
 const entry = repo => ({ repo, host: 'github' });
 
@@ -196,5 +201,34 @@ describe('the pack listing', () => {
 				{ path: 'Packwiz/26.3/pack.toml', repository: { full_name: 'b/nested' } },
 			]),
 		).toEqual(['a/root']);
+	});
+});
+
+describe('a .mrpack on a host that serves ranges', () => {
+	test('gives its index without the rest of the archive being read', async () => {
+		const directory = await mkdtemp(join(tmpdir(), 'ender-mrpack-'));
+
+		try {
+			const index = JSON.stringify({ name: 'Big', files: [{ path: 'mods/a.jar' }] });
+
+			await writeFile(join(directory, 'modrinth.index.json'), index);
+			await writeFile(join(directory, 'world.bin'), randomBytes(3 * 1024 * 1024));
+			Bun.spawnSync(['zip', '-q', '-9', 'pack.mrpack', 'world.bin', 'modrinth.index.json'], { cwd: directory });
+
+			const bytes = new Uint8Array(await Bun.file(join(directory, 'pack.mrpack')).arrayBuffer());
+			let read = 0;
+			const entry = await zipEntryByRanges('pack', bytes.length, 'modrinth.index.json', {
+				read: async (url, from, to) => {
+					read += to - from + 1;
+
+					return bytes.slice(from, to + 1);
+				},
+			});
+
+			expect(new TextDecoder().decode(entry)).toBe(index);
+			expect(read).toBeLessThan(bytes.length / 4);
+		} finally {
+			await rm(directory, { recursive: true, force: true });
+		}
 	});
 });
