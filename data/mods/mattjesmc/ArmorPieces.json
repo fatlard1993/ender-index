@@ -45,7 +45,7 @@
 						"unreadable": []
 					},
 					"icon": null,
-					"downloads": 6,
+					"downloads": 7,
 					"funding": [],
 					"content": {
 						"names": {
@@ -85,7 +85,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "The release that turned a set of pieces into a wardrobe. Requires Minecraft 26.2, Fabric Loader 0.19.3 and Fabric API 0.159.0.\n\n**Ninety-one pieces**\n- Seventy-one new ones. Every one of the twelve sockets now has at least six answers, and the six themes reach across the whole suit.\n- Among them a family of seven flat **visor styles** on the `brow` socket, whose sights are real openings with your own face behind them rather than paint.\n\n**Armor skins**\n- A third template family beside the socket templates and the fitting templates: a **skin is the armor's own texture** - what the plate is, rather than what is bolted to it or painted over it. A piece, a trim and a skin are three independent choices on one piece of armor.\n- Fourteen ship: plate, mail, gambeson, gothic, milanese, brigandine, scale, lamellar, lorica, varangian, hoplite, samurai, runic and chainmail.\n- Each is one greyscale master pair on vanilla's own armor grid, recoloured at load through eight shades taken from *that armor material's* vanilla texture, so a skinned iron helmet still reads as iron and a modded armor material is skinned for free from the texture it already ships.\n- Applied at the advanced smithing table with the piece's own **reforging material**: re-skinning is re-forging, and it costs the metal the piece is made of. Chainmail armor takes no skin and says so through a tag a pack can disagree with.\n- Every skin's template wears its own icon, drawn by the game as the item atlas is built off the skin's own chestplate - so a skin a *pack* ships gets an icon on the same terms the mod's do.\n\n**Cloth**\n- A fourth layer, after the piece, the trim and the skin. A **Tunic** or a **Tabard** over a chestplate, applied with a cloth template and a banner made at a loom, so the heraldry is yours rather than a list the mod maintains.\n- It is baked into the armor's own texture rather than hung off it: it moves with the armor, clips nothing, and the plate's rivets and edges read *through* it. One greyscale cut mask ships the whole feature - no per-material art, no per-banner art.\n\n**Found rather than made**\n- Most pieces now turn up in the chests that suit them. A **loot group** is one file naming a category of vanilla tables and the tag of pieces found in them; six ship, one per theme - knightly gear in strongholds and trial chambers, beast trophies in bastions, court jewellery in mansions and ancient cities, tidal pieces in shipwrecks and ocean ruins.\n- Skins are divided over the same six groups, and a fitting template turns up in every one of them.\n- **The chance belongs to the table, not to the piece.** One pool per table, rolled once: a chest's odds of holding something of ours stay put however many pieces are added. Another piece changes *which* one you find, never how often.\n- **Thirty recipes, not ninety-one.** A template recipe now ships only where the centre item is plainly the piece or what it is made of - a bell for the bells, a goat horn for the horns. The rest are found.\n\n**The advanced smithing table**\n- A block, crafted from a smithing table, an armor stand and two iron ingots. It holds a whole set worn by a stand that can be turned by dragging, and a box opens out of the piece you pick, listing what it wears.\n- A row is one socket, drawn as the socket template that carries the piece with a place after it per fitting; the last row is the piece's own - its trim, its skin and, on a chestplate, its cloth.\n- **Remove** empties whatever is picked - a piece, one of its fittings, the trim, the skin or the cloth - which is the one way any of them is ever taken off, since the smithing table has no ingredient that means \"nothing\".\n- Apply is not a new rule: the slots go to the ordinary smithing recipe lookup, so this mod's recipes and a vanilla trim both run, and a recipe a pack has turned off stays off.\n\n**Templates, and turning them off**\n\n..."
 		},
 		{
 			"tag": "0.2.0",
@@ -126,7 +127,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "A part can take a second material. Requires Minecraft 26.2, Fabric Loader 0.19.3 and Fabric API 0.159.0.\n\n**Fittings**\n- A fitting names a region of a part - a mask beside the master, or a bone of the geometry - and the kind of item that fills it. Four ship: `gemstone`, `guard`, `inlay` and `banner`.\n- One fitting template covers all of them. At the smithing table the item decides where it goes: a gem to the gemstone, an ingot to the guard, a dye to the inlay, a banner made at a loom to the banner. The template with nothing in the third slot takes every fitting out again.\n- The circlet takes a gem in its stone, the sash a dye on its strap and a metal on its buckle, the greaves a dye in their inlay, and the back banner wears a real banner's design, drawn in pattern layers the way a shield wears one.\n- Re-applying a part keeps what is set in it: a circlet goes from iron to gold without losing its emerald.\n- An effect can be gated on a fitting with `armorpieces:if_fitting`, so an emerald in the circlet can mean something.\n- Fittings are data in `data/<ns>/armorpieces/fitting/` over three code types - `material`, `dye`, `banner` - and a mod can add a type the way it adds an effect type. Whatever item fills one also goes in `#armorpieces:fitting_additions`.\n- Nothing changes for a part without fittings, on disk or on screen. Armor decorated before this version reads back exactly as it was written.\n\n**Blockbench plugin, the datapack half**\n- *Part...* on the panel edits the name, the anchors and the fittings list, picked from every fitting definition in the pack and the mod. The panel follows at once.\n- *New...* defines a fitting the pack lacks - material over a tag or ticked materials, dye, or banner on a bone - and writes the file, its language line and any tag on confirm.\n- Effects are rows on the same dialog, with fields, ranges, defaults and descriptions parsed out of the built-in records so Java stays the one source of truth. Ids autocomplete from the game jar, and any row can be gated on a fitting.\n- Masks are a third edit mode, greyscale like the master and created on first use; the material preview fills each fitting from a dropdown.\n- Save writes the data file and the language line and never reformats a file for being opened. Fields the dialog has no control for are written back exactly as read.\n\n**Tools**\n- `fitting_mask.py` paints masks and `sync_decoration_masters.py` installs and checks them.\n- `preview_material.py` bakes masks the way the game does (`--fitting gemstone=emerald`), lists a part's fittings and the values each takes, and reads packs outside the mod with `--pack`.\n- `check_authoring.py` runs the Blockbench round trip over every shipped part; `effect_schema.py` reads the effect records; `vanilla_assets.py` now extracts the trim-material registry and tags too.\n- `/armorpieces stage fittings [<part>]` stages every fitting filled with everything the item registry puts in it, one block per fitting.\n\n**Docs**\n- The mod page gains the fitting sections, the `smithing_fitting` recipe type and the `if_fitting` effect row. Authoring moved to `docs/authoring.md`, with the plugin as a feature in its own right.\n- New gallery: every set in all eleven trim materials, the front row up close, the same rows from behind, and one circlet in seven gems. A header banner and an icon.\n\nAttached: the mod jar, and the same data and assets as standalone datapack and resource pack zips."
 		},
 		{
 			"tag": "0.1.3",
@@ -167,7 +169,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "**Docs.** Every claim on the mod page was checked against the code, and four were wrong. Twelve\nsockets do not hold one part each: they hold one part *at a time*, and the twenty parts are spread\nunevenly over them, three on `back` alone. The built-in effects reach four of the five hooks, not\nall of them - nothing built in touches `Lifecycle`. A part is two files and a PNG, plus a line in a\nlanguage file, not three files and a PNG. Four stale source comments were corrected to match the\ncode they describe, including one in `DecorationEffect` that claimed effects are stripped from the\nnetwork codec when `ArmorDecoration` in fact sends them, and one in `ModItems` that still counted\nten sockets rather than twelve.\n\nNo behaviour changes: comments, `modpage.yml` and the pages generated from it.\n\nAttached: the mod jar, and the same data and assets as standalone datapack and resource pack zips."
 		},
 		{
 			"tag": "0.1.2",
@@ -208,12 +211,56 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "**Blockbench plugin.** `tools/blockbench_plugin/armorpieces.js` turns Blockbench into an editor for\nparts. A piece opens on the vanilla player wearing real armor, in its own trimmed-down workspace:\none panel holds the piece and anchor selectors, master or static editing, a live material preview,\nthe walk and sprint poses with a phase slider, and the reference toggles. Painting is kept legal by\nconstruction - colour on the master folds to grey under the brush, the static layer is created on\nfirst use, and strokes over a material preview land on the layer being edited. Cubes are box UV by\nconstruction too: a new or resized cube is laid out in free space on the sheet, its paint moves with\nits faces, and the sheet grows when it is full, all inside the same undo step as the edit. The\ntemplate recipe is two fields on the same panel, a centre item and a ring item with the game's item\nlist as autocomplete, written on Save.\n\n**Mittens.** A twentieth part, on the vambraces socket, and the first made entirely in the plugin.\n\n**Animated rigs.** The reference rigs now carry the vanilla walk and sprint cycles, baked from the\ngame's own limb arithmetic, and hang the part under the bone it is attached to so it swings with the\nlimb and the armor over it. The body, the armor and the cycle are transcribed once, in\n`tools/mc_humanoid.py`; the rig's skin, armor and palette textures come from the game jar via\n`tools/vanilla_assets.py` and are never committed.\n\n**Material preview outside the game.** `tools/preview_material.py` is a literal port of the mod's\npalette mapping, so a part can be seen in any trim material without a running client. It also\nprints the ramps a live editor needs, which is what the plugin composites with.\n\nAttached: the mod jar, and the same data and assets as standalone datapack and resource pack zips."
 		}
 	],
 	"readme": "README.md",
 	"readmeSummary": "You know the one. You walk into spawn in your best diamond and the first person you see is wearing the same helmet, the same chestplate, the same Sentry trim in the same netherite.",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"docs/assets/banners/header.png",
+		"docs/assets/gallery/fittings.png",
+		"docs/assets/gallery/sets.png",
+		"docs/assets/gallery/skins.png",
+		"docs/assets/gallery/table.png",
+		"docs/assets/gallery/wardrobe.png",
+		"docs/assets/icons/advanced_smithing_table.png",
+		"docs/assets/icons/black_banner.png",
+		"docs/assets/icons/blue_banner.png",
+		"docs/assets/icons/brown_banner.png",
+		"docs/assets/icons/cyan_banner.png",
+		"docs/assets/icons/gray_banner.png",
+		"docs/assets/icons/green_banner.png",
+		"docs/assets/icons/hay_block.png",
+		"docs/assets/icons/light_blue_banner.png",
+		"docs/assets/icons/light_gray_banner.png",
+		"docs/assets/icons/lime_banner.png",
+		"docs/assets/icons/loom.png",
+		"docs/assets/icons/magenta_banner.png",
+		"docs/assets/icons/orange_banner.png",
+		"docs/assets/icons/pink_banner.png",
+		"docs/assets/icons/purple_banner.png",
+		"docs/assets/icons/red_banner.png",
+		"docs/assets/icons/shield.png",
+		"docs/assets/icons/smithing_table.png",
+		"docs/assets/icons/white_banner.png",
+		"docs/assets/icons/yellow_banner.png",
+		"docs/assets/recipes/armorpieces__advanced_smithing_table.png",
+		"docs/assets/recipes/armorpieces__apply_back.gif",
+		"docs/assets/recipes/armorpieces__apply_belt.gif",
+		"docs/assets/recipes/armorpieces__apply_brow.gif",
+		"docs/assets/recipes/armorpieces__apply_cloth.gif",
+		"docs/assets/recipes/armorpieces__apply_collar.gif",
+		"docs/assets/recipes/armorpieces__apply_crest.gif",
+		"docs/assets/recipes/armorpieces__apply_fitting.gif",
+		"docs/assets/recipes/armorpieces__apply_greaves.gif",
+		"docs/assets/recipes/armorpieces__apply_horns.gif",
+		"docs/assets/recipes/armorpieces__apply_knees.gif",
+		"docs/assets/recipes/armorpieces__apply_pauldrons.gif",
+		"docs/assets/recipes/armorpieces__apply_skin.gif"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

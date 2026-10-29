@@ -86,7 +86,7 @@
 						"unreadable": []
 					},
 					"icon": null,
-					"downloads": 6,
+					"downloads": 7,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -94,7 +94,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "# Additions\n- Added Auto-detect compiler setting that automatically selects the correct compiler for each hud.\n- New compiler API (Fully replacing the old one).\n- Added `game_time` variable.\n\n# Changes\n- Hudder now defaults to V3.\n- V3 now takes priority over V2 in Auto-detect.\n- `get` function now points directly to the DataVariableRegistry rather than the compiler's own variable system.\n- Various UI methods now accept floats for positioning and scaling allowing for more accurate positioning.\n\n# Fixes\n- Fix weird behavior with the verticies methods.\n- Fix some errors in the log not showing up as errors.\n- Fix `worldtime` and `daytime` variables\n\n# Removals\n- Removed buggy \"Hud is still compiling\" message for now\n- Remove remnants of global variables including the message at startup.\n\n# Notes:\nAll the addons I've tested with this release had issues and need updating so if you rely on any addons I'd wait before updating."
 		},
 		{
 			"tag": "10.3.0",
@@ -172,7 +173,8 @@
 					},
 					"downloads": 4
 				}
-			]
+			],
+			"notes": "# Additions\n+ Added option to remove boss bars\n+ Added rotate parameter for the text method\n+ Added `rectangle`, `gradient` and `horizontal_gradient` methods\n+ Added `boss_bars` variable (An array of objects with the properties [String uuid, String color, String color_code, Component name, boolean darken_screen, boolean play_boss_music, boolean create_world_fog, float progress])\n\n# Deprecations\n+ Deprecated the `AddText` parameter for the run method in Hudder (as well as the `add` alias).\n+ Deprecated old support for quote-less strings in Hudder's run method.\n\n# Changes\n+ Added a total and Per-file size limit for Hudpacks (64MiB total, 8MiB per-file, disabled if unsafe operations is enabled)\n+ Added a max file count for Hudpacks (255 files, disabled if unsafe operations is enabled)\n+ Hudder V3 no longer marked experimental/unstable\n\n# Fixes\n+ The DataVariableRegistry now enforces case-insensitivity in the getters too.\n+ Many less than ideal error handling.\n+ Potential memory leaks\n+ Drag n drop in the config screen\n+ Several issues caused by invalid Hudpacks\n+ Some issues with auto-refresh\n+ Some screen types being incorrect or too general\n+ Item and slot methods\n\n# Technical/API changes\n+ Improved testing infrastructure\n+ Updated FunctionAndConsumerAPI to provide more debug information to the functions and consumers\n+ Deprecated functions and consumers not using the new interfaces.\n+ Updated DataVariableRegistry to be more type safe.\n+ Deprecated the old DataVariableRegistry's `VariableTypes` class and the DataVariableRegistry methods that use it\n+ Many breaking changes for Compilers (And many to come)"
 		},
 		{
 			"tag": "10.2.0",
@@ -250,7 +252,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "# Additions:\n- Added a proper selection list for huds instead of having a text box that inputs the filename of the hud\n- Added `first_execution` variable for if it's the first time this hud has ran (since clearing cache), should be useful for initalizing huds\n- Added \"integer\" option type to hudpacks (require format version 3)\n- Added an edit button for the huds in Hudder's settings (Opens system editor)\n- Added experimental reimplementation of the Hudder compiler using ASM and Bytecode generation (Further implementation details will be reported on upon exiting experimental status)\n\n# Changes:\n- Hudpack format version 3\n- Draging and dropping huds into Hudder's settings now copies them into Hudder's huds folder.\n- Compilers now report which huds they support\n- Experimental compilers now show a warning when selected in Hudder's settings\n- General performance improvements across the entire codebase\n\n# Removed:\n- Removed the built in hud `tutorial.hud`\n- Removed the built in hud `worldtime.js`\n\n# Fixes:\n- Huds that take longer than a second to compile now compile in the background\n- `;no_sys_var;` and `;sys_var;` not doing their job\n- Inconsistent casing with Functions and Methods (All methods and functions are now case sensitive)\n- Built in huds always regenerating after deletion, built in huds now only regenerate if the hudder folder is missing completely"
 		},
 		{
 			"tag": "10.1.0",
@@ -325,7 +328,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "# Hudder:\nAdded If Else\nAdded Ternary operator for Hudder (if [Condition] then [value] else [value])\n\n# Added variables:\nmods_list variable\nis_player_list_shown variable\nplayers_list variable (see wiki)\nis_singleplayer variable\ndisable_hudpack_version_check variable\ndisable_warnings variable\n\n# Functions added:\n\ngetTimesMinedStat\ngetTimesCraftedStat\ngetTimesUsedStat\ngetTimesBrokenStat\ngetTimesPickedUpStat\ngetTimesDroppedStat\ngetTimesKilledStat\ngetTimesKilledByStat\ngetCustomStat\nisKeybindDown\nisKeybindDefault\nisKeybindUnbound\n\n# Hudpack format version 2:\nAdded \"dropdown\" settings type to hudpack settings (Added values to the json)\nAdded readHudpackFile function to Hudpacks\nAdded readBinaryHudpackFile function to Hudpacks\n\n# Changes:\nText method can now draw Components\nAdded option to bypass hudpack version checks\nAdded option to disable Hudder warnings\nNew settings ui\n\n# Deprecations:\nDeprecated # instructions without declared instruction\n\n## Fixes:\nFixed Hudpacks running hudpacks with a newer format version than is suppported"
 		},
 		{
 			"tag": "10.0.1-Mixin-conflict-fix",
@@ -454,7 +458,8 @@
 					},
 					"downloads": 5
 				}
-			]
+			],
+			"notes": "update trinkets"
 		},
 		{
 			"tag": "trinkets-1.20.1",
@@ -512,11 +517,14 @@
 					},
 					"downloads": 8
 				}
-			]
+			],
+			"notes": "Add support for trinkets"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

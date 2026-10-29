@@ -5,7 +5,7 @@
 	"archived": false,
 	"license": "Apache-2.0",
 	"created": "2026-03-27T11:08:31Z",
-	"pushed": "2026-10-27T01:19:39Z",
+	"pushed": "2026-10-28T07:14:48Z",
 	"releases": [
 		{
 			"tag": "3.0.0",
@@ -13,12 +13,13 @@
 			"prerelease": false,
 			"assets": [
 				{
-					"id": 665482360,
+					"id": 684167926,
 					"name": "emote-3.0.0.jar",
 					"url": "https://github.com/hanhy06/emote/releases/download/3.0.0/emote-3.0.0.jar",
-					"size": 1994060,
+					"size": 2001219,
+					"downloads": 0,
 					"inspection": 2,
-					"sha256": "b2e20b856648dc8caf343364ce502124dceaf04a071e625aba8dae03a49390c9",
+					"sha256": "513ed0e6f0bb0771820f9041cae5a6c20983819856db6330294023057f27d64f",
 					"mods": [
 						{
 							"loader": "fabric",
@@ -39,11 +40,21 @@
 								"fabric-permissions-api-v0",
 								"org_javassist_javassist",
 								"team_unnamed_mocha"
+							],
+							"suggests": [
+								"polymer-autohost"
 							]
 						}
 					],
+					"icon": "8872e19698f26b5812dd1c46f540475f6577ec4e227bb9221b918e0758300073.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
 					"scan": {
-						"classes": 874,
+						"classes": 876,
 						"jars": [
 							"META-INF/jars/fabric-permissions-api-0.7.0.jar",
 							"META-INF/jars/javassist-3.30.2-GA.jar",
@@ -129,11 +140,16 @@
 						},
 						"unreadable": []
 					},
-					"icon": "8872e19698f26b5812dd1c46f540475f6577ec4e227bb9221b918e0758300073.png",
-					"downloads": 3,
-					"funding": []
+					"replaced": [
+						{
+							"id": 665482360,
+							"sha256": "b2e20b856648dc8caf343364ce502124dceaf04a071e625aba8dae03a49390c9",
+							"until": "2026-10-29T10:54:18.815Z"
+						}
+					]
 				}
-			]
+			],
+			"notes": "# Emote 3.0.0\n\nEmote 3.0.0 introduces a new animation format (Schema v5), skin overrides, two-player interactive emotes, optional Polymer integration, and major improvements to the web converter.\n\n---\n\n## Highlights\n\n- Overhauled the animation format with Schema v5, separating nodes from attachments and introducing advanced interpolation curves and per-track Molang expression controls.\n- Added **skin overrides**, allowing specific parts of a player's skin to be replaced or outer layers to be removed using mask textures.\n- Added **Hug**, a two-player interactive emote triggered through sign interaction, along with new Juggling and Exercise samples and improvements to existing animations.\n- Made **Polymer an optional dependency**, allowing the mod to run without Polymer on servers that do not require custom resource delivery.\n- Optimized pose calculations and display updates, increasing the default active display limit from 512 to 768.\n- Improved the web converter to preserve original animation curves and Molang expressions while enhancing compatibility with external animation formats.\n\n---\n\n## Breaking Changes\n\n> **Schema v5 Migration Required**\n>\n> Existing v4 Animation and Sequence files must be converted to v5 using the web converter before they can be used.\n>\n> If you use the client mod, both the server and client must be updated to 3.0.0.\n\n- Updated the `schema_version` of Animation and Sequence files from 4 to 5. The previous `timeline` structure has been integrated into `animation`, and the `display_interpolation` setting has been removed.\n- Changed Polymer from a bundled dependency to a separately installed optional dependency. Servers requiring automatic resource pack delivery must install Polymer separately.\n- The `server_sync` environment does not support dynamic clocks, Molang tick programs, Molang delays, or dynamic NBT.\n- Updated the public API for Schema v5, including renamed exception classes, entity access methods, and other major API signature changes.\n- The legacy v4 converter is now available at https://hanhy06.github.io/emote/legacy/converter/.\n\n---\n\n## Animation Format (Schema v5)\n\n### Structure and Transformations\n\n- Separated transformation nodes from visible attachments. A single node can contain multiple attachments or serve as an invisible pivot without any rendered elements.\n- Added support for composing translation, rotation, scale, and matrix transformations in a defined order, including configurable Euler rotation orders and Quaternion rotations.\n- Added individual controls for inheriting rotation, scale, and visibility from parent nodes.\n- Redesigned the timeline structure to better organize track properties and update behaviors, including partial NBT updates through patch operations.\n\n### Curves and Molang\n\n- Added support for Step, Linear, Catmull-Rom, Hermite, and Bézier interpolation for vector curves, as well as SLERP interpolation for Quaternions.\n- Added separate incoming (`pre`) and outgoing (`post`) keyframe values, with support for Molang expressions in curve control points and easing.\n- Expanded Molang functionality with reusable curves shared across tracks (`animation.values`) and accumulated playback time (`q.life_time`).\n- Added Molang-based control over playback speed and direction.\n\n### Delays, Events, and Sequences\n\n- Added animation start delays, with Molang expression support for both start and loop delays.\n- Added event execution direction controls (forward, reverse, or both), along with configurable command execution context and position.\n- Added the `emote:empty` Sequence step, which hides display elements while waiting for external input. This step does not advance automatically and can be controlled through the external API.\n\n---\n\n## Mod Runtime\n\n### Playback and Display Processing\n\n- Improved transitions between Sequence steps using linear interpolation for position and scale, and Quaternion interpolation for rotation. Also improved pose continuity around waiting steps.\n\n\n..."
 		},
 		{
 			"tag": "2.3.0",
@@ -298,7 +314,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "# Emote v2.3.0 Update\n\n> **v2.3.0 includes major changes to the playback engine and Mod API, including breaking changes to existing APIs and several Emote format features.**\n\n## Emote Mod\n\n### Added\n\n- Added **Marker mannequins**, allowing Emotes to be played in the world without requiring an online player.\n- Marker mannequins use `minecraft:marker`.\n  - Use the `emote` field in `CustomData` to specify the Emote to play.\n  - Use `emote_skin` to specify the skin displayed by the mannequin.\n- Added `default_skin` to `config.json`. The default skin can be specified using a Minecraft player name.\n- The default skin is prepared during server startup and reload. The prepared result is cached and reused after server restarts.\n- Replaced the previous hexagonal Emote wheel with a circular design.\n\n### Removed\n\n- Removed two-player Emotes.\n  - Sequences using `participants` or `await_partner` are no longer supported.\n  - The handshake sample has also been removed.\n- Removed per-node `space` and the skin `participant` distinction.\n  - All nodes are now processed relative to a single playback root.\n- Removed `outro`.\n  - Stopping playback now ends the Emote immediately without an outro animation.\n- Removed `loop_end`.\n  - Loops now repeat from `loop_start` to the end of the timeline.\n- Removed automatic conversion support for legacy Emote Animation schemas 1 and 3.\n\n---\n\n## Mod API\n\n### Playback Sessions and Session IDs\n\nEach Emote playback creates a separate playback session. Every session is assigned a unique UUID session ID, so multiple playbacks of the same Emote still receive different IDs.\n\n- After playback starts successfully, the session ID can be obtained from `PlayResult.Success.playback().sessionId()`.\n- By storing the session ID, integrations can later query or stop that playback, seek within its timeline, or change its placement.\n- Use `getPlayback(player)` to retrieve the player's current playback.\n- Use `getPlayback(sessionId)` to retrieve a specific playback session.\n\n### Playback State\n\n`PlaybackInfo` now provides more detailed information about the current playback state.\n\n- `state()` reports whether the session is running, closing, or fully closed.\n- `elapsedTicks()` reports the total number of playback ticks elapsed since the session started.\n- `timelineTick()` reports the current position within the playback timeline.\n- `position()` provides the current animation, sequence step and repeat position, playback segment, and position within that segment.\n- `placement()` provides the current playback root position, rotation, and placement mode.\n\nElapsed time and timeline position are intentionally separate.\n\nWhen a loop repeats or the playback position is changed, the timeline position may move backward or forward, while elapsed time continues to represent how long the session itself has been running.\n\n### Timeline Inspection\n\nUse `getTimeline(sessionId)` to inspect the order and duration of a playback session.\n\n- The total playback duration and loop configuration can be inspected.\n- `segments()` includes animation, transition, wait, loop-delay, and hold segments.\n- Random selections and repetitions in Sequences return the results already resolved for that specific session.\n- Each segment includes its start tick. The end tick is exclusive.\n\n### Seeking\n\nRunning playback sessions can be moved to another playback position without restarting the session.\n\n- `setTick(sessionId, tick)` moves playback to a specific tick in the full timeline, including Sequence transitions and wait segments.\n- `setAnimationTick(sessionId, tick)` moves to a specific tick within the currently active Animation.\n  - Returns `false` if playback is not currently inside an Animation segment.\n- `setStep(sessionId, stepIndex, repeatIndex, tick)` moves to the selected Animation of a specific Sequence step and repetition.\n  - `tick` specifies the position within that Animation.\n  - Step and repeat indexes are zero-based.\n\n\n..."
 		},
 		{
 			"tag": "2.1.0",
@@ -463,7 +480,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "# Emote v2.1.0 Update\n\n## Emote Management\n\n### Minecraft Account-Based Skin Generation\n\n- Added support for generating player skin textures using Minecraft accounts.\n- You can link a Microsoft account with `/emote account login`. Follow the login URL and one-time code shown in chat. The code can be clicked to copy it.\n- `/emote account` displays the current skin provider, registered accounts, and accounts that require reauthentication.\n- Use `/emote account remove <name or UUID>` to remove a registered account.\n- When multiple accounts are registered, upload jobs are distributed across them. Each account processes one job at a time, while different accounts can process jobs in parallel.\n- When authentication expires, the mod attempts to refresh the token automatically. Rate limits and server errors are retried a limited number of times.\n- If at least one account is registered, the account-based provider is used. Otherwise, MineSkin is used. If a registered account encounters an authentication issue, it is marked as requiring reauthentication.\n- Account credentials are stored encrypted. On Windows, DPAPI is used by default. If `EMOTE_ACCOUNT_KEY` is set, AES-256-GCM is used instead. `EMOTE_ACCOUNT_KEY` must contain a Base64-encoded 32-byte key.\n\nBecause the registered account's actual Minecraft skin is changed during skin generation, using a dedicated account instead of your primary account is recommended.\n\n### Player Skin Preparation and Cache\n\n- Skin regions used by emotes are now prepared when a player joins.\n- Required regions shared by multiple emotes are merged and deduplicated to reduce unnecessary requests.\n- Cache access is now synchronized to improve stability when multiple skin generation jobs run concurrently.\n- Improved overall skin processing stability.\n\n### Emote Search\n\n- Emote descriptions can now include searchable tags such as `#dance` and `#music`.\n- The emote menu and wheel editor can search by name, ID, description, or `#tag`.\n- Added a search field to the wheel editor for finding available emotes.\n\n### Administrative Commands and Reloading\n\n- Added `/emote info`. It displays active sessions and participants, display usage and limits, the current skin provider, active/queued/retrying jobs, and the number of loaded emotes.\n- Display limit usage is shown in different colors depending on the current utilization.\n- `/emote stop` can now target multiple players at once, and `/emote stop-all` has been removed.\n- Improved the execution order of `/emote reload`. If loading the configuration, preparing the resource pack, or loading the emote directory fails, the existing configuration, emote list, and resource pack are preserved.\n\n### Stress Testing and Processing Cost\n\n- Stress test load can now be specified by instance count or display count using suffixes such as `100i` and `1000d`.\n- Cleaned up processing-time and packet-load reporting in stress test results.\n- Static nodes without transform tracks now reuse their local transformation matrices.\n- Per-emote permission rules are precomputed to reduce the cost of permission checks on every playback request.\n- Several more complex emotes have been added, so stress test results may need to be recalculated.\n\n### Permissions and Automatic Idle Emotes\n\n- The `emotes` and `idle.emote` fields in permission groups now support regular expressions. This allows emotes sharing a common prefix or naming pattern to be selected using a single rule.\n- Strings that are valid Minecraft Identifiers are matched as literal strings. Other strings are interpreted as Java regular expressions.\n- Regex-based idle emote selection uses equal probability and cannot be combined with explicit weights.\n- If no currently loaded emote matches the regular expression, selection is deferred and checked again later.\n\n### Cooldowns and Playback State\n\n- Cooldowns are now calculated from the end of playback rather than from when playback begins.\n\n..."
 		},
 		{
 			"tag": "2.0.1",
@@ -601,7 +619,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "- Fixed an issue where default emotes would not load on Minecraft 26.3.\n- Fixed incorrect Block Display and Text Display scaling in AJ.\n- Fixed an issue where the stress test reported significantly lower MSPT values than the actual results.\n- Added a new default emote: \"anvil\"."
 		},
 		{
 			"tag": "2.0.0",
@@ -739,7 +758,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "# Emote v2.0.0\n\nThis update brings major changes to Emote's animation and sequence systems, web converter, cooperative emotes, resource pack distribution, Emote Wheel, and Mod API.\n\nThe animation format has also been redesigned, and older files can be converted using the web converter.\n\n> Important: Starting with v2.0.0, Schema 1 and Schema 3 animations can no longer be loaded directly by the server.  \n> Import them into the web converter and export them again using the new format.\n\n---\n\n## Common Time Format\n\nAll time-based settings in Emote now use the same Minecraft time format.\n\n```text\n20\n20t\n5s\n1d\n```\n\n- No suffix or `t`: ticks\n- `s`: seconds\n- `d`: Minecraft days\n\nThis format is shared across settings such as `loop_delay`, cooldowns, sequence transitions, wait steps, and idle timers.\n\n---\n\n## Animation and Playback System\n\nThe animation structure and playback engine have been significantly expanded.\n\n### Hierarchical Animation Nodes\n\nNodes can now have parent nodes and use local position, rotation, and scale relative to their parent.\n\nNodes can use the following coordinate spaces:\n\n- `scene`\n- `initiator`\n- `partner`\n\nDisplay and Anchor nodes can also be used within the hierarchy.\n\n### Independent Animation Tracks\n\nPosition, rotation, scale, visibility, and NBT can each have their own independent keyframes.\n\nLinear interpolation, step interpolation, multiple easing types, and discontinuous keyframes are supported.\n\n### Playback Modes\n\nThe following playback modes are available:\n\n- `once`\n- `hold`\n- `loop`\n- `server_sync`\n\nLooping animations can use `loop_delay` to add a delay between repetitions.\n\n`rotation_deadzone` can be used to control how far the player must turn before the animation scene follows the new direction.\n\n### Molang\n\nAnimations can now use Molang expressions.\n\nQueries can access animation time, player look direction, rotation, movement, crouching, sprinting, swimming, elytra flight, riding, item use, and other player states.\n\nThis allows animations to react dynamically to the player's current state.\n\n---\n\n## Player Behavior and Playback Rules\n\nAnimation and sequence player settings are now grouped under `settings.player`.\n\n### Player Visibility\n\nThe original player and their equipment can be hidden while an emote is playing.\n\n### Stop Conditions\n\nPlayback can be configured to stop in situations such as movement, jumping, taking damage, attacking, or mounting an entity.\n\n### Cooldowns\n\nAnimations and sequences can have individual cooldowns.\n\n```json\n\"cooldown\": \"5s\"\n```\n\nCooldowns are tracked independently for each player and Emote ID.\n\nWhen playing a sequence, only the sequence's cooldown is used rather than the cooldowns of its internal animations.\n\nPlayers with the `emote.bypass` permission can ignore cooldowns.\n\n---\n\n## Sequence System\n\nSequences have been expanded to support repeats, transitions, wait steps, and random animation selection.\n\n### Repeats and Transitions\n\n```json\n{\n  \"emote\": \"example:wave\",\n  \"repeat\": 3,\n  \"transition\": \"4t\"\n}\n```\n\nIndividual steps can be repeated, and a transition duration can be added before moving to the next animation.\n\nAnimations with different node structures can also be connected within the same sequence.\n\n### Wait Steps\n\n```json\n{\n  \"wait\": \"1s\"\n}\n```\n\nA sequence can pause for a specified amount of time before continuing.\n\n### Random and Weighted Selection\n\nA sequence step can randomly select one animation from multiple candidates.\n\n```json\n\"emote\": [\n  \"example:idle_1\",\n  \"example:idle_2\",\n  \"example:idle_3\"\n]\n```\n\nWeights can also be assigned manually.\n\n```json\n\"emote\": [\n  \"example:idle_1\", 50,\n  \"example:idle_2\", 40,\n  \"example:idle_3\", 10\n]\n```\n\nCandidates are selected again on each repeat, and when possible, the most recently played animation is excluded from the next selection.\n\n### Repeat Flow Control\n\n`emote:continue` skips the current repeat and immediately selects another candidate.\n\n\n..."
 		},
 		{
 			"tag": "2.0.0-pre",
@@ -877,12 +897,22 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "# Emote v2.0.0-pre\n\nThis update **redesigns Emote’s animation format, playback engine, sequence system, web converter, and server-side architecture**.\n\nIt introduces the new **Schema 4** format, a Molang runtime, expanded sequences, two-player collaborative emotes, automatic server resource pack distribution, and major improvements to the Emote Wheel and Mod API.\n\n> **Important:** Starting with v2.0.0, the server uses **Schema 4** animations and sequences.  \n> Existing Schema 1 and Schema 3 files must be imported into the web converter and exported again as Schema 4.\n\n---\n\n## Animation Schema 4\n\nThe animation format has been completely redesigned around Schema 4.\n\nThe previous node-based structure has been extended with **hierarchical nodes and local transforms**, allowing significantly more complex animation layouts.\n\n### Hierarchical Nodes\n\n- Nodes can have parent nodes.\n- Each node uses local position, rotation, and scale relative to its parent.\n- Each node can use the `scene`, `initiator`, or `partner` coordinate space.\n- Existing Display and Anchor nodes can be used within the new hierarchy.\n- Initial Entity NBT and visibility state can be configured.\n\n### Independent Tracks\n\nAnimation data is now separated into independent tracks:\n\n- Position\n- Rotation\n- Scale\n- Visibility\n- NBT\n\nEach track can have its own keyframes.\n\n### Keyframe Improvements\n\nThe existing keyframe and interpolation system has been expanded with:\n\n- Linear interpolation\n- Step interpolation\n- Various easing types\n- Discontinuous keyframes that can define separate previous and next values at the same Tick\n- More explicit handling between the default transform and the first keyframe\n\n---\n\n## Molang\n\nA Molang runtime has been added to the Schema 4 playback engine.\n\n### Programs\n\n- Molang programs can run when an animation is initialized.\n- Tick programs can run once every server Tick.\n- Molang expressions can be used in position, rotation, scale, and visibility track values.\n\n### Queries\n\nMolang queries can access various animation and player runtime states.\n\nExamples include:\n\n- Animation time, length, and loop count\n- Player look, head, and body rotation\n- Movement speed and distance\n- Grounded, sneaking, and sprinting states\n- Swimming and gliding\n- Riding state\n- Item use and charged-item state\n- Sleeping\n- Burning and underwater states\n\nMolang expressions used by Bedrock, GeckoLib, and Animated Java are preserved where supported.\n\nWhen the web converter cannot fully evaluate an expression, supported runtime data is preserved and preview limitations are shown instead of discarding the expression.\n\n---\n\n## Playback Engine Redesign\n\nThe playback system has been rebuilt around Schema 4.\n\nThe following playback modes are supported:\n\n- `once`\n- `hold`\n- `loop`\n- `server_sync`\n\nLooping modes can use `loop_delay` to insert a delay between repetitions.\n\nTime-based settings now use a shared Minecraft Time format.\n\n```text\n20\n20t\n5s\n1d\n```\n\n- No suffix or `t`: Ticks\n- `s`: Seconds\n- `d`: Minecraft Days\n\nThe existing player-facing rotation tracking system has also been updated for the new engine.\n\n`rotation_deadzone` can be used to control how far the player may rotate before the animation scene begins following their new direction.\n\n---\n\n## Player Behavior Settings\n\nAnimation and sequence player behavior settings are now consolidated under `settings.player`.\n\n### Player Visibility\n\nThe existing player hiding system has been extended to work consistently with the new playback session architecture and partner emotes.\n\n- Original player and equipment visibility are managed during playback.\n- Visibility is restored when playback ends or is interrupted.\n- Collaborative emotes manage each participant independently.\n\n### Playback Stop Conditions\n\nPlayback can be configured to stop when the player:\n\n- Moves beyond a configured distance\n- Jumps\n- Becomes submerged\n- Starts riding\n- Takes damage\n- Attacks\n- Changes game mode\n\n\n..."
 		}
 	],
 	"readme": "docs/README.md",
 	"readmeSummary": "▶ Watch the full emote demo on YouTube",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"docs/mkdocs/assets/custom-emote/apply-emote.gif",
+		"docs/mkdocs/assets/custom-emote/open.gif",
+		"docs/mkdocs/assets/custom-emote/setting-and-export.gif",
+		"docs/mkdocs/assets/images/converter-open.png",
+		"docs/mkdocs/assets/images/converter-review.png",
+		"docs/mkdocs/assets/images/converter-settings.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

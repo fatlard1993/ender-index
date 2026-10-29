@@ -18,7 +18,7 @@
 					"name": "OptiFabric-Reforged-2.2.13+mc26.2-full.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.13/OptiFabric-Reforged-2.2.13%2Bmc26.2-full.jar",
 					"size": 210751,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "3f82e9e5fe0604fc0aa45d8ed27fc75cdbe97133b0c795cf620e2527159554e8",
 					"mods": [
@@ -42,9 +42,19 @@
 								"ryoamiclights",
 								"sodium"
 							],
+							"breaksVersions": {
+								"no_fog": "*",
+								"thallium": "*",
+								"xradiation": "*",
+								"ryoamiclights": "*",
+								"sodium": "*"
+							},
 							"conflicts": [
 								"sodium"
-							]
+							],
+							"conflictsVersions": {
+								"sodium": "*"
+							}
 						}
 					],
 					"icon": "e9e58ba6133336c4fb6f62f0cc353401094735274ae98affabbe8b76054d4185.png",
@@ -102,7 +112,7 @@
 					"name": "OptiFabric-Reforged-2.2.13+mc26.2.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.13/OptiFabric-Reforged-2.2.13%2Bmc26.2.jar",
 					"size": 186815,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "831fb11a330ab9f49053aa26ee010eb51b69f9d903b7bb750f716d67b64e1c14",
 					"mods": [
@@ -126,9 +136,19 @@
 								"ryoamiclights",
 								"sodium"
 							],
+							"breaksVersions": {
+								"no_fog": "*",
+								"thallium": "*",
+								"xradiation": "*",
+								"ryoamiclights": "*",
+								"sodium": "*"
+							},
 							"conflicts": [
 								"sodium"
-							]
+							],
+							"conflictsVersions": {
+								"sodium": "*"
+							}
 						}
 					],
 					"icon": "e9e58ba6133336c4fb6f62f0cc353401094735274ae98affabbe8b76054d4185.png",
@@ -166,7 +186,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# OptiFabric Reforged 2.2.13+mc26.2\n\n**Minecraft 26.2** / Fabric Loader 0.19.5 / **Java 25** / 需求 OptiFine `preview_OptiFine_26.2_HD_U_K2_pre5.jar`\n\n## 2.2.8 改了什么(本版)\n\n**一句话:** 之前重算 StackMapTable 帧时,两个类型的公共父类型只从**第一个参数**那一侧展开、第二个参数只沿 `superName` 往上走;ASM 传参顺序任意,于是\"接口在前、实现类在后\"时会回落成 `java/lang/Object`,而校验器以帧为准 ⇒ 那个类在**加载时**被拒。1.20.6 上的 `ShaderProgram.method_35785(String)` 正是这个形态,表现是**启动即崩**(`VerifyError: Bad return type`)。本版把它改成对称求解,并一并处理审查报告里其余可修的缺陷。\n\n### 帧计算:两侧各自求闭包,取最近的公共类型\n\n`getCommonSuperClass` 现在两侧各自求闭包(**自身 + 全部超类 + 全部接口**,最近优先)后取最近的公共类型;确实没有公共父类型时才用 `java/lang/Object`。`allSupertypes` 也把**自身**算进去,顺带修掉 `getCommonSuperClass(A, A)` 同样返回 `Object` 的问题。\n\n**实测**:同一实例在修复前每次启动都产生崩溃报告;修复后 **0 份崩溃报告、0 次 VerifyError**,客户端一直存活到被测试脚手架停掉。附带确认:这个崩**与 Lithium 无关**(移出 Lithium 同样崩)、**不是上一版的回归**(1.1.4 同样崩)、**也不是坏缓存**(删缓存重打同样崩)。\n\n### 同批加固\n\n`ChunkRendererFix` 参数个数守卫;`MethodComparison` 不认识的 `invokedynamic` 记为\"不同\"而非抛异常、LDC 排序按描述符比较;`ClassCache` 四个长度加上限;`OptifineSetup` 的 `LambdaRebuilder` 放进 `finally`;`GAME_CLASSES` 改为有界 LRU(上限 512);`LambdaRebuilder` 模糊配对只按本类回查、`return 0` 改 `continue`;`InjectionCallPointFix` 按位置消费参数并照抄游戏的压栈指令;`ZipUtils.extract` 路径检查无条件 + 带分隔符;标题界面 `jarType == null` 落到\"内部错误\"分支、`parseJarType` 接住 `RuntimeException`;`release/publish.ps1` 脱敏令牌;静默 catch 的 lint 覆盖本线。\n\n### 下载器(只影响 `-full` 构建;**本产物没有下载器**)\n\n`-full` 另外补了主机名精确比较、**强制 https**、以及**下载后校验构建身份**(读 `Config.class` 里的 `VERSION` / `MC_VERSION`)三项,都做过真实下载验证。**本产物不联网、不启动进程。**\n\n## 2.2.6 改了什么(本版):把 1.21.x 线重写过的 `LocalSlotLayoutFix` 移植过来\n\n**本版修的是一处类库级缺陷**:`distanthorizons`(Distant Horizons)在 **26.2** 上**启动阶段就崩,连主界面都到不了**。\n只有 OptiFine 在场时才会坏,报错落在 DH 自己那个 `@Inject` 上:\n\n```\n[main/ERROR]: Critical injection failure: LVT in net/minecraft/client/renderer/GameRenderer::renderLevel(\nLnet/minecraft/client/DeltaTracker;)V has incompatible changes at opcode 286 in callback\nDistantHorizons.fabric.mixins.json:client.MixinGameRenderer from mod distanthorizons->@Inject::renderLevel(…)\nCaused by: java.lang.RuntimeException: Mixin transformation of net.minecraft.client.renderer.GameRenderer failed\n```\n\n**根因**:OptiFine 会**重编译它补丁的那些方法**,它的 javac 把**它自己新增的局部变量**放在源码里出现的位置,于是\n**游戏自己的局部变量被整体往上挤**。Mixin 读局部变量表有两种方式,这一处两种都会坏:\n\n1. **按槽位顺序** —— `CallbackInjector` 用 `getFirstNonArgLocalIndex(args)` 往上取前若干个非空局部变量来建回调的\n   描述符,顺序对不上就报上面那条 `LVT … has incompatible changes at opcode N`(DH 撞的是这一种);\n2. **按绝对槽位** —— MixinExtras 的 `@Local(index = N)` 糖取 `locals[N]`,那个槽位上是别的类型时糖根本建不起来\n   (`SugarApplicationException: Unable to find matching local!`)。\n\n**修复**:把 1.21.x 线重写过的 `LocalSlotLayoutFix` **逐字节**移植过来(37,453 字节,SHA-256\n`85EF437444F637EC15DC63CA810A9348998FEBE751F1F9F4509113E12E103BB1`,取自侧分支 `tf-localscope` 的 `1bf3e4b`),\n按这一线的**官方名**注册两条(`desc` 留空,按 OptiFine 那份类自带的描述符办事):\n\n```java\nregisterFix(\"net/minecraft/client/renderer/GameRenderer\",\n        new LocalSlotLayoutFix(null, \"render\", \"renderLevel\"));\nregisterFix(\"net/minecraft/client/renderer/LevelRenderer\",\n        new LocalSlotLayoutFix(null, \"renderLevel\"));\n```\n\n它**按作用域**把两张局部变量表配对(可比的是「按槽位顺序排列的描述符序列」,用最长公共子序列对齐),把**游戏自己的**\n槽位放回游戏声明的编号,OptiFine 自己的槽位搬到局部区间末尾;一个槽整体搬、绝不拆开,同时活着的两个槽不合并,帧由管线\n本来就在用的 `FrameComputingWriter` 重算。**它不删 OptiFine 的任何代码、不加任何指令。**\n\n因此 **`@Local(index = N)` 那一类失败整类消失** —— 不再取决于某个 sugar 恰好落在第几个槽位。这一线上原本**没有**任何\n其它管局部变量布局的代码,不会重复施加。\n\n**本版实测**(干净临时 worktree、自己的实例副本、**每次运行前清空 `.optifine` 缓存**、Java 25、各自的 OptiFine 预览版):\n\n| 手臂 | 模组 | 结果 |\n|---|---|---|\n| DH 复现:出厂 **2.2.3** | 4 jars → `Loading 51 mods` | **FAIL,13 秒**,就是上面那条 `opcode 286` |\n| DH 对照:出厂 **2.2.4** | 同上 | **FAIL,21 秒**,同一行 |\n| **本版,DH** | 同上 | **PASS,主界面**(33 秒);四项计数器 0 |\n| 宽集合对照:出厂 **2.2.4** | 18 jars → `Loading 118 mods` | **PASS,主界面并进世界**(32 s / 41 s);`ERROR=6`,其余四项 0 |\n| **本版,宽集合** | 同上 | **PASS,主界面并进世界**(16 s / 20 s);`ERROR=6`,其余四项 0 |\n| **本版,26.1.2 宽集合**(这一处修复第一次在 26.1.2 上跑) | 20 jars → `Loading 118 mods` | **PASS,主界面并进世界**(18 s / 22 s);`ERROR=4`,其余四项 0 |\n\n修复器自己的 stdout(26.x 上它在**启动器 stdout**,不在 `latest.log`):`GameRenderer.render needs no local slots\n\n..."
 		},
 		{
 			"tag": "v2.2.12",
@@ -178,7 +199,7 @@
 					"name": "OptiFabric-Reforged-2.2.12+mc26.2-full.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.12/OptiFabric-Reforged-2.2.12%2Bmc26.2-full.jar",
 					"size": 210750,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "f46901f06071c2e02138637adbf27f1826f900c7bb469a419533f77a603dfd6b",
 					"mods": [
@@ -262,7 +283,7 @@
 					"name": "OptiFabric-Reforged-2.2.12+mc26.2.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.12/OptiFabric-Reforged-2.2.12%2Bmc26.2.jar",
 					"size": 186815,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "af39a7d06cc54cd86a26403abb830c2ca810e41382b801a143b9896a904e8db7",
 					"mods": [
@@ -326,7 +347,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# OptiFabric Reforged 2.2.12+mc26.2\n\n**Minecraft 26.2** / Fabric Loader 0.19.5 / **Java 25** / 需求 OptiFine `preview_OptiFine_26.2_HD_U_K2_pre4.jar`\n\n## 2.2.8 改了什么(本版)\n\n**一句话:** 之前重算 StackMapTable 帧时,两个类型的公共父类型只从**第一个参数**那一侧展开、第二个参数只沿 `superName` 往上走;ASM 传参顺序任意,于是\"接口在前、实现类在后\"时会回落成 `java/lang/Object`,而校验器以帧为准 ⇒ 那个类在**加载时**被拒。1.20.6 上的 `ShaderProgram.method_35785(String)` 正是这个形态,表现是**启动即崩**(`VerifyError: Bad return type`)。本版把它改成对称求解,并一并处理审查报告里其余可修的缺陷。\n\n### 帧计算:两侧各自求闭包,取最近的公共类型\n\n`getCommonSuperClass` 现在两侧各自求闭包(**自身 + 全部超类 + 全部接口**,最近优先)后取最近的公共类型;确实没有公共父类型时才用 `java/lang/Object`。`allSupertypes` 也把**自身**算进去,顺带修掉 `getCommonSuperClass(A, A)` 同样返回 `Object` 的问题。\n\n**实测**:同一实例在修复前每次启动都产生崩溃报告;修复后 **0 份崩溃报告、0 次 VerifyError**,客户端一直存活到被测试脚手架停掉。附带确认:这个崩**与 Lithium 无关**(移出 Lithium 同样崩)、**不是上一版的回归**(1.1.4 同样崩)、**也不是坏缓存**(删缓存重打同样崩)。\n\n### 同批加固\n\n`ChunkRendererFix` 参数个数守卫;`MethodComparison` 不认识的 `invokedynamic` 记为\"不同\"而非抛异常、LDC 排序按描述符比较;`ClassCache` 四个长度加上限;`OptifineSetup` 的 `LambdaRebuilder` 放进 `finally`;`GAME_CLASSES` 改为有界 LRU(上限 512);`LambdaRebuilder` 模糊配对只按本类回查、`return 0` 改 `continue`;`InjectionCallPointFix` 按位置消费参数并照抄游戏的压栈指令;`ZipUtils.extract` 路径检查无条件 + 带分隔符;标题界面 `jarType == null` 落到\"内部错误\"分支、`parseJarType` 接住 `RuntimeException`;`release/publish.ps1` 脱敏令牌;静默 catch 的 lint 覆盖本线。\n\n### 下载器(只影响 `-full` 构建;**本产物没有下载器**)\n\n`-full` 另外补了主机名精确比较、**强制 https**、以及**下载后校验构建身份**(读 `Config.class` 里的 `VERSION` / `MC_VERSION`)三项,都做过真实下载验证。**本产物不联网、不启动进程。**\n\n## 2.2.6 改了什么(本版):把 1.21.x 线重写过的 `LocalSlotLayoutFix` 移植过来\n\n**本版修的是一处类库级缺陷**:`distanthorizons`(Distant Horizons)在 **26.2** 上**启动阶段就崩,连主界面都到不了**。\n只有 OptiFine 在场时才会坏,报错落在 DH 自己那个 `@Inject` 上:\n\n```\n[main/ERROR]: Critical injection failure: LVT in net/minecraft/client/renderer/GameRenderer::renderLevel(\nLnet/minecraft/client/DeltaTracker;)V has incompatible changes at opcode 286 in callback\nDistantHorizons.fabric.mixins.json:client.MixinGameRenderer from mod distanthorizons->@Inject::renderLevel(…)\nCaused by: java.lang.RuntimeException: Mixin transformation of net.minecraft.client.renderer.GameRenderer failed\n```\n\n**根因**:OptiFine 会**重编译它补丁的那些方法**,它的 javac 把**它自己新增的局部变量**放在源码里出现的位置,于是\n**游戏自己的局部变量被整体往上挤**。Mixin 读局部变量表有两种方式,这一处两种都会坏:\n\n1. **按槽位顺序** —— `CallbackInjector` 用 `getFirstNonArgLocalIndex(args)` 往上取前若干个非空局部变量来建回调的\n   描述符,顺序对不上就报上面那条 `LVT … has incompatible changes at opcode N`(DH 撞的是这一种);\n2. **按绝对槽位** —— MixinExtras 的 `@Local(index = N)` 糖取 `locals[N]`,那个槽位上是别的类型时糖根本建不起来\n   (`SugarApplicationException: Unable to find matching local!`)。\n\n**修复**:把 1.21.x 线重写过的 `LocalSlotLayoutFix` **逐字节**移植过来(37,453 字节,SHA-256\n`85EF437444F637EC15DC63CA810A9348998FEBE751F1F9F4509113E12E103BB1`,取自侧分支 `tf-localscope` 的 `1bf3e4b`),\n按这一线的**官方名**注册两条(`desc` 留空,按 OptiFine 那份类自带的描述符办事):\n\n```java\nregisterFix(\"net/minecraft/client/renderer/GameRenderer\",\n        new LocalSlotLayoutFix(null, \"render\", \"renderLevel\"));\nregisterFix(\"net/minecraft/client/renderer/LevelRenderer\",\n        new LocalSlotLayoutFix(null, \"renderLevel\"));\n```\n\n它**按作用域**把两张局部变量表配对(可比的是「按槽位顺序排列的描述符序列」,用最长公共子序列对齐),把**游戏自己的**\n槽位放回游戏声明的编号,OptiFine 自己的槽位搬到局部区间末尾;一个槽整体搬、绝不拆开,同时活着的两个槽不合并,帧由管线\n本来就在用的 `FrameComputingWriter` 重算。**它不删 OptiFine 的任何代码、不加任何指令。**\n\n因此 **`@Local(index = N)` 那一类失败整类消失** —— 不再取决于某个 sugar 恰好落在第几个槽位。这一线上原本**没有**任何\n其它管局部变量布局的代码,不会重复施加。\n\n**本版实测**(干净临时 worktree、自己的实例副本、**每次运行前清空 `.optifine` 缓存**、Java 25、各自的 OptiFine 预览版):\n\n| 手臂 | 模组 | 结果 |\n|---|---|---|\n| DH 复现:出厂 **2.2.3** | 4 jars → `Loading 51 mods` | **FAIL,13 秒**,就是上面那条 `opcode 286` |\n| DH 对照:出厂 **2.2.4** | 同上 | **FAIL,21 秒**,同一行 |\n| **本版,DH** | 同上 | **PASS,主界面**(33 秒);四项计数器 0 |\n| 宽集合对照:出厂 **2.2.4** | 18 jars → `Loading 118 mods` | **PASS,主界面并进世界**(32 s / 41 s);`ERROR=6`,其余四项 0 |\n| **本版,宽集合** | 同上 | **PASS,主界面并进世界**(16 s / 20 s);`ERROR=6`,其余四项 0 |\n| **本版,26.1.2 宽集合**(这一处修复第一次在 26.1.2 上跑) | 20 jars → `Loading 118 mods` | **PASS,主界面并进世界**(18 s / 22 s);`ERROR=4`,其余四项 0 |\n\n修复器自己的 stdout(26.x 上它在**启动器 stdout**,不在 `latest.log`):`GameRenderer.render needs no local slots\n\n..."
 		},
 		{
 			"tag": "v1.1.9-reforged+mc1.20.6",
@@ -338,7 +360,7 @@
 					"name": "OptiFabric-Reforged-1.1.9-reforged+mc1.20.6-full.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v1.1.9-reforged%2Bmc1.20.6/OptiFabric-Reforged-1.1.9-reforged%2Bmc1.20.6-full.jar",
 					"size": 756802,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "dd9b39dcd5b56eb65c22a63c2c4a00f3a51c4a8df971336914e5912b4de43c40",
 					"mods": [
@@ -419,7 +441,7 @@
 					"name": "OptiFabric-Reforged-1.1.9-reforged+mc1.20.6.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v1.1.9-reforged%2Bmc1.20.6/OptiFabric-Reforged-1.1.9-reforged%2Bmc1.20.6.jar",
 					"size": 732726,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "4898e2f20efcf4d25a947e594e04580e1eafcd58d8e5d9d0021d50d50705882e",
 					"mods": [
@@ -481,7 +503,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## 1.1.9-reforged+mc1.20.6\n\n这是 `optifabric_reforged`(1.20.6 的**替代产物**)的新版本。**相对 1.1.8 只改下载器的错误信息与资源处理**:\n\n* 停摆被看门狗断开后,抛的不再是传输层自己的 `Stream closed`,而是可操作的一句:the download stopped sending data for 60 s, giving up; check the connection and try again;\n* 响应流只被关闭一次 —— 看门狗持有它,不再与 try-with-resources 重复关闭。\n\n其余行为与 1.1.8 完全相同:边收边读、`Content-Length` 预检、连续 60 秒无字节才判定停摆、进度随读随报。"
 		},
 		{
 			"tag": "v2.2.11+mc26.1.2",
@@ -493,7 +516,7 @@
 					"name": "OptiFabric-Reforged-2.2.11+mc26.1.2-full.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.11%2Bmc26.1.2/OptiFabric-Reforged-2.2.11%2Bmc26.1.2-full.jar",
 					"size": 210687,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "734201a5743211d1b9e6951566612199b61e8e11a03b24bd154e31a79744d92d",
 					"mods": [
@@ -577,7 +600,7 @@
 					"name": "OptiFabric-Reforged-2.2.11+mc26.1.2.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.11%2Bmc26.1.2/OptiFabric-Reforged-2.2.11%2Bmc26.1.2.jar",
 					"size": 186817,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "31bb5ce5f4411b226c9833d24b06a866f8430b391d7cb62146e9ea601fa8b3c5",
 					"mods": [
@@ -641,7 +664,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# OptiFabric Reforged 2.2.11+mc26.1.2\n\n**Minecraft 26.1.2** / Fabric Loader 0.19.5 / **Java 25** / 需求 OptiFine `preview_OptiFine_26.1.2_HD_U_K1_pre2.jar`\n\n## 2.2.8 改了什么(本版)\n\n**一句话:** 之前重算 StackMapTable 帧时,两个类型的公共父类型只从**第一个参数**那一侧展开、第二个参数只沿 `superName` 往上走;ASM 传参顺序任意,于是\"接口在前、实现类在后\"时会回落成 `java/lang/Object`,而校验器以帧为准 ⇒ 那个类在**加载时**被拒。1.20.6 上的 `ShaderProgram.method_35785(String)` 正是这个形态,表现是**启动即崩**(`VerifyError: Bad return type`)。本版把它改成对称求解,并一并处理审查报告里其余可修的缺陷。\n\n### 帧计算:两侧各自求闭包,取最近的公共类型\n\n`getCommonSuperClass` 现在两侧各自求闭包(**自身 + 全部超类 + 全部接口**,最近优先)后取最近的公共类型;确实没有公共父类型时才用 `java/lang/Object`。`allSupertypes` 也把**自身**算进去,顺带修掉 `getCommonSuperClass(A, A)` 同样返回 `Object` 的问题。\n\n**实测**:同一实例在修复前每次启动都产生崩溃报告;修复后 **0 份崩溃报告、0 次 VerifyError**,客户端一直存活到被测试脚手架停掉。附带确认:这个崩**与 Lithium 无关**(移出 Lithium 同样崩)、**不是上一版的回归**(1.1.4 同样崩)、**也不是坏缓存**(删缓存重打同样崩)。\n\n### 同批加固\n\n`ChunkRendererFix` 参数个数守卫;`MethodComparison` 不认识的 `invokedynamic` 记为\"不同\"而非抛异常、LDC 排序按描述符比较;`ClassCache` 四个长度加上限;`OptifineSetup` 的 `LambdaRebuilder` 放进 `finally`;`GAME_CLASSES` 改为有界 LRU(上限 512);`LambdaRebuilder` 模糊配对只按本类回查、`return 0` 改 `continue`;`InjectionCallPointFix` 按位置消费参数并照抄游戏的压栈指令;`ZipUtils.extract` 路径检查无条件 + 带分隔符;标题界面 `jarType == null` 落到\"内部错误\"分支、`parseJarType` 接住 `RuntimeException`;`release/publish.ps1` 脱敏令牌;静默 catch 的 lint 覆盖本线。\n\n### 下载器(只影响 `-full` 构建;**本产物没有下载器**)\n\n`-full` 另外补了主机名精确比较、**强制 https**、以及**下载后校验构建身份**(读 `Config.class` 里的 `VERSION` / `MC_VERSION`)三项,都做过真实下载验证。**本产物不联网、不启动进程。**\n\n## 2.2.6 改了什么(本版):把 1.21.x 线重写过的 `LocalSlotLayoutFix` 移植过来\n\n**本版加的是一处类库级修复**:`LocalSlotLayoutFix` 把**游戏自己的局部变量放回游戏声明的槽位**。OptiFine 会重编译它\n补丁的那些方法,它的 javac 把**它自己新增的局部变量**放在源码里出现的位置,于是游戏自己的局部变量被整体往上挤;Mixin\n读局部变量表有两种方式,两种都会坏:\n\n1. **按槽位顺序** —— `CallbackInjector` 用 `getFirstNonArgLocalIndex(args)` 往上取前若干个非空局部变量来建回调的\n   描述符,顺序对不上就整个类变换失败(`Critical injection failure: LVT in … has incompatible changes at opcode N`);\n2. **按绝对槽位** —— MixinExtras 的 `@Local(index = N)` 糖取 `locals[N]`,那个槽位上是别的类型时糖根本建不起来\n   (`SugarApplicationException: Unable to find matching local!`)。\n\n**26.2 上是 `distanthorizons` 撞出来的**(DH 至今**没有 26.1.2 的构建**,所以这一版在 26.1.2 上没有对应的模组手臂;\n这一版第一次把修复器跑在 26.1.2 上,见下面的实测)。\n\n**修复**:把 1.21.x 线重写过的文件**逐字节**移植过来(37,453 字节,SHA-256\n`85EF437444F637EC15DC63CA810A9348998FEBE751F1F9F4509113E12E103BB1`,取自侧分支 `tf-localscope` 的 `1bf3e4b`),\n按这一线的**官方名**注册两条(`desc` 留空,按 OptiFine 那份类自带的描述符办事):\n\n```java\nregisterFix(\"net/minecraft/client/renderer/GameRenderer\",\n        new LocalSlotLayoutFix(null, \"render\", \"renderLevel\"));\nregisterFix(\"net/minecraft/client/renderer/LevelRenderer\",\n        new LocalSlotLayoutFix(null, \"renderLevel\"));\n```\n\n它**按作用域**把两张局部变量表配对(可比的是「按槽位顺序排列的描述符序列」,用最长公共子序列对齐),把**游戏自己的**\n槽位放回游戏声明的编号,OptiFine 自己的槽位搬到局部区间末尾;一个槽整体搬、绝不拆开,同时活着的两个槽不合并,帧由管线\n本来就在用的 `FrameComputingWriter` 重算。**它不删 OptiFine 的任何代码、不加任何指令**,也不改任何行为 —— 只是把同一个\n写操作写到另一个槽号上。因此 **`@Local(index = N)` 那一类失败整类消失**。这一线上原本**没有**任何其它管局部变量布局的\n代码,不会重复施加。\n\n**本版实测**(干净临时 worktree、自己的实例副本、**每次运行前清空 `.optifine` 缓存**、Java 25、OptiFine `K1_pre2`):\n\n| 手臂 | 模组 | 结果 |\n|---|---|---|\n| 出厂 **2.2.4**(对照) | 20 jars → `Loading 118 mods` | **PASS,到主界面并进世界**(30 s / 37 s);`ERROR=4`,其余四项 0 |\n| **本版** | 同一套 20 jars → `Loading 118 mods` | **PASS,到主界面并进世界**(18 s / 22 s);`ERROR=4`,其余四项 0 |\n\n**修复器确实跑了**,它的 stdout 在**启动器 stdout**(26.x 上不进 `latest.log`):\n\n```\n[OptiFabric] Realigned the locals of net/minecraft/client/renderer/GameRenderer.renderLevel(Lnet/minecraft/client/DeltaTracker;)V\nonto the slots the game declares them in: 19 of OptiFine's 25 table entries are the game's own (of 21), the other 6 are\nOptiFine's own or could not be paired (slots 2->23, 3->2, 4->3, 5->4, 6->5, 7->6, 8->7, 9->8, 10->9, 11->10, 12->24, …)\n```\n\n`GameRenderer.render` 那一条则是 `needs no local slots moved: the game's own locals are already in the slots the game\ndeclares them in`(两张表本来就对齐,修复器不瞎搬)。出厂 jar 上**没有**这些行。\n\n**边界**:两个 PASS 都只跑了约 40 秒、只进了**一个**世界(复制进去的固定存档)、**没有光影包**、没有压测、没有联机;\n每个手臂只跑一次;26.1.2 上**没有** DH 的手臂(DH 没有这一版的构建,这一版修的那一处在这里无法用模组复现);\n\n..."
 		},
 		{
 			"tag": "v2.2.16+mc1.21.11",
@@ -653,7 +677,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.11-full.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.11/OptiFabric-2.2.16%2Bmc1.21.11-full.jar",
 					"size": 960637,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "22dc42bf6194f7c3e98d24fc1f34d33e818f141cceb75cab9d1c36f2ed181441",
 					"mods": [
@@ -734,7 +758,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.11.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.11/OptiFabric-2.2.16%2Bmc1.21.11.jar",
 					"size": 937637,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "a161ec34aae34c1b1dad3abf7ac14d6e39f64152c82b3e6d8146d9cdb586a1cc",
 					"mods": [
@@ -795,7 +819,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# OptiFabric 2.2.16+mc1.21.11\n\n**Minecraft 1.21.11** / Fabric Loader 0.19.5 / Java 21+ / 需求 OptiFine `OptiFine_1.21.11_HD_U_J9.jar`\n\n状态:**已实测正常(含抗锯齿)**\n\n## 2.2.13 的改动\n\n**一句话:** 一份坏掉的 OptiFine jar 不再把**错误提示自己**打崩(实测:修复前产生崩溃报告与 `NullPointerException … jarType is null`,修复后无崩溃报告、无 NPE、进程存活);另有一轮来自代码审查的加固,九条分支同步。\n\n### 坏 jar 不再打崩错误路径\n\n`mods/` 里放一个**合法 zip、`net/optifine/Config.class` 却是坏字节**的 jar 时:旧版 `parseJarType` 只接住 `ZipException | ZipError`,而 `ClassReader` 对垃圾字节抛的是**未检查异常**,它一路穿透到标题界面,`switch (OptifineVersion.jarType)` 拿到 null ⇒ NPE —— 崩溃发生在**专门用来解释失败的那条路**上。两处改法:\n\n* `parseJarType` 把 `RuntimeException` 一并接住(读不懂的类文件与坏 zip 是同一类\"不可用的 jar\" ⇒ `JarType.CORRUPT_ZIP`,对话框照旧显示);\n* `MixinTitleScreen` 在 `jarType == null` 时落到 `INTERNAL_ERROR` 分支(复制堆栈/日志 + issues 链接)。同树的 `CrashReportMixin` 早有 null 守卫、`OptifinePrompt.gate()` 对 null 安全,这里是唯一漏掉的一处。\n\n**实测**:同一份坏 jar、同一个实例副本,分别用本提交与提交前构建的 jar 启动 —— 修复前有崩溃报告(`crash-2026-10-07_12.28.12-client.txt`)与两次 `NullPointerException`,进程自己退出;修复后**无崩溃报告、0 次 NPE**,客户端一直活到被测试脚手架主动停掉。那份崩溃报告同时证明错误当时**已经设置好**(进入 switch 前有 `if (!OptifabricError.hasError()) return;`),即对话框那条路确实被走到了。修复后**无法从日志证明对话框已显示**(`setError()` 只存不打印),如实写明。\n\n### 与其它分支同步的加固\n\n* `ChunkRendererFix`:先判参数个数再取最后一个参数(短参数表的调用以前会 `AIOOBE`);\n* `MethodComparison`:不认识的 `invokedynamic` bootstrap 记为\"不同\"而不是抛异常;LDC 的 sort switch 原先**无 default**、基本类型会穿透到 IINC 比较并强转(`ClassCastException`),改为统一按描述符比较;\n* `ClassCache`:文件声明的四个长度全部加上限,负数/超大值走\"空缓存\"(与其它损坏情形一致),不再抛 `NegativeArraySizeException`;\n* `OptifineSetup`:`LambdaRebuilder` 放进 `finally` 关闭(以前 transform 抛异常时原版 jar 与临时文件不释放);\n* `GAME_CLASSES`:改为**有界 LRU**(上限 512),而不是\"只 put 不清空\";\n* `LambdaRebuilder`:模糊配对只按**本类**回查(以前跨类套用同名同描述符的配对);\"已全部配上\"从 `return 0` 改成 `continue`;\n* `InjectionCallPointFix`:重建调用时按位置消费参数,并优先**照抄游戏自己那次调用的压栈指令**(以前同类型多形参会把同一个槽位用两次、静默传错值);\n* `ZipUtils.extract`:路径检查改成**无条件 + 带分隔符**(审查已把它降级为纵深防御 —— 唯一调用点在 `-Doptifabric.extract` 调试开关后面;仍然修了);\n* `release/publish.ps1`:`-DryRun` 打印前**脱敏令牌**,两条 curl 命令改成参数数组、不再用 `Invoke-Expression`。\n\n### 下载器(只影响 `-full` 构建;**本产物没有下载器**)\n\n`-full` 版本另外补了三处并做了**真实下载验证**:主机名精确比较(以前 `url.contains(\"optifine.net\")`,`https://evil.example/?optifine.net` 会被当成官方页去抓对方页面并从里面找下载链接;`https://optifine.net@evil.example/` 这类写法同样堵住)、**一律要求 https**、以及**下载后校验下来的确实是所要的那个构建**(读它自己 `Config.class` 的 `VERSION` / `MC_VERSION`,不匹配就删掉文件并报错)。官网那个下载链接是**相对路径**,解析后仍是 https,所以强制 https 不影响正常下载。**本产物(默认产物)不联网、不启动进程。**\n\n### 帧计算修正:公共父类型改为对称求解\n\n1.20.6 + OptiFine `J1_pre18` 曾**启动即崩**(`VerifyError: Bad return type` 于 `class_5944.method_35785`):字节码是正确的,但我们写出的 StackMapTable 帧把 `class_284` 与 `class_278` 的公共类型写成了 `java/lang/Object`,校验器于是拒绝加载该类。原实现只展开第一个参数的祖先、再沿第二个参数的 `superName` 走,而 ASM 的传参顺序是任意的 ⇒ \"接口在前\"时必然回落成 `Object`。现在两侧各自求闭包(自身 + 全部超类 + 全部接口)后取最近的公共类型,`allSupertypes` 也计入自身。\n\n**实测**:同一实例(含 Lithium 0.12.5)在修复前每次启动都产生崩溃报告;修复后 **0 份崩溃报告、0 次 VerifyError**,客户端一直存活到被测试脚手架停掉。附带确认:这个崩**与 Lithium 无关**(移出 Lithium 后同样崩)、**不是 1.1.5 的回归**(1.1.4 同样崩)、也**不是坏缓存**(删缓存重打同样崩)。\n\n\n\n## 2.2.10 的改动\n\n**一句话:** 2.2.8 / 2.2.9 把 sodium 写进 `breaks`,于是**整个实例被加载器拒绝**;本版把那条声明去掉,实例能起来、日志里只留一条警告,\n并修掉**重新归因那一轮证明属于我们这一侧的第一处失败**——而 sodium、iris、immediatelyfast 都不是单个坑,是**连着的坑**,\n本版只关掉了每一串的头几处。\n\n### sodium 不再是闸门\n\n`fabric.mod.json` 里从 2.2.8 起把 `sodium` **同时**写进了 `conflicts` 与 `breaks`。在 Fabric Loader 0.19.5 上这两者不是一回事:\n`conflicts` 只是 `Warnings were found!`(`ModSolver` 里那条 `// TODO: soft negative dep?` 至今没有约束),而 `breaks` 点到已存在的\n模组是 `NEG_HARD_DEP`,加载器**拒绝整个实例**。2.2.9 实测:\n\n```\n[main/INFO]: Immediate reason: [HARD_DEP chloride 1.8.1 {depends sodium @ [>=0.8.12]},\n    NEG_HARD_DEP optifabric_reforged 2.2.9+mc1.21.1 {breaks sodium @ [*]}, …]\n[main/ERROR]: Incompatible mods found!\n```\n\n代价是包里**其它所有模组**(chloride 这类 sodium 附属模组还会以 `HARD_DEP` 一起失败)。2.2.10 只保留 `conflicts`:\n实例能起来,日志里留一条警告。README 与 README_CN 里那张声明表、表上的摘要行与相关段落都已按实测改写,两次运行都引在正文里。\n\n### sodium **仍然是级联**:不要把这一版读成\"sodium 能用了\"\n\n两个调用点都修好了,而且都先在**私有 `.optifine` 缓存副本**上用 fixer 类本身验过才提交:\n\n* `class_761.method_22714` 丢了 `class_310.method_1517()Z`(OptiFine 换成了自己的 `Config.isRainFancy()Z`,一个**无参**静态取值器):\n\n..."
 		},
 		{
 			"tag": "v2.2.16+mc1.21.10",
@@ -807,7 +832,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.10-full.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.10/OptiFabric-2.2.16%2Bmc1.21.10-full.jar",
 					"size": 943093,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "dc2222bf5d38cea673e1e9e773f01c34c87f49e7b23dc4c34d1e6cba354ad2b3",
 					"mods": [
@@ -888,7 +913,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.10.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.10/OptiFabric-2.2.16%2Bmc1.21.10.jar",
 					"size": 920094,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "15b244ae5928adb3d6364a96fd6ec135373dc1732011c629921ab33a93a8566c",
 					"mods": [
@@ -949,7 +974,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# OptiFabric 2.2.16+mc1.21.10\n\n**Minecraft 1.21.10** / Fabric Loader 0.19.5 / Java 21+ / 需求 OptiFine `preview_OptiFine_1.21.10_HD_U_J7_pre11.jar`\n\n状态:**已实测正常(含抗锯齿)**\n\n## 2.2.13 的改动\n\n**一句话:** 一份坏掉的 OptiFine jar 不再把**错误提示自己**打崩(实测:修复前产生崩溃报告与 `NullPointerException … jarType is null`,修复后无崩溃报告、无 NPE、进程存活);另有一轮来自代码审查的加固,九条分支同步。\n\n### 坏 jar 不再打崩错误路径\n\n`mods/` 里放一个**合法 zip、`net/optifine/Config.class` 却是坏字节**的 jar 时:旧版 `parseJarType` 只接住 `ZipException | ZipError`,而 `ClassReader` 对垃圾字节抛的是**未检查异常**,它一路穿透到标题界面,`switch (OptifineVersion.jarType)` 拿到 null ⇒ NPE —— 崩溃发生在**专门用来解释失败的那条路**上。两处改法:\n\n* `parseJarType` 把 `RuntimeException` 一并接住(读不懂的类文件与坏 zip 是同一类\"不可用的 jar\" ⇒ `JarType.CORRUPT_ZIP`,对话框照旧显示);\n* `MixinTitleScreen` 在 `jarType == null` 时落到 `INTERNAL_ERROR` 分支(复制堆栈/日志 + issues 链接)。同树的 `CrashReportMixin` 早有 null 守卫、`OptifinePrompt.gate()` 对 null 安全,这里是唯一漏掉的一处。\n\n**实测**:同一份坏 jar、同一个实例副本,分别用本提交与提交前构建的 jar 启动 —— 修复前有崩溃报告(`crash-2026-10-07_12.28.12-client.txt`)与两次 `NullPointerException`,进程自己退出;修复后**无崩溃报告、0 次 NPE**,客户端一直活到被测试脚手架主动停掉。那份崩溃报告同时证明错误当时**已经设置好**(进入 switch 前有 `if (!OptifabricError.hasError()) return;`),即对话框那条路确实被走到了。修复后**无法从日志证明对话框已显示**(`setError()` 只存不打印),如实写明。\n\n### 与其它分支同步的加固\n\n* `ChunkRendererFix`:先判参数个数再取最后一个参数(短参数表的调用以前会 `AIOOBE`);\n* `MethodComparison`:不认识的 `invokedynamic` bootstrap 记为\"不同\"而不是抛异常;LDC 的 sort switch 原先**无 default**、基本类型会穿透到 IINC 比较并强转(`ClassCastException`),改为统一按描述符比较;\n* `ClassCache`:文件声明的四个长度全部加上限,负数/超大值走\"空缓存\"(与其它损坏情形一致),不再抛 `NegativeArraySizeException`;\n* `OptifineSetup`:`LambdaRebuilder` 放进 `finally` 关闭(以前 transform 抛异常时原版 jar 与临时文件不释放);\n* `GAME_CLASSES`:改为**有界 LRU**(上限 512),而不是\"只 put 不清空\";\n* `LambdaRebuilder`:模糊配对只按**本类**回查(以前跨类套用同名同描述符的配对);\"已全部配上\"从 `return 0` 改成 `continue`;\n* `InjectionCallPointFix`:重建调用时按位置消费参数,并优先**照抄游戏自己那次调用的压栈指令**(以前同类型多形参会把同一个槽位用两次、静默传错值);\n* `ZipUtils.extract`:路径检查改成**无条件 + 带分隔符**(审查已把它降级为纵深防御 —— 唯一调用点在 `-Doptifabric.extract` 调试开关后面;仍然修了);\n* `release/publish.ps1`:`-DryRun` 打印前**脱敏令牌**,两条 curl 命令改成参数数组、不再用 `Invoke-Expression`。\n\n### 下载器(只影响 `-full` 构建;**本产物没有下载器**)\n\n`-full` 版本另外补了三处并做了**真实下载验证**:主机名精确比较(以前 `url.contains(\"optifine.net\")`,`https://evil.example/?optifine.net` 会被当成官方页去抓对方页面并从里面找下载链接;`https://optifine.net@evil.example/` 这类写法同样堵住)、**一律要求 https**、以及**下载后校验下来的确实是所要的那个构建**(读它自己 `Config.class` 的 `VERSION` / `MC_VERSION`,不匹配就删掉文件并报错)。官网那个下载链接是**相对路径**,解析后仍是 https,所以强制 https 不影响正常下载。**本产物(默认产物)不联网、不启动进程。**\n\n### 帧计算修正:公共父类型改为对称求解\n\n1.20.6 + OptiFine `J1_pre18` 曾**启动即崩**(`VerifyError: Bad return type` 于 `class_5944.method_35785`):字节码是正确的,但我们写出的 StackMapTable 帧把 `class_284` 与 `class_278` 的公共类型写成了 `java/lang/Object`,校验器于是拒绝加载该类。原实现只展开第一个参数的祖先、再沿第二个参数的 `superName` 走,而 ASM 的传参顺序是任意的 ⇒ \"接口在前\"时必然回落成 `Object`。现在两侧各自求闭包(自身 + 全部超类 + 全部接口)后取最近的公共类型,`allSupertypes` 也计入自身。\n\n**实测**:同一实例(含 Lithium 0.12.5)在修复前每次启动都产生崩溃报告;修复后 **0 份崩溃报告、0 次 VerifyError**,客户端一直存活到被测试脚手架停掉。附带确认:这个崩**与 Lithium 无关**(移出 Lithium 后同样崩)、**不是 1.1.5 的回归**(1.1.4 同样崩)、也**不是坏缓存**(删缓存重打同样崩)。\n\n\n> **光影包请用 Complementary 等主流包**:Photon 在 1.21.6 起的 OptiFine 上程序名对不上 ⇒ 画面错乱 / 闪烁,与本模组无关。\n\n\n## 2.2.10 的改动\n\n**一句话:** 2.2.8 / 2.2.9 把 sodium 写进 `breaks`,于是**整个实例被加载器拒绝**;本版把那条声明去掉,实例能起来、日志里只留一条警告,\n并修掉**重新归因那一轮证明属于我们这一侧的第一处失败**——而 sodium、iris、immediatelyfast 都不是单个坑,是**连着的坑**,\n本版只关掉了每一串的头几处。\n\n### sodium 不再是闸门\n\n`fabric.mod.json` 里从 2.2.8 起把 `sodium` **同时**写进了 `conflicts` 与 `breaks`。在 Fabric Loader 0.19.5 上这两者不是一回事:\n`conflicts` 只是 `Warnings were found!`(`ModSolver` 里那条 `// TODO: soft negative dep?` 至今没有约束),而 `breaks` 点到已存在的\n模组是 `NEG_HARD_DEP`,加载器**拒绝整个实例**。2.2.9 实测:\n\n```\n[main/INFO]: Immediate reason: [HARD_DEP chloride 1.8.1 {depends sodium @ [>=0.8.12]},\n    NEG_HARD_DEP optifabric_reforged 2.2.9+mc1.21.1 {breaks sodium @ [*]}, …]\n[main/ERROR]: Incompatible mods found!\n```\n\n代价是包里**其它所有模组**(chloride 这类 sodium 附属模组还会以 `HARD_DEP` 一起失败)。2.2.10 只保留 `conflicts`:\n实例能起来,日志里留一条警告。README 与 README_CN 里那张声明表、表上的摘要行与相关段落都已按实测改写,两次运行都引在正文里。\n\n### sodium **仍然是级联**:不要把这一版读成\"sodium 能用了\"\n\n两个调用点都修好了,而且都先在**私有 `.optifine` 缓存副本**上用 fixer 类本身验过才提交:\n\n\n..."
 		},
 		{
 			"tag": "v2.2.16+mc1.21.9",
@@ -961,7 +987,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.9-full.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.9/OptiFabric-2.2.16%2Bmc1.21.9-full.jar",
 					"size": 943075,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "f83fa37563af9dc06cf536ffb75b4deb923c88ba2c60658bae07396a08760087",
 					"mods": [
@@ -1042,7 +1068,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.9.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.9/OptiFabric-2.2.16%2Bmc1.21.9.jar",
 					"size": 920076,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "e2e9def86308b738a22333a87819694a45009483d60daf251a255cf995997cfe",
 					"mods": [
@@ -1103,7 +1129,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# OptiFabric 2.2.16+mc1.21.9\n\n**Minecraft 1.21.9** / Fabric Loader 0.19.5 / Java 21+ / 需求 OptiFine `preview_OptiFine_1.21.9_HD_U_J7_pre2.jar`\n\n状态:**已实测正常(含抗锯齿)**\n\n## 2.2.13 的改动\n\n**一句话:** 一份坏掉的 OptiFine jar 不再把**错误提示自己**打崩(实测:修复前产生崩溃报告与 `NullPointerException … jarType is null`,修复后无崩溃报告、无 NPE、进程存活);另有一轮来自代码审查的加固,九条分支同步。\n\n### 坏 jar 不再打崩错误路径\n\n`mods/` 里放一个**合法 zip、`net/optifine/Config.class` 却是坏字节**的 jar 时:旧版 `parseJarType` 只接住 `ZipException | ZipError`,而 `ClassReader` 对垃圾字节抛的是**未检查异常**,它一路穿透到标题界面,`switch (OptifineVersion.jarType)` 拿到 null ⇒ NPE —— 崩溃发生在**专门用来解释失败的那条路**上。两处改法:\n\n* `parseJarType` 把 `RuntimeException` 一并接住(读不懂的类文件与坏 zip 是同一类\"不可用的 jar\" ⇒ `JarType.CORRUPT_ZIP`,对话框照旧显示);\n* `MixinTitleScreen` 在 `jarType == null` 时落到 `INTERNAL_ERROR` 分支(复制堆栈/日志 + issues 链接)。同树的 `CrashReportMixin` 早有 null 守卫、`OptifinePrompt.gate()` 对 null 安全,这里是唯一漏掉的一处。\n\n**实测**:同一份坏 jar、同一个实例副本,分别用本提交与提交前构建的 jar 启动 —— 修复前有崩溃报告(`crash-2026-10-07_12.28.12-client.txt`)与两次 `NullPointerException`,进程自己退出;修复后**无崩溃报告、0 次 NPE**,客户端一直活到被测试脚手架主动停掉。那份崩溃报告同时证明错误当时**已经设置好**(进入 switch 前有 `if (!OptifabricError.hasError()) return;`),即对话框那条路确实被走到了。修复后**无法从日志证明对话框已显示**(`setError()` 只存不打印),如实写明。\n\n### 与其它分支同步的加固\n\n* `ChunkRendererFix`:先判参数个数再取最后一个参数(短参数表的调用以前会 `AIOOBE`);\n* `MethodComparison`:不认识的 `invokedynamic` bootstrap 记为\"不同\"而不是抛异常;LDC 的 sort switch 原先**无 default**、基本类型会穿透到 IINC 比较并强转(`ClassCastException`),改为统一按描述符比较;\n* `ClassCache`:文件声明的四个长度全部加上限,负数/超大值走\"空缓存\"(与其它损坏情形一致),不再抛 `NegativeArraySizeException`;\n* `OptifineSetup`:`LambdaRebuilder` 放进 `finally` 关闭(以前 transform 抛异常时原版 jar 与临时文件不释放);\n* `GAME_CLASSES`:改为**有界 LRU**(上限 512),而不是\"只 put 不清空\";\n* `LambdaRebuilder`:模糊配对只按**本类**回查(以前跨类套用同名同描述符的配对);\"已全部配上\"从 `return 0` 改成 `continue`;\n* `InjectionCallPointFix`:重建调用时按位置消费参数,并优先**照抄游戏自己那次调用的压栈指令**(以前同类型多形参会把同一个槽位用两次、静默传错值);\n* `ZipUtils.extract`:路径检查改成**无条件 + 带分隔符**(审查已把它降级为纵深防御 —— 唯一调用点在 `-Doptifabric.extract` 调试开关后面;仍然修了);\n* `release/publish.ps1`:`-DryRun` 打印前**脱敏令牌**,两条 curl 命令改成参数数组、不再用 `Invoke-Expression`。\n\n### 下载器(只影响 `-full` 构建;**本产物没有下载器**)\n\n`-full` 版本另外补了三处并做了**真实下载验证**:主机名精确比较(以前 `url.contains(\"optifine.net\")`,`https://evil.example/?optifine.net` 会被当成官方页去抓对方页面并从里面找下载链接;`https://optifine.net@evil.example/` 这类写法同样堵住)、**一律要求 https**、以及**下载后校验下来的确实是所要的那个构建**(读它自己 `Config.class` 的 `VERSION` / `MC_VERSION`,不匹配就删掉文件并报错)。官网那个下载链接是**相对路径**,解析后仍是 https,所以强制 https 不影响正常下载。**本产物(默认产物)不联网、不启动进程。**\n\n### 帧计算修正:公共父类型改为对称求解\n\n1.20.6 + OptiFine `J1_pre18` 曾**启动即崩**(`VerifyError: Bad return type` 于 `class_5944.method_35785`):字节码是正确的,但我们写出的 StackMapTable 帧把 `class_284` 与 `class_278` 的公共类型写成了 `java/lang/Object`,校验器于是拒绝加载该类。原实现只展开第一个参数的祖先、再沿第二个参数的 `superName` 走,而 ASM 的传参顺序是任意的 ⇒ \"接口在前\"时必然回落成 `Object`。现在两侧各自求闭包(自身 + 全部超类 + 全部接口)后取最近的公共类型,`allSupertypes` 也计入自身。\n\n**实测**:同一实例(含 Lithium 0.12.5)在修复前每次启动都产生崩溃报告;修复后 **0 份崩溃报告、0 次 VerifyError**,客户端一直存活到被测试脚手架停掉。附带确认:这个崩**与 Lithium 无关**(移出 Lithium 后同样崩)、**不是 1.1.5 的回归**(1.1.4 同样崩)、也**不是坏缓存**(删缓存重打同样崩)。\n\n\n> **光影包请用 Complementary 等主流包**:Photon 在 1.21.6 起的 OptiFine 上程序名对不上 ⇒ 画面错乱 / 闪烁,与本模组无关。\n\n\n## 2.2.10 的改动\n\n**一句话:** 2.2.8 / 2.2.9 把 sodium 写进 `breaks`,于是**整个实例被加载器拒绝**;本版把那条声明去掉,实例能起来、日志里只留一条警告,\n并修掉**重新归因那一轮证明属于我们这一侧的第一处失败**——而 sodium、iris、immediatelyfast 都不是单个坑,是**连着的坑**,\n本版只关掉了每一串的头几处。\n\n### sodium 不再是闸门\n\n`fabric.mod.json` 里从 2.2.8 起把 `sodium` **同时**写进了 `conflicts` 与 `breaks`。在 Fabric Loader 0.19.5 上这两者不是一回事:\n`conflicts` 只是 `Warnings were found!`(`ModSolver` 里那条 `// TODO: soft negative dep?` 至今没有约束),而 `breaks` 点到已存在的\n模组是 `NEG_HARD_DEP`,加载器**拒绝整个实例**。2.2.9 实测:\n\n```\n[main/INFO]: Immediate reason: [HARD_DEP chloride 1.8.1 {depends sodium @ [>=0.8.12]},\n    NEG_HARD_DEP optifabric_reforged 2.2.9+mc1.21.1 {breaks sodium @ [*]}, …]\n[main/ERROR]: Incompatible mods found!\n```\n\n代价是包里**其它所有模组**(chloride 这类 sodium 附属模组还会以 `HARD_DEP` 一起失败)。2.2.10 只保留 `conflicts`:\n实例能起来,日志里留一条警告。README 与 README_CN 里那张声明表、表上的摘要行与相关段落都已按实测改写,两次运行都引在正文里。\n\n### sodium **仍然是级联**:不要把这一版读成\"sodium 能用了\"\n\n两个调用点都修好了,而且都先在**私有 `.optifine` 缓存副本**上用 fixer 类本身验过才提交:\n\n\n..."
 		},
 		{
 			"tag": "v2.2.16+mc1.21.8",
@@ -1115,7 +1142,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.8-full.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.8/OptiFabric-2.2.16%2Bmc1.21.8-full.jar",
 					"size": 915043,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "5dbe17d702d3ad15abcd712d96937c37a36395eef086ef747c6dc29ae530f914",
 					"mods": [
@@ -1196,7 +1223,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.8.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.8/OptiFabric-2.2.16%2Bmc1.21.8.jar",
 					"size": 892044,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "379fe89953030080b85417eaf95c5a93909b3ae3a67e53b046af43c8bbdb0d79",
 					"mods": [
@@ -1257,7 +1284,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# OptiFabric 2.2.16+mc1.21.8\n\n**Minecraft 1.21.8** / Fabric Loader 0.19.5 / Java 21+ / 需求 OptiFine `preview_OptiFine_1.21.8_HD_U_J6_pre16.jar`\n\n状态:**已实测正常(含抗锯齿)**\n\n## 2.2.13 的改动\n\n**一句话:** 一份坏掉的 OptiFine jar 不再把**错误提示自己**打崩(实测:修复前产生崩溃报告与 `NullPointerException … jarType is null`,修复后无崩溃报告、无 NPE、进程存活);另有一轮来自代码审查的加固,九条分支同步。\n\n### 坏 jar 不再打崩错误路径\n\n`mods/` 里放一个**合法 zip、`net/optifine/Config.class` 却是坏字节**的 jar 时:旧版 `parseJarType` 只接住 `ZipException | ZipError`,而 `ClassReader` 对垃圾字节抛的是**未检查异常**,它一路穿透到标题界面,`switch (OptifineVersion.jarType)` 拿到 null ⇒ NPE —— 崩溃发生在**专门用来解释失败的那条路**上。两处改法:\n\n* `parseJarType` 把 `RuntimeException` 一并接住(读不懂的类文件与坏 zip 是同一类\"不可用的 jar\" ⇒ `JarType.CORRUPT_ZIP`,对话框照旧显示);\n* `MixinTitleScreen` 在 `jarType == null` 时落到 `INTERNAL_ERROR` 分支(复制堆栈/日志 + issues 链接)。同树的 `CrashReportMixin` 早有 null 守卫、`OptifinePrompt.gate()` 对 null 安全,这里是唯一漏掉的一处。\n\n**实测**:同一份坏 jar、同一个实例副本,分别用本提交与提交前构建的 jar 启动 —— 修复前有崩溃报告(`crash-2026-10-07_12.28.12-client.txt`)与两次 `NullPointerException`,进程自己退出;修复后**无崩溃报告、0 次 NPE**,客户端一直活到被测试脚手架主动停掉。那份崩溃报告同时证明错误当时**已经设置好**(进入 switch 前有 `if (!OptifabricError.hasError()) return;`),即对话框那条路确实被走到了。修复后**无法从日志证明对话框已显示**(`setError()` 只存不打印),如实写明。\n\n### 与其它分支同步的加固\n\n* `ChunkRendererFix`:先判参数个数再取最后一个参数(短参数表的调用以前会 `AIOOBE`);\n* `MethodComparison`:不认识的 `invokedynamic` bootstrap 记为\"不同\"而不是抛异常;LDC 的 sort switch 原先**无 default**、基本类型会穿透到 IINC 比较并强转(`ClassCastException`),改为统一按描述符比较;\n* `ClassCache`:文件声明的四个长度全部加上限,负数/超大值走\"空缓存\"(与其它损坏情形一致),不再抛 `NegativeArraySizeException`;\n* `OptifineSetup`:`LambdaRebuilder` 放进 `finally` 关闭(以前 transform 抛异常时原版 jar 与临时文件不释放);\n* `GAME_CLASSES`:改为**有界 LRU**(上限 512),而不是\"只 put 不清空\";\n* `LambdaRebuilder`:模糊配对只按**本类**回查(以前跨类套用同名同描述符的配对);\"已全部配上\"从 `return 0` 改成 `continue`;\n* `InjectionCallPointFix`:重建调用时按位置消费参数,并优先**照抄游戏自己那次调用的压栈指令**(以前同类型多形参会把同一个槽位用两次、静默传错值);\n* `ZipUtils.extract`:路径检查改成**无条件 + 带分隔符**(审查已把它降级为纵深防御 —— 唯一调用点在 `-Doptifabric.extract` 调试开关后面;仍然修了);\n* `release/publish.ps1`:`-DryRun` 打印前**脱敏令牌**,两条 curl 命令改成参数数组、不再用 `Invoke-Expression`。\n\n### 下载器(只影响 `-full` 构建;**本产物没有下载器**)\n\n`-full` 版本另外补了三处并做了**真实下载验证**:主机名精确比较(以前 `url.contains(\"optifine.net\")`,`https://evil.example/?optifine.net` 会被当成官方页去抓对方页面并从里面找下载链接;`https://optifine.net@evil.example/` 这类写法同样堵住)、**一律要求 https**、以及**下载后校验下来的确实是所要的那个构建**(读它自己 `Config.class` 的 `VERSION` / `MC_VERSION`,不匹配就删掉文件并报错)。官网那个下载链接是**相对路径**,解析后仍是 https,所以强制 https 不影响正常下载。**本产物(默认产物)不联网、不启动进程。**\n\n### 帧计算修正:公共父类型改为对称求解\n\n1.20.6 + OptiFine `J1_pre18` 曾**启动即崩**(`VerifyError: Bad return type` 于 `class_5944.method_35785`):字节码是正确的,但我们写出的 StackMapTable 帧把 `class_284` 与 `class_278` 的公共类型写成了 `java/lang/Object`,校验器于是拒绝加载该类。原实现只展开第一个参数的祖先、再沿第二个参数的 `superName` 走,而 ASM 的传参顺序是任意的 ⇒ \"接口在前\"时必然回落成 `Object`。现在两侧各自求闭包(自身 + 全部超类 + 全部接口)后取最近的公共类型,`allSupertypes` 也计入自身。\n\n**实测**:同一实例(含 Lithium 0.12.5)在修复前每次启动都产生崩溃报告;修复后 **0 份崩溃报告、0 次 VerifyError**,客户端一直存活到被测试脚手架停掉。附带确认:这个崩**与 Lithium 无关**(移出 Lithium 后同样崩)、**不是 1.1.5 的回归**(1.1.4 同样崩)、也**不是坏缓存**(删缓存重打同样崩)。\n\n\n\n## 2.2.10 的改动\n\n**一句话:** 2.2.8 / 2.2.9 把 sodium 写进 `breaks`,于是**整个实例被加载器拒绝**;本版把那条声明去掉,实例能起来、日志里只留一条警告,\n并修掉**重新归因那一轮证明属于我们这一侧的第一处失败**——而 sodium、iris、immediatelyfast 都不是单个坑,是**连着的坑**,\n本版只关掉了每一串的头几处。\n\n### sodium 不再是闸门\n\n`fabric.mod.json` 里从 2.2.8 起把 `sodium` **同时**写进了 `conflicts` 与 `breaks`。在 Fabric Loader 0.19.5 上这两者不是一回事:\n`conflicts` 只是 `Warnings were found!`(`ModSolver` 里那条 `// TODO: soft negative dep?` 至今没有约束),而 `breaks` 点到已存在的\n模组是 `NEG_HARD_DEP`,加载器**拒绝整个实例**。2.2.9 实测:\n\n```\n[main/INFO]: Immediate reason: [HARD_DEP chloride 1.8.1 {depends sodium @ [>=0.8.12]},\n    NEG_HARD_DEP optifabric_reforged 2.2.9+mc1.21.1 {breaks sodium @ [*]}, …]\n[main/ERROR]: Incompatible mods found!\n```\n\n代价是包里**其它所有模组**(chloride 这类 sodium 附属模组还会以 `HARD_DEP` 一起失败)。2.2.10 只保留 `conflicts`:\n实例能起来,日志里留一条警告。README 与 README_CN 里那张声明表、表上的摘要行与相关段落都已按实测改写,两次运行都引在正文里。\n\n### sodium **仍然是级联**:不要把这一版读成\"sodium 能用了\"\n\n两个调用点都修好了,而且都先在**私有 `.optifine` 缓存副本**上用 fixer 类本身验过才提交:\n\n* `class_761.method_22714` 丢了 `class_310.method_1517()Z`(OptiFine 换成了自己的 `Config.isRainFancy()Z`,一个**无参**静态取值器):\n\n..."
 		},
 		{
 			"tag": "v2.2.16+mc1.21.7",
@@ -1269,7 +1297,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.7-full.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.7/OptiFabric-2.2.16%2Bmc1.21.7-full.jar",
 					"size": 914971,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "95825f727b8fd674839c4cf0f5c90e2611933eac32e8302bea7183064fa5aaf7",
 					"mods": [
@@ -1350,7 +1378,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.7.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.7/OptiFabric-2.2.16%2Bmc1.21.7.jar",
 					"size": 891972,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "f64b35807165bec42477cb27921962c354098fa9a635296060a891527b90c590",
 					"mods": [
@@ -1411,7 +1439,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# OptiFabric 2.2.16+mc1.21.7\n\n**Minecraft 1.21.7** / Fabric Loader 0.19.5 / Java 21+ / 需求 OptiFine `preview_OptiFine_1.21.7_HD_U_J6_pre7.jar`\n\n状态:**不开光影可正常启动(2026-09-13 实机确认);启用光影会在启动阶段崩溃 —— 该版 OptiFine 预览构建自身缺陷,本移植不提供光影支持(见文末\"已知限制\")**\n\n## 2.2.13 的改动\n\n**一句话:** 一份坏掉的 OptiFine jar 不再把**错误提示自己**打崩(实测:修复前产生崩溃报告与 `NullPointerException … jarType is null`,修复后无崩溃报告、无 NPE、进程存活);另有一轮来自代码审查的加固,九条分支同步。\n\n### 坏 jar 不再打崩错误路径\n\n`mods/` 里放一个**合法 zip、`net/optifine/Config.class` 却是坏字节**的 jar 时:旧版 `parseJarType` 只接住 `ZipException | ZipError`,而 `ClassReader` 对垃圾字节抛的是**未检查异常**,它一路穿透到标题界面,`switch (OptifineVersion.jarType)` 拿到 null ⇒ NPE —— 崩溃发生在**专门用来解释失败的那条路**上。两处改法:\n\n* `parseJarType` 把 `RuntimeException` 一并接住(读不懂的类文件与坏 zip 是同一类\"不可用的 jar\" ⇒ `JarType.CORRUPT_ZIP`,对话框照旧显示);\n* `MixinTitleScreen` 在 `jarType == null` 时落到 `INTERNAL_ERROR` 分支(复制堆栈/日志 + issues 链接)。同树的 `CrashReportMixin` 早有 null 守卫、`OptifinePrompt.gate()` 对 null 安全,这里是唯一漏掉的一处。\n\n**实测**:同一份坏 jar、同一个实例副本,分别用本提交与提交前构建的 jar 启动 —— 修复前有崩溃报告(`crash-2026-10-07_12.28.12-client.txt`)与两次 `NullPointerException`,进程自己退出;修复后**无崩溃报告、0 次 NPE**,客户端一直活到被测试脚手架主动停掉。那份崩溃报告同时证明错误当时**已经设置好**(进入 switch 前有 `if (!OptifabricError.hasError()) return;`),即对话框那条路确实被走到了。修复后**无法从日志证明对话框已显示**(`setError()` 只存不打印),如实写明。\n\n### 与其它分支同步的加固\n\n* `ChunkRendererFix`:先判参数个数再取最后一个参数(短参数表的调用以前会 `AIOOBE`);\n* `MethodComparison`:不认识的 `invokedynamic` bootstrap 记为\"不同\"而不是抛异常;LDC 的 sort switch 原先**无 default**、基本类型会穿透到 IINC 比较并强转(`ClassCastException`),改为统一按描述符比较;\n* `ClassCache`:文件声明的四个长度全部加上限,负数/超大值走\"空缓存\"(与其它损坏情形一致),不再抛 `NegativeArraySizeException`;\n* `OptifineSetup`:`LambdaRebuilder` 放进 `finally` 关闭(以前 transform 抛异常时原版 jar 与临时文件不释放);\n* `GAME_CLASSES`:改为**有界 LRU**(上限 512),而不是\"只 put 不清空\";\n* `LambdaRebuilder`:模糊配对只按**本类**回查(以前跨类套用同名同描述符的配对);\"已全部配上\"从 `return 0` 改成 `continue`;\n* `InjectionCallPointFix`:重建调用时按位置消费参数,并优先**照抄游戏自己那次调用的压栈指令**(以前同类型多形参会把同一个槽位用两次、静默传错值);\n* `ZipUtils.extract`:路径检查改成**无条件 + 带分隔符**(审查已把它降级为纵深防御 —— 唯一调用点在 `-Doptifabric.extract` 调试开关后面;仍然修了);\n* `release/publish.ps1`:`-DryRun` 打印前**脱敏令牌**,两条 curl 命令改成参数数组、不再用 `Invoke-Expression`。\n\n### 下载器(只影响 `-full` 构建;**本产物没有下载器**)\n\n`-full` 版本另外补了三处并做了**真实下载验证**:主机名精确比较(以前 `url.contains(\"optifine.net\")`,`https://evil.example/?optifine.net` 会被当成官方页去抓对方页面并从里面找下载链接;`https://optifine.net@evil.example/` 这类写法同样堵住)、**一律要求 https**、以及**下载后校验下来的确实是所要的那个构建**(读它自己 `Config.class` 的 `VERSION` / `MC_VERSION`,不匹配就删掉文件并报错)。官网那个下载链接是**相对路径**,解析后仍是 https,所以强制 https 不影响正常下载。**本产物(默认产物)不联网、不启动进程。**\n\n### 帧计算修正:公共父类型改为对称求解\n\n1.20.6 + OptiFine `J1_pre18` 曾**启动即崩**(`VerifyError: Bad return type` 于 `class_5944.method_35785`):字节码是正确的,但我们写出的 StackMapTable 帧把 `class_284` 与 `class_278` 的公共类型写成了 `java/lang/Object`,校验器于是拒绝加载该类。原实现只展开第一个参数的祖先、再沿第二个参数的 `superName` 走,而 ASM 的传参顺序是任意的 ⇒ \"接口在前\"时必然回落成 `Object`。现在两侧各自求闭包(自身 + 全部超类 + 全部接口)后取最近的公共类型,`allSupertypes` 也计入自身。\n\n**实测**:同一实例(含 Lithium 0.12.5)在修复前每次启动都产生崩溃报告;修复后 **0 份崩溃报告、0 次 VerifyError**,客户端一直存活到被测试脚手架停掉。附带确认:这个崩**与 Lithium 无关**(移出 Lithium 后同样崩)、**不是 1.1.5 的回归**(1.1.4 同样崩)、也**不是坏缓存**(删缓存重打同样崩)。\n\n\n> **本版仍不支持光影**:一旦选了光影包,启动阶段会崩在 OptiFine 自己的着色器代码里(正文里有那段栈)。不开光影可以正常游玩。\n\n\n## 2.2.10 的改动\n\n**一句话:** 2.2.8 / 2.2.9 把 sodium 写进 `breaks`,于是**整个实例被加载器拒绝**;本版把那条声明去掉,实例能起来、日志里只留一条警告,\n并修掉**重新归因那一轮证明属于我们这一侧的第一处失败**——而 sodium、iris、immediatelyfast 都不是单个坑,是**连着的坑**,\n本版只关掉了每一串的头几处。\n\n### sodium 不再是闸门\n\n`fabric.mod.json` 里从 2.2.8 起把 `sodium` **同时**写进了 `conflicts` 与 `breaks`。在 Fabric Loader 0.19.5 上这两者不是一回事:\n`conflicts` 只是 `Warnings were found!`(`ModSolver` 里那条 `// TODO: soft negative dep?` 至今没有约束),而 `breaks` 点到已存在的\n模组是 `NEG_HARD_DEP`,加载器**拒绝整个实例**。2.2.9 实测:\n\n```\n[main/INFO]: Immediate reason: [HARD_DEP chloride 1.8.1 {depends sodium @ [>=0.8.12]},\n    NEG_HARD_DEP optifabric_reforged 2.2.9+mc1.21.1 {breaks sodium @ [*]}, …]\n[main/ERROR]: Incompatible mods found!\n```\n\n代价是包里**其它所有模组**(chloride 这类 sodium 附属模组还会以 `HARD_DEP` 一起失败)。2.2.10 只保留 `conflicts`:\n实例能起来,日志里留一条警告。README 与 README_CN 里那张声明表、表上的摘要行与相关段落都已按实测改写,两次运行都引在正文里。\n\n### sodium **仍然是级联**:不要把这一版读成\"sodium 能用了\"\n\n\n..."
 		},
 		{
 			"tag": "v2.2.16+mc1.21.6",
@@ -1423,7 +1452,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.6-full.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.6/OptiFabric-2.2.16%2Bmc1.21.6-full.jar",
 					"size": 914921,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "28478054c84101587ef4a41e6f173bde0c73b059e2457ee921b099bcd76f2b2e",
 					"mods": [
@@ -1504,7 +1533,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.6.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.6/OptiFabric-2.2.16%2Bmc1.21.6.jar",
 					"size": 891922,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "525d8237d02420345ae9f45d3326a246fc6c392970012787ebd88167e447afcd",
 					"mods": [
@@ -1565,7 +1594,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# OptiFabric 2.2.16+mc1.21.6\n\n**Minecraft 1.21.6** / Fabric Loader 0.19.5 / Java 21+ / 需求 OptiFine `preview_OptiFine_1.21.6_HD_U_J6_pre3.jar`\n\n状态:**不开光影可正常启动(2026-09-13 实机确认);启用光影会在启动阶段崩溃 —— 该版 OptiFine 预览构建自身缺陷,本移植不提供光影支持(见文末\"已知限制\")**\n\n## 2.2.13 的改动\n\n**一句话:** 一份坏掉的 OptiFine jar 不再把**错误提示自己**打崩(实测:修复前产生崩溃报告与 `NullPointerException … jarType is null`,修复后无崩溃报告、无 NPE、进程存活);另有一轮来自代码审查的加固,九条分支同步。\n\n### 坏 jar 不再打崩错误路径\n\n`mods/` 里放一个**合法 zip、`net/optifine/Config.class` 却是坏字节**的 jar 时:旧版 `parseJarType` 只接住 `ZipException | ZipError`,而 `ClassReader` 对垃圾字节抛的是**未检查异常**,它一路穿透到标题界面,`switch (OptifineVersion.jarType)` 拿到 null ⇒ NPE —— 崩溃发生在**专门用来解释失败的那条路**上。两处改法:\n\n* `parseJarType` 把 `RuntimeException` 一并接住(读不懂的类文件与坏 zip 是同一类\"不可用的 jar\" ⇒ `JarType.CORRUPT_ZIP`,对话框照旧显示);\n* `MixinTitleScreen` 在 `jarType == null` 时落到 `INTERNAL_ERROR` 分支(复制堆栈/日志 + issues 链接)。同树的 `CrashReportMixin` 早有 null 守卫、`OptifinePrompt.gate()` 对 null 安全,这里是唯一漏掉的一处。\n\n**实测**:同一份坏 jar、同一个实例副本,分别用本提交与提交前构建的 jar 启动 —— 修复前有崩溃报告(`crash-2026-10-07_12.28.12-client.txt`)与两次 `NullPointerException`,进程自己退出;修复后**无崩溃报告、0 次 NPE**,客户端一直活到被测试脚手架主动停掉。那份崩溃报告同时证明错误当时**已经设置好**(进入 switch 前有 `if (!OptifabricError.hasError()) return;`),即对话框那条路确实被走到了。修复后**无法从日志证明对话框已显示**(`setError()` 只存不打印),如实写明。\n\n### 与其它分支同步的加固\n\n* `ChunkRendererFix`:先判参数个数再取最后一个参数(短参数表的调用以前会 `AIOOBE`);\n* `MethodComparison`:不认识的 `invokedynamic` bootstrap 记为\"不同\"而不是抛异常;LDC 的 sort switch 原先**无 default**、基本类型会穿透到 IINC 比较并强转(`ClassCastException`),改为统一按描述符比较;\n* `ClassCache`:文件声明的四个长度全部加上限,负数/超大值走\"空缓存\"(与其它损坏情形一致),不再抛 `NegativeArraySizeException`;\n* `OptifineSetup`:`LambdaRebuilder` 放进 `finally` 关闭(以前 transform 抛异常时原版 jar 与临时文件不释放);\n* `GAME_CLASSES`:改为**有界 LRU**(上限 512),而不是\"只 put 不清空\";\n* `LambdaRebuilder`:模糊配对只按**本类**回查(以前跨类套用同名同描述符的配对);\"已全部配上\"从 `return 0` 改成 `continue`;\n* `InjectionCallPointFix`:重建调用时按位置消费参数,并优先**照抄游戏自己那次调用的压栈指令**(以前同类型多形参会把同一个槽位用两次、静默传错值);\n* `ZipUtils.extract`:路径检查改成**无条件 + 带分隔符**(审查已把它降级为纵深防御 —— 唯一调用点在 `-Doptifabric.extract` 调试开关后面;仍然修了);\n* `release/publish.ps1`:`-DryRun` 打印前**脱敏令牌**,两条 curl 命令改成参数数组、不再用 `Invoke-Expression`。\n\n### 下载器(只影响 `-full` 构建;**本产物没有下载器**)\n\n`-full` 版本另外补了三处并做了**真实下载验证**:主机名精确比较(以前 `url.contains(\"optifine.net\")`,`https://evil.example/?optifine.net` 会被当成官方页去抓对方页面并从里面找下载链接;`https://optifine.net@evil.example/` 这类写法同样堵住)、**一律要求 https**、以及**下载后校验下来的确实是所要的那个构建**(读它自己 `Config.class` 的 `VERSION` / `MC_VERSION`,不匹配就删掉文件并报错)。官网那个下载链接是**相对路径**,解析后仍是 https,所以强制 https 不影响正常下载。**本产物(默认产物)不联网、不启动进程。**\n\n### 帧计算修正:公共父类型改为对称求解\n\n1.20.6 + OptiFine `J1_pre18` 曾**启动即崩**(`VerifyError: Bad return type` 于 `class_5944.method_35785`):字节码是正确的,但我们写出的 StackMapTable 帧把 `class_284` 与 `class_278` 的公共类型写成了 `java/lang/Object`,校验器于是拒绝加载该类。原实现只展开第一个参数的祖先、再沿第二个参数的 `superName` 走,而 ASM 的传参顺序是任意的 ⇒ \"接口在前\"时必然回落成 `Object`。现在两侧各自求闭包(自身 + 全部超类 + 全部接口)后取最近的公共类型,`allSupertypes` 也计入自身。\n\n**实测**:同一实例(含 Lithium 0.12.5)在修复前每次启动都产生崩溃报告;修复后 **0 份崩溃报告、0 次 VerifyError**,客户端一直存活到被测试脚手架停掉。附带确认:这个崩**与 Lithium 无关**(移出 Lithium 后同样崩)、**不是 1.1.5 的回归**(1.1.4 同样崩)、也**不是坏缓存**(删缓存重打同样崩)。\n\n\n> **本版仍不支持光影**:一旦选了光影包,启动阶段会崩在 OptiFine 自己的着色器代码里(正文里有那段栈)。不开光影可以正常游玩。\n\n\n## 2.2.10 的改动\n\n**一句话:** 2.2.8 / 2.2.9 把 sodium 写进 `breaks`,于是**整个实例被加载器拒绝**;本版把那条声明去掉,实例能起来、日志里只留一条警告,\n并修掉**重新归因那一轮证明属于我们这一侧的第一处失败**——而 sodium、iris、immediatelyfast 都不是单个坑,是**连着的坑**,\n本版只关掉了每一串的头几处。\n\n### sodium 不再是闸门\n\n`fabric.mod.json` 里从 2.2.8 起把 `sodium` **同时**写进了 `conflicts` 与 `breaks`。在 Fabric Loader 0.19.5 上这两者不是一回事:\n`conflicts` 只是 `Warnings were found!`(`ModSolver` 里那条 `// TODO: soft negative dep?` 至今没有约束),而 `breaks` 点到已存在的\n模组是 `NEG_HARD_DEP`,加载器**拒绝整个实例**。2.2.9 实测:\n\n```\n[main/INFO]: Immediate reason: [HARD_DEP chloride 1.8.1 {depends sodium @ [>=0.8.12]},\n    NEG_HARD_DEP optifabric_reforged 2.2.9+mc1.21.1 {breaks sodium @ [*]}, …]\n[main/ERROR]: Incompatible mods found!\n```\n\n代价是包里**其它所有模组**(chloride 这类 sodium 附属模组还会以 `HARD_DEP` 一起失败)。2.2.10 只保留 `conflicts`:\n实例能起来,日志里留一条警告。README 与 README_CN 里那张声明表、表上的摘要行与相关段落都已按实测改写,两次运行都引在正文里。\n\n### sodium **仍然是级联**:不要把这一版读成\"sodium 能用了\"\n\n\n..."
 		},
 		{
 			"tag": "v2.2.16+mc1.21.4",
@@ -1577,7 +1607,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.4-full.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.4/OptiFabric-2.2.16%2Bmc1.21.4-full.jar",
 					"size": 875154,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "7cc549e45692d90052747847bc8b47db76100efaa7e800bf54f37acd2f5778fd",
 					"mods": [
@@ -1658,7 +1688,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.4.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.4/OptiFabric-2.2.16%2Bmc1.21.4.jar",
 					"size": 852155,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "359316ba32a741815bb9c7531f199724d8a38aa9a42669adfe99274da1fed76e",
 					"mods": [
@@ -1719,7 +1749,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# OptiFabric 2.2.16+mc1.21.4\n\n**Minecraft 1.21.4** / Fabric Loader 0.19.5 / Java 21+ / 需求 OptiFine `OptiFine_1.21.4_HD_U_J3.jar`\n\n状态:**已实测正常(含抗锯齿)**\n\n## 2.2.13 的改动\n\n**一句话:** 一份坏掉的 OptiFine jar 不再把**错误提示自己**打崩(实测:修复前产生崩溃报告与 `NullPointerException … jarType is null`,修复后无崩溃报告、无 NPE、进程存活);另有一轮来自代码审查的加固,九条分支同步。\n\n### 坏 jar 不再打崩错误路径\n\n`mods/` 里放一个**合法 zip、`net/optifine/Config.class` 却是坏字节**的 jar 时:旧版 `parseJarType` 只接住 `ZipException | ZipError`,而 `ClassReader` 对垃圾字节抛的是**未检查异常**,它一路穿透到标题界面,`switch (OptifineVersion.jarType)` 拿到 null ⇒ NPE —— 崩溃发生在**专门用来解释失败的那条路**上。两处改法:\n\n* `parseJarType` 把 `RuntimeException` 一并接住(读不懂的类文件与坏 zip 是同一类\"不可用的 jar\" ⇒ `JarType.CORRUPT_ZIP`,对话框照旧显示);\n* `MixinTitleScreen` 在 `jarType == null` 时落到 `INTERNAL_ERROR` 分支(复制堆栈/日志 + issues 链接)。同树的 `CrashReportMixin` 早有 null 守卫、`OptifinePrompt.gate()` 对 null 安全,这里是唯一漏掉的一处。\n\n**实测**:同一份坏 jar、同一个实例副本,分别用本提交与提交前构建的 jar 启动 —— 修复前有崩溃报告(`crash-2026-10-07_12.28.12-client.txt`)与两次 `NullPointerException`,进程自己退出;修复后**无崩溃报告、0 次 NPE**,客户端一直活到被测试脚手架主动停掉。那份崩溃报告同时证明错误当时**已经设置好**(进入 switch 前有 `if (!OptifabricError.hasError()) return;`),即对话框那条路确实被走到了。修复后**无法从日志证明对话框已显示**(`setError()` 只存不打印),如实写明。\n\n### 与其它分支同步的加固\n\n* `ChunkRendererFix`:先判参数个数再取最后一个参数(短参数表的调用以前会 `AIOOBE`);\n* `MethodComparison`:不认识的 `invokedynamic` bootstrap 记为\"不同\"而不是抛异常;LDC 的 sort switch 原先**无 default**、基本类型会穿透到 IINC 比较并强转(`ClassCastException`),改为统一按描述符比较;\n* `ClassCache`:文件声明的四个长度全部加上限,负数/超大值走\"空缓存\"(与其它损坏情形一致),不再抛 `NegativeArraySizeException`;\n* `OptifineSetup`:`LambdaRebuilder` 放进 `finally` 关闭(以前 transform 抛异常时原版 jar 与临时文件不释放);\n* `GAME_CLASSES`:改为**有界 LRU**(上限 512),而不是\"只 put 不清空\";\n* `LambdaRebuilder`:模糊配对只按**本类**回查(以前跨类套用同名同描述符的配对);\"已全部配上\"从 `return 0` 改成 `continue`;\n* `InjectionCallPointFix`:重建调用时按位置消费参数,并优先**照抄游戏自己那次调用的压栈指令**(以前同类型多形参会把同一个槽位用两次、静默传错值);\n* `ZipUtils.extract`:路径检查改成**无条件 + 带分隔符**(审查已把它降级为纵深防御 —— 唯一调用点在 `-Doptifabric.extract` 调试开关后面;仍然修了);\n* `release/publish.ps1`:`-DryRun` 打印前**脱敏令牌**,两条 curl 命令改成参数数组、不再用 `Invoke-Expression`。\n\n### 下载器(只影响 `-full` 构建;**本产物没有下载器**)\n\n`-full` 版本另外补了三处并做了**真实下载验证**:主机名精确比较(以前 `url.contains(\"optifine.net\")`,`https://evil.example/?optifine.net` 会被当成官方页去抓对方页面并从里面找下载链接;`https://optifine.net@evil.example/` 这类写法同样堵住)、**一律要求 https**、以及**下载后校验下来的确实是所要的那个构建**(读它自己 `Config.class` 的 `VERSION` / `MC_VERSION`,不匹配就删掉文件并报错)。官网那个下载链接是**相对路径**,解析后仍是 https,所以强制 https 不影响正常下载。**本产物(默认产物)不联网、不启动进程。**\n\n### 帧计算修正:公共父类型改为对称求解\n\n1.20.6 + OptiFine `J1_pre18` 曾**启动即崩**(`VerifyError: Bad return type` 于 `class_5944.method_35785`):字节码是正确的,但我们写出的 StackMapTable 帧把 `class_284` 与 `class_278` 的公共类型写成了 `java/lang/Object`,校验器于是拒绝加载该类。原实现只展开第一个参数的祖先、再沿第二个参数的 `superName` 走,而 ASM 的传参顺序是任意的 ⇒ \"接口在前\"时必然回落成 `Object`。现在两侧各自求闭包(自身 + 全部超类 + 全部接口)后取最近的公共类型,`allSupertypes` 也计入自身。\n\n**实测**:同一实例(含 Lithium 0.12.5)在修复前每次启动都产生崩溃报告;修复后 **0 份崩溃报告、0 次 VerifyError**,客户端一直存活到被测试脚手架停掉。附带确认:这个崩**与 Lithium 无关**(移出 Lithium 后同样崩)、**不是 1.1.5 的回归**(1.1.4 同样崩)、也**不是坏缓存**(删缓存重打同样崩)。\n\n\n\n## 2.2.10 的改动\n\n**一句话:** 2.2.8 / 2.2.9 把 sodium 写进 `breaks`,于是**整个实例被加载器拒绝**;本版把那条声明去掉,实例能起来、日志里只留一条警告,\n并修掉**重新归因那一轮证明属于我们这一侧的第一处失败**——而 sodium、iris、immediatelyfast 都不是单个坑,是**连着的坑**,\n本版只关掉了每一串的头几处。\n\n### sodium 不再是闸门\n\n`fabric.mod.json` 里从 2.2.8 起把 `sodium` **同时**写进了 `conflicts` 与 `breaks`。在 Fabric Loader 0.19.5 上这两者不是一回事:\n`conflicts` 只是 `Warnings were found!`(`ModSolver` 里那条 `// TODO: soft negative dep?` 至今没有约束),而 `breaks` 点到已存在的\n模组是 `NEG_HARD_DEP`,加载器**拒绝整个实例**。2.2.9 实测:\n\n```\n[main/INFO]: Immediate reason: [HARD_DEP chloride 1.8.1 {depends sodium @ [>=0.8.12]},\n    NEG_HARD_DEP optifabric_reforged 2.2.9+mc1.21.1 {breaks sodium @ [*]}, …]\n[main/ERROR]: Incompatible mods found!\n```\n\n代价是包里**其它所有模组**(chloride 这类 sodium 附属模组还会以 `HARD_DEP` 一起失败)。2.2.10 只保留 `conflicts`:\n实例能起来,日志里留一条警告。README 与 README_CN 里那张声明表、表上的摘要行与相关段落都已按实测改写,两次运行都引在正文里。\n\n### sodium **仍然是级联**:不要把这一版读成\"sodium 能用了\"\n\n两个调用点都修好了,而且都先在**私有 `.optifine` 缓存副本**上用 fixer 类本身验过才提交:\n\n* `class_761.method_22714` 丢了 `class_310.method_1517()Z`(OptiFine 换成了自己的 `Config.isRainFancy()Z`,一个**无参**静态取值器):\n\n..."
 		},
 		{
 			"tag": "v2.2.16+mc1.21.3",
@@ -1731,7 +1762,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.3-full.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.3/OptiFabric-2.2.16%2Bmc1.21.3-full.jar",
 					"size": 867370,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "b9e91c379df16f05a97cd40caf664fcfadf650b5d83ea6b22fe458f59ed99145",
 					"mods": [
@@ -1812,7 +1843,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.3.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.3/OptiFabric-2.2.16%2Bmc1.21.3.jar",
 					"size": 844371,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "36395fee21b073d3a309a77c09c86a46663ba4567bc42680d780f70ee79ee53e",
 					"mods": [
@@ -1873,7 +1904,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# OptiFabric 2.2.16+mc1.21.3\n\n**Minecraft 1.21.3** / Fabric Loader 0.19.5 / Java 21+ / 需求 OptiFine `OptiFine_1.21.3_HD_U_J2.jar`\n\n状态:**已实测正常(含抗锯齿)**\n\n## 2.2.13 的改动\n\n**一句话:** 一份坏掉的 OptiFine jar 不再把**错误提示自己**打崩(实测:修复前产生崩溃报告与 `NullPointerException … jarType is null`,修复后无崩溃报告、无 NPE、进程存活);另有一轮来自代码审查的加固,九条分支同步。\n\n### 坏 jar 不再打崩错误路径\n\n`mods/` 里放一个**合法 zip、`net/optifine/Config.class` 却是坏字节**的 jar 时:旧版 `parseJarType` 只接住 `ZipException | ZipError`,而 `ClassReader` 对垃圾字节抛的是**未检查异常**,它一路穿透到标题界面,`switch (OptifineVersion.jarType)` 拿到 null ⇒ NPE —— 崩溃发生在**专门用来解释失败的那条路**上。两处改法:\n\n* `parseJarType` 把 `RuntimeException` 一并接住(读不懂的类文件与坏 zip 是同一类\"不可用的 jar\" ⇒ `JarType.CORRUPT_ZIP`,对话框照旧显示);\n* `MixinTitleScreen` 在 `jarType == null` 时落到 `INTERNAL_ERROR` 分支(复制堆栈/日志 + issues 链接)。同树的 `CrashReportMixin` 早有 null 守卫、`OptifinePrompt.gate()` 对 null 安全,这里是唯一漏掉的一处。\n\n**实测**:同一份坏 jar、同一个实例副本,分别用本提交与提交前构建的 jar 启动 —— 修复前有崩溃报告(`crash-2026-10-07_12.28.12-client.txt`)与两次 `NullPointerException`,进程自己退出;修复后**无崩溃报告、0 次 NPE**,客户端一直活到被测试脚手架主动停掉。那份崩溃报告同时证明错误当时**已经设置好**(进入 switch 前有 `if (!OptifabricError.hasError()) return;`),即对话框那条路确实被走到了。修复后**无法从日志证明对话框已显示**(`setError()` 只存不打印),如实写明。\n\n### 与其它分支同步的加固\n\n* `ChunkRendererFix`:先判参数个数再取最后一个参数(短参数表的调用以前会 `AIOOBE`);\n* `MethodComparison`:不认识的 `invokedynamic` bootstrap 记为\"不同\"而不是抛异常;LDC 的 sort switch 原先**无 default**、基本类型会穿透到 IINC 比较并强转(`ClassCastException`),改为统一按描述符比较;\n* `ClassCache`:文件声明的四个长度全部加上限,负数/超大值走\"空缓存\"(与其它损坏情形一致),不再抛 `NegativeArraySizeException`;\n* `OptifineSetup`:`LambdaRebuilder` 放进 `finally` 关闭(以前 transform 抛异常时原版 jar 与临时文件不释放);\n* `GAME_CLASSES`:改为**有界 LRU**(上限 512),而不是\"只 put 不清空\";\n* `LambdaRebuilder`:模糊配对只按**本类**回查(以前跨类套用同名同描述符的配对);\"已全部配上\"从 `return 0` 改成 `continue`;\n* `InjectionCallPointFix`:重建调用时按位置消费参数,并优先**照抄游戏自己那次调用的压栈指令**(以前同类型多形参会把同一个槽位用两次、静默传错值);\n* `ZipUtils.extract`:路径检查改成**无条件 + 带分隔符**(审查已把它降级为纵深防御 —— 唯一调用点在 `-Doptifabric.extract` 调试开关后面;仍然修了);\n* `release/publish.ps1`:`-DryRun` 打印前**脱敏令牌**,两条 curl 命令改成参数数组、不再用 `Invoke-Expression`。\n\n### 下载器(只影响 `-full` 构建;**本产物没有下载器**)\n\n`-full` 版本另外补了三处并做了**真实下载验证**:主机名精确比较(以前 `url.contains(\"optifine.net\")`,`https://evil.example/?optifine.net` 会被当成官方页去抓对方页面并从里面找下载链接;`https://optifine.net@evil.example/` 这类写法同样堵住)、**一律要求 https**、以及**下载后校验下来的确实是所要的那个构建**(读它自己 `Config.class` 的 `VERSION` / `MC_VERSION`,不匹配就删掉文件并报错)。官网那个下载链接是**相对路径**,解析后仍是 https,所以强制 https 不影响正常下载。**本产物(默认产物)不联网、不启动进程。**\n\n### 帧计算修正:公共父类型改为对称求解\n\n1.20.6 + OptiFine `J1_pre18` 曾**启动即崩**(`VerifyError: Bad return type` 于 `class_5944.method_35785`):字节码是正确的,但我们写出的 StackMapTable 帧把 `class_284` 与 `class_278` 的公共类型写成了 `java/lang/Object`,校验器于是拒绝加载该类。原实现只展开第一个参数的祖先、再沿第二个参数的 `superName` 走,而 ASM 的传参顺序是任意的 ⇒ \"接口在前\"时必然回落成 `Object`。现在两侧各自求闭包(自身 + 全部超类 + 全部接口)后取最近的公共类型,`allSupertypes` 也计入自身。\n\n**实测**:同一实例(含 Lithium 0.12.5)在修复前每次启动都产生崩溃报告;修复后 **0 份崩溃报告、0 次 VerifyError**,客户端一直存活到被测试脚手架停掉。附带确认:这个崩**与 Lithium 无关**(移出 Lithium 后同样崩)、**不是 1.1.5 的回归**(1.1.4 同样崩)、也**不是坏缓存**(删缓存重打同样崩)。\n\n\n\n## 2.2.10 的改动\n\n**一句话:** 2.2.8 / 2.2.9 把 sodium 写进 `breaks`,于是**整个实例被加载器拒绝**;本版把那条声明去掉,实例能起来、日志里只留一条警告,\n并修掉**重新归因那一轮证明属于我们这一侧的第一处失败**——而 sodium、iris、immediatelyfast 都不是单个坑,是**连着的坑**,\n本版只关掉了每一串的头几处。\n\n### sodium 不再是闸门\n\n`fabric.mod.json` 里从 2.2.8 起把 `sodium` **同时**写进了 `conflicts` 与 `breaks`。在 Fabric Loader 0.19.5 上这两者不是一回事:\n`conflicts` 只是 `Warnings were found!`(`ModSolver` 里那条 `// TODO: soft negative dep?` 至今没有约束),而 `breaks` 点到已存在的\n模组是 `NEG_HARD_DEP`,加载器**拒绝整个实例**。2.2.9 实测:\n\n```\n[main/INFO]: Immediate reason: [HARD_DEP chloride 1.8.1 {depends sodium @ [>=0.8.12]},\n    NEG_HARD_DEP optifabric_reforged 2.2.9+mc1.21.1 {breaks sodium @ [*]}, …]\n[main/ERROR]: Incompatible mods found!\n```\n\n代价是包里**其它所有模组**(chloride 这类 sodium 附属模组还会以 `HARD_DEP` 一起失败)。2.2.10 只保留 `conflicts`:\n实例能起来,日志里留一条警告。README 与 README_CN 里那张声明表、表上的摘要行与相关段落都已按实测改写,两次运行都引在正文里。\n\n### sodium **仍然是级联**:不要把这一版读成\"sodium 能用了\"\n\n两个调用点都修好了,而且都先在**私有 `.optifine` 缓存副本**上用 fixer 类本身验过才提交:\n\n* `class_761.method_22714` 丢了 `class_310.method_1517()Z`(OptiFine 换成了自己的 `Config.isRainFancy()Z`,一个**无参**静态取值器):\n\n..."
 		},
 		{
 			"tag": "v2.2.16+mc1.21.1",
@@ -1885,7 +1917,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.1-full.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.1/OptiFabric-2.2.16%2Bmc1.21.1-full.jar",
 					"size": 835587,
-					"downloads": 1,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "d47bbf6e19ad2796e0c5db52a8b0fc72e95f9ee919f317648f84e68bd1102097",
 					"mods": [
@@ -1966,7 +1998,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.1.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21.1/OptiFabric-2.2.16%2Bmc1.21.1.jar",
 					"size": 812587,
-					"downloads": 0,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "97bc58645bcc841e5cbfad0d33a45700091394793295a5870f2dffeb408b893d",
 					"mods": [
@@ -2027,7 +2059,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# OptiFabric 2.2.16+mc1.21.1\n\n**Minecraft 1.21.1** / Fabric Loader 0.19.5 / Java 21+ / 需求 OptiFine `OptiFine_1.21.1_HD_U_J1.jar`\n\n状态:**已实测正常**\n\n## 2.2.13 的改动\n\n**一句话:** 一份坏掉的 OptiFine jar 不再把**错误提示自己**打崩(实测:修复前产生崩溃报告与 `NullPointerException … jarType is null`,修复后无崩溃报告、无 NPE、进程存活);另有一轮来自代码审查的加固,九条分支同步。\n\n### 坏 jar 不再打崩错误路径\n\n`mods/` 里放一个**合法 zip、`net/optifine/Config.class` 却是坏字节**的 jar 时:旧版 `parseJarType` 只接住 `ZipException | ZipError`,而 `ClassReader` 对垃圾字节抛的是**未检查异常**,它一路穿透到标题界面,`switch (OptifineVersion.jarType)` 拿到 null ⇒ NPE —— 崩溃发生在**专门用来解释失败的那条路**上。两处改法:\n\n* `parseJarType` 把 `RuntimeException` 一并接住(读不懂的类文件与坏 zip 是同一类\"不可用的 jar\" ⇒ `JarType.CORRUPT_ZIP`,对话框照旧显示);\n* `MixinTitleScreen` 在 `jarType == null` 时落到 `INTERNAL_ERROR` 分支(复制堆栈/日志 + issues 链接)。同树的 `CrashReportMixin` 早有 null 守卫、`OptifinePrompt.gate()` 对 null 安全,这里是唯一漏掉的一处。\n\n**实测**:同一份坏 jar、同一个实例副本,分别用本提交与提交前构建的 jar 启动 —— 修复前有崩溃报告(`crash-2026-10-07_12.28.12-client.txt`)与两次 `NullPointerException`,进程自己退出;修复后**无崩溃报告、0 次 NPE**,客户端一直活到被测试脚手架主动停掉。那份崩溃报告同时证明错误当时**已经设置好**(进入 switch 前有 `if (!OptifabricError.hasError()) return;`),即对话框那条路确实被走到了。修复后**无法从日志证明对话框已显示**(`setError()` 只存不打印),如实写明。\n\n### 与其它分支同步的加固\n\n* `ChunkRendererFix`:先判参数个数再取最后一个参数(短参数表的调用以前会 `AIOOBE`);\n* `MethodComparison`:不认识的 `invokedynamic` bootstrap 记为\"不同\"而不是抛异常;LDC 的 sort switch 原先**无 default**、基本类型会穿透到 IINC 比较并强转(`ClassCastException`),改为统一按描述符比较;\n* `ClassCache`:文件声明的四个长度全部加上限,负数/超大值走\"空缓存\"(与其它损坏情形一致),不再抛 `NegativeArraySizeException`;\n* `OptifineSetup`:`LambdaRebuilder` 放进 `finally` 关闭(以前 transform 抛异常时原版 jar 与临时文件不释放);\n* `GAME_CLASSES`:改为**有界 LRU**(上限 512),而不是\"只 put 不清空\";\n* `LambdaRebuilder`:模糊配对只按**本类**回查(以前跨类套用同名同描述符的配对);\"已全部配上\"从 `return 0` 改成 `continue`;\n* `InjectionCallPointFix`:重建调用时按位置消费参数,并优先**照抄游戏自己那次调用的压栈指令**(以前同类型多形参会把同一个槽位用两次、静默传错值);\n* `ZipUtils.extract`:路径检查改成**无条件 + 带分隔符**(审查已把它降级为纵深防御 —— 唯一调用点在 `-Doptifabric.extract` 调试开关后面;仍然修了);\n* `release/publish.ps1`:`-DryRun` 打印前**脱敏令牌**,两条 curl 命令改成参数数组、不再用 `Invoke-Expression`。\n\n### 下载器(只影响 `-full` 构建;**本产物没有下载器**)\n\n`-full` 版本另外补了三处并做了**真实下载验证**:主机名精确比较(以前 `url.contains(\"optifine.net\")`,`https://evil.example/?optifine.net` 会被当成官方页去抓对方页面并从里面找下载链接;`https://optifine.net@evil.example/` 这类写法同样堵住)、**一律要求 https**、以及**下载后校验下来的确实是所要的那个构建**(读它自己 `Config.class` 的 `VERSION` / `MC_VERSION`,不匹配就删掉文件并报错)。官网那个下载链接是**相对路径**,解析后仍是 https,所以强制 https 不影响正常下载。**本产物(默认产物)不联网、不启动进程。**\n\n### 帧计算修正:公共父类型改为对称求解\n\n1.20.6 + OptiFine `J1_pre18` 曾**启动即崩**(`VerifyError: Bad return type` 于 `class_5944.method_35785`):字节码是正确的,但我们写出的 StackMapTable 帧把 `class_284` 与 `class_278` 的公共类型写成了 `java/lang/Object`,校验器于是拒绝加载该类。原实现只展开第一个参数的祖先、再沿第二个参数的 `superName` 走,而 ASM 的传参顺序是任意的 ⇒ \"接口在前\"时必然回落成 `Object`。现在两侧各自求闭包(自身 + 全部超类 + 全部接口)后取最近的公共类型,`allSupertypes` 也计入自身。\n\n**实测**:同一实例(含 Lithium 0.12.5)在修复前每次启动都产生崩溃报告;修复后 **0 份崩溃报告、0 次 VerifyError**,客户端一直存活到被测试脚手架停掉。附带确认:这个崩**与 Lithium 无关**(移出 Lithium 后同样崩)、**不是 1.1.5 的回归**(1.1.4 同样崩)、也**不是坏缓存**(删缓存重打同样崩)。\n\n\n\n## 2.2.10 的改动\n\n**一句话:** 2.2.8 / 2.2.9 把 sodium 写进 `breaks`,于是**整个实例被加载器拒绝**;本版把那条声明去掉,实例能起来、日志里只留一条警告,\n并修掉**重新归因那一轮证明属于我们这一侧的第一处失败**——而 sodium、iris、immediatelyfast 都不是单个坑,是**连着的坑**,\n本版只关掉了每一串的头几处。\n\n### sodium 不再是闸门\n\n`fabric.mod.json` 里从 2.2.8 起把 `sodium` **同时**写进了 `conflicts` 与 `breaks`。在 Fabric Loader 0.19.5 上这两者不是一回事:\n`conflicts` 只是 `Warnings were found!`(`ModSolver` 里那条 `// TODO: soft negative dep?` 至今没有约束),而 `breaks` 点到已存在的\n模组是 `NEG_HARD_DEP`,加载器**拒绝整个实例**。2.2.9 实测:\n\n```\n[main/INFO]: Immediate reason: [HARD_DEP chloride 1.8.1 {depends sodium @ [>=0.8.12]},\n    NEG_HARD_DEP optifabric_reforged 2.2.9+mc1.21.1 {breaks sodium @ [*]}, …]\n[main/ERROR]: Incompatible mods found!\n```\n\n代价是包里**其它所有模组**(chloride 这类 sodium 附属模组还会以 `HARD_DEP` 一起失败)。2.2.10 只保留 `conflicts`:\n实例能起来,日志里留一条警告。README 与 README_CN 里那张声明表、表上的摘要行与相关段落都已按实测改写,两次运行都引在正文里。\n\n### sodium **仍然是级联**:不要把这一版读成\"sodium 能用了\"\n\n两个调用点都修好了,而且都先在**私有 `.optifine` 缓存副本**上用 fixer 类本身验过才提交:\n\n* `class_761.method_22714` 丢了 `class_310.method_1517()Z`(OptiFine 换成了自己的 `Config.isRainFancy()Z`,一个**无参**静态取值器):\n\n..."
 		},
 		{
 			"tag": "v2.2.16+mc1.21",
@@ -2039,7 +2072,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21-full.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21/OptiFabric-2.2.16%2Bmc1.21-full.jar",
 					"size": 835510,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "58df48628dddfeb36a52f2fdea768461c6ddda17e0d9bbd51f6adae6ff3bf1d3",
 					"mods": [
@@ -2120,7 +2153,7 @@
 					"name": "OptiFabric-2.2.16+mc1.21.jar",
 					"url": "https://github.com/Kynarain/OptiFabric-Reforged/releases/download/v2.2.16%2Bmc1.21/OptiFabric-2.2.16%2Bmc1.21.jar",
 					"size": 812510,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "3ab715d56efc2d3a474f102f4eb735da1768e8fe8c8f582996434be0177eb309",
 					"mods": [
@@ -2181,11 +2214,14 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# OptiFabric 2.2.16+mc1.21\n\n**Minecraft 1.21** / Fabric Loader 0.19.5 / Java 21+ / 需求 OptiFine `preview_OptiFine_1.21_HD_U_J1_pre9.jar`\n\n状态:**已实测正常**\n\n## 2.2.13 的改动\n\n**一句话:** 一份坏掉的 OptiFine jar 不再把**错误提示自己**打崩(实测:修复前产生崩溃报告与 `NullPointerException … jarType is null`,修复后无崩溃报告、无 NPE、进程存活);另有一轮来自代码审查的加固,九条分支同步。\n\n### 坏 jar 不再打崩错误路径\n\n`mods/` 里放一个**合法 zip、`net/optifine/Config.class` 却是坏字节**的 jar 时:旧版 `parseJarType` 只接住 `ZipException | ZipError`,而 `ClassReader` 对垃圾字节抛的是**未检查异常**,它一路穿透到标题界面,`switch (OptifineVersion.jarType)` 拿到 null ⇒ NPE —— 崩溃发生在**专门用来解释失败的那条路**上。两处改法:\n\n* `parseJarType` 把 `RuntimeException` 一并接住(读不懂的类文件与坏 zip 是同一类\"不可用的 jar\" ⇒ `JarType.CORRUPT_ZIP`,对话框照旧显示);\n* `MixinTitleScreen` 在 `jarType == null` 时落到 `INTERNAL_ERROR` 分支(复制堆栈/日志 + issues 链接)。同树的 `CrashReportMixin` 早有 null 守卫、`OptifinePrompt.gate()` 对 null 安全,这里是唯一漏掉的一处。\n\n**实测**:同一份坏 jar、同一个实例副本,分别用本提交与提交前构建的 jar 启动 —— 修复前有崩溃报告(`crash-2026-10-07_12.28.12-client.txt`)与两次 `NullPointerException`,进程自己退出;修复后**无崩溃报告、0 次 NPE**,客户端一直活到被测试脚手架主动停掉。那份崩溃报告同时证明错误当时**已经设置好**(进入 switch 前有 `if (!OptifabricError.hasError()) return;`),即对话框那条路确实被走到了。修复后**无法从日志证明对话框已显示**(`setError()` 只存不打印),如实写明。\n\n### 与其它分支同步的加固\n\n* `ChunkRendererFix`:先判参数个数再取最后一个参数(短参数表的调用以前会 `AIOOBE`);\n* `MethodComparison`:不认识的 `invokedynamic` bootstrap 记为\"不同\"而不是抛异常;LDC 的 sort switch 原先**无 default**、基本类型会穿透到 IINC 比较并强转(`ClassCastException`),改为统一按描述符比较;\n* `ClassCache`:文件声明的四个长度全部加上限,负数/超大值走\"空缓存\"(与其它损坏情形一致),不再抛 `NegativeArraySizeException`;\n* `OptifineSetup`:`LambdaRebuilder` 放进 `finally` 关闭(以前 transform 抛异常时原版 jar 与临时文件不释放);\n* `GAME_CLASSES`:改为**有界 LRU**(上限 512),而不是\"只 put 不清空\";\n* `LambdaRebuilder`:模糊配对只按**本类**回查(以前跨类套用同名同描述符的配对);\"已全部配上\"从 `return 0` 改成 `continue`;\n* `InjectionCallPointFix`:重建调用时按位置消费参数,并优先**照抄游戏自己那次调用的压栈指令**(以前同类型多形参会把同一个槽位用两次、静默传错值);\n* `ZipUtils.extract`:路径检查改成**无条件 + 带分隔符**(审查已把它降级为纵深防御 —— 唯一调用点在 `-Doptifabric.extract` 调试开关后面;仍然修了);\n* `release/publish.ps1`:`-DryRun` 打印前**脱敏令牌**,两条 curl 命令改成参数数组、不再用 `Invoke-Expression`。\n\n### 下载器(只影响 `-full` 构建;**本产物没有下载器**)\n\n`-full` 版本另外补了三处并做了**真实下载验证**:主机名精确比较(以前 `url.contains(\"optifine.net\")`,`https://evil.example/?optifine.net` 会被当成官方页去抓对方页面并从里面找下载链接;`https://optifine.net@evil.example/` 这类写法同样堵住)、**一律要求 https**、以及**下载后校验下来的确实是所要的那个构建**(读它自己 `Config.class` 的 `VERSION` / `MC_VERSION`,不匹配就删掉文件并报错)。官网那个下载链接是**相对路径**,解析后仍是 https,所以强制 https 不影响正常下载。**本产物(默认产物)不联网、不启动进程。**\n\n### 帧计算修正:公共父类型改为对称求解\n\n1.20.6 + OptiFine `J1_pre18` 曾**启动即崩**(`VerifyError: Bad return type` 于 `class_5944.method_35785`):字节码是正确的,但我们写出的 StackMapTable 帧把 `class_284` 与 `class_278` 的公共类型写成了 `java/lang/Object`,校验器于是拒绝加载该类。原实现只展开第一个参数的祖先、再沿第二个参数的 `superName` 走,而 ASM 的传参顺序是任意的 ⇒ \"接口在前\"时必然回落成 `Object`。现在两侧各自求闭包(自身 + 全部超类 + 全部接口)后取最近的公共类型,`allSupertypes` 也计入自身。\n\n**实测**:同一实例(含 Lithium 0.12.5)在修复前每次启动都产生崩溃报告;修复后 **0 份崩溃报告、0 次 VerifyError**,客户端一直存活到被测试脚手架停掉。附带确认:这个崩**与 Lithium 无关**(移出 Lithium 后同样崩)、**不是 1.1.5 的回归**(1.1.4 同样崩)、也**不是坏缓存**(删缓存重打同样崩)。\n\n\n\n## 2.2.10 的改动\n\n**一句话:** 2.2.8 / 2.2.9 把 sodium 写进 `breaks`,于是**整个实例被加载器拒绝**;本版把那条声明去掉,实例能起来、日志里只留一条警告,\n并修掉**重新归因那一轮证明属于我们这一侧的第一处失败**——而 sodium、iris、immediatelyfast 都不是单个坑,是**连着的坑**,\n本版只关掉了每一串的头几处。\n\n### sodium 不再是闸门\n\n`fabric.mod.json` 里从 2.2.8 起把 `sodium` **同时**写进了 `conflicts` 与 `breaks`。在 Fabric Loader 0.19.5 上这两者不是一回事:\n`conflicts` 只是 `Warnings were found!`(`ModSolver` 里那条 `// TODO: soft negative dep?` 至今没有约束),而 `breaks` 点到已存在的\n模组是 `NEG_HARD_DEP`,加载器**拒绝整个实例**。2.2.9 实测:\n\n```\n[main/INFO]: Immediate reason: [HARD_DEP chloride 1.8.1 {depends sodium @ [>=0.8.12]},\n    NEG_HARD_DEP optifabric_reforged 2.2.9+mc1.21.1 {breaks sodium @ [*]}, …]\n[main/ERROR]: Incompatible mods found!\n```\n\n代价是包里**其它所有模组**(chloride 这类 sodium 附属模组还会以 `HARD_DEP` 一起失败)。2.2.10 只保留 `conflicts`:\n实例能起来,日志里留一条警告。README 与 README_CN 里那张声明表、表上的摘要行与相关段落都已按实测改写,两次运行都引在正文里。\n\n### sodium **仍然是级联**:不要把这一版读成\"sodium 能用了\"\n\n两个调用点都修好了,而且都先在**私有 `.optifine` 缓存副本**上用 fixer 类本身验过才提交:\n\n* `class_761.method_22714` 丢了 `class_310.method_1517()Z`(OptiFine 换成了自己的 `Config.isRainFancy()Z`,一个**无参**静态取值器):\n\n..."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

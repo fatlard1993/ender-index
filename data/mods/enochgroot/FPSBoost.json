@@ -43,7 +43,7 @@
 						"unreadable": []
 					},
 					"icon": null,
-					"downloads": 9,
+					"downloads": 10,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -51,7 +51,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "## VulkanMod Compatibility\n\nFPSBoost now auto-detects VulkanMod at startup.\n\n**With Vulkan:**\n- Sky/weather/cloud skip → disabled (VulkanMod owns those render passes)\n- Light texture throttle → disabled (Vulkan manages GPU uploads)\n- Config screen shows **Vulkan Mode** indicator\n- Entity culling, LOD, shadow skip, nametag skip, particle cap, block entity culling → **all still active**\n\n**Without Vulkan:** everything runs as normal.\n\nK = menu, J = toggle all on/off"
 		},
 		{
 			"tag": "v5.0.4",
@@ -90,7 +91,8 @@
 					},
 					"downloads": 4
 				}
-			]
+			],
+			"notes": "Added **J key** to instantly disable/re-enable all optimizations at once.\n\nShows green `FPSBoost ON` or red `FPSBoost OFF` above your hotbar when pressed.\n\nK = menu, J = toggle. Both rebindable in Options > Controls > Miscellaneous."
 		},
 		{
 			"tag": "v5.0.3",
@@ -129,7 +131,8 @@
 					},
 					"downloads": 8
 				}
-			]
+			],
+			"notes": "**Root cause found from crash log:**\n`java.lang.IllegalStateException: Can only blur once per frame`\n\nIn MC 1.21.11 the screen rendering framework automatically calls `renderBackground()` before your `render()` method. Calling it again inside `render()` triggered a double-blur and crashed.\n\n**Fix:** Removed the `renderBackground()` call from our render override. One line.\n\nAll v5 optimizations are back. Press K to open config (2 pages, MAX FPS PRESET on page 2)."
 		},
 		{
 			"tag": "v5.0.2-diag",
@@ -168,7 +171,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "**DIAGNOSTIC BUILD — zero mixins, minimal screen.**\n\nIf K opens a screen that says 'If you see this it works!' then the crash is from a mixin, not the screen.\n\nIf this also crashes, please share the crash report from `.minecraft/crash-reports/` — paste the contents."
 		},
 		{
 			"tag": "v5.0.1",
@@ -207,11 +211,14 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "**Fixed menu crash.** Completely rewrote screen — no helper methods, no functional interfaces, just plain Button.builder calls. Split into 2 pages so it never overflows small screens.\n\nAll v5 features kept. MAX FPS PRESET on page 2."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

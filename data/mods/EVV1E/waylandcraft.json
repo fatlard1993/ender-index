@@ -2,7 +2,7 @@
 	"repo": "EVV1E/waylandcraft",
 	"host": "github",
 	"description": "Wayland Compositor in Minecraft",
-	"stars": 2984,
+	"stars": 2987,
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2025-09-27T16:07:59Z",
@@ -59,7 +59,7 @@
 						"unreadable": []
 					},
 					"icon": "9ce6b320103d47f21f957928b3fa00aee9a7369c6eba76f18f376d5b67a92a07.png",
-					"downloads": 469,
+					"downloads": 485,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -67,7 +67,8 @@
 						"shaders": true
 					}
 				}
-			]
+			],
+			"notes": "This release contains a bunch of backend code changes and some much requested features.\n\n## Detached cursor capture mode\nThe settings now have an option called \"Detach cursor\" which makes it such that when\nyou are in keyboard capture mode and hover over a window, your mouse cursor now detaches and you can move it over the window like in a normal desktop environment instead of it still turning your camera around in game. This is useful for a lot of FPS games that frequently lock and unlock the mouse.\n\n## Single-axis window grabbing\nWhen moving a window around by grabbing its title bar, you can now hold down CTRL to make it snap to only move it around horizontally or vertically on its plane. This is useful for aligning windows on a wall.\n\n## Fixes\n- The game no longer crashes when the render node could not be queried and now falls back to basic functionality (no dmabuf, only shared memory) instead\n- Fixed potential texture memory leaks\n- Fix updates being triggered too often when using mods that render multiple game views\n\n## Technical changes (for nerds)\nThe graphics code for EGL has been rewritten from Rust to Java in a way that\nis more extensible for different graphics APIs and backends.\n\n## New Contributors\n* @ryleu made their first contribution in https://github.com/EVV1E/waylandcraft/pull/214\n\n**Full Changelog**: https://github.com/EVV1E/waylandcraft/compare/v2.0.3...v2.1.0"
 		},
 		{
 			"tag": "v2.0.3",
@@ -121,7 +122,8 @@
 					},
 					"downloads": 1026
 				}
-			]
+			],
+			"notes": "This release fixes a couple of bugs.\n\n## Fix glitchy framebuffer issues\nOn some GPUs / drivers the earlier code sometimes produced weird artifacts. That is now fixed.\n\n## Window antialiasing is now enabled by default\nThe setting is now removed in the settings menu. Unless Iris shaders are in use, antialiasing is always enabled.\n\n## Fix items taken away after respawn\nAfter a player died, an issue in the server code would permanently take away their window items. That is now fixed.\n\n**Full Changelog**: https://github.com/EVV1E/waylandcraft/compare/v2.0.2...v2.0.3"
 		},
 		{
 			"tag": "v2.0.2",
@@ -175,7 +177,8 @@
 					},
 					"downloads": 140
 				}
-			]
+			],
+			"notes": "This release contains a couple of new features and internally a rework of alpha translucency processing.\n\n## Iris shader support\nThe mod now supports Iris shaders! This means you can now see your windows within the world even while shaders are enabled.\n\nShaders in Minecraft change a ton of internal things about how the rendering process works. As such waylandcraft has to rely on existing Minecraft functionality for in-world windows. This also means that there are some downsides to the window rendering while shaders are enabled, namely anti-aliasing does not work which can make text in windows hard to read and you might notice black bars on the outside of the windows due to how the Minecraft cutout shaders work. Still, this is a relatively low cost if it means one can use the mod even with shaders enabled.\n\nNote: I recommend you disable Temporal Anti-Aliasing (TAA) in your shader pack if it has that feature because it often tends to make the windows look like they have burn-in when something changes on-screen.\n\n## Improved window to window snapping\nWhen holding down CTRL while moving a window it snaps to other windows in the world. This functionality has had some quality of life improvements and now also allows you to snap a window to the corner of another, not just the edges.\n\n## What's Changed\n* Improve window snap by @EVV1E in https://github.com/EVV1E/waylandcraft/pull/173\n* Iris shader support by @EVV1E in https://github.com/EVV1E/waylandcraft/pull/174\n\n\n**Full Changelog**: https://github.com/EVV1E/waylandcraft/compare/v2.0.1...v2.0.2"
 		},
 		{
 			"tag": "v2.0.1",
@@ -229,7 +232,8 @@
 					},
 					"downloads": 102
 				}
-			]
+			],
+			"notes": "This release adds new snapping behavior for grabbed windows, launching terminal apps from the app launcher and a fallback mode for non-linux platforms.\n\n## Fallback mode for non-Linux platforms\nThe mod still only fully supports Linux but with this hotpatch the game will now be able to launch on Windows or MacOS but with all of the features disabled. This means you can install the mod to play on servers that have this mod even if you are on an unsupported platform.\n\n## New window grab snapping behavior\nWhen holding ALT while moving a window it'll snap to walls like before but now it smoothly rotates when snapped against the floor or a ceiling. The CTRL+ALT snapping mode now snaps to half blocks instead of blocks meaning that you can snap windows to the corner or edges of blocks.\n\n## Terminal apps from the app launcher\nA new setting now exists in the settings menu where you can write your terminal executable of choice and when launching terminal apps with desktop entries they now get correctly started within your terminal.\n\n## What's Changed\n* Add support for directly launching terminal apps by @EVV1E in https://github.com/EVV1E/waylandcraft/pull/166\n* Change window grab snapping behavior by @EVV1E in https://github.com/EVV1E/waylandcraft/pull/167\n* Implement unsupported platform fallback mode by @EVV1E in https://github.com/EVV1E/waylandcraft/pull/171\n\n\n**Full Changelog**: https://github.com/EVV1E/waylandcraft/compare/v2.0.0...v2.0.1"
 		},
 		{
 			"tag": "v2.0.0",
@@ -283,11 +287,19 @@
 					},
 					"downloads": 46
 				}
-			]
+			],
+			"notes": "# v2.0.0\n\nAnd here we are again! This release includes two major changes to the mod both internally and for users.\n\n## Server items\nEven though multiplayer is not supported, servers may now choose to install waylandcraft to allow players to use their own window items for themselves on the server just like in singleplayer.\n\n## xwayland-satellite integration\nThe compositor now has integrated xwayland-satellite support. What this means is that if xwayland-satellite is installed, the compositor will automatically start it at game launch. All launched applications are now directly given the `DISPLAY` environment variable and you can now start X11 apps like Steam directly from the app launcher!\n\n## What's Changed\n* Support for items on servers by @EVV1E in https://github.com/EVV1E/waylandcraft/pull/160\n* Add xwayland-satellite integration by @EVV1E in https://github.com/EVV1E/waylandcraft/pull/162\n\n\n**Full Changelog**: https://github.com/EVV1E/waylandcraft/compare/v1.1.1...v2.0.0"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"assets/screenshot.png",
+		"assets/title.png",
+		"assets/title_scaled.png",
+		"assets/title_scaled_transparent.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

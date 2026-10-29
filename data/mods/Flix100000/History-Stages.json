@@ -1,0 +1,605 @@
+{
+	"repo": "Flix100000/History-Stages",
+	"host": "github",
+	"description": "Guide your players through the ages. Lock items, recipes, dimensions, mobs, loot, and more behind custom research-based eras — unlocked server-wide through the Research Pedestal with full in-game tooling.",
+	"stars": 12,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-02-26T18:57:12Z",
+	"pushed": "2026-10-26T23:18:46Z",
+	"releases": [
+		{
+			"tag": "6.1.0-1.20.1",
+			"published": "2026-10-26T23:18:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 679809753,
+					"name": "historystages-6.1.0-1.20.1.jar",
+					"url": "https://github.com/Flix100000/History-Stages/releases/download/6.1.0-1.20.1/historystages-6.1.0-1.20.1.jar",
+					"size": 4182313,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "1ace3f4539481f762886597868306ca55ba4f4ee04b0ca8c0fb26cec7a114d62",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "historystages",
+							"version": "6.1.0-1.20.1",
+							"name": "History Stages",
+							"description": "Guide your players through the ages. Lock items, recipes, fluids, villager trades, structures, biomes, dimensions, mobs, loot and more behind custom research-based Stages, unlocked server-wide or individual at the Research Pedestal, or automatically from what a player has already done. Ships with a full in-game editor, KubeJS and CraftTweaker integration, and an API other mods can hook into.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"lootr"
+							],
+							"suggests": [
+								"jei",
+								"emi",
+								"jade",
+								"ftbquests",
+								"ftbteams",
+								"curios",
+								"accessories",
+								"spell_engine",
+								"bettercombat"
+							]
+						}
+					],
+					"icon": "eb60068b6c16da13cb8ec5348197340eabd623614278198e9f6c08c2249fec31.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Acacia Scroll Shelf",
+								"Bamboo Scroll Shelf",
+								"Birch Scroll Shelf",
+								"Cherry Scroll Shelf",
+								"Crimson Scroll Shelf",
+								"Dark Oak Scroll Shelf",
+								"Jungle Scroll Shelf",
+								"Mangrove Scroll Shelf",
+								"Oak Scroll Shelf",
+								"Research Pedestal",
+								"Research Pedestal Tier II",
+								"Research Pedestal Tier III",
+								"Research Pedestal Tier IV",
+								"Spruce Scroll Shelf",
+								"Warped Scroll Shelf"
+							],
+							"item": [
+								"Creative Scroll",
+								"Open Research Scroll",
+								"Research Scroll"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe",
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1806,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.5.3.jar",
+							"META-INF/jarjar/mixinextras-forge-0.5.3.jar!META-INF/jars/MixinExtras-0.5.3.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jarjar/mixinextras-forge-0.5.3.jar!META-INF/jars/MixinExtras-0.5.3.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.5.3.jar!META-INF/jars/MixinExtras-0.5.3.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"META-INF/jarjar/mixinextras-forge-0.5.3.jar!META-INF/jars/MixinExtras-0.5.3.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class",
+								"net/bananemdnsa/historystages/Config$Gameplay.class",
+								"net/bananemdnsa/historystages/Config$Visual.class",
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							],
+							"historystages.github.io": [
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							],
+							"discord.gg": [
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: https://github.com/Flix100000/History-Stages/compare/6.0.2-1.20.1...6.1.0-1.20.1\n\nStages can now stand in for each other, block, hide or revoke one another and lock themselves again. Items can be locked by their enchantments and potion effects, locked things can wear a disguise, and the addon API got what it was missing.\n\n### **New**\n\n- Stages: \"Interchangeable\" switch. When several stages lock the same thing, the ones with the switch on stand in for each other, so any one of them is enough. Works for every kind of lock. Tooltip and Jade list them under \"One of:\" (`groupInterchangeableStages` in `visuals` and `jade` turns that off).\n- Stages: Logic blocks, behind the new \"Logic\" button. Conditions look at other stages, and there are four kinds:\n  - \"Blocked while ...\": the stage cannot be unlocked while the condition holds. Commands and the editor still go through.\n  - \"Hidden while ...\": the stage shows as \"???\" (or not at all) in the graph, JEI/EMI and messages, but can still be unlocked.\n  - \"Cheaper/costlier while ...\": scales research time, item and XP costs in percent.\n  - \"Revoke when ...\": takes the stage away the moment the condition becomes true, offline players at their next login.\n- Stages: New mode \"While\" keeps a stage open only while its state triggers hold (biome, dimension, effect, weather, ...). Default and Auto stages can get lock triggers of their own and lock themselves again.\n- Individual stages: \"Share with team\" for FTB Teams. When one player in a party unlocks the stage, the rest of the party gets it too. Options in `team_mods` in gameplay.toml; other team mods can hook in through `RegisterTeamProvidersEvent`.\n- Locks: Enchantments and potion effects as new categories. Locks books, gear, potions and tipped arrows carrying them, and the enchanting table, anvil and brewing stand refuse them. The brewing stand only checks global stages.\n- Locks: Disguises. A locked item or block can look like something else until it is unlocked, like Revelationary but built in: emerald ore can show as stone in the world and in inventories ([#125](https://github.com/Flix100000/History-Stages/issues/125)).\n- Locks: Item, fluid and interaction actions and SpawnControl can be fixed for a whole stage in its settings (right click fixes a value).\n- Locks: `blockExplosions` switch for biome and structure locks, on by default.\n- Locks: Locked ammo is skipped; a bow takes the next arrow it may use.\n- Blocks: Scroll shelves, a chiseled bookshelf for research scrolls in eleven wood types, with hopper, comparator and Jade support.\n- Editor: \"Recipes using this item\" in the right-click menu adds every recipe that takes an item as ingredient ([#132](https://github.com/Flix100000/History-Stages/issues/132)).\n- Graph: Unplaced stages live in the sidebar, several stages can be selected and moved at once, the auto layout is roomier, and there is undo/redo plus keyboard shortcuts (F1 for the list).\n- Graph: Style presets: name a node look once and point stages at it.\n- Open Scroll: Chapters are marked with icons (`open_scroll.tabStyle = \"words\"` for the old look).\n- Research Pedestal: Handing in items by hand counts the booster's discount.\n- Debug report: Written on every start and reload, much shorter (about 100 lines instead of 650), and errors also go to `latest.log`.\n- Addons: The API covers what addons actually need: stage checks per player, unlocks for offline players, events with a cause and a veto, the stage graph, locks at a position and client-side queries. API version 6.1, nothing removed.\n\n### **Fixes**\n\n- Compat: Accessories 1.0.0 betas no longer crash the game on load. Accessories only ships betas for 1.20.1, and the version range sorted every one of them below 1.0.0.\n- Scripts: `isLocked('items', ...)` in KubeJS and CraftTweaker always answered \"unlocked\".\n- Research Pedestal: Unlocking at the pedestal or through an FTB Quests reward no longer runs a full reload every time.\n\n..."
+		},
+		{
+			"tag": "6.1.0-1.21.1",
+			"published": "2026-10-16T17:55:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 648131214,
+					"name": "historystages-6.1.0-1.21.1.jar",
+					"url": "https://github.com/Flix100000/History-Stages/releases/download/6.1.0-1.21.1/historystages-6.1.0-1.21.1.jar",
+					"size": 3547739,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "573d114049d26ee7a54d6f4aec01c36e12ddac09eaa61977d2bbc5c659a62730",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "historystages",
+							"version": "6.1.0-1.21.1",
+							"name": "History Stages",
+							"description": "Guide your players through the ages. Lock items, recipes, fluids, villager trades, structures, biomes, dimensions, mobs, loot and more behind custom research-based Stages, unlocked server-wide or individual at the Research Pedestal, or automatically from what a player has already done. Ships with a full in-game editor, KubeJS and CraftTweaker integration, and an API other mods can hook into.",
+							"minecraft": "[1.21,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"lootr"
+							],
+							"suggests": [
+								"jei",
+								"emi",
+								"jade",
+								"ftbteams",
+								"ftbquests",
+								"curios",
+								"accessories",
+								"spell_engine",
+								"bettercombat"
+							]
+						}
+					],
+					"icon": "eb60068b6c16da13cb8ec5348197340eabd623614278198e9f6c08c2249fec31.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Acacia Scroll Shelf",
+								"Bamboo Scroll Shelf",
+								"Birch Scroll Shelf",
+								"Cherry Scroll Shelf",
+								"Crimson Scroll Shelf",
+								"Dark Oak Scroll Shelf",
+								"Jungle Scroll Shelf",
+								"Mangrove Scroll Shelf",
+								"Oak Scroll Shelf",
+								"Research Pedestal",
+								"Research Pedestal Tier II",
+								"Research Pedestal Tier III",
+								"Research Pedestal Tier IV",
+								"Spruce Scroll Shelf",
+								"Warped Scroll Shelf"
+							],
+							"item": [
+								"Creative Scroll",
+								"Open Research Scroll",
+								"Research Scroll"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe",
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1278,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"github.com": [
+								"net/bananemdnsa/historystages/Config$Gameplay.class",
+								"net/bananemdnsa/historystages/Config$Visual.class",
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							],
+							"historystages.github.io": [
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							],
+							"discord.gg": [
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: https://github.com/Flix100000/History-Stages/compare/6.0.2-1.21.1...6.1.0-1.21.1\n\nStages can now stand in for each other, block, hide or revoke one another and lock themselves again. Items can be locked by their enchantments and potion effects, locked things can wear a disguise, and the addon API got what it was missing.\n\n### **New**\n\n- Stages: \"Interchangeable\" switch. When several stages lock the same thing, the ones with the switch on stand in for each other, so any one of them is enough. Works for every kind of lock. Tooltip and Jade list them under \"One of:\" (`groupInterchangeableStages` in `visuals` and `jade` turns that off).\n- Stages: Logic blocks, behind the new \"Logic\" button. Conditions look at other stages, and there are four kinds:\n  - \"Blocked while ...\": the stage cannot be unlocked while the condition holds. Commands and the editor still go through.\n  - \"Hidden while ...\": the stage shows as \"???\" (or not at all) in the graph, JEI/EMI and messages, but can still be unlocked.\n  - \"Cheaper/costlier while ...\": scales research time, item and XP costs in percent.\n  - \"Revoke when ...\": takes the stage away the moment the condition becomes true, offline players at their next login.\n- Stages: New mode \"While\" keeps a stage open only while its state triggers hold (biome, dimension, effect, weather, ...). Default and Auto stages can get lock triggers of their own and lock themselves again.\n- Individual stages: \"Share with team\" for FTB Teams. When one player in a party unlocks the stage, the rest of the party gets it too. Options in `team_mods` in gameplay.toml; other team mods can hook in through `RegisterTeamProvidersEvent`.\n- Locks: Enchantments and potion effects as new categories. Locks books, gear, potions and tipped arrows carrying them, and the enchanting table, anvil and brewing stand refuse them. The brewing stand only checks global stages.\n- Locks: Disguises. A locked item or block can look like something else until it is unlocked, like Revelationary but built in: emerald ore can show as stone in the world and in inventories ([#125](https://github.com/Flix100000/History-Stages/issues/125)).\n- Locks: Item, fluid and interaction actions and SpawnControl can be fixed for a whole stage in its settings (right click fixes a value).\n- Locks: `blockExplosions` switch for biome and structure locks, on by default.\n- Locks: Locked ammo is skipped; a bow takes the next arrow it may use.\n- Blocks: Scroll shelves, a chiseled bookshelf for research scrolls in eleven wood types, with hopper, comparator and Jade support.\n- Editor: \"Recipes using this item\" in the right-click menu adds every recipe that takes an item as ingredient ([#132](https://github.com/Flix100000/History-Stages/issues/132)).\n- Graph: Unplaced stages live in the sidebar, several stages can be selected and moved at once, the auto layout is roomier, and there is undo/redo plus keyboard shortcuts (F1 for the list).\n- Graph: Style presets: name a node look once and point stages at it.\n- Open Scroll: Chapters are marked with icons (`open_scroll.tabStyle = \"words\"` for the old look).\n- Research Pedestal: Handing in items by hand counts the booster's discount.\n- Debug report: Written on every start and reload, much shorter (about 100 lines instead of 650), and errors also go to `latest.log`.\n- Addons: The API covers what addons actually need: stage checks per player, unlocks for offline players, events with a cause and a veto, the stage graph, locks at a position and client-side queries. API version 6.1, nothing removed.\n\n### **Fixes**\n\n- Scripts: `isLocked('items', ...)` in KubeJS and CraftTweaker always answered \"unlocked\".\n- Research Pedestal: Unlocking at the pedestal or through an FTB Quests reward no longer runs a full reload every time.\n- Pedestal: The top no longer renders darker than the sides.\n- Trades: Merchants without a profession, like Vinery's wandering winemaker, can be locked.\n\n..."
+		},
+		{
+			"tag": "6.0.2-1.20.1",
+			"published": "2026-09-28T19:40:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 596262991,
+					"name": "historystages-6.0.2-1.20.1.jar",
+					"url": "https://github.com/Flix100000/History-Stages/releases/download/6.0.2-1.20.1/historystages-6.0.2-1.20.1.jar",
+					"size": 3474369,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "3900344263fe7dfb2a99e9b2dc28174b4888a2342472a05e8af84ec5ac9f5ea0",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "historystages",
+							"version": "6.0.2-1.20.1",
+							"name": "History Stages",
+							"description": "Guide your players through the ages. Lock items, recipes, fluids, villager trades, structures, biomes, dimensions, mobs, loot and more behind custom research-based Stages, unlocked server-wide or individual at the Research Pedestal, or automatically from what a player has already done. Ships with a full in-game editor, KubeJS and CraftTweaker integration, and an API other mods can hook into.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"lootr"
+							],
+							"suggests": [
+								"jei",
+								"emi",
+								"jade",
+								"ftbquests",
+								"curios",
+								"accessories",
+								"spell_engine",
+								"bettercombat"
+							]
+						}
+					],
+					"icon": "0b52d0049dd9a2479472795a73c77927a6ff101ff10a81171137b57f8e481f55.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Research Pedestal",
+								"Research Pedestal Tier II",
+								"Research Pedestal Tier III",
+								"Research Pedestal Tier IV"
+							],
+							"item": [
+								"Creative Scroll",
+								"Open Research Scroll",
+								"Research Scroll"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe",
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1532,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.5.3.jar",
+							"META-INF/jarjar/mixinextras-forge-0.5.3.jar!META-INF/jars/MixinExtras-0.5.3.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jarjar/mixinextras-forge-0.5.3.jar!META-INF/jars/MixinExtras-0.5.3.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.5.3.jar!META-INF/jars/MixinExtras-0.5.3.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"META-INF/jarjar/mixinextras-forge-0.5.3.jar!META-INF/jars/MixinExtras-0.5.3.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class",
+								"net/bananemdnsa/historystages/Config$Gameplay.class",
+								"net/bananemdnsa/historystages/Config$Visual.class",
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							],
+							"historystages.github.io": [
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							],
+							"discord.gg": [
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: https://github.com/Flix100000/History-Stages/compare/6.0.0-1.20.1...6.0.2-1.20.1\n\n### **New**\n\n- Translations: Simplified Chinese (`zh_cn`).\n- Compat: EMI can hide locked items and recipes the same way JEI does. It hides exactly what the lock overlay marks, so a recipe locked by its id or by a gated fluid disappears as well, and JER's drop and loot pages are left alone ([#83](https://github.com/Flix100000/History-Stages/issues/83)).\n\n### **Fixes**\n\n- Compat: TerraFirmaCraft no longer crashes when it looks up an alloy. TFC asks for that recipe without a level, and the recipe gate read the side off the level and threw, for every alloy, gated or not.\n- Locks: A gated fluid can no longer be poured into the world or tipped into a cauldron.\n- Locks: Placing a gated block now says why it will not go down with specific settings, instead of doing nothing and looking like the game is broken.\n\n### **Other**\n\n- Thanks to @FunnyCarbendazim for the Chinese translation\n- Thanks to @jwright159 for the EMI hiding ([#129](https://github.com/Flix100000/History-Stages/pull/129))."
+		},
+		{
+			"tag": "6.0.2-1.21.1",
+			"published": "2026-09-28T13:13:49Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 595451349,
+					"name": "historystages-6.0.2-1.21.1.jar",
+					"url": "https://github.com/Flix100000/History-Stages/releases/download/6.0.2-1.21.1/historystages-6.0.2-1.21.1.jar",
+					"size": 2861503,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "2810d1353d21e7de71e83165c5a44006e8e0e13739e3a8f62cad3b23fc03a157",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "historystages",
+							"version": "6.0.2-1.21.1",
+							"name": "History Stages",
+							"description": "Guide your players through the ages. Lock items, recipes, fluids, villager trades, structures, biomes, dimensions, mobs, loot and more behind custom research-based Stages, unlocked server-wide or individual at the Research Pedestal, or automatically from what a player has already done. Ships with a full in-game editor, KubeJS and CraftTweaker integration, and an API other mods can hook into.",
+							"minecraft": "[1.21,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"lootr"
+							],
+							"suggests": [
+								"jei",
+								"emi",
+								"jade",
+								"ftbquests",
+								"curios",
+								"accessories",
+								"spell_engine",
+								"bettercombat"
+							]
+						}
+					],
+					"icon": "0b52d0049dd9a2479472795a73c77927a6ff101ff10a81171137b57f8e481f55.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Research Pedestal",
+								"Research Pedestal Tier II",
+								"Research Pedestal Tier III",
+								"Research Pedestal Tier IV"
+							],
+							"item": [
+								"Creative Scroll",
+								"Open Research Scroll",
+								"Research Scroll"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe",
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1014,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"github.com": [
+								"net/bananemdnsa/historystages/Config$Gameplay.class",
+								"net/bananemdnsa/historystages/Config$Visual.class",
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							],
+							"historystages.github.io": [
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							],
+							"discord.gg": [
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: https://github.com/Flix100000/History-Stages/compare/6.0.1-1.21.1...6.0.2-1.21.1\n\nA small release that ships a Simplified Chinese translation and the fixes collected since 6.0.1. NeoForge only for now; Forge and Fabric follow.\n\n### **New**\n\n- Translations: Simplified Chinese (`zh_cn`).\n- Compat: EMI can hide locked items and recipes the same way JEI does. It hides exactly what the lock overlay marks, so a recipe locked by its id or by a gated fluid disappears as well, and JER's drop and loot pages are left alone ([#83](https://github.com/Flix100000/History-Stages/issues/83)).\n\n### **Fixes**\n\n- Compat: TerraFirmaCraft no longer crashes when it looks up an alloy. TFC asks for that recipe without a level, and the recipe gate read the side off the level and threw, for every alloy, gated or not.\n- Locks: A gated fluid can no longer be poured into the world or tipped into a cauldron.\n- Locks: Placing a gated block now says why it will not go down with specific settings, instead of doing nothing and looking like the game is broken.\n- Zones: The marker item marks a corner anywhere. Inside a locked zone or on a locked block, the click was refused before the marker ever saw it, which is exactly where an author tends to stand.\n- Pedestal: The pay-XP button is pressed in when the player's level is too low, and the tooltip says how much is missing. It used to look clickable and silently swallow every click, most visibly in creative at level 0.\n- GUI: The locked-stage silhouette on the open scroll shows again, and the pedestal's progress wash is drawn over the item instead of under it.\n\n### **Other**\n\n- Thanks to @FunnyCarbendazim for the Chinese translation \n- Thanks to @jwright159 for the EMI hiding ([#129](https://github.com/Flix100000/History-Stages/pull/129))."
+		},
+		{
+			"tag": "6.0.0-1.21.1-fabric",
+			"published": "2026-09-23T17:16:22Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 584245443,
+					"name": "historystages-fabric-6.0.0-1.21.1-fabric.jar",
+					"url": "https://github.com/Flix100000/History-Stages/releases/download/6.0.0-1.21.1-fabric/historystages-fabric-6.0.0-1.21.1-fabric.jar",
+					"size": 3196540,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "a2006f1bff5a68638f7082346219ed02a20f36e27e6a70d769d4afeb149a3c47",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "historystages",
+							"version": "6.0.0-1.21.1-fabric",
+							"name": "History Stages",
+							"description": "Guide your players through the ages. Lock items, recipes, fluids, villager trades, structures, biomes, dimensions, mobs, loot and more behind custom research-based Stages, unlocked server-wide or individual at the Research Pedestal, or automatically from what a player has already done. Ships with a full in-game editor and an API other mods can hook into.",
+							"minecraft": ">=1.21 <1.21.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"lootr"
+							],
+							"provides": [
+								"com_electronwill_night-config_core",
+								"com_electronwill_night-config_toml"
+							],
+							"suggests": [
+								"jade",
+								"emi",
+								"jei",
+								"ftbquests",
+								"accessories",
+								"spell_engine",
+								"bettercombat"
+							]
+						}
+					],
+					"icon": "0b52d0049dd9a2479472795a73c77927a6ff101ff10a81171137b57f8e481f55.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Research Pedestal",
+								"Research Pedestal Tier II",
+								"Research Pedestal Tier III",
+								"Research Pedestal Tier IV"
+							],
+							"item": [
+								"Creative Scroll",
+								"Open Research Scroll",
+								"Research Scroll"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1276,
+						"jars": [
+							"META-INF/jars/core-3.6.7.jar",
+							"META-INF/jars/toml-3.6.7.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/core-3.6.7.jar!com/electronwill/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/core-3.6.7.jar!com/electronwill/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/core-3.6.7.jar!com/electronwill/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"net/bananemdnsa/historystages/Config$Gameplay.class",
+								"net/bananemdnsa/historystages/Config$Visual.class",
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							],
+							"historystages.github.io": [
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							],
+							"discord.gg": [
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: https://github.com/Flix100000/History-Stages/compare/5.2.1-1.21.1-fabric...6.0.0-1.21.1-fabric\n\nOne of the biggest updates for History Stages so far, and on Fabric it arrives in one go. The last Fabric build was 5.2.1 in May, so this carries 5.3, 5.4, 5.5 and 5.6 along with 6.0.0 and 6.0.1: five new lock categories, a stage map players can open themselves, an addon surface other mods can build on, and a long list of fixes. The few places where Fabric does something differently are listed under Other.\n\n### **Before you update**\n\nMost of this migrates on its own, but a few things behave differently than they did in 5.2. Worth reading before 6.0.0 goes on an existing pack.\n\n- Server and client both have to be on 6.0.0. All 48 packets were rebuilt on Fabric's own networking and the stage sync is gzipped, so a 5.2 client and a 6.0.0 server no longer understand each other.\n- Settings moved into `historystages/settings/`, split into `visual` and `gameplay` by what a setting does rather than by which file it happened to load from. Every pre-6.0 config path is mapped to where it lives now and the values are carried across on first load, so nothing is lost. The old files stop being read after that.\n- A spawn lock no longer implies an attack lock. Locking a creature's spawns used to make it unhittable as well, and that rule does not survive the new conditions — \"zombies only at night\" would have handed out invulnerable night zombies. A creature that should also be unhittable belongs in the attack list from now on. This change is a silent one: nothing errors, the mob simply becomes attackable.\n- `trade` is a new item action, and old files count it as locked. Stage files store the complement of an action list, so an action that no existing file mentions is gated in every one of them. An item somebody narrowed to \"use only\" gates trading as well from this version on.\n- Four commands are gone: `/history global info`, `/history global list`, `/history individual info` and `/history individual list`. They printed a stale text dump of the stage definition that the editor has long since shown better. `/history temporary global info` and `/history temporary individual info` stay, because they show runtime state nothing else can. Quest rewards that call the removed ones will hit a syntax error.\n- Locked recipes are hidden from the recipe book by default. They used to sit in there looking craftable. The new switch is `recipe_book.hideLockedRecipesInBook`.\n- Worlds from before 6.0.0 do not know when a stage was unlocked. The new map background needs that timestamp, so in an older world the deepest stage in the tree decides it once, until something unlocks again.\n- Zones ship as BETA. The category works, but a zone writes more into a stage file than any other entry and that format may still move. It is marked `[BETA]` in the editor for the same reason.\n\n### **New**\n\n- Locks: Zones [BETA] — draw an area out of cuboids, spheres and cylinders, several shapes per zone, and hang it on a stage. A locked zone can push players back with a client-side barrier, show a force-field wall up close and an outline from a distance, and tint the screen from the inside.\n- Locks: Trades — hide single merchant offers behind a stage, per player, back the moment the stage unlocks. Three ways to say what is gated that do not overlap: a single offer, a profession (optionally only on some of its levels), or a merchant level. A locked offer is absent from the list rather than crossed out, so nobody loses a profession or stops levelling.\n- Locks: Fluids — gate a fluid through whatever carries it, vanilla buckets, modded buckets and tank items alike, without listing a single item id. Also covers the recipes a fluid produces or is consumed by, through an `ingredient` action that only this category has.\n\n..."
+		},
+		{
+			"tag": "5.4.0-1.21.1",
+			"published": "2026-06-01T17:25:19Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 435453273,
+					"name": "historystages-5.4.0-1.21.jar",
+					"url": "https://github.com/Flix100000/History-Stages/releases/download/5.4.0-1.21.1/historystages-5.4.0-1.21.jar",
+					"size": 832529,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "62d9d44268050abdbe23d79ba253cd265b5deb3829313803034e9b962c30ff25",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "historystages",
+							"version": "5.4.0-1.21",
+							"name": "History Stages",
+							"description": "Guide your players through the ages. Lock items, recipes, dimensions, mobs, loot, and more behind custom research-based Stages, unlocked server-wide or individual through the Research Pedestal with full in-game tooling.",
+							"minecraft": "[1.21,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"lootr",
+								"jei",
+								"emi",
+								"jade",
+								"ftbquests",
+								"curios",
+								"accessories"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Research Pedestal",
+								"Research Pedestal Tier II",
+								"Research Pedestal Tier III",
+								"Research Pedestal Tier IV"
+							],
+							"item": [
+								"Creative Scroll",
+								"Research Scroll"
+							]
+						},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 217,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"github.com": [
+								"net/bananemdnsa/historystages/Config$Client.class",
+								"net/bananemdnsa/historystages/Config$Common.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's Changed\n* Wip structure lock by @Flix100000 in https://github.com/Flix100000/History-Stages/pull/68\n\n\n**Full Changelog**: https://github.com/Flix100000/History-Stages/compare/5.3.0-1.21...5.4.0-1.21.1\n\n### New\n\n- Added Accessories mod integration to block locked items in accessory slots.\n- Added optional JEI hiding of locked items and recipes.\n- Added Research Pedestal tiering with Tier II, III, and IV variants.\n- Added Research Boosters for Pedestals.\n- Added support for matching and editing arbitrary data components (fixes Iron's Spellbooks integration).\n- Added structure lock features including wall mode, anti-cheese block-pos check, and projectile blocking.\n- Added seeded zone builder, red force-field, and screen overlay for structure locks.\n- Added styled toast notifications for editor actions.\n- Added toggle button for lockedItemMultiStagePolicy in the editor.\n- Added Ctrl-click on an inventory slot to import its NBT in the editor.\n- Added a fixed center Add button with an empty-state hint in the editor.\n\n### Fixes\n\n- Fixed client recipe manager wiping on stage sync, which caused rendering issues with other mods.\n- Fixed ConcurrentModificationException in stage manager on the render thread.\n- Fixed item-loss and bucket-edge placement issues in structure lock.\n- Fixed missing Jade config translation for pedestal_booster."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-29T10:54:18.815Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"history": 1
+}

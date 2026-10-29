@@ -122,7 +122,7 @@
 						"unreadable": []
 					},
 					"icon": "c614705704fc05a846ecf61631f89ffae5c15c83f7572c1d66ddbb179de78669.png",
-					"downloads": 33,
+					"downloads": 37,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -239,7 +239,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 18,
+					"downloads": 19,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -247,7 +247,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "### Subtitles along the top of the screen\n\nThe bottom of the screen is where a subtitle belongs and also where everything else already is: the hotbar, the health and hunger rows, the chat, the experience bar, and whatever the server draws down there on top of all that. On a busy interface the feed had nowhere left to sit.\n\nThere is now a setting for which edge it hangs from, under **Layout**:\n\n| | |\n|---|---|\n| **Edge of the screen** | bottom, as before, or top |\n| **Depth below the top** | how far down from the top edge the feed sits, when it hangs from the top. Its own distance, because the bottom has a hotbar to clear and the top has nothing |\n\nRead top to bottom the order is the same either way round: oldest first, newest nearest the middle of the screen. Along the top the feed leaves the chat allowance alone, since the chat box is nowhere near it, and cinema mode clears the top matte the way it already cleared the bottom one.\n\nNothing else has changed. Both jars are as they were: the ordinary one fetches the engine and the model when it first needs them, the full one already has them inside."
 		},
 		{
 			"tag": "v1.2.2",
@@ -468,7 +469,8 @@
 					},
 					"downloads": 24
 				}
-			]
+			],
+			"notes": "Two things, both found on a live server.\n\n### Everything after the first sentence was lost\n\nMarian, which is the shape every OPUS-MT model has, translates one sentence and then stops, whatever it is handed. \"Hey my name is Denis. What is your name?\" came back as \"Меня зовут Денис.\" and nothing else. The same two sentences the other way round came back as the other half, which read as though the model were shuffling them rather than dropping them.\n\nA line is now cut into sentences and each one goes through on its own. Cut on a full stop, a question mark or an exclamation mark followed by a space, and nowhere else: not after an initial, not after a bare number, not inside `3.14` or `example.com`, and a closing quotation mark stays with the sentence it closes. A line with one sentence in it, which is nearly all of them, costs exactly what it did before.\n\n### The language list read \"en, en, en, en\"\n\nWhat `/vsub lang <player>` offered was built from the recognition catalogue, which holds four English models and nine Russian ones. So it offered `en` four times and `ru` nine, every line identical, with the only thing telling them apart hidden in a tooltip.\n\nIt is now the two languages there is a translation for, offered once each, with the name of the language beside the code. And the name is used wherever the code used to be printed: in the answer to `/vsub lang`, in the line that says what everybody here is taken to speak, and in the list of who has been marked as speaking something else.\n\nTwo is all there is, because two is what this mod carries: `en-ru` and `ru-en`, a hundred and thirteen megabytes each, and every further pair would be another one of those. A language that is only in the recognition catalogue – German, French, Japanese – is still accepted when it is typed out, since a caption in the right alphabet is worth having even where nothing can translate it. It is simply not suggested.\n\n### Two files, as before\n\n**`voice-subtitles-1.2.2.jar`** is the ordinary one: 3 MB, and it fetches the engine and the model the first time it needs them. Take this one.\n\n**`voice-subtitles-1.2.2-full.jar`** is 177 MB and is the same mod with the recognition engine and the Russian GigaAM model already inside it. On the first run it copies them onto disk in about a second and never asks the network for anything. It is for people whose problem is the download rather than the size; the engine in it is built for Windows x64."
 		},
 		{
 			"tag": "v1.2.1",
@@ -689,7 +691,8 @@
 					},
 					"downloads": 8
 				}
-			]
+			],
+			"notes": "### Everyone at the same table\n\nA roleplay server is a story told out loud, and somebody who does not speak the language it is told in is standing outside it. This release translates what they say and what they write, in both directions between Russian and English, on your own machine and without a word of it going anywhere.\n\nMark whoever speaks something else and the mod does the rest:\n\n```\n/vsub lang Gizmons_ en\n```\n\nFrom then on that player's voice goes into an English model rather than a Russian one, and what it produces is drawn translated under the original. Everybody else carries on through the model they always did. Text chat, `/me`, `/do`, `/try` and the rest are translated in place, under the line they belong to.\n\nFour settings, and the difference between them is how much is loaded and when:\n\n| | |\n|---|---|\n| **Off** | nothing. Everybody's voice goes into your own model, which is what a Russian model does to English speech: writes it out in Cyrillic, phonetically, and it reads as nonsense |\n| **Recognise only** | a second recognition model for the people you marked, so at least their words come out in their own alphabet. Nothing is translated and no translation model is downloaded |\n| **Automatic** | recognise and translate, loading both the moment one of those people is heard and letting go of them once they have been quiet for five minutes |\n| **Always** | the same, loaded from the moment you join, for somebody who hears another language all evening |\n\nThe original stays under the translation, so a name a translator mangled can still be read as it was said. Names, and anything the server put in brackets, are held back from the translator entirely and put back afterwards: a translated character name is a different character.\n\nIt runs on [OPUS-MT](https://github.com/Helsinki-NLP/Opus-MT) by the University of Helsinki, quantised to eight bits, on the copy of ONNX Runtime that sherpa-onnx has already put on disk. A hundred and thirteen megabytes per direction, a few hundred milliseconds a sentence, no network at any point.\n\n### Two downloads now\n\n**`voice-subtitles-1.2.1.jar`** is the ordinary one: 3 MB, and it fetches the engine and the model the first time it needs them. Take this one.\n\n**`voice-subtitles-1.2.1-full.jar`** is 177 MB and is the same mod with the recognition engine and the Russian GigaAM model already inside it. On the first run it copies them onto disk in about a second and never asks the network for anything.\n\nIt exists because for some people the download is the problem rather than the size. GitHub and Hugging Face are reached slowly from some places and not at all from others, and an evening spent watching a progress bar crawl is an evening not spent playing. The engine in it is built for **Windows x64**; on anything else the model is still free and the engine is a 7 to 30 MB download.\n\n### A crash that took the game down without a word\n\nTwo players lost their game to it, both within a third of a second of the recognition library loading. Handed a file it cannot open, sherpa-onnx throws a C++ exception, and a C++ exception crossing back into Java kills the process outright: no crash report, no message, nothing but a line saying it died in native code.\n\nThe file could not be opened because something else had it. Antivirus software is the usual reason: two hundred megabytes that have just appeared on disk are exactly what it wants to look at, and while it is looking, everything else is turned away.\n\nSo the mod now reads the whole model file itself, in Java, before the library is given the path, and waits and tries again if it cannot. Either the read succeeds, in which case the scanner has finished and the library will be let in too, or it fails here, where a failure is a caption that never appears rather than a game that dies.\n\n\n..."
 		},
 		{
 			"tag": "v1.1.0",
@@ -796,7 +799,8 @@
 					},
 					"downloads": 7
 				}
-			]
+			],
+			"notes": "### The mod is 3 MB instead of 27\n\nBoth recognition engines used to be carried inside the jar, built for Windows, Linux and macOS, which meant every player downloaded three platforms of an engine they would load one of. They are fetched when they are first needed now, for the platform in hand, and checked against a hash built into the mod before anything is unpacked or loaded.\n\n### Much better recognition\n\nA second engine, [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx), and nine models to choose from.\n\n- **`ru-giga-rnnt` is the new Russian default**: GigaAM v3 by Sber, 162 MB, and it writes punctuation and capital letters of its own accord. The old default got roughly every third word wrong on spontaneous speech; this one is in another class entirely.\n- **`en-fast` is the new English default**: NVIDIA Parakeet, 103 MB, punctuation included.\n- **`en-heavy`** (465 MB) covers twenty-five European languages, Russian and Ukrainian among them, which is worth knowing before downloading two models for a bilingual server.\n- `ru-big-int8` is the accuracy of the old 1.8 GB Vosk model in 57 MB, and seconds to load rather than a minute.\n- Japanese added.\n\nThe accurate models read a whole sentence before deciding what a word was, so a line arrives a second or so after it was said. The audio is re-read as it accumulates, so the caption still grows while somebody is talking.\n\n### A conversation log worth the name\n\n- **Kept across restarts.** Written as you play, one file per day, held for a fortnight by default. Nothing leaves your machine.\n- **Search and filters**: by text, by speaker, by voice or chat, by how far back, oldest or newest first. Matches are picked out in the lines.\n- **The rest of the evening too**: joining a server or opening a world, deaths, commands as they were typed, the whole of the chat. Login and registration are never written down; they carry a password.\n- **Sealed.** Each line is encrypted and carries the fingerprint of the one before it, so the file cannot be reworded in a text editor and any tampering is reported rather than shown as though genuine. It is not proof of anything to anybody, since the key sits on the same machine, but it turns silent tampering into visible tampering.\n- Saving it writes what the filters are showing, and the line that says so opens the folder with the file picked out.\n\n### Captions that move\n\n- Lines fade in and out over a length you can set, rather than appearing between one frame and the next.\n- Recognised text is revealed a few characters at a time, so a caption grows the way speech does instead of arriving in jumps. It never delays anything: the reveal outruns the speaking.\n- **`/vsub preview`** puts a sample caption on screen, so all of the above can be adjusted without waiting for somebody to talk.\n- Captions above heads gained their own size, row limit, background and name toggle.\n- An optional arrow in front of each line points at the speaker: up for ahead, down for behind you. Off by default.\n\n### While you wait\n\nDownloading and installing both say so now, with what is being fetched, how much of how much, and roughly how long is left. Shown on menus as well as in game, since the first download starts at the title screen.\n\n### A third place to put subtitles\n\nVoice and chat each gained **log only**: written down, drawn nowhere. Text chat is already readable in the chat window.\n\n### Alongside Absolute Cinema Camera\n\nThat mod hides the whole interface for its film mode, subtitles included. They stay now, sitting just on top of the bottom matte: somebody reading the conversation instead of hearing it should not lose it to a camera angle. The hotbar allowance is dropped while the hotbar is gone, so the captions sit where film subtitles sit rather than halfway up the picture. Nothing to install or switch on, and nothing changes if that mod is not there.\n\n### Fixed\n\n\n..."
 		},
 		{
 			"tag": "v1.0.0",
@@ -873,7 +877,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "Live subtitles for Simple Voice Chat.\n\n- Caption feed in the spirit of Minecraft: Story Mode, or captions above the speaker's head\n- Offline speech recognition through Vosk; nothing is uploaded and no server-side mod is needed\n- Roleplay names taken from the player list, per-speaker colours derived from UUIDs\n- Distance and whispering shown as opacity, never as a filter\n- Optional direction arrow, text chat support, and a conversation log\n\nMinecraft 1.21.6 - 1.21.8, Fabric. Requires Fabric API and Simple Voice Chat."
 		}
 	],
 	"readme": "README.md",

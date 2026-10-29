@@ -18,7 +18,7 @@
 					"name": "unionclef-1.21.11-0.95.66.jar",
 					"url": "https://github.com/3ndetz/unionclef/releases/download/v0.95.66/unionclef-1.21.11-0.95.66.jar",
 					"size": 6389324,
-					"downloads": 8,
+					"downloads": 16,
 					"inspection": 2,
 					"sha256": "ff23056a32f7e2fe9fe6a7f5dda73f3529e4ab3df543b1488123bf9a90007961",
 					"mods": [
@@ -124,7 +124,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "## Installation\n\n1. Install [Fabric Loader](https://fabricmc.net/) for the Minecraft version listed in the release title\n2. Drop the release JAR into your `.minecraft/mods/` folder\n3. Launch Minecraft\n\nNo separate mods install needed — everything is bundled into the main UnionClef JAR. If you see a separate `tungsten-**.jar`, do not install it next to UnionClef: UnionClef already contains it.\n\n## Modules\n\nUnionClef bundles two systems, each with its own command prefix:\n\n| Module | Prefix | What it does |\n| --- | --- | --- |\n| **Tungsten** | `;` | Movement — physics-simulated pathfinding, block-space search, bridging, mining |\n| **AltoClef** | `@` | High-level bot tasks (get items, kill mobs, survive) |\n\n## Quick start commands\n\n```\n;goto <x> <y> <z>          — tungsten: walk/jump to coordinates\n;followPlayer <nick>        — tungsten: follow a player\n;stop                       — tungsten: stop current action\n;settings debugTime true    — tungsten: enable profiling output\n\n@goto <x> <y> <z>          — altoclef: smart goto (avoids mobs, eats, etc.)\n```\n\n---\n\n# Jump when there is no ground\n\nA run from `repro-lava-stuck-cell` on 0.95.65 burned to death 0.9 blocks from the shore of the\nportal-site pool. The escape route was two cells long, the second one block up. The walker\npresses jump only from the ground, and a body floating in lava is never on the ground, so it\nwalked into the shore face at zero speed until it died (\"wlk i1/2 d0.9 wp(-250,26,1105) g0 j0\").\n\nThe walker now holds jump while its feet are in a liquid and the next waypoint is above them --\nbaritone's rule (`Movement.java:125-127`). Lever: `walkerJumpsInLiquid`.\n\nMeasured:\n\n- new course `escape_lava_deep_kit` (a two-deep lava pit, the bot floating, cobblestone in the\n  pack; resistance on so both arms live long enough to compare), same jar, lever pinned:\n  off 43.7 / 27.9 / 24.0 s to get out, on 8.7 / 15.7 / 6.0 s. It is a gate now: out within 20 s.\n- from `repro-lava-stuck-cell`, 10 minutes each: two runs, 0 deaths, both reached the nether\n  (one took its first ender pearl at 5.5 minutes). The same checkpoint on 0.95.65: one death in\n  two runs.\n- craft 29/29 gates and `nav_flat`, `nav_staircase`, `nav_water`, `nav_water_pillar`, `nav_bridge`\n  PASS at 29-30 FPS.\n\n**HOW TO TEST:**\n\n```powershell\npython deploy/runner/run_suite.py craft --only escape_lava_deep_kit,escape_lava_step,escape_lava_pool --record\npython deploy/runner/run_suite.py craft --only escape_lava_deep_kit --pin walkerJumpsInLiquid=false   # the old input\npython deploy/runner/gamer_smoke.py 10 --from repro-lava-stuck-cell --raw-resume --record\n```\n\n**Known:** with no blocks in the pack the same two-deep pit is still not escaped\n(`escape_lava_deep`, recorded, not gated): the walker never gets a route there and the physics\nsearch cannot leave lava. Three causes found in the search; patching them moved the failure but\ndid not fix it, so that patch is not in this build. Open. Escaping also still eats while\nswimming when not full, which slows it.\n\n\n**Full Changelog**: https://github.com/3ndetz/unionclef/compare/v0.95.65...v0.95.66"
 		},
 		{
 			"tag": "v0.95.65",
@@ -136,7 +137,7 @@
 					"name": "unionclef-1.21.11-0.95.65.jar",
 					"url": "https://github.com/3ndetz/unionclef/releases/download/v0.95.65/unionclef-1.21.11-0.95.65.jar",
 					"size": 6389161,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "a4a7ed7f73d2ad106272edc49db681c2447fd2c8199e1fb8b732f65de61b82bf",
 					"mods": [
@@ -234,7 +235,8 @@
 					},
 					"funding": []
 				}
-			]
+			],
+			"notes": "## Installation\n\n1. Install [Fabric Loader](https://fabricmc.net/) for the Minecraft version listed in the release title\n2. Drop the release JAR into your `.minecraft/mods/` folder\n3. Launch Minecraft\n\nNo separate mods install needed — everything is bundled into the main UnionClef JAR. If you see a separate `tungsten-**.jar`, do not install it next to UnionClef: UnionClef already contains it.\n\n## Modules\n\nUnionClef bundles two systems, each with its own command prefix:\n\n| Module | Prefix | What it does |\n| --- | --- | --- |\n| **Tungsten** | `;` | Movement — physics-simulated pathfinding, block-space search, bridging, mining |\n| **AltoClef** | `@` | High-level bot tasks (get items, kill mobs, survive) |\n\n## Quick start commands\n\n```\n;goto <x> <y> <z>          — tungsten: walk/jump to coordinates\n;followPlayer <nick>        — tungsten: follow a player\n;stop                       — tungsten: stop current action\n;settings debugTime true    — tungsten: enable profiling output\n\n@goto <x> <y> <z>          — altoclef: smart goto (avoids mobs, eats, etc.)\n```\n\n---\n\n# A source out of reach is given up\n\nA 30-minute run on 0.95.64 stood fourteen minutes on \"Getting within 3 blocks\" of one lava source,\nand the next run stood at the same source from minute sixteen to the end. No cell near it was\nsafe to stand on, so the approach never closed in. The chooser above it gave the source up every\nthree minutes and then, with nothing else on offer, lifted its own ban and handed the same source\nback.\n\n`CollectBucketLiquidTask` now gives a source up when the approach has not gained half a block in\n20 seconds, and takes the next one; the blacklist goes through the source filter, so it holds.\nThe clock pauses while the task is interrupted (Unstuck Chain broke in every 25 s in that stall,\nand a clock that restarted with the task never ran out).\n\nAlso: when the iron pickaxe wears out with cobblestone in the pack, the bot crafts a stone\npickaxe instead of looking for wood for a wooden one. The stone-pickaxe step required a pickaxe\nto exist first, for mining the cobblestone it was already carrying; from the stall checkpoint the\nold build spent five minutes underground on \"wooden_pickaxe\".\n\nMeasured:\n\n- new course `lava_boxed_source` (the nearest source sealed in bedrock, an open one 18 blocks\n  on): 0.95.64 0/2 (no bucket in 150 s), this build 2/2 at ~34 s, \"No closer to the liquid ...\n  trying another source\" once per run.\n- from the stall checkpoint (`repro-lava-stuck-cell`): stone pickaxe crafted in the first minute,\n  lava collected, portal lit and the nether reached at ~4.8 minutes; 0 deaths.\n- regression: craft 26/26 and `nav_flat`, `nav_staircase`, `nav_water`, `nav_water_pillar`,\n  `nav_bridge` PASS at 29-30 FPS; a 30-minute native run from `full59-before-portal` PASS, 0\n  deaths, median 27 FPS. That run took another road (iron, then ten minutes after food and two\n  nights underground) and did not reach the portal, so it says nothing about the lava either way.\n\n**HOW TO TEST:**\n\n```powershell\npython deploy/runner/run_suite.py craft --only lava_boxed_source,lava_far_lake,portal_lava_lake --record\npython deploy/runner/gamer_smoke.py 10 --from repro-lava-stuck-cell --raw-resume --record\n```\n\n**Known (added after release):** a second run from `repro-lava-stuck-cell` on the published jar\ndied in the portal-site lava at 3.2 minutes: the obsidian cast failed, a wander took the bot into\nthe pool, and the escape route's second waypoint was a block up -- the walker jumps only from the\nground, so floating in lava it walked into the shore face and burned 0.9 blocks out. One death in\ntwo runs from that checkpoint; the fix is the next release.\n\nThe give-up never fired in the stall-checkpoint run (the lava there was taken without\nit), so in the field it is measured by the course only. The whole playthrough is still open.\n\n\n**Full Changelog**: https://github.com/3ndetz/unionclef/compare/v0.95.64...v0.95.65"
 		},
 		{
 			"tag": "v0.95.64",
@@ -246,7 +248,7 @@
 					"name": "unionclef-1.21.11-0.95.64.jar",
 					"url": "https://github.com/3ndetz/unionclef/releases/download/v0.95.64/unionclef-1.21.11-0.95.64.jar",
 					"size": 6388541,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "1db4c0560040dba57a31d7e91cbe696e83f4e74d7c2797a0f4a560c561841d17",
 					"mods": [
@@ -343,7 +345,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## Installation\n\n1. Install [Fabric Loader](https://fabricmc.net/) for the Minecraft version listed in the release title\n2. Drop the release JAR into your `.minecraft/mods/` folder\n3. Launch Minecraft\n\nNo separate mods install needed — everything is bundled into the main UnionClef JAR. If you see a separate `tungsten-**.jar`, do not install it next to UnionClef: UnionClef already contains it.\n\n## Modules\n\nUnionClef bundles two systems, each with its own command prefix:\n\n| Module | Prefix | What it does |\n| --- | --- | --- |\n| **Tungsten** | `;` | Movement — physics-simulated pathfinding, block-space search, bridging, mining |\n| **AltoClef** | `@` | High-level bot tasks (get items, kill mobs, survive) |\n\n## Quick start commands\n\n```\n;goto <x> <y> <z>          — tungsten: walk/jump to coordinates\n;followPlayer <nick>        — tungsten: follow a player\n;stop                       — tungsten: stop current action\n;settings debugTime true    — tungsten: enable profiling output\n\n@goto <x> <y> <z>          — altoclef: smart goto (avoids mobs, eats, etc.)\n```\n\n---\n\n# The client stays up\n\nA 30-minute run on 0.95.63 lost its client at minute seven. The crash report:\n`NullPointerException: Cannot invoke \"List.add\" because \"HashMap.get(...)\" is null` in\n`InventorySubTracker.registerItem`, reached from the mob-defence check for a shield. The\ninventory tracker rebuilds plain hash maps -- clear, then refill -- and two threads ran that\nrebuild at once, so one cleared a map between the other's `put` and `get`. The tracker's update\nand every read of its maps are now synchronized on the tracker. It is a rare race (this one came\nafter four days of client uptime and seven million ticks); the fix rests on that mechanism, not\non a run that happened not to crash.\n\nThe test bench also stops calling such a run green: `gamer_smoke` read PASS after 25 minutes with\nthe client gone, on the rung reached before the crash. Three or more consecutive offline polls now\nfail the run with \"client left the game\".\n\nMeasured on the release candidate: `nav_flat`, `nav_staircase`, `nav_water`, `nav_water_pillar`,\n`nav_bridge`, `craft_at_distant_table` and `portal_lava_lake` PASS at 29-30 FPS; a 30-minute\nnative run from `full59-before-portal` PASS with no deaths, no crash, median 29 FPS.\n\nAlso on the bench: a `lava_far_lake` course (a lava bucket past 45 capped sources to an open lake);\nit passes on this build in about 11 s.\n\n**HOW TO TEST:**\n\n```powershell\npython deploy/runner/gamer_smoke.py 30 --from full59-before-portal --raw-resume --record\npython deploy/runner/run_suite.py craft --only lava_far_lake,portal_lava_lake --record\n```\n\n**Known:** in that 30-minute run the bot later stood 7+ minutes underground \"searching for liquid\"\nfor its portal with a lava lake 30 blocks away; tracked, cause not yet found. No speed or FPS gain\nis claimed, and the whole playthrough is still open.\n\n\n**Full Changelog**: https://github.com/3ndetz/unionclef/compare/v0.95.63...v0.95.64"
 		},
 		{
 			"tag": "v0.95.63",
@@ -450,9 +453,10 @@
 						"unreadable": []
 					},
 					"icon": "a99bba88d78bfab8d0ab303bf64e2301e52022ee8647ad8d77186fc04b4ea1be.png",
-					"downloads": 31
+					"downloads": 32
 				}
-			]
+			],
+			"notes": "## Installation\n\n1. Install [Fabric Loader](https://fabricmc.net/) for the Minecraft version listed in the release title\n2. Drop the release JAR into your `.minecraft/mods/` folder\n3. Launch Minecraft\n\nNo separate mods install needed — everything is bundled into the main UnionClef JAR. If you see a separate `tungsten-**.jar`, do not install it next to UnionClef: UnionClef already contains it.\n\n## Modules\n\nUnionClef bundles two systems, each with its own command prefix:\n\n| Module | Prefix | What it does |\n| --- | --- | --- |\n| **Tungsten** | `;` | Movement — physics-simulated pathfinding, block-space search, bridging, mining |\n| **AltoClef** | `@` | High-level bot tasks (get items, kill mobs, survive) |\n\n## Quick start commands\n\n```\n;goto <x> <y> <z>          — tungsten: walk/jump to coordinates\n;followPlayer <nick>        — tungsten: follow a player\n;stop                       — tungsten: stop current action\n;settings debugTime true    — tungsten: enable profiling output\n\n@goto <x> <y> <z>          — altoclef: smart goto (avoids mobs, eats, etc.)\n```\n\n---\n\n# Water, air and buckets\n\nWork from the UNIONCLEF-HARD session (developed and bench-tested 2026-10-02..10-04, left\nuncommitted when that session paused), reviewed, rebuilt over 0.95.62 and re-tested before\nrelease.\n\n**Pillaring in water uses swimming input.** A pillar started in water used to hold sneak with\njump, and sneak sinks the body: the bot sat at a bank holding both. It now swims up while in\nwater and goes back to the land sneak/jump placement once out. `pillarUsesSwimInputInWater` is\nnow on by default (`false` keeps the old input). Earlier evidence: 42 water/neighbour and 36 dry\ninteraction trials passed at 29+ FPS; on the retained food-bank checkpoint new food appeared in\n5/5 FPS-valid ON observations against 1/5 OFF.\n\n**The air escape starts when the way out needs it.** The rescue used to wait until half the air\nwas gone. It now prices the actual exit -- digging the cap overhead, with vanilla's underwater\nmining penalty, or swimming to the nearest breathable cell -- and starts early enough to finish\nit. A live route to air is followed to its end instead of being re-priced every tick (baritone\nPathingBehavior.java:196-224), which stops the dig/swim flip-flop measured in dry-entry tunnels.\n\n**Extra water buckets are emptied, one is kept.** The task used to empty every water bucket at\nits own feet. It now keeps one filled bucket and empties only the extras, against a solid face\nwithin reach.\n\n**The block scanner no longer reads the live world from its worker thread.** Chunk contents are\ncopied on the client tick (`ChunkBlockSnapshot`) and the worker searches the copies.\n\nRe-tested on this build (0.95.62 + this work):\n\n- `nav_water`, `nav_water_pillar`, `nav_grid_water_roof`, `nav_flat`, `nav_staircase`,\n  `nav_descend`, `nav_break`, `nav_bridge`, `nav_gaps`: 9/9 PASS, 29-30 FPS.\n- `portal_lava_lake` PASS (27.6 FPS), `craft_at_distant_table` PASS.\n- Same checkpoint 7 minutes before a drowning in the air escape, interleaved: 0.95.62 had two\n  deaths in one of two runs (a creeper and a zombie, lowest health 1.8); this build none in two\n  (lowest health 11.2 and 20). The drowning itself did not recur in either arm, so this is not\n  claimed as a drowning fix.\n- Night in a lake (`repro-lake-night`): no deaths, health 20.\n- 15-minute native run from `full59-before-portal`: PASS, 0 deaths, lowest health 17.3, iron and\n  crafting rungs. Its median FPS was 20; the interleaved checkpoint pair above read the same FPS on\n  both builds (26/22 vs 26/22), so the host was loaded that day rather than the scanner slow.\n\n**HOW TO TEST:**\n\n```powershell\npython deploy/runner/run_suite.py nav --only nav_water,nav_water_pillar,nav_grid_water_roof --record\npython deploy/runner/gamer_smoke.py 15 --from full59-before-portal --raw-resume --record\n```\n\nAlso: checkpoints named `repro-*` are never removed by the budget trim (two reproductions were\n\n..."
 		},
 		{
 			"tag": "v0.95.62",
@@ -560,7 +564,8 @@
 					},
 					"downloads": 5
 				}
-			]
+			],
+			"notes": "## Installation\n\n1. Install [Fabric Loader](https://fabricmc.net/) for the Minecraft version listed in the release title\n2. Drop the release JAR into your `.minecraft/mods/` folder\n3. Launch Minecraft\n\nNo separate mods install needed — everything is bundled into the main UnionClef JAR. If you see a separate `tungsten-**.jar`, do not install it next to UnionClef: UnionClef already contains it.\n\n## Modules\n\nUnionClef bundles two systems, each with its own command prefix:\n\n| Module | Prefix | What it does |\n| --- | --- | --- |\n| **Tungsten** | `;` | Movement — physics-simulated pathfinding, block-space search, bridging, mining |\n| **AltoClef** | `@` | High-level bot tasks (get items, kill mobs, survive) |\n\n## Quick start commands\n\n```\n;goto <x> <y> <z>          — tungsten: walk/jump to coordinates\n;followPlayer <nick>        — tungsten: follow a player\n;stop                       — tungsten: stop current action\n;settings debugTime true    — tungsten: enable profiling output\n\n@goto <x> <y> <z>          — altoclef: smart goto (avoids mobs, eats, etc.)\n```\n\n---\n\n# Dressed for the nether\n\nThree changes for the night and the nether, each measured on the bench.\n\n**The bot no longer floats in a lake all night.** With every dig-in site within 16 blocks under\nwater, the night shelter used to wait in the lake till morning -- 6.5 minutes afloat in one run,\n\"impaled by Drowned\" in another. It now heads for dry land (a heightmap scan out to 48 blocks)\nand digs in there. Lake replays: before, 0/4 left the water; after, the valid runs reached the\nshore and dug in.\n\n**No hoglin hunting in stone gear.** A hoglin has 40 health and throws the player on every hit;\nfrom the nether arrival, hunts with a stone sword ended \"slain by Hoglin\" or \"fell from a high\nplace\". Hoglins are now food only with an iron-or-better weapon and an iron-or-better chestplate\nworn; otherwise the bot goes back to the Overworld for food. Same checkpoint: deaths 2/2 before,\n1/2 after (that one from a piglin fight).\n\n**A gold helmet before the nether.** Piglins attack a player wearing no gold. Before the trip the\nbot now mines, smelts and crafts a gold helmet, with a six-minute budget so a world without gold\nnearby does not stop the run. Two 15-minute runs: a helmet in both, no deaths; one reached the\nnether and was alive at full health for its remaining seven minutes there.\n\n**HOW TO TEST:**\n\n```powershell\npython deploy/runner/gamer_smoke.py 15 --from full59-before-portal --raw-resume --record\npython deploy/runner/gamer_smoke.py 6 --from nether-fresh --raw-resume --record\n```\n\nAlso: `InputControls.waterKeyHolders` names whoever holds jump or sneak in water, and\n`gamer_smoke.py --grcon \"COMMAND\"` runs an rcon command after a checkpoint restore.\n\n**Known:** in the nether the bot later holds a small area on \"Going to biome\"; tracked. No speed\nor FPS gain is claimed, and the whole playthrough is still open.\n\n\n**Full Changelog**: https://github.com/3ndetz/unionclef/compare/v0.95.61...v0.95.62"
 		},
 		{
 			"tag": "v0.95.61",
@@ -1099,5 +1104,24 @@
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"assets/README/AutoclefDodging.gif",
+		"assets/README/EnderClutch.gif",
+		"assets/README/MaceClutch.gif",
+		"assets/README/ShredderBridging256.gif",
+		"reports/hf/cave-johnson-0.95.58/hf/assets/lab.jpg",
+		"reports/hf/cave-johnson-0.95.59/hf/assets/lab.jpg",
+		"reports/hf/cave-johnson-0.95.60/hf/assets/lab.jpg",
+		"reports/hf/cave-johnson-0.95.61/hf/assets/lab.jpg",
+		"reports/hf/cave-johnson-0.95.62/hf/assets/lab.jpg",
+		"reports/hf/cave-johnson-0.95.63/hf/assets/lab.jpg",
+		"reports/hf/cave-johnson-0.95.64/hf/assets/lab.jpg",
+		"reports/hf/cave-johnson-0.95.66/hf/assets/lab.jpg",
+		"reports/pitch/hf/assets/board.jpg",
+		"reports/pitch/hf/assets/dragon.jpg",
+		"reports/pitch/hf/assets/fail.jpg",
+		"reports/pitch/hf/assets/lab.jpg"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

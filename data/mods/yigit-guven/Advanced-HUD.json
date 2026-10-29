@@ -50,7 +50,7 @@
 						"unreadable": []
 					},
 					"icon": "1b089fd7b86f1fe25aa78eeb31a1d4c40ab601576eabbae551228965401682d2.png",
-					"downloads": 5,
+					"downloads": 6,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -58,7 +58,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "- Introduce HUD transparency setting and UI slider (default 80) in `ModConfig`/`ConfigScreen`.\n- Adjust several option defaults and tooltip text for clarity (e.g., `showBlockId` default set to `false`).\n- Add armor toughness tracking to `TargetInfo` (field, getter, reset, and attribute read) and show toughness in the HUD.\n- Refine container inventory detection with heuristics and custom name support for `Nameable` block entities.\n- Update `HudRenderer` to account for toughness when computing layout and rendering the armor bar (different icon/color, appended toughness text).\n- Use configured transparency for tooltip background rendering.\n- Updated mod version to 1.0.4.\n\n**Full Changelog**: https://github.com/yigit-guven/Advanced-HUD/compare/1.0.3...1.0.4"
 		},
 		{
 			"tag": "1.0.3",
@@ -99,7 +100,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "- **Entity Model Scaling**: Fixed entity models overflowing the HUD panel by tuning the scale formula (base `18`, max `20`).\n- **Entity Model Rotation**: Fixed entities looking to the right; they now correctly face their left.\n- **Stale Waterlogged State**: Fixed the 💧 Waterlogged indicator persisting on subsequent non-waterlogged blocks.\n- **Mod Menu Config Screen**: Added an in-game configuration screen accessible via Mod Menu's \"Config\" button, with three categories:\n    - *General* – Enable HUD toggle, X/Y offset, Show Mod Name.\n    - *Blocks* – Block ID, Effective Tool, Harvest Level, Crop Growth, Waterlogged, Breaking Progress, Bee Count, Container Info.\n    - *Entities* – Health, Armor, Entity Model, Entity ID, Owner, Horse Stats, Villager Info.\n- **Config System Fixes**: Previously several config flags were defined but had no effect. They are now fully wired up:\n- `showBlockId` / `showEntityId` — displays the internal ID (e.g. `minecraft:stone`) with a 🆔 icon.\n- `showWaterlogged` — displays a 💧 icon for waterlogged blocks.\n- `showEntityOwner` — displays the owner's name (👤) for tamed entities.\n- `showHarvestLevel` — displays the required tool tier ⛏ (Stone / Iron / Diamond).\n- **Aesthetic Overhaul**: New high-end \"glassmorphism\" HUD background with subtle transparency and professional borders.\n- **Visual Health Bar**: Added a smooth progress bar for entity health, including numerical values.\n- **Visual Armor Bar**: Added a shield-themed progress bar to visually represent protection levels.\n- **Generic Crop Growth**: Completely rewritten growth detection that works for all crops dynamically.\n- **Enhanced Block Entity Support**: Added specific tracking for Furnaces and Brewing Stands (General Info).\n- **Improved Alignment**: Refined layout scaling and text centering.\n- **Icon-Based Stats**: Unicode icons used for entity/block info (Health, Armor, Speed, Jump, Bees, Items, Growth, Profession).\n- **Cycling Tool Icons**: Displays rotating tool icons (e.g., Diamond/Iron Pickaxes) for mineable blocks instead of text.\n- **Harvesting Indicator**: Added ✔ and ✘ icons to show if the current setup will drop items from the targeted block.\n- **Mod Version**: Updated to 1.0.3.\n- **HUD Redesign**: \n    - Implemented a more compact and streamlined layout.\n    - Improved positioning and centering logic.\n    - Relocated mod name for better space efficiency.\n    - Enhanced vertical alignment and spacing for all HUD elements.\n\n**Full Changelog**: https://github.com/yigit-guven/Advanced-HUD/compare/1.0.2...1.0.3"
 		},
 		{
 			"tag": "1.0.2",
@@ -140,7 +142,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "- **Strictly Client-Sided**: The mod is now 100% client-side. You can connect to any vanilla or modded server safely.\n- **Enhanced Block Information**:\n    - Added display for effective tools (Pickaxe, Axe, etc.) and mining requirements.\n    - Added crop growth percentage for all major crops.\n    - Added waterlogged status indicator.\n    - Added a visual **Breaking Progress Bar** at the bottom of the HUD.\n    - Added **Beehive occupancy** count for nests and hives.\n    - Added **Container contents** count (e.g., \"Items: 15/27\") for chests, shulker boxes, etc.\n- **Detailed Entity Stats**:\n    - Added **Horse Stats**: Precise speed (b/s) and jump strength for horses and variants.\n    - Added **Villager Info**: Displays profession and level.\n    - Added display for entity armor and tamed ownership.\n    - Added optional technical entity ID toggle.\n- **System Improvements**:\n    - Dynamic UI layout that adjusts height based on visible information.\n    - Refined color-coded categorized information for better readability.\n    - Fixed an issue where the configuration file wouldn't update with new options.\n    - Improved stability by fixing a potential Mixin registration crash.\n    - Cleaned up project structure and removed example boilerplate.\n\n**Full Changelog**: https://github.com/yigit-guven/Advanced-HUD/compare/1.0.1...1.0.2"
 		},
 		{
 			"tag": "1.0.1",
@@ -181,7 +184,8 @@
 					},
 					"downloads": 6
 				}
-			]
+			],
+			"notes": "- **HUD Beautification**:\n    - New vanilla-inspired tooltip background with purple borders and gradients.\n    - Added a distinct outer frame covering the HUD for a more premium look.\n    - Dynamic item icons for blocks being looked at.\n    - Heart-themed health bar with a border and vibrant red color.\n- Improved HUD layout and typography to match Minecraft aesthetics.\n- Updated `TargetInfo` to provide `ItemStack` data for icons.\n- Incremental version update to 1.0.1.\n\n**Full Changelog**: https://github.com/yigit-guven/Advanced-Hud/compare/1.0.0...1.0.1"
 		},
 		{
 			"tag": "1.0.0",
@@ -222,11 +226,14 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "- **Dynamic Raycasting**: Implemented logic to detect blocks and entities the player is currently looking at.\n- **Advanced HUD Overlay**:\n    - Added display for block names and IDs.\n    - Added display for entity names and a dynamic health bar for living entities.\n- **Customization System**:\n    - Created a JSON-based configuration system recorded in `config/advanced-hud.json`.\n    - Added options to toggle HUD visibility, adjust X/Y offsets, and hide specific info (like block IDs).\n- **Client Integration**: Registered the HUD renderer to the Fabric client entrypoint.\n- **License**: Switched project license to GPL-3.0.\n\n**Full Changelog**: https://github.com/yigit-guven/Advanced-Hud/commits/1.0.0"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

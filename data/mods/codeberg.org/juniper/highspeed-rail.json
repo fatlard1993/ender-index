@@ -45,7 +45,7 @@
 						"unreadable": []
 					},
 					"icon": "7c54b11e8a49fb4781f86c3bbff4707c21aeef0352621a77873e9e6c53e23ddf.webp",
-					"downloads": 6,
+					"downloads": 7,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -53,7 +53,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "This fixes mixin bindings for how things were changed around in 1.20.4. Not much else to say, really!"
 		},
 		{
 			"tag": "LF.0.5.2+1.20.1",
@@ -94,7 +95,8 @@
 					},
 					"downloads": 6
 				}
-			]
+			],
+			"notes": "This change updates dependencies, and downgrades the required Minecraft version to 1.20.1 to match the server version. It also redoes the max speed and velocity mechanisms again to be more robust.\n\n**Changelog:**\n * Created value cache for minecarts, to ensure that all speed data is linked to specific minecarts.\n * Replaced velocity multiplier with a clamped ratio multiplier, so it will only ever lower velocity when applicable.\n * Added an \"effective max speed\" system, that allows interpolating between max speed values.\n   * This effectively adds our own controls for managing the deceleration curve of minecarts. This also links into the new velocity ratio multiplier, as the ratio is determined by the current and previous effective max speeds, that are generated as parts of the interpolation step."
 		},
 		{
 			"tag": "LF.0.5.1+1.20.2",
@@ -135,7 +137,8 @@
 					},
 					"downloads": 11
 				}
-			]
+			],
+			"notes": "This change rewrites the mixin methods to be more reasonable, and implements a caching layer in order to avoid recalls of methods. The caching layer itself has a circular \"removed\" buffer in order to avoid erroneous re-adds of minecarts due to the asynchronous nature of Minecraft's tick system. It also removes velocity clamping to instead use velocity scaling, based upon the block the minecart is currently under.\n\n**Changelog:**\n* Added caching system for minecart max speed and speedometer data.\n  * Cache system only stores what is required for the speedometer and highspeed-rail calculations, by minecart hashCode.\n  * Implemented circular de-duplication buffer is an integer array of length 16, which I believe will be enough for almost all cases.\n* Replaced clamping with scaling velocity.\n  * Scaling velocity works by calculating the ratio of the last max speed, and the current one, and multiplying the velocity by the resulting scalar value.\n* Rewrote [AbstractMinecartEntityMixin](https://codeberg.org/juniper/highspeed-rail/src/tag/LF.0.5.1+1.20.2/src/main/java/net/pcal/highspeed/mixins/AbstractMinecartEntityMixin.java) in order to be more clear, and robust for the future.\n* Added \"defaultCartSpeed\" property for the vanilla default to be changed.\n  * See the property in [src/main/resources/default-config.json5](https://codeberg.org/juniper/highspeed-rail/src/tag/LF.0.5.1+1.20.2/src/main/resources/default-config.json5#L34)"
 		}
 	],
 	"readme": "README.md",

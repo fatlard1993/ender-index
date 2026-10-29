@@ -59,7 +59,7 @@
 						"unreadable": []
 					},
 					"icon": "c9eec53604d3fbae5e6ef01c0ba11f7686ae11421c46341d161211ba3db3089b.webp",
-					"downloads": 4,
+					"downloads": 5,
 					"funding": [],
 					"content": {
 						"names": {
@@ -88,7 +88,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "Updated to 1.8.2, because Cobblemon decided to make random and unnecessary changes that break things IN A PATCH UPDATE!"
 		},
 		{
 			"tag": "1.5.0-mc1.21.1",
@@ -142,7 +143,8 @@
 					},
 					"downloads": 4
 				}
-			]
+			],
+			"notes": "Minor update to bring the mod onto Cobblemon 1.8.0 and improve Competitive Mode.\n\n## Additions\n- Added a new item, Dimorphic Stabiliser that forces the Pokémon to inherit the holder's gender, if valid.\n- Added a new setting to Competitive Mode, `kill_infertile_parents`, that allows infertile Pokémon to die in childbirth.\n  - This mirrors PokeMMO's breeding mechanic.\n\n## Changes\n- Abilities no longer have RNG in Competitive Mode with fertile parents. The ability of the primary parent (if valid) will always be inherited.\n- Minor grammar adjustments for some breeding tooltips.\n\n## Bugfixes\n- Fixed issue where forms lacking a translation key will appear as \"form?\" in the egg tooltip."
 		},
 		{
 			"tag": "1.4.2-mc1.21.1",
@@ -196,7 +198,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "Patch update with more bugfixes and a revision to the new datapack system.\n\nMany individuals have requested a more comprehensive wiki to explain how the mod works, what the recipes are, and how to make datapacks.\nAs of 1.4.2, there is now an in-depth wiki covering everything you may want to know about Daycare+.  \n\nYou can view the wiki on [GitHub](https://github.com/Provismet/DaycarePlus/wiki)!\n\n## Additions\n- Breeding Rules can now react to the following:\n  - Abilities\n  - Marks\n  - Base Stats\n  - Types\n\n## Changes\n- Pokemon Predicates have had their fields split between new `species` and `instance` objects to accomodate the 16 field limit on codecs.\n  - Datapacks in the 1.4.0 - 1.4.1 format will still work.  \n\n## Bugfixes\n- Fixed Rockruff Dusk form breeding.\n- Fixed Paldean Tauros breeding.\n- Fixed Pichu always having Volt Tackle when bred from a Pikachu."
 		},
 		{
 			"tag": "1.4.1-mc1.21.1",
@@ -250,7 +253,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "Patch update following the major revamp to sort out a bug and give more control to servers.\n\n## Additions\n- Added new config option to not produce eggs for players who are offline.\n  - The pastures still tick and count the time, but they won't create any items until the player logs in.\n- Added new config option to deactivate pastures for banned players.\n  - Deactivation applies on the first load per server session. You may need to reboot your server to see this apply.\n\n## Changes\n- Adjusted daycare error feedback text to clarify when certain actions are illegal.\n\n## Bugfixes\n- Fixed bug where Dittos could breed with each other.\n- Fixed bug where egg production callbacks still triggered when a pasture failed to produce an egg due to being full.\n  - Mostly affected competitive mode due to fertility being reduced."
 		},
 		{
 			"tag": "1.4.0-mc1.21.1",
@@ -304,7 +308,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "Huge internal update to completely revamp the breeding code.\n\nNo gameplay changes are present in this update. All new features a purely technical and only affect server owners, side-modders, and datapack makers.\n\n## Additions\n### Breeding Rules\nBreeding Rules are a new feature replacing the now deprecated Pre-Evolution Overrides. They allow you to completely control the breeding output of two\nparent Pokemon.\n\nThe Breeding Rule system checks for rules that match the species of the primary parent (the female or non-ditto parent) and then scans a list of rules,\nchecking them against _both_ parents until a match is found.\n\nThe rules use a datapackable predicate system that can check the following components of either parent:\n- species\n- form name\n- species + form\n- aspects\n- moves\n- level\n- friendship\n- fullness\n- held item (showdown id)\n- species labels\n- form labels\n- EVs\n- IVs\n- whether or not a pre-evolution exists for this species\n- whether or not an evolution exists for this species\n\nThe system is then able to produce an offspring with any of the following data already set:\n- species\n- features\n- level\n- moves\n- ability\n- gender\n- nature\n- EVs\n- IVs\n- held item (any Minecraft ItemStack)\n- scale\n- shiny\n- any properties\n  - This PokemonProperties is applied first and includes everything that works with `/pokegive` and similar commands.\n\nA rule may have a predicate for the primary (female/non-ditto) parent, the secondary parent, both, or even neither. A rule may also have\nany number of possible offspring; if there is more than one offspring for a rule, then one is selected at random. This randomness is weighted\nand the datapack creator can additionally set the weights (integer, defaults to 1 if omitted).\n\nBreeding Rules may also bypass gender and egg group rules if the author wishes. Potentially allowing any Pokemon to breeding with any other Pokemon to\nproduce any possible offspring.\n\nTo give an example of the power of this system: all special vanilla rules have been implemented via Breeding Rules.\n- Illumise and Volbeat breeding into each other's species.\n- NidoranF and NidoranM breeding into each other's species.\n- Pikachu holding a Light Ball produces a Pichu that knows Volt Tackle.\n- Regional forms producing the correct \"region-bias\" form from Cobblemon.\n- Indeedee using forms as its genders.\n\nA new datagen API for Breeding Rules has also been provided. (Seriously just use the API, you do NOT want to be writing these out by hand.)\n\n## Bugfixes\n- Tatsugiri's form override data has been added to the built-in datapack and should no longer randomise when breeding.\n\n## Deprecations\n- The pre-evolution overrides (`data/daycareplus/overrides/preevolutions/...`) have been deprecated in favour of the new Breeding Rules system.\n  - Pre-Evolution overrides have not been removed, existing datapacks will still function.\n  - This feature will be removed in version 2.0.0, please update all of your datapack pre-evolution overrides to Breeding Rules before then."
 		}
 	],
 	"readme": "README.md",
@@ -315,5 +320,7 @@
 		}
 	],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

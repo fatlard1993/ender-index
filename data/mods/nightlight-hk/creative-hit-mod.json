@@ -45,7 +45,7 @@
 						"unreadable": []
 					},
 					"icon": null,
-					"downloads": 4,
+					"downloads": 5,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -53,11 +53,14 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "# Creative Hit Mod\n\n**A Fabric client-side mod for Minecraft 1.21.11**\n\nIn vanilla Minecraft, attacking a player in Creative mode does nothing — Creative players are invulnerable by default. This mod changes that: when **you** hit a Creative-mode player, the mod sends the `/damage <target> 1 generic_kill` command to the server, dealing 1 point of unavoidable damage.\n\n## How it works\n\n1. You hit another player who is in Creative mode.\n2. The mod intercepts this via a Mixin into `ClientPlayerInteractionManager#attackEntity`.\n3. It sends a `CommandExecutionC2SPacket` with the command `damage <target> 1 generic_kill` directly to the server.\n4. The server executes the command, dealing 1 HP of `generic_kill` damage — this bypasses Creative invulnerability, armor, and resistance effects.\n\n## Why this approach?\n\nThe mod uses **`CommandExecutionC2SPacket`** (not `sendChatCommand`) to bypass Minecraft's chat signing system. Modern Minecraft signs chat commands with cryptographic keys; sending the packet directly avoids any signing failures or silent drops.\n\nPermission checks are left to the server — if you're not OP'd, the server simply rejects the command.\n\n## Requirements\n\n| Requirement | Version |\n|---|---|\n| Minecraft | 1.21.11 |\n| Fabric Loader | ≥0.16.x |\n| Fabric API | Any compatible release |\n\n## Installation\n\n1. Install the **Fabric Loader** for Minecraft 1.21.11.\n2. Place the mod JAR in your `mods/` folder.\n3. Ensure you are **OP'd** on the server (`/op <yourname>`), or that cheats are enabled in singleplayer.\n4. That's it — no configuration needed.\n\n## Permissions\n\nThe `/damage` command requires **GAMEMASTERS** permission level (OP level 1+). The mod does not check permissions client-side — it sends the packet and lets the server enforce access.\n\n- **Singleplayer**: Always enabled (cheats implicitly on).\n- **Server**: You must be an operator (`/op`). The default `/op` level (permission level 2 → `OWNERS`) is more than sufficient.\n\n## Technical details\n\n- **Client-side only**: The mod runs entirely on the client via a Mixin. No server-side installation is required.\n- **Damage type**: `minecraft:generic_kill` — tagged with `BYpASSES_INVULNERABILITY` and `BYPASSES_RESISTANCE`. Deals 1 HP per hit regardless of Creative mode, armor, or potion effects.\n- **Packet**: Uses `CommandExecutionC2SPacket` directly to avoid Minecraft's chat signing layer.\n\n## Building from source\n\n```bash\n./gradlew build\n```\n\nThe built JAR will be in `build/libs/creative-hit-mod-<version>.jar`.\n\n## License\n\nMIT"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

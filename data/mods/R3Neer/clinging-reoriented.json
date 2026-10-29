@@ -54,7 +54,7 @@
 						"unreadable": []
 					},
 					"icon": null,
-					"downloads": 4,
+					"downloads": 5,
 					"funding": [],
 					"content": {
 						"names": {
@@ -69,7 +69,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "### Contact-aware landings\n\n- Distinguish clear feet-first approaches, ambiguous or mixed contacts and tangential grazes without treating every brief feet contact as support.\n- Keep Reorientation available during acquisition and body anticipation. Commit camera and input only within five ticks of a clear landing, or three ticks of an ambiguous landing after two consecutive confirmed server ticks.\n- Count at most one confirmation per server tick. A missed prediction, skipped tick or changed surface restarts confirmation; retaining a distant candidate through a short miss does not retain its confirmation count.\n- Preserve simultaneous support and lateral contact evidence through the landing surface API, with a default adapter for existing providers.\n- Recover a cancelled landing smoothly toward the retained flight orientation over four ticks / 200 ms. Lifecycle and context transfers release presentation immediately.\n\n### Validation and release\n\n- Add regressions for duplicate same-tick observations, interrupted confirmation, real consecutive-tick commitment, grazes, mixed contacts, commit windows and visual recovery.\n- Run the server/client compatibility matrix, including First Person, Scale Brews and Fresh Animations.\n- Publish the regular and sources JARs from the exact successful main CI artifact.\n\n\n---\nTarget commit: a0fc3f158656adaedaf5524b04e2112c961e38e3\nMain CI run: #1075 (38484270385)\nRegular JAR SHA-256: 72ba4f3f6be4f1680c2bc5646ae1abf8daf7d7257d2a85a86e6694b0e2be0bf7\nSources JAR SHA-256: f2252d20095048d227d31949edf968ffad2806c2f0eb4fe31bb09594d31156a0"
 		},
 		{
 			"tag": "v0.1.0-beta.5",
@@ -114,7 +115,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "### Gravity Charge hotfix\n\n- Keep launched Gravity Charges alive in Peaceful instead of inheriting vanilla ShulkerBullet peaceful-despawn behavior.\n- Preserve vanilla Peaceful despawn for natural shulker bullets; only project-owned launched Gravity Charges bypass that removal.\n- Add regressions proving manual launches survive and move through their first ticks, and that Peaceful distinguishes launched Gravity Charges from natural shulker bullets.\n- Keep beta.4 gravity navigation, mob AI, water, landing and aerodynamics semantics unchanged.\n- Publish beta.5 only from the exact successful `main` CI artifact rather than rebuilding for release.\n\n\n---\nTarget commit: f683d79ab6928cbfb8cd97adc686a4aa9255f154\nMain CI run: #1063 (35452142341)\nRegular JAR SHA-256: 9c8c046cd8b37ad93ae1decc98ba6aa7f45d013813b71558bd2b7d08f7e636fb\nSources JAR SHA-256: 0163888fa7d9bb2bf5dc19eb1109f617e9156f6fc741f208b0caacbd259142d7"
 		},
 		{
 			"tag": "v0.1.0-beta.4",
@@ -159,7 +161,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "### Gravity Fall body, aerodynamics and landing\n\n- Replace the old W-specific air-diving redirect with persistent body attitude and posture-driven anisotropic aerodynamics: gaze drives macro-body intent, velocity contributes only weak stabilization, and transverse momentum receives extra drag without generating thrust or lift.\n- Keep full-sphere camera semantics while separating the visible body attitude from velocity transport, including stable head/feet symmetry through reversals.\n- Separate landing acquisition from presentation: future support can be tracked up to 40 ticks ahead while the visible LAND/BODY_LANDING transition remains at most 10 ticks and converges at predicted touchdown.\n- Reuse one shared `TrajectoryPrediction`/`AirMotion`/`LandingSurfaces` model across player landing and gravity-transition forecasts instead of maintaining parallel approximate physics.\n\n### Water controls and presentation\n\n- Make owned swimming W/S follow camera forward/back including pitch and A/D follow camera left/right while Space/Shift remain world +Y/-Y.\n- Separate underwater camera presentation from logical gravity: unsupported swimming converges to world-up, while real gravity-relative support converges to support-up with bounded hysteresis and continuous transition.\n- Preserve the generic fluid-context fence so water, lava and modded fluids still suspend Clinging support, landing and Gravity Fall body semantics.\n\n### Gravity-aware pets and mobs\n\n- Replace pet gravity-breadcrumb replay with history-free follow based on the pet's current state, a filtered current owner target and current world geometry.\n- Keep ordinary `FollowOwnerGoal` navigation first; when gravity is actually needed, pets walk to a validated launch frontier, revalidate before commit, fly under real physics and replan only after stable support/recovery.\n- Keep airborne owners trackable through filtered/tangential targeting without remotely commanding pets to copy owner gravity turns.\n- Add a general gravity-locomotion bridge for vanilla mob intents. Melee pursuit, flee/avoid and position goals keep ownership of high-level AI while the shared planner can use support-to-support gravity transitions when normal navigation cannot satisfy the intent.\n- Preserve vanilla goal cadence/semantics and external gravity ownership; no per-species gravity route tables are introduced.\n- Preserve an owned `APPROACH` across short vanilla navigation jumps for at most 20 ticks without replanning or committing gravity while unsupported; longer support loss fails and cools down the maneuver instead of looping approach -> jump -> clear -> replan.\n- Add committed-flight monitoring and finite 2–10 tick reaction latency derived from base movement speed. Reorientation may make a legal airborne correction after the delay; spent Clinging never receives a second turn, and late obstacles can still cause natural impacts.\n\n### Planning cost and validation\n\n- Bound one local gravity plan to one mirror navigation plus at most four launch nodes × five alternate gravities (`<=20` physical forecasts).\n- Add `MobGravityPlanningBudget`: at most 32 new grounded gravity plans per server level/tick and 4 per 64×64 X/Z region/tick, shared by generic mobs and pet follow.\n- Defer excess work through `WAITING_PLAN` while preserving the live vanilla intent instead of continuing an obsolete partial path or busy-looping the planner.\n- Shorten committed-flight monitoring to `reactionTicks + 2`, capped at 20 ticks, while revalidating the exact committed landing independently.\n- Add adversarial coverage for dynamic obstacles, stale/unknown geometry, target jitter/movement, Clinging/Reorientation capability boundaries, planning-budget fairness, trapped landings, airborne-owner follow and gravity-enabled flee.\n- Re-run the complete server/client compatibility matrix, including First Person, Scale Brews, Fresh Animations and semantic camera snapshots.\n\n..."
 		},
 		{
 			"tag": "v0.1.0-beta.3",
@@ -204,7 +207,8 @@
 					},
 					"downloads": 4
 				}
-			]
+			],
+			"notes": "### Performance and stability\n\n- Reduce background CPU overhead in entity-heavy worlds, especially when loaded mobs are not actively using Clinging/Reorientation gravity.\n- Reduce transient memory pressure during entity rendering and Gravity Fall camera updates to improve frame-time consistency in heavier client and modpack setups.\n- Smooth rare gravity-recovery cases by spreading collision-safe placement work across multiple ticks instead of concentrating the full search into one server tick.\n- Reduce repeated landing and collision bookkeeping during sustained Gravity Fall and moving-surface interactions.\n- Reduce overhead in optional Scale Brews compatibility paths while preserving the same integration behaviour.\n- Reduce temporary work during Gravity Charge target reacquisition without changing its range, targeting cone, priority rules or retry cadence.\n- Keep camera controls, gameplay timings, targeting rules and compatibility semantics unchanged; this prerelease is focused on runtime efficiency rather than new features.\n\n### Validation and release\n\n- Add TM performance holdouts that preserve the exact legacy gravity-recovery candidate set/order while enforcing a bounded per-call search budget.\n- Re-run the complete server/client compatibility matrix, including First Person, Scale Brews, Fresh Animations and semantic camera snapshots.\n- Publish beta.3 only from the exact successful `main` CI artifact rather than rebuilding for release.\n\n\n---\nTarget commit: d45511e0fa8829c8bc451b5f3db3a652f13f3d9f\nMain CI run: #834 (35010672290)\nRegular JAR SHA-256: 675b7edbc8579cbfa471e6a372afceab5d23306ed50caf356e8de315b944757d\nSources JAR SHA-256: ce04d04d940461f6e16a2136927b610c4a6c64eba14936bef1bc07e4820dcf4b"
 		},
 		{
 			"tag": "v0.1.0-beta.2",
@@ -249,11 +253,17 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "### Gravity Fall camera\n\n- Fix full-sphere Gravity Fall look so horizontal and vertical mouse intent keeps the same on-screen direction when crossing either pole.\n- Keep first- and third-person views on the same continuous look frame; switching view mode no longer reinterprets the current orientation.\n- Make third-person Gravity Fall use the continuous camera frame while retaining Minecraft's ordinary camera distance and wall clipping.\n- Keep the player entity's ordinary yaw/pitch compatible with vanilla while preserving the same forward gaze through full 360-degree camera loops and Gravity Fall exit.\n\n### Fluids and retained camera\n\n- Fix underwater Reorientation turns losing their newly created retained camera frame at end-of-tick.\n- Preserve a HOLD created while already inside water/lava for that fluid epoch without re-enabling submerged landing or Gravity Fall body semantics.\n- Keep the original fluid-boundary fence for a later, separate fluid entry so stale dry-flight presentation is still retired.\n\n### Validation and release\n\n- Add red-before-green screen-space camera regressions, diagonal pole holdouts, first/third-person continuity checks and semantic camera snapshots.\n- Keep First Person, Scale Brews server/client and Fresh Animations/EMF/ETF in the release matrix.\n- Publish beta.2 only from the exact successful `main` CI artifact rather than rebuilding for release.\n\n\n---\nTarget commit: 5dfc36500f681e4ed8394c8e91eeb4950b9917df\nMain CI run: #797 (34952757007)\nRegular JAR SHA-256: 6df1eac13e8dcb326824b2081389edf9f2c13ee1c63a94e32133a5fe2eb0aa6f\nSources JAR SHA-256: 7bddef781fd360e81504db4867f9687506d3333d80b5e80ee80c79635c9e92c5"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"docs/images/0000_clinging-east-gravity.png",
+		"docs/images/0001_clinging-restored-down.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

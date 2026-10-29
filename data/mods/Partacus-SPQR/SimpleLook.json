@@ -50,7 +50,7 @@
 						"unreadable": []
 					},
 					"icon": null,
-					"downloads": 3,
+					"downloads": 4,
 					"funding": [],
 					"content": {
 						"names": {
@@ -62,7 +62,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "## [1.3.0] - 2026-06-24\n\n### Added\n- Minecraft 26.2 support (unobfuscated builds, Java 25)\n\n### Fixed\n- Restored 1.21.9 / 1.21.10 / 1.21.11 builds, which had regressed in 1.2.0:\n  - `MouseButtonEvent` mouse signatures and `options.controls.KeyBindsScreen` are now applied to all shipped versions (they were wrongly gated to `>=26.1`, leaving the 1.21.x path on pre-1.21.9 APIs)\n  - Fallback config screen used `GuiGraphics.renderTooltip(...)` on 1.21.x → switched to `setTooltipForNextFrame(...)`\n  - `Identifier` import and `KeyMapping.Category` are now gated `>=1.21.11` (were conflated with `KeyMappingHelper` at `>=26.1`)\n\n### Changed\n- 26.2 is now the primary build target; multi-version builds cover 1.21.9, 1.21.10, 1.21.11, 26.1, and 26.2\n- Adapted to the 26.2 screen API change via a new `ScreenCompat` helper:\n  - `Minecraft.setScreen()` → `Minecraft.setScreenAndShow()`\n  - `Minecraft.screen` field → `Minecraft.gui.screen()`\n- Switched the Java config to a toolchain so the 26.x (Java 25) builds no longer depend on the ambient JDK\n- Updated dependencies for 26.2: Fabric API 0.153.0+26.2, Mod Menu 20.0.0-beta.4\n- Clarified the look-mode option in both the Cloth and fallback config screens — the control is now labelled **Hold / Toggle** (the default is **Hold**: hold the key to look, release to revert) instead of an ambiguous on/off"
 		},
 		{
 			"tag": "v1.2.0",
@@ -103,7 +104,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "## [1.2.0] - 2026-03-25\n\n### Added\n- Minecraft 26.1 support\n- Java 25 toolchain support\n- Unobfuscated jar handling for MC 26.1 (no mappings required)\n\n### Changed\n- Updated Gradle wrapper to 9.4.1\n- Updated Fabric Loader to 0.18.4\n- Adapted all source files with Stonecutter conditionals for 26.1 API changes:\n  - `ResourceLocation` → `Identifier`\n  - `GuiGraphics` → `GuiGraphicsExtractor`\n  - `KeyBindingHelper` → `KeyMappingHelper`\n  - `render()` → `extractRenderState()`\n  - Mouse events now use `MouseButtonEvent`\n  - `Camera.setup()` → `Camera.alignWithEntity()`\n- Cloth Config excluded for 26.1 (no compatible version available yet)\n\n### Technical\n- Multi-version support expanded to 1.21.9, 1.21.10, 1.21.11, 26.1"
 		},
 		{
 			"tag": "v1.0.0",
@@ -212,11 +214,16 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "## [1.0.0] - 2025-12-16\n\n### Added\n- Initial release\n- Free look camera functionality (hold key to look around independently)\n- Smooth camera movement with configurable smoothing\n- Smooth return to center when key is released\n- Configurable maximum yaw angle (10-180 degrees)\n- Configurable maximum pitch angle (10-90 degrees)\n- Configurable return speed (1-100%)\n- Configurable smoothing factor (0-100%, lower = faster turning)\n- Toggle mode option (press once to activate/deactivate)\n- Keybind is unbound by default (recommended: Left Alt)\n- Keybind visible in Options > Controls > Key Binds > SimpleLook category\n- Full Mod Menu integration\n- Cloth Config support for enhanced configuration UI (uses text fields due to Cloth Config slider bug)\n- Fallback configuration screen when Cloth Config is not available\n- Keybindings tab in configuration screen for quick rebinding\n\n### Supported Activities\n- Walking, running, sprinting\n- Swimming and underwater movement\n- Flying with elytra\n- Riding mounts (horses, pigs, striders, happy ghasts, and all other rideable entities)\n\n### Technical\n- Multi-version support (1.21.9, 1.21.10, 1.21.11)\n- Client-side only mod\n- Fabric API integration\n- Mixin-based camera and mouse handling\n- Cloth Config and Mod Menu are truly optional dependencies\n![SimpleLookExample](https://github.com/user-attachments/assets/68c852ca-3878-41d3-b445-549b1e3a7753)"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"SimpleLook.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

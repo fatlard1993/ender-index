@@ -53,7 +53,7 @@
 						"unreadable": []
 					},
 					"icon": "60b135aab338c4a4179acdcb79d1a92419a3bd8700c40d653f2a28b34e89e795.webp",
-					"downloads": 5,
+					"downloads": 6,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -112,7 +112,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 2,
+					"downloads": 3,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -159,7 +159,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 2,
+					"downloads": 3,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -201,7 +201,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 2,
+					"downloads": 3,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -248,7 +248,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 2,
+					"downloads": 3,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -295,7 +295,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 2,
+					"downloads": 3,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -342,7 +342,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 2,
+					"downloads": 3,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -389,7 +389,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 3,
+					"downloads": 4,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -436,7 +436,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 2,
+					"downloads": 3,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -444,7 +444,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "- fixed crash rendering fog/blended particles when improved transparency is enabled in minecraft 26.3\n- fixed fog/blended particles flickering when items are picked up in 1.20... again\n- fixed heightmap calculation fetching collision from wrong block position\n- fixed velocity particles becoming invisible without wind (ty CH4ACKO3)\n- fixed hardcoded heightmap level height causing rain under high structures on some servers\n\n[full changelog](https://github.com/PigCart/particle-rain/blob/main/CHANGELOG.md)"
 		},
 		{
 			"tag": "v4.0.1",
@@ -806,7 +807,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "- Fix crash on load due to obscure accessor mapping error on pre-26.1 fabric\n\n[see the actual v4 changelog here](https://github.com/PigCart/particle-rain/blob/main/CHANGELOG.md)"
 		},
 		{
 			"tag": "v4.0.0",
@@ -1168,7 +1170,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "dropping the beta tag since all particles (except streaks) are using the customization system now, which was the original point of this update (and multiver) before i did all that other stuff.\n\n- Added Minecraft 26.3 support\n- fixed particle count not decreasing when a particle spawn is canceled by the Particle Group\n- fixed blended particles being visible through objects in 26.1\n- fixed blended particle corrupt rendering regression from beta 1\n- fixed wind applying to particles with a wind strength of zero\n- fixed particles not appearing on forge due to missing convention tags\n- fixed haze effects breaking when viewed through spyglass or at low FOV (fix does not apply to zoom mods)\n- fixed surface effects spawning inside blocks at negative coordinates due to a rounding error\n- fixed storm weather particles spawning only when not stormy\n- fixed dripstone particles not tinting with water/rain color\n- fixed ripple texture resolution options not being visible\n- fixed rain appearing in unloaded chunks\n- fixed streaks floating over the edges of non-full blocks\n- fixed texture related config options reloading resource before the config screen closes\n- fixed `always` weather option\n- fixed config screen flickering on 26.1+\n- fixed particle config attempting to load the empty particle entries\n- fixed particle collisions not accounting for velocity\n- added random Y spawn offset to particles with surface spawn position\n- added fade types to particle config\n- added horizontal particle rotation type\n- added heavy snow and rain during thunderstorms\n- reduced distance fading falloff so particles are more visible at a distance\n- tweaked rain and snow texturing\n  - was previously split into 4 sprites, now is split into 16\n  - particle size reduced to fit the new texel density\n- ported mist and ripple effect to configurable horizontal particles\n- mist after rain no longer spawns in plains biomes (its too overwhelming i dont like it there)\n- tweaked spawn randomness such that particles with similar densities will spawn at the same time, allowing for composite effects (see horizontal & vertical fog)\n- replaced dust texture with vanilla generic dust texture\n- dust and shrubs can now spawn on coarse dirt\n- Wind Improvements (ty: plunderpixels)\n  - added WindLink compatibility, weather particles move with its wind when it is installed\n  - particles from vanilla or other mods now take wind, with the wind strength options shown for them\n  - snow can be drawn with WindLink's snowflake sprites, when its config asks for it\n  - WindLink can ask for more snow and rain, and for bigger flakes and drops\n\noverview of changes since v3.3.6:\n- multiversion support including support for forge loaders\n- customizable weather particles\n- built-in config and particle editor\n- resource packs can load their own weather effects\n- weather ignores barriers and other configurable blocks\n- various visual improvements to all effects including wind variance, distance fading, and new rotation styles\n- puddles removed and expanded into their own mod\n\n[see full version history](https://github.com/PigCart/particle-rain/blob/main/CHANGELOG.md)"
 		},
 		{
 			"tag": "v4-beta.11",
@@ -1492,7 +1495,8 @@
 					},
 					"downloads": 7
 				}
-			]
+			],
+			"notes": "- added mc 26.2 support\n- added a null check before accessing config (potentially fixing a loading issue on forge platforms)\n- added rolling block particles\n- raised config text input limit\n- fixed shrubs\n- fixed issues specific to mc 26.1 and above:\n  - fixed after weather period\n  - fixed mist not spawning (added `#minecraft:substrate_overworld` to mist blocks list)\n  - fixed blended particle alpha masking\n- fixed shrub spawn density not displaying correctly in config gui\n- fixed biome border particle culling removing particles between biomes with similar climates \n- tweaked algorithm for the wind pattern\n- changed wind to apply cumulatively instead of overwriting particle velocity\n- updated Ukrainian and Russian translations (thanks: megatocha)\n- updated Korean translation (thanks: good7777865)\n- re-enabled dust haze by default because its cool as heck\n\n[see full changelog here](https://github.com/PigCart/particle-rain/blob/main/CHANGELOG.md)"
 		},
 		{
 			"tag": "v4-beta.10",
@@ -1778,7 +1782,8 @@
 					},
 					"downloads": 40
 				}
-			]
+			],
+			"notes": "- updated Simplified Chinese translation (thanks: Sasaki-Akari)\n- added option for weather to ignore specific blocks, passing through them instead of being obstructed (thanks: HigorFr)\n  - barriers, fences, and signs are ignored by default\n- removed incompatibilty warning for async particles\n- improved instructions on placeholder particle texture\n- added slight variance to map colored effects to improve effect visibility\n- re-added haze, disabled by default, improved dust haze\n- fixed non-functional underground spawn position option appearing in the config screen\n- fixed sky render distance being used for surface particles\n- fixed wrong collision size causing particles to clip through thin surfaces in mc`>1.21.9`\n- fixed particles inverting/inflating during collision animation"
 		},
 		{
 			"tag": "v4-beta.7",
@@ -2291,7 +2296,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "- added mc26.1 support\n- marked asyncparticles as explicitly incompatible\n\n[view changelog history here](https://github.com/PigCart/particle-rain/blob/main/CHANGELOG.md)"
 		},
 		{
 			"tag": "v3.0.6-1.21.2",
@@ -2332,7 +2338,8 @@
 					},
 					"downloads": 9
 				}
-			]
+			],
+			"notes": "backport provided by Riflusso"
 		},
 		{
 			"tag": "v3.0.5-1.20",
@@ -2373,11 +2380,14 @@
 					},
 					"downloads": 7
 				}
-			]
+			],
+			"notes": "backport v3.0.5 to 1.19.4 / 1.20 / 1.20.1 versions"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

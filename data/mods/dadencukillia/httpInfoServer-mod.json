@@ -1,0 +1,238 @@
+{
+	"repo": "dadencukillia/httpInfoServer-mod",
+	"host": "github",
+	"description": "Minecraft fabric mod that collects and sends in-game information to Minecraft HTTP API server",
+	"stars": 2,
+	"archived": true,
+	"license": "CC0-1.0",
+	"created": "2024-04-08T17:00:56Z",
+	"pushed": "2024-05-28T15:59:25Z",
+	"releases": [
+		{
+			"tag": "mc1.20.6",
+			"published": "2024-05-28T15:34:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 170559421,
+					"name": "httpinfoserver-1.0.0.jar",
+					"url": "https://github.com/dadencukillia/httpInfoServer-mod/releases/download/mc1.20.6/httpinfoserver-1.0.0.jar",
+					"size": 140098,
+					"downloads": 13,
+					"inspection": 2,
+					"sha256": "be935aa780063fc6c90e98c5b7dc13387ec7cc457fff3554293983981ef9e6df",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "httpinfoserver",
+							"version": "1.0.0",
+							"name": "HttpInfoServer",
+							"description": "Data collector (agent) for HTTP API server",
+							"minecraft": "~1.20.6",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [
+								"org_java-websocket_java-websocket"
+							],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": "cfa9da44d00ddeb589b6d266d8d3805197808f840af99af9de7349b1007eda63.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 92,
+						"jars": [
+							"META-INF/jars/Java-WebSocket-1.5.6.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/Java-WebSocket-1.5.6.jar!org/java_websocket/AbstractWrappedByteChannel.class": [
+									"java/nio/channels/SocketChannel.isBlocking"
+								],
+								"META-INF/jars/Java-WebSocket-1.5.6.jar!org/java_websocket/client/WebSocketClient$WebsocketWriteThread.class": [
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/Java-WebSocket-1.5.6.jar!org/java_websocket/client/WebSocketClient.class": [
+									"java/net/Socket.close",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setReuseAddress",
+									"java/net/Socket.isConnected",
+									"java/net/Socket.connect",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.<init>",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.getLocalSocketAddress",
+									"java/net/Socket.getRemoteSocketAddress"
+								],
+								"META-INF/jars/Java-WebSocket-1.5.6.jar!org/java_websocket/server/WebSocketServer.class": [
+									"java/nio/channels/SocketChannel.configureBlocking",
+									"java/nio/channels/SocketChannel.socket",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setKeepAlive",
+									"java/nio/channels/SocketChannel.register",
+									"java/net/Socket.getLocalSocketAddress",
+									"java/net/Socket.getRemoteSocketAddress"
+								],
+								"META-INF/jars/Java-WebSocket-1.5.6.jar!org/java_websocket/SSLSocketChannel.class": [
+									"java/nio/channels/SocketChannel.close",
+									"java/nio/channels/SocketChannel.read",
+									"java/nio/channels/SocketChannel.write",
+									"java/nio/channels/SocketChannel.isBlocking",
+									"java/nio/channels/SocketChannel.isOpen"
+								],
+								"META-INF/jars/Java-WebSocket-1.5.6.jar!org/java_websocket/SSLSocketChannel2.class": [
+									"java/nio/channels/SocketChannel.write",
+									"java/nio/channels/SocketChannel.read",
+									"java/nio/channels/SocketChannel.isConnected",
+									"java/nio/channels/SocketChannel.isOpen",
+									"java/nio/channels/SocketChannel.close",
+									"java/nio/channels/SocketChannel.configureBlocking",
+									"java/nio/channels/SocketChannel.connect",
+									"java/nio/channels/SocketChannel.finishConnect",
+									"java/nio/channels/SocketChannel.socket",
+									"java/nio/channels/SocketChannel.isBlocking"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"META-INF/jars/Java-WebSocket-1.5.6.jar!org/java_websocket/AbstractWebSocket.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Minecraft version**: 1.20.6\n**Patch** number: 0\n\nThis version contains the following information about the player that ran the mod:\n- UUID\n- Nickname\n- Is the player in any world now\n- Info about the world the player playing in:\n- - World's name\n- - World's difficulty\n- - Is day now in the world\n- - Which weather now (\"clear\", \"thunder\", \"rain\")\n- - Time of day\n- - World time\n- - Type of world (\"overworld\", \"theEnd\", \"theNether\", \"custom\")\n- - Is server's world\n- - Server info:\n- - - Is world local (IP address is 127.0.0.1 or 192.168.x.x)\n- - - Is world realm\n- - - Address of the server (as the player wrote where joined)\n- - - Ping\n- - - Name of the server (as the player wrote when saving server in the server's list)\n- - - MOTD of the server\n- List of players in the world:\n- - URL to download the player's skin\n- - Is skin has a slim model\n- - Nickname of the player\n- - UUID of the player\n- - Position of the player (x, y, z)\n- - Game mode of the player (\"spectator\", \"creative\", \"survival\" (also if the player is in the adventure mode)),\n- - Light level at the player\n- - Luminance at the player\n- - Name of block the player stood on\n- - Name of an item the player held\n- List of entities in the world:\n- - Entity's id\n- - Name of the entity (like \"minecraft:cow\")\n- - Position of the entity (x, y, z)"
+		},
+		{
+			"tag": "mc1.20.4",
+			"published": "2024-04-08T18:16:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 160983197,
+					"name": "httpinfoserver-1.0.0.jar",
+					"url": "https://github.com/dadencukillia/httpInfoServer-mod/releases/download/mc1.20.4/httpinfoserver-1.0.0.jar",
+					"size": 139589,
+					"downloads": 10,
+					"inspection": 2,
+					"sha256": "a086c2704da9cbabf289a6df1f23b5e11a84a3cea3616448724d8506d420f2fa",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "httpinfoserver",
+							"version": "1.0.0",
+							"name": "HttpInfoServer",
+							"description": "Data collector (agent) for HTTP API server",
+							"minecraft": "~1.20.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [
+								"org_java-websocket_java-websocket"
+							],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": "cfa9da44d00ddeb589b6d266d8d3805197808f840af99af9de7349b1007eda63.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 92,
+						"jars": [
+							"META-INF/jars/Java-WebSocket-1.5.6.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/Java-WebSocket-1.5.6.jar!org/java_websocket/AbstractWrappedByteChannel.class": [
+									"java/nio/channels/SocketChannel.isBlocking"
+								],
+								"META-INF/jars/Java-WebSocket-1.5.6.jar!org/java_websocket/client/WebSocketClient$WebsocketWriteThread.class": [
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/Java-WebSocket-1.5.6.jar!org/java_websocket/client/WebSocketClient.class": [
+									"java/net/Socket.close",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setReuseAddress",
+									"java/net/Socket.isConnected",
+									"java/net/Socket.connect",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.<init>",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.getLocalSocketAddress",
+									"java/net/Socket.getRemoteSocketAddress"
+								],
+								"META-INF/jars/Java-WebSocket-1.5.6.jar!org/java_websocket/server/WebSocketServer.class": [
+									"java/nio/channels/SocketChannel.configureBlocking",
+									"java/nio/channels/SocketChannel.socket",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setKeepAlive",
+									"java/nio/channels/SocketChannel.register",
+									"java/net/Socket.getLocalSocketAddress",
+									"java/net/Socket.getRemoteSocketAddress"
+								],
+								"META-INF/jars/Java-WebSocket-1.5.6.jar!org/java_websocket/SSLSocketChannel.class": [
+									"java/nio/channels/SocketChannel.close",
+									"java/nio/channels/SocketChannel.read",
+									"java/nio/channels/SocketChannel.write",
+									"java/nio/channels/SocketChannel.isBlocking",
+									"java/nio/channels/SocketChannel.isOpen"
+								],
+								"META-INF/jars/Java-WebSocket-1.5.6.jar!org/java_websocket/SSLSocketChannel2.class": [
+									"java/nio/channels/SocketChannel.write",
+									"java/nio/channels/SocketChannel.read",
+									"java/nio/channels/SocketChannel.isConnected",
+									"java/nio/channels/SocketChannel.isOpen",
+									"java/nio/channels/SocketChannel.close",
+									"java/nio/channels/SocketChannel.configureBlocking",
+									"java/nio/channels/SocketChannel.connect",
+									"java/nio/channels/SocketChannel.finishConnect",
+									"java/nio/channels/SocketChannel.socket",
+									"java/nio/channels/SocketChannel.isBlocking"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"META-INF/jars/Java-WebSocket-1.5.6.jar!org/java_websocket/AbstractWebSocket.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Minecraft version**: 1.20.4\n**Patch** number: 0\n\nThis version contains the following information about the player that ran the mod:\n- UUID\n- Nickname\n- Is the player in any world now\n- Info about the world the player playing in:\n- - Is day now in the world\n- - Which weather now (\"clear\", \"thunder\", \"rain\")\n- - Time of day\n- - World time\n- - Type of world (\"overworld\", \"theEnd\", \"theNether\", \"custom\")\n- - List of players in the world:\n- - - URL to download the player's skin\n- - - Is skin has a slim model\n- - - Nickname of the player\n- - - UUID of the player\n- - - Position of the player (x, y, z)\n- - - Game mode of the player (\"spectator\", \"creative\", \"survival\" (also if the player is in the adventure mode)),\n- - - Light level at the player\n- - - Luminance at the player\n- - - Name of block the player stood on\n- - - Name of an item the player held\n- - List of entities in the world:\n- - - Entity's id\n- - - Name of the entity (like \"minecraft:cow\")\n- - - Position of the entity (x, y, z)\n- - Is server's world\n- - Server info:\n- - - Is world local (IP address is 127.0.0.1 or 192.168.x.x)\n- - - Is world realm\n- - - Address of the server (as the player wrote where joined)\n- - - Ping\n- - - Name of the server (as the player wrote when saving server in the server's list)\n- - - MOTD of the server"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-29T10:54:18.815Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"history": 1
+}

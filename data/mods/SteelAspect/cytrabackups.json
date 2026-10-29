@@ -352,7 +352,7 @@
 						"unreadable": []
 					},
 					"icon": "be5df4df5cb3f3e5440f1f691c9de8affd54f680578c74253d718bc41f791d8b.png",
-					"downloads": 4,
+					"downloads": 5,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -360,7 +360,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "- **Restore preview**: `/cbackup preview <id> radius <0-7>` (or `chunks <dim> <x1> <z1> <x2> <z2>`, up to 256 chunks) turns that area of a backup into a Litematica schematic placed exactly where it was. With Cytra Syncmatica on the server it is shared right away, so everyone can load it from the Syncmatica menu and compare it with the world before restoring. Without it, the `.litematic` is saved in the backup folder under `previews/`. `/cbackup preview clear` removes the shared previews."
 		},
 		{
 			"tag": "v1.6.4",
@@ -707,7 +708,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "- New mod icon: the Cytra logo (Mod Menu, Cytra Hub). No other changes."
 		},
 		{
 			"tag": "v1.6.3",
@@ -1054,7 +1056,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "Includes every change since 1.5.0 (1.5.1–1.6.2 were not released separately).\n\n### 1.6.3\n\n- The area restore screen has a **Copy command** button: it copies the `/cbackup restore` command for the selected chunks, so you can run it from chat later, for example once you are away from the area. Chunks nobody is near are restored right away instead of at the next restart.\n\nInstall: replace any older `cytrabackups-*.jar` in `mods/` (the button needs it in your game; the server works with 1.6.2 or newer).\n\n### 1.6.2\n\n**Faster off-site cleanup, and settings save during uploads.**\n\n- Deleting data from the off-site copy (after deleting or pruning backups) runs with **Parallel transfers** at a time instead of one by one, and its progress is shown (it used to sit at 0%). A backup's own files are deleted before its data.\n- Fix: if a piece was queued for deletion off-site and the same content was uploaded again while the deletions ran (for example a chunk back in an older state after a restore), the old deletion could remove the new upload.\n- Saving settings or `/cbackup reload` during an off-site upload no longer fails: the settings are saved right away and take effect as soon as the upload has finished. The settings screen shows the saved values immediately.\n\nInstall: replace any older `cytrabackups-*.jar` in `mods/`.\n\n### 1.6.1\n\n**Fix: slow off-site uploads.**\n\n- Off-site uploads became very slow once the server had been running for a few minutes: the list of uploaded pieces was saved to disk after every single piece instead of every 2 minutes. This affected off-site only backups and the regular off-site copy.\n- Off-site only: pieces an interrupted backup left on the server without uploading are uploaded first by the next backup, so cancelled or restarted backups cannot pile up local data.\n- Off-site only: the console logs upload progress about once a minute (pieces, size, speed, what is waiting), and `/cbackup status` shows it too.\n- `/cbackup cancel` and server stops no longer wait for uploads to catch up first.\n\nInstall: replace any older `cytrabackups-*.jar` in `mods/`.\n\n### 1.6.0\n\n**Off-site only: keep backups only at the off-site copy.**\n\n- New setting **Keep local copy** (`offsite.keepLocalCopy`, on by default). Turned off, every backup uploads its new data while it runs and deletes it on this server once uploaded. Only the backup list and at most **Upload buffer** (`offsite.localBufferGiB`, default 4) of data waiting for upload stay here, so a world bigger than the free disk space can be backed up.\n- Unchanged data is referenced, not uploaded again. An interrupted backup (restart, lost connection) continues where it stopped on the next try.\n- If uploading is slower than reading the world, world saving is turned back on for the rest of that backup instead of holding the world unsaved for hours.\n- Restores, area restores, verify and export download the data they need from the off-site copy. Fetching a backup in this mode only fetches its file list.\n- Cleanup also deletes off-site data that only the removed backups used, and leftovers of interrupted backups.\n- New setting **Parallel transfers** (`offsite.uploadThreads`, default 8, was a fixed 3): uploads and downloads at the same time. Backups are many small pieces, so this matters more than bandwidth.\n- Fix: data uploaded again shortly after being queued for off-site deletion (content that came back, e.g. after a restore) could be deleted off-site by that older queued deletion.\n\nInstall: replace any older `cytrabackups-*.jar` in `mods/`.\n\n### 1.5.1\n\n**Automatic backups start off.**\n\n- On a fresh install automatic backups are now disabled (`schedule.enabled` defaults to `false`). Turn them on under Settings > Schedule > Enabled, or set `schedule.enabled` to `true` in `config/cytrabackups.json` and run `/cbackup reload`. Manual backups work as before.\n- Existing configs are not changed: a server that already has `\"enabled\": true` keeps its automatic backups.\n\n..."
 		},
 		{
 			"tag": "v1.5.0",
@@ -1401,7 +1404,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "**Smaller backups: chunk recompression.**\n\n- New setting **Recompress chunks** (`compression.recompressChunks`, off by default). Each chunk's data is unpacked from Minecraft's zlib and stored with native zstd plus a dictionary trained on real 1.21.11 chunks (shipped in the jar). Measured on 25,000 real chunks: about 24 percent smaller than the zlib payloads at the default level 15 (`compression.chunkLevel`, 1-22). Restores, exports and live chunk restores pack the chunks back into normal region files, so Minecraft never sees a difference.\n- Native zstd (zstd-jni) is bundled for Windows, Linux and macOS (x64 and ARM64). With it, the zstd **Level** setting now works (1-22). On a platform without a native library the mod falls back to the pure-Java zstd as before; dictionary-compressed chunks can only be read where the native library loads.\n- Turning the setting on or off makes the next backup re-read every region file once (it is a full read, not a full copy: unchanged chunks that already exist in the store are still shared).\n- Backups written with recompression on need CytraBackups 1.5.0 or newer to restore. Older backups restore as before.\n\nInstall: replace any older `cytrabackups-*.jar` in `mods/`."
 		},
 		{
 			"tag": "v1.4.0",
@@ -1740,11 +1744,19 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "**Get backups back from the off-site copy.**\n\n- `/cbackup offsite list` shows the backups stored at your S3, SFTP or WebDAV destination, with a [Fetch] button for the ones not on this server. `/cbackup offsite fetch <id>` downloads one into the local store (every piece verified), after which it can be restored like any other backup. Also under Tools in the menu.\n- Works for disaster recovery: on a fresh server with the same off-site settings, list, fetch, restore.\n- OVHcloud Object Storage documented as an S3 destination (endpoint `https://s3.<region>.io.cloud.ovh.net`, region e.g. `gra`, path-style on).\n- The zstd \"Level\" setting is documented as having no effect: the bundled pure-Java zstd has a single level (about zstd 3). Measured on 25,000 real 1.21.11 chunks, recompressing with higher zstd levels would save at most 10-24%, so that is planned separately with a native zstd.\n\nInstall: replace any older `cytrabackups-*.jar` in `mods/`."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"docs/images/gui-backups.png",
+		"docs/images/gui-confirm.png",
+		"docs/images/gui-settings.png",
+		"docs/images/gui-tools.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

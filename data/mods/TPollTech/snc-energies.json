@@ -46,7 +46,7 @@
 						"unreadable": []
 					},
 					"icon": "7e18b50a1a7547dfc1c36a5eeb568f03da95aa78a336a9ae129b80d743a8d5a8.png",
-					"downloads": 5,
+					"downloads": 6,
 					"funding": [],
 					"content": {
 						"names": {
@@ -150,7 +150,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "# SNC Energies 0.8.0 — Motores Adventures + UV elétrico opt-in\n\nData: 30/09/2026 · Minecraft 26.3 · Fabric Loader 0.19.5\n\n## Destaques\n\n- **Motor de Bebidas** (opt-in, requer SNC Adventures): encoste na Esmagadora de Cana ou Prensa de Uvas, carregue a fornada e ligue energia SNC. Ele entrega a fornada exata, coleta caldo/bagaço e pausa sem perdas quando falta energia. Automação transacional: sem jogador falso, sem leitura de campos privados, lote confirmado antes de aplicar — o contrato entre os mods é respeitado à risca. Caldeirão, dorna, alambique e barril continuam manuais.\n- **Lâmpada UV Elétrica** (opt-in): variante elétrica da lâmpada UV do Adventures. Energia própria (ciclo de 1.200 E = 600 ticks, 20 E/t acesa), redstone independente, luz nível 11 para afetar apenas a maturação UV feita pela lógica original do Adventures. A lâmpada original segue intacta.\n- **Caderno da Oficina**: página nova do **Silo** (operação + receita, linguagem simples), texto de operação da **Compactadora** na página dela, e a página de Adventures atualizada explicando motor e UV elétrico.\n- **Prévias 3D no estúdio**: `previews/compactadora.html` (controle do pistão: desce e espreme o fardo de demonstração) e `previews/silo.html` (controle do nível de grão: fileiras enchendo de baixo para cima). Geometria real do jogo, estúdio do SNC 75, variantes offline autocontidas.\n\n## Sem Adventures\n\nO jogo funciona igual às versões anteriores: o motor idela com máquinas desconhecidas (não toca em nada) e a lâmpada só acende com energia. Nada é registrado em nome do outro mod.\n\n## Qualidade\n\n- Suíte funcional standalone: **640 verificações PASS** (`verification/0.8.0-standalone.log`).\n- Suíte funcional com SNC Adventures 1.2.61: **656 verificações PASS** (`verification/0.8.0-adventures.log`), incluindo a cadeia real cana → moenda → caldo/bagaço coletados pelo motor com conservação total.\n- Gametest de cliente: painéis do Motor e do Silo renderizam com layout sincronizado; caderno exibe as páginas novas (`verification/panel-beverage_motor.png`, `verification/panel-silo.png`, `verification/progression-guide-0.8.0.png`).\n\n## Uso\n\nSubstitua o `snc-energies.jar` na pasta mods. Receitas: Motor = 4 chapas de aço + 2 circuitos + engrenagem + redstone; Lâmpada UV Elétrica = 6 vidros + 2 fios de cobre + quartzo. Detalhes de operação no `GUIA-DE-TESTE.md` e no Caderno da Oficina no jogo."
 		},
 		{
 			"tag": "v0.7.0",
@@ -191,7 +192,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "# SNC Energies 0.7.0\n\nTier Agroindustrial completo + retrogen opcional do Mercadão.\n\n## Novidades\n\n- **Compactadora** (11ª máquina industrial, 2×1×2, tier 4 elétrico — 120 E por lote): fardos de feno a partir de 9 trigos ou 9 arroz, bloco de osso a partir de 9 farinhas de osso, briquetes de biomassa em lote (6 cascas de arroz ou 6 serragens → 3), chapa isolada a partir de 8 farelos de soja e o clássico bolo (4 açúcares + 1 ovo). Painel próprio no padrão SNC, compatível com chave de fenda e modos de face.\n- **Silo** (2×2×3, sem orientação, 12 células): armazenagem a granel com 16 fileiras de 16.384 itens (262.144 no total), um tipo de item por fileira — grãos nunca se misturam. Recepção por cima (funis e tubos), saída por baixo; buffers de entrada e extração drenam sozinhos. Depósito/retirada em massa clicando com pilhas grandes. Receita: chapas de aço + engrenagens.\n- **Retrogen opcional do Mercadão**: `/gamerule snc_mercadao_retrogen true` liga a backfill em chunks antigos já carregados (fila processada a 2 chunks/tick, sem travar o servidor); checagem de proximidade evita duplicar um mercado existente. Comando de admin `/retrogen mercadao` (raiz: valida gamerule + proximidade), `/retrogen mercadao here|at <pos>` (força a checagem no chunk).\n\n## Qualidade\n\n- Suíte funcional: **629 verificações PASS** standalone (`verification/0.7.0-standalone.log`), 68 novas cobrindo o contrato multibloco da compactadora, as 7 receitas conservativas, o granel do silo (sem mistura, buffers, persistência, teardown) e o básico do retrogen.\n- Instalação na instância com backup prévio e SHA-256 conferidos: `7D5261F830B9C965CC414D8E0F13659D7AFB7E2B9E06E7F0C086DB55D013FAE0` (`verification/installation-0.7.0.json`).\n\n## Notas\n\n- Requer Minecraft 26.3, Fabric Loader 0.19.5+ e Fabric API 0.161.0+26.3 (Java 25).\n- Nenhum ID antigo alterado; mundos e máquinas existentes preservados.\n- Changelog completo por versão: `PROGRESSAO.md` no repositório."
 		},
 		{
 			"tag": "v0.6.6",
@@ -232,7 +234,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "# SNC Energies 0.6.6\n\nMarco acumulado 0.5.0 → 0.6.6 (o primeiro release desde a 0.4.1).\n\n## Destaques\n\n- **Veículos SNC no jogo (0.6.1)**: trator SNC 75 dirigível, plantadeira SNC 75-P engatável, colheitadeira SNC 90 e Carreta Graneleira SNC 90-C — plantio/colheita reais por faixas, combustível a óleo vegetal, engate com transferência conservativa de carga, painéis próprios.\n- **Mercadão completo (0.6.0–0.6.4)**: prédio fechado com porta, letreiro MERCADÃO pintado, vitrines que esvaziam durante o dia, interior cenográfico, Mercajeiro que debita a carteira do SNC Adventures pelo balcão, estoque diário persistido, estrutura gerada no mundo (spacing 24, 18 biomas).\n- **Correção crítica de worldgen (0.6.5)**: os JSONs de estrutura estavam sem o prefixo `worldgen/` desde a 0.6.0 e os registries os ignoravam em silêncio — o Mercadão nunca foi gerado. Corrigido contra o layout real da 26.3; `/locate structure snc_energies:mercadao` agora responde.\n- **Sweep defensivo dos datapacks (0.6.6)**: nenhum outro erro de pasta. Na 26.3 `worldgen/feature/` é o nome correto de configured features (`configured_feature/` não existe mais nesta versão) — estanho e voltaite sempre geraram.\n- **Automação (0.5.0)**: modo de I/O por lado nas 11 industriais (chave de fenda), redstone invertível e filtro de 9 slots por célula do Tubo de Itens.\n\n## Qualidade\n\n- Suíte funcional: **561 verificações PASS** standalone (`verification/0.6.6-standalone.log`), incluindo probes permanentes de worldgen (structure/structure_set/template_pool/placed_feature com controles vanilla), `/locate` end-to-end no servidor de testes e `RecipeManager.byKey`.\n- Instalação na instância com backup prévio e SHA-256 conferidos: `8F813C9E8987FD96387B5AC6D932F1F1C5DC480F6B7B419B79C3454FF8E648D9` (`verification/installation-0.6.6.json`).\n\n## Notas\n\n- Requer Minecraft 26.3, Fabric Loader 0.19.5+ e Fabric API 0.161.0+26.3 (Java 25).\n- Chunks já explorados não recebem estruturas/minérios retroativamente (sem retrogen): procure em região nova.\n- Changelog completo por versão: `PROGRESSAO.md` no repositório."
 		},
 		{
 			"tag": "v0.4.1",
@@ -273,7 +276,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "# SNC Energies 0.4.1 — marco do fluxo de releases\n\n## O que mudou\n- **Nenhuma mudança de gameplay**: o 0.4.0 passou no teste do dono sem nada a ajustar.\n- Marco formal do novo fluxo de publicação (Regra de Ouro 8): release gerada pelo GitHub Actions no push da tag `v0.4.1`, com o jar e o `SHA256SUMS.txt` anexados automaticamente.\n- CI: cache de Gradle/Loom compartilhado entre os workflows; novo workflow **Build** na `main` e em PRs (artifact do jar a cada push, comentário automático em PR quebrado, issue de rastreio quando a main quebra e fecha quando volta ao verde).\n\n## Notas\n- O jar anexado é buildado pelo CI a partir da tag `v0.4.1`; internamente o `fabric.mod.json` ainda declara 0.4.0 — a próxima release (0.5.0, já em preparo) sai com a versão alinhada ao gradle.properties.\n- Integridade: conferir o `SHA256SUMS.txt` anexado.\n- Requisitos: Minecraft **26.3** · Fabric Loader **0.19.5** · Fabric API **0.161.0+26.3** · Java 25.\n- Instalação: copie o jar para `mods` (remova versões anteriores); `fabric-api-0.161.0+26.3.jar` é obrigatório."
 		},
 		{
 			"tag": "v0.4.0",
@@ -314,11 +318,55 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "# SNC Energies 0.4.0 — Caderno legível com busca e índice lateral\n\n## Caderno da Oficina (FieldGuideScreen)\n- **Legibilidade corrigida**: fundo/pergaminho desenhados na camada de fundo (o desenho antes do `super.extractRenderState` escurecia tudo) e tintas quentes sobre pergaminho claro — corpo `#4d3a26`, títulos `#7a3a20`, apagado `#8a6a48`, erro `#a04430`. Fim do texto quase preto ilegível.\n- **Busca ao digitar**: campo no topo do caderno; matching sem acento (ex.: \"minerio\" encontra \"minério\"); todas as palavras devem casar com título + corpo + receitas da página. `<`/`>` ciclam só entre resultados; dica \"Página X de Y\" e mensagem própria quando nada é encontrado.\n- **Índice lateral clicável** (novo): coluna à esquerda com uma linha por página (títulos sem o prefixo \"NN /\", máquinas pelo nome do bloco). Clique pula direto para a página com som de virar página; página atual destacada; entradas fora do filtro da busca ficam apagadas; clicar numa apagada limpa a busca e pula. Roda do mouse rola o índice ou o texto, conforme o lado.\n\n## Requisitos\n- Minecraft **26.3** · Fabric Loader **0.19.5** · Fabric API **0.161.0+26.3** · Java 25\n\n## Instalação\n1. Copie `snc-energies.jar` para a pasta `mods` da instância (remova versões anteriores).\n2. Obrigatório: `fabric-api-0.161.0+26.3.jar` na mesma pasta.\n\n## Integridade\n- SHA-256 do `snc-energies.jar` anexado (build do CI): `B96B1D9BD88584CF16230C9E28861359788D00A12748203C20298A90A74A14F8`\n- O jar instalado em `Instances/SNC energies/mods/` (SHA-256 `B58B4B3D…1501`) foi buildado localmente das mesmas fontes da tag `v0.4.0` — manifesto em `verification/installation-0.4.0.json`.\n\n## Também neste marco\n- v0.3.0 (automação): tubos de itens com conservação exata, sucção nas saídas das máquinas, válvula de redstone nas 11 industriais.\n- Texturas 128×128 geradas por código (motor fbm/bevel) — 99 texturas regeneradas de forma determinística.\n\n## Notas\n- Traduções pt_br (prioritário) e en_us; strings vindas dos geradores, nunca hardcoded.\n- Validação visual no jogo ainda pendente de teste do dono."
 		}
 	],
 	"readme": null,
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"assets/mercadao/anchor_ghost.png",
+		"assets/mercadao/awning_bebidas.png",
+		"assets/mercadao/barrel.png",
+		"assets/mercadao/counter_frame.png",
+		"assets/mercadao/counter_glass.png",
+		"assets/mercadao/counter_top.png",
+		"assets/mercadao/counter_wood.png",
+		"assets/mercadao/floor_accent.png",
+		"assets/mercadao/floor_stone.png",
+		"assets/mercadao/glass_pane.png",
+		"assets/mercadao/goods_balcao_forte.png",
+		"assets/mercadao/goods_bebidas.png",
+		"assets/mercadao/goods_frios.png",
+		"assets/mercadao/goods_sementes.png",
+		"assets/mercadao/lantern.png",
+		"assets/mercadao/npc_mercador.png",
+		"assets/mercadao/sack.png",
+		"assets/mercadao/sign_board.png",
+		"assets/mercadao/spruce_log.png",
+		"assets/mercadao/spruce_planks.png",
+		"assets/mercadao/stripped_spruce.png",
+		"tools/backup-textures-v1-icon_128.png",
+		"tools/backup-textures-v1/block/cable_arm.png",
+		"tools/backup-textures-v1/block/cable_core.png",
+		"tools/backup-textures-v1/block/coal_generator_front_off.png",
+		"tools/backup-textures-v1/block/coal_generator_front_on.png",
+		"tools/backup-textures-v1/block/coal_generator_side.png",
+		"tools/backup-textures-v1/block/colonial_iron.png",
+		"tools/backup-textures-v1/block/colonial_stone.png",
+		"tools/backup-textures-v1/block/colonial_wood.png",
+		"tools/backup-textures-v1/block/crusher_front_off.png",
+		"tools/backup-textures-v1/block/crusher_front_on.png",
+		"tools/backup-textures-v1/block/crusher_side.png",
+		"tools/backup-textures-v1/block/crusher_top.png",
+		"tools/backup-textures-v1/block/deepslate_tin_ore.png",
+		"tools/backup-textures-v1/block/deepslate_voltaite_ore.png",
+		"tools/backup-textures-v1/block/electric_furnace_front_off.png",
+		"tools/backup-textures-v1/block/electric_furnace_front_on.png",
+		"tools/backup-textures-v1/block/electric_furnace_side.png",
+		"tools/backup-textures-v1/block/energy_cube.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

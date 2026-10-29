@@ -50,7 +50,7 @@
 						"unreadable": []
 					},
 					"icon": null,
-					"downloads": 13,
+					"downloads": 14,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -58,7 +58,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "## [1.5.0] - 2026-06-23\n\n### Added\n- Minecraft 26.2 support (unobfuscated builds, Java 25)\n\n### Changed\n- 26.2 is now the primary build target; multi-version builds now cover 1.21.9, 1.21.10, 1.21.11, 26.1, and 26.2\n- Adapted to the 26.2 screen API change via a new `ScreenCompat` helper:\n  - `Minecraft.setScreen()` → `Minecraft.setScreenAndShow()`\n  - `Minecraft.screen` field → `Minecraft.gui.screen()`\n- Updated dependencies for 26.2: Fabric API 0.153.0+26.2, Mod Menu 20.0.0-beta.4\n\n### Fixed\n- **Cycle-limit sliders (fallback config screen)** could not reliably select **0 (Disabled)**: the slider's far-left mapped to `-1` (Unlimited), so setting villager or wandering-trader cycling to disabled silently did nothing — and a \"disabled\" wandering trader could still be cycled once at the default limit of 1. Sliders now order options as **Disabled (0) → 1…N → Unlimited (-1)**, so every value (especially Disabled) is reliably selectable. The Cloth Config screen was unaffected.\n- Wandering-trader cycle limit of `0` now reports a clear \"cycling is disabled by the server\" message, matching villager behavior.\n\n### Technical\n- Server-side networking, merchant accessors, and trade-cycle logic required no changes — they reuse the existing `>=26.1` Stonecutter conditionals\n- Screen API difference centralised in `ScreenCompat` (gated on `>=26.2`) so 1.21.x and 26.1 are unaffected"
 		},
 		{
 			"tag": "v1.4.0",
@@ -99,7 +100,8 @@
 					},
 					"downloads": 15
 				}
-			]
+			],
+			"notes": "## [1.4.0] - 2026-03-25\n\n### Added\n- Minecraft 26.1 support\n- Minecraft 1.21.9 and 1.21.10 support\n- Java 25 toolchain support\n- Unobfuscated jar handling for MC 26.1 (no mappings required)\n- Multi-version builds via Stonecutter (1.21.9, 1.21.10, 1.21.11, 26.1)\n\n### Changed\n- Migrated from Yarn to Mojang mappings\n- Updated Gradle wrapper to 9.4.1\n- Updated Fabric Loom to 1.15.5\n- Updated Fabric Loader to 0.18.4\n- Adapted all source files with Stonecutter conditionals for API changes:\n  - `PayloadTypeRegistry.playC2S()` → `serverboundPlay()` (26.1)\n  - `displayClientMessage()` → `sendSystemMessage()` (26.1)\n  - `KeyBindingHelper` → `KeyMappingHelper` / `KeyBinding` → `KeyMapping` (26.1)\n  - `GuiGraphics` → `GuiGraphicsExtractor` with new render methods (26.1)\n  - `Villager` package restructured in 1.21.11+\n  - `ResourceLocation` → `Identifier` (1.21.11+)\n  - Permission API changes for 1.21.11+\n- Cloth Config excluded for 26.1 (no compatible version available yet)\n- Fallback config screen used when Cloth Config is unavailable\n\n### Technical\n- Stonecutter 0.5.1 for multi-version source management\n- Single source tree with version conditionals"
 		},
 		{
 			"tag": "v1.3.0",
@@ -111,7 +113,7 @@
 					"name": "villager-cycle-1.3.0.jar",
 					"url": "https://github.com/Partacus-SPQR/VillagerCycle/releases/download/v1.3.0/villager-cycle-1.3.0.jar",
 					"size": 1487468,
-					"downloads": 38,
+					"downloads": 39,
 					"inspection": 2,
 					"sha256": "93d1a7079a3b0286751dd9ef31849f6de85cc8e8ed81e047074e6938215d2a93",
 					"metadataError": "JSON Parse error: Unrecognized token '﻿'",
@@ -130,7 +132,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## [1.3.0] - 2025-12-11\n\n### Added\n- **Fallback Config Screen**: Vanilla config UI when Cloth Config is not installed\n- **Mouse Button Keybinds**: Cycle trades keybind now supports mouse buttons (e.g., Button 4/5)\n\n### Changed\n- **Cloth Config**: Now optional (recommended for enhanced config UI)\n- **ModMenu**: Now optional (recommended for in-game config access)\n- Updated to Minecraft 1.21.11\n- Updated to Fabric Loader 0.18.2\n- Updated to Fabric API 0.139.4+1.21.11\n- Updated to Gradle 9.2.1 and Loom 1.14\n\n### Fixed\n- Cycle trades keybind now properly detects key presses while merchant screen is open"
 		},
 		{
 			"tag": "v1.2.0",
@@ -142,7 +145,7 @@
 					"name": "villager-cycle-1.2.0.jar",
 					"url": "https://github.com/Partacus-SPQR/VillagerCycle/releases/download/v1.2.0/villager-cycle-1.2.0.jar",
 					"size": 1466445,
-					"downloads": 13,
+					"downloads": 14,
 					"inspection": 2,
 					"sha256": "14f1fa010d07a8f72afa1a50f31648a782cc4fc42c80996e0625e7b022f75f40",
 					"metadataError": "JSON Parse error: Unrecognized token '﻿'",
@@ -161,7 +164,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## [1.2.0] - 2025-12-07\n\n### Added\n- **Draggable Button**: Reposition the cycle button via drag screen (set keybind to access)\n- **Villager Cycle Limit**: Configurable limit on cycles per villager (operator only, default: unlimited)\n- **Wandering Trader Cycle Limit**: Configurable limit on cycles per trader (operator only, default: 1)\n- **Show Villager Success Message**: Client-side toggle to hide success messages (reduces chat spam)\n- **Show Wandering Trader Success Message**: Client-side toggle to hide trader success messages\n- **Button Size Sliders**: Configurable button width and height in config\n- **Keybinds**: All unbound by default, set in Controls menu:\n  - Toggle button visibility\n  - Open button position (drag) screen\n  - Open config screen\n  - Reload config file\n  - Cycle trades (works while merchant screen is open)\n\n### Changed\n- Success message settings are now client-side (each player controls their own)\n- Cycle limits are operator-only settings on multiplayer servers\n- All features work in singleplayer with full control\n\n![villagercycle-ezgif com-crop](https://github.com/user-attachments/assets/ef58c221-97e5-4470-bfc7-6bfb75dee31d)\n![VillagerCycleBinds](https://github.com/user-attachments/assets/1a109b44-8d32-45b8-8541-5126690b25dd)\n![VillagerCycleConfig](https://github.com/user-attachments/assets/2c77950c-69af-422d-a0f0-20338adbd30a)\n![VillagerCycleDragScreen](https://github.com/user-attachments/assets/5c32c6ba-b293-44d9-a1cb-716f94ad9640)"
 		},
 		{
 			"tag": "v1.1.0",
@@ -173,7 +177,7 @@
 					"name": "villager-cycle-1.1.0.jar",
 					"url": "https://github.com/Partacus-SPQR/VillagerCycle/releases/download/v1.1.0/villager-cycle-1.1.0.jar",
 					"size": 1408373,
-					"downloads": 12,
+					"downloads": 13,
 					"inspection": 2,
 					"sha256": "837dbfa5f7498e02687bc28fd78cdb6fb45c3e63fac1bf2488635b3def04c710",
 					"metadataError": "JSON Parse error: Unrecognized token '﻿'",
@@ -192,11 +196,14 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## [1.1.0] - 2025-12-01\n\n### Added\n- **Wandering Trader Support**: Can now cycle trades for wandering traders (operator level 4 required on servers)\n- **Visual Config Screen**: In-game configuration GUI via Cloth Config API\n- **Manual Config Support**: JSON config file for users who don't want ModMenu\n- **Anti-Exploit Protection**: Items in trade slots are automatically returned to inventory when cycling\n- **Trade Validation**: Prevents cycling wandering traders that have already been traded with\n- **Enhanced Tooltips**: Config screen displays default values and ranges for all settings\n- **Operator Permissions**: Wandering trader setting requires operator level 4 on multiplayer servers\n- **Config Sync System**: Network packets properly sync wandering trader setting between client and server\n\n### Fixed\n- **Wandering Trader Detection**: Fixed instanceof check preventing false error messages for regular villagers\n- **Button Focus**: Button no longer stays highlighted after multiple trade cycles\n- **Config Persistence**: Config changes in GUI now properly sync to server in multiplayer\n\n### Changed\n- **Cloth Config**: Now a required dependency\n- **ModMenu**: Now optional (only needed for in-game config access)\n- Wandering trader cycling disabled by default for security\n- Config tooltips show default values in gray text\n- Server logs show operator actions when toggling settings"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

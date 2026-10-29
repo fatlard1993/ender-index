@@ -80,7 +80,7 @@
 						"unreadable": []
 					},
 					"icon": "35cfe2937faacd417b4d4c11a4a87c916e9109a69867743567cfb1f611902bd2.webp",
-					"downloads": 3,
+					"downloads": 4,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -88,7 +88,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "Fixes:\n- Fixed tab characters not being allowed at the start of function lines\n- Restored compatibility with adventure-platform-fabric\n\nThis mod requires [fabric-language-kotlin](https://github.com/FabricMC/fabric-language-kotlin) to be installed.\n\nThere's no new extension version for this release. Version 0.7.0 can be downloaded [here](https://github.com/Papierkorb2292/CommandCrafter/releases/tag/v0.7.0+26.2)"
 		},
 		{
 			"tag": "v0.8.2+26.3",
@@ -163,7 +164,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "Fixes:\n- Fixed an incompatibility with the PackTest mod\n\nThis mod requires [fabric-language-kotlin](https://github.com/FabricMC/fabric-language-kotlin) to be installed.\n\nThere's no new extension version for this release. Version 0.7.0 can be downloaded [here](https://github.com/Papierkorb2292/CommandCrafter/releases/tag/v0.7.0+26.2)"
 		},
 		{
 			"tag": "v0.8.1+26.3",
@@ -238,7 +240,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "Fixes:\n- Fixed that auto reload did not detect all (new) reloadable file types\n- Fixed that there was no analyzer for `dimension` files\n- Fixed a network error that happened when a reload removes tags that a dynamic registry entry references\n- Fixed completely missing auto-completions for item slots in chat after typing at least one character\n- Debugger should use `\"step\"` as stop reason after stepping\n- Correctly handle trailing whitespace after an inline function in the editor\n\nThis mod requires [fabric-language-kotlin](https://github.com/FabricMC/fabric-language-kotlin) to be installed.\n\nThere's no new extension version for this release. Version 0.7.0 can be downloaded [here](https://github.com/Papierkorb2292/CommandCrafter/releases/tag/v0.7.0+26.2)"
 		},
 		{
 			"tag": "v0.8.0+26.3",
@@ -313,7 +316,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "- Updated to 26.3\n\nChanges:\n- Added the `command_crafter:term` context int/float provider type, which allows evaluating mathematical expressions (and can be transpiled to vanilla providers)\n- Added highlighting, diagnostics, hover, and \"Go to definition\" support for substitutions in `translate` text components\n\nFixes:\n- Fixed `angry_at` tag missing from auto-completion\n- Fixed rare disconnect from Minecraft server due to large log messages\n- Fixed analyzing missing the last character in a macro in `@language vanilla easyNewLine` mode\n\nThis mod requires [fabric-language-kotlin](https://github.com/FabricMC/fabric-language-kotlin) to be installed.\n\nThere's no new extension version for this release. Version 0.7.0 can be downloaded [here](https://github.com/Papierkorb2292/CommandCrafter/releases/tag/v0.7.0+26.2)"
 		},
 		{
 			"tag": "v0.7.0+26.2",
@@ -388,7 +392,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "Changes:\n- Added support for color pickers in VSCode\n- (block-)entity NBT can now be read in everywhere (selectors, `data merge`, etc.)\n- Added support for auto-completing NBT paths\n- All of the mod's NBT auto-completions are also available in chat now (if this conflicts with other mods, it can be disabled in the config by setting `add-ingame-suggestions` to `false`)\n- Selectors, NBT paths, Commands and Macros inside NBT or JSON strings are also parsed now\n- The macro cache now detects if only a single macro was changed, in which case only that macro has to be reparsed\n- Added warnings for unknown/unused JSON or NBT keys\n- Added `@` as trigger character for completions\n- Added \"SavedFileAutomaticReloadDelay\" setting in VSCode\n- Added the `/commandcrafter:datagen` clientside command, which uses Minecraft's datagen to produce files similar to mcmeta (`commands.json`,`blocks.json` and `registries.json`), which can be loaded into Spyglass. The corresponding Spyglass config is also generated in the output folder if there isn't already a Spyglass config present.\n    - The data generation can also be invoked on server start by setting the `-Dcc_server_datagen_dir=path/to/output` JVM argument\n- \"Go to definition\" now also works if the cursor is exactly at the end of an id\n- Some performance improvements\n\nRemoved:\n- Removed SNBT highlighting for strings that just look like SNBT but Minecraft doesn't actually parse them as SNBT\n\nFixes:\n- Fixed SNBT builtin functions not being highlighted\n- Fixed SNBT incorrectly suggesting commas in some places\n- Fixed missing suggestions for tag entries\n- Fixed that the mod suggested some unicode name in `\"\\N{...}\"` that aren't actually accepted by Minecraft\n- Fixed particle argument analyzer in `vanilla easyNewLine` trying to read nbt in lines following it\n- Fixed that `max_format` suggestions in `pack.mcmeta` specified a minor version, which isn't forwards compatible\n- Fixed some thread pools not being shutdown when Minecraft exits and leading to a watchdog timeout\n\nThis mod requires [fabric-language-kotlin](https://github.com/FabricMC/fabric-language-kotlin) to be installed."
 		},
 		{
 			"tag": "v0.6.6+26.2",
@@ -537,7 +542,8 @@
 					},
 					"downloads": 4
 				}
-			]
+			],
+			"notes": "Updated to 26.1-26.1.2\n\nChanges:\n- Auto completing a JSON or SNBT key no longer inserts a space after the colon. This is because typing the space manually allows VSCode to also load auto-completions for the value\n\nRemoved:\n- Removed warning for missing `block_pos` tag when summoning a `BlockAttachedEntity`, since it doesn't prevent the entity from spawning    \n\nFixes:\n- Fixed completely missing nbt completions for `{equipment:{|}}` in `summon`\n- Fixed that it was impossible to build datapacks for multiple versions with `datapack build`. Overlay directories will be included in the built datapack now (as well as all other files in the datapack folder such as `.vscode`) and it is now possible to skip function validation at specific locations using `@language vanilla noBuildCheck`\n- Fixed `pack.mcmeta` analyzer not reading `\"filter\"` section\n- Fixed that multiline arguments at the end of a `@language vanilly easyNewLine` command were missing suggestions in the following lines if the argument had an error\n- Fixed completely missing analyzing of `pack.mcmeta` specifically on Windows (eww)\n\nThis mod requires [fabric-language-kotlin](https://github.com/FabricMC/fabric-language-kotlin) to be installed."
 		},
 		{
 			"tag": "v0.6.2+1.21.11",
@@ -612,7 +618,8 @@
 					},
 					"downloads": 6
 				}
-			]
+			],
+			"notes": "Fixes:\n- Fixed nbt arguments (except compound arguments) being transpiled incorrectly by `/datapack build`\n\nThere's no new extension version for this release. Version 0.6.0 can be downloaded [here](https://github.com/Papierkorb2292/CommandCrafter/releases/tag/0.6.0+1.21.11)"
 		},
 		{
 			"tag": "v0.5.4+1.21.9",
@@ -687,7 +694,8 @@
 					},
 					"downloads": 4
 				}
-			]
+			],
+			"notes": "Works in 1.21.9-1.21.10\n\nFixes:\n- Fixed network error when a datapack had very large registry files (on the order of megabytes)\n- Fixed registry sync not being cleaned up when an error happened and causing huge error logs on subsequent syncs due to duplicate entries\n\nThis mod requires [fabric-language-kotlin](https://github.com/FabricMC/fabric-language-kotlin) to be installed.\n\nThere's no new extension version for this release. Version 0.5.0 can be downloaded [here](https://github.com/Papierkorb2292/CommandCrafter/releases/tag/v0.5.0)"
 		},
 		{
 			"tag": "v0.5.0",
@@ -762,7 +770,8 @@
 					},
 					"downloads": 7
 				}
-			]
+			],
+			"notes": "Works with 1.21.6, 1.21.7 and 1.21.8\n\n- Updated to fabric loader 0.17.x\n\nChanges:\n- Improved autocomplete in multiline commands\n- Boolean value suggestions in SNBT will now be `true`/`false` instead of `1b`/`0b`\n- \"Load namespace:\" entries in storage viewer are at the top now\n- Improved file search of debugger\n- Added suggestions for keybind text component\n- Show proper error message when VSCode tries to evaluate something (evaluation is not supported yet)\n\nFixes:\n- Fixed errors when vanilla (multiline) commands had trailing spaces on a line\n- Fixed problems with the debugger in macro functions\n- Fixed duplicated breakpoints on reload\n- Fixed \"Step In\" skipping commands when paused on a command result\n- Fixed command feedback from commands like `/function` appearing too early in VSCode\n- Fixed error handling of `/function` commands in the debugger\n- Fixed debugger in inline tags using incorrect positions\n- Fixed that SNBT strings missing their second quotation had no autocomplete\n- Fixed completely missing autocomplete and errors with some inline loot tables, predicates, item modifiers or dialogs \n- Fixed predicates and item modifiers not being able to reload automatically\n- Fixed errors with some command arguments when `easyNewLine` was enabled and they tried to read the next lines, which were later parsed a second time, leading to conflicts\n\nThis mod requires [fabric-language-kotlin](https://github.com/FabricMC/fabric-language-kotlin) to be installed."
 		},
 		{
 			"tag": "v0.4.0",
@@ -835,7 +844,8 @@
 					},
 					"downloads": 8
 				}
-			]
+			],
+			"notes": "Only works with Fabric Loader 0.16.14 and below!\n\n- Updated to 1.21.6 (also works on 1.21.7 and 1.21.8)\n- CommandCrafter now only connects to a dedicated server if the mod versions match\n- Added \"Load namespace:\" entries to storage viewer when storages in a namspace exist but haven't been loaded by the game yet\n- NBT suggestions for entity data in `/summon` and for block data\n- Added support for dialogs\n\nBugfixes:\n- Player was kicked from server when opening storages with too much data\n- Selector filters after `type=` weren't being analyzed\n- `/reload` kicked players without CommandCrafter on a dedicated server with CommandCrafter\n- Diagnostics were not removed by the language server after a file was deleted\n- The language server was missing datapack features when in the main menu\n\nSide note: I am planning to release snapshot versions of the mod if I have the time to give you quicker access to new datapack features (like dialogs)"
 		},
 		{
 			"tag": "v0.3.0",
@@ -908,7 +918,8 @@
 					},
 					"downloads": 4
 				}
-			]
+			],
+			"notes": "Only works with Fabric Loader 0.16.14 and below!\n\nImportant bugfix: Debugging macro functions works now\n\nChanges:\n- New Minecraft Console\n- Added VSCode commands to reload files: `Reload Datapack`, `Reload Resourcepack` and `Reload Shaders`\n    - Reloads can also be configured to happen automatically when saving a file in VSCode by enabling the following keys in the feature config: `autoreload.datapack_json`, `autoreload.resourcepack` and `autoreload.datapack_functions`\n- When SNBT is written in a string, tags and values are still highlighted, but the string color will be kept for characters that aren't highlighted to make it clear that the value is a string\n\nAnd other bugfixes\n\nThis mod requires [fabric-language-kotlin](https://github.com/FabricMC/fabric-language-kotlin) to be installed."
 		},
 		{
 			"tag": "v0.1.2",
@@ -980,7 +991,8 @@
 					},
 					"downloads": 6
 				}
-			]
+			],
+			"notes": "Only works with Fabric Loader 0.16.14 and below!\n\n- Fixed #2 (crash on startup when other mods' command registration rely on a server instance being present)\n\nThis mod requires [fabric-language-kotlin](https://github.com/FabricMC/fabric-language-kotlin) to be installed.\n\nThere's no new extension version for this release. Version 0.1.0 can be downloaded [here](https://github.com/Papierkorb2292/CommandCrafter/releases/tag/v0.1.0)"
 		},
 		{
 			"tag": "v0.1.1",
@@ -1117,7 +1129,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "Only works with Fabric Loader 0.16.14 and below!\n\n- Updated to 1.21.2-1.21.3 (this release also contains the 1.21.4 version, because there are no new features _yet_)\n- When debugging a function, command outputs are now printed in the debug console\n- Bugfixes\n\nThis mod requires [fabric-language-kotlin](https://github.com/FabricMC/fabric-language-kotlin) to be installed.\n\nThere's no new extension version for this release. Version 0.1.0 can be downloaded [here](https://github.com/Papierkorb2292/CommandCrafter/releases/tag/v0.1.0)"
 		},
 		{
 			"tag": "v0.1.0",
@@ -1189,11 +1202,19 @@
 					},
 					"downloads": 8
 				}
-			]
+			],
+			"notes": "First release of CommandCrafter\n\nOnly works with Fabric Loader 0.16.14 and below!\n\nThis mod requires [fabric-language-kotlin](https://github.com/FabricMC/fabric-language-kotlin) to be installed"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"editor_extensions/vscode/ExampleImage.png",
+		"editor_extensions/vscode/ExampleImage2.png",
+		"editor_extensions/vscode/MacroExample.gif",
+		"editor_extensions/vscode/commandcrafter/resources/command-crafter-icon.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

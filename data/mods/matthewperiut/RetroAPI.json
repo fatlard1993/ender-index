@@ -52,7 +52,14 @@
 								"retrocommands",
 								"bhcreative",
 								"retrotweaks"
-							]
+							],
+							"breaksVersions": {
+								"retromovement": "*",
+								"retrosprint": "*",
+								"retrocommands": "*",
+								"bhcreative": "*",
+								"retrotweaks": "*"
+							}
 						}
 					],
 					"scan": {
@@ -238,7 +245,7 @@
 						"unreadable": []
 					},
 					"icon": "72d3c705f665edf8fdeabebf9546f3d699dc083599b36f648c595ac50df12a93.webp",
-					"downloads": 6,
+					"downloads": 7,
 					"funding": [],
 					"content": {
 						"names": {
@@ -320,7 +327,14 @@
 								"retrocommands",
 								"bhcreative",
 								"retrotweaks"
-							]
+							],
+							"breaksVersions": {
+								"retromovement": "*",
+								"retrosprint": "*",
+								"retrocommands": "*",
+								"bhcreative": "*",
+								"retrotweaks": "*"
+							}
 						}
 					],
 					"scan": {
@@ -505,7 +519,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 4,
+					"downloads": 5,
 					"funding": [],
 					"content": {
 						"names": {
@@ -547,7 +561,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "StationAPI mods now get the same automatic treatment RetroAPI mods do.\n\nCreative tabs\n- Auto tabs now include mods that register through StationAPI, not just RetroAPI. A mod that has never heard of RetroAPI gets a tab named after itself.\n- Spawn eggs are no longer duplicated into the owning mod's tab, since they already sit in the Spawn Eggs tab. Eggs from other mods are left where they are.\n\nSpawn eggs\n- Automatic eggs now work under StationAPI. The sweep reads vanilla's EntityRegistry, which both toolchains populate. Living entities only.\n- The fallback egg is tinted from a saturation weighted average of the mob's own render texture, so eggs are distinguishable before anyone draws one. Drop a sprite at assets/<mod>/textures/item/<mob>_spawn_egg.png to replace it.\n\nOpting out without a dependency\n- com.periut.retroapi.compat.RetroOptional takes only Strings, so a mod can call excludeItemGroup, excludeSpawnEggs and excludeSpawnEgg reflectively with no hard dependency on RetroAPI.\n- templates/RetroCompat.java.txt is a copy in helper that wraps the mod check and the reflection, and does nothing when RetroAPI is absent.\n\nFixes\n- The handshake length widener uses ModifyArg instead of ModifyConstant. Only one injector may claim a constant, so RetroTweaks and Glass Networking previously fought over it and whichever lost crashed on startup. Both now apply."
 		},
 		{
 			"tag": "0.4.0",
@@ -994,7 +1009,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "Commands (Brigadier)\n- Full Brigadier port bundled in-tree, with argument types, suggestions and command-tree sync to clients\n- Built-in commands: /give, /setblock, /gamemode, /gamerule, /fly, /help and others\n- Preloaded suggestions so completion is instant on servers rather than a round trip\n- Text component system (retroapi.text) with translation resolution\n- Command blocks: all three types, full editor with text editing and suggestions, chunk-loaded execution\n\nGame modes\n- Creative, Survival, Adventure, Spectator, with per-life persistent flight\n- Modern creative screen: tabs, search, player render, page buttons, click semantics (1 / shift-64 / 1–9 hotbar), bin slot\n- Creative instant break, break cadence, no durability loss, no item consumption, mobs ignore you\n- Middle-click block picker returning obtainable item forms\n- /fly independent of game mode, with fall-damage immunity\n\nConfig API (com.periut.retroapi.config)\n- Annotation-driven configs any mod registers in one call; per-mod JSON, screen, defaults\n- Options screen button renamed Configs..., with a Mods page listing every registered config\n- Server sync for Scope.WORLD options, operator editing with red asterisks and a footer note\n\nContent / registration\n- Spawn eggs for all vanilla mobs, plus automatic spawn eggs for modded entities\n- Automatic creative tab for mods that register content but no tab\n- Achievement pages, with hidden pages and a viewer; StationAPI page mirroring\n- RetroData.chunk(...) for arbitrary per-chunk sidecar data\n- Tags resolving through both RetroAPI's and StationAPI's registries\n\nRetroTweaks merged in (com.periut.retrotweaks, ~290 classes)\n- The whole tweaks/fixes/QoL set HUD, inventory, blocks, entities, rendering, auth/skins, scoring\n- Now breaks the standalone mod, and its config is the config API's first consumer\n\nPackaging\n- OSL modules bundled in the Ornithe jar too (previously babric only)\n- StationAPI compat nested and loaded only when StationAPI is present"
 		},
 		{
 			"tag": "0.3.9",
@@ -1364,7 +1380,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "Two StationAPI fixes.\n\n- Breaking a disguised block no longer overflows the stack.\n- Blocks that register their own BlockItem subclass keep it, so their placement rules work again."
 		},
 		{
 			"tag": "0.3.8",
@@ -1734,7 +1751,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "Minor bug fixes.\n\n- Fixed a server-side crash.\n- Networking patches.\n- Custom world height now reaches the game's own block API, and blocks can have water flow around them.\n- Block items can carry an icon of their own, and the break sound the widened block id was eating is back.\n- Break sounds and debris now read the position before the record, so they play at the right place.\n- Breaking speed works under StationAPI through its own hook, and the disguise path no longer relies on optional injections.\n- Dropped item scale works under StationAPI."
 		},
 		{
 			"tag": "0.3.7",
@@ -2104,11 +2122,14 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "Four releases' worth of work going out as one, because none of it shipped: 0.3.6 was the last tag and everything here has been sitting on main since.\n\n## World generation\n\n`world.noise` is the modern noise stack ported whole, taking a `firstOctave` and an amplitude per octave rather than beta's fixed halving spectrum, and summing two Perlins at incommensurable scales so the lattice artifacts cancel. `RetroCubicBiomes` stores biomes on a sparse 16x16x16 grid with the world, which is what beta's `getBiome(temperature, rainfall)` cannot express: a cavern under a desert is not a property of the desert, and one a player has walked through has an identity that has to survive being unloaded. `RetroCarvers` makes carving registrable and vanilla carving switchable, running against the chunk's raw `byte[]` before lighting or decoration exists. `RetroWorldHeight` extends a dimension vertically, data layer only.\n\n## A launcher that works\n\nstarac was declared `modRuntimeOnly`, and `maven-publish` exports that into the POM at runtime scope, so every mod depending on RetroAPI silently got it on the runtime classpath. Its `MinecraftMixin` redirects a `noCanvas` target that does not exist on Fabric's applet path, and a redirect that finds nothing is a hard failure, so `runClient` in a consumer's project died before drawing a frame in a mixin belonging to a mod they never asked for. It is replaced by retrodragon 0.1.10.\n\n## Blocks that are not cubes\n\nBeta decides a lot of things once, for a whole block type, and then applies the answer to a piece of one.\n\n**Smooth lighting** is four brightness values, one per corner of the whole block face, handed to face methods that draw at whatever bounding box is current. A full cube occupies those same corners. A stair's step spans half the block and gets the whole gradient squeezed into half the distance, and since a stair is two boxes in two passes, the halves disagree where they meet. Those four numbers describe a bilinear field, so it is now sampled at the corners the quad actually covers, which is what modern Minecraft does.\n\n**Texture coordinates** had the same problem with a twist. Two of the six faces emit their horizontal coordinate reversed, which on a full cube only mirrors the tile and is old enough to count as intended, but on a partial box also takes the wrong half. The mirroring is kept and the sub-rectangle it implies is used. Both corrections reproduce vanilla's own numbers for a full face, epsilon included, so ordinary blocks do not move.\n\n**`droppedItemScale`** covers beta doubling the dropped size of anything that is not a full cube, a rule about torches and flowers that lands a stair at twice the size of everything else in the pile. **`setFlatItem`** covers the other end: beta draws its own door and pane as a flat sprite because a three pixel panel is unreadable at inventory size, and custom render types had no way to say so.\n\n## A block can present as another block\n\n`RetroBlockDisguise` answers, per position, three questions beta only answers per block type: which tool works (`mineableTools` takes a block, no coordinates), what the particles look like (`BlockParticle` reads the block's static sprite), and what it sounds like (`soundGroup` is a field).\n\n```java\npublic class FramedBlock extends Block implements RetroBlockDisguise {\n    public Block disguisedBlock(BlockView world, int x, int y, int z) { return whatItWears(world, x, y, z); }\n}\n```\n\n\n..."
 		}
 	],
 	"readme": null,
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

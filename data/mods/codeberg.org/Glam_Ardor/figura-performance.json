@@ -50,7 +50,7 @@
 						"unreadable": []
 					},
 					"icon": "7a1c881430f42a9dfff434742165ed2900cd1551a7ef6078496e56d5f1d07617.webp",
-					"downloads": 51,
+					"downloads": 54,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -58,7 +58,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "Avatars stop breaking, and reloading them no longer needs Figura's popup menu.\n\n- **Reload all avatars.** A button in the settings, under General, and a key reload every player's avatar at once. Another key reloads the avatar you are looking at. Both keys are unbound by default. An avatar loaded from your wardrobe stays.\n- **Hidden avatars no longer break.** Figura sends an avatar its setup event once, when the player first shows up, and that is usually while the avatar is still hidden: too far, over the limit or off screen. The mod swallowed it along with everything else, and the avatar threw script errors the moment it came into view. Now only the per tick and per frame events are skipped, each after its first run.\n- **Figura's own texture bug.** When someone swaps their avatar, Figura 0.1.5 throws the old one away off the render thread, fails halfway through and leaves the avatar without textures. The mod moves that cleanup to the render thread. This also ends the \"Image is not allocated\" errors on resource reload that followed it.\n\nMinecraft 1.21.6–1.21.8, Fabric."
 		},
 		{
 			"tag": "v1.4.1",
@@ -100,7 +101,8 @@
 					},
 					"downloads": 9
 				}
-			]
+			],
+			"notes": "The readout is now behind F3 as well.\n\n- **Figura Performance in the debug screen.** Press F3 and the mod's panel is there with everything else: how many avatars are shown and hidden, who is hidden, the total cost and the most expensive avatars. On by default, switched off with **Show in F3** in the settings. The standalone overlay is still there for watching the numbers without the rest of the debug screen in the way.\n- The list of hidden players on the panel now names four people instead of six.\n\nMinecraft 1.21.6–1.21.8, Fabric."
 		},
 		{
 			"tag": "v1.3.2",
@@ -142,7 +144,8 @@
 					},
 					"downloads": 94
 				}
-			]
+			],
+			"notes": "Tested on a live server, and the numbers held: with thirteen people around, hiding the avatars took a client from 100 frames to 135, where Figura's own panic button gave 143 – the difference being your own avatar, which is never hidden.\n\nSince 1.3.1:\n\n- both name lists now say how they want to be filled in, with an example above the fields and inside the empty one\n- the overlay names who is hidden right now, nearest first\n- the repository has an icon and a screenshot"
 		},
 		{
 			"tag": "v1.3.1",
@@ -184,7 +187,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "Rewritten around what the measurements actually showed.\n\n**Hiding, not trimming.** An avatar costs far more than its model: for every player with one, Figura also edits the vanilla player model, walks its own layers and draws a custom nameplate, all hanging off a single lookup. Cutting the model down leaves that running. Hiding the avatar fails the lookup and costs nothing at all – on a live server with thirteen people, 100 frames became 135, where the panic button gave 143.\n\nGone, because they broke how avatars looked and saved nothing measurable:\n\n- script thinning (\"scripts every N ticks\")\n- animation thinning (\"animation every N frames\")\n- soft level of detail and its complexity floor\n\n**Profiles gone.** One count covers both cases by itself: with two people around, a limit of twelve hides nobody, and adaptive mode reads the real frame rate instead of guessing from how many players are nearby. Two settings replace sixteen.\n\n**Overlay** now names who is hidden, alongside the cost of each avatar in milliseconds and frames.\n\nMinecraft 1.21.8, Fabric. Needs Fabric API and Figura. Cloth Config and Mod Menu are optional."
 		},
 		{
 			"tag": "v1.1.6",
@@ -226,7 +230,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "Fixes a bug of this mod's own making.\n\nCancelling `Avatar#render` for a cut down avatar also cancelled the complexity counter reset Figura does there every frame, so the complexity shown for that avatar climbed without bound (millions) and its per frame complexity budget stopped being refreshed. Cancelling `tick` skipped the permission, sound and particle bookkeeping in the same way.\n\nEverything now hangs off `Avatar#run`, the one method every Lua event goes through: cut down avatars skip the per frame events and thin the per tick ones, while Figura's own accounting runs untouched. Pings, input and chat events are never skipped unless the avatar is off entirely, so things like a scripted costume change still come through.\n\nThe wrong numbers were only ever reported, never stored – restarting the game clears them."
 		}
 	],
 	"readme": "README.md",

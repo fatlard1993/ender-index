@@ -50,7 +50,7 @@
 						"unreadable": []
 					},
 					"icon": null,
-					"downloads": 5,
+					"downloads": 6,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -58,7 +58,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "# Magic Shulker Boxes 0.14.0\n\n## 简体中文\n\n- 新增原理图取料优先使用快捷栏：选中格为空时直接放入，否则使用任意快捷栏空格；快捷栏全满时替换选中格（不可替换时扫描其他格），跳过工具和可损坏物品\n- 新增被替换物品优先回到来源盒；放不下的部分再按同类专用盒、受管杂物盒、空盒、背包空格收纳；没有安全空间时整笔拒绝，不修改物品\n- 新增服务端临时来源账本，记录来源盒子、剩余数量、已回盒和已转存数量；不写入物品 NBT 或组件，物品离开主背包与快捷栏、玩家死亡或退出登录后清除，不跨服务端重启保留\n- 新增 `/msb ledger` 查看本人的来源条目，管理员可用 `/msb admin ledger <玩家>` 查看在线玩家\n- 新增主背包或快捷栏中被跟踪物品的来源提示，悬停显示来源盒子和可回盒数量；由账本同步渲染，不修改物品名称、Lore 或图标\n- 新增取料守恒审计，仅在取出、剩余、已回盒、已转存计数异常时记录错误日志\n- 修复快捷栏满时取料总落背包、旧手持物被换入背包，导致连续取料逐渐塞满背包\n- 修复关闭“启用空盒”后，腾栏路径仍可能从未标记空盒新建受管盒\n- 改进唯一同指纹堆在主背包或快捷栏内移动时跟随该堆；出现多堆同物品或物品离开物品栏时放弃来源，避免错误回退\n- 变更 `refillMakeSpace=false` 时不再替换非空快捷栏格，材料保留背包落点\n- 变更 `useEmptyBoxes=false` 现在覆盖腾栏、取料替换、工具替换、合成余量和堆叠空盒拆盒捷径；已标记的受管杂物盒仍然可用\n- 变更回原盒遵守当前的 `enderChestRefill` / `includeOffhand` 开关；关闭后对应的末影箱或副手盒子不再写入\n\n兼容性：磁盘配置保持版本 3，设置与 GUI 协议保持 v9；来源提示使用新增的只读通道，旧客户端不会注册。建议客户端和服务端同时更新到 0.14.0。\n\n## English\n\n- Added hotbar-first schematic refilling: fill an empty selected slot, otherwise any empty hotbar slot; when full, replace the selected slot (scanning other slots when needed) while skipping tools and damageable items\n- Added source-box return for a replaced stack; the remainder follows matching dedicated boxes, managed junk boxes, empty boxes and free backpack slots, and the whole refill is refused without changing items when no safe space exists\n- Added a transient server-side provenance ledger recording the source box, remaining quantity, returned count and stored count; it writes no item NBT or components and clears when items leave the main inventory and hotbar, on death or logout, without surviving a server restart\n- Added `/msb ledger` for the caller's entries and `/msb admin ledger <player>` for an online player\n- Added provenance tooltips for tracked items in the main inventory or hotbar, showing the source box and returnable count through the synchronized ledger without changing names, lore or icons\n- Added a conservation audit that logs only when extracted, remaining, returned or stored counts violate the invariant\n- Fixed refilled materials always landing in the backpack with a full hotbar and the old held stack being swapped into it, which gradually filled the backpack during continuous refills\n- Fixed the relocation path still creating a managed box from unmarked empty stock when empty boxes were disabled\n- Improved following a unique matching stack while it moves within the main inventory or hotbar; duplicate stacks or an item leaving the inventory discard provenance instead of risking a wrong return\n- Changed `refillMakeSpace=false` to never replace a non-empty hotbar slot, keeping the backpack destination\n- Changed `useEmptyBoxes=false` to cover relocation, schematic and tool replacement, crafting remainders and the stacked-empty-box shortcut; already marked managed junk boxes remain usable\n- Changed source-box returns to honor the current `enderChestRefill` / `includeOffhand` switches; disabling one stops writes to that ender chest or offhand box\n\nCompatibility: disk configuration stays at version 3 and settings/GUI stay on protocol v9; provenance uses a separate additive read-only channel that older clients do not register. Update client and server together for 0.14.0."
 		},
 		{
 			"tag": "v0.13.0",
@@ -99,7 +100,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "# Magic Shulker Boxes 0.13.0\n\n## 简体中文\n\n- 快捷栏第 1–9 格保护改为默认开启。自动腾栏不会移走这些格子的物品，自动拆盒也不会把新盒放到这些格子；`useHotbarForSpace` 仍默认关闭，两者相互独立。\n- 升级时自动迁移已有服务端配置、玩家个人设置和单人客户端配置：服务端配置补齐九项保护，个人稀疏覆盖把显式关闭改为开启，未设置的格子继续继承服务器默认值。迁移只执行一次，之后仍可逐格关闭。\n- 原始配置在迁移前完整备份；没有更早迁移备份时使用 `.pre-0.13.0.bak`。无效字段或冲突备份保持原文件不变。\n- 磁盘配置版本升至 3；设置与 GUI 协议保持 v9。客户端和服务端需同时更新到 0.13.0。\n\n## English\n\n- Hotbar positions 1–9 are now protected by default. Automatic relocation does not move their items, and automatic box splitting does not place a new box there. `useHotbarForSpace` remains off by default and independent.\n- Upgrading migrates existing server configuration, player preferences and single-player client settings: server files get all nine protections, sparse personal overrides flip explicit off values, and absent keys keep inheriting the server default. Migration runs once, and positions can still be unprotected afterward.\n- Original files are backed up before migration; migrations without an earlier backup use `.pre-0.13.0.bak`. Invalid fields or conflicting backups leave the original unchanged.\n- Disk configuration is now version 3; settings and GUI stay on protocol v9. Update client and server together to 0.13.0."
 		},
 		{
 			"tag": "v0.12.0",
@@ -140,7 +142,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "# Magic Shulker Boxes 0.12.0\n\n## 简体中文\n\n本次公开发行也包含 [0.11.0 的自动杂物盒、三组分离和快捷栏逐格保护](0.11.0.md)。\n\n- 新增“每次取料数量”，支持 1–64，用于投影取料和 IPN 补货。实际取出不超过来源库存和物品自身堆叠上限：不可堆叠物品为 1 件，16 件上限物品最多取 16 件，也支持组件定义的其他上限。\n- 个人设置可跟随服务器，房主和管理员可配置默认值及逐项权限。旧“每次取一组”自动迁为 64 或 1，原配置先备份。\n- 重写全部中英文设置、命令、快捷键和反馈文案，统一术语并说明失败后的可用操作。\n- 客户端和服务端需同时更新；合成按配方取料、工具替换为 1 件，GCA 独立补货不变。\n\n## English\n\nThis public release also includes [0.11.0’s automatic junk boxes, three-stack consolidation and per-slot hotbar protection](0.11.0.md).\n\n- Added “Items per refill”: choose 1–64 for schematic and IPN refilling. Extraction respects available items and their stack limit: 1 for unstackable items, at most 16 for items capped at 16, including component-defined limits.\n- Personal settings can inherit server defaults. Hosts and administrators control defaults and permissions. The retired full-stack switch migrates to 64 or 1 after backing up the original configuration.\n- Rewrote all Chinese and English settings, commands, keybinding labels and feedback for consistent terms and actionable recovery.\n- Update client and server together. Crafting follows recipes, tool swaps take 1 and GCA’s independent replenishment is unchanged."
 		},
 		{
 			"tag": "v0.10.1",
@@ -181,7 +184,8 @@
 					},
 					"downloads": 6
 				}
-			]
+			],
+			"notes": "# Magic Shulker Boxes 0.10.1\n\n适用于 Minecraft 1.21.11 / Fabric / Java 21。\n\n- “指定杂物盒格子（按住多选）”默认按键改为 **F9**。打开背包，把鼠标放到自己的格子上按键；按住可划过多格。\n- 沿用 Minecraft 保存的自定义绑定，不覆盖已有按键选择。0.10.0 保存的“未绑定”可在“选项 → 控制 → 按键绑定 → 魔法潜影盒：槽位选择”点击该行“重置”，恢复 F9，或自行重新绑定。\n- 保留 0.10.0 的槽位角色、收纳保护、IPN 整理和提示层次。服务端配置与玩家槽位数据不变。\n\n详见[使用说明](../guide.md)。\n\n## English\n\nFor Minecraft 1.21.11 / Fabric / Java 21.\n\n- **Assign junk box slots** now defaults to **F9**. Hover your own inventory slot and press it; hold while crossing slots for multiple selections.\n- Retains Minecraft's saved custom bindings. If 0.10.0 saved an unbound choice, use **Reset** on this row under **Options → Controls → Key Binds → Magic Shulker Boxes: slot selection** to restore F9, or bind a key manually.\n- Preserves 0.10.0 slot roles, storage protection, IPN sorting and tooltip layering. Server settings and saved player slot choices are unchanged.\n\nSee the [user guide](../en/guide.md)."
 		},
 		{
 			"tag": "v0.10.0",
@@ -222,7 +226,8 @@
 					},
 					"downloads": 4
 				}
-			]
+			],
+			"notes": "# Magic Shulker Boxes 0.10.0\n\n适用于 Minecraft 1.21.11 / Fabric / Java 21。\n\n- 新增手动杂物盒槽位。自行绑定“指定杂物盒格子”快捷键，默认未绑定，支持键盘与鼠标；按住并划过自己的主背包或快捷栏可多选，首格决定整轮指定或取消，重复经过不会翻转。\n- 角色绑定固定格子，不写入盒子名称或物品数据。各世界、各玩家独立保存；空格和普通物品保留标记，换入潜影盒即可收纳。装备、副手和外部容器不能指定。\n- 收纳顺序为同类专用盒 → 指定杂物盒 → 空盒。指定盒为空或只有一种物品时仍保留杂物角色；未指定的混合盒不会自动接收杂物。默认实际入包物仍优先同类盒，`preferEmptyBoxesOverInventory` 开启后才尝试杂物盒与空盒。\n- 左上小盒子角标用青色、灰色、黄色分别表示有效盒、无盒、待确认；悬停显示状态与按键。提示框显示在角标和多选边框上方，不遮挡提示文字。\n- 指定格不被自动腾栏或当作拆盒/取料空位。兼容 Carpet 堆叠，拆分后装有物品的单盒留在指定格；所有盒子及内容数量保留。丢出回收仅在原版拾取后路由实际收到的数量。\n- IPN 2.2.6 整理保留指定格，不修改其保存的锁定设置或普通补货筛选。其他整理模组需使用自己的固定格功能。\n- 保留 0.9.2 的原版优先和未知容器所有权保护。已有设置不重置，配置版本 2 与设置/GUI 协议 v7 不变；槽位状态使用独立协议和玩家数据文件。\n\n槽位选择与角标需要两端都升级到 0.10.0。升级后在“选项 → 控制 → 按键绑定 → 魔法潜影盒：槽位选择”绑定按键。完整操作见[使用说明](../guide.md)，部署流程见[手动部署](../release-staging.md)。\n\n## English\n\nFor Minecraft 1.21.11 / Fabric / Java 21.\n\n- Adds manually assigned junk box slots. Bind **Assign junk box slots** to a keyboard key or mouse button; it starts unbound. Hold it while crossing your own inventory or hotbar slots. The first valid slot chooses assign or erase for the gesture, and revisits do not toggle again.\n- Roles belong to fixed positions without renaming or tagging items. Each player and world saves independently. Empty slots and ordinary items retain the marker; a shulker placed there becomes usable. Equipment, offhand and external containers cannot be assigned.\n- Storage priority is matching single-type boxes → assigned junk boxes → empty boxes. Assigned empty or single-type boxes retain their role; unassigned mixed boxes do not become junk boxes. Default post-insertion storage still prefers matching boxes; `preferEmptyBoxesOverInventory` also permits junk and empty boxes.\n- Top-left markers show aqua for a usable box, gray for no box and yellow for pending changes. Hover for status and the current binding. Tooltips render above markers and selection outlines.\n- Assigned slots are protected from automatic eviction and empty split/extraction destinations. Carpet stack splitting leaves the filled single box in its assigned position and conserves boxes and contents. Drop recollection routes only quantities actually received after vanilla pickup.\n- IPN 2.2.6 sorting preserves assigned slots without changing stored locks or ordinary refill matching. Other sorting mods need their own fixed-slot facilities.\n- Retains 0.9.2 vanilla-first processing and unverified-container ownership protection. Existing settings stay intact; disk configuration version 2 and settings/GUI protocol v7 remain unchanged. Slot state uses independent channels and player data files.\n\nUpdate both sides to 0.10.0 for selection and markers. Bind the key under **Options → Controls → Key Binds → Magic Shulker Boxes: slot selection**. See the [user guide](../en/guide.md) and [manual deployment](../en/release-staging.md)."
 		},
 		{
 			"tag": "v0.9.2",
@@ -268,5 +273,7 @@
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

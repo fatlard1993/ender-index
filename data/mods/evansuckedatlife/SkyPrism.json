@@ -50,7 +50,7 @@
 						"unreadable": []
 					},
 					"icon": "551cfce4573f04ddcf3d4247dbb2f6321d62e0e37ffc20f457c9bc57609320d3.webp",
-					"downloads": 7,
+					"downloads": 8,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -94,7 +94,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 6,
+					"downloads": 7,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -102,7 +102,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "Four bug reports, all of them correct.\n\n## The screenshots were never using Hypixel's art\n\nAn earlier release claimed they were, on the strength of a log line saying the resource pack had mounted. That line could not have proved anything. The pack holds **3733 files under `assets/hypixel_skyblock/` and 23 under `assets/minecraft/`** — none of them item textures. So a vanilla `ItemStack` with no `item_model` component renders **byte-identically whether the pack is loaded or not**.\n\nChecked against both candidate textures, every published frame matched vanilla bit for bit: 34/34 opaque pixels on Silver Magmafish, 76/76 on Radioactive Vial, 112/112 on Magma Lord Fragment, maximum channel difference zero.\n\nNothing had ever attached a Hypixel model to a drop. The single step that did taught four names — and ran *after* the shots it was supposed to dress.\n\n**Now:** 99 drop names get their Hypixel model before the first shutter, and the run refuses to write a capture unless the pack resolves definition → model → texture → baked model. Afterwards every frame is decoded and searched for both textures, so a frame that silently used vanilla art fails the run instead of reaching the README. That check was itself proved to work by painting a frame with the vanilla texture and watching it reject.\n\nSome frames stay vanilla honestly — Hypixel ships no art for the Diana drops.\n\n## The reels no longer stall\n\nThey used to land and then restart a spin. The celebration now happens mid-flight and the columns come to rest afterwards: **rolling → jackpot → rolling → locked**, with the scroll offset continuous throughout. A new `ReelScroll` owns that offset, and a test samples it across the whole sequence and fails if it ever jumps backwards. Confirmed by photographing 37 frames over 19 seconds — no column lands before the celebration does.\n\n## The Chimera book rolls now\n\nIt's an enchantment, not an item, so it draws as an enchanted book with a glint on the Minos Inquisitor. It showed up on the first spin of the verification run. Drop pools are fuller across the board.\n\n## Level bands above 480 are wider\n\nThirteen bands couldn't be told apart. The closest pair in 1.0.3 was **0.0256** in Oklab, and level 590 sat 0.0869 from the level-200 aqua — which is what got reported. There is no arc of the colour wheel Hypixel leaves free, and believing there was is what broke this twice. So: fewer, wider bands, every 20 levels, matching the cadence below 480. Tightest pair anywhere is now **0.1142**, and the test checks *every* pair in the table rather than only neighbours.\n\n## Which jar\n\n| Minecraft | Jar |\n| --- | --- |\n| 26.1.2 | `skyprism-1.0.4+26.1.2.jar` |\n| 26.2 | `skyprism-1.0.4+26.2.jar` |\n\nNot interchangeable. Needs [Fabric API](https://modrinth.com/mod/fabric-api); [YACL](https://modrinth.com/mod/yacl) and [Mod Menu](https://modrinth.com/mod/modmenu) optional. Drop-in over 1.0.3.\n\n4878 tests across both Minecraft versions. Diana's detection logic is untouched; its slot-roll animation is what changed, and its 385 tests pass."
 		},
 		{
 			"tag": "v1.0.3",
@@ -177,7 +178,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "**The level colours now follow Hypixel's own palette instead of replacing it.**\n\nThree players said the same thing from two angles: everything below 480 should look like it did, and the colour shouldn't change on every single level. They were describing Hypixel's own scheme — 13 tier colours, one every 40 levels — where **480 is the last tier**, so every level above it is the same dark red forever. The old default threw all of that away for a 16-stop rainbow that recoloured every level.\n\n## The new default\n\n| Levels | What you see |\n| --- | --- |\n| **0–479** | Hypixel's own colours, **every 20 levels instead of 40** |\n| **480–600** | Thirteen new shades, **every 10 levels**, magenta through cyan |\n| 600+ | Chroma, if you turn it on |\n\nBelow 480 nothing is invented: even bands are a real Hypixel hex, odd bands are the perceptual midpoint of the two either side. It's twice the resolution in colours you already recognise — so a level 200 and a level 239 finally look different, which was the whole point of the mod.\n\nAbove 480 is where it earns its keep, because that's where Hypixel gives every level the same dark red. The lightness alternates rather than climbing, which is Hypixel's own bright/dark grammar inverted — at 10-level spacing the hue step alone can't separate neighbouring bands.\n\n**The 479→480 crossing is the change**: dark red into rose, the point where the mod starts telling you something the server can't.\n\n## Your settings are safe\n\nA default change alone would have reached nobody who already had the mod — every config on disk names its palette explicitly, so it would have shipped to strangers and not to the people who asked for it. There's now a guarded migration that **rewrites only a palette nobody has touched**, and leaves a chosen one alone with a note in the log saying so. Verified against 60 cases, including a real config that keeps its palette and changes only its version number.\n\n`spectrum` and the other nine ramps are all still in the dropdown. If you liked the rainbow, it's one setting away.\n\n## Also\n\n- **The mod has an icon now**, plus proper links and a description that says what it actually does.\n- The self-test recolour probe checked level 451 — which under the new default resolves to a colour from Hypixel's own hexlist, so it would have \"verified\" a recolour to nearly its own input. It now also checks 521, where the custom colours live.\n\n## Which jar\n\n| Minecraft | Jar |\n| --- | --- |\n| 26.1.2 | `skyprism-1.0.3+26.1.2.jar` |\n| 26.2 | `skyprism-1.0.3+26.2.jar` |\n\nNot interchangeable. Needs [Fabric API](https://modrinth.com/mod/fabric-api); [YACL](https://modrinth.com/mod/yacl) and [Mod Menu](https://modrinth.com/mod/modmenu) optional for the settings screen. Drop-in over 1.0.2.\n\n4550 tests across both Minecraft versions."
 		},
 		{
 			"tag": "v1.0.2",
@@ -252,7 +254,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "**The drop tables were wrong, and now they aren't.**\n\nIf you play SkyBlock you could tell at a glance. Lord Jawbus was showing Magma Urchin and Lava Shell — both Crimson Isle miniboss loot, nothing to do with fishing. Ashfang had an invented armour set. Arachne listed the same summoning item twice, once under its display name and once under its internal name. Crystal Nucleus listed the crystals you *deposit to start a run* instead of its rewards. The Hoppity and Chocolate Factory sources listed rabbits, which aren't items at all.\n\n## What was actually broken\n\nOf **476 distinct item names** the mod used, **102 matched no SkyBlock item in existence**. Forty of those sat in jackpot lists — so forty celebrations could never fire, and forty names scrolled the reels advertising loot that does not exist. \"Chimera\" was one: it's an enchantment, not an item, so that jackpot could never have triggered.\n\n## Where the data comes from now\n\n- **[NotEnoughUpdates](https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO)** — 8,755 items — for name truth.\n- **[hypixelskyblock.minecraft.wiki](https://hypixelskyblock.minecraft.wiki)** per-mob drop tables for which item belongs to which source.\n- **Hypixel's own resource pack** as a second signal: its model paths encode the content area an item belongs to, e.g. `item/community_center/mayor/diana/…`.\n\nThe Fandom wiki blocks automated access (403/402), so it isn't usable as a source — that's recorded in the docs so nobody rediscovers it the hard way.\n\n## The part that matters more than any single fix\n\nA snapshot of valid SkyBlock names now ships as a test resource, and **every name the mod uses is checked against it at build time**. A fake name fails the build. Nothing checked before, which is how these survived several review passes — and the failure was silent, looking exactly like a detector that never fires.\n\n## Also\n\n- Screenshots re-shot with the Hypixel server pack loaded, so the reels show **Hypixel's own item art** rather than vanilla lookalikes.\n- **Diana was already correct** and is untouched — its 260 tests pass unmodified.\n- Twenty sources whose real tables could not be verified are listed as *inferred* in `docs/CHAT-PATTERNS.md` rather than guessed at a second time. `POWDER_CHEST` is the largest remaining gap.\n\n## Which jar\n\n| Minecraft | Jar |\n| --- | --- |\n| 26.1.2 | `skyprism-1.0.2+26.1.2.jar` |\n| 26.2 | `skyprism-1.0.2+26.2.jar` |\n\nDrop-in over 1.0.1; your config carries across. Needs [Fabric API](https://modrinth.com/mod/fabric-api); [YACL](https://modrinth.com/mod/yacl) + [Mod Menu](https://modrinth.com/mod/modmenu) optional for the settings screen.\n\n4510 tests across both Minecraft versions."
 		},
 		{
 			"tag": "v1.0.1",
@@ -327,7 +330,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "Two fixes on top of 1.0.0, both spotted by looking at the published screenshots.\n\n## The reels now scroll loot that belongs to the source\n\nThe spinning reels used **one static list of drop names on every roll of every source**. It was written when this was a Diana-only mod and never generalised, so a fishing roll scrolled Daedalus Sticks and a slayer roll scrolled Griffin Feathers. It also carried `Control Switch` — a Crystal Hollows mining item that has never been Diana loot — which is what made it visible on a Minos Champion roll.\n\nFiller is now resolved per source from the loot registry and cached once, so the strip tells you at a glance what kind of machine you're looking at. A test walks all 64 sources and fails if a strip borrows another source's loot, or contains a name with no sprite mapping — the exact gap that let the unmapped Control Switch through unnoticed.\n\n## Chroma is off until level 600\n\nWas 400. The animated shimmer now marks the very top of the ladder instead of being common. **A threshold you've already set yourself wins over the new default** — nothing is overwritten on upgrade.\n\nRe-shooting the screenshots for this turned up two real bugs:\n\n- The self test pinned the chroma threshold to a literal `300` inside a block documented as using shipped defaults, which is why every published palette screenshot showed a value **no player has ever had**.\n- `/skyprism preview` hardcoded its range to `0..600`, so against the new default the one screen built to demonstrate chroma would have opened with none of it in frame.\n\nThe palette image in the README is now shot at GUI scale 2 and shows **546 levels instead of 99**, so it reads as a gradient rather than a flat band.\n\n## Which jar\n\n| Minecraft | Jar |\n| --- | --- |\n| 26.1.2 | `skyprism-1.0.1+26.1.2.jar` |\n| 26.2 | `skyprism-1.0.1+26.2.jar` |\n\nThey are not interchangeable. You also need [Fabric API](https://modrinth.com/mod/fabric-api); [YACL](https://modrinth.com/mod/yacl) and [Mod Menu](https://modrinth.com/mod/modmenu) are optional and only add the settings screen. Java 25, Fabric Loader 0.19.3+. Drop-in over 1.0.0 — your config carries across.\n\n4496 tests across both Minecraft versions. Diana's animation frames are byte-identical to 1.0.0, so the one path confirmed against the live server did not move."
 		},
 		{
 			"tag": "v1.0.0",
@@ -402,11 +406,23 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "The first release. Two features, both client-side only — SkyPrism reads what Hypixel already sent you and draws it differently. It never sends anything to the server.\n\n## Every level gets its own colour\n\nHypixel gives your level prefix one of 13 colours, changing once every 40 levels, so a level 200 and a level 239 look identical. SkyPrism gives every single level a distinct colour, computed in a perceptual colour space so the gradient reads evenly instead of going muddy through the middle. Chat, TAB and nametags, each independently toggleable. Run `/skyprism preview` to browse the whole range.\n\n## Lucky drops become a slot machine\n\nA slot machine spins and lands its reels on the items you *actually* got, read out of chat. If one of them is genuinely rare, gold floods in **while the reels are still turning**, they break loose and spin up again, and they land one at a time — all three on the same item, with the Magic Find that earned it shown underneath.\n\n64 sources: slayer bosses, dungeon chests, Crystal Hollows chests, rare sea creatures, tree gifts, Diana's mythological creatures, gemstones, Garden pests, dragons, Kuudra and more. Each source knows how often it fires, so an Inquisitor spins the machine every time and ordinary fishing catches don't — otherwise you'd never see anything else.\n\n## Which jar\n\n| Minecraft | Jar |\n| --- | --- |\n| 26.1.2 | `skyprism-1.0.0+26.1.2.jar` |\n| 26.2 | `skyprism-1.0.0+26.2.jar` |\n\nThey are not interchangeable. You also need [Fabric API](https://modrinth.com/mod/fabric-api), and optionally [YACL](https://modrinth.com/mod/yacl) + [Mod Menu](https://modrinth.com/mod/modmenu) for the settings screen — without them the mod still runs, you just get no GUI. Java 25, Fabric Loader 0.19.3+.\n\n## See it working without waiting for luck\n\n```\n/skyprism simulate inq Chimera\n```\n\nThat drives the whole pipeline offline, jackpot included. `/skyprism sources` is the one to check if something *isn't* firing — it prints each source's gate so you can see whether the mod thinks you're somewhere else.\n\n## Worth knowing\n\nOnly the Diana path has been confirmed against the live server. The other detectors were built from two open-source mods' pattern corpora and have never been seen arriving from Hypixel by this project. **A wrong pattern fails silently** — the gate opens, nothing matches, nothing is logged — so if a source never spins for you, that's a genuinely useful bug report. Paste the chat line and open an issue. Details in [docs/CHAT-PATTERNS.md](https://github.com/evansuckedatlife/SkyPrism/blob/main/docs/CHAT-PATTERNS.md).\n\nBuilt from one source tree for both Minecraft versions with zero version-conditional code. 3450 tests run across both."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"docs/images/jackpot-magic-find.png",
+		"docs/images/level-palette.png",
+		"docs/images/settings-levels.png",
+		"docs/images/slot-jackpot.png",
+		"docs/images/slot-source-slayer.png",
+		"docs/images/slot-spinning.png",
+		"docs/images/source-fishing.png",
+		"docs/images/source-slayer.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

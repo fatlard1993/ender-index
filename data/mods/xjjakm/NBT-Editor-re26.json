@@ -72,7 +72,7 @@
 						"unreadable": []
 					},
 					"icon": "37abda0cab2e8194d45cc713b2d27c0d8ca884bdf7399857ca262dd53de089a4.png",
-					"downloads": 8,
+					"downloads": 12,
 					"funding": [
 						{
 							"platform": "buy_me_a_coffee",
@@ -90,7 +90,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "Fix selection text rendering error and chest enchantment glint"
 		},
 		{
 			"tag": "2.2.0-26.3",
@@ -154,7 +155,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "Officially migrated to Minecraft 26.3, there should be no big problem.\nKnown issue: \n1. Chest enchantment glint fix no longer works (Mojang removed these render calls in 26.3, really messy code)\n2.  can't select the input box"
 		},
 		{
 			"tag": "2.2.0-26.3-pre",
@@ -218,7 +220,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "Ported to Minecraft 26.3\n Known issues:\n1.  The normal editor can't read NBT, please use Factory in the meantime.\n2.  Chest enchantment glint fix no longer works (Mojang removed these render calls in 26.3, really messy code)"
 		},
 		{
 			"tag": "2.2.0",
@@ -280,9 +283,10 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 2
+					"downloads": 3
 				}
-			]
+			],
+			"notes": "# NBT Editor 2.2.0-26.2 Changelog\n\n**Scope**: a56d7a7 → 3e277a4  (4 commits)  \n**Changes**: 22 files, +922 / -104 lines\n\n---\n\n## ✨ New Features\n\n### 1. Entity Attributes Screen (`EntityAttributesScreen`)\nAdded a new \"Entity Attributes\" entry in the advanced editor factory menu for editing an entity's NBT attribute list and boolean tags.\nSupported: current/max Health, movement_speed / attack_damage / follow_range, NoAI / Invulnerable / NoGravity / Silent / CanBreatheUnderwater / FireImmune, FallDistance / AbsorptionAmount / Air, Baby for AgeableMobs.\n\n### 2. Spawn Egg Entity Data Screen (`SpawnEggAttributesScreen`)\nA spawn-egg-exclusive entity NBT editor that directly manipulates the `entity_data` component (`TypedEntityData<EntityType<?>>`) — no entity loading required.\nIncludes every attribute from `EntityAttributesScreen`, plus these extras:\n- Entity type switcher (searchable dropdown, change what the spawn egg generates at runtime)\n- CustomNameVisible / Glowing boolean toggles\n- PersistenceRequired / CanPickUpLoot (Mob-only, conditionally shown)\n- Villager trading editor entry (only for Villager / Zombie Villager — reuses `VillagerScreen` bridged via an anonymous `NBTReference`)\n- Entries conditionally shown by current `entityType` (`isMob` / `canBeBaby`) — after save, Mob-exclusive, AgeableMob-only, and Villager button entries automatically appear or disappear\n\n### 3. Shared Entity Attribute Utilities (`EntityAttrsUtil` + `EntityAttrState`)\nCommon code shared between the two new screens to avoid duplication:\n\n| API | Purpose |\n|-----|---------|\n| `EntityAttrState` (enum) | `KEEP` / `ON` / `OFF` — three-state toggle |\n| `EntityAttrsUtil.BABY_AGE = -24000` | Minecraft vanilla baby Age constant |\n| `getAttributeBase(nbt, attributeId)` | Look up a base value in the attributes ListTag by id; returns -1 if not found |\n| `setAttributeBase(nbt, attributeId, value)` | Updates an existing entry or creates a new full `{id, base, modifiers:[]}` entry |\n| `applyBooleanTag(nbt, key, dropdown)` | Applies the three-state value to NBT; skips when dropdown is null (supports conditional entries) |\n| `titleWithCurrent(langKey, current)` | Translated label + \" (current: on/off)\" suffix so users see the NBT value at a glance |\n\n### 4. LocalEditorScreen Save Button Text Differentiation\nPreviously all editors showed \"Save Item\". Now the label branches on `localNBT` type:\n- `LocalItem` → `nbteditor.editor.save` (\"Save Item\")\n- Others (entities/blocks) → `nbteditor.editor.save_changes` (\"Save Changes\")\n\n---\n\n## 🛠 New Feature Infrastructure\n\n| Change | Description |\n|--------|-------------|\n| `LocalEditorScreen.onAfterSave()` hook | Called inside the save success callback; subclasses override to rebuild UI |\n| `ConfigPanel.setConfig(ConfigPath)` | `toRender` no longer final, `elements` changed from `List.of()` to `ArrayList` — swap the internal ConfigCategory at runtime without destroying the Panel widget itself (avoids Screen.children stacking issues) |\n| `LocalFactoryScreen` registers two new factory entries | `entity_attributes` (EntityReference) + `spawn_egg_attributes` (SpawnEggItem) |\n| SpawnEggAttributesScreen selector timing | Entity type selector listener only writes NBT + `checkSave()`. UI rebuild **only** happens post-save via `onAfterSave` |\n\n---\n\n## 🐛 Existing Bug Fixes\n\n### 1. Save button occasionally stays gray (`MainUtil.copyAirable`)\n**Root cause**: Under Fabric Data Components, `item.transmuteCopy(item.getItem(), item.getCount())` does a **shallow copy** — the component patch's internal Tag/Map objects are shared references with the original. `LocalEditorScreen` calls `copyAirable` twice during construction, so `localNBT.item` and `savedLocalNBT.item` end up pointing to the **same component patch object**. Any edit to local simultaneously pollutes saved → `ItemStack.matches` always returns true → save button stays permanently disabled.  \n**Fix**: Use vanilla `item.copy()` which does a full deep copy of all component data.\n\n\n..."
 		},
 		{
 			"tag": "2.0.12-26.2",
@@ -346,11 +350,14 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "d65fe5f308952b942c6ec406a6c67edc4e8a97c4 ~ a6d5c8b590eb2400f8dae07caa2108e0494579ec\n## What's Changed\n\n### 🆕 New: Villager Trade Editor (now in the factory)\n- **Full villager trade editor** — edit trades (Purchase A / Purchase B / Sale, prices, counts, and per-trade NBT); changes persist after re-entering the world.\n- **Server-side NBT fetching**: on 26.2 the client-side entity snapshot doesn't contain `Offers`, so the editor automatically requests the entity NBT from the server and rebuilds itself.\n- **New item selection overlay** with search (by Chinese name or ID), hover highlighting, click-to-select, Confirm/Cancel — and a **Clear** button for the purchase-B slot.\n- **\"Save and Return\" flow for trade NBT**: saving an item's NBT returns to the villager editor; the whole factory chain (NBT / Enchantments / Attributes / Containers, …) now shows a \"Save and Return\" button that returns to the previous screen after saving.\n\n### 🐛 Fixes\n- **Villager `Offers` failed to load/save**: server-side entity serialization now uses a registry-aware `DynamicOps` (`level.registryAccess().createSerializationContext`), so `MerchantOffers → ItemCost → Item.CODEC` is no longer silently dropped; the read path now prefers `subject.level().registryAccess()` instead of the vanilla fallback (datapack items no longer lost).\n- **Ender Chest changes not working / MC-69683**: enchanted ender-chest glow was lost under 26.2's deferred rendering; switched to `RenderTypes.entityGlint()` redraw (matching the Trident renderer).\n- **Container title missing / server permissions not resolved**: container title color now passes the alpha-channel check (`-12566464`); `ServerMixinLink` detects 26.1+ client listeners via reflection fallback, restoring permission checks in single-player.\n- **Item selection overlay not clickable / no hover highlight**: entries now use local-coordinate-based `isHovering` checks.\n- **Right-click context menu crash (NPE)**: `List2D` guards against a null `finalEventHandler`.\n\n### 🔧 Other\n- **Skull database expansion**: `/headdb` (alias `/hdb`) command with paged view, larger database, and updated translations.\n- **Layout polish**: trade main screen no longer overlaps Buy/Sell labels; trade item NBT editing restored the advanced editor (factory) entry.\n- Lang updates for `en_us`, `zh_cn`, `zh_tw`."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

@@ -51,7 +51,7 @@
 						"unreadable": []
 					},
 					"icon": "8d2a5bdb8c9db7ba76cd6ccebac1ae458ee26e2efbc4964f129a95628a9f3329.png",
-					"downloads": 10,
+					"downloads": 11,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -98,7 +98,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 5,
+					"downloads": 7,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -145,7 +145,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 3,
+					"downloads": 4,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -192,7 +192,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 3,
+					"downloads": 4,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -239,7 +239,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 3,
+					"downloads": 4,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -286,7 +286,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 3,
+					"downloads": 4,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -333,7 +333,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 3,
+					"downloads": 4,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -380,7 +380,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 3,
+					"downloads": 4,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -427,7 +427,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 7,
+					"downloads": 9,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -474,7 +474,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 10,
+					"downloads": 11,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -484,7 +484,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "## 修复\n\n- 修复夺舍时统计快照共享原对象，导致双方统计值相互覆盖的问题；快照保存独立副本，恢复时清零目标独有项目，避免跳跃、钓鱼等统计混合并写入存档\n- 修复开启 `fakePlayerProfilePreload` 后，同名或大小写不同的重复请求可能在多个维度创建同一假人的问题；资料查询和召唤回放共同去重，并检查在线 UUID 与正在召唤的状态"
 		},
 		{
 			"tag": "1.7.0",
@@ -881,7 +882,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "# Carpet FGA Addition 1.7.0\n\n## 新功能\n\n- 新增 `craftableEndPortalFrame` 规则；开启后可用八个末地石围绕一个末影之眼合成末地门框架，适用于当前十个构建版本\n- 新增 `silentAutoEat` 服务端规则；开启后，兼容的 halfmasa 客户端可请求服务端静默消耗背包中的食物，并保留原版营养、饱和度、效果和余留物处理\n- 新增 `craftableBarrier` 规则；开启后可用八个玻璃围绕一个黑曜石合成屏障，适用于当前十个构建版本\n- Minecraft 26.3 的 halfmasa 协议支持查询当前向玩家显示的凋灵和末影龙 Boss 栏血量\n\n## 修复\n\n- 修复切石配方开关在单人世界内置服务端未过滤配方的问题\n- 修复切石规则切换后已打开的切石机仍保留旧配方、选择和产物预览的问题；关闭时按原版行为退还输入\n- 修复整盒潜影盒的切石配方查询在客户端错误应用服务端规则的问题"
 		},
 		{
 			"tag": "1.6.4",
@@ -1278,7 +1280,8 @@
 					},
 					"downloads": 5
 				}
-			]
+			],
+			"notes": "# Carpet FGA Addition 1.6.4\n\n- 合并pr，更新 QuickCraft 轻松放置实体协议，载具中有实体也可以放置。"
 		},
 		{
 			"tag": "1.6.3",
@@ -1675,7 +1678,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "修复ams大潜影盒与fga满盒合成下合成出来物品背包内预览数量正常，放下后物品数量减半的问题"
 		},
 		{
 			"tag": "1.6.2",
@@ -2072,7 +2076,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "# Carpet FGA Addition 1.6.2\n\n## 规则兼容\n\n- AMS 大潜影盒兼容改为直接查询 Carpet `largeShulkerBox` 规则当前值，适配移除旧 LazySettings 类的新版本\n- 旧 AMS 仍在启动时决定潜影盒容量；更改规则默认值后需重启服务器，再使用整盒合成\n- （1.6.2目前还有bug，暂时不要同时使用两个功能）\n\n## 玩家夺舍\n\n- 将单人世界服主无需开放局域网即可使用 `/fga possess` 的权限修复同步到当前支持的十个构建版本\n- 修正 Carpet `commandPlayer` 权限检查所用的玩家命令来源，并在夺舍开始和结束时刷新命令树\n- 增加 `/fga possess stop` 作为独立退出入口；退出后恢复原命令权限\n- 保持 `permissionSwapsToo` 语义：`true` 保留操控者权限，`false` 使用被操控者权限"
 		},
 		{
 			"tag": "1.5.4",
@@ -2468,7 +2473,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "## Carpet FGA Addition 1.5.4\n- 移除独立 Minecraft 1.21 Gradle/Preprocessor 平台，由 1.21.1 JAR 兼容 Minecraft 1.21/1.21.1\n- 重构 Github Actions 自动发布"
 		},
 		{
 			"tag": "1.4.7",
@@ -3091,11 +3097,14 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "26.1-引入深板岩切石、虚空世界地形、载具急停"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

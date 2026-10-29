@@ -177,7 +177,7 @@
 						"unreadable": []
 					},
 					"icon": "c879ced0c0a1acb0f829e956dc652c80c404774f79811be7ecec2f510de1ed62.webp",
-					"downloads": 1564,
+					"downloads": 1588,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -185,7 +185,8 @@
 						"shaders": true
 					}
 				}
-			]
+			],
+			"notes": "## What's changed\n- Restored Voxy's page inside Sodium's Video Settings screen for Sodium 0.8.x.\n- Switched the integration to Sodium's built-in NeoForge config API discovery with `@ConfigEntryPointForge(\"voxy\")`.\n- Removed the obsolete Sodium Options API integration path, which targeted older Sodium option classes and could crash with Sodium 0.8.x.\n- Kept the NeoForge Mods-menu config screen as the fallback config path.\n\n## Notes\nYou should not need Sodium Options API just to see Voxy settings in Sodium 0.8.x. If Sodium Options API is installed anyway, Voxy no longer depends on its old option-page classes.\n\n## Validation\n- Built with Java 21.\n- `./gradlew build --no-daemon` passed.\n- Mixin validation passed against `voxy-0.2.12-alpha.jar`.\n- The jar includes `VoxyConfigMenu`/`SodiumConfigBuilder` and does not package the obsolete `VoxySodiumOptions` integration."
 		},
 		{
 			"tag": "v0.2.11-alpha",
@@ -355,7 +356,8 @@
 					},
 					"downloads": 531
 				}
-			]
+			],
+			"notes": "## What's changed\n- Fixed startup crashes in modpacks using Sodium 0.8.x by supporting both RenderSectionManager constructor signatures.\n- Fixed the next Sodium 0.8.x crash by supporting the newer DefaultChunkRenderer render signature with the indexed-rendering boolean parameter.\n- Keeps compatibility with Sodium 0.6.x by retaining the older constructor and render injection paths.\n- All supported Sodium paths share the same Voxy chunk-bound reset, min-build-height setup, and LOD render injection behavior.\n\n## Why this matters\nSome packs, including All The Mons Takes Off, ship Sodium 0.8.12-beta.1. Older Voxy builds only matched Sodium 0.6.x signatures, causing Mixin failures during world load.\n\n## Validation\n- Built with Java 21.\n- `./gradlew build --no-daemon` passed.\n- Mixin validation passed against the packaged `voxy-0.2.11-alpha.jar`."
 		},
 		{
 			"tag": "v0.2.10-alpha",
@@ -525,7 +527,8 @@
 					},
 					"downloads": 40
 				}
-			]
+			],
+			"notes": "## What's changed\n- Fixed distracting dark triangle artifacts over water while moving by no longer drawing coarse temporary LOD fallback meshes when child data is still loading.\n- Reduced giant temporary distant-block pop-in by making higher mip levels require more non-air samples before representing sparse geometry.\n- Smoothed translucent LOD blending around the vanilla render-distance boundary, especially for water.\n- Added Sodium shader parser compatibility for both Sodium 0.6.x and newer parser return types to avoid startup crashes on 0.6.13.\n- Kept mesh-building performance tidy by clearing section masks during preparation instead of doing separate full-array clears.\n\n## Notes\nThis is still an alpha build. The water artifact fix prefers a brief missing LOD patch over rendering an oversized incorrect fallback, which should be much less distracting during movement.\n\n## Validation\n- Built with Java 21.\n- `./gradlew build --no-daemon` passed.\n- Mixin validation passed; existing non-fatal mixin naming/remap warnings remain."
 		},
 		{
 			"tag": "v0.2.9-alpha",
@@ -693,14 +696,17 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 53
+					"downloads": 54
 				}
-			]
+			],
+			"notes": "Alpha NeoForge 1.21.1 release.\n\nBuilt jar: voxy-0.2.9-alpha.jar\nMinecraft: 1.21.1\nNeoForge: 21.1.x\nRequired dependencies: Sodium NeoForge, Forgified Fabric API\n\nSHA-256: C0224A371B5A702DCD28C915B0301E397033EF5E603F51893B1828AECBA930E7"
 		}
 	],
 	"readme": "README.md",
 	"readmeSummary": "An unofficial NeoForge 1.21.1 port of Voxy, the high-performance Level of Detail terrain renderer for Minecraft.",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

@@ -122,7 +122,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "### Changes\n* [`apoli`] Made the `*_inventory` action/condition types operate on all powers that have an inventory if the `power` field is absent when the `power` inventory type is specified.\n\n### Fixes\n* [`apoli`] Fixed `ConcurrentModificationException` being thrown when revoking a power.\n* [`apoli`] Fixed `ConcurrentModificationException` being thrown when syncing command tags of an entity.\n* [`apoli`] Fixed `*_inventory` action/condition types still counting the entity's inventory even if not specified.\n* [`apoli`] Fixed `modify_inventory` entity action type not respecting its process mode when modifying items.\n* [`apoli`] Fixed the incorrect calculation of the distance for the `raycast` entity action type (for real this time.)\n* [`apoli`] Fixed `item_on_item` power type not recognizing the `result` field.\n* [`origins`] Fixed icon of an origin being rendered over the border of the origin window.\n* [`origins`] Fixed scrolling progress of the origin window not persisting when resizing the game window.\n\n###  Changelogs\n* ### [Full changelog](https://github.com/apace100/origins-fabric/compare/1.13.0-pre.3+mc.1.21.1...1.13.0-pre.4+mc.1.21.1)\n* ### [Apoli 2.12.0-pre.4+mc.1.21.1](https://github.com/apace100/apoli/releases/tag/2.12.0-pre.4%2Bmc.1.21.1)"
 		},
 		{
 			"tag": "1.13.0-pre.3+mc.1.21.1",
@@ -239,7 +240,8 @@
 					},
 					"downloads": 23
 				}
-			]
+			],
+			"notes": "##  Changes\n* \\[[**`apoli#283`**](https://github.com/apace100/apoli/issues/283)\\] Registries [specific to Apoli] are now synced to the client.\n* [**`apoli`**] Simplified implementation for syncing command tags, and also fixed the related crashing issue when a player joins a server without Apoli installed.\n* [**`apoli`**] The `attribute_modify_transfer` power type now uses the `ModifyValueCallback` event for transferring attribute modifiers.\n* [**`apoli`**] Re-added missing `still` fluid condition type.\n* [**`apoli`**] Optimized power lookup implementations.\n* [**`origins`**] Removed the 'choose' button in the view origin screen since it no longer works.\n* [**`origins`**] Moved all rendering logic for the origin window to its own widget class.\n\n##  Fixes\n* [**`apoli`**] Fixed `conditioned_attribute` power type disregarding its condition when applying its attribute modifier(s).\n* [**`apoli`**] Fixed incorrect landing condition logic in `random_teleport` entity action type.\n* [**`apoli`**] Fixed typo in the entity condition type registry data type. (e.g: _\"... not undefined\"_ → _\"... undefined\"_)\n* [**`apoli`**] Fixed `replace_loot_table` power type not replacing the `apoli:replaced_loot_table` loot table properly.\n* [**`apoli`**] Fixed incorrect calculation and usage of the general/entity/block distance in the `raycast` entity action type.\n* [**`apoli`**] Fixed `action_on_death` power type executing its actions before the entity's health is set.\n* [**`apoli`**] Fixed crashing issues related to the recipe book and power-related recipe serializers.\n* [**`apoli`**] Fixed `remove_power` entity action type removing all powers from the source of the specified power, instead of removing the power from its sources.\n* [**`origins`**] Fixed issue with being unable to choose an origin for other origin layers if there are more than one.\n* [**`origins`**] Fixed Merling's Aqua Affinity power not working consistently when floating or standing underwater.\n* [**`origins`**] Fixed `origins:like_water` power type setting the entity's 'on ground' flag on/off repeatedly.\n\n##  Changelogs\n* ### [Full changelog](https://github.com/apace100/origins-fabric/compare/1.13.0-pre.2+mc.1.21.1...1.13.0-pre.3+mc.1.21.1)\n* ### [Apoli 2.12.0-pre.3+mc.1.21.1](https://github.com/apace100/apoli/releases/tag/2.12.0-pre.3%2Bmc.1.21.1)"
 		},
 		{
 			"tag": "1.13.0-pre.2+mc.1.21.1",
@@ -356,7 +358,8 @@
 					},
 					"downloads": 53
 				}
-			]
+			],
+			"notes": "##  Changes\n* [**`apoli`**] The replacement IDs in the `replace_loot_table` power type can now reference capture groups from the regular expression.\n* [**`origins`**] Scrolling the origin window is now much faster, and can be slowed down (to its previous speed) by holding the shift key.\n\n##  Fixes\n* [[**`apoli#267`**](https://github.com/apace100/apoli/pull/267)] Fixed incompatibility with message-api.\n* [**`apoli`**] Fixed `command_along_ray` in `raycast` entity action type not being executed even when `command_along_ray_only_on_hit` is `false`.\n* [**`apoli`**] Fixed `offset` block condition type not checking the block at the offset position.\n* [**`apoli`**] Fixed incompatibility with Trickster.\n* [**`apoli`**] Fixed `apoli:replaced_loot_table` loot table sometimes not referencing the replaced loot table.\n* [**`apoli`**] Fixed `attribute` power type not re-applying the attributes when the player goes through the End Portal (e.g: pseudo-respawning.)\n* [[**`origins#865`**](https://github.com/apace100/origins-fabric/pull/865)] Fixed crash when the water protection enchantment is filtered.\n* [**`origins`**] Fixed an issue with choosing origins (or random) in multiple origin layers not working properly.\n* [**`origins`**] Fixed the dirt background not rendering when choosing an origin for the first time.\n\n##  Changelogs\n* ### [Full changelog](https://github.com/apace100/origins-fabric/compare/1.13.0-pre.1+mc.1.21.1...1.13.0-pre.2+mc.1.21.1)\n* ### [Apoli 2.12.0-pre.2+mc.1.21.1](https://github.com/apace100/apoli/releases/tag/2.12.0-pre.2%2Bmc.1.21.1)"
 		},
 		{
 			"tag": "1.13.0-pre.1+mc.1.21.1",
@@ -473,7 +476,8 @@
 					},
 					"downloads": 30
 				}
-			]
+			],
+			"notes": "##  Changes\n* [**`apoli`**] Power/global power resource reload listeners now have direct access to the registry wrapper lookup (this means Apoli/Origins won't have to rely on pretty-hacky methods to get the registry wrapper lookup to use for parsing powers/global powers.)\n* [**`apoli`**] Powers are now validated when data pack contents are refreshed (e.g: after all data packs have been reloaded) instead of after powers are parsed.\n* [**`apoli`**] Power recipes are now registered when data pack contents are refreshed (e.g: after all data packs have been reloaded) instead of after powers are parsed.\n* [**`apoli`**] Allowed indexed stacks (the data typ used in the `starting_equipment` power type) to have a slot range with multiple slots.\n* [**`apoli`**] Optimized inventory-related actions/utilities to reduce performance overhead.\n* [**`apoli`**] _{For addon developers}_ Simplified and improved naming convention of some classes/methods. This affects the following classes/methods:\n  * `AbstractAction` --> `Action`\n  * `AbstractCondition` --> `Condition`\n  * `Power#getPowerType` --> `Power#getType`\n  * `Action#getActionType` --> `Action#getType`\n  * `Condition#getConditioType` --> `Condition#getType`\n\n##  Fixes\n* [**[`apoli#260`](https://github.com/apace100/apoli/pull/260)**] Fixed memory leaks and threading issues.\n* [**`apoli`**] Fixed attribute modifiers added via the `attribute` power type not persisting on respawn.\n* [**`apoli`**] Fixed attribute modifiers added via the `conditioned_attribute` power type being added unconditionally upon gaining the power.\n* [**`apoli`**] Fixed `.mcfunction` files not being loaded due to non-existent powers caused by loading order issue (since `.mcfunction` files are loaded before powers.)\n* [**`apoli`**] Fixed inventory-related entity action/condition types improperly checking the size boundary of the inventories and specified slots.\n* [**`apoli`**] Fixed `passenger_action` entity action type executing its own entity action on the ridden entity instead of the riding entity.\n* [**`apoli`**] Fixed `attacker` damage condition type not checking if the attacker actually exists.\n* [**`apoli`**] Fixed powers unnecessarily being synced in singleplayer.\n* [**`apoli`**] Fixed crash with the `raycast` entity action/condition types caused by not checking if the entity has the reach-related attributes.\n* [**`apoli`**] Fixed tooltips of item powers being duplicated after each equipment slot tooltips.\n* [**`apoli`**] Fixed the position context of the `raycast` entity action type to use the position of the raycast's end position instead of the specified destination position.\n* [**[`origins#801`](https://github.com/apace100/origins-fabric/pull/801)**] Fixed origin powers unable to be disabled via the config.\n* [**`origins`**] Fixed origins/origin layers/badges being unnecessarily synced in singleplayer.\n* [**`origins`**] Fixed `.mcfunction` files not being loaded due to non-existent origins caused by loading order issue (since `.mcfunction` files are loaded before origins.)\n\n##  Changelogs\n* ### [Full changelog](https://github.com/apace100/origins-fabric/compare/1.13.0-alpha.12+mc.1.21.1...1.13.0-pre.1+mc.1.21.1)\n* ### [Apoli 2.12.0-pre.1+mc.1.21.1](https://github.com/apace100/apoli/releases/tag/2.12.0-pre.1%2Bmc.1.21.1)"
 		},
 		{
 			"tag": "1.10.2+mc.1.20.1",
@@ -516,7 +520,11 @@
 							"breaks": [
 								"optifabric",
 								"identity"
-							]
+							],
+							"breaksVersions": {
+								"optifabric": "<=1.11.18",
+								"identity": "<1.14.2-beta"
+							}
 						},
 						{
 							"loader": "forge",
@@ -575,7 +583,7 @@
 						"unreadable": []
 					},
 					"icon": "d7cb58e5f4147a9283141b2a5a5b32f43998dbc692c630204798c248b4654f3b.png",
-					"downloads": 99,
+					"downloads": 102,
 					"funding": [],
 					"content": {
 						"names": {
@@ -590,7 +598,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "## Additions\n* [**`origins`**] Added Connector Extras as an explicit dependency\n\n##  Fixes\n* [**`origins`**] Fixed Avian's `like_air` power\n* [**`origins (connector)`**] Fixed Shulk's `strong_arms` power\n* [**`origins`**] Fixed origin selection screen invulnerability (woops)\n\n##  Changelogs\nMake sure to check out the full changelogs here so you don't miss a thing!\n* [**Full changelog**](<https://github.com/apace100/origins-fabric/compare/v1.10.1...1.10.2+mc.1.20.1>)\n* [**Apoli 2.9.2+mc.1.20.1**](<https://github.com/apace100/apoli/releases/tag/2.9.2%2Bmc.1.20.1>)\n* [**Calio 1.11.2+mc.1.20.1**](<https://github.com/apace100/calio/releases/tag/1.11.2%2Bmc.1.20.1>)"
 		},
 		{
 			"tag": "1.13.0-alpha.10+mc.1.21.1",
@@ -707,7 +716,8 @@
 					},
 					"downloads": 23
 				}
-			]
+			],
+			"notes": "> [!WARNING]\n> ### Power/action/condition types and actions/conditions have been overhauled in this update. There is currently no documentation, but you can check out PR https://github.com/apace100/apoli/pull/254, or take a look at the codebase of Apoli 2.12.0-alpha.13 as a reference\n\n##   Additions\n<ul>\n<li>\n[<b><code>calio</code></b>] <em>[For addon developers]</em> Added <code>SerializableDataType#validateValue</code> method for validating the operand type\n</li>\n\n<li>\n[<b><code>apoli</code></b>] Added legacy aliases for meta condition types;\n\n<ul>\n<li><code>and</code> --> <code>all_of</code></li>\n<li><code>or</code> --> <code>any_of</code></li>\n<li><code>chance</code> --> <code>random_chance</code></li>\n</ul>\n\n</li>\n</ul>\n\n##   Changes\n<ul>\n<li>\n[<b><code>calio</code></b>] <em>[For addon developers]</em> Deprecated <code>SimpleDataObjectFactory</code> in favor of using <code>DataObjectFactory</code> directly via <code>DataObjectFactory#simple</code>\n</li>\n\n<li>\n[<b><code>calio</code></b>] <em>[For addon developers]</em> Renamed <code>SerializableDataTypeList</code> class to <code>ListSerializableDataType</code>\n</li>\n\n<li>\n[<b><code>calio</code></b>] <em>[For addon developers]</em> Renamed <code>FunctionedFieldImpl</code> class to <code>FunctionedDefaultFieldImpl</code>\n</li>\n\n<li>\n[<b><code>calio</code></b>] <em>[For addon developers]</em> Renamed <code>OptionalFieldImpl</code> class to <code>DefaultedFieldImpl</code>\n</li>\n\n<li>\n[<b><code>calio</code></b>] <em>[For addon developers]</em> Renamed <code>Field#path</code> method to <code>Field#name</code>\n</li>\n\n<li>\n[<b><code>calio</code></b>] <em>[For addon developers]</em> Tweaked field presence check logic in <code>SerializableData$Instance</code> to ensure that the default value of fields are only checked if the field doesn't have a defined value\n</li>\n\n<li>\n[<b><code>calio</code></b>] <em>[For addon developers]</em> Separated setting of defaulted and functioned default fields of <code>SerializableData$Instance</code> (when decoding) to avoid nullability issues with functioned default fields relying on defaulted fields\n</li>\n\n<li>\n[<b><code>apoli</code></b>] Made the <code>*_inventory</code> action/condition types use slot ranges (e.g: <code>hotbar.*</code>, <code>armor.*</code>, etc.)\n</li>\n\n<li>\n[<b><code>apoli</code></b>] Made the <code>keep_inventory</code> power type use slot ranges (e.g: <code>enderchest.*</code>, <code>inventory.*</code>, etc.)\n</li>\n\n<li>\n[<b><code>apoli</code></b>] Renamed the <code>simple</code> power type to <code>dummy</code> (and added its old name as an alias)\n</li>\n\n<li>\n[<b><code>apoli</code></b>] Renamed the <code>active_self</code> power type to <code>action_on_key_press</code> (and added its old name as an alias)\n</li>\n\n<li>\n[<b><code>apoli</code></b>] Renamed some meta condition types (and added their old name as an alias)\n\n<ul>\n<li><code>and</code> --> <code>sequence</code></li>\n<li><code>chance</code> --> <code>random_chance</code></li>\n</ul>\n\n</li>\n\n<li>\n[<b><code>apoli</code></b>] <em>[For addon developers]</em> Added <code>PowerUtil</code>, a utility class for modifying/querying resource values, and validating if a power type is considered a resource\n</li>\n\n<li>\n[<b><code>apoli</code></b>] <em>[For addon developers]</em> Made container type an interface. There's also a new registry, <code>ApoliRegistries#CONTAINER_TYPE</code>, where addons can register their container types to be used by the <code>inventory</code> power type. Currently, there are two types of container type:\n\n<ul>\n<li>Preset container type, which re-uses a screen handler/screen of a pre-existing container</li>\n<li>Dynamic container type, which has definable rows, columns, title alignment, and texture via data; also has its own screen handler/screen <b>(currently incomplete and unsupported)</b></li>\n</ul>\n\n</li>\n\n<li>\n\n..."
 		},
 		{
 			"tag": "1.13.0-alpha.4+mc.1.20.4",
@@ -782,7 +792,8 @@
 					},
 					"downloads": 21
 				}
-			]
+			],
+			"notes": "##  Additions\n* \\[[**`apoli#225`**](https://github.com/apace100/apoli/pull/225)\\] Added `duration` and `duration_on_use` fields to the `spawn_effect_cloud` entity action type.\n* \\[[**`apoli#227`**](https://github.com/apace100/apoli/pull/227)\\] Added `sprinting` power type.\n* \\[[**`apoli#228`**](https://github.com/apace100/apoli/pull/228)\\] Added `pose` power type.\n* \\[[**`apoli$234`**](https://github.com/apace100/apoli/pull/234)\\] Added `prevent_entity_selection` power type.\n\n##  Changes\n* \\[[**`apoli#223`**](https://github.com/apace100/apoli/pull/223)\\] Global power sets now support Fabric's resource conditions.\n* \\[[**`origins#751`**](https://github.com/apace100/origins-fabric/pull/751)\\] Origins and origin layers now support Fabric's resource conditions.\n\n##  Fixes\n* [**`calio`**] Fixed issue with the `SerializableDataTypes#RECIPE` data type leniently parsing the recipe's ID and the recipe's serializer ID.\n* [**`apoli`**] Fixed `*_when_hit` power types causing a crash when executing/evaluating actions/conditions on the possibly non-existent attacker.\n* [**`apoli`**] Fixed issue with selecting entities by command tags (via the `@e[tag = <tagName>]` selector argument) added in the same tick.\n* [**`apoli`**] Fixed certain errors not being caught when reading sub-powers.\n* [**`apoli`**] Fixed inconsistent format of automatically-generated translation keys in power names and descriptions.\n* [**`origins`**] Fixed inconsistent format of automatically-generated translation keys in origins and origin layers.\n\n##  Full changelogs\n* **Calio:** [**`1.14.0-alpha.2+mc.1.20.4`**](https://github.com/apace100/calio/releases/1.14.0-alpha.2+mc.1.20.4)"
 		},
 		{
 			"tag": "v1.12.10",
@@ -861,9 +872,10 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 96
+					"downloads": 98
 				}
-			]
+			],
+			"notes": "[A] marks the changes in the underlying Apoli version, while [C] marks the changes in the underlying Calio version.\n\n##  Changes\n* [A] Reverted supposed fix for issue with negating modified damage.\n* [A] Made the `entity_set` power type validate its entries upon the holder of the power being loaded.\n\n##  Fixes\n* [C] Fixed argument type data types not properly printing its error in the output log.\n* [A] Fixed power HUD renders not rendering properly.\n* [A] Fixed automatic removal of entities in powers that use the `entity_set` power type.\n* [A] Fixed potential infinite recursion when granting powers.\n\n##  Changelogs\nMake sure to check out Apoli's and Calio's changelog for more information about this release:\n\n* **Apoli: [`v2.11.11`](https://github.com/apace100/apoli/releases/tag/v2.11.11)**\n* **Calio: [`v1.13.3`](https://github.com/apace100/calio/releases/tag/v1.13.3)**"
 		},
 		{
 			"tag": "v1.12.2",
@@ -944,7 +956,8 @@
 					},
 					"downloads": 8
 				}
-			]
+			],
+			"notes": "[O] marks the changes in Origins while [A] marks the changes in the underlying Apoli version.\n\n## Fixes\n* [A] Fixed `replace_loot_table` power type ignoring block conditions.\n* [A] Fixed potential issues with the `inventory` power type.\n* [O] Fixed result stack of recipe badge tooltips not being modified by a power that uses the `modify_crafting` power type.\n* [O] Fixed concurrent modification crash edge-case issue when removing disabled powers from origins on server (re)load.\n\n**Apoli changelog:** [`v2.11.3`](https://github.com/apace100/apoli/releases/tag/v2.11.3)\n**Origins changelog (full):** [`v1.12.1..v1.12.2`](https://github.com/apace100/origins-fabric/compare/v1.12.1...v1.12.2)"
 		},
 		{
 			"tag": "v1.12.1",
@@ -1025,7 +1038,8 @@
 					},
 					"downloads": 15
 				}
-			]
+			],
+			"notes": "[O] marks the changes in Origins while [A] marks the changes in the underlying Apoli version.\n\n## Fixes\n* [O] Fixed badges not appearing in the origin screen caused by badges not being synced to the client.\n* [A] Fixed `burn` power type ignoring conditions.\n* [A] Fixed `fire_projectile` power type not accepting zero value in its `interval` and `start_delay` fields.\n* [A] Fixed `entity_set` power type not executing its `action_on_remove` bi-entity action upon removing entities from an entity set."
 		},
 		{
 			"tag": "v1.11.2",
@@ -1947,5 +1961,7 @@
 	"readmeSummary": "This is the GitHub repository for the Origins mod, created for Fabric.",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

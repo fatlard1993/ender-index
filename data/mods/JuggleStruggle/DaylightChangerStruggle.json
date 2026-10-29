@@ -46,7 +46,7 @@
 						"unreadable": []
 					},
 					"icon": "19ff3b7218f5a6c1927bffddfb222b15fff45394c01c8dbf281822277e649045.png",
-					"downloads": 4,
+					"downloads": 5,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -54,7 +54,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "Introduces minor quality of life improvements.\n\n\n## Hotfix\n* Fix a game crash when joining a world without a defined cycle set\n  * This occurs when starting the mod fresh without any prior configuration in regards to the cycle being set.\n\n\n## Additions\n\n### Keybind Shortcuts\n* Can now toggle the option in disabling night vision's potion effect\n* Can now quickly switch cycles via next and previous\n  * Same as when quick-switching via the menu\n\n### Commands\n* The `/dcs option` command now shows all available options\n  * It is both interactive and can be hovered to show what these options do\n    * Clicking on the checkbox next to the option applies the value in a fixed form\n    * Clicking on the option text itself toggles the value\n\n### User Interface\n* Right-clicking a cycling button now cycles to its previous value\n  * Non-cycling buttons which also support right-clicking (such as Quick-Switch Cycle in the main menu) can now \n    respond to this\n\n\n## Changes\n\n### Randomizer Cycle\n* Now supports negative values being used for Daylight Random Time (applies to both minimum and maximum)\n\n### Commands\n* Renamed the cycle's `option` subcommand to `propertyScreen` to better reflect what it really does\n  * While at it, `propertyScreen` now opens the actual property screen when executing the command, rather\n    than have nothing happen\n* The `/dcs cycle` command now shows its list of cycles in a less confusing manner where now only the active\n    cycle is colored green and underlined\n\n### Remembering States on World Change/Leave\n* Now has a separate way for general cycle saving: Keybind shortcuts which make preference changes will now mark \n  to let the mod know to save changes to disk when it's time to do so\n  * For example, World Time toggles or disabling the night vision's effect as keybind toggles tells the mod to\n    remind itself to save to disk when switching worlds or leaving\n\n### Cycle Property Sub-Screen\n* Updated Auto-Save, Save and Reset's descriptions\n  * Now both Save and Reset contain multi-line tooltip descriptions\n* Save button's width size was expanded to account for button text changes, which are now longer\n\n\n## Bugfixes\n* Introduced in `v0.0.4+26.1`, the mod's client clock that replaced the vanilla version's in the client world \n  wouldn't send any updates to the original clock only if DCS clock was enabled, despite this being the only way to\n  update due to Mixin overrides. Now updates regardless of whether DCS clock is used; not that it would've affected\n  much, considering it's only enabled briefly during environment attribute lookup.\n\n\n## Removals\n\n### Mod Screen\n* Removed the internal unused configuration button and screen which did nothing"
 		},
 		{
 			"tag": "v0.0.5+1.21.11",
@@ -95,7 +96,8 @@
 					},
 					"downloads": 5
 				}
-			]
+			],
+			"notes": "Introduces minor quality of life improvements.\n\n\n## Additions\n\n### Keybind Shortcuts\n* Can now toggle the option in disabling night vision's potion effect\n* Can now quickly switch cycles via next and previous\n  * Same as when quick-switching via the menu\n\n### Commands\n* The `/dcs option` command now shows all available options\n  * It is both interactive and can be hovered to show what these options do\n    * Clicking on the checkbox next to the option applies the value in a fixed form\n    * Clicking on the option text itself toggles the value\n\n### User Interface\n* Right-clicking a cycling button now cycles to its previous value\n  * Non-cycling buttons which also support right-clicking (such as Quick-Switch Cycle in the main menu) can now \n    respond to this\n\n\n## Changes\n\n### Randomizer Cycle\n* Now supports negative values being used for Daylight Random Time (applies to both minimum and maximum)\n\n### Commands\n* Renamed the cycle's `option` subcommand to `propertyScreen` to better reflect what it really does\n  * While at it, `propertyScreen` now opens the actual property screen when executing the command, rather\n    than have nothing happen\n* The `/dcs cycle` command now shows its list of cycles in a less confusing manner where now only the active\n    cycle is colored green and underlined\n\n### Remembering States on World Change/Leave\n* Now has a separate way for general cycle saving: Keybind shortcuts which make preference changes will now mark \n  to let the mod know to save changes to disk when it's time to do so\n  * For example, World Time toggles or disabling the night vision's effect as keybind toggles tells the mod to\n    remind itself to save to disk when switching worlds or leaving\n\n### Cycle Property Sub-Screen\n* Updated Auto-Save, Save and Reset's descriptions\n  * Now both Save and Reset contain multi-line tooltip descriptions\n* Save button's width size was expanded to account for button text changes, which are now longer\n\n\n## Removals\n\n### Mod Screen\n* Removed the internal unused configuration button and screen which did nothing"
 		},
 		{
 			"tag": "v0.0.4+26.2",
@@ -136,7 +138,8 @@
 					},
 					"downloads": 4
 				}
-			]
+			],
+			"notes": "Port version from 26.1."
 		},
 		{
 			"tag": "v0.0.4+26.1",
@@ -177,7 +180,8 @@
 					},
 					"downloads": 4
 				}
-			]
+			],
+			"notes": "Port update which further explores more on the concept of world environments in the sense used to fix bugs\nintroduced in `v0.0.3+1.21.11`.\n\n\n## For developers\n* This port still uses Yarn, and only uses the necessary libraries for Fabric API for the mod to at least function. \n   See `build.gradle` for more details.\n\n\n## Changes\n* Numeric Widget now allows for setting negative numbers\n  * More specifically, allowing the use of a dash at the start of the text\n  * This is treated as `0` if only the dash is present, which might be valid depending on the numeric \n    property used in\n* Remembers now the screens responsible for opening the mod's screen, if there were any\n* System Time now includes the previous cached time at the start of the cycle creation\n* Translation descriptions received minor changes\n\n\n## Bugfixes\n* Fixed a bug introduced in some releases ago where changing the world time from the mod never updated when\n  the game was paused in single player\n  * However, there still is a very minor bug but this but can be largely fixed by making changes that affect\n    the world time (inconsistently applied from the cycle properties for the most part with the exception of\n    static/moving time)\n* Fix smoothness still being applied even when disabled in areas where the daylight cycle has an effect in \n  the world, such as sky lighting and cloud coloring\n* Fix the numeric text field's invalid text color lacking an alpha value (Regression)\n* Low to High Height Time's lowest value did not allow setting for 0 or below"
 		},
 		{
 			"tag": "v0.0.4+1.21.11",
@@ -218,7 +222,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "Update which further explores more on the concept of world environments in the sense used to fix bugs\nintroduced in `v0.0.3+1.21.11` and a backport from 26.1.\n\n\n## Changes\n* Numeric Widget now allows for setting negative numbers\n  * More specifically, allowing the use of a dash at the start of the text\n  * This is treated as `0` if only the dash is present, which might be valid depending on the numeric \n    property used in\n* Remembers now the screens responsible for opening the mod's screen, if there were any\n* System Time now includes the previous cached time at the start of the cycle creation\n* Translation descriptions received minor changes\n\n\n## Bugfixes\n* Fixed a bug introduced in some releases ago where changing the world time from the mod never updated when\n  the game was paused in single player\n  * However, there still is a very minor bug but this but can be largely fixed by making changes that affect\n    the world time (inconsistently applied from the cycle properties for the most part with the exception of \n    static/moving time)\n* Fix smoothness still being applied even when disabled in areas where the daylight cycle has an effect in \n  the world, such as sky lighting and cloud coloring\n* Fix the numeric text field's invalid text color lacking an alpha value (Regression)\n* Low to High Height Time's lowest value did not allow setting for 0 or below"
 		},
 		{
 			"tag": "v0.0.3+1.21.1",
@@ -259,7 +264,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "Port version from 1.20.1 with some elements taken from v0.0.1+1.21.5."
 		},
 		{
 			"tag": "v0.0.3+1.18",
@@ -300,7 +306,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "Update version from the initial release while including all features introduced up to v0.0.3.\n\n# Additions\nThese features are only added due to 1.20+ versions of the game having these features. All of them are User\nInterface related.\n\n## Key Expansion: Arrow Keys\n* Lets the user move freely around the menus\n  * This does not replace the TAB functionality, but expands on it\n* Has some bugs due to not having enough time\n  * When wanting to save the properties of a cycle, make sure to use TAB instead as no arrow support was\n    added in those widgets due to lack of time.\n\n## Tooltip Support: Mouse or Keys\nKey support was now added to account for tooltips, including Vanilla's TAB action and behaves similarly to \nthe latest ports."
 		},
 		{
 			"tag": "v0.0.3+1.21.9",
@@ -341,7 +348,8 @@
 					},
 					"downloads": 6
 				}
-			]
+			],
+			"notes": "A pretty minor update.\n\n## Additions\n* Add support for mouse cursors introduced in this Minecraft version\n\n## Changes\n* List Widget: The background gradient will now hide if the scrollbar is already displayed due to list entries\n  already having the gradient effect themselves\n\n## Bugfixes\n* List Widget: Fixed certain visual and interaction issues by removing offsets by which the list widgets never used\n* Configuration: Internally added the ability for the property `allowWorldChangeCyclesToWriteToDisk` to be written to \n  disk due to an oversight in v0.0.1\n  * Note: Previously, this property would be read but if wanted to be written to disk, this simply wouldn't happen\n    as there wasn't anything hinting that it should have"
 		},
 		{
 			"tag": "v0.0.3+1.20.1",
@@ -382,7 +390,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "A pretty minor update and a backport for 1.20.1!\n\n## Additions (for this port only)\n* Rainbow Shader is used\n  * Based on the initial release version from 1.19 with changes to support this version\n\n## Changes\n* List Widget: The background gradient will now hide if the scrollbar is already displayed due to list entries\n  already having the gradient effect themselves\n\n## Bugfixes\n* List Widget: Fixed certain visual and interaction issues by removing offsets by which the list widgets never used\n* Configuration: Internally added the ability for the property `allowWorldChangeCyclesToWriteToDisk` to be written to \n  disk due to an oversight in v0.0.1\n  * Note: Previously, this property would be read but if wanted to be written to disk, this simply wouldn't happen\n    as there wasn't anything hinting that it should have"
 		},
 		{
 			"tag": "v0.0.2-1.21.6+1.21.8",
@@ -423,7 +432,8 @@
 					},
 					"downloads": 4
 				}
-			]
+			],
+			"notes": "A pretty minor update and mostly a port.\n\n\n## Additions\n\n### Narrator\n* Will now account for tooltips: This works by reading the tooltips after the widget text\n  * Works similarly to how the Vanilla approach does them, but not in a clean way (to avoid caching tooltip \n    descriptions if the user isn't using the Narrator to begin with)\n* Widgets which the narrator shouldn't bother narrating will be skipped towards reading the tooltip description instead\n\n\n## Changes\n\n### Rainbow Shader\n* Removed the Rainbow Shader and its functions in the meantime to help port the mod for future Minecraft versions \n  easily.\n  * As a result, this was replaced with a gradient-like rainbow look which uses a pretty similar style to the rest \n    of the mod itself.\n\n### Tooltips\n* Made them slightly readable by having the description of the tooltip be of gray color\n  * The title of the tooltip remains as-is\n* Now responds to keyboard inputs, uses vanilla's tooltip approach\n* If there is not enough space to show the tooltips on above of either a selected or hovered widget, they're now moved \n  below the widget\n  * So far, only the Back button is affected by this due to it being on top-left of the screen. Older versions showed\n    the tooltip but was never visible due to its location."
 		},
 		{
 			"tag": "v0.0.1-1.21.5",
@@ -464,7 +474,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "A long-awaited mini update and a port of the mod which focuses on minor additions and changes.\n\n\n## Additions\n\n### Static Time\n* Quick Options: Added modifier key description on buttons that have a value other than 0 (Sunrise is the only one that\n  can't have this as it passes the value 0)\n  * The ability to use modifier keys were available in the initial release version but were never shown\n\n### Moving Time\n* Now shares a similar quick-option style from Static Time\n* Is now accounted for when doing `/daylightchanger time add` (or `remove`, `set`) `<time>` (closes #2)\n\n### Randomizers\n* Seed Section: A new button option to set the RNG back to its initial state\n  * Note: Just like in the initial release, the \"Initial Seed\" text widget only changes its seed to its initial state \n    if no tick ran\n\n### Moving Time & Randomizers\n* Have an extra category that aims to make 2 internal values accessible so the user can get to modify them\n  * The rest can be modified on a configuration, though this is not intended to be done this way as it will likely break \n     these cycles.\n\n### Saving Cycle States and Remembering States on World Change/Leave\n* Note: Only Moving Time and Randomizers get this addition and change due to their nature with needing to store caches\n* Can now save the states for both while either switching or leaving a world\n  * However, this is still a bit buggy when starting from a new instance but is not that big of a deal.\n* To disable the option to save into a disk while this is happening, use the command version and write: \n    `/daylightchanger option allowWorldChangeCyclesToWriteToDisk false`\n* Randomizers will not be able to remember the seed as there is no current option to reset the seed back to its\n  initial state.\n\n\n## Known Issues\n\n### System Time\n* The year is still broken when using Date Over Ticks option in the screen"
 		},
 		{
 			"tag": "v0.0.0-1.19",
@@ -505,11 +516,14 @@
 					},
 					"downloads": 21
 				}
-			]
+			],
+			"notes": "Initial release version for 1.19. Quilt version requires Quilted Fabric API / Standard libraries.\n\nThis version is just a port of 1.18's version, which only has similar bugs to this counterpart. See [v0.0.0 for 1.18 - 1.18.2](https://github.com/JuggleStruggle/DaylightChangerStruggle/releases/tag/v0.0.0-1.18)."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

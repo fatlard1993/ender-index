@@ -1,0 +1,358 @@
+{
+	"repo": "Coin0804/FirmaLifeHardCore",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-07-21T16:37:52Z",
+	"pushed": "2026-08-31T10:48:16Z",
+	"releases": [
+		{
+			"tag": "0.3.4-beta",
+			"published": "2026-08-31T10:48:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 537843001,
+					"name": "firmalifehardcore-neoforge-0.3.4-beta.jar",
+					"url": "https://github.com/Coin0804/FirmaLifeHardCore/releases/download/0.3.4-beta/firmalifehardcore-neoforge-0.3.4-beta.jar",
+					"size": 232563,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "70a1eb1121298d5140280bec455ff0267889d802e47f4983d242b18061322524",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "firmalifehardcore",
+							"version": "0.3.4-beta",
+							"name": "FirmaLife HardCore",
+							"description": "å¤å¤ç©è¯­å¼å°çª/æ¸©å®¤æºå¶ â æè´¨ç­é» + å°é­ç©ºé´æ£æµ + æå¼ClimateStationçå¨å±è¿½è¸ªå¨",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"tfc",
+								"firmalife"
+							],
+							"suggests": [
+								"jade"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Reinforced Alfisol",
+								"Reinforced Andisol",
+								"Reinforced Aridisol",
+								"Reinforced Entisol",
+								"Reinforced Fluvisol",
+								"Reinforced Mollisol",
+								"Reinforced Oxisol",
+								"Reinforced Podzol"
+							],
+							"group": [
+								"FirmaLife HardCore"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 41,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 0.3.4-beta\n\n### Fixes\n- **Cheese wheels can now actually age — receivers are split by climate type**: `CheeseWheelBlock.setValid` computes `shouldAge = valid && climate == ClimateType.CELLAR` in one pass, and `SprinklerBlockEntity.setValid` ignores `climate` entirely and just syncs `valid`. Both assume the receiver only ever receives *one* climate type — true for vanilla Firmalife, broken for us, because we broadcast both cellar and greenhouse to every receiver and the last call won. The unified `climate_receivers` tag is replaced by two tags: `cellar_receivers` (food shelves, hangers, large vessels, cheese wheels) and `greenhouse_receivers` (planters, sprinklers). `CellarDetector` sorts every receiver position into the matching set at scan time (greenhouse wins if both), and `broadcastToContainers` sends each climate only to its own receivers — cheese wheels only ever see `CELLAR`, sprinklers/planters only ever see `GREENHOUSE`. Old saves load the legacy `receivers` list as cellar receivers; the next re-scan reclassifies by tag.\n\n---"
+		},
+		{
+			"tag": "0.3.3-beta",
+			"published": "2026-08-26T06:44:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 530396516,
+					"name": "firmalifehardcore-neoforge-0.3.3-beta.jar",
+					"url": "https://github.com/Coin0804/FirmaLifeHardCore/releases/download/0.3.3-beta/firmalifehardcore-neoforge-0.3.3-beta.jar",
+					"size": 231914,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a37093d8eadf783e0ae1018af623de3e36bfe2a4193a63f2e2f6f87958da7787",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "firmalifehardcore",
+							"version": "0.3.2-beta",
+							"name": "FirmaLife HardCore",
+							"description": "å¤å¤ç©è¯­å¼å°çª/æ¸©å®¤æºå¶ â æè´¨ç­é» + å°é­ç©ºé´æ£æµ + æå¼ClimateStationçå¨å±è¿½è¸ªå¨",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"tfc",
+								"firmalife"
+							],
+							"suggests": [
+								"jade"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Reinforced Alfisol",
+								"Reinforced Andisol",
+								"Reinforced Aridisol",
+								"Reinforced Entisol",
+								"Reinforced Fluvisol",
+								"Reinforced Mollisol",
+								"Reinforced Oxisol",
+								"Reinforced Podzol"
+							],
+							"group": [
+								"FirmaLife HardCore"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 41,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 0.3.3-beta\n\n### Fixes\n- **Cheese wheels can now actually age**: `LargePlanterBlockEntity.setValid` computes `shouldAge = valid && climate == ClimateType.CELLAR` in one pass, so the *last* broadcast wins. We broadcast both greenhouse and cellar, and cellar came first — the later greenhouse broadcast then recomputed `shouldAge` as `false` and stomped the valid cellar state, so wheels never started aging. Vanilla Firmalife only ever sends one climate type per receiver, so this never surfaced there (its planter `setValid` even branches on `if (climate == ClimateType.GREENHOUSE)` first — the bug was our broadcasting order, not the receiver). `broadcastToContainers` now sends greenhouse first, cellar last, so the final broadcast the wheel receives is the cellar one.\n\n---\n\n## 0.3.2-beta\n\n### Fixes\n- **Reinforced soil beams are now shovel-mineable**: the 8 beam variants were missing from `mineable/shovel`. Combined with `requiresCorrectToolForDrops()`, no tool ever counted as correct, so beams dropped nothing when mined. Now they drop the regular reinforced soil, as intended.\n- **Reinforced soils now count as TFC insulation**: added all 16 variants to `tfc:insulation` (append, `replace: false`). Charcoal forge and bloomery multiblocks accept them as valid insulation walls/bottom — consistent with their medium (0.55) thermal resistance in the cellar/greenhouse system, and with real rammed-earth insulation.\n\n---"
+		},
+		{
+			"tag": "0.3.1-beta",
+			"published": "2026-08-03T13:30:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 500092916,
+					"name": "firmalifehardcore-neoforge-0.3.1-beta.jar",
+					"url": "https://github.com/Coin0804/FirmaLifeHardCore/releases/download/0.3.1-beta/firmalifehardcore-neoforge-0.3.1-beta.jar",
+					"size": 231592,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "6626dc4f29c21f458163cb2ef094dcda2901db2ad189c9df039559832ba4f71f",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "firmalifehardcore",
+							"version": "0.3.1-beta",
+							"name": "FirmaLife HardCore",
+							"description": "å¤å¤ç©è¯­å¼å°çª/æ¸©å®¤æºå¶ â æè´¨ç­é» + å°é­ç©ºé´æ£æµ + æå¼ClimateStationçå¨å±è¿½è¸ªå¨",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"tfc",
+								"firmalife"
+							],
+							"suggests": [
+								"jade"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Reinforced Alfisol",
+								"Reinforced Andisol",
+								"Reinforced Aridisol",
+								"Reinforced Entisol",
+								"Reinforced Fluvisol",
+								"Reinforced Mollisol",
+								"Reinforced Oxisol",
+								"Reinforced Podzol"
+							],
+							"group": [
+								"FirmaLife HardCore"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 41,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 0.3.1-beta\n\n### Fixes\n- **Pump refill is now dimension-scoped**: `tickAll(Level)` only fills pumps in the ticking level. `LevelTickEvent.Post` fires for every loaded `ServerLevel`, so the same pump was refilled once per dimension every tick (4× intended rate with multiple loaded dimensions).\n- **Pump refill cycle 20 → 80 ticks** (matching sprinkler watering cadence): at the 15 rpm design balance point the injection amount is now `25.0 → 25 mB/80tick` with zero `(int)` loss, exactly matching 5 sprinklers' 25 mB/80tick consumption (previously 6.28 → 6, 4% short, so the balance point was unreachable).\n- **Sprinkler `searchForFluid` now honors the `drain` flag in pipe mode**: probe calls (`drain=false`, e.g. tfcfertigation's per-tick fertilizing cycle check) no longer drain water from the pump tank — only water-level and pressure checks run. Actual watering (`drain=true`) is unchanged. Previously every probe call executed a real `drain(sprinklerWaterUse, EXECUTE)`, draining the pump tank every tick per sprinkler.\n- **Reinforced dirt conversion no longer blocks beam placement**: `ReinforcedDirtHandler` only takes over `UseItemOnBlockEvent` when conversion is guaranteed to succeed — clicking a non-reinforceable block or holding too few beams now falls back to normal support beam placement.\n- Conversion decision moved before event cancellation so client and server sides agree on whether to take over; `setBlock` failure now breaks the conversion loop instead of silently continuing."
+		},
+		{
+			"tag": "0.3.0-beta",
+			"published": "2026-07-30T09:34:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 495178086,
+					"name": "firmalifehardcore-neoforge-0.3.0-beta.jar",
+					"url": "https://github.com/Coin0804/FirmaLifeHardCore/releases/download/0.3.0-beta/firmalifehardcore-neoforge-0.3.0-beta.jar",
+					"size": 230981,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "cd099de2ae2ddcdbd4c7fc13700bbd78154fe47b5cbc7b97ab50bc29beeb5eef",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "firmalifehardcore",
+							"version": "0.3.0-beta",
+							"name": "FirmaLife HardCore",
+							"description": "å¤å¤ç©è¯­å¼å°çª/æ¸©å®¤æºå¶ â æè´¨ç­é» + å°é­ç©ºé´æ£æµ + æå¼ClimateStationçå¨å±è¿½è¸ªå¨",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"tfc",
+								"firmalife"
+							],
+							"suggests": [
+								"jade"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Reinforced Alfisol",
+								"Reinforced Andisol",
+								"Reinforced Aridisol",
+								"Reinforced Entisol",
+								"Reinforced Fluvisol",
+								"Reinforced Mollisol",
+								"Reinforced Oxisol",
+								"Reinforced Podzol"
+							],
+							"group": [
+								"FirmaLife HardCore"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 40,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 0.3.0-beta\n\n### Additions\n- **4-set BFS model**: OBSTACLE split into pure obstacle + RECEIVER — containers, planters, sprinklers, and cheese wheels are now properly distinguished from inert blocks.\n- Unified `#firmalifehardcore:climate_receivers` tag covering all ClimateReceiver blocks.\n- BFS cell expansion logic extracted to shared `updateBounds()` helper.\n- `/flhc cellar clear` debug command — clears all tracked spaces (permission 4).\n- `CellarDetector.DetectResult` — distinguishes \"BFS genuinely failed\" from \"interrupted by unloaded chunk\".\n- `receiverPositions` persisted in save data with full backward compatibility.\n\n### Changes\n- Command alias shortened: `/firmalifehardcore` → `/flhc`.\n- `broadcastToContainers` and `invalidateSpace` now only iterate `receiverPositions` instead of all interior/obstacle positions.\n- `CellarEventHandler.isRelevantBlock` → `affectsCellar` — clearer naming.\n- Health check now destroys spaces with zero receivers (fragment cleanup).\n- BFS aborts gracefully when encountering unloaded chunks, preserving existing space data.\n- Pending discovery candidates expanded: any non-WALL block is a valid BFS seed.\n- Load errors skip individual spaces instead of crashing.\n\n### Fixes\n- **Fragment cleanup**: 1-block cavities and receiver-less spaces are now auto-destroyed by the health check.\n- **Seed candidate blind spot**: BFS can now start from obstacle/receiver blocks, not just air.\n- **Orphaned containers**: When a cellar is split by a new wall, containers on the isolated side are immediately invalidated.\n- **Chunk boundary resilience**: Spaces spanning chunk borders no longer get destroyed by incomplete BFS data.\n- **PumpNBT log spam removed.**\n\n---"
+		},
+		{
+			"tag": "0.2.1-beta",
+			"published": "2026-07-28T11:29:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 492637786,
+					"name": "firmalifehardcore-neoforge-0.2.1-beta.jar",
+					"url": "https://github.com/Coin0804/FirmaLifeHardCore/releases/download/0.2.1-beta/firmalifehardcore-neoforge-0.2.1-beta.jar",
+					"size": 228350,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c1d6505608b2d2f8e3f0781fb3b5f0b4e7cd7c73489f311a8b03e954b87ca8cd",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "firmalifehardcore",
+							"version": "0.2.0-beta",
+							"name": "FirmaLife HardCore",
+							"description": "å¤å¤ç©è¯­å¼å°çª/æ¸©å®¤æºå¶ â æè´¨ç­é» + å°é­ç©ºé´æ£æµ + æå¼ClimateStationçå¨å±è¿½è¸ªå¨",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"tfc",
+								"firmalife"
+							],
+							"suggests": [
+								"jade"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Reinforced Alfisol",
+								"Reinforced Andisol",
+								"Reinforced Aridisol",
+								"Reinforced Entisol",
+								"Reinforced Fluvisol",
+								"Reinforced Mollisol",
+								"Reinforced Oxisol",
+								"Reinforced Podzol"
+							],
+							"group": [
+								"FirmaLife HardCore"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 39,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 0.2.1-beta\n\n### Fixes\n- Sprinkler BFS refactored: terminal check (pump/tank) now runs before pipe traversal, so tanks stacked on pumps are correctly found.\n- Tank count resolved from pump's own fluid capacity instead of duplicate scanning — single source of truth.\n- BFS inner class moved out of mixin package to fix `IllegalClassLoadError`.\n\n### Changes\n- `searchForFluid` fully rewritten via `@Overwrite` — cleaner structure, no scattered `@Redirect` patches on `enqueueConnections`.\n- Pump connection check extracted as `@Unique` helper — no longer redirects `PumpingStationBlock.hasConnection` from the sprinkler mixin.\n\n---"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "A NeoForge 1.21.1 mod that completely overhauls Firmalife's cellar and greenhouse mechanics — no Climate Station required.",
+	"funding": [],
+	"fundingChecked": "2026-10-29T10:54:18.815Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"history": 1
+}

@@ -18,7 +18,7 @@
 					"name": "Sporran-1.0.2+mc1.21.1.jar",
 					"url": "https://github.com/navrelis/Sporran/releases/download/v1.0.2/Sporran-1.0.2%2Bmc1.21.1.jar",
 					"size": 36291977,
-					"downloads": 1,
+					"downloads": 9,
 					"inspection": 2,
 					"sha256": "fb23a184530e896b153fc7d5c08891059db93986be80cfabbfce31e225079346",
 					"mods": [
@@ -104,7 +104,13 @@
 								"async",
 								"creativecore",
 								"embeddium"
-							]
+							],
+							"breaksVersions": {
+								"quilt_loader": "*",
+								"async": "*",
+								"creativecore": "<2.12.33",
+								"embeddium": "*"
+							}
 						}
 					],
 					"icon": "10a29e0f14a3860ffe933b1a6711a8492de809c1a0fd764044725b3f64033120.png",
@@ -1178,7 +1184,8 @@
 						"shaders": true
 					}
 				}
-			]
+			],
+			"notes": "## Sporran 1.0.2\n\nCompatibility fix for Fabric mods that change vanilla behaviour. Continues the work of 1.0.1.\n\nMany Sporran hooks replaced vanilla code even when no NeoForge mod overrode or listened to it. Fabric mods that hook\nthe same vanilla code were then skipped. Now Sporran only takes over when a NeoForge mod needs it:\n\n- **Vanilla checks.** About 40 checks (sounds, friction, fire spread, light, explosion resistance, path finding, item\n  damage and stack size, food, shields, bundles and more) wrongly took the NeoForge path for every block, item and\n  entity. Fabric mods that change these work again on vanilla content. NeoForge mods that override them still work as\n  before. A few checks that could never find an override now find real ones.\n- **Placing blocks with items.** Fabric mods that change what happens when you place a block from an item work again.\n  NeoForge place events still fire and can still cancel the placement.\n- **Breaking blocks.** Fabric mods that change whether a tool harvests a block work again.\n- **Hoppers.** Hoppers use vanilla's code again for plain vanilla containers. Containers from NeoForge mods keep\n  working.\n- **Fluids, biomes and vibrations.** Vanilla's code runs again for eye-in-fluid checks, biome mob and generation\n  settings and vibration frequencies. NeoForge fluid types and biome modifiers are applied on top.\n- **Block rendering.** Plain blocks use vanilla's and Sodium's render paths again. Only blocks that ask for special\n  render layers use NeoForge's.\n- **Smaller fixes.** Container data values reach Fabric mods' hooks again, and NeoForge mods that call the parent of a\n  custom ingredient no longer crash.\n\nRequires Minecraft 1.21.1, Fabric Loader, Fabric API and Fabric Language Kotlin. NeoForge mods are not included; get\nthem from their authors."
 		},
 		{
 			"tag": "v1.0.1",
@@ -2339,7 +2346,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## Sporran 1.0.1\n\nCompatibility fix for Fabric mods that change enchanting or the grindstone.\n\nThree Sporran hooks replaced vanilla code for every item, even when no NeoForge mod needed them. Fabric mods that hook\nthe same vanilla code were then skipped. Now Sporran only takes over when a NeoForge mod overrides the method or\nchanges the NeoForge event:\n\n- **Enchantment levels.** Fabric mods that change an item's enchantment level (for example to switch an enchantment\n  off) work again on vanilla items. NeoForge mods that change enchantment levels still work as before.\n- **Enchanting table.** Fabric mods that change which enchantments the enchanting table offers for an item work again.\n- **Grindstone.** Taking the result of a grindstone runs vanilla's code again unless a NeoForge mod changes it. With a\n  Fabric mod that grinds enchanted books one at a time, the rest of the stack is no longer lost.\n- **Other vanilla hooks.** Four more places (air checks, shulker box slots, dripstone filling cauldrons, key\n  bindings without modifier keys) no longer replace vanilla code when no NeoForge mod needs it.\n\nRequires Minecraft 1.21.1, Fabric Loader, Fabric API and Fabric Language Kotlin. NeoForge mods are not included; get\nthem from their authors."
 		},
 		{
 			"tag": "v1.0.0",
@@ -3500,11 +3508,14 @@
 					},
 					"funding": []
 				}
-			]
+			],
+			"notes": "## Sporran 1.0.0\n\nFirst release of the relaunched Sporran project.\n\nSporran is a modified version of Kilt 21.1.13 and is fully LGPL-2.1 compliant: the complete source code is public on\nGitHub, every modified upstream file carries a dated change notice, the licence notices of the bundled projects are in\nthe `NOTICE` file inside the jar, and `docs/CHANGES.md` lists everything that differs from Kilt. This release replaces\nthe earlier builds 1.0.0 to 1.0.8, which have been withdrawn; everything they fixed is included.\n\n- **Mobs and projectiles.** Mobs between 0.75 and 1 block wide (also cows, pigs and sheep) walk along their paths again,\n  arrows and thrown weapons of NeoForge mods behave as they do on NeoForge, and arrow impacts fire the NeoForge impact\n  event. A server crash with magma cubes in modded fluids and a crash on saving after a potion effect ran out are fixed.\n- **Events.** Block drops, player ticks, critical hits, interactions, explosions, respawns and entity deaths fire\n  exactly once and with the right data, including for Fabric and Architectury mods that listen to them.\n- **Camera and rendering.** Screen shake tilts the view by the intended few degrees instead of spinning it, and the\n  \"Conflicting default methods\" crash with connected textures is gone.\n- **Recipes and networking.** Chest recipes no longer lose their chest in the first world, and joining a server no\n  longer fails with \"Registry remapping failed\" next to some Fabric mods.\n- **Data packs and world generation.** Fabric mods that carry both Fabric and NeoForge overlay lists no longer get\n  switched-off overlays applied, structures with skull checks generate, and a rare world generation hang is fixed.\n  Terralith now follows its config file (see `docs/CHANGES.md` for how to keep the old behaviour).\n- **Faster.** Chunk building with Sodium and other rendering checks are much cheaper; our tests show a first start\n  about 32 % faster and a cached start about 11 % faster.\n- **Quieter log**, and a profiler fix for spark's mod sources view.\n\nRequires Minecraft 1.21.1, Fabric Loader, Fabric API and Fabric Language Kotlin. NeoForge mods are not included; get\nthem from their authors."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

@@ -56,7 +56,7 @@
 						"unreadable": []
 					},
 					"icon": "71ae62772391684494b1de5d1b51bf4157a40659be308e863dddb8b1f21a5165.webp",
-					"downloads": 12,
+					"downloads": 13,
 					"funding": [],
 					"content": {
 						"names": {
@@ -76,7 +76,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "First release of the 1.21.1 backport.\n\n**Requires:** Minecraft 1.21.1, Fabric Loader 0.16.10+, Java 21+. Fabric API is **not** required.\n\n---\n\n## Before you install\n\nCreate's artwork belongs to the Create Team and is All Rights Reserved. **None of it is in this\njar.** On first launch the mod shows a setup screen and offers to fetch all 4,925 files from the\nCreate Team's own Modrinth release, about 20 MB. It verifies the download against the checksum\nModrinth published, copies the artwork out, and deletes the download.\n\nNothing is uploaded, no account is involved, and no server other than Modrinth is contacted. You can\ninstead point the setup screen at a Create jar you already have, or decline and leave Create switched\noff. You only do this once.\n\nThe only files under `assets/create/` in this jar are 44 translations and 17 item model definitions,\nboth of which are this port's own work.\n\n## What works\n\n- Create's blocks, items, contraptions, recipes and ponder scenes\n- With and without Fabric API. Both start with 2818 recipes, no tag or recipe errors\n- Dedicated server\n- Sodium and Iris (shaders disable Flywheel's optimisations, as upstream)\n- Compiled-in compatibility for CC: Tweaked, Trinkets, Accessories and Cardinal Components\n\n## Saving and loading\n\nBackporting the storage layer was the largest single risk in this port, because a mistake there\nloses your build silently rather than crashing. It is verified three ways:\n\n- an automated round-trip of the storage layer itself, 46 checks\n- an automated save, server restart and reload of 14 Create blocks, whose block-entity data comes\n  back byte-identical\n- a hand-played test: a deployer, depot, item vault and belt holding items, a schematicannon loaded\n  with gunpowder and a schematic, and an assembled contraption — saved, the game fully closed and\n  reopened, everything intact and the contraption still assembled\n\n## Not in this build\n\n- **Recipe viewer integration.** REI 16.x for 1.21.1 differs too much from the 20.x the upstream code\n  targets, and EIV has no 1.21.1 build. Recipes work; you just cannot browse them in a viewer.\n- **ModernFix** integration. No 1.21.1 Fabric build of `modernfix-mvus`.\n- **Create's commands**, which upstream has not implemented either.\n- **Slippery blocks affecting leashed entities.** 1.21.1's leash physics has no ground-friction term\n  to hook into.\n- The linked controller's redstone torch, whose model could not be established as fetchable.\n\n## Known limitations\n\n- **Do not open worlds made with other versions.** Data loading changed across these versions and\n  data can be lost. This applies to worlds from other Minecraft versions or other Create builds, not\n  to worlds made with this one.\n- No full progression playthrough has been done, so later-game machinery is less exercised than the\n  basics. Back up anything you would be sad to lose.\n\n## Reporting problems\n\nReport bugs on **this** repository's issue tracker, not to simibubi, the Create Team, NeoForge\nCreate, or ZurrTum. They did not write this port and cannot fix it. A useful report has your\n`latest.log`, your Fabric Loader version, and your mod list.\n\n## Credits\n\nCreate is by **simibubi and the Create Team**. Create Fly, which this backports, is by **ZurrTum**:\nthe architecture, the Yarn mappings work and the no-Fabric-API design are all theirs. Flywheel and\nVanillin are by **Engine-Room**, Ponder by **the Ponder project**.\n\nThis is an unofficial, community port. It is not affiliated with, or endorsed by, any of them.\n\n---\n\n`create-godri-6.0.9-1.jar`\nsha256 `836f79a8e459fff9bb88dd3cac1b4bfc5c45e6183aebaa7df7aeffdffefe124b`"
 		}
 	],
 	"readme": "README.md",
@@ -91,5 +92,7 @@
 		}
 	],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

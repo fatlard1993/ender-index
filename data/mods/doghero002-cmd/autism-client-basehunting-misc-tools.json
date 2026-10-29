@@ -18,7 +18,7 @@
 					"name": "autism-base-finding-tools-3.0.0+client5.0.jar",
 					"url": "https://github.com/doghero002-cmd/autism-client-basehunting-misc-tools/releases/download/v3.0.0/autism-base-finding-tools-3.0.0%2Bclient5.0.jar",
 					"size": 18435490,
-					"downloads": 3,
+					"downloads": 8,
 					"inspection": 2,
 					"sha256": "426e67afd2bf4fa00b51e87c74be305ea160473fc03038d6318f726653a7815a",
 					"mods": [
@@ -184,7 +184,7 @@
 					"name": "autism-base-finding-tools-3.0.0.jar",
 					"url": "https://github.com/doghero002-cmd/autism-client-basehunting-misc-tools/releases/download/v3.0.0/autism-base-finding-tools-3.0.0.jar",
 					"size": 18435484,
-					"downloads": 3,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "f098fcecdc355f8760c56f0f1818e36c0d8baaae21e176cf68c8219f321a876b",
 					"mods": [
@@ -345,7 +345,8 @@
 						"shaders": true
 					}
 				}
-			]
+			],
+			"notes": "## Which jar do I download?\n\nInstall **one** addon jar alongside its matching AUTISM Client:\n\n| Jar | AUTISM Client | Addon API |\n| --- | --- | --- |\n| `autism-base-finding-tools-3.0.0.jar` | V4 / `5.1-26.2` (current official) | v4 |\n| `autism-base-finding-tools-3.0.0+client5.0.jar` | `5.0-26.2` (public release) | v3 |\n\nRequires Minecraft **26.2**, Java **25+**, Fabric Loader **0.19.3+** and compatible Fabric API. Do not install both variants together.\n\n## Changes\n\n\n\n\nNew modules are opt-in. Home Setter SET mode, the separate Relog Loader workflow, seed cracking and unrelated addon features remain available. The README contains the full source-to-module mapping.\n\n## Validation and limits\n\n- Both variants passed **643 automated tests**.\n- Isolated offline checks on both hosts confirmed **27/27 port registrations**, **11/11 new/modified mixins**, and normal **exit code 0** without a shutdown watchdog.\n- The release archives contain the same compiled classes, resources and nested dependencies as the runtime-tested builds; only the mod-version value in `fabric.mod.json` differs.\n- Active module gameplay was not authenticated or live-server tested. Detection results are clues, not proof of bases or vanished players. Movement/mining behavior is server-dependent; no bypass or anti-cheat immunity is guaranteed.\n- API3 may log a handled optional AI-bridge-unavailable notice. AI features still require the supported AI-enabled host."
 		},
 		{
 			"tag": "v2.4.5",
@@ -686,7 +687,8 @@
 					"downloads": 25,
 					"funding": []
 				}
-			]
+			],
+			"notes": "## Which jar do I download?\n\nInstall **one** jar that matches your AUTISM Client:\n\n| Jar | AUTISM Client | API |\n|-----|---------------|-----|\n| `autism-base-finding-tools-2.4.5.jar` | **V4 / 5.1-26.2** (current official) | v4 |\n| `autism-base-finding-tools-2.4.5+client5.0.jar` | **5.0-26.2** (public release) | v3 |\n\n## Highlights\n\n- **Guarded Base Scout:** optional bounded walking exploration coordinates existing finders, stops on safety or automation conflicts, and keeps candidate evidence locally for manual review. It is not a survival guarantee or proof of a base.\n- **Finder improvements:** Classic and Dog+ Sus Chunk modes; optional settled mined-geode candidates; Player Finder light-data/simulation modes; underground light detection; and revised chunk/stash candidate reporting. These remain investigative signals, not confirmed player locations.\n- **Chat Games:** 316 bundled trivia questions, expanded local puzzle solving and a client-editable 489-entry curated default word/phrase list. Existing saved additions are retained. The large English fallback and live Minecraft/world registry words remain automatic.\n- **Chat Bot / AI:** uses the selected V4 language-model provider for conversations, separates replies from owner-only game actions, and adds an optional authenticated local AI-control bridge.\n- **Automation / trading:** GoTo/Gather/Elytra/inventory coordination, screen-aware navigation, safer AH Sniper confirmation and price checks, stricter AH Sell inventory filtering, and validated Panic Pay acknowledgements.\n- **Documentation and validation:** module groups, setup/safety/known limitations, chat-game data sources and Base Scout evidence review are documented in README and `docs/`.\n\nBoth jars were built from the same source revision. Full build/test result: **API v4 / Client 5.1 - 404 tests passed; API v3 / Client 5.0 - 401 passed, 3 V4-host-specific tests skipped.**\n\nBase-finding results are hypotheses and need manual inspection. Base Scout and other automated movement can still be stopped by server rules, hazards, combat tags, client stalls or network failures; no survival or anticheat-safety guarantee is made."
 		},
 		{
 			"tag": "v2.4.4",
@@ -1005,7 +1007,8 @@
 					},
 					"downloads": 11
 				}
-			]
+			],
+			"notes": "## Which jar do I download?\n\n| Jar | AUTISM Client | API |\n|-----|---------------|-----|\n| `autism-base-finding-tools-2.4.4.jar` | **V4 / 5.1** (current official) | v4 |\n| `autism-base-finding-tools-2.4.4+client5.0.jar` | **5.0** (public release) | v3 |\n\n## Fixes\n- **AH buying actually completes**: the purchase-confirm dialog was misdetected (a 27-slot confirm screen was read as a listing page, and the lore check deadlocked every confirm). Purchases now detect the confirm GUI by container slots + screen title, re-verify seller/count/full price/enchantments before clicking, and match the confirm button by name/id (never a red/cancel item, and a lime-pane target no longer skips its own confirm button). Unconfirmed purchases stop the sniper instead of blind-retrying.\n- **AH Flipper optional auto-buy** (default OFF): buy sales-backed flips through the sniper's verified executor. Requires a positive Buy budget; ask-only estimates stay alerts; attempts reserve their full price even if unconfirmed; default 1 attempt per enable. Bulk settings reset / container close cancels a pending buy safely. Stale flip alerts fixed (rank cache now invalidates on book changes).\n- **Storage Recorder clear keybind**: optional key (Record group, unbound by default) that runs the same Clear action - only during gameplay, one press = one clear. Cleared positions stay hidden until a loaded chunk proves them gone or the session ends.\n- **Region Map image loads**: the built-in map now resolves from the addon's own asset namespace; custom PNG failures fall back to the built-in map and warn once instead of every frame.\n- Price parsing hardened: BigDecimal k/m/b/t amounts (no double overflow), lore-only reading, enchanted books read stored enchantments.\n\nBoth jars built from the same source revision; full 233-test suite green on each (5.1/API4 and 5.0/API3)."
 		},
 		{
 			"tag": "v2.4.3",
@@ -1324,7 +1327,8 @@
 					},
 					"downloads": 12
 				}
-			]
+			],
+			"notes": "## Which jar do I download?\n\n| Jar | AUTISM Client version | API |\n|-----|----------------------|-----|\n| `autism-base-finding-tools-2.4.3.jar` | **V4 / 5.1** (current official) | v4 |\n| `autism-base-finding-tools-2.4.3+client5.0.jar` | **5.0** (public release) | v3 |\n\n## Fixes\n- **.goto no longer crashes/freezes the game**: chunk scanning is budgeted (48 chunks/pass, nearest-first), disk writes moved off the game thread, and the chunk cache is capped at 2048 chunks with distance-based eviction - far goals (2000+ blocks) no longer OOM.\n- **Addon tabs are now separate**: modules are grouped into their own GUI tabs (Dogs Fake / Trading / Render / Entity / Finders / Movement etc.) instead of one giant tab. Works on the official obfuscated 5.1 client.\n- .goto \"no path\" hint now shows the full `.goto mine x y z` syntax.\n\n## New\n- **Parkour module** (utility tab): auto-jumps at block edges while you run - no key timing needed. \"Only while moving\" setting included.\n\nTested in-game on AUTISM Client 5.1-26.2: goto far-target, freeze watch, disable stability, parkour edge-jump, tab grouping (12 separate Dogs tabs confirmed), module smoke tests - all PASS."
 		},
 		{
 			"tag": "v2.4.2",
@@ -1643,7 +1647,8 @@
 					},
 					"downloads": 5
 				}
-			]
+			],
+			"notes": "AUTISM Client compatibility builds\nThis release includes two addon builds for Minecraft 26.2. Download the one that matches your client:\n\nAPI v4 — AUTISM Client 5.1 / Client V4\nAPI v3 — AUTISM Client 5.0\nChanges since v2.4.2\nmade a actually good math based ah flipper for that one guy who hated it \nalso organised alot of stuff\nGeode finder: Fixed a GEODE check that could incorrectly reject real geode chunks.\nScan consistency: Structure lookup is now captured once per scan instead of being repeated.\nInstall\nPlace the matching addon jar in your Minecraft mods folder alongside AUTISM Client.\n\nRequirements\nMinecraft 26.2\nJava 25+\nFabric Loader 0.19.3+ and Fabric API"
 		},
 		{
 			"tag": "v2.1.1",
@@ -2108,7 +2113,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "## Removed the buggy TunnelBase Finder and replaced it\n\nThe old TunnelBase Finder's XENON and WALK_2X1 modes were flagging the anti-cheat (rubber-bands / setbacks on live DonutSMP). Both modes are **gone**. `TunnelBase Finder` is now a single clean toggle that runs the proven Water engine - the mode that doesn't flag.\n\n### Changes\n- **TunnelBase Finder**: rewritten as a thin hand-off to the Water engine (1900+ lines of flaggy dig logic deleted). Just toggle it on and it drives Tunnel Base (Water).\n- **45-degree diagonal detours**: when the tunnel needs to dodge a lake, it now makes ONE turn to ~45 degrees, cuts diagonally past the hazard, then ONE turn back - instead of the old 90-degree staircase that turned the camera at every lake edge.\n- **Hazard overhaul (Water engine)**:\n  - Lava survival reflex: if you end up IN lava, everything stops, you float + back out, then re-route on the other side.\n  - Forward scan now also catches dry drops (>3 blocks = fall damage / cave fall) and magma/contact-hazard floors, not just fluids.\n  - Tower (climb-over) scan checks the shaft's side pockets for fluids at every level it will open - no more gravel/lava dumps mid-climb.\n  - Commit-lock emergency brake: a committed turn re-checks point-blank and re-decides if a flow front moved in.\n  - Deep-clear lanes are preferred over short-scan lanes when picking a detour side.\n  - Base scan throttled to every 10 ticks (big CPU win at high render distance).\n- **New icon.**\n\n### Install\nDrop `autism-seedcracker-1.9.3.jar` in your mods folder next to the AUTISM Client 5.0 base jar. Delete any older addon jar."
 		},
 		{
 			"tag": "v1.9.2",
@@ -2254,7 +2260,8 @@
 					},
 					"downloads": 8
 				}
-			]
+			],
+			"notes": "## v1.9.2\n\n### Fixes\n- **Friends are never targeted**: tunnel-defense and SpawnerProtect now respect the AUTISM Client Teams module's friends list (KillAura already did)\n- **Side-by-side mixin fix**: the MouseHandler rotation redirects no longer hard-crash when another mod applies the same redirect first (graceful skip)\n- Rebuilt against the latest AUTISM Client 5.0 base\n\n### Since v1.9.1\n- All v1.9.1 movement overhauls included (water default mode, go-around lava, position-verified towering, stuck watchdogs, xenon avoidance fix, scoreboard hider, pinned waypoints)"
 		},
 		{
 			"tag": "v1.9.1",
@@ -2400,7 +2407,8 @@
 					},
 					"downloads": 7
 				}
-			]
+			],
+			"notes": "## v1.9.1\n\n### Movement overhaul (Tunnel Base Water + Xenon/Walk)\n- **Water is now the default tunnel mode** - Tunnel Base Finder hands off to the Water engine\n- Fixed bedrock lava box-in: towering up only checks the ceiling now\n- Fixed tower dig phase digging DOWN toward lava (pitch bug)\n- Position-verified towering with computed target height + stall watchdogs\n- Go AROUND lava (sticky side detours with resume hysteresis) - no more turning back over loaded chunks, no more back-and-forth second-guessing\n- Xenon: fixed avoidance cooldown freezing forever after the first hazard (the lag-back/bug-out root cause), proper converged-aim digging, cave-abort escalation, legit pillar escape\n- Auto-eat: eats ANY food, earlier trigger, never stalls mining when out of food\n- Base flag now REQUIRES a spawner by default (require-spawner setting)\n- Full key-release hygiene across all movement modules (no stuck strafe/sneak/use keys)\n\n### New\n- **Scoreboard Hider** (Render) - render-only sidebar hide, undetectable\n\n### Fixes\n- Chunk Waypoints: markers are now ALWAYS pinned at the set Y (removed the follow-below option entirely - stale configs were re-enabling it)\n- SpawnerProtect: storage state machine actually opens the shulker before filling; sneak released during storage\n- AutoEat: no more double-fire use packets; survives GUI opens mid-bite"
 		},
 		{
 			"tag": "v1.8.9",
@@ -2538,7 +2546,8 @@
 					},
 					"downloads": 67
 				}
-			]
+			],
+			"notes": "added mode for sus chunk"
 		},
 		{
 			"tag": "v1.8.8",
@@ -2676,7 +2685,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "amythist esp bugfix"
 		},
 		{
 			"tag": "v1.8.7",
@@ -2814,7 +2824,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "updated region map"
 		},
 		{
 			"tag": "v1.8.6",
@@ -2952,7 +2963,8 @@
 					},
 					"downloads": 6
 				}
-			]
+			],
+			"notes": "updated tpa macro"
 		},
 		{
 			"tag": "v1.8.5",
@@ -3090,7 +3102,8 @@
 					},
 					"downloads": 13
 				}
-			]
+			],
+			"notes": "fixed flags i think"
 		},
 		{
 			"tag": "v1.8.4",
@@ -3228,7 +3241,8 @@
 					},
 					"downloads": 7
 				}
-			]
+			],
+			"notes": "added more options to finders"
 		},
 		{
 			"tag": "v1.8.3",
@@ -3366,7 +3380,8 @@
 					},
 					"downloads": 7
 				}
-			]
+			],
+			"notes": "bugfixes highly  game doesnt lag as often now"
 		},
 		{
 			"tag": "v1.8.2",
@@ -3497,7 +3512,8 @@
 					},
 					"downloads": 6
 				}
-			]
+			],
+			"notes": "redonte stash finder antitrap suschunk finder chunk finder ext"
 		},
 		{
 			"tag": "v1.8.1",
@@ -3628,11 +3644,14 @@
 					},
 					"downloads": 12
 				}
-			]
+			],
+			"notes": "added bedrock hole esp and amethyst esp"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

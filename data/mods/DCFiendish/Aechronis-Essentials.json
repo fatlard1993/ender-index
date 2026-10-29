@@ -1,0 +1,408 @@
+{
+	"repo": "DCFiendish/Aechronis-Essentials",
+	"host": "github",
+	"description": "Fabric client mod for Minecraft 26.2 that colors player/entity hitboxes by town/nation/ally/enemy relationship, using Aechronis's Nodes map API. GPLv3 port of the hitbox-coloring feature from oreotrollturbo's CrusalisUtils.",
+	"stars": 1,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2026-08-16T16:28:39Z",
+	"pushed": "2026-08-21T14:08:43Z",
+	"releases": [
+		{
+			"tag": "v1.2.6",
+			"published": "2026-08-17T20:43:52Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 518485457,
+					"name": "aechronishitboxes-1.2.6.jar",
+					"url": "https://github.com/DCFiendish/Aechronis-Essentials/releases/download/v1.2.6/aechronishitboxes-1.2.6.jar",
+					"size": 682747,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "316e61d49747788f09f94e802953ba55f361927f6c3c93e186aee3607a5e8a5c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "aechronishitboxes",
+							"version": "1.2.6",
+							"name": "Aechronis Hitboxes",
+							"description": "Colors player and entity hitboxes by relationship (town/nation/ally/enemy) using Aechronis's Nodes map API. A stripped-down, from-source GPLv3 port of the hitbox-coloring feature from oreotrollturbo's CrusalisUtils (itself a fork of Hitbox+), retargeted from Crusalis to Aechronis.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cloth-config"
+							],
+							"provides": [
+								"mixinextras"
+							],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 530,
+						"jars": [
+							"META-INF/jars/mixinextras-fabric-0.5.4.jar"
+						],
+						"capabilities": {
+							"network": {
+								"net/aechronis/hitboxes/data/AechronisDataFetcher.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/mixinextras-fabric-0.5.4.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"META-INF/jars/mixinextras-fabric-0.5.4.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"map.aechronis.net": [
+								"net/aechronis/hitboxes/AechronisHitboxes.class"
+							],
+							"github.com": [
+								"META-INF/jars/mixinextras-fabric-0.5.4.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Fixed\n- F3+G corner-pillar lines (the grid lines around, not just under, your current chunk) now recolor correctly by territory relation. Root cause: the pillar redirect captured its chunk origin as two ordinal-indexed \\`@Local double\\` values; each \\`double\\` consumes two local-variable slots, and the second ordinal capture was landing on unrelated data in practice - pillars were resolving territory hundreds of chunks away from where they were actually drawn, so they'd never match the real territory underneath them. Fixed by capturing the method's single \\`SectionPos\\` local instead (unambiguous, no ordinal needed) and deriving the origin from it directly.\n- \\`mapLink\\` cross-thread visibility fix carried over from v1.2.4.\n\n### Changed\n- Removed the diagnostic logging added while chasing both this bug and an unrelated \"mod doesn't run on Aechronis\" report that turned out to be a stale jar, not a real issue.\n\nThis closes out the F3+G recoloring work - both the current-chunk grid and the surrounding corner pillars now match relation coloring."
+		},
+		{
+			"tag": "v1.2.4",
+			"published": "2026-08-17T20:22:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 518463467,
+					"name": "aechronishitboxes-1.2.4.jar",
+					"url": "https://github.com/DCFiendish/Aechronis-Essentials/releases/download/v1.2.4/aechronishitboxes-1.2.4.jar",
+					"size": 683239,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "094e401661c080d12bb7b0a55ef17e7bdc2110d501c82e3b03dbcd27223ed99a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "aechronishitboxes",
+							"version": "1.2.4",
+							"name": "Aechronis Hitboxes",
+							"description": "Colors player and entity hitboxes by relationship (town/nation/ally/enemy) using Aechronis's Nodes map API. A stripped-down, from-source GPLv3 port of the hitbox-coloring feature from oreotrollturbo's CrusalisUtils (itself a fork of Hitbox+), retargeted from Crusalis to Aechronis.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cloth-config"
+							],
+							"provides": [
+								"mixinextras"
+							],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 530,
+						"jars": [
+							"META-INF/jars/mixinextras-fabric-0.5.4.jar"
+						],
+						"capabilities": {
+							"network": {
+								"net/aechronis/hitboxes/data/AechronisDataFetcher.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/mixinextras-fabric-0.5.4.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"META-INF/jars/mixinextras-fabric-0.5.4.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"map.aechronis.net": [
+								"net/aechronis/hitboxes/AechronisHitboxes.class"
+							],
+							"github.com": [
+								"META-INF/jars/mixinextras-fabric-0.5.4.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Fixed\n- \\`mapLink\\` was a plain static field written on the render thread but read from a background scheduler thread on periodic data refreshes - same cross-thread visibility bug class as earlier fixes this cycle. Now \\`volatile\\`.\n\n### Added\n- Unconditional logging at mod init and at the top of the server-join handler, before any host-matching logic runs. Lets a support log distinguish \"mod never initialized\" from \"initialized but join event/host match failed.\"\n- Re-added the throttled F3+G corner-pillar chunk/territory diagnostic log for the ongoing investigation into corner-pillar lines not recoloring.\n\n### Known issue (actively investigating)\n- On at least one client setup (Lunar Client), this mod's entrypoint appears to never execute at all - no crash, no error, but zero log output including the new init-time log, while other third-party mods initialize normally in the same session. Suspected cause: Lunar Client silently declining to run ESP-adjacent mod code as an anti-cheat/integrity measure, independent of which server is joined. Not yet confirmed against a non-Lunar Fabric install."
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-08-17T17:24:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 518302459,
+					"name": "aechronishitboxes-1.2.0.jar",
+					"url": "https://github.com/DCFiendish/Aechronis-Essentials/releases/download/v1.2.0/aechronishitboxes-1.2.0.jar",
+					"size": 682728,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "2337738c21253797b254b21630c08844af1b175a19ce809c2265bd7cef13ecb3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "aechronishitboxes",
+							"version": "1.2.0",
+							"name": "Aechronis Hitboxes",
+							"description": "Colors player and entity hitboxes by relationship (town/nation/ally/enemy) using Aechronis's Nodes map API. A stripped-down, from-source GPLv3 port of the hitbox-coloring feature from oreotrollturbo's CrusalisUtils (itself a fork of Hitbox+), retargeted from Crusalis to Aechronis.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cloth-config"
+							],
+							"provides": [
+								"mixinextras"
+							],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 530,
+						"jars": [
+							"META-INF/jars/mixinextras-fabric-0.5.4.jar"
+						],
+						"capabilities": {
+							"network": {
+								"net/aechronis/hitboxes/data/AechronisDataFetcher.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/mixinextras-fabric-0.5.4.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"META-INF/jars/mixinextras-fabric-0.5.4.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"map.aechronis.net": [
+								"net/aechronis/hitboxes/AechronisHitboxes.class"
+							],
+							"github.com": [
+								"META-INF/jars/mixinextras-fabric-0.5.4.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Fixed\n- Default hitbox opacity computed to ~1/255 (effectively invisible) for every category out of the box. The only thing actually visible was vanilla's own hardcoded red eye-height marker, which had been mistaken for a coloring bug. Defaults now render fully opaque.\n- Relation resolution now falls back to a resident's town->nation link when their own `nation` field is stale/null.\n- `world.json` parsing no longer requires a `core` field that some Nodes forks omit.\n- Null-safety fix in resident name parsing.\n- Cross-thread visibility fix (`volatile`) on territory/town data shared between the background data-fetch thread and the render thread.\n- Added the missing `MAJOR_LINES` recolor for F3+G (vanilla's dominant grid color), previously only 2 of 3 relevant fields were redirected.\n\n### Changed\n- Server activation and map data source are hardcoded per-release again instead of runtime-configurable. Supporting a new server means a new release, not exposing an arbitrary URL/host field to players.\n- Removed diagnostic logging added during troubleshooting.\n\n### Known issue\n- F3+G corner-pillar lines (the grid lines around, not under, your current chunk) may still render in vanilla's default color rather than the relation color - unconfirmed as of this release."
+		},
+		{
+			"tag": "v1.1.0",
+			"published": "2026-08-16T21:19:40Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 517231254,
+					"name": "aechronishitboxes-1.1.0.jar",
+					"url": "https://github.com/DCFiendish/Aechronis-Essentials/releases/download/v1.1.0/aechronishitboxes-1.1.0.jar",
+					"size": 681533,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "5e2bbfb88c00648d4ea8f4870c9c20d2fc9b5c0104bf7d51164218213b68e5e9",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "aechronishitboxes",
+							"version": "1.1.0",
+							"name": "Aechronis Hitboxes",
+							"description": "Colors player and entity hitboxes by relationship (town/nation/ally/enemy) using Aechronis's Nodes map API. A stripped-down, from-source GPLv3 port of the hitbox-coloring feature from oreotrollturbo's CrusalisUtils (itself a fork of Hitbox+), retargeted from Crusalis to Aechronis.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cloth-config"
+							],
+							"provides": [
+								"mixinextras"
+							],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 530,
+						"jars": [
+							"META-INF/jars/mixinextras-fabric-0.5.4.jar"
+						],
+						"capabilities": {
+							"network": {
+								"net/aechronis/hitboxes/data/AechronisDataFetcher.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/mixinextras-fabric-0.5.4.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"META-INF/jars/mixinextras-fabric-0.5.4.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"map.aechronis.net": [
+								"net/aechronis/hitboxes/config/ModConfig.class"
+							],
+							"github.com": [
+								"META-INF/jars/mixinextras-fabric-0.5.4.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changes since v1.0.0\n- Added back the auto `/t spawn` on respawn feature from upstream CrusalisUtils (off by default - toggle in the config screen under \"aechronis\"). Fixed a real bug in the process: upstream's \"just respawned\" flag was never reset, so it only ever fired once per session. This version resets it on every death, so it fires every time.\n- Bug-scan pass over the whole codebase; fixed a Java 20+ deprecation (`new URL(...)` -> `URI.create(...).toURL()`).\n\n## Requirements\n- Minecraft 26.2\n- Fabric Loader >= 0.19.3\n- Fabric API 0.157.0+26.2\n- Cloth Config 26.2.155+fabric\n- Mod Menu 20.0.1 (optional - only needed for the in-game settings screen)\n\nmixinextras-fabric is bundled inside the jar, no separate install needed."
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-08-16T16:40:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 517005055,
+					"name": "aechronishitboxes-1.0.0.jar",
+					"url": "https://github.com/DCFiendish/Aechronis-Essentials/releases/download/v1.0.0/aechronishitboxes-1.0.0.jar",
+					"size": 680956,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "1f50da34e3a8c26a903eafbbbe6d47399991ff823e392d7001934151cf545f9a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "aechronishitboxes",
+							"version": "1.0.0",
+							"name": "Aechronis Hitboxes",
+							"description": "Colors player and entity hitboxes by relationship (town/nation/ally/enemy) using Aechronis's Nodes map API. A stripped-down, from-source GPLv3 port of the hitbox-coloring feature from oreotrollturbo's CrusalisUtils (itself a fork of Hitbox+), retargeted from Crusalis to Aechronis.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cloth-config"
+							],
+							"provides": [
+								"mixinextras"
+							],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 530,
+						"jars": [
+							"META-INF/jars/mixinextras-fabric-0.5.4.jar"
+						],
+						"capabilities": {
+							"network": {
+								"net/aechronis/hitboxes/data/AechronisDataFetcher.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/mixinextras-fabric-0.5.4.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"META-INF/jars/mixinextras-fabric-0.5.4.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"map.aechronis.net": [
+								"net/aechronis/hitboxes/config/ModConfig.class"
+							],
+							"github.com": [
+								"META-INF/jars/mixinextras-fabric-0.5.4.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Initial release. Hitbox-coloring (and F3+G chunk-border coloring) for Aechronis, ported from oreotrollturbo's CrusalisUtils (GPLv3), rebuilt for Minecraft 26.2 against Aechronis's Nodes map API.\n\n## Requirements\n- Minecraft 26.2\n- Fabric Loader >= 0.19.3\n- Fabric API 0.157.0+26.2\n- Cloth Config 26.2.155+fabric\n- Mod Menu 20.0.1 (optional - only needed for the in-game settings screen)\n\nmixinextras-fabric is bundled inside the jar, no separate install needed.\n\nSee the README for the full feature list and what was intentionally left out of this port."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-29T10:54:18.815Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"history": 1
+}

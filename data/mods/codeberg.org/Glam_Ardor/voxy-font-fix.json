@@ -44,7 +44,7 @@
 						"unreadable": []
 					},
 					"icon": "4dcafc890c8cf79cb58e34963fe6bf01defc58dc23d76f180bb3dc8fb2b2284f.webp",
-					"downloads": 106,
+					"downloads": 108,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -52,7 +52,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "Fixes the second half of the same bug: after a resource pack load every item sprite in the inventory and the hotbar turns red until you reload the pack with F3+T. Items on the ground, items in your hand and flat GUI sprites stay fine.\n\nVanilla binds a shader's samplers through the cache in `GlStateManager`, and Voxy binds its own textures with `glBindTextureUnit`, which the cache never sees. The bind is then skipped and the GUI item shader samples Voxy's texture where the lightmap should be, so every sprite gets multiplied by the colour in that texture: shape and alpha survive, red keeps its original values, green and blue go to zero.\n\nBoth binders now issue the driver call they would otherwise skip and clear any sampler object left behind. The originals still run and still update the cache, so nothing else changes.\n\nAlso new: start the game with `-Dvoxyfontfix.audit=true` and the mod logs any texture unit where the driver and the cache disagree, at most once per second. Off by default, because reading GL state back stalls the pipeline.\n\nMinecraft 1.21.8, Fabric, client side. Fabric API is not needed. Reported working in play alongside Voxy."
 		},
 		{
 			"tag": "v1.0.0",
@@ -92,7 +93,8 @@
 					},
 					"downloads": 9
 				}
-			]
+			],
+			"notes": "Fixes text breaking when Voxy is installed: letters that vanish after a resource pack load, or come back as coloured noise. Cyrillic suffers the most, because those glyphs are baked lazily, right while Voxy is working.\n\nVoxy binds its textures with `glBindTextureUnit`, which bypasses the binding cache in `GlStateManager`. The cache then goes stale and vanilla's next glyph upload silently lands on somebody else's texture. This mod keeps the real GL state in agreement with what the game believes is bound. Voxy itself is never touched.\n\nMinecraft 1.21.8, Fabric, client side. Fabric API is not needed.\n\n**Still being tested.** It loads clean and leaves no GL errors on a dev client, but it has not had a long run alongside Voxy yet, so problems are possible."
 		}
 	],
 	"readme": "README.md",

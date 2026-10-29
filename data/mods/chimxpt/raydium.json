@@ -4659,7 +4659,7 @@
 						"unreadable": []
 					},
 					"icon": "1d801720cbb4f2bd599fdd8ebf566e442ba1fd4a6a18783c47ed058a54358925.webp",
-					"downloads": 10,
+					"downloads": 11,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -4667,11 +4667,14 @@
 						"shaders": true
 					}
 				}
-			]
+			],
+			"notes": "**Raydium no longer requires an NVIDIA GPU to produce a clean image.**\n\nUntil this build the picture depended on DLSS Ray Reconstruction, so Raydium only\nworked on GeForce. The ray tracing itself never did — it runs on the standard\n`VK_KHR_ray_query`, which RDNA 2+ Radeon and Intel Arc also support. What was missing\nwas denoising: without it the frame stays in raw grain and is unplayable.\n\n> ⚠️ AMD and Intel remain **untested** — there is no such hardware on this side.\n> If you own a Radeon or an Arc card and would like to help, join the Discord and\n> message me. A single report saying \"it launches\" or \"it crashes, here is the log\"\n> is worth more than any amount of guesswork.\n\n### Built-in temporal denoiser\n\nA denoiser that needs no vendor libraries at all. It reprojects using the motion\nvectors the engine already produces, clamps history against the local neighbourhood\nto suppress ghosting where a motion vector lies, and rejects history whose normal or\ndepth does not match — which is what stops colour bleeding across object edges.\n\nHistory length shortens as a pixel moves faster across the screen: standing still\naccumulates up to 32 frames, walking drops to a couple. A long history on the move\nstacks shifted copies, and that looks worse than any grain.\n\n### Denoiser and upscaler are now separate settings\n\nThey are different jobs; the confusion comes from DLSS Ray Reconstruction doing both\nin a single pass. Each has its own toggle and model selector.\n\nThe hierarchy follows the hardware rather than preference: choosing DLSS as the\nupscaler forces it as the denoiser too, because Ray Reconstruction's denoising cannot\nbe declined. The reverse stays free — RR can run at matched resolutions, so denoising\nwith DLSS while upscaling with something else remains possible.\n\nA **basic bilinear upscaler** with edge sharpening was added so reduced render scale\nworks without DLSS at all. It is deliberately not presented as an equal third model —\nit adds no detail — but it restores the ray budget that matters: tracing at native\nresolution costs more than twice as much, which is exactly what a weaker GPU cannot\nafford.\n\n### Volumetric light rays are now a setting\n\nThey were always on, despite being one of the heaviest parts of the shader: a march\nalong the view ray with a shadow ray traced at every step, up to sixteen per pixel.\nThe setting compiles the code out rather than skipping it at runtime — a runtime\ncheck saves nothing, because the GPU reserves registers for the heaviest path through\nthe shader and that code keeps occupying them even when it never executes.\n\n### Fixes\n\n- Ray tracing could silently fall back to raster: the shader source was passed to the\n  compiler through a fixed-size stack allocator, and our GLSL has grown past it. There\n  was no crash and nothing on screen — only a line in the log.\n- A startup crash when loading the config, caused by Gson being configured to write\n  into static fields.\n- Camera bobbing was only half applied, so step bobbing was missing entirely and only\n  the side-to-side sway survived. Mods such as Camera Overhaul now work fully.\n- Cave fog faded toward the bright sky colour underground instead of into darkness.\n- Rain and snow moved into their own acceleration structure and are now rejected in\n  hardware by secondary rays: no shadows or reflections from drops, and their cost is\n  gone from those passes. GPU load in rain dropped from a pegged 100% to 88%.\n- Block-light colour is now baked into a world-space volume instead of a 192-entry\n  buffer re-selected every frame by proximity to the camera. Lamps no longer lose\n  their colour at a distance, patches of colour no longer flicker across the floor,\n  and the per-pixel loop over light sources is gone from the frame.\n- Long option labels scroll instead of running underneath the controls.\n- Chunk render and simulation distance moved above the shader settings, where they\n  belong: they apply at all times and affect frame rate more than anything else.\n\n..."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

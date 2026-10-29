@@ -44,7 +44,7 @@
 						"unreadable": []
 					},
 					"icon": null,
-					"downloads": 6,
+					"downloads": 7,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -52,7 +52,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "KeybindsGalore 1.8.0 for Minecraft 26.3 on NeoForge\n\nThe NeoForge build for Minecraft 26.3. Same mod as the Fabric 26.3 build, on the NeoForge loader.\n\nNothing about the mod's behaviour changed. The pie menu, the list menu, the priority system, K-key priority capture, live conflict re-scanning, per-category filters, and the config screen all work exactly as they do on the Fabric build. The version number is unchanged, because this adds a loader rather than features.\n\n## Requirements\n\n- Minecraft 26.3\n- NeoForge 26.3.0.26-beta or newer\n- Java 25 or newer\n- Cloth Config 26.3.159 or newer\n\nNo Fabric Loader, no Fabric API, and no ModMenu. The config screen is contributed through NeoForge's own settings extension point and appears in the mod list.\n\nNote that NeoForge publishes 26.3 only as a beta at the time of writing, so this build tracks a moving target.\n\n## What this port needed\n\nLess than a port from an older Minecraft version, because the 26.3 Fabric build had already done the hard part. The engine work was already done and carried over unchanged:\n\n- the client is on SDL3, so key handling uses `InputConstants.Type.KEYBOARD` with SDL scancodes\n- rendering uses the `com.mojang.renderpearl` pipeline API\n- `RingRenderer` needed no changes at all\n\nOnly the loader surface changed:\n\n- the mod entrypoint is a NeoForge `@Mod(dist = CLIENT)` class\n- key registration uses `RegisterKeyMappingsEvent`\n- tick and connection events use the NeoForge equivalents\n- the config directory uses `FMLPaths.CONFIGDIR`\n- the ModMenu settings entrypoint became a `ModContainer` extension point, and `ModMenuIntegration` was removed, since NeoForge allows one `@Mod` class per mod id\n- configuration loading moved to the first client tick, because `Minecraft.options` is still null during NeoForge mod construction\n- `fabric.mod.json` is replaced by `META-INF/neoforge.mods.toml`\n\n## Known issue\n\nOne harmless deprecation warning appears at startup. It comes from Cloth Config 26.3.159 itself, is upstream, and will disappear when Cloth ships a patch. Nothing in this mod causes it.\n\nThe limitations of the Fabric 1.8.0 build still apply, notably: no keyboard navigation in the pie menu, overlapping labels for long action names, and no detection of bindings another mod changes at runtime.\n\n## Credits\n\nOriginal project and original author: Cael. KeybindsGalore Plus: AV306. 1.20.x, 1.21.x and 26.x updates and re-writes: HVB007, plus the contributors listed in the mod metadata."
 		},
 		{
 			"tag": "keybindsgalore-1.8.0+26.3",
@@ -94,7 +95,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "KeybindsGalore 1.9.0+26.3 — Minecraft 26.3 (Fabric)\n\nA port to Minecraft 26.3, which was not a content-only update.\n\nTwo platform changes broke the mod, both found by inspecting the 26.3 jar rather than the\nchangelog. If you maintain an addon that depends on this mod's internals, read the Removed\nsection.\n\n## Changed\n\n### GLFW was replaced with SDL3\n\nMinecraft 26.3 dropped LWJGL's GLFW bindings and moved to SDL3, so key codes are now SDL\nscancodes rather than GLFW keycodes.\n\n- `InputConstants.Type.KEYSYM` was renamed to `InputConstants.Type.KEYBOARD`\n- Unbound keys are now identified by a negative value, replacing `GLFW.GLFW_KEY_UNKNOWN`\n- The default capture hotkey changed from the GLFW keycode for K to the SDL scancode for K\n\n**Modders who read raw key values need to update.** Anything comparing against GLFW constants\nwill silently stop working.\n\n### The GUI render pipeline moved packages\n\n`RenderPipeline` is now `com.mojang.renderpearl.api.pipeline.RenderPipeline`. Mods that\nimplement a custom GUI element render state will need the same import change. `RenderPipelines.GUI`\nis unchanged.\n\n### Verified as unchanged\n\n`KeyMapping.set`, `KeyMapping.click`, `KeyMapping.setDown`, the private `key`, `isDown` and\n`clickCount` fields, `KeyMapping.Category.id()` and `.label()`, and `KeyEvent` /\n`MouseButtonEvent` are all still present with the same shape. The selector release path and\nall mixins are therefore unaffected.\n\n## Requirements\n\n- Minecraft 26.3\n- Fabric Loader 0.19.3+\n- Fabric API 0.161.0+26.3+\n- Java 25+\n- Cloth Config 26.3.159+\n- ModMenu 21.0.0+ (optional, only for the settings screen)\n\nClient-side only.\n\n## Unverified\n\nThis port was confirmed to compile, to pass all 45 unit tests, and to launch with all mixins\napplying and the startup conflict scan running. The user has played it briefly and reports it\nworks.\n\nNot yet re-verified: the full manual test matrix, and pie visual fidelity. One specific item to\ncheck is the `K` capture hotkey, whose SDL scancode was derived rather than read from vanilla\nsource, because letter keys have no named constant on `InputConstants`. If `K` does not open\nthe capture screen, rebind it in the vanilla Controls screen.\n\nThe carried-over known limitations from 1.8.0 still apply: no keyboard navigation in the pie\nmenu, possible label overlap, hex colour fields rather than pickers, and no detection of\nruntime rebinds from other mods.\n\n## Credits\n\nOriginal project and original author: Cael. KeybindsGalore Plus: AV306. 1.20.x, 1.21.x and\n26.x updates and re-writes: HVB007, plus the contributors listed in the mod metadata."
 		},
 		{
 			"tag": "keybindsgalore-1.8.0+26.2-neoforge",
@@ -133,7 +135,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "KeybindsGalore 1.8.0+26.2-neoforge — Minecraft 26.2 (NeoForge)\n\nFirst NeoForge release. This is the same mod as the Fabric `1.8.0+26.2` build, ported to\nNeoForge. Behaviour is unchanged: the pie menu, the list menu, the priority system, K-key\npriority capture, live conflict re-scanning, per-category filters, and the in-game config\nscreen all work the same way.\n\nThe Fabric edition is published separately as `1.8.0+26.2` and keeps its own version number.\nThe two are maintained on separate branches and versioned independently.\n\n## Requirements\n\n- Minecraft 26.2\n- NeoForge 26.2.0.88 or newer\n- Java 25+\n- Cloth Config 26.2.155+\n\nNo Fabric Loader, no Fabric API, and no ModMenu. The config screen is contributed through\nNeoForge's own settings extension point and appears in the Mods list.\n\nClient-side only.\n\n## What changed from the Fabric build\n\nOnly the loader-facing surface. The conflict engine, configuration model, and both selector\nscreens are untouched, because nearly all of the mod is plain Minecraft or plain Java.\n\n- `ClientModInitializer` became an `@Mod(dist = CLIENT)` constructor\n- Key registration moved to `RegisterKeyMappingsEvent`\n- Tick and connection events moved to the NeoForge equivalents\n- The config directory moved to `FMLPaths.CONFIGDIR`\n- The ModMenu settings entrypoint became a `ModContainer` extension point\n- Configuration loading moved to the first client tick, since `Minecraft.options` is still null\n  during NeoForge mod construction\n- The deprecation warning at startup is gone; `logoFile` is now `iconFile`\n\nThe mod now reports `1.8.0+26.2-neoforge` in-game.\n\n## Known issues\n\nOne harmless deprecation warning appears at startup, from Cloth Config 26.2.155 itself. It is\nupstream, inside that jar, and is already fixed in Cloth Config 26.3.159. It will disappear\nwhen Cloth ships a 26.2 patch. Nothing in this mod causes it.\n\nThe limitations of the 1.8.0+26.2 Fabric build still apply, notably: no keyboard navigation in\nthe pie menu, overlapping labels for long action names, and no detection of bindings another\nmod changes at runtime.\n\n## Credits\n\nOriginal project and original author: Cael. KeybindsGalore Plus: AV306. 1.20.x, 1.21.x and\n26.x updates and re-writes: HVB007, plus the contributors listed in the mod metadata."
 		},
 		{
 			"tag": "keybindsgalore-1.8.0+26.2",
@@ -175,7 +178,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "KeybindsGalore 1.8.0+26.2 — Minecraft 26.2 (Fabric)\n\nThe config screen now works on 26.2.\n\nThe previous 26.2 build shipped with a known issue: the ModMenu config screen failed, because\nthe Cloth Config release available at the time referenced a Minecraft class that no longer\nexists. If you were told to edit `keybindsgalore.properties` by hand, you no longer need to.\n\nBeyond that, conflict detection was rebuilt around a single canonical index, and the pie menu\nwas substantially reworked.\n\n## Fixed\n\n- Rebuilt conflict detection around one canonical index, instead of scattered callers.\n- Conflicts now re-scan on startup, on joining a world, when the vanilla Controls screen\n  closes, when config is saved, and when priorities change. A rebind done outside those moments\n  could previously go unnoticed.\n- The `K` capture key opens reliably. A direct edge-triggered path now runs alongside the\n  previous poll-based one, so the first press is no longer sometimes swallowed.\n- Pie menu labels are positioned radially and clamped to the screen. A label on a bottom wedge\n  was previously pushed upward into the pie.\n- Pie smoothness now divides its vertex budget across the wedges, so lowering the vertex count\n  degrades the whole pie evenly instead of only making the cancel circle faceted.\n\n## Added\n\n- **Sector gradation** with a gradient intensity slider. Each wedge shades from a lighter inner\n  edge to its outer colour.\n- **Open animation** with a duration slider, 0 to 1000 ms. Set it to 0 for an instant menu.\n  Labels appear once it finishes, because fading them in with it looked wrong.\n- **Darken strength** slider for the pie menu background.\n- **Selected sector expansion** now applies when you hover a wedge, defaulting to a subtle 0.06.\n- **Label text shadow** follows its setting instead of being permanently on.\n- **A separate list menu settings tab.** The list menu's colours and opacity were in the pie\n  tab, where they had no effect and looked broken.\n- Public API for other mods to register their actions, versioned via `ApiVersion`.\n\n## Changed\n\n- Config is read and written through a validated snapshot with atomic file replacement, instead\n  of reflection over static fields.\n- Colours use a real colour field with an alpha channel. Bounded numbers use sliders.\n- Retired keys are stripped from existing config files on load, so upgrading no longer produces\n  \"no matching config field\" errors.\n\n## Removed\n\nNine configuration options were retired because they were unread, redundant, or 1.21.x\nleftovers. Each is listed in `keybindsgalore.properties` with its replacement, and old values\nare cleaned up automatically:\n\n`PIE_MENU_COLOR_LIGHTEN_FACTOR`, `PIE_MENU_SELECT_COLOR`, `PIE_MENU_BLEND`,\n`LABEL_TEXT_INSET`, `IGNORED_KEYS`, `INVERT_IGNORED_KEYS_LIST`,\n`USE_SOFTWARE_RENDERING`, `LAZY_CONFLICT_CHECK`, `USE_KEYBIND_FIX`\n\n`FILTERED_CATEGORY_KEYS` now defaults to empty. The old default was `Debug`, which does not\nmatch any category in 26.2 and therefore did nothing.\n\n## Requirements\n\n- Minecraft 26.2\n- Fabric Loader 0.19.3+\n- Fabric API 0.152.1+26.2+\n- Java 25+\n- Cloth Config 26.2.155+\n- ModMenu 20.0.2+ (optional, only for the settings screen)\n\nClient-side only.\n\n## Known limitations\n\n- The pie menu has no keyboard navigation, which is the largest accessibility gap.\n- Neighbouring wedge labels can overlap when action names are long. Labels are clamped so they\n  are never cut off by the screen edge, but they cannot reflow.\n- The pie menu does not pause the game, intentionally.\n- Colour inputs are hex text fields, not RGB pickers. The Cloth Config release in use provides no\n  picker widget.\n- Bindings changed by another mod at runtime are not detected. Only the listed triggers cause a\n  rescan.\n\n## Credits\n\nOriginal project and original author: Cael. KeybindsGalore Plus: AV306. 1.20.x, 1.21.x and\n26.x updates and re-writes: HVB007, plus the contributors listed in the mod metadata."
 		},
 		{
 			"tag": "Release",
@@ -235,7 +239,8 @@
 					},
 					"downloads": 7
 				}
-			]
+			],
+			"notes": "Please head over to [Modrinth](https://modrinth.com/mod/keybindsgalore+(hvb007)/version/1.6.1) for more upto date and frequent releases.\n\n### Fixes & Improvements\n\n*   **Holding Down Keys Works Again:** Holding down a key with conflicts (like **Attack** or **Use Item**) now works continuously instead of just performing a single click.\n*   **Ignored Keys Are Fixed:** Keys like **Space**, **Shift**, and **S** now work correctly again, even if they have conflicts.\n*   **Middle Mouse Button Fixed:** The pie menu now closes properly when you release the middle mouse button.\n*   **Better Conflict Warnings:** The warning message for prioritized keys (like \"Attack\") will now correctly show you what other keybinds are conflicting.\n*   **Fixed Startup Crashes:** Solved several crashes and errors that happened on startup, especially when using transparent colors in the config file or running on newer Minecraft versions.\n*   **Removed Reload Keybind:** The \"Reload Config\" keybind was causing startup crashes on some game versions, so it has been removed for now."
 		},
 		{
 			"tag": "0.3",
@@ -274,11 +279,21 @@
 					},
 					"downloads": 67
 				}
-			]
+			],
+			"notes": "Mod Version Version 0.3-1.20.x\n\nNew Feature:\nCreated a Cancel Keypress zone at the center of the circle which cancels the keypress, in cases of accidental keypress.\nhighlights in red when the keypress is going to be canceled.\n\n**Full Changelog**: https://github.com/HVB007og/KeybindsGalore_HVB007_1.20.x/compare/Alpha-0.2...0.3"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"Modrinth Photos/Cancel Keypress.png",
+		"Modrinth Photos/Selector.png",
+		"images/kbg_plus_demo.gif",
+		"images/low_poly.png",
+		"images/pie_menu_0.png",
+		"images/pie_menu_1.gif"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

@@ -1,0 +1,285 @@
+{
+	"repo": "Datenflieger/TrackView",
+	"host": "github",
+	"description": "TrackView is a Cactus addon that adds a clean media preview to your game",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-04-19T14:12:16Z",
+	"pushed": "2026-05-24T21:28:03Z",
+	"releases": [
+		{
+			"tag": "v1.1.0",
+			"published": "2026-04-19T16:36:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 400089201,
+					"name": "trackview-1.1.jar",
+					"url": "https://github.com/Datenflieger/TrackView/releases/download/v1.1.0/trackview-1.1.jar",
+					"size": 854933,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "62c82bf3124271bb0755b49f01c0966b0b7bbe8094c77c34ff5a8b26411a4aea",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "trackview",
+							"version": "1.1",
+							"name": "TrackView",
+							"description": "TrackView is a Cactus addon that adds a clean media preview HUD element to your game.",
+							"minecraft": "~26.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": "a6e8feba290b4bc42c253707ea89a259602eeeb3ab37fd5f58ac20be1fcc9402.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 304,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"xyz/datenflieger/trackview/media/TrackViewArtworkCache.class": [
+									"java/net/URL.openConnection"
+								],
+								"org/endlesssource/mediainterface/api/ArtworkDecoder.class": [
+									"java/net/URL.openStream"
+								],
+								"org/freedesktop/dbus/transport/jre/NativeUnixSocketHelper.class": [
+									"java/nio/channels/SocketChannel.getOption"
+								],
+								"org/freedesktop/dbus/transport/jre/NativeUnixSocketTransport.class": [
+									"java/nio/channels/SocketChannel.open",
+									"java/nio/channels/SocketChannel.configureBlocking",
+									"java/nio/channels/SocketChannel.isOpen",
+									"java/nio/channels/SocketChannel.close"
+								],
+								"org/freedesktop/dbus/spi/message/AbstractInputStreamMessageReader.class": [
+									"java/nio/channels/SocketChannel.read",
+									"java/nio/channels/SocketChannel.isOpen",
+									"java/nio/channels/SocketChannel.close"
+								],
+								"org/freedesktop/dbus/spi/message/AbstractOutputStreamMessageWriter.class": [
+									"java/nio/channels/SocketChannel.write",
+									"java/nio/channels/SocketChannel.isOpen",
+									"java/nio/channels/SocketChannel.close"
+								],
+								"org/freedesktop/dbus/connections/transports/AbstractTransport.class": [
+									"java/nio/channels/SocketChannel.close"
+								],
+								"org/freedesktop/dbus/connections/transports/TransportConnection.class": [
+									"java/nio/channels/SocketChannel.close"
+								],
+								"org/freedesktop/dbus/connections/SASL.class": [
+									"java/nio/channels/SocketChannel.read",
+									"java/nio/channels/SocketChannel.write"
+								],
+								"org/freedesktop/dbus/bin/DBusDaemon.class": [
+									"java/nio/channels/SocketChannel.isConnected"
+								],
+								"org/freedesktop/dbus/bin/DBusDaemon$DBusDaemonSenderThread.class": [
+									"java/nio/channels/SocketChannel.isConnected"
+								],
+								"org/freedesktop/dbus/utils/Util.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"native": {
+								"org/endlesssource/mediainterface/windows/WinRtBridge.class": [
+									"java/lang/System.load"
+								]
+							},
+							"exec": {
+								"org/endlesssource/mediainterface/macos/MacOsPerlAdapter.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"www.freedesktop.org": [
+								"org/freedesktop/dbus/connections/GlobalHandler.class",
+								"org/freedesktop/dbus/bin/DBusDaemon$DBusServer.class"
+							],
+							"java.sun.com": [
+								"org/freedesktop/dbus/utils/XmlUtil.class"
+							],
+							"www.w3.org": [
+								"org/freedesktop/dbus/utils/XmlUtil.class"
+							],
+							"xml.apache.org": [
+								"org/freedesktop/dbus/utils/XmlUtil.class"
+							],
+							"www.slf4j.org": [
+								"org/slf4j/LoggerFactory.class",
+								"org/slf4j/MDC.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Port to 26.1\n\nThis release ports TrackView to Minecraft **26.1** and updates the full Fabric toolchain for the unobfuscated 26.1 environment.\n\n## Updated Compatibility\n\n- Minecraft: **26.1**\n- Java: **25**\n- Fabric Loader: **0.19.2**\n- Fabric Loom: **1.16-SNAPSHOT**\n- Fabric API: **0.145.1+26.1**\n- Cactus: **0.13**\n\n## Build/Platform Changes\n\n- Switched Loom plugin to `net.fabricmc.fabric-loom`\n- Removed mappings dependency line (required for 26.1 setup)\n- Replaced `modImplementation` usage with `implementation` in dependencies\n- Migrated project Java target/toolchain from 21 to 25\n- Updated Gradle wrapper to latest compatible version\n\n## Code Migration Notes\n\n- Updated HUD rendering integration for the new GUI extraction API used on 26.1:\n  - `GuiGraphics` -> `GuiGraphicsExtractor`\n  - `drawString`/`drawCenteredString` -> `text`/`centeredText`\n- Preserved existing TrackView behavior:\n  - async media polling\n  - async artwork decode/cache\n  - resizable HUD element\n  - image size setting\n  - fallback no-media state\n\n## Important\n\n- This version is intended for **Minecraft 26.1 only**.\n- Older game versions require the previous TrackView release line."
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-04-19T16:22:20Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 400088150,
+					"name": "trackview-1.0.jar",
+					"url": "https://github.com/Datenflieger/TrackView/releases/download/v1.0.0/trackview-1.0.jar",
+					"size": 866770,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "13e450c6a7511e2e237ffb8ea4c6eaf66d6aed05374115f917aa27299dc7f5c8",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "trackview",
+							"version": "1.0",
+							"name": "TrackView",
+							"description": "TrackView is a Cactus addon that adds a clean media preview HUD element to your game.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": "a6e8feba290b4bc42c253707ea89a259602eeeb3ab37fd5f58ac20be1fcc9402.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 303,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"org/endlesssource/mediainterface/api/ArtworkDecoder.class": [
+									"java/net/URL.openStream"
+								],
+								"org/freedesktop/dbus/bin/DBusDaemon$DBusDaemonSenderThread.class": [
+									"java/nio/channels/SocketChannel.isConnected"
+								],
+								"org/freedesktop/dbus/bin/DBusDaemon.class": [
+									"java/nio/channels/SocketChannel.isConnected"
+								],
+								"org/freedesktop/dbus/connections/SASL.class": [
+									"java/nio/channels/SocketChannel.read",
+									"java/nio/channels/SocketChannel.write"
+								],
+								"org/freedesktop/dbus/connections/transports/AbstractTransport.class": [
+									"java/nio/channels/SocketChannel.close"
+								],
+								"org/freedesktop/dbus/connections/transports/TransportConnection.class": [
+									"java/nio/channels/SocketChannel.close"
+								],
+								"org/freedesktop/dbus/spi/message/AbstractInputStreamMessageReader.class": [
+									"java/nio/channels/SocketChannel.read",
+									"java/nio/channels/SocketChannel.isOpen",
+									"java/nio/channels/SocketChannel.close"
+								],
+								"org/freedesktop/dbus/spi/message/AbstractOutputStreamMessageWriter.class": [
+									"java/nio/channels/SocketChannel.write",
+									"java/nio/channels/SocketChannel.isOpen",
+									"java/nio/channels/SocketChannel.close"
+								],
+								"org/freedesktop/dbus/transport/jre/NativeUnixSocketHelper.class": [
+									"java/nio/channels/SocketChannel.getOption"
+								],
+								"org/freedesktop/dbus/transport/jre/NativeUnixSocketTransport.class": [
+									"java/nio/channels/SocketChannel.open",
+									"java/nio/channels/SocketChannel.configureBlocking",
+									"java/nio/channels/SocketChannel.isOpen",
+									"java/nio/channels/SocketChannel.close"
+								],
+								"org/freedesktop/dbus/utils/Util.class": [
+									"java/net/URL.openConnection"
+								],
+								"xyz/datenflieger/trackview/media/TrackViewArtworkCache.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"exec": {
+								"org/endlesssource/mediainterface/macos/MacOsPerlAdapter.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"native": {
+								"org/endlesssource/mediainterface/windows/WinRtBridge.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {
+							"www.freedesktop.org": [
+								"org/freedesktop/dbus/bin/DBusDaemon$DBusServer.class",
+								"org/freedesktop/dbus/connections/GlobalHandler.class"
+							],
+							"java.sun.com": [
+								"org/freedesktop/dbus/utils/XmlUtil.class"
+							],
+							"www.w3.org": [
+								"org/freedesktop/dbus/utils/XmlUtil.class"
+							],
+							"xml.apache.org": [
+								"org/freedesktop/dbus/utils/XmlUtil.class"
+							],
+							"www.slf4j.org": [
+								"org/slf4j/LoggerFactory.class",
+								"org/slf4j/MDC.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First public release of TrackView for Cactus.\n\n### Added\n\n- New Cactus HUD element: **Track View**\n- Media session integration via `mediainterface`\n- Display for album art, title, artist, source app, and playback state\n- Optional progress bar when duration/position are available\n- Resizable HUD element with configurable image size\n\n### Quality\n\n- Async media polling (no render-thread blocking)\n- Async artwork decode/texture registration with caching and retry\n- Graceful fallback rendering when no media is active\n- Improved image decode compatibility for real-world artwork payloads\n\n### Requirements\n\n- Minecraft `1.21.11`\n- Fabric Loader `>= 0.17.3`\n- Java `21`\n- Cactus `0.12.3`\n\n### Included Assets\n\n- Runtime mod file: `build/libs/trackview-1.0.jar`\n- Sources jar: `build/libs/trackview-1.0-sources.jar`"
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "ko_fi",
+			"url": "https://ko-fi.com/datenflieger"
+		}
+	],
+	"fundingChecked": "2026-10-29T10:54:18.815Z",
+	"pictures": [
+		"docs/assets/previews/preview-1-standard.png",
+		"docs/assets/previews/preview-2-no-thumbnail.png",
+		"docs/assets/previews/preview-3-no-media.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"history": 1
+}

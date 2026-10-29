@@ -173,7 +173,7 @@
 						"unreadable": []
 					},
 					"icon": "c879ced0c0a1acb0f829e956dc652c80c404774f79811be7ecec2f510de1ed62.webp",
-					"downloads": 1005,
+					"downloads": 1055,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -181,7 +181,8 @@
 						"shaders": true
 					}
 				}
-			]
+			],
+			"notes": "## 中文\n\n- 新增 NeoForge 1.21.1 专用服务器 companion：在后台采集完整区块并维护独立的服务端 LOD 缓存\n- 新增远程 LOD 传输：客户端与服务器协商协议、限额请求缺失 section，并完成方块/生物群系 ID 映射后写入本地缓存\n- 新增远程缓存一致性处理：服务端合并运行中的区块段变化，发送批量失效通知，客户端删除旧条目并限速重拉\n- 异步区块采集改为先快照 palette、生物群系和光照，避免后台转换读取已变化或已卸载的区块状态\n- 客户端与专用服务器合并为同一个通用 JAR；专服使用不依赖 LWJGL 的 RocksDB 存储，客户端继续保留 LMDB/Zstd 支持\n- 同一个 JAR 通过 Sodium 0.6.13、0.8.12、0.8.13-beta.2，以及 Iris、Iris shaderpack 和 Distant Horizons 客户端启动测试\n- 新增打包后专服启动测试和真实客户端/服务器远程 LOD 往返测试，并补充服务端依赖与产物边界校验\n\n## English\n\n- Added a NeoForge 1.21.1 dedicated-server companion that ingests complete chunks in the background and maintains a separate server-side LOD cache\n- Added remote LOD transfer with protocol negotiation, bounded missing-section requests, block/biome ID remapping, and persistent client caching\n- Added remote cache coherence: the server coalesces live section changes and sends batched invalidations so clients discard stale entries and re-fetch them at a bounded rate\n- Snapshot block palettes, biomes, and lighting before asynchronous chunk conversion to avoid reading changed or unloaded chunk state on worker threads\n- Merged client and dedicated-server distributions into one universal JAR; dedicated servers use RocksDB storage without LWJGL while clients retain LMDB/Zstd support\n- Verified the same JAR with Sodium 0.6.13, 0.8.12, and 0.8.13-beta.2, plus Iris, an Iris shaderpack, and Distant Horizons client smoke tests\n- Added packaged dedicated-server startup testing, a real client/server remote LOD roundtrip, and stricter packaged dependency and server-boundary validation\n\nArtifact:\n- voxy-0.6.0.jar\n- SHA256: ee147bd4214f076642e146f5c161eb6d708f7b3e5726fbf40fb71f742ef4bd43"
 		},
 		{
 			"tag": "v0.5.0",
@@ -348,9 +349,10 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 163
+					"downloads": 164
 				}
-			]
+			],
+			"notes": "## 中文\n\n- 首次进入世界时按帧预算加载 LOD，减少瞬时卡顿和线程争抢\n- 修复 RocksDB 迭代器、原生资源和文件句柄未正确释放的问题\n- 异步区块摄取任务现在持有世界引用，减少重连和切换世界时的生命周期错误\n- 补充 C2ME 共存说明：单人世界可受益，远程服务器不会直接加速客户端 Voxy\n- 继续支持 Sodium 0.6.13 和 0.8.12；由 GitHub Actions 验证\n\n## English\n\n- Budget initial LOD loading per frame to reduce world-join stalls and thread contention\n- Fix RocksDB iterator, native resource, and file-handle cleanup\n- Retain world references while asynchronous chunk ingest tasks are queued or running\n- Document C2ME coexistence behavior for integrated and remote servers\n- Keep Sodium 0.6.13 and 0.8.12 compatibility verified by GitHub Actions"
 		},
 		{
 			"tag": "v0.4.0",
@@ -519,7 +521,8 @@
 					},
 					"downloads": 29
 				}
-			]
+			],
+			"notes": "## 中文\n\n- NeoForge 1.21.1 客户端构建，聚焦 LOD 缓存正确性与更安全的 Sodium 区块摄取\n- 当相邻缓存段缺失时，LOD 邻接网格生成改为保守策略，减少远景地形切开/地下结构暴露的问题\n- 跟踪存储缺失的占位段，避免缓存的空占位被当作真实 LOD 数据复用\n- 移植上游安全的区块摄取防护：拒绝过期的客户端区块缓存槽，仅读取活跃的 FULL 区块\n- 新增 Gradle 校验脚本，用于保守邻接网格与安全区块摄取的回归测试\n- GitHub Actions Build 通过 Sodium 0.8.12 和 0.6.13 验证；check-does-build 通过；本地静态校验脚本通过\n\n## English\n\n- NeoForge 1.21.1 client build focused on LOD cache correctness and safer Sodium chunk ingest\n- Made LOD neighbor meshing conservative when adjacent cached sections are missing, reducing distant terrain cutaway / exposed underground artifacts\n- Tracked storage-missing placeholder sections so cached empty placeholders are not reused as real LOD data\n- Ported upstream-safe chunk ingest guards: stale client chunk-cache slots are rejected and ingest only reads live FULL chunks\n- Added Gradle validation scripts for conservative neighbor meshing and safe chunk ingest regressions\n- GitHub Actions Build passed for Sodium 0.8.12 and 0.6.13; check-does-build passed; local static validation scripts passed\n\nArtifact:\n- voxy-0.4.0.jar\n- SHA256: 0834e96bbee9e2bf387337b501826b879cfcf6435243a4dd83cd20c33a6a70ee"
 		},
 		{
 			"tag": "v0.3.0",
@@ -688,7 +691,8 @@
 					},
 					"downloads": 14
 				}
-			]
+			],
+			"notes": "## 中文\n\n- NeoForge 1.21.1 客户端构建，聚焦 Sodium/Iris 兼容性与 LOD 恢复\n- 新增 `/voxy refresh` 命令，重建客户端渲染器而无需重建 Voxy 存储实例\n- 新增 `/voxy status` 命令，用于快速查看 LOD/Sodium 同步诊断信息\n- 当 Sodium 同步/边界遥测显示 LOD 边界塌缩时，自动进行保守的 LOD 恢复\n- 新增自动 LOD 恢复的配置开关与本地化文本\n- 包含此前修复：Sodium 同步边界为空时保留 Voxy 区块边界\n- GitHub Actions Build 通过 Sodium 0.8.12 和 0.6.13 验证；check-does-build 通过\n\n## English\n\n- NeoForge 1.21.1 client build focused on Sodium/Iris compatibility and LOD recovery\n- Added `/voxy refresh` to rebuild the client renderer without recreating the Voxy storage instance\n- Added `/voxy status` for quick LOD/Sodium sync diagnostics\n- Added conservative automatic LOD recovery when Sodium sync/bounds telemetry indicates collapsed LOD bounds\n- Added config toggle and localized text for automatic LOD recovery\n- Includes the previous empty Sodium sync bounds preservation fix\n- GitHub Actions Build passed for Sodium 0.8.12 and 0.6.13; check-does-build passed\n\nArtifact:\n- voxy-0.3.0.jar\n- SHA256: 35ac559fdb8fcbe5cc836a43e5aa4d4da471e96167477fc5020c7073b2ab0ab9"
 		},
 		{
 			"tag": "v0.2.0",
@@ -857,11 +861,14 @@
 					},
 					"downloads": 5
 				}
-			]
+			],
+			"notes": "## 中文\n\n- NeoForge 1.21.1 版本\n- 改进 Sodium 兼容性，Actions 已验证 Sodium 0.6.13 和 0.8.12\n- 新增配置本地化语言文件\n- 改进 Voxy 渲染器重载与区块段同步行为\n- 调整默认存储压缩方式\n\n## English\n\n- NeoForge 1.21.1 release\n- Improved Sodium compatibility, validated in Actions against Sodium 0.6.13 and 0.8.12\n- Added config localization files\n- Improved Voxy renderer reload / section sync behavior\n- Adjusted default storage compression"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

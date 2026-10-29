@@ -1,0 +1,760 @@
+{
+	"repo": "cuspymd/mcp-server-mod",
+	"host": "github",
+	"description": "A Fabric mod that implements a Model Context Protocol (MCP) server, enabling AI assistants like Claude to interact with Minecraft through structured commands.",
+	"stars": 11,
+	"archived": false,
+	"license": "CC0-1.0",
+	"created": "2025-07-25T17:29:59Z",
+	"pushed": "2026-07-06T14:54:27Z",
+	"releases": [
+		{
+			"tag": "v1.3.0+mc26.2",
+			"published": "2026-07-06T14:55:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 468175168,
+					"name": "mcp-server-mod-1.3.0+mc26.2.jar",
+					"url": "https://github.com/cuspymd/mcp-server-mod/releases/download/v1.3.0%2Bmc26.2/mcp-server-mod-1.3.0%2Bmc26.2.jar",
+					"size": 100144,
+					"downloads": 48,
+					"inspection": 2,
+					"sha256": "5c85dce3177e5da797e4f6bedad451d18b2f1f6db4af2644d643064e7f6cec2f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mcp-server-mod",
+							"version": "1.3.0+mc26.2",
+							"name": "MCP Server Mod",
+							"description": "A Fabric mod that implements an MCP (Model Context Protocol) server, enabling AI assistants like Claude to interact with Minecraft through structured commands.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cfc817df89a40b8fa3457cb32959a9b524b4fad02c5146fb6ed280db9177e1d4.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 45,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"localhost": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							],
+							"127.0.0.1": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changes (compared to v1.3.0+mc26.1)\n\n- Ported the mod from Minecraft `26.1` to `26.2`.\n  - Bumped Fabric API to `0.154.1+26.2` and widened `fabric.mod.json`'s `minecraft` dependency range from `~26.1` to `~26.2`.\n  - Fixed `ScreenshotUtils`: `Minecraft.getMainRenderTarget()` was removed in `26.2` (which introduces an initial Vulkan renderer backend alongside OpenGL); the render target now lives on `GameRenderer` (`client.gameRenderer.mainRenderTarget()`).\n  - Added `docs/minecraft-26.2-migration.md` with migration details.\n- Verified end-to-end on a live client/world: `ping`, `initialize`, `tools/list`, `execute_commands`, `get_player_info` (including the `frontPosition.y` fix), `get_blocks_in_area`, and `take_screenshot` all work correctly on `26.2`.\n\n## Build Artifact\n\n- `mcp-server-mod-1.3.0+mc26.2.jar`\n\n## Full Changelog\n\n- https://github.com/cuspymd/mcp-server-mod/compare/v1.3.0+mc26.1...v1.3.0+mc26.2"
+		},
+		{
+			"tag": "v1.3.0+mc26.1",
+			"published": "2026-07-06T14:19:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 468145401,
+					"name": "mcp-server-mod-1.3.0+mc26.1.jar",
+					"url": "https://github.com/cuspymd/mcp-server-mod/releases/download/v1.3.0%2Bmc26.1/mcp-server-mod-1.3.0%2Bmc26.1.jar",
+					"size": 100104,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "23dbee2c582b8e91add6183ba4bf0151353406c989e8e8aa638fec734d5b0ff1",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mcp-server-mod",
+							"version": "1.3.0+mc26.1",
+							"name": "MCP Server Mod",
+							"description": "A Fabric mod that implements an MCP (Model Context Protocol) server, enabling AI assistants like Claude to interact with Minecraft through structured commands.",
+							"minecraft": "~26.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cfc817df89a40b8fa3457cb32959a9b524b4fad02c5146fb6ed280db9177e1d4.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 45,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"localhost": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							],
+							"127.0.0.1": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changes (compared to v1.2.0+mc1.21.11)\n\n- Ported the mod from Minecraft 1.21.11/Yarn to Minecraft 26.1/Mojang official unobfuscated names.\n  - Updated Fabric build tooling: `net.fabricmc.fabric-loom`, Java 25, Gradle 9.5.1, Fabric Loader 0.19.3, Fabric API 0.145.1+26.1.\n  - Removed the Yarn/mappings dependency and switched Fabric dependencies from `modImplementation` to standard `implementation`.\n  - Updated the chat capture mixin and documentation, including migration notes for future 26.x work.\n- Fixed `get_player_info`'s `frontPosition.y` being off by up to 3 blocks when the player looked down: now only the horizontal (x/z) look direction is used to project 3 blocks forward, so `y` always matches the player's own standing height.\n- Cleaned up unused imports and replaced string concatenation with parameterized logging.\n- Stopped tracking `.claude/settings.local.json`.\n\n## Build Artifact\n\n- `mcp-server-mod-1.3.0+mc26.1.jar`\n\n## Full Changelog\n\n- https://github.com/cuspymd/mcp-server-mod/compare/v1.2.0+mc1.21.11...v1.3.0+mc26.1"
+		},
+		{
+			"tag": "v1.2.0+mc1.21.11",
+			"published": "2026-03-12T14:57:28Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 372408214,
+					"name": "mcp-server-mod-1.2.0+mc1.21.11.jar",
+					"url": "https://github.com/cuspymd/mcp-server-mod/releases/download/v1.2.0%2Bmc1.21.11/mcp-server-mod-1.2.0%2Bmc1.21.11.jar",
+					"size": 101606,
+					"downloads": 25,
+					"inspection": 2,
+					"sha256": "028aee5e91eca91bfbe4bc633a903da3ffbf4ef1baaabde2528d8a1d35166963",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mcp-server-mod",
+							"version": "1.2.0+mc1.21.11",
+							"name": "MCP Server Mod",
+							"description": "A Fabric mod that implements an MCP (Model Context Protocol) server, enabling AI assistants like Claude to interact with Minecraft through structured commands.",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cfc817df89a40b8fa3457cb32959a9b524b4fad02c5146fb6ed280db9177e1d4.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 45,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"localhost": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							],
+							"127.0.0.1": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changes (compared to v1.1.1+mc1.21.11)\n\n- Added dedicated server support for MCP operation and aligned the codebase for dual-mode (client/integrated + dedicated server).\n- Improved server-side MCP reliability:\n  - Fixed MCP tool exposure and `runServer` dev setup.\n  - Improved command execution outcome handling (`appliedCount`, failure-state capture, response format/safety validation refinements).\n- Improved block scanning behavior:\n  - Fixed block namespace output to include full identifiers.\n  - Added overworld fallback when no players are online.\n  - Corrected server block-scan error format.\n- Removed deprecated IPC components (`IPCServer`, `IPCClient`) and cleaned related logging/imports.\n- Added/updated docs for server/client dual-mode support design notes.\n\n## Build Artifact\n\n- `mcp-server-mod-1.2.0+mc1.21.11.jar`\n\n## Full Changelog\n\n- https://github.com/cuspymd/mcp-server-mod/compare/v1.1.1+mc1.21.11...v1.2.0+mc1.21.11"
+		},
+		{
+			"tag": "v1.1.1+mc1.21.11",
+			"published": "2026-02-26T15:12:31Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 362890517,
+					"name": "mcp-server-mod-1.1.1+mc1.21.11.jar",
+					"url": "https://github.com/cuspymd/mcp-server-mod/releases/download/v1.1.1%2Bmc1.21.11/mcp-server-mod-1.1.1%2Bmc1.21.11.jar",
+					"size": 92569,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "36eab6f682a03c2db8481dfe36935b6f7fea8af00e3fd14d0d47850453ed38f7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mcp-server-mod",
+							"version": "1.1.1+mc1.21.11",
+							"name": "MCP Server Mod",
+							"description": "A Fabric mod that implements an MCP (Model Context Protocol) server, enabling AI assistants like Claude to interact with Minecraft through structured commands.",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cfc817df89a40b8fa3457cb32959a9b524b4fad02c5146fb6ed280db9177e1d4.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 36,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"cuspymd/mcp/mod/bridge/IPCClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"cuspymd/mcp/mod/bridge/IPCServer.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getRemoteSocketAddress",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {
+							"localhost": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							],
+							"127.0.0.1": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changes (compared to v1.1.0+mc1.21.10)\n\n- Updated Minecraft/Fabric target versions to the `1.21.11` line.\n  - `minecraft_version` -> `1.21.11`\n  - `yarn_mappings` -> `1.21.11+build.4`\n  - Raised minimum required `fabric-loader` version (`>=0.18.0`)\n  - Updated `fabric-api` to `0.141.3+1.21.11`\n- Restored the `take_screenshot` tool in the MCP protocol tool list.\n- Added a regression test for `take_screenshot`.\n\n## Build Artifact\n\n- `mcp-server-mod-1.1.1+mc1.21.11.jar`"
+		},
+		{
+			"tag": "v1.1.0+mc1.21.10",
+			"published": "2026-02-26T13:23:29Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 362840536,
+					"name": "mcp-server-mod-1.1.0+mc1.21.10.jar",
+					"url": "https://github.com/cuspymd/mcp-server-mod/releases/download/v1.1.0%2Bmc1.21.10/mcp-server-mod-1.1.0%2Bmc1.21.10.jar",
+					"size": 92677,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "5787e526e054fadc3742896cd566f4079659f65fbcea896be8a43535ae9d26b2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mcp-server-mod",
+							"version": "1.1.0+mc1.21.10",
+							"name": "MCP Server Mod",
+							"description": "A Fabric mod that implements an MCP (Model Context Protocol) server, enabling AI assistants like Claude to interact with Minecraft through structured commands.",
+							"minecraft": "~1.21.9",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cfc817df89a40b8fa3457cb32959a9b524b4fad02c5146fb6ed280db9177e1d4.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 36,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"cuspymd/mcp/mod/bridge/IPCClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"cuspymd/mcp/mod/bridge/IPCServer.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getRemoteSocketAddress",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {
+							"localhost": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							],
+							"127.0.0.1": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Comparison Base\n- `v1.0.1+mc1.21.10` → `v1.1.0+mc1.21.10`\n\n## Highlights\n- Added the `take_screenshot` tool and improved camera control/debug-save flow.\n- Improved the `execute_commands` response schema and diagnostics.\n- Added command outcome analysis logic (`CommandOutcomeAnalyzer`) to improve response quality.\n\n## Stability Improvements\n- Improved command timeout cancellation handling and prevented late dispatch.\n- Applied message source/command context filtering to reduce false-positive responses.\n- Fixed MCP protocol compile issues and corrected block state information accuracy.\n\n## Tests and Docs\n- Expanded test coverage significantly (`HTTPMCPServer`, `CommandExecutor`, `CommandOutcomeAnalyzer`, `ScreenshotUtils`, `MCPProtocol`, etc.).\n- Updated `README.md`, `TESTING.md`, and design/planning documents.\n\n## Change Size\n- 25 files changed\n- +2,191 / -188\n\n## Compatibility\n- Minecraft version: `1.21.10` (unchanged)\n- Mod version: `1.1.0+mc1.21.10`\n\n## Download\n- `mcp-server-mod-1.1.0+mc1.21.10.jar`"
+		},
+		{
+			"tag": "v1.0.1+mc1.21.9",
+			"published": "2025-10-13T15:08:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 303760606,
+					"name": "mcp-server-mod-1.0.1+mc1.21.9.jar",
+					"url": "https://github.com/cuspymd/mcp-server-mod/releases/download/v1.0.1%2Bmc1.21.9/mcp-server-mod-1.0.1%2Bmc1.21.9.jar",
+					"size": 69609,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "60acf543076a972e4fb5538b023f33a912d54ad7ac97f1975724333197e82f1f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mcp-server-mod",
+							"version": "1.0.1+mc1.21.9",
+							"name": "MCP Server Mod",
+							"description": "A Fabric mod that implements an MCP (Model Context Protocol) server, enabling AI assistants like Claude to interact with Minecraft through structured commands.",
+							"minecraft": "~1.21.9",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cfc817df89a40b8fa3457cb32959a9b524b4fad02c5146fb6ed280db9177e1d4.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"cuspymd/mcp/mod/bridge/IPCClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"cuspymd/mcp/mod/bridge/IPCServer.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getRemoteSocketAddress",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {
+							"localhost": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							],
+							"127.0.0.1": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			]
+		},
+		{
+			"tag": "v1.0.1+mc1.21.8",
+			"published": "2025-09-09T14:55:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 291376616,
+					"name": "mcp-server-mod-1.0.1+mc1.21.8.jar",
+					"url": "https://github.com/cuspymd/mcp-server-mod/releases/download/v1.0.1%2Bmc1.21.8/mcp-server-mod-1.0.1%2Bmc1.21.8.jar",
+					"size": 69460,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "6074f3ecec0fb8c5b714a2d535fc4d7266d8b2eb12d8ac8065dd25dc63053302",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mcp-server-mod",
+							"version": "1.0.1+mc1.21.8",
+							"name": "MCP Server Mod",
+							"description": "A Fabric mod that implements an MCP (Model Context Protocol) server, enabling AI assistants like Claude to interact with Minecraft through structured commands.",
+							"minecraft": "~1.21.8",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cfc817df89a40b8fa3457cb32959a9b524b4fad02c5146fb6ed280db9177e1d4.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"cuspymd/mcp/mod/bridge/IPCClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"cuspymd/mcp/mod/bridge/IPCServer.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getRemoteSocketAddress",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {
+							"localhost": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							],
+							"127.0.0.1": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			]
+		},
+		{
+			"tag": "v1.0.0+mc1.21.7",
+			"published": "2025-09-04T16:41:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 289675964,
+					"name": "mcp-server-mod-1.0.0+mc1.21.7.jar",
+					"url": "https://github.com/cuspymd/mcp-server-mod/releases/download/v1.0.0%2Bmc1.21.7/mcp-server-mod-1.0.0%2Bmc1.21.7.jar",
+					"size": 69447,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "adac6fd1557e42b26dd8ff9086f8e5351dc799ac97fc7305fef0dd36c5a58750",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mcp-server-mod",
+							"version": "1.0.0+mc1.21.7",
+							"name": "MCP Server Mod",
+							"description": "A Fabric mod that implements an MCP (Model Context Protocol) server, enabling AI assistants like Claude to interact with Minecraft through structured commands.",
+							"minecraft": "~1.21.7",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cfc817df89a40b8fa3457cb32959a9b524b4fad02c5146fb6ed280db9177e1d4.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"cuspymd/mcp/mod/bridge/IPCClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"cuspymd/mcp/mod/bridge/IPCServer.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getRemoteSocketAddress",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {
+							"localhost": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							],
+							"127.0.0.1": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			]
+		},
+		{
+			"tag": "v1.0.0+mc1.21.6",
+			"published": "2025-09-04T16:13:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 289666937,
+					"name": "mcp-server-mod-1.0.0+mc1.21.6.jar",
+					"url": "https://github.com/cuspymd/mcp-server-mod/releases/download/v1.0.0%2Bmc1.21.6/mcp-server-mod-1.0.0%2Bmc1.21.6.jar",
+					"size": 69447,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e839aef8e6d2437aa45dd2744a04701932eb6f7c719a8ced18b6da8df7f8de6f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mcp-server-mod",
+							"version": "1.0.0+mc1.21.6",
+							"name": "MCP Server Mod",
+							"description": "A Fabric mod that implements an MCP (Model Context Protocol) server, enabling AI assistants like Claude to interact with Minecraft through structured commands.",
+							"minecraft": "~1.21.6",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cfc817df89a40b8fa3457cb32959a9b524b4fad02c5146fb6ed280db9177e1d4.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"cuspymd/mcp/mod/bridge/IPCClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"cuspymd/mcp/mod/bridge/IPCServer.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getRemoteSocketAddress",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {
+							"localhost": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							],
+							"127.0.0.1": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			]
+		},
+		{
+			"tag": "v1.0.0+mc1.21.5",
+			"published": "2025-09-04T15:21:22Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 289653449,
+					"name": "mcp-server-mod-1.0.0+mc1.21.5.jar",
+					"url": "https://github.com/cuspymd/mcp-server-mod/releases/download/v1.0.0%2Bmc1.21.5/mcp-server-mod-1.0.0%2Bmc1.21.5.jar",
+					"size": 69448,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "339c5eeb333666a5b3a0bb6e58bbb80799ac607e8369d3356d8d87b93194fe1b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mcp-server-mod",
+							"version": "1.0.0+mc1.21.5",
+							"name": "MCP Server Mod",
+							"description": "A Fabric mod that implements an MCP (Model Context Protocol) server, enabling AI assistants like Claude to interact with Minecraft through structured commands.",
+							"minecraft": "~1.21.5",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cfc817df89a40b8fa3457cb32959a9b524b4fad02c5146fb6ed280db9177e1d4.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"cuspymd/mcp/mod/bridge/IPCClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"cuspymd/mcp/mod/bridge/IPCServer.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getRemoteSocketAddress",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {
+							"localhost": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							],
+							"127.0.0.1": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			]
+		},
+		{
+			"tag": "v1.0.0+mc1.21.4",
+			"published": "2025-08-13T16:34:03Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 282204545,
+					"name": "mcp-server-mod-1.0.0.jar",
+					"url": "https://github.com/cuspymd/mcp-server-mod/releases/download/v1.0.0%2Bmc1.21.4/mcp-server-mod-1.0.0.jar",
+					"size": 69383,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "b86321c809ae20463ae780a8b52ed2a5b32add5a0e51eadc492ce3eef00e51ce",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mcp-server-mod",
+							"version": "1.0.0",
+							"name": "MCP Server Mod",
+							"description": "This is an example description! Tell everyone what your mod is about!",
+							"minecraft": "~1.21.4",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": "cfc817df89a40b8fa3457cb32959a9b524b4fad02c5146fb6ed280db9177e1d4.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"cuspymd/mcp/mod/bridge/IPCClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"cuspymd/mcp/mod/bridge/IPCServer.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getRemoteSocketAddress",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {
+							"localhost": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							],
+							"127.0.0.1": [
+								"cuspymd/mcp/mod/bridge/HTTPMCPServer$MCPHandler.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# MCP Server Mod v1.0.0 for Minecraft 1.21.4\n\n## Overview\nFirst stable release of the MCP Server Mod - a Fabric mod that implements a Model Context Protocol (MCP) server, enabling AI assistants like Claude to interact with Minecraft through structured commands.\n\n## Features\n- **MCP Protocol Support**: Full HTTP server implementation on port 8080\n- **Three Core Tools**:\n  - `execute_commands` - Execute Minecraft commands with safety validation  \n  - `get_player_info` - Get comprehensive player information (position, health, inventory)\n  - `get_blocks_in_area` - Scan and retrieve blocks in specified areas\n- **Safety System**: Comprehensive command validation and size limits\n- **Block Compression**: Optimized block change representation using connected regions\n- **Async Execution**: Non-blocking command execution\n\n## Requirements\n- Minecraft 1.21.4\n- Fabric Loader 0.16.14+\n- Fabric API 0.119.3+1.21.4\n- Java 21+\n\n## Installation\n1. Install Fabric Loader for Minecraft 1.21.4\n2. Download and install Fabric API\n3. Place the mod JAR in your `mods` folder\n4. Launch Minecraft - MCP server starts automatically on localhost:8080\n\n## Usage\nConnect your AI assistant to `http://localhost:8080/mcp` and use the available tools to interact with Minecraft safely and efficiently.\n\n## Technical Details\n- Client-side mod with HTTP MCP server\n- Comprehensive safety validation system\n- Block change compression and optimization\n- Chat message capture during command execution\n- Configurable via `config/mcp-client.json`\n\n🤖 Generated with [Claude Code](https://claude.ai/code)"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-29T10:54:18.815Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"history": 1
+}

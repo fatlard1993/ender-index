@@ -1,0 +1,116 @@
+{
+	"repo": "Tyrthurey/unlockedvoidsea",
+	"host": "github",
+	"description": "A simple utility mod that lets you use the \"End Sea\" physics from Create: Aeronautics in other dimensions. Extremely configurable.",
+	"stars": 2,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-05-11T18:59:19Z",
+	"pushed": "2026-05-21T21:53:33Z",
+	"releases": [
+		{
+			"tag": "v1.1.0",
+			"published": "2026-05-21T18:38:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 426383888,
+					"name": "unlockedvoidsea-1.1.0.jar",
+					"url": "https://github.com/Tyrthurey/unlockedvoidsea/releases/download/v1.1.0/unlockedvoidsea-1.1.0.jar",
+					"size": 51057,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "ff234ff219d890e4ec9be586991f37f2cec0453b7ed13a63e269ccac7b998d9b",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "unlockedvoidsea",
+							"version": "1.1.0",
+							"name": "Unlocked Void Sea",
+							"description": "Enables End Sea physics in other dimensions.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"simulated",
+								"veil",
+								"sable"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 21,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n### Added\n- Multiple dimensions at once. The config is now a list of `[[dimension]]` blocks instead of one fixed dimension, so you can have the void sea in the Overworld, the Nether, your favorite datapack dim, whatever. Each block gets its own `dimension`, `startY`, `depthGradient`, `drag`, and `priority`. Recommended in https://github.com/Tyrthurey/unlockedvoidsea/issues/2\n- Ships with Overworld + Nether enabled by default.\n- In-game editor for the dimension list (extending and improving the Catnip/Ponder config screen):\n  - `+` adds a new entry, `-` removes one. No restart needed.\n  - Fields turn red while they're invalid, Save stays disabled until everything checks out.\n  - Won't let you save two entries with the same dimension id.\n  - Tooltips on every field, with translations.\n- Made the auto-generated Catnip value fields wider so things like `-2032.0` or full dimension IDs aren't truncated. String fields use the whole row.\n- `startY` is now clamped at runtime to the configured dimension's actual Y range (`DimensionType.minY()` + `height()`), so datapack dims with weird heights don't break. Logs a warning when it clamps.\n- If the `.toml` somehow ends up with duplicate dimension ids (manual edit, dedicated server config sync, whatever), only the first one is used. Online OPs get a chat warning.\n- Old flat-config users get auto-migrated on first load: their values get folded into a `[[dimension]]` entry. If their old `dimension` was `minecraft:overworld` it overwrites the default Overworld entry; otherwise it's added as a third entry alongside the defaults.\n\n### Fixed/Changed\n- `startY` height now accepts a range from `-2032` to `2031`. Requested in: https://github.com/Tyrthurey/unlockedvoidsea/issues/1\n- Updated README.md with new information.\n- World wouldn't save and the server crashed on close with `IllegalStateException: Cannot get config value before config is loaded`. Cause: reading config values during `ModConfigEvent.Unloading`. Fix: just ignore the Unloading event, only run on Loading/Reloading. Fixes https://github.com/Tyrthurey/unlockedvoidsea/issues/4\n\n### Removed\n- The old flat config keys (`dimension`, `startY`, `depthGradient`, `drag`, `priority` at the top level). The `[[dimension]]` list fully replaces them.\n\n\n<img width=\"1303\" height=\"1239\" alt=\"image\" src=\"https://github.com/user-attachments/assets/cfdeab6b-ecf9-4465-a013-2925696b4eb0\" />\n<img width=\"1598\" height=\"637\" alt=\"image\" src=\"https://github.com/user-attachments/assets/ae1b29c3-aa54-42da-8b29-96c15ff3acfc\" />\n<img width=\"529\" height=\"80\" alt=\"image\" src=\"https://github.com/user-attachments/assets/44b0814a-b49e-4719-b217-3ac054e2309e\" />\n\n**Full Changelog**: https://github.com/Tyrthurey/unlockedvoidsea/compare/v1.0.1...v1.1.0"
+		},
+		{
+			"tag": "v1.0.1",
+			"published": "2026-05-12T10:50:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 418290471,
+					"name": "unlockedvoidsea-1.0.1.jar",
+					"url": "https://github.com/Tyrthurey/unlockedvoidsea/releases/download/v1.0.1/unlockedvoidsea-1.0.1.jar",
+					"size": 11395,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "a5c16a540b59e937affb04a322a7745343b6892f4e5a1cc61eb1aec74459ff62",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "unlockedvoidsea",
+							"version": "1.0.1",
+							"name": "Unlocked Void Sea",
+							"description": "Enables End Sea physics in other dimensions.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"simulated",
+								"veil",
+								"sable"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 4,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Change neoforge version to 21.1.228 from 229\nBump to v1.0.1"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-29T10:54:18.815Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"history": 1
+}

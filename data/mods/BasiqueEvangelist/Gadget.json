@@ -110,7 +110,7 @@
 						"unreadable": []
 					},
 					"icon": "3ef2b0d6fb31cae0a5f7158adc8b69f4988b63f8b5e4ed213a4ae32eb5a3738b.webp",
-					"downloads": 12,
+					"downloads": 13,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -118,7 +118,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "Updated to 1.21.11 (#47, @metabrixkt)\n\nMain features work, though some features may be broken (e.g. class viewer, due to some changes in mapping-io)."
 		},
 		{
 			"tag": "0.2.5+1.21.9",
@@ -223,7 +224,8 @@
 					},
 					"downloads": 21
 				}
-			]
+			],
+			"notes": "Ported to 1.21.9.\n\n- Removed UI inspector, due to the code breaking (and it not being very useful anyways)\n- Removed owo-ui component event counter\n\nThis is very lightly tested, please report any bugs you see!"
 		},
 		{
 			"tag": "0.2.4+1.21",
@@ -342,7 +344,8 @@
 					},
 					"downloads": 68
 				}
-			]
+			],
+			"notes": "- Updated to 1.21\n- Support for the old dump format (which for a long time hasn't been used) has been removed\n- NBT locking has been removed\n- The NBT inspector has been adapted to fit item stack components"
 		},
 		{
 			"tag": "0.2.3+1.20.3",
@@ -465,7 +468,8 @@
 					},
 					"downloads": 47
 				}
-			]
+			],
+			"notes": "Straight-forward port to 1.20.3/1.20.4."
 		},
 		{
 			"tag": "0.2.3+1.20.2",
@@ -588,7 +592,8 @@
 					},
 					"downloads": 18
 				}
-			]
+			],
+			"notes": "- Fix UTF-8 encoding (Kas-tle, #35)\n- Remove translations from file dialogs (mfw tinyfiledialogs)\n- NBT locking is now disabled by default\n- NBT tags can now be copied in the NBT inspector (#37)\n- Added support for dumping server queries (Benonardo, #38)\n- Some minor remapping issues should be fixed"
 		},
 		{
 			"tag": "0.2.2+1.20",
@@ -711,7 +716,8 @@
 					},
 					"downloads": 26
 				}
-			]
+			],
+			"notes": "- Added loud chat logging\n  Run `/gadget chat-log enable logger-name` to forward all messages from that logger to the in-game chat!\n- Basic item NBT locking support\n  Item stack NBT will be locked while running methods that shouldn't mutate it\n  Changing item stack NBT while locked will cause a crash\n- (Block)entity client data can now always be viewed on the client, even if the server doesn't have gadget installed\n- Searching in the field inspector screen should work again\n- Compatibility with Krypton should *hopefully* be fixed\n- Dumped packets now show the time at which they were sent relative to the start of the dump\n- Packets can now be visually collapsed in the dump screen\n- Stacks with non-null empty NBT now have a special tooltip\n- Add tag button no longer appears in NBT inspector when client doesn't have enough permissions"
 		},
 		{
 			"tag": "0.2.0+1.19.4",
@@ -834,7 +840,8 @@
 					},
 					"downloads": 20
 				}
-			]
+			],
+			"notes": "- Field data inspection system has been completely rewritten\n\n  The base abstract class that holds a field data tree is `FieldDataHolder`, which is generic over the node type.\n  If you don't need custom functionality in nodes (for example, in packet dumping), you can use `DefaultFieldDataHolder`.\n  The source of field info is now represented by a `FieldDataSource`, which is async and meant to be easy to implement.\n  gadget provides the `LocalFieldDataSource` for local Java objects and `RemoteFieldDataSource` is used internally for field data screen.\n\n  The network format has also been changed to also support sending errors back to the client.\n\n- Packet dumping has been completely rewritten\n\n  Packet parsing is now done based on a system of `UnwrappedPacket`s, which have methods for gathering search text and writing to owo-ui/plain text.  \n  Some helper interfaces (`FieldsUnwrappedPacket` for field dumped objects and `LinesUnwrappedPacket`) are provided to help with implementing custom packets.\n\n  `DumpedPacket` can have arbitrary context data (which is now used for search and rendered component data), and all events now take an `ErrorSink` parameter, which accepts non-fatal errors.  \n  Most dumping code is now in `io.wispforest.gadget.dump.{read|write}`, and most client-side packet renderers are now common code  \n  `PacketDumpReader` and `PacketDumpWriter` have been added as nice objects for reading and writing packet dumps\n\n- Field dumps and packet dumps can now be exported to a user-readable format  \n  Packet and field dumps can be exported to plain text, and field dumps can also be exported to JSON  \n  An example of a plain text packet dump is <https://gist.github.com/BasiqueEvangelist/b516f7acf6e6c826ac252301e57a3750>  \n  Additionally, the new packet dump and field data holder interfaces support writing these dumps\n\n- Added bytes field object  \n  Used to represent byte arrays and byte buffers. Displayed as a hexdump instead of a list of byte values.\n\n- Complex field objects now track recursion\n\n- `SynchronizeRecipesS2CPacket` is now represented as a gadget fake packet that doesn't break whenever a recipe is missing\n\n- Dump stats screen improvements:  \n  A progress toast is now used to track loading progress.  \n  Additionally, a back button added to sidebar.\n\n- Added experimental owo-ui error check option  \n  Right now, this just replaces `Component#remove` with a more fault-tolerant version\n\n- Quiltflower code now uses new HTTP client to get versions  \n  Should be much faster than old implementation"
 		},
 		{
 			"tag": "0.1.8-hotfix+1.19.2",
@@ -953,7 +960,8 @@
 					},
 					"downloads": 12
 				}
-			]
+			],
+			"notes": "Hotfix narrator mixins after Mojang replaced the TTS library"
 		},
 		{
 			"tag": "0.1.8+1.19.3",
@@ -1072,11 +1080,19 @@
 					},
 					"downloads": 13
 				}
-			]
+			],
+			"notes": "- Fix crashes on servers without gadget ~~no this wasn't intended~~\n- Fix some issues with Polymer\n- Fix scrolling in the server list screen"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"media/gadget-screenshot-entity-inspector-1.jpg",
+		"media/gadget-screenshot-nbt-inspector-1.jpg",
+		"media/gadget-screenshot-packet-dump-viewer-1.jpg",
+		"media/gadget-screenshot-ui-inspector-1.jpg"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

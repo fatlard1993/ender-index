@@ -64,7 +64,7 @@
 						"unreadable": []
 					},
 					"icon": null,
-					"downloads": 11,
+					"downloads": 12,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -123,7 +123,7 @@
 						"unreadable": []
 					},
 					"icon": null,
-					"downloads": 4,
+					"downloads": 5,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -131,7 +131,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "Critical fix for singleplayer data durability. Ensures background saves are triggered immediately during pauses and autosaves, preventing progress loss on crash and eliminating unpause lag spikes."
 		},
 		{
 			"tag": "v1.3.2",
@@ -242,7 +243,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "Fixes a critical lock contention issue causing severe 2-10 second server stalls during background flushes in singleplayer and multiplayer environments. Includes a robust new internal concurrency stress testing suite to prevent regression."
 		},
 		{
 			"tag": "v1.3.1",
@@ -301,7 +303,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "Fixes an issue where progress was only saved on exit.\n\nKey changes:\n- Enabled background flushes and LevelEvent.Save queuing for integrated servers.\n- Improved RegionFileStorage.flush() to ensure it flushes all dirty regions in the storage directory.\n- Implemented flush() in LinearBackedRegionFile for better compatibility with other mods.\n- Reduced quiet flush delay from 15s to 10s."
 		},
 		{
 			"tag": "v1.3.0",
@@ -412,7 +415,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "### Linear v1.3.0 Release\n\n**Key Changes:**\n- **Robust Uninstallation**: Added a two-phase cleanup sequence. Use `/linear storage revert-to-mca confirm` to safely return to Anvil (MCA) format and uninstall the mod.\n- **Permission Fixes**: Improved command permission handling across all supported NeoForge versions.\n- **Stability**: Fixed potential data loss issues during server shutdown.\n\n**Jars included:**\n- `linear-legacy.jar`: For Minecraft 1.21.x (1.21.1 – 1.21.11).\n- `linear-modern.jar`: For NeoForge 26.x+ experimental branches.\n\n*Always keep backups of your world before updating.*"
 		},
 		{
 			"tag": "v1.1",
@@ -523,11 +527,17 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "### Linear v1.1.0 - Expanded Version Support\n\n* **Extended Compatibility**: Expanded support from 1.21.1 only to the full **1.21.x range** (1.21.1–1.21.11) and the new **26.x branches** (NeoForge Modern).\n* **Dual-Profile Build System**: Added support for building both `legacy` (Java 21, MC 1.21.x) and `modern` (Java 25, MC 26.x) targets from a single codebase.\n* **LinearCompat Layer**: Implemented a reflection-based compatibility layer to handle breaking changes in Minecraft's internal `ChunkPos` and `RegionStorageInfo` APIs.\n* **Mixin Stability**: Fixed critical `InvalidMixinException` crashes on 26.x by correcting `@Shadow` type signatures for modern mappings.\n* **Permission API Bridge**: Added a multi-tiered fallback for NeoForge's new Permission API, supporting both the old static method approach and the new Record-based system.\n* **Test Suite Synchronization**: Updated the JUnit test environment to work seamlessly across the new NeoForge lifecycle."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"mcplogo.png",
+		"neoforged_logo.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

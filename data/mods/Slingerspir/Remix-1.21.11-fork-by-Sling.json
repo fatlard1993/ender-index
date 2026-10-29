@@ -2,7 +2,7 @@
 	"repo": "Slingerspir/Remix-1.21.11-fork-by-Sling",
 	"host": "github",
 	"description": "一个我的世界黑客客户端，适用于版本1.21.11 ，A Minecraft hacking client for version 1.21.11",
-	"stars": 12,
+	"stars": 13,
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-08-14T11:09:34Z",
@@ -199,7 +199,7 @@
 						"unreadable": []
 					},
 					"icon": null,
-					"downloads": 65,
+					"downloads": 67,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -207,7 +207,8 @@
 						"shaders": true
 					}
 				}
-			]
+			],
+			"notes": "本次更新修复了 Criticals 导致方块无法正常挖掘的问题，新增 BedBreaker 模块，重做 KillSay，并修复音乐播放器的多项问题。\n\n## Criticals 挖掘修复（重要）\n\n- 原实现每 tick 无条件把移动包中的 onGround 改为 false。服务端据此认为玩家始终处于空中，而 `PlayerEntity.getBlockBreakingSpeed()` 中存在 `if (!isOnGround()) f /= 5.0F` 的惩罚，导致服务端累积的挖掘进度比客户端预测慢 5 倍。客户端提前发送 `STOP_DESTROY_BLOCK`，服务端判定未完成并回滚方块，表现为\"方块挖了又弹回来\"。\n- 新增 `Mine Fix` 开关（默认开启）：攻击键按住且准星指向实体方块时不伪装 onGround。\n- 需要说明的是，该问题在本地抓包日志中无法体现，因为记录的是客户端发出的包，而客户端的预测本身是正常的。\n\n## 新增模块 BedBreaker\n\n直接对床发送破坏包，无视周围防御方块（羊毛、末地石等）。\n\n- 依据：`ClientPlayerInteractionManager.attackBlock()` 仅校验冒险模式限制与世界边界，不检查距离与视线遮挡；距离由服务端通过 `getBlockInteractionRange()` 单独校验。\n- 床为双格结构，破坏任意一半整张床即掉落；优先锁定 FOOT 以保持目标稳定，FOOT 超出交互距离时改为瞄准 HEAD。\n- 支持自动切换最优工具、自动转向目标、按主轴计算破坏面。\n- 接管挖掘期间会跳过原版 `handleBlockBreaking`，否则 `cancelBlockBreaking` 会每 tick 清零进度。接管采用 250 毫秒租约而非布尔标志，模块停止更新时自动失效，不会导致原版挖掘被永久屏蔽。\n\n## KillSay 重做\n\n- 死亡判定由 `PlayerRemoveS2CPacket` 改为 `EntityStatusS2CPacket` 的死亡状态。前者表示\"玩家离开客户端视野\"，对方走远、退出服务器、切换维度时均会误报。\n- 消息库外置到 `Remix/killsay.txt`，一行一条，支持 `{Player}` `{Me}` `{Kills}` `{HP}` `{Item}` `{Server}` 占位符，同时兼容旧的 `%s` 写法。文件修改后每秒自动重读，无需重启游戏。\n- `Prefix` 由下拉选择改为可输入文本框，填写内容非空时自动补一个空格。\n- 新增 `Random` 开关：关闭时按文件中的顺序轮流发送。\n- 攻击记录增加 30 秒超时清理。\n\n## 音乐播放器\n\n### 播放稳定性\n\n- 修复切换歌曲时偶发无法播放并跳到下一首：被释放的旧播放器的异步回调会读到新歌曲的结束回调。现改为回调携带换歌令牌校验，并在释放前摘除回调。\n- 播放出错不再直接视为播放结束，改为原地重试两次并从当前进度续播。\n- 请求层增加限流保护：接口返回 429 / 503 时暂停全部请求并显示倒计时，解除后自动重新拉取歌单；拉取失败时不再清空已有歌单。\n- 歌词索引改为单线程顺序抓取、每首间隔 700 毫秒、上限 40 首，避免刷爆公共接口。\n\n### 播放列表页\n\n- 每行新增缩略封面、歌手与专辑信息、时长。\n- 支持按默认顺序、歌名、歌手、时长排序。\n- 新增搜索框，支持歌名、歌手、专辑与歌词搜索。\n- 新增可拖动滚动条与惯性滚动。\n\n### 其他\n\n- SongInfo 总时长改为读取 MediaPlayer 解析出的真实媒体时长。\n- 音量调节改为可拖动滑条。\n- 进度条悬停时显示该时间点对应的歌词。\n- 暂停时音量淡出、恢复时淡入。\n- 迷你歌词下划线按实际渲染高度实时定位。\n\n## 其他\n\n- 新增 `CharInputEvent` 与 `Keyboard.onChar` 注入，搜索框聚焦时屏蔽游戏按键输入。\n- 关闭游戏时自动停用 MusicPlayer，退出世界时自动收起音乐界面。\n\n---\n\n需要 Minecraft 1.21.11 与 Fabric Loader 0.19.3。构建产物见本页下方 Assets。\n\n\n**Full Changelog**: https://github.com/Slingerspir/Remix-1.21.11-fork-by-Sling/compare/2.4.2...2.4.3"
 		},
 		{
 			"tag": "2.4.2",
@@ -400,7 +401,8 @@
 					},
 					"downloads": 17
 				}
-			]
+			],
+			"notes": "本次更新包含 PearlCatch 连招模块的算法重做，以及音乐播放器的多项交互改进。\n\n## PearlCatch 珍珠风弹连招\n\n### 出手算法\n\n- 新增 `Smart` 出手算法并设为默认：在风弹飞行 tick 不超过 `Max Flight`（默认 12）的前提下取尽可能高的命中点，飞行预算用尽或珍珠到达顶点即出手。\n- 保留 `Instant`（最早合法命中点）与 `Apex`（死等顶点）两种原有算法，原有行为未做改动。\n- 依据官方源码反编译结论：风弹与珍珠同样以 `spawnWithVelocity(..., POWER, 1.0F)` 生成，出膛方向带 ±0.0172275 的随机抖动，误差随飞行 tick 线性累积，因此把风弹飞行时间作为精度预算。实测风弹飞行 7 至 9 tick 时命中率 100%，12 tick 为 99% 至 100%，19 tick 降至约 80%；原 `Apex` 算法在较平缓的抛投角度下会因等不到出手时机而完全不出手，`Smart` 在仰角 15 度至 70 度范围内命中率均为 99% 至 100%。\n- 修正求解器：移除按 RTT 提前出手的延迟补偿；新增误差容限（超过 0.05 格宁可不出手）；裁剪顶点之后 4 tick 以外的解以及低于视线高度的解。\n- 触发条件中的视角俯仰角限制默认关闭，连招不再受抬头角度限制。\n- 新增 `Max Flight` 参数，用于在出手速度与命中高度之间取舍。\n\n### 显示与调试\n\n- 视觉特效与状态机解耦，连招结束后继续显示 2.2 秒。此前特效仅在跟踪状态存在，实际只持续 1 至 2 个 tick，基本无法看到。\n- 新增珍珠真实轨迹、风弹真实轨迹、命中点呼吸环与十字轴线、出手扩散冲击环。\n- `Debug` 面板常驻显示，新增预计击退强度与出手时机提示。\n- 新增 `Debug Chat`：出手时与风弹爆炸时在聊天框输出风弹飞行 tick、命中距离，以及是否命中。\n\n## 音乐播放器\n\n### 歌曲时长\n\n- SongInfo 进度条总时长改为读取 JavaFX MediaPlayer 解析出的真实媒体时长，不再固定按 240 秒计算。\n- 时长尚未解析完成时显示 `--:--` 且不绘制进度填充，避免出现按错误时长计算的进度条。\n- 切换歌曲时清除旧时长，媒体未就绪时会持续重试读取。\n\n### 交互\n\n- 音量调节由单击改为拖动滑条，拖动过程中实时跟随鼠标；悬停与拖动时有高亮反馈并显示当前百分比。\n- 鼠标悬停在进度条上时，在鼠标上方显示该时间点对应的歌词，包含时间、歌词原文与译文（翻译开启时）；上方空间不足时自动翻转到鼠标下方，横向限制在界面范围内。\n- 暂停时音量先淡出再停止播放，恢复播放时由静音淡入，时长约 260 毫秒，消除断音。\n- 迷你歌词下划线位置改为按实际渲染高度实时计算：无译文时位于原文下方，有译文时位于译文下方，翻译字号被压缩时同样适用。\n\n---\n\n需要 Minecraft 1.21.11 与 Fabric Loader 0.19.3。构建产物见本页下方 Assets。\n\n\n**Full Changelog**: https://github.com/Slingerspir/Remix-1.21.11-fork-by-Sling/compare/2.4.1...2.4.2"
 		},
 		{
 			"tag": "2.4.1",
@@ -593,7 +595,8 @@
 					},
 					"downloads": 4
 				}
-			]
+			],
+			"notes": "## 珍珠风弹连招来了 🥥💨\n\n**手持剑右键 → 自动投出末影珍珠 → 风弹在半空中精确命中 → 爆炸把珍珠顶得更高更远 → 你顺势传送过去。**\n\n整个连招从识别到出手只要 1 个 tick，几乎就是\"瞬间\"。\n\n### ✨ 新增模块：PearlCatch\n\n- 主手拿剑、快捷栏里有**末影珍珠**和**风弹**时，右键直接触发整套连招，不需要任何额外按键\n- 默认 `Timing = Instant`：算出命中点就立刻出手。珍珠刚离手时状态最好，此时顶上去 → 它剩下的滞空最长、爆炸给的速度衰减得最少，**落点自然最远**；顺带风弹飞行 tick 最短，出膛抖动的累积误差也最小\n- 想让它贴着最高点命中？切到 `Timing = Highest`\n- 想自己权衡\"快\"和\"高\"，用 `Delay Ticks`（0–10）：每 +1 就多等一个 tick，命中点会沿着珍珠的弧线往后挪 —— 4 大约命中 76% 高度，8 约 90%，10 正好压在顶点上\n- `Min Distance`（默认 8 格）保证爆炸不会贴脸把自己崩飞\n- 视线被方块挡住、或者解算误差过大时，**宁可不出手也不打空**\n\n### 🎨 视觉\n\n- 珍珠预测轨迹：青 → 品红渐变，越远越淡\n- 拦截点呼吸环 + 中轴线，命中点会随珍珠实时移动\n- 风弹虚线路径：从眼睛直连命中点，**可以出手的瞬间整条线变绿加亮**\n- 出手后的扩散闪光\n- 拿不准就打开 `Debug`，HUD 实时显示顶点 tick、命中 tick、风弹飞行、玩家位移、视线状态\n\n### 🔬 这次是真的按物理算的\n\n把 1.21.11 官方源码反编译出来逐条核对：\n\n| 弹射物 | 官方行为 |\n| --- | --- |\n| 末影珍珠 | 走 `ThrownEntity`：每 tick **先加重力、再乘阻力**，即 `v = (v - 0.03) × 0.99` |\n| 风弹 | 走 `ExplosiveProjectileEntity`：阻力 1.0、加速度 0，**无重力无阻力**，恒速 1.5 格/tick 直线飞 |\n| 共有 | `setVelocity(shooter, …)` 会把**玩家自己的位移**加进弹射物速度 —— 这就是跑动时打不准的元凶，现在瞄准方程里已经扣掉了 |\n\n解算的就是这一个方程：\n\n```\n|P(t) − 起点 − t × 玩家位移| = 1.5t\n```\n\n取它由正转负的第一个整数 tick，也就是\"现在出手、并且正好在第 t tick 和珍珠同时到达同一点\"的唯一解。跑动、侧移、斜跑都不再需要猜。\n\n### 🐛 顺带修正\n\n- **去掉了按 RTT 提前出手的延迟补偿。** 珍珠的出膛速度本身带服务端随机抖动，等得越久预测偏得越远，补偿越大反而越打不中，现在默认零补偿\n- 近乎垂直抛投时会解出\"几百 tick 之外\"的荒谬解，已经裁剪，宁可不出手也不打空\n- 极端情况下（珍珠已经掉到眼睛高度以下）直接放弃，不会朝地面乱扔风弹\n\n---\n\n需要 **Minecraft 1.21.11 + Fabric Loader 0.19.3**。jar 在本页下方的 Assets 里，丢进 `mods` 文件夹即可。\n\n\n**Full Changelog**: https://github.com/Slingerspir/Remix-1.21.11-fork-by-Sling/compare/2.4.0...2.4.1"
 		},
 		{
 			"tag": "2.4.0",
@@ -786,7 +789,8 @@
 					},
 					"downloads": 9
 				}
-			]
+			],
+			"notes": "# Remix 1.21.11 · 2.4.0\n\n本次更新包含两项内容：一个全新的**中文翻译模块**，以及 **Disabler 的 Full 模式**。\n\n---\n\n## Translator：界面中文翻译\n\n新增 Render 分类模块 `Translator`。开启后，客户端界面上的模块名、设置项名称与分类名会全部切换为中文；关闭后立即恢复英文原名。\n\n本模块**默认关闭**，且不占用任何快捷键，需要时在 ClickGUI 的 Render 分类中手动开启即可。\n\n### 词表覆盖\n\n| 范围 | 数量 |\n| --- | --- |\n| 模块名 | 117 |\n| 设置项名（Bool / Number / Mode / Color / String / MultiBool） | 612 |\n| 分类名与 ClickGUI 散装文案 | 全覆盖 |\n\n以上词条已与源码中的实际定义逐项比对，覆盖率为 100%，且不存在重复键。\n\n### 生效范围\n\n翻译会同时作用于以下所有会显示英文名的界面：\n\n- **ClickGUI**：模块按钮、分类面板标题，以及 Bool、Number、Mode、Color、String、MultiBool 全部六种设置组件\n- **HUD**：ModuleList 模块列表、TabGUI 的分类行与模块行\n- **通知**：Notification 的标题与分类（含宽度计算）、DynamicIsland 的模块通知\n\n设置组件中 `StringComponent` 的文本宽度计算也已改用译文，避免中文因按英文宽度排版而被截断或错位。\n\n### 模块自带开关\n\n| 设置项 | 默认 | 说明 |\n| --- | --- | --- |\n| Translate Modules | 开启 | 翻译模块名 |\n| Translate Values | 开启 | 翻译设置项名称 |\n| Translate Category | 开启 | 翻译分类名 |\n| Split Camel Case | 开启 | 将 `NoSlowDown` 这类驼峰名拆为单词后再翻译 |\n\n### 两个设计取舍\n\n**一、只影响显示，不改动真实字段。**\n\n`Module#getName()` 等方法的返回值仍为英文，翻译只发生在渲染层。因此：\n\n- 配置文件 `config/Default.json` 完全不受影响，切换语言不会使已有配置失效\n- 聊天命令（如 `.toggle Aura`）仍然使用英文原名，不会失效\n\n代价是命令补全提示仍显示英文。\n\n**二、ModeValue 的选项值不翻译。**\n\n诸如 `\"Vanilla\"`、`\"Rainbow\"` 这类选项字符串会被写入配置文件，并参与 `is(\"Vanilla\")` 之类的逻辑判断。翻译它们会直接破坏配置的读写，因此只翻译设置项本身的名称，选项值保持原文。\n\n---\n\n## Disabler：新增 Full 模式\n\n`Disabler Mode` 中新增 `Full` 选项。其原理是持续发送\"开始使用物品\"包（`PlayerInteractItemC2SPacket`），让服务端始终认为玩家处于使用物品状态，从而绕过基于 `isUsingItem` 的移动与减速检测。\n\n新增设置项（仅在 Full 模式下可见）：\n\n| 设置项 | 默认 | 说明 |\n| --- | --- | --- |\n| Full Delay | 50ms | 发包间隔 |\n| Full Require Bow | 开启 | 要求手持弓 |\n| Full Require Ammo | 开启 | 要求背包内有箭（依赖 Require Bow） |\n| Full Release Packet | 关闭 | 每轮先发送 `RELEASE_USE_ITEM`，使服务端使用状态持续抖动 |\n| Full Swing | 关闭 | 发包时同步挥动手臂 |\n\n实现细节：\n\n- 优先取主手弓，其次副手；关闭 Require Bow 时退化为主手通用使用，可在没有箭的情况下配合盾牌、药水或食物使用\n- 手持弓且开启 Require Ammo 时，会校验普通箭、光灵箭与药水箭\n- 使用 `sendSequencedPacketNoEvent` 发包，保证序列号正确\n\n---\n\n## 升级说明\n\n- 版本号由 2.3.0 提升至 2.4.0\n- 本次更新不涉及配置文件格式变更，可直接沿用现有 `config/Default.json`\n- 运行环境要求不变：Minecraft 1.21.11、Fabric Loader 0.19.3、Fabric API 0.141.4+1.21.11、Java 21\n\n## 构建产物\n\n- `seek-2.4.0.jar`\n\n\n\n**Full Changelog**: https://github.com/Slingerspir/Remix-1.21.11-fork-by-Sling/compare/2.3.0...2.4.0"
 		},
 		{
 			"tag": "2.3.0",
@@ -979,11 +983,14 @@
 					},
 					"downloads": 27
 				}
-			]
+			],
+			"notes": "# Remix 1.21.11 · 2.3.0\n\n本次更新内容较多，核心是**内置音乐播放器**、**HeyPixel 协议子系统**，以及一整套 **Heypixel2 战斗/移动模式**移植。\n\n## 🎵 音乐播放器（MusicPlayer / SongInfo）\n- 基于 JavaFX（MediaPlayer）播放 **mp3 / m4a**，右 Alt 开关的**游戏内原生界面**（无独立窗口）\n- **动态双语歌词**：当前行高亮放大、整组平滑滑动、翻译同步显示；行距/主次可调\n- 封面（自动下载 + 主色抽取做环境色晕）、频谱动画、歌单独立页\n- **记忆续播**：记录平台/歌单/歌曲/进度，重启后继续；每次启用都重新加载歌单\n- `SongInfo` 常显，未播放时显示占位\n\n## 🔌 Protocol 子系统（HeyPixel 协议移植）\n- 完整移植 heypixel 协议包（msgpack、C2S/S2C 编解码、UUID 选择式分帧、规则缓存、trace 日志）\n- 适配 1.21.11：用 Fabric 负载注册收发**原始字节**\n- **ID1 应答**：HMAC-SHA256 签名 + AES-256-GCM 变换 + 系统证据组包\n- 模块 `Protocol`（World 分类），可开关、可观测，发送默认关闭\n\n## ⚔️ Heypixel2 模式系列\n- **Aura**：KillAura 行为（目标筛选/预测/切换、命中点旋转、有机抖动、APS 节拍）\n- **Criticals**：命中窗口内释放疾跑（暴击窗口）\n- **Velocity**：AntiKB / NoXZ「Alink」悬浮收包 → 落地疾跑释放 + 攻击爆发\n- **Backtrack**：延迟目标位置包（1/4096 链式累加）并在延迟位置渲染\n- **Scaffold**：C06 姿势欺骗放置（放置前后各发一次 PosRot）\n- **Disabler**：坏包处理套件（重复槽位/无效俯仰/重复疾跑/完美旋转抑制/容器频率…）\n- **NoSlowDown**：C0F 换手状态机 + 食物换手 + 弓延迟扣包\n\n## 🧩 其它\n- TargetHUD 新增 **Sight** 样式\n- 鼠标事件可取消（点击/滚轮不再穿透到游戏）\n- 歌词 UI：位置上移、行距收紧、主次更分明、迷你歌词平滑滑动\n\n> 需要 Java 21 与 Fabric API 0.141.4+1.21.11。"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

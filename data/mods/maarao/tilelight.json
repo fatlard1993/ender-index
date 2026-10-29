@@ -46,7 +46,7 @@
 						"unreadable": []
 					},
 					"icon": null,
-					"downloads": 4,
+					"downloads": 5,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -54,7 +54,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "Tilelight now draws and lights terrain on Metal in the Nether and the End, and vanilla's lighting effects work on Metal-lit terrain. Experimental: expect rough edges.\n\n![Nether: vanilla terrain vs Tilelight](https://raw.githubusercontent.com/maarao/tilelight/main/docs/dims-nether-tilelight.png)\n\n## What's new\n- **Nether and End on Metal.** Terrain is lit in HDR from vanilla's per-dimension lighting, so it stays faithful to each dimension's palette but gains contrast. A hue-preserving tonemap keeps lava orange.\n- **Lava glow in the Nether.** Lava, glowstone and fire glow softly into the dark air.\n- **Vanilla's lighting effects now apply to Metal-lit terrain:** Brightness slider, night vision (and conduit power), Darkness, boss-fog darkening, torch flicker and lightning flashes. With no effect active, the Overworld looks exactly as in 0.1.0.\n- Fixes: the shadow map and anti-aliasing history now reset when you change world or dimension.\n\nCost on a base M5 MacBook Pro (3456×2168): about 0.25–0.4 ms per frame over vanilla terrain in the Nether and End, which still run at ~245 and ~273 fps. Details and measurements: [docs/ARCHITECTURE.md](https://github.com/maarao/tilelight/blob/main/docs/ARCHITECTURE.md).\n\n## Requirements\n- An Apple Silicon Mac (M1 or later). Tilelight stays off on other machines.\n- Minecraft Java 26.3, Fabric Loader 0.19.5+, Fabric API\n- **Graphics API set to Vulkan** in video settings. Tilelight stays off on OpenGL.\n\n## Install\nPut `tilelight-0.2.0.jar` in `mods/`, replacing any older Tilelight jar. You can add `--enable-native-access=ALL-UNNAMED` to the JVM arguments to silence Java's native-access warning. Settings are in `config/tilelight.json`; see the [README](https://github.com/maarao/tilelight#use).\n\n## Known limitations\n- Doesn't work alongside Sodium, Iris or other mods that replace terrain rendering.\n- Sun shadows, sun shafts and water reflections of the sun are Overworld-only."
 		},
 		{
 			"tag": "v0.1.0",
@@ -95,11 +96,38 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "First public build. Experimental: expect rough edges.\n\n![Sunset](https://raw.githubusercontent.com/maarao/tilelight/main/docs/look2-sunset.png)\n\nTilelight moves parts of each Minecraft frame onto Metal: opaque terrain lit in HDR, sun shadows, volumetric haze and sun shafts, screen-space water reflections, bloom, and TAA plus MetalFX upscaling. On a base M5 MacBook Pro at 3456×2168, render distance 16, it runs at ~125 fps with everything on (vanilla: ~158 fps).\n\n## Requirements\n- An Apple Silicon Mac (M1 or later). Tilelight stays off on other machines.\n- Minecraft Java 26.3, Fabric Loader 0.19.5+, Fabric API\n- **Graphics API set to Vulkan** in video settings. Tilelight stays off on OpenGL.\n\n## Install\nPut `tilelight-0.1.0.jar` in `mods/`. You can add `--enable-native-access=ALL-UNNAMED` to the JVM arguments to silence Java's native-access warning.\n\nSettings are in `config/tilelight.json`. See the [README](https://github.com/maarao/tilelight#use).\n\n## Known limitations\n- Doesn't work alongside Sodium, Iris or other mods that replace terrain rendering.\n- Metal terrain and lighting are Overworld-only. The Nether and the End stay vanilla."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"docs/aa-spatial-crop.png",
+		"docs/aa-taa-crop.png",
+		"docs/aa-taa-moving.png",
+		"docs/dims-end-tilelight.png",
+		"docs/dims-end-vanilla.png",
+		"docs/dims-nether-tilelight.png",
+		"docs/dims-nether-vanilla.png",
+		"docs/effects-midnight.png",
+		"docs/effects-night-vision.png",
+		"docs/final.png",
+		"docs/gate2-shadows.png",
+		"docs/gate3-terrain.png",
+		"docs/gate4-volumetric.png",
+		"docs/gate4-water.png",
+		"docs/gate5-temporal-crop.png",
+		"docs/look-lake-vanilla.png",
+		"docs/look-lake.png",
+		"docs/look-morning.png",
+		"docs/look-sunset.png",
+		"docs/look2-golden.png",
+		"docs/look2-lake.png",
+		"docs/look2-night.png",
+		"docs/look2-sunset.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

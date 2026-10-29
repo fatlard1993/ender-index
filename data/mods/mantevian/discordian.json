@@ -155,7 +155,7 @@
 						"unreadable": []
 					},
 					"icon": "9efb8ad2745aa29fe7c93a09a928639be96c8cc7f422fe94aa6798778c116c65.png",
-					"downloads": 16,
+					"downloads": 17,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -304,7 +304,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 6,
+					"downloads": 7,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -453,7 +453,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 7,
+					"downloads": 8,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -602,7 +602,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 6,
+					"downloads": 7,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -610,7 +610,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "# Features\n* Most notably, added a new config option `require_link_to_play`, which restricts access to the world for players without linked accounts (and prompts them to do so).\n* Merged `send_player_joins` and `send_player_leaves` into `send_player_connections`.\n* Removed blacklisting text to send from Minecraft to Discord and vice-versa.\n* You can now show the currently running world's name using `{world}` in the `start_message` setting.\n* Configuration is now stored as JSON5, adding comments inside the file. You will need to bring over your settings from the old file to the new file manually.\n\n# Underlying changes\nA lot of everything was reorganized and rewritten for other dependencies that I found more pleasant to use.\n\n* Switched development from Java to Kotlin 2.0.\n* Switched the Discord library from JDA to Kord.\n* Switched the configuration from my own to Yet Another Config Lib.\n\nThis means that running this mod will now require Fabric Language Kotlin and Yet Another Config Lib installed on the server."
 		},
 		{
 			"tag": "v1.6.1",
@@ -825,7 +826,8 @@
 					},
 					"downloads": 7
 				}
-			]
+			],
+			"notes": "don't ask me where versions from 1.1 to 1.6 went\n\n# Configuration\nThe config file is created on first server launch.\n* version - don't touch\n* token - Discord bot token\n* channel_id - Discord channel ID to use for messaging\n* use_webhook - turn on/off connecting to a Discord webhook. If webhooks are used, messages will be broadcast to Discord as the webhook user with the corresponding player's name and avatar if that player has linked their accounts with /discord link\n* webhook_url - the URL of said Discord webhook\n* start_message, stop_message - sends this to Discord on server start/stop\n* send_advancements, send_player_joins, send_player_leaves, send_player_deaths - broadcast these events to Discord\n* send_tellraw - broadcast anything that was /tellraw'ed to `@a` to Discord\n* send_replies - broadcast Discord replies to Minecraft (this sends both the reply and the message being replied to with a line that looks like one in Discord)\n* discord_operators - map of Discord user ID to OP level, for example { \"240841342723424256\": 4 }, look up OP levels on Minecraft wiki. All commands from the vanilla game and registered by other mods can be used from the Discord chat, and the corresponding OP levels will be used to execute the users' commands\n* blacklisted_minecraft_to_discord, blacklisted_discord_to_minecraft - arrays of words; messages including these words will not be broadcast\n* statuses - an array of strings that the Discord bot status switches between\n* linked_accounts - map of Minecraft UUID to Discord user ID, this is created by using /discord; you don't have to configure this manually but you can if you want to\n* format - how to format messages broadcast to Discord, you can use `${name}` and `${message}` as the only available variables\n\n# Commands\n/discord link - begins the setup of linking a Minecraft player to a Discord user, follow the instructions provided by the command\n/discord unlink - removes the link\n/discord reload - operator command to reload the json config"
 		},
 		{
 			"tag": "v1.0-a1",
@@ -1044,5 +1046,7 @@
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

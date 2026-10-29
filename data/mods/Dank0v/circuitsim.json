@@ -1,0 +1,451 @@
+{
+	"repo": "Dank0v/circuitsim",
+	"host": "github",
+	"description": "A Minecraft mod that lets you simulate electronic circuits in the game using ngspice.",
+	"stars": 2,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2026-04-18T01:56:45Z",
+	"pushed": "2026-07-21T21:06:34Z",
+	"releases": [
+		{
+			"tag": "1.5.0",
+			"published": "2026-07-07T20:29:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 469533410,
+					"name": "circuitsim-1.5.0.jar",
+					"url": "https://github.com/Dank0v/circuitsim/releases/download/1.5.0/circuitsim-1.5.0.jar",
+					"size": 844101,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "8ac5b7b3a000cc70c120a7e9c04ce3fba8b7516557e232941dd68902bf438b10",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "circuitsim",
+							"version": "1.5.0",
+							"name": "Circuit Simulator",
+							"description": "A Minecraft mod that integrates ngspice circuit simulation.\nPlace blocks to represent electronic components, connect them with wires,\nand simulate circuits using ngspice.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8debb295feff20dfe59c5166c17568dbe3f8b5434bbc1eb8f1fc2c30ffe5e224.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Amplifier",
+								"Behavioral Current Source (B)",
+								"Behavioral Voltage Source (B)",
+								"CCCS (F)",
+								"CCVS (H)",
+								"Capacitor",
+								"Commands Block",
+								"Current Probe",
+								"Current Source",
+								"Diode",
+								"Discrete NMOS",
+								"Discrete NPN",
+								"Discrete PMOS",
+								"Discrete PNP",
+								"Ground",
+								"IC Capacitor2",
+								"IC NMOS4",
+								"IC PMOS4",
+								"IC Resistor3",
+								"Inductor",
+								"Loop Probe",
+								"Param Block",
+								"Probe",
+								"Pulse Voltage Source",
+								"Resistor",
+								"SIN Voltage Source",
+								"Simulate Block",
+								"Simulation Link",
+								"Subcircuit",
+								"Subcircuit Converter",
+								"Transformer (K)",
+								"Transmission Line (T)",
+								"VC Switch",
+								"VCCS (G)",
+								"VCVS (E)",
+								"Voltage Source",
+								"Wire"
+							],
+							"item": [
+								"Subcircuit Chip"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 160,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/circuitsim/simulation/NgSpiceRunner.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## CircuitSim 1.5.0\n\nThe 1.5.0 release adds two new analysis capabilities — loop-gain stability (.STB) and Monte Carlo — plus in-world operating-point annotation on the K key, three new component blocks (Transformer, Transmission Line, Loop Probe), and direct support for KiCad and LTspice model libraries. It also brings an LTspice-style Measurement Builder, a pre-simulation circuit linter, and a netlist viewer.\n\n### New Components\n\n**Transformer** — a 2×3 coupled-inductor block with one primary and one secondary winding (west pins = primary +/−, east pins = secondary +/−). The edit screen sets the coupling factor k (0 < k ≤ 1), primary inductance Lp, and secondary inductance Ls — all three sweepable with Param-block expressions. Each winding has an editable series resistance (default 1 mΩ; set 0 for a fully ideal winding). Note: the windings are galvanically isolated, so the secondary side needs its own DC path to ground (a resistor is enough) or ngspice will refuse to solve.\n\n**Transmission Line** — a 2×3 two-port block with two modes selected in its edit screen: *lossless* (characteristic impedance Z0 plus either a delay TD or a frequency F with normalized length NL; a freshly placed line defaults to Z0=50, TD=10ns) and *lossy LTRA* (per-length R, L, G, C plus the line length LEN; valid parameter combinations are RLC, RC, LC, and RG). All parameters accept `{param}` expressions for parametric sweeps.\n\n**Loop Probe** — a 2-pin block you drop in series inside a feedback loop. In every normal analysis it behaves as a transparent 0 V short and changes nothing; its purpose is the new .STB analysis. Orientation matters: the front face points toward the amplifier output — if your loop-gain plot looks inverted (tiny or negative dB where you expect gain), rotate the probe 180°.\n\n**Inductor series resistance** — standalone Inductor blocks gained an optional series-resistance field. Existing inductors stay ideal, but an ideal inductor straight across an ideal voltage source makes the DC operating point unsolvable (\"singular matrix\"), and a small Rser is the cure.\n\n### New Analyses\n\n**.STB stability (loop-gain) analysis** — a new STB tab in the Simulate block, equivalent to Cadence Spectre's `stb` analysis. Place a Loop Probe in the feedback path, set the frequency range (same fields as AC), and run. The mod performs full Tian dual-injection — two AC runs (voltage and current injection) combined into the true loop gain — so the result is correct even at low- or high-impedance breaking points. You get Bode plots of loop-gain magnitude (dB) and phase (degrees) with phase unwrapping so the −180° crossing is visible, plus DC loop gain, unity-gain frequency (GBW), phase margin, and gain margin reported directly.\n\n**Monte Carlo** — a new \"Monte Carlo runs\" + \"seed\" row in the Simulate dialog, available for OP, AC, DC, and TRAN. Randomness comes from ngspice statistical distributions in Param blocks (`Rv = gauss(10k, 0.05, 3)`, plus agauss, unif, aunif, limit) and/or the new per-component tolerances below; every run re-rolls the values. AC/TRAN/DC runs overlay all iterations in the graph screen, OP runs plot each probe against run number, and every measured scalar (phase margin, GBW, ...) gets a mean / standard deviation / min / max summary in chat. A fixed seed makes runs reproducible; a blank seed picks a random one and tells you what it was. Capped at 300 runs.\n\n**Component tolerances** — ideal resistors, capacitors, and inductors now have a \"Tolerance (%)\" field in their edit screens, shown on the floating label (e.g. \"1kΩ ±5%\"). During Monte Carlo each toleranced device gets its own independent Gaussian draw with ±tolerance = 3σ; outside Monte Carlo the nominal value is used, so normal simulations stay deterministic.\n\n**Histograms** — graph screens gained a \"Hist\" toggle that re-bins the active curves' values into overlaid histograms — the natural way to look at Monte Carlo spreads.\n\n### Operating-Point Annotation\n\n\n..."
+		},
+		{
+			"tag": "1.4.0",
+			"published": "2026-06-17T20:37:57Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 450556810,
+					"name": "circuitsim-1.4.0.jar",
+					"url": "https://github.com/Dank0v/circuitsim/releases/download/1.4.0/circuitsim-1.4.0.jar",
+					"size": 686826,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "fe9a78990c528cc6307295f44240f050e42444b19f5c2e408efb4ccf08a70c7a",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "circuitsim",
+							"version": "1.4.0",
+							"name": "Circuit Simulator",
+							"description": "A Minecraft mod that integrates ngspice circuit simulation.\nPlace blocks to represent electronic components, connect them with wires,\nand simulate circuits using ngspice.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8debb295feff20dfe59c5166c17568dbe3f8b5434bbc1eb8f1fc2c30ffe5e224.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Amplifier",
+								"Behavioral Current Source (B)",
+								"Behavioral Voltage Source (B)",
+								"CCCS (F)",
+								"CCVS (H)",
+								"Capacitor",
+								"Commands Block",
+								"Current Probe",
+								"Current Source",
+								"Diode",
+								"Discrete NMOS",
+								"Discrete NPN",
+								"Discrete PMOS",
+								"Discrete PNP",
+								"Ground",
+								"IC Capacitor2",
+								"IC NMOS4",
+								"IC PMOS4",
+								"IC Resistor3",
+								"Inductor",
+								"Param Block",
+								"Probe",
+								"Pulse Voltage Source",
+								"Resistor",
+								"SIN Voltage Source",
+								"Simulate Block",
+								"Simulation Link",
+								"Subcircuit",
+								"Subcircuit Converter",
+								"VC Switch",
+								"VCCS (G)",
+								"VCVS (E)",
+								"Voltage Source",
+								"Wire"
+							],
+							"item": [
+								"Subcircuit Chip"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 120,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/circuitsim/simulation/NgSpiceRunner.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## CircuitSim 1.4.0\n\nThe 1.4.0 release lets you turn any circuit you build into a reusable subcircuit — convert a schematic into a portable chip and drop it into a new 5×5 Subcircuit block, exactly like the built-in Amplifier but defined entirely by you. It also adds behavioral (arbitrary) sources and a voltage-controlled switch, and reworks how IC/PDK parameters are configured.\n\n### User-Defined Subcircuits\n\n**Subcircuit block** — a 5×5 block (like the Amplifier) that instantiates your own saved schematic as a single black-box component. It exposes 12 pins around its perimeter — two on each corner cell and one in the middle of each edge — numbered clockwise from the top-left. Wires connect only to the live pins; the top texture reflects the pin count and a floating name tag shows the loaded subcircuit.\n\n**Subcircuit Converter + Subcircuit Chip** — place the Converter block on a finished circuit, give it a name, and convert: the schematic is replaced by a portable Chip item. Right-click the ground with a chip to rebuild the entire circuit block-for-block, or insert it into a Subcircuit block to use it.\n\n**Probe \"Subcircuit pin\" toggle** — the voltage probe edit screen gains a checkbox (plus a pin-order number) that marks a net as an external terminal of the subcircuit. The probe's label becomes the pin name.\n\n**Under the hood** — conversion generates a self-contained `.subckt … .ends` definition and instantiates it with an `X` line, so subcircuits work across OP, AC, DC, TRAN, and NOISE analyses as well as parameter sweeps. The Subcircuit block's GUI has a chip slot and a scrollable, read-only netlist view.\n\n### New Components\n\n**Behavioral (arbitrary) sources** — B-source blocks driven by a free-form expression (`V = …` for a voltage source, `I = …` for a current source).\n\n**VC Switch** — a voltage-controlled switch (ngspice `S` device / `SW` model) with configurable threshold, hysteresis, on/off resistances, and an optional initial state. Switches with identical parameters share one `.model` line.\n\n### PDK / IC Components\n\n- The PDK choice (model prefix and MOSFET geometry) now lives on each IC component instead of the Simulate block. `none` / `placeholder` emit a bare `W/L/m` instance, while `sky130A` keeps the full geometry via a per-PDK formula table.\n- W/L are read as microns under `sky130A` and as SI meters otherwise; editor labels, field parsing, and in-world callouts were updated to match. NF is editable only under `sky130A`.\n- The device multiplier is emitted as ngspice's built-in `m=` for all IC devices.\n- The `hsa` compatibility mode now accepts multiple `.lib` paths in a single multi-line box, like `psa`.\n\n### Example World\n\n- Updated with additional pre-built circuits.\n    - **Note:** some examples reference `.lib` files by absolute path; update those to match your own PDK install before simulating them.\n\n### Other Changes\n\n- README updated with a User-Defined Subcircuits guide and captions above the preview GIFs.\n- Removed leftover texture-fix helper scripts; minor texture fixes."
+		},
+		{
+			"tag": "1.3.0",
+			"published": "2026-06-08T14:19:25Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 441806114,
+					"name": "circuitsim-1.3.0.jar",
+					"url": "https://github.com/Dank0v/circuitsim/releases/download/1.3.0/circuitsim-1.3.0.jar",
+					"size": 416989,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "d84e641cd8b52fe484ebfd25894ccebdc1a1f67e712b222198b4490c90ed26eb",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "circuitsim",
+							"version": "1.3.0",
+							"name": "Circuit Simulator",
+							"description": "A Minecraft mod that integrates ngspice circuit simulation.\nPlace blocks to represent electronic components, connect them with wires,\nand simulate circuits using ngspice.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8debb295feff20dfe59c5166c17568dbe3f8b5434bbc1eb8f1fc2c30ffe5e224.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Amplifier",
+								"CCCS (F)",
+								"CCVS (H)",
+								"Capacitor",
+								"Commands Block",
+								"Current Probe",
+								"Current Source",
+								"Diode",
+								"Discrete NMOS",
+								"Discrete NPN",
+								"Discrete PMOS",
+								"Discrete PNP",
+								"Ground",
+								"IC Capacitor2",
+								"IC NMOS4",
+								"IC PMOS4",
+								"IC Resistor3",
+								"Inductor",
+								"Parametric Block",
+								"Probe",
+								"Pulse Voltage Source",
+								"Resistor",
+								"SIN Voltage Source",
+								"Simulate Block",
+								"Simulation Link",
+								"VCCS (G)",
+								"VCVS (E)",
+								"Voltage Source",
+								"Wire"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 94,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/circuitsim/simulation/NgSpiceRunner.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CircuitSim 1.3.0\n\nThe 1.3.0 release adds discrete (single-package) transistors, BJT support, configurable diode models, and a big upgrade to the graph screen with measurement cursors. It also ships a playable example world so you can see working circuits without wiring anything yourself.\n\n## New Components\n\n### Discrete Transistors\n- **Discrete NMOS / PMOS** — single-block MOSFETs as an alternative to the multi-block IC MOSFETs, each with its own edit screen.\n- **Discrete NPN / PNP BJTs** — bipolar junction transistors.\n\nAll four come with their own block, item, creative-tab entry, loot table, block model, edit screen, and network sync packet.\n\n## Component Improvements\n\n- **Diode models** — the diode edit screen now has an optional `.MODEL` field. Leave it blank for the built-in basic SPICE diode, or enter a model name (e.g. `D1N4148_1`) to use a model from your library (PSpice).\n- **Voltage probe \"name only\" mode** — a new checkbox lets a voltage probe name and merge its net **without** plotting/printing it, useful for naming nodes you don't want cluttering the output.\n\n## Graph Screen\n\n- **Measurement cursors** — toggle a pair of OrCAD-style vertical cursors per plot. Drag cursor 1 with the left mouse button and cursor 2 with the right; the readout shows X/Y at each cursor plus the dx/dy between them.\n- Independent cursor and log-axis toggles for the top and bottom plots.\n\n## Simulation\n\n- **\"None\" compatibility mode** — you can now pick `none` when choosing the simulator compatibility mode.\n- Various netlist-builder and circuit-extractor updates to support the new components and diode models.\n\n## Example World\n\n- The repo now ships a ready-to-play save in `example_world/` (\"Zaza The Creator\") with a set of pre-built example circuits — from simple passives up to controlled sources, the Amplifier block, and IC/PDK components. Copy the folder into your `saves/` directory to load it.\n  - **Note:** some examples reference `.lib` files by absolute path; update those paths to match your own PDK install/OrCAD libraries before simulating them.\n\n## Other Changes\n\n- New **Simulate Block edit screen** layout.\n- Mod icon changed to the amplifier texture.\n- README updated with animated GIF previews (non-inverting amp, Miller amp, MOSFET output characteristics) and an Example World section."
+		},
+		{
+			"tag": "1.1.0",
+			"published": "2026-05-18T14:56:27Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 423361927,
+					"name": "circuitsim-1.1.0.jar",
+					"url": "https://github.com/Dank0v/circuitsim/releases/download/1.1.0/circuitsim-1.1.0.jar",
+					"size": 273817,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "3d8908a602c185a0e5251cc1d67aefb4375b1e974abfbb881ead36bb97ed8a43",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "circuitsim",
+							"version": "1.1.0",
+							"name": "Circuit Simulator",
+							"description": "A Minecraft mod that integrates ngspice circuit simulation.\nPlace blocks to represent electronic components, connect them with wires,\nand simulate circuits using ngspice.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "df674a7a4dd950a6b40b1ae93324160a7c38b35314b394fb5627a7d7b71d33fc.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Amplifier",
+								"Capacitor",
+								"Commands Block",
+								"Current Probe",
+								"Current Source",
+								"Diode",
+								"Ground",
+								"IC Capacitor2",
+								"IC NMOS4",
+								"IC PMOS4",
+								"IC Resistor3",
+								"Inductor",
+								"Parametric Block",
+								"Probe",
+								"Resistor",
+								"SIN Voltage Source",
+								"Simulate Block",
+								"Voltage Source",
+								"Wire"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 68,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/circuitsim/simulation/NgSpiceRunner.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# What's New\n\n## New blocks\n- **Op-amp / Amplifier** — A 5x5 multi-cell amplifier subcircuit. Comes with two modes: a 5-pin variant (VIN+/VIN-/VCC/VEE/VOUT) and a 7-pin variant that exposes the offset-null pins.\n- **IC Resistor** — 2- and 3-pin resistor for IC designs. It can be given a model name and it will automatically simulate with it. The only PDK working right now is sky130A. All resistors should work, except for the labels above them that calculate their resistance. Right now they only work for 2-poly resistors.\n- **IC Capacitor** — Similar to the IC Resistor, it is intended to be used with PDKs.\n- **IC NMOS4 / IC PMOS4** — The same as the above two: 4-pin N- and P-MOSFETs. You can input their model names, width, length, multiplier, and number of fingers. They can be mirrored via a toggle in the edit screen.\n- **Commands block** — Lets you add additional commands/expressions into the ngspice `.control` block. Edit screen with a free-form text area.\n\n## Simulation\n- **PSpice (`psa`) compatibility mode** in the Simulate block, adding another working compatibility mode next to `hsa`. A multi-line library path field lets you pull in several `.INCLUDE` PSpice libs. While testing with the OrCAD OPAMP.LIB library, there were some non-UTF-8 characters in it and the simulation didn't run, so the mod processes libraries like that locally to make them work.\n- **New post-simulation output screen** — Replaces the old result view with a cleaner layout for inspecting simulation results.\n- **Sim persistence fixes** — Simulate block now keeps its full configuration across reloads.\n\n## Wires\n- **Smart wire connections** — Wires now render as cross / T / L / straight pieces depending on neighboring components, with dedicated textures for each shape. Connection logic was rewritten to be aware of component pin sides.\n\n## Components / UX\n- **Parametric block overhaul** — Reworked edit screen, packet, and result caching for parametric sweeps.\n- **Label toggle** — A toggle to hide component labels in-world. Default is `L`.\n- **Component callbacks** — All components have callbacks above them to display their values/names, etc."
+		},
+		{
+			"tag": "mod",
+			"published": "2026-05-07T21:23:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 414724441,
+					"name": "circuitsim-1.0.0.jar",
+					"url": "https://github.com/Dank0v/circuitsim/releases/download/mod/circuitsim-1.0.0.jar",
+					"size": 148293,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "604e27a99b706b5851a2b5cd369407983e2f8d928b2dc2dfb353a0c2bc1f0c7a",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "circuitsim",
+							"version": "1.0.0",
+							"name": "Circuit Simulator",
+							"description": "A Minecraft mod that integrates ngspice circuit simulation.\nPlace blocks to represent electronic components, connect them with wires,\nand simulate circuits using ngspice.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "df674a7a4dd950a6b40b1ae93324160a7c38b35314b394fb5627a7d7b71d33fc.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Capacitor",
+								"Current Probe",
+								"Current Source",
+								"Diode",
+								"Ground",
+								"Inductor",
+								"Parametric Block",
+								"Probe",
+								"Resistor",
+								"SIN Voltage Source",
+								"Simulate Block",
+								"Voltage Source",
+								"Wire"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 49,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/circuitsim/simulation/NgSpiceRunner.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: https://github.com/Dank0v/circuitsim/commits/mod"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-29T10:54:18.815Z",
+	"pictures": [
+		"gifs/miller_amp.gif",
+		"gifs/mosfet_output_char.gif",
+		"gifs/non_inverting.gif",
+		"images/preview.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"history": 1
+}

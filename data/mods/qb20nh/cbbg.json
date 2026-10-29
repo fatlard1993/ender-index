@@ -52,7 +52,7 @@
 						"unreadable": []
 					},
 					"icon": "149727b862d24141a072b9cca18301a0cbb546138d7aff025aea0ff54176cac2.png",
-					"downloads": 42,
+					"downloads": 43,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -97,7 +97,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 41,
+					"downloads": 42,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -142,7 +142,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 41,
+					"downloads": 42,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -187,7 +187,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 41,
+					"downloads": 42,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -232,7 +232,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 41,
+					"downloads": 42,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -240,7 +240,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "### Added\n\n- Public noise-generation, CPU image-dithering and Minecraft GPU-dithering APIs for other mods, independent of CBBG's settings ([#90](https://github.com/qb20nh/cbbg/issues/90)).\n- A standalone Java 8 noise-generation and CPU-dithering library with a reusable GLSL include.\n- CBBG Lib, an independently installable utility mod bundled with CBBG. Library versions and GitHub releases advance separately.\n- Open CBBG settings from Sodium's options menu when Sodium provides its configuration API ([#34](https://github.com/qb20nh/cbbg/issues/34)).\n\n### Changed\n\n#### Minecraft 1.21.1, 1.21.11\n\n- Generate noise images and load/save their caches in the background. Cancel replaced calculations and pause dithering until the requested noise is ready.\n- Regenerate caches from previous releases on first use.\n- Reduce the release jar size; include source mappings and dependency information in the sources jar.\n\n#### Minecraft 1.21.1\n\n- Support Fabric Loader `>=0.16.0 <1.0.0` and require Fabric API `>=0.101.2+1.21.1 <1.0.0`.\n\n#### Minecraft 1.21.11\n\n- Support Fabric Loader `>=0.17.3 <1.0.0` and require Fabric API `>=0.139.4+1.21.11 <1.0.0`.\n\n### Fixed\n\n- Align dithering with RenderScale's rendered pixels, including in screenshots ([#20](https://github.com/qb20nh/cbbg/issues/20)).\n- Lock or unlock settings controls immediately when changing Mode.\n\n#### Minecraft 1.21.1, 1.21.11\n\n- Apply the requested noise size, depth and seed consistently, including resets during generation and forced regeneration of cached defaults.\n- Restart the noise-frame sequence after reloading, and use the displayed noise frame in screenshots.\n- Clear generation toasts after cancellation, failure, or completion with notifications disabled; keep them separate from Minecraft's periodic notifications.\n- Release replaced noise images and GPU resources, and cancel generation when Minecraft closes.\n- Parse mode and pixel-format commands consistently across system languages.\n\n#### Minecraft 1.21.1, 1.21.11, 26.1, 26.1.1, 26.1.2, 26.2\n\n- Preserve float precision with improved transparency and Fabulous graphics, including when Sodium is installed ([#19](https://github.com/qb20nh/cbbg/issues/19)).\n\n#### Minecraft 1.21.1\n\n- Convert float screenshots correctly when dithering is unavailable.\n- Release framebuffer resources after a failed allocation.\n- Keep settings cards and labels visible above the menu background, including in generation confirmations.\n\n#### Minecraft 1.21.11\n\n- Avoid crashes when other renderers allocate unnamed framebuffer targets during menu blur.\n\n#### Minecraft 1.21.1, 26.2\n\n- Update RenderScale's target precision when changing CBBG's mode or pixel format.\n\n<!-- cbbg-candidate-run: 38101952225 -->"
 		},
 		{
 			"tag": "lib/v1.0.0-beta.1",
@@ -429,7 +430,8 @@
 					},
 					"downloads": 270
 				}
-			]
+			],
+			"notes": "### Added\n\n- Seeded, cancellable noise generation and CPU image dithering for Java 8 and newer.\n- Reusable GLSL and independently owned Minecraft GPU dithering passes.\n- Installable Fabric library variants for Minecraft 1.21.1, 1.21.11, 26.1.x, 26.2 and 26.3, with native Vulkan support on 26.2 and 26.3.\n- Plain Java utilities and source downloads. Sources include the release mapping and dependency information.\n\n<!-- cbbg-candidate-run: 38078966373 -->"
 		},
 		{
 			"tag": "v1.4.2+mc26.2-fabric",
@@ -470,7 +472,8 @@
 					},
 					"downloads": 4
 				}
-			]
+			],
+			"notes": "### Added\n\n- Vulkan renderer support, including float render targets and dithered screenshots.\n- Suspend dithering while Sulkan shaderpacks are active.\n\n### Changed\n\n- Smaller jar by replacing AsmFabricLoader with our own early entry and using ProGuard. Source mappings and dependency information are included in the sources jar.\n- Require Fabric Loader `>=0.18.4 <1.0.0` and Fabric API `>=0.148.3+26.2 <1.0.0`.\n- Generate noise images and load/save their caches in the background. Cancel replaced calculations and pause dithering until the requested noise is ready.\n- Regenerate 1.4.0 noise caches on first use.\n\n### Fixed\n\n- Apply the requested noise dimensions and seed throughout generation and cache loading, including resets during generation and forced regeneration of cached defaults.\n- Restart the noise-frame sequence after reloading, and use the displayed noise frame in screenshots.\n- Convert float screenshots correctly when dithering is disabled or unavailable.\n- Clear generation toasts after cancellation or failure, and after completion if toast notifications were disabled during generation.\n- Prevent generation toasts from replacing Minecraft's other periodic notifications.\n- Fall back to Minecraft's rendering when the dither shader fails, and release noise images and GPU resources when replaced or closed.\n- Handle unnamed framebuffer targets used by other renderers.\n- Parse mode and pixel-format commands consistently across system languages.\n\n<!-- cbbg-candidate-run: 37437155152 -->"
 		},
 		{
 			"tag": "v1.4.2+mc26.3-fabric",
@@ -511,7 +514,8 @@
 					},
 					"downloads": 8
 				}
-			]
+			],
+			"notes": "### Fixed\n\n- Clear generation toasts after cancellation or failure, and after completion if toast notifications were disabled during generation.\n- Prevent generation toasts from replacing Minecraft's other periodic notifications.\n\n<!-- cbbg-candidate-run: 37264170945 -->"
 		},
 		{
 			"tag": "v1.4.2+mc26.1-fabric",
@@ -552,7 +556,8 @@
 					},
 					"downloads": 7
 				}
-			]
+			],
+			"notes": "### Added\n\n- Minecraft 26.1.x Fabric support.\n\n### Fixed\n\n- Clear generation toasts after cancellation or failure, and after completion if toast notifications were disabled during generation.\n- Prevent generation toasts from replacing Minecraft's other periodic notifications.\n\n<!-- cbbg-candidate-run: 37216541684 -->"
 		}
 	],
 	"readme": "README.md",
@@ -563,5 +568,12 @@
 		}
 	],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"cbbg.png",
+		"scripts/animated.gif",
+		"scripts/banded.png",
+		"scripts/dithered.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

@@ -80,7 +80,7 @@
 						"unreadable": []
 					},
 					"icon": "2e404a99fc9395330a02b0cd4b438bea811acdf2cab2a4d8ebaf527ffb1cf0d1.webp",
-					"downloads": 9,
+					"downloads": 10,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -88,7 +88,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "**Release notes for v0.1.2**\n\n## DonutsAuctions v0.1.2\n\n### Added\n- Idle background AH automation with scheduler/coordinator logic.\n- New automation settings in config (idle delay, scan pages, dwell times, cycle intervals, command pacing, capture timeout).\n- ModMenu/Cloth Config integration for in-game configuration.\n- Player idle tracking tuned to ignore tiny jitter and allow look-around without canceling idle state.\n- Strict AH next-page control locator to reduce false page navigation.\n- Headless auction screen support via network handler mixin.\n\n### Changed\n- Capture pipeline now supports forced titles for headless capture flow.\n- Next-page detection now uses strict arrow+label+bottom-row matching.\n- Runtime state now exposes idle automation state/reason metadata.\n- Version bumped to `0.1.2`.\n\n### Safety/Behavior\n- Automation is gated to allowed hosts (`donutsmp.com` and subdomains).\n- Added fail-safe/cooldown handling for unsafe or unexpected menu states.\n- Automation stops cleanly on movement, config disable, read-only DB, unsupported server, or cooldown.\n\n### Tests\n- Added coverage for:\n  - Automation scheduler behavior and stop flow.\n  - Watch query normalization.\n  - Idle tracker jitter/movement detection.\n  - Next-page locator strict matching.\n  - Config defaults/normalization and persistence.\n  - Server host normalization and allowlist gating.\n\n**Full Changelog**: https://github.com/cancel-cloud/Donuts-Auctions/compare/v0.1.1...v0.1.2"
 		},
 		{
 			"tag": "v0.1.1",
@@ -163,11 +164,21 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "## DonutsAuctions v1.0.0 — First Public Release\n\nThis is the first public release of DonutsAuctions, a client-side Fabric mod for tracking DonutSMP Auction House data locally for analysis and deal finding.\n\n### Highlights\n- Added passive Auction House capture while you browse `/ah` menus.\n- Added local SQLite storage for listings and historical price data.\n- Added analytics UI (open via keybind, default `KP_MULTIPLY`) with min/avg/median stats, trend windows (`25h`, `7d`, `30d`), seller stats, and cheapest-listing views.\n- Added deal scouting based on your local historical pricing.\n- Added config screen integration via ModMenu + Cloth Config.\n- Added optional CSV/JSON exports in dev mode.\n\n### Tech Notes\n- Kotlin runtime support is provided via `fabric-language-kotlin`.\n- Release jar size was optimized by slimming bundled SQLite natives.\n- Included SQLite native targets: Windows `x86_64`, Linux `x86_64`/`aarch64`, macOS `x86_64`/`aarch64` (Apple Silicon supported).\n\n### Requirements\n- Minecraft `1.21.10`\n- Java `21`\n- Fabric Loader `>= 0.18.4`\n- Fabric API `>= 0.138.4+1.21.10`\n- Fabric Language Kotlin `>= 1.13.9+kotlin.2.3.10`\n- ModMenu `>= 12.0.0`\n- Cloth Config `>= 17.0.0`\n\n### Known Behavior\n- Shulker listings are intentionally excluded to avoid distorting per-item analytics."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"refrences/Ah-Filter-options.png",
+		"refrences/Ah-Next-Page.png",
+		"refrences/Ah-Overview.png",
+		"refrences/Ah-Refresh.png",
+		"refrences/Ah-Sort.png",
+		"refrences/Ah-search.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

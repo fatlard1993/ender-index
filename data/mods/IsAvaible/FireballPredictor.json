@@ -50,7 +50,7 @@
 						"unreadable": []
 					},
 					"icon": "0150cdac54a3cd228aa5fdd94080e5951307d6d50c4d242a405d60baede7aeb5.png",
-					"downloads": 5,
+					"downloads": 6,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -88,7 +88,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 3,
+					"downloads": 4,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -96,7 +96,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "- **NeoForge Support:** Added native support for NeoForge alongside Fabric\n- **Stationary Fireball Power Sync:** Fixed an issue where exiting and re-entering a world with stationary fireballs caused them to lose their synced explosion power and fall back until impact\n- **World Ceiling & In-Flight Entity Collision Fixes:** Suppressed dome rendering when impacting the world ceiling without players in danger, and eliminated false HUD threat warnings when dodging fireballs or throwing wind charges\n- **Minor Bugs:** Fix power cache eviction on filter toggle, heart row spacing, and power sanity checks\n- **Branding:** Update the icon, removing the text badge in the lower left"
 		},
 		{
 			"tag": "v1.11.2+26.3",
@@ -138,7 +139,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "- **Explosion Power Inference:** Added an asymmetric divergence check to protect radii on protected blocks and expanded terrain sampling to a 5x5x5 distance-weighted kernel for layered blocks."
 		},
 		{
 			"tag": "v1.11.1+26.3",
@@ -180,7 +182,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "Release notes for version 1.11.1"
 		},
 		{
 			"tag": "v1.11.0+26.3",
@@ -222,7 +225,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "- **Minecraft 26.3 Compatibility:** Updated Fireball Predictor for Minecraft 26.3 (\"Wilderness Bound\"), including the SDL input backend and modern dynamic registry loot conditions.\n- **Dependency Upgrades:** Bumped Fabric Loader, Fabric API, YetAnotherConfigLib, ModMenu, Sodium, and Iris.\n- **Rendering Pipeline Migration:** Migrated custom translucent dome and ribbon pipelines to the updated RenderPearl API."
 		},
 		{
 			"tag": "v1.10.6+26.2",
@@ -264,7 +268,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "- **Multiplayer, Damage & Visual Fixes:** Improved server networking safety, preserved player deflection ownership, fixed shockwave and gallery render sorting, aligned HUD damage text without warning badges, strictly enforced equipment slots for damage protection calculation, and hardened explosion power learning across servers and long-distance flights.\n- **Inference, Memory & Defensive Fixes:** Guarded against secondary explosion ghost matches, resolved off-heap dynamic texture memory leaks, clamped negative knockback impulses, added defensive null checks for preview badges and profiles, and unified ownership resolution across client systems."
 		},
 		{
 			"tag": "v1.10.2+26.2",
@@ -306,7 +311,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "- **Dynamic Power Learning:** Learned fireball blast powers now account for surrounding terrain geometry and material resistance with multi-shot smoothing, ensuring more accurate predictions on multiplayer servers."
 		},
 		{
 			"tag": "v1.10.1+26.2",
@@ -348,7 +354,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "- **Mob Griefing Gamerule Support:** Predictions now respect the server's `mobGriefing` gamerule, accurately hiding block-destruction highlights and particle accents when block damage is disabled.\n- **Port-Independent Server Overrides:** Per-server power settings now normalize server addresses, preserving custom fallback powers across port changes and dynamic LAN sessions.\n- **Isolated Power Inference:** Custom player blast powers no longer bleed into mob or dispenser predictions, keeping vanilla fireballs accurate."
 		},
 		{
 			"tag": "v1.0.0+1.8.9",
@@ -372,7 +379,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "**Full Changelog**: https://github.com/IsAvaible/FireballPredictor/commits/v1.0.0+1.8.9"
 		},
 		{
 			"tag": "v1.7.0+1.21.11",
@@ -414,7 +422,8 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "### Damage & Knockback Estimation\n- **Cracking Damage Hearts Overlay:** Overlays your health bar with animated cracking hearts highlighting the exact health predicted to be lost upon detonation. Fully accounts for explosion distance falloff, line-of-sight cover, armor defense, Protection & Blast Protection enchantments, absorption hearts, and Resistance effects.\n- **Damage & Knockback Readout:** Added a HUD readout next to the impact warning badge displaying predicted heart loss and initial knockback velocity (in blocks per second) for the most threatening incoming projectile.\n\n### HUD Impact Warning Upgrades\n- **Projectile Category Theming:** The impact warning badge now features tailored icons and themed countdown progress bars for Fireballs (fire charge / fiery orange), Wither Skulls (wither skeleton skull / slate grey), Wind Charges (wind charge / ice blue), and Dragon Fireballs (custom dragon fireball sprite / magenta-purple).\n\n### Configuration Options\n- **Damage Estimation Settings:** Added options in the visual settings menu to independently toggle the cracking hearts health bar overlay and the damage/knockback numerical readout.\n\n### Bug Fixes\n- **Vanilla Rendering & HUD Overlays:** Fixed trajectory and shockwave dome overlays failing to render without Iris/Sodium installed, and restored cracking damage heart sprite rendering on the health bar."
 		},
 		{
 			"tag": "v1.9.1+26.2",
@@ -456,7 +465,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "### Visuals & Themes\n- **Dynamic Shockwave Effects:** Dome visual effects (such as electric arcs) now radiate outward from the exact point where the incoming projectile penetrates the blast dome.\n- **Consistent Trail Decoration Spacing:** Trajectory trail decorations (glyphs, wisps, blossoms, arcade sprites) are now anchored to world-space distance, maintaining uniform spacing and size on fast or long-distance paths.\n\n### Collision & Tracking Accuracy\n- **Line-of-Sight Collision Precedence:** Collision detection strictly prioritizes the closest obstacle, preventing occluded entities behind blocks from triggering hits and accurately displaying warning indicators on direct entity impacts.\n- **Isolated Power Inference:** Dynamically inferred explosion powers are now tracked per source with a 90-second cache, preventing custom player blasts from altering vanilla mob or dispenser predictions.\n\n### Performance & Memory\n- **Asynchronous Prediction & Instant Ribbons:** Offloaded heavy explosion simulations and dome mesh construction to background worker threads while rendering trajectory ribbons instantly on spawn.\n- **Sparse Memory & Safe Explosion Bounds:** Switched block destruction tracking to sparse memory and added safe limits for extreme custom explosion powers to prevent lag spikes."
 		},
 		{
 			"tag": "v1.8.1+26.2",
@@ -498,11 +508,19 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "- **Update Icon**: The icon was replaced with a new hand drawn pixel art. This also reduces the jar size."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"docs/assets/Config-Trajectory.png",
+		"docs/assets/Ghast.png",
+		"docs/assets/Screenshot.png",
+		"docs/assets/Wither.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

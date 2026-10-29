@@ -1,0 +1,620 @@
+{
+	"repo": "DemonZ-Development/Onlysleep",
+	"host": "github",
+	"description": "🌙 Skip the night with just one player sleeping or configure it your way.",
+	"stars": 2,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-05-18T19:55:20Z",
+	"pushed": "2026-10-18T09:32:39Z",
+	"releases": [
+		{
+			"tag": "v1.4.4",
+			"published": "2026-10-18T09:34:08Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 653080655,
+					"name": "Onlysleep-1.4.4.jar",
+					"url": "https://github.com/DemonZ-Development/Onlysleep/releases/download/v1.4.4/Onlysleep-1.4.4.jar",
+					"size": 144420,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "7624d95ea68122901405b567448654429bb2b513fc94ba63b8f9892eec91349b",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 56,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/demonzdevelopment/onlysleep/command/CommandDump.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/demonzdevelopment/onlysleep/util/UpdateChecker.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/demonzdevelopment/onlysleep/libs/bstats/MetricsBase.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"discord.gg": [
+								"com/demonzdevelopment/onlysleep/Onlysleep.class"
+							],
+							"modrinth.com": [
+								"com/demonzdevelopment/onlysleep/Onlysleep.class"
+							],
+							"demonz.org": [
+								"com/demonzdevelopment/onlysleep/Onlysleep.class"
+							],
+							"paste.mcsrv.top": [
+								"com/demonzdevelopment/onlysleep/command/CommandDump.class"
+							],
+							"api.modrinth.com": [
+								"com/demonzdevelopment/onlysleep/util/UpdateChecker.class"
+							],
+							"bstats.org": [
+								"com/demonzdevelopment/onlysleep/libs/bstats/bukkit/Metrics.class",
+								"com/demonzdevelopment/onlysleep/libs/bstats/MetricsBase.class",
+								"com/demonzdevelopment/onlysleep/libs/bstats/config/MetricsConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 653080651,
+					"name": "Onlysleep-Fabric-1.4.4.jar",
+					"url": "https://github.com/DemonZ-Development/Onlysleep/releases/download/v1.4.4/Onlysleep-Fabric-1.4.4.jar",
+					"size": 120452,
+					"downloads": 9,
+					"inspection": 2,
+					"sha256": "9dbe15eb87fdc5bdf933145d5a63449f48e77cb0896aa3262c6d799c618e6bf7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "onlysleep",
+							"version": "1.4.4",
+							"name": "Onlysleep",
+							"description": "One player sleep mod - Skip the night with just one player sleeping",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"fabric-permissions-api-v0"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 45,
+						"jars": [
+							"META-INF/jars/fabric-permissions-api-0.7.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/demonzdevelopment/onlysleep/fabric/command/CommandDump.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/demonzdevelopment/onlysleep/fabric/util/UpdateChecker.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"discord.gg": [
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepMod.class"
+							],
+							"modrinth.com": [
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepMod.class"
+							],
+							"demonz.org": [
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepMod.class"
+							],
+							"paste.mcsrv.top": [
+								"com/demonzdevelopment/onlysleep/fabric/command/CommandDump.class"
+							],
+							"api.modrinth.com": [
+								"com/demonzdevelopment/onlysleep/fabric/util/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1.4.4] - 2026-10-18\n\n### Security\n- Fixed ReDoS-prone regular expressions in version and paste response parsing on Paper and Fabric\n- Replaced deprecated Bukkit APIs flagged by code scanning (`getDescription`, `getDisplayName`, `sendTitle`, `Sound.valueOf`, `TextComponent.fromLegacyText`, `Spigot.sendMessage`, `World.get/setGameRuleValue`) with Adventure and PluginMeta replacements\n- Removed dead code and made the Fabric `TaskScheduler.Task` holder static\n- Null-hardened Fabric `/onlysleep world` and `/onlysleep gamemode` command handlers\n\n### Fixed\n- Fixed an inverted creative-mode check in Fabric `SleepCounts` that miscounted required sleepers\n- Fixed double percentage symbol appearing in `/onlysleep status` on Paper\n- Moved diagnostic dump paste uploads off the main server thread to run asynchronously\n- Replaced deprecated `org.bukkit.ChatColor` across Paper with a dedicated `LegacyText` helper to eliminate deprecation warnings while preserving formatting\n- Added support for underscores in raw Fabric configuration paths and improved percentage value parsing\n- Enforced `Locale.ROOT` across commands and configuration keys to prevent locale-specific casing bugs\n\n### Changed\n- Refactored monolithic sleep managers on Paper and Fabric into dedicated lifecycle controllers (`SkipCoordinator`, `GradualSkipController`, `SleepCounts`, `SleepEffects`, `SleepGamerules`)\n- Split command handlers into dedicated action, dump, and config editor classes\n- Unified bed-leave and disconnect handling into a shared departure path on both platforms\n- Update checks now point at https://demonz.org/projects/onlysleep alongside Modrinth\n- Halloween countdown display is now colourised for both console and in-game chat"
+		},
+		{
+			"tag": "v1.4.3",
+			"published": "2026-10-04T19:57:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 610544126,
+					"name": "Onlysleep-1.4.3.jar",
+					"url": "https://github.com/DemonZ-Development/Onlysleep/releases/download/v1.4.3/Onlysleep-1.4.3.jar",
+					"size": 121974,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "b9d91e9ba4b1dbf1193666b747685c32f9c1c003ba2442f8634aeebf99cb8d77",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 43,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/demonzdevelopment/onlysleep/command/OnlysleepCommand.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/demonzdevelopment/onlysleep/util/UpdateChecker.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/demonzdevelopment/onlysleep/libs/bstats/MetricsBase.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"discord.gg": [
+								"com/demonzdevelopment/onlysleep/Onlysleep.class"
+							],
+							"modrinth.com": [
+								"com/demonzdevelopment/onlysleep/Onlysleep.class"
+							],
+							"github.com": [
+								"com/demonzdevelopment/onlysleep/Onlysleep.class"
+							],
+							"paste.mcsrv.top": [
+								"com/demonzdevelopment/onlysleep/command/OnlysleepCommand.class"
+							],
+							"api.modrinth.com": [
+								"com/demonzdevelopment/onlysleep/util/UpdateChecker.class"
+							],
+							"bstats.org": [
+								"com/demonzdevelopment/onlysleep/libs/bstats/bukkit/Metrics.class",
+								"com/demonzdevelopment/onlysleep/libs/bstats/MetricsBase.class",
+								"com/demonzdevelopment/onlysleep/libs/bstats/config/MetricsConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 610544127,
+					"name": "Onlysleep-Fabric-1.4.3.jar",
+					"url": "https://github.com/DemonZ-Development/Onlysleep/releases/download/v1.4.3/Onlysleep-Fabric-1.4.3.jar",
+					"size": 99479,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "179590325f5b1b4651857041b9c07fdac766a81025292b1297bacbdb99dcf6c6",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "onlysleep",
+							"version": "1.4.3",
+							"name": "Onlysleep",
+							"description": "One player sleep mod - Skip the night with just one player sleeping",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"fabric-permissions-api-v0"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 32,
+						"jars": [
+							"META-INF/jars/fabric-permissions-api-0.7.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepCommands.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/demonzdevelopment/onlysleep/fabric/util/UpdateChecker.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"paste.mcsrv.top": [
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepCommands.class"
+							],
+							"discord.gg": [
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepMod.class"
+							],
+							"modrinth.com": [
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepMod.class"
+							],
+							"api.modrinth.com": [
+								"com/demonzdevelopment/onlysleep/fabric/util/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1.4.3] - 2026-10-05\n\n### Added\n- Added an Halloween Easter egg"
+		},
+		{
+			"tag": "v1.4.2",
+			"published": "2026-09-20T11:48:24Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 576725730,
+					"name": "Onlysleep-1.4.2.jar",
+					"url": "https://github.com/DemonZ-Development/Onlysleep/releases/download/v1.4.2/Onlysleep-1.4.2.jar",
+					"size": 116363,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "a0768a1cf1dbfd031a82808369fe7211503db572ca83bef78b48f93419ddc39c",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 41,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/demonzdevelopment/onlysleep/command/OnlysleepCommand.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/demonzdevelopment/onlysleep/util/UpdateChecker.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/demonzdevelopment/onlysleep/libs/bstats/MetricsBase.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"modrinth.com": [
+								"com/demonzdevelopment/onlysleep/Onlysleep.class"
+							],
+							"github.com": [
+								"com/demonzdevelopment/onlysleep/Onlysleep.class"
+							],
+							"paste.mcsrv.top": [
+								"com/demonzdevelopment/onlysleep/command/OnlysleepCommand.class"
+							],
+							"api.modrinth.com": [
+								"com/demonzdevelopment/onlysleep/util/UpdateChecker.class"
+							],
+							"bstats.org": [
+								"com/demonzdevelopment/onlysleep/libs/bstats/bukkit/Metrics.class",
+								"com/demonzdevelopment/onlysleep/libs/bstats/MetricsBase.class",
+								"com/demonzdevelopment/onlysleep/libs/bstats/config/MetricsConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 576725731,
+					"name": "Onlysleep-Fabric-1.4.2.jar",
+					"url": "https://github.com/DemonZ-Development/Onlysleep/releases/download/v1.4.2/Onlysleep-Fabric-1.4.2.jar",
+					"size": 94593,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "c9ea77329eb1fa018d0082b3328f7316ef03ce990c886dbade91a86b951cfee4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "onlysleep",
+							"version": "1.4.2",
+							"name": "Onlysleep",
+							"description": "One player sleep mod - Skip the night with just one player sleeping",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"fabric-permissions-api-v0"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 31,
+						"jars": [
+							"META-INF/jars/fabric-permissions-api-0.7.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepCommands.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/demonzdevelopment/onlysleep/fabric/util/UpdateChecker.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"paste.mcsrv.top": [
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepCommands.class"
+							],
+							"modrinth.com": [
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepMod.class"
+							],
+							"api.modrinth.com": [
+								"com/demonzdevelopment/onlysleep/fabric/util/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1.4.2] - 2026-09-20\n\n### Changed\n- bumped dependencies for minecraft 26.3 (paper and fabric)\n- updated fabric clock manager call for 26.3 changes with fallback\n- updated fabric.mod.json and ci workflows for 26.3\n\n### Fixed\n- suppressed removal warning for players_sleeping_percentage on paper 26.3"
+		},
+		{
+			"tag": "mod-v1.4.1",
+			"published": "2026-09-04T07:29:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 543962387,
+					"name": "Onlysleep-Fabric-1.4.1.jar",
+					"url": "https://github.com/DemonZ-Development/Onlysleep/releases/download/mod-v1.4.1/Onlysleep-Fabric-1.4.1.jar",
+					"size": 94170,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "f8ef427a231796abd1f526bd766a6b5b773d2fa360b87c404719fd106bbcd1b1",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "onlysleep",
+							"version": "1.4.1",
+							"name": "Onlysleep",
+							"description": "One player sleep mod - Skip the night with just one player sleeping",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"fabric-permissions-api-v0"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 31,
+						"jars": [
+							"META-INF/jars/fabric-permissions-api-0.7.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepCommands.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/demonzdevelopment/onlysleep/fabric/util/UpdateChecker.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"paste.mcsrv.top": [
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepCommands.class"
+							],
+							"modrinth.com": [
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepMod.class"
+							],
+							"api.modrinth.com": [
+								"com/demonzdevelopment/onlysleep/fabric/util/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1.4.1] - 2026-08-30\n\nMaintenance release for the Paper/Folia and Fabric 1.4 API line.\n\n### Fixed\n\n- Fabric sleep events now have real Fabric event buses and are dispatched, so listeners can observe and cancel `SleepStartEvent` and `NightSkipEvent` as documented.\n- `/onlysleep world list` and `/onlysleep gamemode list` work without a third argument on Paper/Folia.\n- The dedicated `onlysleep.world` and `onlysleep.gamemode` permissions now authorize their Paper/Folia commands as documented.\n- New command help renders `/onlysleep` instead of the literal `/%cmd%` placeholder.\n- Numeric config commands reject negative delays/AFK time, zero transition speed, and invalid morning ticks.\n- `onlysleep.admin` now grants every advertised admin permission.\n- Developer API availability is cleared when the plugin/mod shuts down, and color stripping handles both `&` and section-sign codes.\n- Release uploads contain runtime JARs only rather than also publishing sources JARs as downloads.\n- Release automation validates tag/version alignment and publishes SHA-256 checksums for both platform JARs.\n- Diagnostic dump failures now retain their stack trace in the plugin logger.\n- Fabric event listener failures are logged without interrupting sleep processing.\n\n### Documentation\n\n- Replaced the placeholder security policy and aligned marketplace/wiki requirements with the 26.2 / Java 25 release line."
+		},
+		{
+			"tag": "v1.4.1",
+			"published": "2026-08-30T12:23:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 536586635,
+					"name": "Onlysleep-1.4.1.jar",
+					"url": "https://github.com/DemonZ-Development/Onlysleep/releases/download/v1.4.1/Onlysleep-1.4.1.jar",
+					"size": 116088,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "81234e0e9c333623d63affc2cde6853aea3d6d1bcd875aca0f4e0c3790d2ec43",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 41,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/demonzdevelopment/onlysleep/command/OnlysleepCommand.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/demonzdevelopment/onlysleep/util/UpdateChecker.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/demonzdevelopment/onlysleep/libs/bstats/MetricsBase.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"modrinth.com": [
+								"com/demonzdevelopment/onlysleep/Onlysleep.class"
+							],
+							"github.com": [
+								"com/demonzdevelopment/onlysleep/Onlysleep.class"
+							],
+							"paste.mcsrv.top": [
+								"com/demonzdevelopment/onlysleep/command/OnlysleepCommand.class"
+							],
+							"api.modrinth.com": [
+								"com/demonzdevelopment/onlysleep/util/UpdateChecker.class"
+							],
+							"bstats.org": [
+								"com/demonzdevelopment/onlysleep/libs/bstats/bukkit/Metrics.class",
+								"com/demonzdevelopment/onlysleep/libs/bstats/MetricsBase.class",
+								"com/demonzdevelopment/onlysleep/libs/bstats/config/MetricsConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 536586636,
+					"name": "Onlysleep-Fabric-1.4.1.jar",
+					"url": "https://github.com/DemonZ-Development/Onlysleep/releases/download/v1.4.1/Onlysleep-Fabric-1.4.1.jar",
+					"size": 93409,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "ee6d4fcb1135c1e684947c296c88e21007c43e8a83c68e638d90dc0b4ebcaaea",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "onlysleep",
+							"version": "1.4.1",
+							"name": "Onlysleep",
+							"description": "One player sleep mod - Skip the night with just one player sleeping",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"fabric-permissions-api-v0"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 31,
+						"jars": [
+							"META-INF/jars/fabric-permissions-api-0.7.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepCommands.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/demonzdevelopment/onlysleep/fabric/util/UpdateChecker.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"paste.mcsrv.top": [
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepCommands.class"
+							],
+							"modrinth.com": [
+								"com/demonzdevelopment/onlysleep/fabric/OnlysleepMod.class"
+							],
+							"api.modrinth.com": [
+								"com/demonzdevelopment/onlysleep/fabric/util/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1.4.1] - 2026-08-30\n\nMaintenance release for the Paper/Folia and Fabric 1.4 API line.\n\n### Fixed\n\n- Fabric sleep events now have real Fabric event buses and are dispatched, so listeners can observe and cancel `SleepStartEvent` and `NightSkipEvent` as documented.\n- `/onlysleep world list` and `/onlysleep gamemode list` work without a third argument on Paper/Folia.\n- The dedicated `onlysleep.world` and `onlysleep.gamemode` permissions now authorize their Paper/Folia commands as documented.\n- New command help renders `/onlysleep` instead of the literal `/%cmd%` placeholder.\n- Numeric config commands reject negative delays/AFK time, zero transition speed, and invalid morning ticks.\n- `onlysleep.admin` now grants every advertised admin permission.\n- Developer API availability is cleared when the plugin/mod shuts down, and color stripping handles both `&` and section-sign codes.\n- Release uploads contain runtime JARs only rather than also publishing sources JARs as downloads.\n- Release automation validates tag/version alignment and publishes SHA-256 checksums for both platform JARs.\n- Diagnostic dump failures now retain their stack trace in the plugin logger.\n- Fabric event listener failures are logged without interrupting sleep processing.\n\n### Documentation\n\n- Replaced the placeholder security policy and aligned marketplace/wiki requirements with the 26.2 / Java 25 release line."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-29T10:54:18.815Z",
+	"pictures": [
+		"assets/modrinth-page.png",
+		"assets/modrinth/commands-heading.png",
+		"assets/modrinth/commands-preview.png",
+		"assets/modrinth/config-preview.png",
+		"assets/modrinth/features-heading.png",
+		"assets/modrinth/installation-heading.png",
+		"assets/modrinth/installation-steps.png",
+		"assets/modrinth/permissions-heading.png",
+		"assets/modrinth/placeholders-heading.png",
+		"assets/modrinth/placeholders-preview.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"history": 1
+}

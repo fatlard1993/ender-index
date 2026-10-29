@@ -84,7 +84,7 @@
 						"unreadable": []
 					},
 					"icon": "521c8e08333b4ddd16a14d550e2b316a06bc74cc4e168a39840c65e3fd98663f.webp",
-					"downloads": 652,
+					"downloads": 702,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -92,7 +92,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "## Highlights\n\n- **Works with Essential 1.5.1.** Essential 1.5.1 renamed the method that receives cosmetics from the server, so this patch's hook no longer matched. 1.7.1 targets the new method, so legacy cosmetics unlock and dumps are written again.\n- **One shared data folder on Windows.** Before, each instance kept its own `prometheus/essential` folder. Now Windows uses one global folder at `%APPDATA%\\.minecraft\\prometheus`, like macOS and Linux already did, so your cosmetic list, dumps and outfit changes are shared across all instances. The first launch merges an instance's old local folder into the global one without overwriting anything there, then renames it to `essential.migrated`. You can delete it once you've checked everything carried over.\n\n> [!WARNING]\n> 1.7.1 requires **Essential 1.5.1 or newer**. Older Essential builds still use the old method name and will crash on launch with this version. If Essential hasn't updated to 1.5.1 for your Minecraft version yet, stay on [1.7.0](https://github.com/prometheusreengineering/minecraft-essential/releases/tag/1.7.0).\n\n## What's Changed\n\n* fix: update mixin method target names for Essential 1.5.1 in https://github.com/prometheusreengineering/minecraft-essential/pull/54\n* fix: store data in a global folder on Windows\n  * the folder path is now absolute, so it no longer depends on the folder the game was launched from\n  * an instance's existing local folder is merged in once and renamed to `essential.migrated`\n* legal: update project name in `LICENSE` to `minecraft-essential`\n* chore: suppress warnings\n\n**Full Changelog**: https://github.com/prometheusreengineering/minecraft-essential/compare/1.7.0...1.7.1"
 		},
 		{
 			"tag": "1.7.0",
@@ -163,9 +164,10 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 210
+					"downloads": 213
 				}
-			]
+			],
+			"notes": "## Highlights\n\n- **Legacy cosmetics now stay equipped after a restart.** The server drops legacy cosmetics and their settings from saved outfits. Changes you make to outfits on this client are now saved locally (`outfits.json`) and applied on top of what the server sends. Each saved change is dropped once the server matches it, and deleted along with its outfit.\n- **Legacy cosmetics unlock reliably on startup.** Before, some legacy cosmetics weren't unlocked in time to be equipped. Each cosmetic is now unlocked as soon as it arrives.\n- **Much less stutter when connecting.** Cosmetic dumps and config files are now written on a background thread, and unlocks are batched once per tick. Before, every (re)connect could freeze the game briefly with 1000+ cosmetics.\n\n## What's Changed\n\n* fix(cosmetics): reliably unlock legacy cosmetics on startup\n  * legacy IDs are requested through Essential, so cosmetics only count as loaded once they arrive\n  * IDs added by the background GitHub update of `cosmetics.json` are requested right away\n  * downloads now time out, and the bundled list is used instead of crashing if `cosmetics.json` can't be read\n* perf(dumps): write cosmetic dumps off the main thread\n  * unchanged dumps are skipped\n  * a problem setting up the config folder is now logged instead of crashing the game\n* feat(outfits): keep legacy cosmetics equipped across restarts\n* fix(cosmetics): batch unlocks and only request legacy cosmetics when logged in to Essential\n* perf(outfits): save `outfits.json` on the IO thread\n* chore: mark runtime-provided dependencies as `provided`\n* docs: add `CLAUDE.md`\n\n## A note on AI\n\nThis is the first release made with help from Claude (Claude Code). Claude co-authored the commits in this release, and those commits carry a `Co-Authored-By` trailer. I reviewed every change, and the release follows the project's [AI policy](https://github.com/prometheusreengineering/minecraft-essential/blob/main/CONTRIBUTING.md#ai). I tested it in-game and I'm responsible for it like any other release. The new `CLAUDE.md` holds the project notes we built up along the way, such as which mixin targets are safe across Essential builds. It's useful for anyone working on the codebase, with or without AI.\n\n**Full Changelog**: https://github.com/prometheusreengineering/minecraft-essential/compare/1.6.1...1.7.0"
 		},
 		{
 			"tag": "1.6.1",
@@ -238,7 +240,8 @@
 					},
 					"downloads": 18
 				}
-			]
+			],
+			"notes": "## What's Changed\n* fix: reunlock cosmetics upon reconnection by @abhijeetnardele24-hash in https://github.com/prometheusreengineering/minecraft-essential/pull/50\n\n## New Contributors\n* @abhijeetnardele24-hash made their first contribution in https://github.com/prometheusreengineering/minecraft-essential/pull/50\n\n**Full Changelog**: https://github.com/prometheusreengineering/minecraft-essential/compare/1.6.0...1.6.1"
 		},
 		{
 			"tag": "1.6.0",
@@ -311,7 +314,8 @@
 					},
 					"downloads": 2676
 				}
-			]
+			],
+			"notes": "## What's Changed\n* cosmetics: Add new cosmetics by @BehaviorPack in https://github.com/prometheusreengineering/minecraft-essential/pull/43\n* docs: readme update + contributing note by @cootshk in https://github.com/prometheusreengineering/minecraft-essential/pull/36\n* feat: Support 1.16-1.17 forge by @cootshk in https://github.com/prometheusreengineering/minecraft-essential/pull/45\n\n\n**Full Changelog**: https://github.com/prometheusreengineering/minecraft-essential/compare/1.5.0...1.6.0"
 		},
 		{
 			"tag": "1.5.0",
@@ -384,11 +388,14 @@
 					},
 					"downloads": 596
 				}
-			]
+			],
+			"notes": "## What's Changed\n* Update EXTRA_COSMETICS list by @BehaviorPack in https://github.com/prometheusreengineering/minecraft-essential/pull/37\n* feat: load legacy cosmetics dynamically by @cootshk in https://github.com/prometheusreengineering/minecraft-essential/pull/38\n\n## New Contributors\n* @BehaviorPack made their first contribution in https://github.com/prometheusreengineering/minecraft-essential/pull/37\n\n**Full Changelog**: https://github.com/prometheusreengineering/minecraft-essential/compare/1.4.0...1.5.0"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

@@ -44,7 +44,7 @@
 						"unreadable": []
 					},
 					"icon": null,
-					"downloads": 3,
+					"downloads": 4,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -52,7 +52,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "# Changelog\n\n## What's new in this build\n\n### Added\n- **Windows MMap prefetch** via `PrefetchVirtualMemory` (FFM) in `MadviseHelper`.\n  - Linux continues using `posix_madvise` (`WILLNEED` / `DONTNEED`).\n  - Windows `DONTNEED` is intentionally a no-op; the OS manages page lifetime.\n\n### Changed\n - Status now lists MMap prefetch on both Windows and Linux.\n  - Removed the old \"Windows PrefetchVirtualMemory fallback\" backlog item.\n  - Corrected output jar name to `zeroseek-1.0.0.jar`.\n- `MmapRegionIo` debug log messages now use generic \"MMap prefetch\" wording.\n- `ZeroSeekConfig`: added `FUTURE` comments for `maxMappedBytes` and `chunkLoaderThreads`.\n- `AsyncChunkService`: added a `FUTURE` comment for the reserved `loaderPool`.\n\n### Removed\n- Dead `AsyncChunkService.prefetchChunk(ServerLevel, ChunkPos)` method.\n- Unused `RegionFileVersion` import in `RegionFileMixin`.\n- Unused `WeakReference` import in `EntityHibernation`.\n\n### Fixed\n- `MadviseHelper`: corrected Linux advice constants and separated platform logic into clean Linux / Windows / no-op paths.\n- `MadviseHelper`: Windows `PrefetchVirtualMemory` binding now works correctly with `MemorySegment.ofAddress(...)` for the `WIN32_MEMORY_RANGE_ENTRY` layout.\n\n### Infrastructure\n- Added this changelog file."
 		},
 		{
 			"tag": "v.1.0",
@@ -93,12 +94,15 @@
 					},
 					"downloads": 1
 				}
-			]
+			],
+			"notes": "mode release"
 		}
 	],
 	"readme": "README.md",
 	"readmeSummary": "High-performance MMap + Async chunk loading and Concurrent World Generation engine for dedicated Minecraft servers.",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

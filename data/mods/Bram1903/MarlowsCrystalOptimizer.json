@@ -68,7 +68,7 @@
 						"unreadable": []
 					},
 					"icon": "9215429680abbdcac1479838823b352356e9459275ce88b87c6fa5078c262550.webp",
-					"downloads": 8,
+					"downloads": 10,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -131,7 +131,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 5,
+					"downloads": 6,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -188,7 +188,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 5,
+					"downloads": 6,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -245,7 +245,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 5,
+					"downloads": 6,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -308,7 +308,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 5,
+					"downloads": 6,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -365,7 +365,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 5,
+					"downloads": 6,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -422,7 +422,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 8,
+					"downloads": 9,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -485,7 +485,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 14,
+					"downloads": 15,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -542,7 +542,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 5,
+					"downloads": 6,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -605,7 +605,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 5,
+					"downloads": 6,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -662,7 +662,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 4,
+					"downloads": 5,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -725,7 +725,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 6,
+					"downloads": 7,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -733,7 +733,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "## 2.0.0\n\n### Added\n\n- Added NeoForge support for Minecraft 1.20.4 through 26.3, released next to the Fabric jars. It sends\n  the same packets as the Fabric version. With YetAnotherConfigLib installed, the settings open from\n  NeoForge's mod list, which also shows new versions.\n- Added an update check, shown in Mod Menu on Fabric and in NeoForge's mod list. It offers new versions\n  built for your Minecraft version and mod loader, from Modrinth or from GitHub as picked in the\n  settings. Beta builds are only offered with the Experimental Builds setting, which is off by default.\n- The version packet now also sends the mod loader, the git commit the build came from, whether it had\n  uncommitted changes, and when it was built. PROTOCOL.md lists the fields.\n- Added a Keep Render setting, off by default. A broken crystal stays visible until the server removes\n  it instead of being hidden, and the next crystal can still be placed where it stood straight away. It\n  sends exactly the same packets as the default mode.\n- Added Minecraft 26.3 to the supported versions. The 26.1 build covers it unchanged, so it ships as the\n  same jar. On 26.3 Fabric API itself asks for Fabric Loader `0.19.3` or newer.\n\n### Fixed\n\n- Fixed a crash when joining a server that disables the optimizer on Minecraft 1.21.2 through 1.21.4.\n  The mod called a Minecraft method whose return type changed in 1.21.2, which threw `NoSuchMethodError`\n  the moment the server sent its opt-out packet.\n- Fixed the mod failing to start the game on Minecraft 1.20.5 and 1.20.6. Packet identifiers were built\n  with a method that only exists from 1.21 onwards.\n- Fixed a crystal struck while sprinting skipping the vanilla attack slowdown, which anticheats flagged\n  as movement. The crystal was removed the moment the attack packet was sent, before Minecraft ran its\n  own attack, so the client never lost the speed and the sprint a sprint hit costs. It is now hidden\n  right after that attack, still inside the same click, so the next crystal is placed exactly as fast as\n  before.\n- Fixed a crystal the server did not break staying invisible until you moved out of its range, for\n  example one that cannot be damaged or a hit a plugin cancelled. A broken crystal is now hidden rather\n  than removed. It comes back as soon as the server confirms a block you placed or started breaking after\n  the hit without having removed the crystal first, and otherwise 30 ticks after the hit, a second and a\n  half at the normal tick rate, so a placement stops going through a crystal that is still there.\n- Fixed a crystal outside the world border disappearing when hit. The server ignores those hits.\n- Fixed a crystal disappearing without breaking when hit with Weakness just as Strength ran out. The\n  server ends Strength before the client is told, so its last 1.5 seconds no longer count.\n\n### Changed\n\n- A broken crystal now only lets crystals through. Until the server removes it, it stands in the way of\n  everything else exactly as it does without the mod: a click never breaks the block under it or reaches\n  anyone behind it, and no other item is used past it. An attack on it goes to the next end crystal\n  behind it, and a right click with an end crystal in either hand places that crystal on the obsidian or\n  bedrock behind it, both in the same tick it was broken and as fast as before. Only the hand holding the\n  end crystal sees past it. Anticheats flagged hitting, breaking and placing blocks through a crystal the\n  server had not removed yet.\n- The opt-out is now tracked per connection instead of being remembered per server address. A backend\n  switch behind a proxy keeps the opt-out, and disconnecting clears it, which is what the documented\n  protocol always said should happen.\n- The message shown when a server disables the optimizer now appears once per connection rather than\n  once per server per game session."
 		},
 		{
 			"tag": "v1.1.0",
@@ -938,7 +939,8 @@
 					},
 					"downloads": 80
 				}
-			]
+			],
+			"notes": "1.1.0\n\n- Major speed improvement. Feels almost identical to the original 1.19\n  build, with proper damage prediction and opt-out support kept intact.\n- Rewrote the damage check to mirror Player.attack exactly; closes edge\n  cases where the prediction could leave a ghost crystal.\n- Available for 1.19 through 26.1."
 		},
 		{
 			"tag": "v1.0.6",
@@ -978,7 +980,8 @@
 					},
 					"downloads": 147
 				}
-			]
+			],
+			"notes": "Added: 26.1 Support\n\n**Full Changelog**: https://github.com/Bram1903/MarlowsCrystalOptimizer/compare/v1.0.5...v1.0.6"
 		},
 		{
 			"tag": "v1.0.5",
@@ -1018,7 +1021,8 @@
 					},
 					"downloads": 212
 				}
-			]
+			],
+			"notes": "- Added: Opt Out Support\n- Fixed: Compatibility issue with Mineman Club\n\n**Full Changelog**: https://github.com/Bram1903/MarlowsCrystalOptimizer/compare/v1.0.4...v1.0.5"
 		},
 		{
 			"tag": "v1.0.4",
@@ -1058,11 +1062,17 @@
 					},
 					"downloads": 90
 				}
-			]
+			],
+			"notes": "- Added 1.21.11 Support\n- Performance Optimizations (Even faster)\n\n**Full Changelog**: https://github.com/Bram1903/MarlowsCrystalOptimizer/compare/v1.0.3...v1.0.4"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [
+		"docs/images/opt_out_hover_message.png",
+		"docs/images/opt_out_message.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

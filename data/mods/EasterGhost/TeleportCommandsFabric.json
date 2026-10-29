@@ -45,7 +45,7 @@
 						"unreadable": []
 					},
 					"icon": "f556b92360a77d6b2e0e1312f94944bbef8f43bef9e8a940e7f8798a513bfd8b.webp",
-					"downloads": 5,
+					"downloads": 6,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -94,7 +94,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 4,
+					"downloads": 5,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -102,7 +102,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "## TeleportCommandsFabric v2.4.1\n\n### Bug Fix:\n\n- Fix `/wild` crashing the server on Minecraft 26.2 when sampling candidate chunks\n\n---\n\n### Bug修复：\n\n- 修复 Minecraft 26.2 上 `/wild` 采样候选区块时导致服务端崩溃的问题"
 		},
 		{
 			"tag": "v2.4-26.1",
@@ -268,7 +269,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "## TeleportCommandsFabric v2.3.1\n\n> This is the first GitHub release for the v2.3 release line. It includes all features and improvements introduced in v2.3, together with the stability fixes delivered in v2.3.1.\n\n### What's New:\n\n- Add JourneyMap integration\n  - Sync TPC homes and warps to JourneyMap\n  - Route teleport actions from synchronized JourneyMap waypoints through TPC commands\n  - Support `/back death` teleport handling for matching JourneyMap death waypoints\n\n- Add BlueMap integration\n  - Publish server-side warp markers to BlueMap web maps\n\n- Add a shared map synchronization layer for bundled client map integrations\n\n### Changes:\n\n- Expand the Standard build to include bundled Xaero, JourneyMap, and BlueMap integrations\n\n- Keep the Core build focused on core teleport and storage functionality without bundled map integrations\n\n- Add a legacy Xaero synchronization compatibility path for the transition between v2.2 and v2.3 clients and servers\n\n- Improve map synchronization so unchanged waypoint snapshots are not repeatedly sent to clients\n\n- Improve waypoint persistence behavior across supported map integrations\n\n- Rename the Xaero-specific admin module wording to the more general `integration` name\n  - Keep the historical `xaero` config section name for configuration compatibility\n\n- Preserve home and warp entries during profile loading when their dimensions are temporarily unavailable\n\n- Move `deleteInvalid` cleanup to teleport-time validation and ensure cleanup only removes the exact unchanged invalid waypoint\n\n- Normalize command return values across modules for clearer command-block and administration behavior\n\n- Improve teleport execution state handling\n  - Capture the previous location before teleport execution\n  - Save it only after the teleport succeeds\n\n- Improve target teleport safety checks\n  - Treat doors as passable space\n  - Prevent fences, walls, and fence gates from being accepted as safe standing support\n  - Add a timeout fallback for parallel safety checks\n\n- Limit the configurable target chunk preload radius to a maximum of `3` chunks\n  - Existing larger values are normalized automatically\n  - `/tpc config teleporting preloadRadius` enforces the same range\n\n- Update `/tpc help` and `/tpc status` to report whether client map synchronization is available\n\n- Keep config schema version at `3` and storage schema version at `1`\n\n### Bug Fix:\n\n- Fix `deleteInvalid` potentially removing valid warp data during server startup before all dimensions become available\n\n- Fix asynchronous invalid-waypoint cleanup potentially deleting a newly created or updated waypoint with the same name\n\n- Fix creative and fall-flying state remaining active after teleport, especially during cross-dimension teleportation\n\n- Fix camera and player-state reset edge cases after teleport\n\n- Fix a BlueMap lifecycle race that could access an outdated API instance while BlueMap is being disabled or reloaded\n\n- Prevent malformed current or legacy map synchronization packets from requesting unsafe client-side memory allocation\n\n- Fix teleport safety workers attempting to synchronously create missing chunks before the warmup region finishes loading\n\n- Ensure parallel safety checks only read already loaded chunks instead of falling back to worker-thread world chunk loading\n\n### Other:\n\n- The Standard build is recommended for players and servers using supported map integrations\n\n- The Core build is intended for servers that only need core teleport functionality or do not need bundled map integrations\n\n- Core teleport commands remain fully usable as a server-side mod without requiring client installation\n\n- Matching v2.3 client and server builds are recommended for map synchronization features\n\n- No config or storage migration is required when upgrading from v2.2 or v2.3\n\n---\n\n> 这是 v2.3 版本线首次在 GitHub 上正式发布，包含 v2.3 引入的全部功能与改进，以及 v2.3.1 提供的稳定性修复。\n\n### 新增功能：\n\n- 添加 JourneyMap 联动\n  - 将 TPC 的 home 和 warp 同步到 JourneyMap\n\n..."
 		},
 		{
 			"tag": "v2.2-26.1",
@@ -345,7 +347,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "## TeleportCommandsFabric v2.2\n\n### What's New:\n\n- Add `/back preview` to view recorded previous-teleport and death locations before using `/back`\n\n- Add `/tpcancel` so players can cancel their own pending teleport\n\n- Add version and integration status information to `/tpc help` and `/tpc status`\n\n- Add separate build variants:\n  - Standard build: includes core teleport features and bundled Xaero integration\n  - Core build: includes only core teleport features, without bundled map integration\n\n### Changes:\n\n- Refactor Xaero integration into a bundled JAR-in-JAR integration module\n\n- Separate core teleport features from bundled map integration packaging\n\n- Allow core-only builds through the `includeXaeroIntegration` build option\n\n- Improve admin CLI output with clearer page headings\n\n- Keep config schema version at `3` and storage schema version at `1`\n\n### Bug Fix:\n\n- Fix silent Xaero map visibility commands generated from waypoint delete actions when page arguments are not included\n\n### Other:\n\n- The standard build is recommended for most users\n\n- The core build is intended for servers that only need server-side teleport commands or do not use bundled map integration\n\n- Core teleport features remain usable without installing the client-side mod\n\n---\n\n### 新增功能：\n\n- 添加 `/back preview`，可在使用 `/back` 前查看当前记录的上一传送前位置和死亡点\n\n- 添加 `/tpcancel`，玩家可以取消自己正在等待执行的传送\n\n- 在 `/tpc help` 和 `/tpc status` 中显示版本与联动状态信息\n\n- 添加不同构建版本：\n  - 标准版：包含核心传送功能和内嵌 Xaero 联动\n  - 核心版：只包含核心传送功能，不包含内嵌地图联动\n\n### 变更：\n\n- 将 Xaero 联动重构为内嵌 JAR-in-JAR integration 模块\n\n- 分离核心传送功能与内嵌地图联动的打包边界\n\n- 支持通过 `includeXaeroIntegration` 构建选项生成核心版\n\n- 改进管理员 CLI 输出，添加更清晰的页面标题\n\n- 配置结构版本保持为 `3`，存储结构版本保持为 `1`\n\n### Bug修复：\n\n- 修复从 Xaero 航点删除动作触发的静默地图显示/隐藏命令在缺少页码参数时无法正确处理的问题\n\n### 其他：\n\n- 推荐大多数用户使用标准版\n\n- 核心版适合只需要服务端传送命令，或不使用内嵌地图联动的服务器\n\n- 核心传送功能仍然不要求客户端安装本模组"
 		},
 		{
 			"tag": "v2.1-26.1",
@@ -385,7 +388,8 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "## TeleportCommandsFabric v2.1\n\n### What's New:\n\n- Add TPA trust rules for `tpa` and `tpahere`\n\n  Players can now set whether requests from specific players, or from everyone by default, should be accepted, denied, or handled normally.\n\n- Add clickable filter and sort controls for `/homes` and `/warps`\n\n  Home and warp pages can now be adjusted directly from the command UI without manually typing the full query every time.\n\n- Add teleport rotation restore support\n\n  Saved locations can now preserve player facing direction and restore it when teleporting.\n\n### Changes:\n\n- Improve known-target teleport safety handling and block-state lookup performance\n\n- Improve RTP destination safety checks with shared unsafe-block handling\n\n- Simplify Xaero waypoint recognition so only waypoints created by this mod are handled\n\n- Improve command page layout and interaction consistency for home, warp, TPA, and admin commands\n\n- Update internal command/admin structure for easier future maintenance\n\n### Bug Fix:\n\n- Fix custom Xaero home/warp waypoint sets not being recognized correctly for map teleport actions\n\n- Fix normal player-created Xaero waypoints possibly being handled as TeleportCommandsFabric waypoints when hiding or deleting map waypoints\n\n- Improve Xaero waypoint teleport and hide/delete command routing stability\n\n---\n\n### 新增功能：\n\n- 添加 `tpa` 与 `tpahere` 的 TPA 信任规则\n\n  玩家现在可以为指定玩家或默认规则设置自动接受、自动拒绝或正常处理。\n\n- 为 `/homes` 和 `/warps` 添加可点击的筛选与排序控制\n\n  home 和 warp 页面现在可以直接通过命令界面调整，不需要每次手动输入完整查询参数。\n\n- 添加传送朝向恢复支持\n\n  保存的位置现在可以记录玩家朝向，并在传送时恢复。\n\n### 变更：\n\n- 改进已知目标传送的安全检查处理与方块状态读取性能\n\n- 改进 RTP 落点安全检查，并统一不安全方块判定逻辑\n\n- 简化 Xaero 航点识别逻辑，现在只处理由本模组创建的同步航点\n\n- 改进 home、warp、TPA 和管理命令页面的布局与交互一致性\n\n- 调整内部命令与管理模块结构，便于后续维护\n\n### Bug修复：\n\n- 修复自定义 Xaero home/warp 航点集合无法被地图传送正确识别的问题\n\n- 修复隐藏或删除地图航点时，普通玩家自建 Xaero 航点可能被误识别为本模组航点的问题\n\n- 改进 Xaero 航点传送与隐藏/删除命令路由的稳定性"
 		},
 		{
 			"tag": "v1.5.2-1.21.11",
@@ -425,11 +429,14 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "## TeleportCommandsFabric v1.5.2\n\n### What's New:\n\n- No new gameplay features in this release\n\n> This version focuses on fixing and stabilizing storage migration introduced in recent UUID-based home and warp updates\n\n### Changes:\n\n- Update storage schema version to `4`\n\n- Refine storage migration pipeline by separating legacy normalization (`v3`) and UUID-based upgrades (`v4`)\n\n- Improve migration flow clarity to avoid inconsistent upgrade states across different historical versions\n\n### Bug Fix:\n\n- Fix incorrect storage version progression for data generated by `1.5.1` and related builds\n\n- Fix legacy `DefaultHome` migration producing invalid empty UUID entries in `storage.json`\n\n- Fix missing `HiddenWarpUuids` field during migration by automatically repairing and initializing it\n\n- Improve robustness of migration logic when handling partially upgraded or inconsistent storage data\n\n### Other:\n\n- Further improve internal storage reliability and forward compatibility\n\n- Ensure all existing data converges correctly to UUID-based storage format\n\n---\n\n### 新增功能：\n\n- 本版本未添加新的功能\n\n> 本次更新主要用于修复和稳定近期引入的基于 UUID 的 home 和 warp 存储迁移逻辑\n\n### 变更：\n\n- 更新存储结构版本至 `4`\n\n- 优化存储迁移流程，将旧版标准化处理（`v3`）与 UUID 升级（`v4`）明确拆分\n\n- 改进迁移逻辑结构，避免不同历史版本之间出现不一致的升级状态\n\n### Bug修复：\n\n- 修复 `1.5.1` 等版本生成的存储数据在版本升级过程中无法正确迁移的问题\n\n- 修复旧版 `DefaultHome` 迁移时可能写入空 UUID 的问题\n\n- 修复迁移过程中缺失 `HiddenWarpUuids` 字段的问题，现在会自动补全\n\n- 增强迁移逻辑对部分升级/不完整数据的兼容性和稳定性\n\n### 其他：\n\n- 进一步提升存储系统的稳定性与向前兼容能力\n\n- 确保所有历史数据能够正确收敛到基于 UUID 的统一格式"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

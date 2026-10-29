@@ -1,0 +1,64 @@
+{
+	"repo": "ch1335/RenderJS",
+	"host": "github",
+	"description": "An mod that supports the modpack authors using KubeJS to draw HUDs and register ItemDecorator(item extra render in inventory), as well as a mod for rendering blocks and items in the world.",
+	"stars": 2,
+	"archived": false,
+	"created": "2024-07-27T10:53:31Z",
+	"pushed": "2026-10-27T11:06:32Z",
+	"releases": [
+		{
+			"tag": "2101.2.4",
+			"published": "2026-02-23T14:00:50Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 360811729,
+					"name": "renderjs-neoforge-2101.2.4.jar",
+					"url": "https://github.com/ch1335/RenderJS/releases/download/2101.2.4/renderjs-neoforge-2101.2.4.jar",
+					"size": 52870,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "4837a63612a5aa4fae2796c1ca30c9610d932a76001f5d4beca0370a55eedffa",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "renderjs",
+							"version": "2101.2.4",
+							"name": "RenderJS",
+							"description": "",
+							"minecraft": "[1.21.1, 1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"kubejs"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 35,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "1.Add a method for rendering GUI images:\n```\nRenderJSEvents.onGuiPostRender(event => {\n  //Draw an image at a fixed size (Automatic stretching)\n    event.drawTextureWithSize(\"minecraft:textures/item/apple.png\", 0, 0, 100, 100, 10)\n})\n```\n2.Fixed the issue of `IGuiRenderHelper.drawString` rendering shadows, now it no longer renders shadows\n\n3.Replaced the event of registering block entity rendering:\nold:\n```\n// in startup scripts\n//Errors may occur on the server\nClientEvents.blockEntityRendererRegistry(event => {\n    event.register(\"test:test_block\", (c) => RenderJSBlockEntityRenderer\n        .create(c)\n        .setCustomRender((renderer, context) => {\n            var lightLevel = LevelRenderer.getLightColor(context.blockEntity.level, context.blockEntityJS.blockPos.above())\n            var poseStack = context.poseStack\n            poseStack.pushPose()\n            poseStack.translate(0, 5, 0)\n            context.renderLevelItem(Items.DIAMOND, poseStack)\n\n            context.scale(-1, -1, 1)\n            context.drawTexture(\"minecraft:textures/item/apple.png\", 0, 0, 16, 16)\n            poseStack.popPose()\n\n\n\n        })\n    )\n})\n```\nnow:\n```\n// in client scripts\n// support reload\nRenderJSEvents.registerBlockEntityRender(event => {\n    event.registerOrSwap(\"test:test_block\", (c) => RenderJSBlockEntityRenderer\n        .create(c)\n        .setCustomRender((renderer, context) => {\n            var lightLevel = LevelRenderer.getLightColor(context.blockEntity.level, context.blockEntityJS.blockPos.above())\n            var poseStack = context.poseStack\n            poseStack.pushPose()\n            poseStack.translate(0, 5, 0)\n            context.renderLevelItem(Items.DIAMOND, poseStack)\n\n            context.scale(-1, -1, 1)\n            context.drawTexture(\"minecraft:textures/item/apple.png\", 0, 0, 16, 16)\n            poseStack.popPose()\n\n\n\n        })\n    )\n})\n```"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-29T10:54:18.815Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"history": 1
+}

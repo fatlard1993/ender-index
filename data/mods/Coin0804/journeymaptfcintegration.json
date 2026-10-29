@@ -1,0 +1,161 @@
+{
+	"repo": "Coin0804/journeymaptfcintegration",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-07-02T15:24:11Z",
+	"pushed": "2026-08-18T11:46:34Z",
+	"releases": [
+		{
+			"tag": "1.0.3",
+			"published": "2026-08-18T11:46:34Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 519383063,
+					"name": "journeymaptfcintegration-neoforge-1.0.3.jar",
+					"url": "https://github.com/Coin0804/journeymaptfcintegration/releases/download/1.0.3/journeymaptfcintegration-neoforge-1.0.3.jar",
+					"size": 50758,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a189bcf1871d5ffb8e3e9db462467ae2daaa301a1ec7acd543648714c10430ca",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "journeymaptfcintegration",
+							"version": "1.0.1",
+							"name": "JourneyMap TFC Integration",
+							"description": "Adds TerraFirmaCraft climate and rock layer overlays to JourneyMap.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"tfc",
+								"journeymap"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 20,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### [1.0.3] — 2026-08-18\n\n#### Fixed\n\n- **非 TFC 世界崩溃（Critical）**：进入超平坦（或任何非 TFC 生成器）世界时，区块生成过程中 `RockData.getSurfaceRock` 抛 `NullPointerException` 直接崩服。原因：世界生成器不是 TFC 时，TFC 的 `CHUNK_DATA` attachment 退化为无 generator 的空数据，`getSurfaceRock` 无条件解引用 null。\n  - 新增 `TFCDataAccess.isTFCGenerator()` —— 判定 `level.getChunkSource().getGenerator() instanceof TFCChunkGenerator`。\n  - `ServerCache.queryData()` —— 非 TFC 世界跳过岩石查询（`rockId=\"\"`，温度/降雨逻辑不变）；判定按生成器实例缓存（世界切换自动重判），每个世界打一次 INFO 日志。\n  - `ChunkEvent.Load` 与 `warmup()` 两条路径都经 `queryData`，一处守卫全覆盖。"
+		},
+		{
+			"tag": "1.0.2",
+			"published": "2026-07-13T07:28:49Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 475212318,
+					"name": "journeymaptfcintegration-neoforge-1.0.2.jar",
+					"url": "https://github.com/Coin0804/journeymaptfcintegration/releases/download/1.0.2/journeymaptfcintegration-neoforge-1.0.2.jar",
+					"size": 50220,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "6c8111f853839fd2945c7d86ac945922b7ef9e0b6e167eb9d62713b11a4dc277",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "journeymaptfcintegration",
+							"version": "1.0.1",
+							"name": "JourneyMap TFC Integration",
+							"description": "Adds TerraFirmaCraft climate and rock layer overlays to JourneyMap.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"tfc",
+								"journeymap"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 20,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### [1.0.2] — 2026-07-13\n\n#### Fixed\n\n- **缓存丢失（Critical）**：`loadOnce()` 原本依赖客户端请求触发，外部模组（如 SimpleBackups）可在服务端初始化后立即触发 `LevelEvent.Save`，此时内存中仅有 spawn chunks 的不完整数据，`save()` 直接覆盖磁盘上完整的历史缓存文件，造成不可逆的数据丢失。\n  - `loadOnce()` 移至 `JMTFCServerPlugin.initialize()` 中执行——服务端就绪即加载，不再依赖客户端。\n  - `save()` 新增 `loadedFromDisk` 守卫——`loadOnce()` 未完成前拒绝覆盖磁盘。\n  - `loadOnce()` 加载时与内存已有 `ChunkEvent.Load` 数据合并，磁盘优先，追加合并计数日志。\n\n#### Added\n\n- **`/jmtfc clearcache` 命令**：OP 权限（level 2），清除全部 TFC 缓存（内存 + 磁盘文件）。\n- **全链路诊断日志**：覆盖 loadOnce / save / warmup / buildPayload / handleRequestCache / handleCacheData / onCacheDataReceived / toggleOverlay / renderOverlay 各环节，INFO 仅保留关键生命周期事件。\n\n#### Changed\n\n- **日志降级**：per-request 日志（warmup、buildPayload、toggleOverlay 等）降至 DEBUG，减少正常使用时的日志噪音。\n- 修复 `TFCDataAccess` 中 `ChunkAccess` 全限定名引用。"
+		},
+		{
+			"tag": "1.0.1",
+			"published": "2026-07-11T11:15:38Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 473438263,
+					"name": "journeymaptfcintegration-neoforge-1.0.1.jar",
+					"url": "https://github.com/Coin0804/journeymaptfcintegration/releases/download/1.0.1/journeymaptfcintegration-neoforge-1.0.1.jar",
+					"size": 46638,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "dd01678b0ffd872d6182578052ae3a6611ae97672fad1efc2c6ad006ca66b736",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "journeymaptfcintegration",
+							"version": "1.0.1",
+							"name": "JourneyMap TFC Integration",
+							"description": "Adds TerraFirmaCraft climate and rock layer overlays to JourneyMap.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"tfc",
+								"journeymap"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 20,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			]
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "Adds TerraFirmaCraft rock layer, temperature, and precipitation overlays to the JourneyMap fullscreen map.",
+	"funding": [],
+	"fundingChecked": "2026-10-29T10:54:18.815Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"history": 1
+}

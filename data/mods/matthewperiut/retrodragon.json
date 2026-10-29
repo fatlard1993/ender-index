@@ -76,7 +76,11 @@
 							"breaks": [
 								"starac",
 								"gambac"
-							]
+							],
+							"breaksVersions": {
+								"starac": "*",
+								"gambac": "*"
+							}
 						}
 					],
 					"scan": {
@@ -281,7 +285,7 @@
 						"unreadable": []
 					},
 					"icon": "df2908f2b58185fd2b573e15d4b291d806e623ab0717ffa51b6a53c0b40065d3.png",
-					"downloads": 69,
+					"downloads": 71,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -353,7 +357,11 @@
 							"breaks": [
 								"starac",
 								"gambac"
-							]
+							],
+							"breaksVersions": {
+								"starac": "*",
+								"gambac": "*"
+							}
 						}
 					],
 					"scan": {
@@ -557,7 +565,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 15,
+					"downloads": 16,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -565,7 +573,8 @@
 						"shaders": true
 					}
 				}
-			]
+			],
+			"notes": "Sky light as a uniform, so dusk stops re-meshing the world.\n\n- Beta bakes the time of day into every terrain vertex colour, so each step of `World.ambientDarkness` -- 12 values, walked twice a day cycle and again for every rain and thunder transition -- re-meshes every sky-lit section. That is ~22 full rebuild storms per day for a change that is one number. It is a uniform now and the sweep is cancelled.\n- A terrain vertex carries two bytes instead: its luminance at full daylight, and the luminance block light alone gives it. The shader inverts the first through beta's own brightness curve, subtracts the darkness, re-applies the curve and takes the larger of that and the second. At darkness 0 those cancel, so noon is vanilla's colour to within the byte it is stored in.\n- The bytes come from meshing a section up to three times with `getNaturalBrightness` answering differently, and dividing one walk's colour by another's. Whatever a renderer does to a luminance on the way to the vertex it does in both walks, so everything but the light cancels -- which is what lets the same two bytes come out of beta's own renderer and out of StationAPI's Arsenic. The block-floor walk is skipped for a section with no block light in it.\n- Both backends. WebGPU reads a `Unorm8x2` attribute; the GL terrain program reads a generic one. On GL the pair rides in beta's unread pad word, so the legacy vertex stays 32 bytes; the compact one grows to 24, sharing its extra word with the stitched-atlas sprite size.\n- Fixes a sky-light bug that predates this: StationAPI's flattening overrides `Chunk.getLight` without calling super, so the per-thread sky-light verdict was never set and the world never re-lit when the sun moved -- outdoors at midnight, lit as if it were noon. The flag is now collected at the call site, which is virtual and covers any `Chunk` subclass.\n\nVerified in game at noon and midnight on WebGPU, GL and StationAPI against `-Dretroperf.terrainLight=false`: land pixels come out within 1/255 on average at both times of day. Orbit bench 1.36 ms median against 1.52 ms baked.\n\n`-Dretroperf.terrainLight=false` reverts to beta's baked light and its rebuilds."
 		},
 		{
 			"tag": "0.1.14",
@@ -1104,7 +1113,8 @@
 					},
 					"downloads": 17
 				}
-			]
+			],
+			"notes": "glCopyTexSubImage2D under the WebGPU backend.\n\n- The shim now implements glCopyTexSubImage2D. It was missing, so the call did nothing and UniTweaks' main-menu panorama blurred an empty texture -- a blank title screen. The panorama renders now.\n- The copy is a draw rather than a texture copy, because it has to convert format (BGRA swapchain, RGBA textures) and flip: GL's window origin is bottom-left, so the destination's first row is the framebuffer's bottom one.\n- Fixed a crash in the -Dretroperf.shotFrame diagnostic when the frame limiter is uncapped.\n\nNote: UniTweaks 0.29.0 also gates its panorama on ModMenu being installed, so it stays off without it whatever the config says."
 		},
 		{
 			"tag": "0.1.13",
@@ -1643,7 +1653,8 @@
 					},
 					"downloads": 3
 				}
-			]
+			],
+			"notes": "Fixed-function mod compatibility under the WebGPU backend.\n\n- glPushAttrib and glPopAttrib are now implemented in the shim, restoring state by mask the way GL does. Mods that wrap a scene in push/pop (OldMCLogo's title screen) no longer leak depth and blend state into the rest of the GUI.\n- glViewport is honored per draw, so a mod rendering through a sub-viewport lands where it intended instead of stretching across the whole framebuffer.\n- Any GL entry point the shim still lacks logs a one-time warning naming the exact method, instead of silently doing nothing.\n- Declares incompatibility with starac and gambac."
 		},
 		{
 			"tag": "0.1.12",
@@ -2182,7 +2193,8 @@
 					},
 					"downloads": 11
 				}
-			]
+			],
+			"notes": "**A macOS launch was signed in as nobody.** The game came up as `Player1098`, then `Player4471` the next time, a fresh throwaway name on every start, while the same instance launched through the applet on Windows and Linux was signed in correctly. The launcher had authenticated normally and nothing in the log looked wrong. The credentials were never lost by the launcher; this path never read them.\n\nb1.7.3 predates named arguments for an account. The version manifest asks for `${auth_player_name} ${auth_session} --gameDir ... --assetsDir ...`, so a launcher hands the pair over positionally and loader keeps the two as leftovers rather than as named values. Its `AppletFrame` reads them back out of that leftover list, which is how the applet path has been signed in all along. `HeadlessLaunch`, the macOS SDL3 path that skips the applet entirely, parsed only `--key value` pairs, so the pair fell on the floor and the fallback name was all that was left.\n\nThe pair does not stay at the front, either. Loader parses the command line into named values plus leftovers and rebuilds it in that order, so by the time the arguments reach this launch the credentials trail the flags; reading them by index would have been wrong. They are read now as whatever the flag pass did not consume, and only when there are exactly two leftovers, the shape loader itself insists on. `--username` and `--session` still win where a launcher sends them, so the positional pair is a fallback only and a launcher that was already working cannot regress.\n\nRetroCenter children were the same story. This path now brings across the branch `MinecraftAppletMixin.init` always had: a child instance takes the hub's session and its assigned server, so children on macOS no longer boot anonymous and unconnected.\n\n[RetroAuth](https://modrinth.com/mod/retroauth) is downstream of all of this. It enriches whatever `Session` the game built, so it had a throwaway name and an empty token to work with and could do nothing with either. It needs no change to come back.\n\nWindows and Linux never take this path and are unaffected."
 		},
 		{
 			"tag": "0.1.11",
@@ -2721,11 +2733,14 @@
 					},
 					"downloads": 2
 				}
-			]
+			],
+			"notes": "**macOS shortcuts outranked key binds.** Ctrl+space is the system's binding for \"Select the previous input source\", so a player with sprint on control got the input source picker every time they jumped. Cmd+tab, cmd+space and the function-key shortcuts are the same story.\n\nThese are *symbolic hot keys*: the window server matches them before the event is dispatched to any process, so nothing at the SDL, GLFW or NSEvent layer can see them, let alone swallow them. Monitoring events is what mods like [MCMacOSInputFixes](https://github.com/hamarb123/MCMacOSInputFixes) do, and it fixes the combinations that *do* arrive — ctrl+click, shift+scroll, trackpad momentum — but it cannot reach these.\n\nHIToolbox exposes `PushSymbolicHotKeyMode` and `PopSymbolicHotKeyMode`, the pair remote desktop clients and full screen games use to hold the system's shortcuts back while they own the keyboard. `kHIHotKeyModeAllDisabled` is now pushed while the pointer is grabbed **and** the window is focused — no screen is open, the player is looking around, and every keystroke is meant for the game — and popped the moment a GUI opens or focus leaves. Chat is exactly where switching input source is a reasonable thing to do, and leaving the system's shortcuts disabled while the player is in another application would be indefensible. `Sdl3Window.destroy` pops as well, for a teardown that keeps the JVM alive.\n\nThe cost is inherent to the API rather than to the implementation: there is no public way to disable one symbolic hot key, so cmd+tab does nothing while you are in game either. Press escape first, the way every full screen game has always worked.\n\nBoth functions are looked up through the already-loaded HIToolbox bundle, so nothing is dlopened and no native library ships. They are Carbon-era SPI: if a future macOS drops them the lookup fails once, the class marks itself unavailable, and every call after that is a no-op — which costs the player nothing but the original annoyance. Verified against the live frameworks before wiring: both symbols resolve, the push returns a token and the pop takes it back.\n\nWindows and Linux are untouched; the class is inert off macOS."
 		}
 	],
 	"readme": null,
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
 	"history": 1
 }

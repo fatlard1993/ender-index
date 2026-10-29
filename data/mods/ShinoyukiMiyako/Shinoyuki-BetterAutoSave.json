@@ -1,0 +1,530 @@
+{
+	"repo": "ShinoyukiMiyako/Shinoyuki-BetterAutoSave",
+	"host": "github",
+	"description": "Async world saving for Forge 1.20.1 servers — chunk, entity and saved-data serialization moved off the main thread. Kills autosave lag spikes. Ships save-latency diagnostics and Prometheus metrics. Foundation of the Shinoyuki series: BetterBackup's incremental backups build on its listener API",
+	"stars": 5,
+	"archived": false,
+	"license": "AGPL-3.0",
+	"created": "2026-05-03T17:43:14Z",
+	"pushed": "2026-09-21T21:37:27Z",
+	"releases": [
+		{
+			"tag": "v0.20.2",
+			"published": "2026-09-21T21:37:28Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 579915123,
+					"name": "shinoyuki_betterautosave-0.20.2-all.jar",
+					"url": "https://github.com/ShinoyukiMiyako/Shinoyuki-BetterAutoSave/releases/download/v0.20.2/shinoyuki_betterautosave-0.20.2-all.jar",
+					"size": 1236085,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "c138197fe2a360b66cfcbff5a8f3d3696d05d547054bf3ad90c83ccec326e059",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "shinoyuki_betterautosave",
+							"version": "0.20.2",
+							"name": "Shinoyuki BetterAutoSave",
+							"description": "Asynchronous chunk + entity + SavedData serialization for 1.20.1 Forge: snapshot on main thread, encode and IO on worker pool.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 656,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.5.4.jar",
+							"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 579915124,
+					"name": "shinoyuki_betterautosave-neoforge-0.20.2.jar",
+					"url": "https://github.com/ShinoyukiMiyako/Shinoyuki-BetterAutoSave/releases/download/v0.20.2/shinoyuki_betterautosave-neoforge-0.20.2.jar",
+					"size": 211871,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a248bfd2580906fc944112d5980be603e4f3a9819142162e6821db9a344630d5",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "shinoyuki_betterautosave",
+							"version": "0.20.2",
+							"name": "Shinoyuki BetterAutoSave",
+							"description": "Asynchronous chunk + entity + SavedData serialization for 1.21.1 NeoForge: snapshot on main thread, encode and IO on worker pool.",
+							"minecraft": "[1.21.1,1.21.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 109,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v0.20.2 — 修复区块异步存盘的两处竞态窗口\n\n区块异步存盘在两处极窄的时间窗口里，会把「这个区块当前没有写盘任务」的错误信号暴露给主线程。撞上时，同一个区块会出现两份并行的写盘，或者一次保存请求被错误地当成「已有人处理」而跳过。最坏的后果是重启后该区块回退到较早的状态，或者卸载前最后一次改动没有落盘\n\n两处窗口都只有几条指令宽，而且要求主线程恰好在那一瞬间处理同一个区块的保存，实际触发概率很低。但它们属于数据安全问题，建议所有 0.20.x 用户升级。本版只改动区块存盘路径\n\n### 一、问题\n\n主线程在 `ChunkMap.save` 里只根据区块的存盘状态二选一：状态是「在飞」（已有写盘任务），就把最新内容登记成接力快照，等在飞的那次写完后接着写；状态是「脏」，就开一个新的存盘周期。这两种状态之间的切换必须是一步完成的，中间不能被主线程看到别的值\n\n有两条路径把这一步拆成了两步，中间短暂出现了「脏」：\n\n1. **写盘失败后的原地重试**。写盘失败且未超过 `maxRetries` 时，回调会用已经序列化好的旧数据原地重投。它先把状态改成「脏」，下一步才改回「在飞」。夹在中间的主线程会以为没有在飞任务：抢先一步就开出第二个存盘周期，与重试并行写同一个区块；慢了一步则把这次保存当成「已有人处理」直接放过，不登记接力。后一种情况如果发生在区块卸载时，卸载前的最后一批改动没有任何副本\n2. **接力写盘**。在飞的那次写完后，如果有接力快照在等，回调先把状态改成「脏」并取走快照，下一步才进入接力周期。登记接力时区块并不会被标记为已保存，所以这段时间主线程处理同一个区块时同样会开出第二个周期。若接力快照之后区块又被改动过，两个周期落地时都会判定数据已过期，谁都不把区块标记为干净；若较早那份数据后写完，region 文件里留下的就是旧内容，而区块此时已被标记为已保存，不会再写一次\n\n第二处窗口不需要磁盘出错，只要同一个区块在写盘途中又被改动并触发了保存（典型场景是卸载，或高负载下的自动保存）即可具备前提\n\n在部分交错下，两处窗口还会让内部的待落盘计数永久多出 1：`/betterautosave drain-unload` 会一直等不到归零，Prometheus 的 `mustDrain` 指标也会一直显示有区块待处理\n\n### 二、修复\n\n原则是：只有真正结束、之后不再有后续写盘的回调，才能把状态改成「脏」。会继续写盘的回调，全程保持「在飞」\n\n1. 写盘失败未超过重试次数时，状态保持「在飞」不变，直接原地重投。只有序列化线程自身出错、已经无法重投时，才由兜底逻辑单独把状态改成「脏」，交给下一轮存盘重新捕获。实体存盘路径自 0.11.0 起已按同样的方式处理，这次区块路径补齐\n2. 取走接力快照与进入接力周期合并成同一个原子操作，中间不再出现「脏」\n\n两处改动都不改变存档格式、配置键和对外 API，状态机在其它路径上的行为保持不变\n\n### 三、验证\n\n- 538 项单元测试全部通过，其中新增 9 项：用单线程按交错顺序逐步驱动状态机，确定性地复现两处窗口；另加一组随机化用例，覆盖 0 到 10 次重试上限及恰好用尽上限的边界\n- 变异验证：把修复的关键改动逐一改回旧写法，共 6 组，每一组都有测试失败\n- 两个独立审查方分别对修复做了对抗式复审\n\n### 四、升级\n\n替换 jar 即可，存档格式与配置键不变"
+		},
+		{
+			"tag": "v0.20.1",
+			"published": "2026-08-22T03:35:10Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 524606853,
+					"name": "shinoyuki_betterautosave-0.20.1-all.jar",
+					"url": "https://github.com/ShinoyukiMiyako/Shinoyuki-BetterAutoSave/releases/download/v0.20.1/shinoyuki_betterautosave-0.20.1-all.jar",
+					"size": 1235890,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "4ad09bdb60862d9916973d877791094bfcaffd662d755ff1d468d3643bfa4b14",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "shinoyuki_betterautosave",
+							"version": "0.20.1",
+							"name": "Shinoyuki BetterAutoSave",
+							"description": "Asynchronous chunk + entity + SavedData serialization for 1.20.1 Forge: snapshot on main thread, encode and IO on worker pool.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 656,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.5.4.jar",
+							"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 524606851,
+					"name": "shinoyuki_betterautosave-neoforge-0.20.1.jar",
+					"url": "https://github.com/ShinoyukiMiyako/Shinoyuki-BetterAutoSave/releases/download/v0.20.1/shinoyuki_betterautosave-neoforge-0.20.1.jar",
+					"size": 211702,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "5c34053b6acc2938de543660ce240a5c3eab9f2958858a3dbaa7434771169111",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "shinoyuki_betterautosave",
+							"version": "0.20.1",
+							"name": "Shinoyuki BetterAutoSave",
+							"description": "Asynchronous chunk + entity + SavedData serialization for 1.21.1 NeoForge: snapshot on main thread, encode and IO on worker pool.",
+							"minecraft": "[1.21.1,1.21.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 109,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v0.20.1 — 修复与 Lithium 系优化 mod 同装时启动崩服\n\n0.20.0 与 Harium、Radium、Radium Re-Reforged、Canary 一类 Lithium 移植同装时会导致服务器启动崩溃。装了这些 mod 的用户请直接升级到 0.20.1，或临时回退到 0.19.0。只有 0.20.0 受影响\n\n### 一、症状\n\n启动时 mixin 应用失败，整个配置被拒绝：\n\n```\nMixin apply failed shinoyuki_betterautosave.mixins.json:ServerChunkCacheSyncLoadMixin\n  -> net.minecraft.server.level.ServerChunkCache\nInvalidInjectionException: @At(\"INVOKE\") on ...betterautosave$measureSyncChunkLoad with priority 1000\n  cannot inject into ServerChunkCache::m_7587_ merged by\n  me.jellysquid.mods.lithium.mixin.world.chunk_access.ServerChunkManagerMixin with priority 1000\n```\n\n失败的是 0.20.0 新增的同步加载检测器，但代价是整份 `shinoyuki_betterautosave.mixins.json` 一起被拒绝——异步存盘、异步加载全部随之失效，服务器起不来\n\n### 二、原因\n\n0.20.0 的同步加载检测器用 `@WrapOperation` 包住 `ServerChunkCache.getChunk` 里那次等待区块就绪的调用，并声明了 `require = 0`，本意是「注入点不存在时静默跳过，不让一个纯观测功能把服务器搞崩」\n\n这个声明不足以覆盖真实的失败模式。Lithium 系用 `@Overwrite` 整体接管了 `getChunk`，而 Mixin 在 `Injector.findTargetNodes` 里有一条更早的判定：注入器的优先级不高于已经 merge 该方法的 mixin 时，直接抛 `InvalidInjectionException`。两边优先级都是默认的 1000，不满足条件；这条判定发生在 require 的命中数检查之前，所以 `require = 0` 根本没有被问到\n\n0.20.0 发行说明里「这种情况下同步加载检测静默不生效，而不是让服务器启动失败」这句话，方向是对的，实现没有兑现。这一版补上\n\n### 三、修复\n\n同步加载检测器的注入改为在类加载期先过一道门控，命中任一条就完全不注入这个 mixin：\n\n1. 磁盘上 `common.toml` 里 `diagnostics.syncLoadDetection` 为 `false`（缺文件、缺段或缺键按默认值 `true` 处理）\n2. 在场 mod 中含已知会 `@Overwrite getChunk` 的：`harium`、`radium`、`canary`、`lithium`\n\n门控关闭时打一行 WARN 指明是哪个 mod 触发的：\n\n```\n[BetterAutoSave] sync chunk load detector disabled: mod 'harium' overwrites\nServerChunkCache.getChunk, which Mixin will not let us wrap. Async saving and loading are unaffected\n```\n\n这一行是必要的：否则「装了 0.20 却看不到任何同步加载报告」将无从解释。**存盘、异步加载以及其余全部功能不受该门控影响**\n\n没有采用提高该 mixin 优先级的做法。那样 BAS 会先应用，对方的 `@Overwrite` 随后把整个方法体连同本注入一起覆盖掉，结果是崩溃风险转移给对方而本功能照样失效\n\n### 四、名单之外的同类 mod\n\n第 2 条是白名单，只覆盖已知的四个。若今后出现同样 `@Overwrite getChunk` 而不在名单上的 mod，把 `diagnostics.syncLoadDetection` 设为 `false` 并重启即可（走第 1 条判定），不必等待版本更新\n\n判定逻辑对两个加载器完全一致；NeoForge 侧此前没有 mixin 配置插件，这一版补齐\n\n### 五、验证\n\n- 529 项单元测试，其中门控判定规则 11 项，覆盖白名单匹配、大小写、误报反向断言、TOML 段落识别与默认值语义\n- 测试服 1.20.1 双向实测：BAS 0.20.0 + Harium 2.0 可稳定复现启动崩溃；换 0.20.1 后服务器正常启动，日志中 WARN 指明 `harium`；移除 Harium 后服务器正常启动且不打该 WARN，检测器照常注入\n- 上述崩溃异常原文已随修复一并记入源码注释，避免今后再次用 `require = 0` 去应对同类问题\n\n### 六、升级\n\n替换 jar 即可，存档格式与配置键不变。0.19.0 及更早版本不含该 mixin，不受此问题影响"
+		},
+		{
+			"tag": "v0.20.0",
+			"published": "2026-08-21T03:17:54Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 523153794,
+					"name": "shinoyuki_betterautosave-0.20.0-all.jar",
+					"url": "https://github.com/ShinoyukiMiyako/Shinoyuki-BetterAutoSave/releases/download/v0.20.0/shinoyuki_betterautosave-0.20.0-all.jar",
+					"size": 1232569,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "1875ee0743e2d2242577cc5b549311cdeda0569a31b6eabbe7737a5eb367ce1f",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "shinoyuki_betterautosave",
+							"version": "0.20.0",
+							"name": "Shinoyuki BetterAutoSave",
+							"description": "Asynchronous chunk + entity + SavedData serialization for 1.20.1 Forge: snapshot on main thread, encode and IO on worker pool.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 655,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.5.4.jar",
+							"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 523153795,
+					"name": "shinoyuki_betterautosave-neoforge-0.20.0.jar",
+					"url": "https://github.com/ShinoyukiMiyako/Shinoyuki-BetterAutoSave/releases/download/v0.20.0/shinoyuki_betterautosave-neoforge-0.20.0.jar",
+					"size": 206961,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "07b2b5a7f99704bad3825cef7898a69635a8dafb93bbe250a04edc2fd096b402",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "shinoyuki_betterautosave",
+							"version": "0.20.0",
+							"name": "Shinoyuki BetterAutoSave",
+							"description": "Asynchronous chunk + entity + SavedData serialization for 1.21.1 NeoForge: snapshot on main thread, encode and IO on worker pool.",
+							"minecraft": "[1.21.1,1.21.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 107,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v0.20.0 — 把主线程同步区块加载与 tick 间停顿变成可观测的\n\n0.20.0 新增两项诊断能力，只观测、不干预：主线程同步区块加载检测，以及 tick 之间长停顿的监控。两项都默认开启，两个加载器功能一致\n\n### 一、这两类卡顿以前查不到\n\n一台 74 人在线的生产服出现整服冻结。用 spark 抓下来之后，主线程上 BetterAutoSave 自己的存盘路径（`NbtIo` 写入）只占 0.03%，存盘不是原因。真正的两个来源是：\n\n- 一次由第三方调用发起的主线程同步区块加载，单次阻塞 5.2 秒\n- 两段发生在 tick 与 tick 之间的停顿，17.1 秒和 14.8 秒\n\n第二类尤其麻烦。MSPT 只统计一个游戏刻内部的耗时，两刻之间的等待不计入，所以这 17 秒在 TPS 曲线和常规监控面板上完全看不见——面板一切正常，玩家却在断线。把这两处从 spark 的 inclusive 调用树里翻出来花了数小时人工排查。0.20.0 要做的就是让服务器自己把它们报出来\n\n### 二、主线程同步区块加载\n\n区块不在内存里时，如果有代码在主线程上直接把它要过来，主线程就得原地等到硬盘读完、必要时连地形生成一起等完，这期间整个服务器停住。原版在正常运行中很少走到这条路径，实际触发它的通常是在事件回调、定时任务或命令里直接按坐标取区块的第三方逻辑\n\nBAS 在原版 `ServerChunkCache.getChunk` 里那次「等待区块就绪」的调用上做计时，超过 `diagnostics.syncLoadThresholdMs`（默认 50 毫秒，即一个游戏刻）时记一次，内容包括阻塞时长、区块坐标、维度，以及调用栈中第一个非原版类：\n\n```\n[BetterAutoSave] main-thread sync chunk load: 5188ms at (120,-340) in minecraft:overworld, called from com.example.protection.RegionScanner\n```\n\n同一个来源只在首次出现时打印一行，之后只累加进统计表，避免跑图时刷屏\n\n这个调用点位于原版四槽区块缓存未命中之后的分支上：请求的区块已在缓存里时根本执行不到这里。未命中时也只多两次 `System.nanoTime()`（数十纳秒），而调用栈只在确实超过阈值之后才采集——正常运行中一次都不采\n\n### 三、tick 间停顿\n\n一个游戏刻结束到下一刻开始之间，服务器一边等下一刻到来，一边处理任务队列。这段时间不计入 MSPT。队列里的东西（其它 mod 提交的任务、区块系统回调、命令执行）如果卡住，MSPT 可以一直保持健康，而玩家已经卡了十几秒\n\n默认档在 tick 开始与结束各取一次时间戳，间隔超过 `diagnostics.tickGapThresholdMs`（默认 1000 毫秒）即记一次：\n\n```\n[BetterAutoSave] inter-tick gap: 17100ms after tick 148213 (this time is not counted in MSPT)\n```\n\n默认档只报「有多长、发生在哪个 tick 之后」，不报是谁。要落到具体任务，打开 `diagnostics.tickGapDeepAttribution`（默认关闭）：它给任务队列里的每个任务单独计时，把耗时超过阈值十分之一（默认即 100 毫秒）的任务按实际 `Runnable` 类型归档。这一档每个任务多两次纳秒取时，而服务器每刻要跑几百个任务，所以只建议在已经收到 tick gap 报告、需要缩小范围时临时打开，查完关掉\n\n### 四、关于归因的措辞\n\n检测报告的是「阻塞发生在哪条调用链上」，不是「谁有 bug」。同步取区块在很多场景下是完全合理的写法，只是代价随服务器规模、视距和硬盘速度放大；一次 5 秒的等待里，磁盘、地形生成以及同一台机器上的其它负载都可能是主因。检测到的阻塞多数来自第三方 mod 的调用模式，不代表该 mod 存在缺陷\n\n请把归因结果当作定位的起点，而不是结论。命令输出里固定带着同一句话：\n\n```\nnote: stalls listed above are attributed to the call site, not to a defect in the owning mod.\n```\n\n### 五、三条查看路径\n\n`/betterautosave diagnose [数量]`（默认 10，可填 1-50）打印当前累计与 Top N 归因，`/betterautosave diagnose reset` 清空两张统计表并重置日志去重记录。完整输出样例见 `docs/CONFIGURATION.md` 第八节\n\nreset 刻意不清累计计数（`bas_sync_load_stalls_total` 一类）：Prometheus 的 counter 必须单调递增，清零会破坏 `rate()`。命令回执里会说明这一点\n\n周期性诊断摘要（`diagnostics.diagnosticLogging`，默认开启）末尾新增两行：\n\n```\n[BetterAutoSave]   |- syncLoad: stalls=37 totalBlocked=48210ms tracked=2 top=examplemod=31400ms x12, com.example.map.RegionCache=14600ms x19\n[BetterAutoSave]   `- tickGap: exceeded=2 max=17100ms last=14800ms after tick 148213 deepTasks=0\n```\n\nPrometheus 导出器新增四个指标：\n\n| 指标 | 类型 | 含义 |\n|---|---|---|\n| `bas_sync_load_stalls_total` | counter | 超阈值的主线程同步区块加载次数 |\n| `bas_sync_load_stall_seconds_total` | counter | 上述阻塞的累计秒数 |\n| `bas_tick_gap_exceeded_total` | counter | 超阈值的 tick 间停顿次数 |\n| `bas_tick_gap_max_seconds` | gauge | 本次启动以来最长的一次 tick 间停顿 |\n\n### 六、新增配置项\n\n| 配置项 | 默认 | 作用 |\n|---|---|---|\n| `diagnostics.syncLoadDetection` | `true` | 主线程同步区块加载检测总开关 |\n| `diagnostics.syncLoadThresholdMs` | `50` | 单次阻塞达到该毫秒数才记录（1 - 60000） |\n| `diagnostics.syncLoadTrackLimit` | `64` | 同时追踪的（归因主体，调用栈）组合上限，超出按 LRU 逐出。重启生效 |\n| `diagnostics.syncLoadStackDepth` | `24` | 每次记录保留的非原版栈帧数（4 - 128） |\n| `diagnostics.tickGapDetection` | `true` | tick 间停顿检测总开关 |\n| `diagnostics.tickGapThresholdMs` | `1000` | 间隔达到该毫秒数才记录（50 - 600000） |\n| `diagnostics.tickGapDeepAttribution` | `false` | 深度档：逐任务计时以定位造成停顿的任务 |\n| `diagnostics.tickGapDeepTrackLimit` | `64` | 深度档表的 LRU 上限，深度档关闭时无效。重启生效 |\n\n除两个 `TrackLimit` 外全部可热重载，改完即刻生效\n\n### 七、已知的限制\n\n- 如果同时装了重写区块获取路径的 mod（C2ME 一类），BAS 的探针可能因为目标调用不复存在而装不上去。这种情况下同步加载检测静默不生效，而不是让服务器启动失败——纯观测功能不值得换来一次启动崩溃。注入点是否还在由构建期的门禁测试保证，运行期不再硬校验\n- 归因取的是调用栈中第一个非原版类的全限定名；能在加载器的 mod 文件扫描表里匹配到时换成 modid，匹配不到就保留类名。调用链经过事件总线时，这个类名可能是事件订阅者而不是最初的发起方，深一层的线索在命令输出的栈帧行里\n- 深度档「阈值的十分之一」这个派生系数没有实测依据，是「构成一次 1 秒停顿的单个任务通常在 100 毫秒量级」的工程估计。若真机上发现漏掉的中等任务太多，会在后续版本把它提为独立配置项\n- 两个 `TrackLimit` 在服务器启动时冻结，改完需要重启\n\n### 八、行为变更\n\n周期性诊断摘要现在在管线降级会话中也继续输出，此前它随降级一起停摆。同步加载与 tick 间停顿由外部调用模式引起，与 BAS 自己是否降级无关，而降级会话往往正是最需要观测的时候。副作用是存盘指标摘要在降级会话里也会继续打印\n\n### 九、升级\n\n- 替换 jar 即可，存档格式与既有配置键不变\n\n..."
+		},
+		{
+			"tag": "v0.19.0",
+			"published": "2026-08-03T14:46:11Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 500170213,
+					"name": "shinoyuki_betterautosave-0.19.0-all.jar",
+					"url": "https://github.com/ShinoyukiMiyako/Shinoyuki-BetterAutoSave/releases/download/v0.19.0/shinoyuki_betterautosave-0.19.0-all.jar",
+					"size": 1202087,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "d8fc36e698329b692e91178866590cde3ae955216275aa353738b0ffce8a675f",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "shinoyuki_betterautosave",
+							"version": "0.19.0",
+							"name": "Shinoyuki BetterAutoSave",
+							"description": "Asynchronous chunk + entity + SavedData serialization for 1.20.1 Forge: snapshot on main thread, encode and IO on worker pool.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 643,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.5.4.jar",
+							"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 500170212,
+					"name": "shinoyuki_betterautosave-neoforge-0.19.0.jar",
+					"url": "https://github.com/ShinoyukiMiyako/Shinoyuki-BetterAutoSave/releases/download/v0.19.0/shinoyuki_betterautosave-neoforge-0.19.0.jar",
+					"size": 176525,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "7e655015cf051ab6231b48d6a859836bb25a2fe2397576fdc138c25544838366",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "shinoyuki_betterautosave",
+							"version": "0.19.0",
+							"name": "Shinoyuki BetterAutoSave",
+							"description": "Asynchronous chunk + entity + SavedData serialization for 1.21.1 NeoForge: snapshot on main thread, encode and IO on worker pool.",
+							"minecraft": "[1.21.1,1.21.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 95,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v0.19.0 — 玩家存档与 level.dat 的数据安全加固，以及自动保存的主线程尖峰优化\n\n0.19.0 补上了三处原版遗留的静默数据丢失路径，为 `level.dat` 建立起完整的读写校验闭环，并新增两项默认关闭的性能优化。数据安全类修复默认开启，性能类优化默认关闭\n\n（0.18.0 未公开发布，其内容已并入本版）\n\n### 一、三条会静默丢数据的路径\n\n这三处都是原版行为，触发时不报错、不中断、玩家自己也未必立刻察觉\n\n**玩家存档读取失败等同于新玩家。** `playerdata/<uuid>.dat` 读取抛异常时，原版记一行日志然后按新玩家处理——背包、位置、经验全部归零，而 `<uuid>.dat_old` 就躺在同一个目录里从未被查看。写盘中途断电、磁盘坏块、外部工具截断文件都会走到这里\n\n`playerData.loadFallback`（默认开启）改为：先把损坏的主文件隔离为 `<uuid>_corrupted_<时间戳>.dat` 保留证据，再尝试 `.dat_old`，读成功则正常走一遍数据修复器并返回。两份都读不出来时才回落到原版行为。主文件缺失（真正的新玩家）这条路径行为完全不变\n\n**成就与统计文件是截断写。** `advancements/<uuid>.json` 和 `stats/<uuid>.json` 原版直接覆盖写入实时文件，没有临时文件、没有备份。写到一半掉电，留下的是一个长度截断的 JSON——下次读取解析失败，该玩家所有成就与统计清零\n\n`playerData.atomicSidecarWrite`（默认开启）改为临时文件 + 原子改名，并在改名前把上一份留作 `.bak`。文件系统不支持原子改名时自动回退\n\n消除截断窗口靠的是「临时文件 + 原子替换」本身。额外的 `fsync` 另有一个独立开关 `playerData.sidecarFsync`，**默认关闭**：`PlayerList.save` 跑在服务器主线程上，每名在线玩家每次自动保存都要写这两个文件，开着它就是把两次同步刷盘按人数放大钉在同一个 tick 上（60 人即 120 次）。原版在这条路径上一次 `fsync` 都没有，连 `playerdata/<uuid>.dat` 都没有。而 ext4 在默认的 `data=ordered` 下，本来就会在提交「覆盖已有文件的改名」之前把新写的数据刷下去。只有在主机没有带电池的写缓存、且确实要防非正常断电时才建议打开，并配合下面的分批错峰使用\n\n**崩溃关服会跳过存盘收尾。** BetterAutoSave 的四个关服守卫此前都挂在 `ServerStoppingEvent` 上。服务器异常退出时该事件从不发出，另有一种情况是其它 mod 在该事件里抛异常打断了整条事件链——两种情况下守卫全部失效，队列中在途的存盘任务被直接丢弃\n\n本版把关服标记提前到 `stopServer` 入口，绕开事件机制。同时把降级善后的契约上移成 `SaveTask` 接口的方法：此前那段按类型分派的代码在遇到未登记的任务类型时会静默丢弃它，并且外层仍然计入\"已妥善处理 N 个\"\n\n### 二、level.dat 的读写校验闭环\n\n`level.dat` 存着世界种子、出生点、游戏规则、维度配置和 Forge 的注册表 ID 表。它损坏的后果不是丢一块地皮，是整个世界打不开，或者更糟——用一份被判定为\"可读\"的空白元数据启动，世界种子变成 0\n\n原版只有一层保护：写盘时把上一份轮转为 `level.dat_old`。但读取侧只在文件**存在但读不出来**时才会去看它，判据是\"能不能解析成 NBT\"\n\n本版补上另外三层，都默认开启：\n\n- `levelData.verifyOnStartup` — 启动时按四级判据检查（文件缺失 / 无法解压或解析 / 结构不完整 / 正常），前三种从 `level.dat_old` 自动修复。\"结构不完整\"指能解析成 NBT 但缺少 `Data`、`DataVersion` 或 `LevelName`，这正是原版判据放行、而后果最严重的那一类\n- `levelData.startupBackup` — 通过校验后立刻在 `<世界>/betterautosave/leveldat/` 下留一份原始字节副本，保留三代。原版永远不会读取这个目录，所以它不参与自动修复；检测到主副本和 `level.dat_old` 同时损坏时，日志会直接打出可复制的还原命令，由管理员决定\n- `levelData.postWriteVerify` — 写盘后在工作线程上把文件读回来校验一遍（默认 `CHECKSUM`，完整流式解压以触发 gzip 的 CRC 与长度校验；`FULL` 额外做结构判据；`OFF` 关闭）。这条只读、不修复，作用是让\"写坏了\"在下一次自动保存把好的那份轮转掉之前就被发现\n\n### 三、自动保存的主线程尖峰（issue #25）\n\n用 spark 观察一台 mod 较多的服务器，MSPT 曲线上通常能看到每 5 分钟一根整齐的尖峰，即使服上一个人都没有。它不来自区块存盘，而来自原版每次自动保存都会无条件重写一遍 `level.dat`\n\n这里要先纠正一个容易误判的归类：出问题的是世界根目录下的 `level.dat`（世界元数据），不是 `world/data/` 下的 `*.dat`（SavedData）。BetterAutoSave 此前的异步存盘只覆盖后者，`level.dat` 这条路径一直在覆盖范围之外\n\n而 mod 装多以后，`level.dat` 里绝大部分内容是 Forge 的注册表 ID 对照表。真实生产服实测（Forge 1.20.1，137 个 mod）：\n\n| 项 | 实测值 |\n|---|---|\n| `level.dat` 解压后大小 | 1,234,370 字节 |\n| 其中注册表 ID 表 `fml/Registries` | 1,215,091 字节（98.44%，17 个注册表 / 26,648 条 ID） |\n| 世界业务数据 `/Data` | 12,018 字节（0.97%） |\n| 主线程重建该表的开销 | 每次自动保存约 25ms |\n\n把相隔 5 分钟的两代 `level.dat` 解压后逐字节比对，1,234,370 字节中只有 5 个字节不同，且全部落在 `/Data` 区间——注册表那 1,222,341 字节完全相同。也就是说，每 5 分钟花 25ms 重算一遍的内容，算出来跟上次一模一样\n\n新增 `levelData.cacheRegistrySnapshot`，开启后缓存该表并在后续保存中复用。缓存由三层相互独立的机制失效，任一触发即重建：\n\n- Forge 的 `IdMappingEvent`，覆盖官方全部三条 ID 变更路径\n- 每次写盘前对每个持久化注册表采一次指纹（条目数与冻结状态），兜住 `ForgeRegistry.unfreeze()` 这条公开且不发任何事件的路径\n- `levelData.registryCacheRevalidateCycles` 周期性强制重算一次并与缓存逐字段对拍，不一致则记 ERROR 并采用实时结果\n\n这项优化只减少主线程重建工作，不改变写盘时机、不引入后台线程、不触碰 `level.dat` 的落盘协议\n\n需要留意的是，缓存命中时会跳过 `ForgeHooks.writeAdditionalLevelSaveData` 整个方法，其它 mod 注入到该方法里的逻辑也会一并跳过。目前没有已知的这类 mod（该方法标注为内部 API 且只有一处调用），且缓存内容本身就取自那些注入全部执行过的一次结果；若某个 mod 往里写入随时间变化的数据，周期性对拍会将其报为 `MISMATCH`\n\n生产环境实测：连续运行 15 小时 18 分，93 次周期性强制重算全部一致、零 `MISMATCH`，四次 `save-all` 取回的 `level.dat` 注册表区间逐字节相同，`writeAdditionalLevelSaveData` 的主线程耗时由 76ms 降至 16ms\n\n### 四、玩家存盘的主线程开销\n\n在 4 名玩家的生产服上抓取，每次自动保存里 `PlayerList.saveAll` 约占 80ms，约合每人 6.7ms，其中成就文件占 55%、玩家存档占 30%、统计文件占 15%。这一项随人数线性增长，60 人时会外推到每次自动保存约 400ms\n\n本版提供两个默认关闭的开关：\n\n`playerData.advancementsSkipMode` — 原版每次自动保存都会无条件重写每个在线玩家的成就文件，无论进度是否变化。开启后按脏标志跳过。三档：`OFF`（原版行为）、`AUDIT`（照常写，但与上次内容摘要对拍，只在判断本会出错时记录，用于确认脏标志在你的 mod 组合下没有漏判）、`ON`（真正跳过）\n\n这里有一处刻意的实现选择：没有复用原版的 `progressChanged` 集合。它被 `flushDirty` 每 tick 清空，自动保存时几乎恒为空，拿它当写盘脏标志会把确实变了的保存也跳掉。本版用独立标志，只在授予或撤销进度真正成功时置位\n\n\n..."
+		},
+		{
+			"tag": "v0.17.0",
+			"published": "2026-07-31T11:55:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 496644121,
+					"name": "shinoyuki_betterautosave-0.17.0-all.jar",
+					"url": "https://github.com/ShinoyukiMiyako/Shinoyuki-BetterAutoSave/releases/download/v0.17.0/shinoyuki_betterautosave-0.17.0-all.jar",
+					"size": 1148233,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b44a3eee01328651c0f951bacd26055120a60468f68aee24c18fec3c34f4a255",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "shinoyuki_betterautosave",
+							"version": "0.17.0",
+							"name": "Shinoyuki BetterAutoSave",
+							"description": "Asynchronous chunk + entity + SavedData serialization for 1.20.1 Forge: snapshot on main thread, encode and IO on worker pool.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 620,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.5.4.jar",
+							"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"META-INF/jarjar/mixinextras-forge-0.5.4.jar!META-INF/jars/MixinExtras-0.5.4.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 496644119,
+					"name": "shinoyuki_betterautosave-neoforge-0.17.0.jar",
+					"url": "https://github.com/ShinoyukiMiyako/Shinoyuki-BetterAutoSave/releases/download/v0.17.0/shinoyuki_betterautosave-neoforge-0.17.0.jar",
+					"size": 176401,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b34481e6d70b0c7d56fb6fb2f48cd3c84a486b8e376c1c633704f871ad6dfbf4",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "shinoyuki_betterautosave",
+							"version": "0.17.0",
+							"name": "Shinoyuki BetterAutoSave",
+							"description": "Asynchronous chunk + entity + SavedData serialization for 1.21.1 NeoForge: snapshot on main thread, encode and IO on worker pool.",
+							"minecraft": "[1.21.1,1.21.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 95,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v0.17.0 — 主线程存盘取材成本减半\n\n0.17.0 是一个性能版本。区块存盘在主线程上的取材成本降低约一半，来源是消除一处此前每次快照都会执行、但结果从不被使用的全区块遍历。本版同时修补一处第三方生物群系容器可能被直接引用进异步快照的数据安全隐患\n\n### 消除快照期的无效方块计数（issue #24）\n\n主线程 capture 此前把每个 section 的两个调色板容器包进一个 `LevelChunkSection`。该构造器会无条件调用 `recalcBlockCounts()`，对每个调色板多于一项的 section 遍历全部 4096 格并逐格喂进一个哈希表，一个区块 24 个 section 约合 9.8 万次哈希写入\n\n而它算出的三个方块计数（非空方块数、随机刻方块数、随机刻流体数）只服务于活跃区块的 tick 调度与网络同步，原版序列化 section 时一个都不读——计数全错的副本，落盘字节与正确副本逐字节相同。也就是说这次遍历的结果在存盘链路上从未被使用\n\n本版改为只携带 worker 编码真正需要的两个容器，落盘 NBT 字节不变，不涉及任何 mixin 或原版行为改动\n\n真实生产服前后对比（Forge 1.20.1，137 个 mod，AMD Ryzen 9 9950X3D2，ZGC，60 秒采样，`eventCompatMode = PARTIAL`）：\n\n| 主线程帧 | 改前 | 改后 |\n|---|---|---|\n| 快照取材入口 `captureWithGeneration` | 6692ms（占忙碌时间 19.1%） | 2948ms（8.2%） |\n| 其中 section 取材 `copySections` | 4096ms | 1024ms |\n| 方块计数重算 `recalcBlockCounts` | 3152ms | 0（调用已不存在） |\n| BetterAutoSave 主线程总占用 | 占忙碌时间 25.8% | 15.2% |\n\n两次采样的存盘区块量以不受本次改动影响的帧交叉核对，改后一轮反而高出约 15%，故上表降幅未被工作量差异夸大\n\n附带收益：每个 section 一个临时哈希表的分配消失后，ZGC 重定位读屏障（`forwarding_find`）同步下降 32%。调色板容器本身的深拷贝因此也快了 20%，尽管这部分代码未改\n\n需要说明的是，这不会提升一台本就健康的服务器的 TPS——两次采样 TPS 均为 20。它换来的是主线程余量：同样的存盘吞吐占用更少主线程时间，在高负载或大存档下更不容易挤占刻预算\n\n### FULL 兼容档不再重复取材\n\n`eventCompatMode = FULL` 下，快照取材（section 拷贝、光照层克隆、高度图克隆、方块实体 NBT、结构数据拷贝）此前在模式分支之前无条件执行，但该档实际使用的是原版 `ChunkSerializer.write` 产出的完整 NBT，而 `write` 内部会自行采集同一批数据。这批先采后废的工作现已跳过\n\n此前为规避 issue #8 而改用 FULL 档的用户，本版起不再承担双倍的主线程取材开销\n\n### 数据安全\n\n活跃 section 的生物群系容器若不是原版的 `PalettedContainer` 实现（原版不会出现，仅在第三方 mod 提供只读容器实现时触发），此前会被直接引用进异步快照。只读接口没有拷贝方法，无法脱钩，意味着 worker 编码期间主线程仍可改动同一对象。本版改为在主线程当场编码为 NBT 带走，与活跃容器彻底分离\n\n### 升级\n\n- 替换 jar 即可，无配置变更，存档格式不变\n- 落盘 NBT 与此前逐字节一致，可随时回退到 0.16.3"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-29T10:54:18.815Z",
+	"pictures": [
+		"docs/images/BetterAutoSave.png"
+	],
+	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"history": 1
+}
