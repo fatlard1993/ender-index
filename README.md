@@ -1,10 +1,17 @@
 # ender-index
 
-Minecraft mods found where their source lives, described by their own jars, and scanned every night.
+Minecraft mods found where their source lives, described by their own jars, and scanned every night; and the modpacks built from them, with where each of their mods really comes from.
 
 Search it at **[fatlard1993.github.io/ender-index](https://fatlard1993.github.io/ender-index/)**, or from a terminal with [ender](https://github.com/fatlard1993/ender-launcher)'s `ender search`. Both rank the same way.
 
 There is nothing to sign up for and nothing to describe twice. A repository is in the index because it looks like a mod and ships like one: loader metadata in its source tree, and jars attached to its releases on GitHub, Codeberg or GitLab. Everything else is read from what it already publishes.
+
+## What it shows
+
+- **Mods.** Search by name, theme or author, filtered by Minecraft version, loader, side, host and what a mod's code can reach, and sorted as you choose. Each mod has a page: its readme and pictures, its releases and what each jar can reach, what it needs, works with and won't work with, the packs it is in, and more from its author.
+- **Packs.** Modpacks kept in repositories, as packwiz packs, `.mrpack` releases or ender packs, searched, filtered and sorted like mods. Each has a page listing every mod it names: the ones in the index, the ones whose source is known but whose jar comes from Modrinth, and the ones with no source to be found. A pack says so up front when some of its mods come from Modrinth rather than their source, or have no jar anyone can fetch.
+- **Player shots.** Screenshots players share with the story behind them, on the pages of the mods they show, apart from the author's own pictures. `ender share`, or the form linked from a mod's page, posts one as a GitHub issue, and it appears once it is approved.
+- **Collections.** Gather mods from anywhere in the index, then copy the one line that installs them all, or make them into a pack to copy, download or publish as a gist.
 
 ## On your own machine
 
@@ -12,7 +19,7 @@ There is nothing to sign up for and nothing to describe twice. A repository is i
 ender web
 ```
 
-The same pages at `http://localhost:7460`, with your ender instances beside them: pick one, and each mod says whether it is installed, with a button to add or drop it, and the collection installs in one press. Every [ender](https://github.com/fatlard1993/ender-launcher) release carries these pages; it answers only pages it served itself, and adds nothing but the `gh:`, `cb:`, `gl:`, `mr:` and `cf:` specs search writes.
+The same pages at `http://localhost:7460`, with your ender instances beside them. Pick one, and each mod says whether it is installed, with a button to add or drop it; a collection installs in one press. The Instances page makes an instance from a list of mods or from a pack, updates and launches it, deletes it with its worlds kept, and publishes it as a gist, and what takes a while shows ender's progress as it goes. Every [ender](https://github.com/fatlard1993/ender-launcher) release carries these pages. It answers only pages it served itself, takes requests only as JSON, and installs nothing but the `gh:`, `cb:`, `gl:`, `mr:` and `cf:` specs search writes, or a pack you point it at.
 
 To work on the pages themselves, `bun install` and `bun run local` serve them from this checkout, running the `ender` on your `PATH` (or `ENDER`) with the same checks.
 
@@ -46,6 +53,11 @@ data/mods/<owner>/<repo>.json   a GitHub repository and its watched releases
 data/mods/codeberg.org/...      the same for Codeberg
 data/mods/gitlab.com/...        and for GitLab
 data/search.json            one summary per repository, for listing without fetching every record
+data/packs.txt              pack repositories found on their hosts
+data/packs/<owner>/<repo>.json  a pack repository and each pack format it has, with what Modrinth says of its mods
+data/packs.json             one summary per pack, for listing
+data/pack-pages/<owner>/<repo>.json  a pack's page: each mod it names and where it comes from
+data/shots.json             the player shots published, by the mods they show
 ```
 
 A record:
