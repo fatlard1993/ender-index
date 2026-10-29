@@ -1,0 +1,62 @@
+name: packs
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency: packs
+
+jobs:
+  list:
+    if: contains(github.event.issue.labels.*.name, 'pack') && github.event.issue.state == 'open'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ender-index
+      - uses: actions/checkout@v4
+        with:
+          repository: fatlard1993/ender-launcher
+          path: ender-launcher
+      # By its download address: asked for by version, setup-bun asks GitHub's API where it is, which a crawl running
+      # alongside may have spent the repository's hour of
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-download-url: https://github.com/oven-sh/bun/releases/download/bun-v1.4.0/bun-linux-x64.zip
+      - run: bun install
+        working-directory: ender-index
+      - name: list
+        working-directory: ender-index
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
+          PACK_BODY: ${{ github.event.issue.body }}
+          PACK_ISSUE: ${{ github.event.issue.number }}
+          SUBMIT_SAY: ${{ runner.temp }}/say.md
+        run: |
+          git config user.name 'ender-index'
+          git config user.email 'ender-index@users.noreply.github.com'
+          # From the newest data each time: a crawl pushing alongside rebuilt the same lists
+          for attempt in 1 2 3; do
+            git fetch -q origin main && git reset -q --hard origin/main
+            code=0
+            bun src/submit.js || code=$?
+            [ "$code" = 0 ] || break
+            git add data
+            git diff --cached --quiet && break
+            git commit -qm "Packs: listed from #$PACK_ISSUE"
+            git push -q && break
+            code=1
+          done
+          if [ "$code" = 1 ] || [ ! -s "$SUBMIT_SAY" ]; then
+            gh issue comment "$PACK_ISSUE" --body 'The index could not list this just now; it is looked into from the failed run.'
+            exit 1
+          fi
+          gh issue comment "$PACK_ISSUE" --body-file "$SUBMIT_SAY"
+          [ "$code" = 0 ] && gh issue close "$PACK_ISSUE" --reason completed
+          exit 0

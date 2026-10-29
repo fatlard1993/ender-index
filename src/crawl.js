@@ -643,10 +643,13 @@ export const crawlEach = async (
 
 const PACKS = join(DATA, 'packs');
 
+/** The packs players asked the index to list, one line each as packs.txt has them; discovery never rewrites it. */
+export const SUBMITTED_PACKS = 'submitted-packs.txt';
+
 /** Each pack's page: the listing's entry, and every mod it names with where it comes from. */
 const PACK_PAGES = join(DATA, 'pack-pages');
 
-const packPath = name => join(PACKS, `${name.replace(GIST_LINE, 'gist/$1')}.json`);
+export const packRecordPath = name => join(PACKS, `${name.replace(GIST_LINE, 'gist/$1')}.json`);
 
 /**
  * The most of a crawl's time packs are read in, before the mods take the rest: a backlog of mods would otherwise spend
@@ -661,11 +664,16 @@ const PACK_SHARE = 1 / 6;
  */
 const crawlPacks = async ({ deadline, scratch, now, parallel }) => {
 	const onGitHub = line => !line.includes(':') || GIST_LINE.test(line);
-	const found = (await readLines('packs.txt')).filter(onGitHub);
+	const found = [...new Set([...(await readLines('packs.txt')), ...(await readLines(SUBMITTED_PACKS))])].filter(
+		onGitHub,
+	);
 	const fromModrinth = (await readLines('modrinth-packs.txt')).filter(onGitHub);
 	const ages = new Map(
 		await Promise.all(
-			[...found, ...fromModrinth].map(async line => [line, Date.parse((await readJson(packPath(line)))?.fetched) || 0]),
+			[...found, ...fromModrinth].map(async line => [
+				line,
+				Date.parse((await readJson(packRecordPath(line)))?.fetched) || 0,
+			]),
 		),
 	);
 	const lines = crawlOrder(found, fromModrinth, line => ages.get(line));
@@ -677,11 +685,11 @@ const crawlPacks = async ({ deadline, scratch, now, parallel }) => {
 		parallel,
 		beforeWait: () => github.saveCache(),
 		crawlRepo: async name => {
-			const recorded = await readJson(packPath(name));
+			const recorded = await readJson(packRecordPath(name));
 			const pack = await crawlPack(name, { recorded, scratch: join(scratch, 'packs'), now });
 
-			if (pack) await writeJson(packPath(name), pack);
-			else if (recorded) await rm(packPath(name), { force: true });
+			if (pack) await writeJson(packRecordPath(name), pack);
+			else if (recorded) await rm(packRecordPath(name), { force: true });
 		},
 	});
 };

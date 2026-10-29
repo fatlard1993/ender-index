@@ -74,8 +74,14 @@ jobs:
           git config user.name 'ender-index'
           git config user.email 'ender-index@users.noreply.github.com'
           git add data
-          git diff --cached --quiet || git commit -m "Crawl $(date -u +%F)"
-          git pull --rebase
+          git diff --cached --quiet && exit 0
+          git commit -m "Crawl $(date -u +%F)"
+          # A pack listed while the crawl ran rebuilt the same lists: the crawl's records win, and the lists are built
+          # again from both
+          git pull --rebase -X theirs
+          bun run lists
+          git add data
+          git diff --cached --quiet || git commit --amend --no-edit
           git push
       - uses: actions/cache/save@v4
         if: always()
