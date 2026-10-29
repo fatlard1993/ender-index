@@ -1,7 +1,32 @@
-import { Button, Card, Link, theme } from '@vanilla-bean/components';
+import { Button, Card, Link, styled, theme } from '@vanilla-bean/components';
 
-import { LOADERS, PACK_FORMATS, packPath, repositoryUrl } from './search';
-import { Chip, Command, Meta, Row, Stack, Title, Warning, about, copyCommand, count, date } from './ui';
+import { LOADERS, PACK_FORMATS, packPath, pictureUrl, repositoryUrl } from './search';
+import { Chip, Command, Meta, Row, Stack, Title, Warning, about, avatar, copyCommand, count, date } from './ui';
+
+const Mosaic = styled.Component(
+	({ colors, radius }) => `
+		flex-shrink: 0;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 2px;
+		overflow: hidden;
+		border-radius: ${radius.md};
+		background: ${colors.raised};
+
+		& > * {
+			width: 100% !important;
+			height: 100% !important;
+			border-radius: 0;
+		}
+	`,
+);
+
+/** A pack's picture: the faces the listing picked from its mods, two by two. */
+export const packFace = (pack, size) =>
+	new Mosaic({
+		style: { width: `${size}px`, height: `${size}px` },
+		append: (pack.faces ?? []).map(face => avatar(pictureUrl(face, size), size / 2 - 1)),
+	});
 
 /**
  * What a player should know before installing a pack: how many of its mods come from Modrinth rather than from where
@@ -48,25 +73,33 @@ export const installRow = (pack, ...beside) =>
 export const packCard = pack =>
 	new Card(
 		{},
-		new Stack({
-			style: { gap: theme.space.sm },
+		new Row({
+			style: { flexWrap: 'nowrap', alignItems: 'flex-start', gap: theme.space.md },
 			append: [
-				new Row({
+				packFace(pack, 80),
+				new Stack({
+					style: { flex: '1', minWidth: '0', gap: theme.space.sm },
 					append: [
-						new Link({ href: packPath(pack), append: new Title({ textContent: pack.name }) }),
-						new Link({ href: repositoryUrl(pack), target: '_blank', textContent: pack.repo }),
-						new Meta({ textContent: packStats(pack) }),
+						new Row({
+							append: [
+								new Link({ href: packPath(pack), append: new Title({ textContent: pack.name }) }),
+								new Link({ href: repositoryUrl(pack), target: '_blank', textContent: pack.repo }),
+								new Meta({ textContent: packStats(pack) }),
+							],
+						}),
+						...about(pack.description ? { text: pack.description } : undefined),
+						new Row({
+							append: [
+								...packChips(pack),
+								new Meta({
+									textContent: `${count(pack.count)} mods, ${count(pack.matched.length)} of them in the index`,
+								}),
+							],
+						}),
+						...packWarnings(pack),
+						installRow(pack),
 					],
 				}),
-				...about(pack.description ? { text: pack.description } : undefined),
-				new Row({
-					append: [
-						...packChips(pack),
-						new Meta({ textContent: `${count(pack.count)} mods, ${count(pack.matched.length)} of them in the index` }),
-					],
-				}),
-				...packWarnings(pack),
-				installRow(pack),
 			],
 		}),
 	);

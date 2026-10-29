@@ -420,12 +420,22 @@ const INSTALL = {
 };
 
 /**
+ * A pack has no picture of its own: four of its mods stand for it, those with an icon first, since the rest show their
+ * owner's picture and a pack of one author's mods would show it four times.
+ */
+const facesOf = entries =>
+	[...entries.filter(entry => entry.icon), ...entries.filter(entry => !entry.icon)]
+		.slice(0, 4)
+		.map(({ host, repo, icon }) => ({ host, repo, ...(icon ? { icon } : {}) }));
+
+/**
  * The pack listing, and each pack's page: each pack repository once, by the format its mods are best told in, with
  * each mod the index has, and for the rest, where its source and its jar are. A pack is said to take mods from
  * Modrinth, and to name some with no jar to be found, by counts the listing carries.
  */
 export const buildPacks = (packs, entries, records, modrinthIds = {}) => {
 	const match = matcher(entries, records, modrinthIds);
+	const byKey = new Map(entries.map(entry => [`${entry.host ?? 'github'}:${entry.repo}`, entry]));
 
 	return packs
 		.map(pack => {
@@ -460,6 +470,7 @@ export const buildPacks = (packs, entries, records, modrinthIds = {}) => {
 				...(format.version ? { version: format.version } : {}),
 				count: mods.length,
 				matched,
+				faces: facesOf(matched.map(key => byKey.get(key))),
 				fromModrinth: others.filter(mod => mod.jar === 'modrinth').length,
 				unsourced: others.filter(mod => !mod.source).length,
 				missing: others.filter(mod => mod.jar === 'none').length,

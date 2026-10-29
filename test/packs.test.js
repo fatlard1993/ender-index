@@ -55,6 +55,28 @@ describe('the pack listing', () => {
 		});
 	});
 
+	test('shows four of its mods for a picture, those with an icon before those showing their owner', () => {
+		const iconed = ['e/one', 'e/two'].map(repo => ({ ...entry(repo), icon: `${repo}.png` }));
+		const [pack] = buildPacks(
+			[
+				{
+					repo: 'p/pack',
+					host: 'github',
+					formats: { ender: { mods: ['gh:a/linked', 'gh:b/named', 'gh:c/filed', 'gh:e/one', 'gh:e/two'] } },
+				},
+			],
+			[...entries, ...iconed],
+			records,
+		);
+
+		expect(pack.faces).toEqual([
+			{ host: 'github', repo: 'e/one', icon: 'e/one.png' },
+			{ host: 'github', repo: 'e/two', icon: 'e/two.png' },
+			{ host: 'github', repo: 'a/linked' },
+			{ host: 'github', repo: 'b/named' },
+		]);
+	});
+
 	test('says of each mod it has not got where its source and its jar are, and counts what comes from Modrinth or nowhere', () => {
 		const [pack] = buildPacks(
 			[

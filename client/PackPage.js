@@ -16,11 +16,10 @@ import { HOSTS } from 'ender-launcher/rank';
 import { loadListing, loadPackPage, loadPacks } from './data';
 import { local } from './local';
 import { Prose, renderReadme } from './ModPage';
-import { installRow, packCard, packChips, packWarnings } from './packs';
+import { installRow, packCard, packChips, packFace, packWarnings } from './packs';
 import {
 	collectionKey,
 	kindOf,
-	pictureUrl,
 	similarPacks,
 	readmeSources,
 	repositoryUrl,
@@ -33,7 +32,6 @@ import {
 	Row,
 	Stack,
 	about,
-	avatar,
 	count,
 	date,
 	fetchReadme,
@@ -51,29 +49,6 @@ const Heading = styled.Component(
 		overflow-wrap: anywhere;
 	`,
 );
-
-/** A pack has no picture of its own: the icons of the first four of its mods the index has stand for it. */
-const Mosaic = styled.Component(
-	({ colors, radius }) => `
-		flex-shrink: 0;
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 2px;
-		width: 96px;
-		height: 96px;
-		overflow: hidden;
-		border-radius: ${radius.md};
-		background: ${colors.raised};
-
-		& > * {
-			width: 100% !important;
-			height: 100% !important;
-			border-radius: 0;
-		}
-	`,
-);
-
-const mosaic = mods => new Mosaic({ append: mods.slice(0, 4).map(mod => avatar(pictureUrl(mod, 96), 47)) });
 
 /** Where a pack's mods come from, each kind a share of one bar, told again beneath it in words. */
 const KINDS = [
@@ -291,7 +266,6 @@ export default class PackPage extends View {
 	show(pack, byKey) {
 		const { signal } = this;
 		const owner = pack.repo.split('/')[0];
-		const indexed = pack.matched.map(key => byKey.get(key)).filter(Boolean);
 		const readme = new Stack({ append: new EmptyState({ loading: true, title: 'Fetching the readme' }) });
 		const similar = new Stack();
 		const hasReadme = pack.host === 'github';
@@ -316,7 +290,7 @@ export default class PackPage extends View {
 			new Row({
 				style: { flexWrap: 'nowrap', alignItems: 'flex-start', gap: theme.space.lg },
 				append: [
-					mosaic(indexed),
+					packFace(pack, 96),
 					new Stack({
 						style: { flex: '1', minWidth: '0', gap: theme.space.sm },
 						append: [
