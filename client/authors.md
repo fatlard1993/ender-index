@@ -52,6 +52,10 @@ Each mod has a page, made from what the repository already holds:
 - **Pictures:** images in the repository outside `src` and `build` and not named `icon`, `logo`, `badge` or `banner`. Players can add screenshots of their own.
 - **What its code reaches.** Each jar is scanned for what it can do beyond the game, like reaching the network or running programs. That is a finding, not a verdict: an update checker reaches the network.
 
+## Notices
+
+Players can ask for two things on a mod's page: a way to pay its author, when the index knows none, and a built release, when it has only its source. Each player is counted once. When three have asked, the index opens one issue on the repository saying so, with a link here. It does that once per repository for each, and closing the issue is the whole answer it needs.
+
 ## Questions
 
 Something listed wrong, or a mod missing that should be found? [Open an issue](https://github.com/fatlard1993/ender-index/issues).

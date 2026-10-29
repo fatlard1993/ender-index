@@ -494,3 +494,10 @@ export const slug = text =>
 		.trim()
 		.replace(/[^\w\s-]/g, '')
 		.replace(/\s+/g, '-');
+
+/**
+ * The form a player asks through for something of a mod, filled in with the mod: `fund` to pay its author, `release`
+ * for a built release. When a few have asked, the index tells its author.
+ */
+export const askUrl = (entry, kind) =>
+	`${REPOSITORY}/issues/new?${new URLSearchParams({ template: `${kind}.yml`, mod: `${entry.host ?? 'github'}:${entry.repo}` })}`;

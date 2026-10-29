@@ -24,6 +24,7 @@ import { packCard } from './packs';
 import { shareUrl } from './shots';
 import {
 	BUILT_FROM_SOURCE,
+	askUrl,
 	CAPABILITIES,
 	INDEX,
 	collectionKey,
@@ -847,7 +848,16 @@ export default class ModPage extends View {
 			...(entry.replaced
 				? [new Warning({ textContent: 'A jar in one of its releases was changed after publishing' })]
 				: []),
-			...(entry.fromSource ? [new Warning({ textContent: BUILT_FROM_SOURCE })] : []),
+			...(entry.fromSource
+				? [
+						new Warning({
+							append: [
+								`${BUILT_FROM_SOURCE} `,
+								new Link({ href: askUrl(entry, 'release'), target: '_blank', textContent: 'Ask its author for a release' }),
+							],
+						}),
+					]
+				: []),
 			new Row({
 				append: [
 					new Command({ tag: 'code', textContent: command }),
@@ -903,6 +913,17 @@ export default class ModPage extends View {
 							append: [
 								'The index knows no way to support its author. ',
 								new Link({ href: authorsPath('funding'), textContent: 'Is it yours? Here is how to add one.' }),
+							],
+						}),
+						new Row({
+							append: [
+								new Link({
+									variant: 'raised',
+									href: askUrl(entry, 'fund'),
+									target: '_blank',
+									textContent: 'I would pay its author',
+									tooltip: hint('Counted once per player on GitHub; when a few have asked, the index tells its author.'),
+								}),
 							],
 						}),
 					]),
