@@ -1,0 +1,469 @@
+{
+	"repo": "MaxCreateMC/Create-Deep-Seas",
+	"host": "github",
+	"description": "Submarine in Create Aeronautics!",
+	"stars": 30,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-05-18T17:55:02Z",
+	"pushed": "2026-10-24T15:37:34Z",
+	"releases": [
+		{
+			"tag": "Release",
+			"published": "2026-10-02T23:36:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 606717605,
+					"name": "create_submarine-3.3.0.jar",
+					"url": "https://github.com/MaxCreateMC/Create-Deep-Seas/releases/download/Release/create_submarine-3.3.0.jar",
+					"size": 8109785,
+					"downloads": 24,
+					"inspection": 2,
+					"sha256": "99709e004c8a7a36cb3439c0200ffd0c8ff5d7ca4fb77d49f76395d803864ba1",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "create_submarine",
+							"version": "3.3.0",
+							"name": "Create Deep Seas",
+							"description": "A submarine addon for the Create mod.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create",
+								"ponder",
+								"sable",
+								"aeronautics",
+								"simulated"
+							],
+							"suggests": [
+								"lithostitched",
+								"fusion"
+							]
+						},
+						{
+							"loader": "neoforge",
+							"id": "create_abyss",
+							"version": "1.0.0",
+							"name": "Create Abyss",
+							"description": "The Abyss dimension and its fauna, for Create Deep Seas.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"create_submarine",
+								"neoforge",
+								"minecraft",
+								"sable"
+							],
+							"suggests": [
+								"lithostitched"
+							]
+						},
+						{
+							"loader": "neoforge",
+							"id": "create_high_seas",
+							"version": "0.1.1",
+							"name": "Create High Seas",
+							"description": "Surface naval content for Create Deep Seas. Coming soon.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"create_submarine",
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "2f23ac1c3c1e1c96672df6d9649a22f4aa69274cdbc4df82406e6e03f396a12f.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Anchor",
+								"Arresting Hook",
+								"Ballast Vent",
+								"Black Sail",
+								"Blue Sail",
+								"Boat Engine",
+								"Brown Sail",
+								"Buoy",
+								"Copper Pressurized Glass",
+								"Creative Oxygenator",
+								"Creepvine Seed",
+								"Cyan Sail",
+								"Decompression Chamber",
+								"Electrolyzer",
+								"Floater",
+								"Gray Sail",
+								"Green Sail",
+								"Industrial Alarm",
+								"Iron Pressurized Glass",
+								"Light Blue Sail",
+								"Light Gray Sail",
+								"Lime Sail",
+								"Magenta Sail",
+								"Onboard Computer",
+								"Orange Sail",
+								"Oxygen Diffuser",
+								"Pink Sail",
+								"Pressure Barometer",
+								"Pressurized Glass",
+								"Pulley",
+								"Pump Controller",
+								"Purple Sail",
+								"Red Sail",
+								"Rudder",
+								"Sail",
+								"Sonar",
+								"Submarine Ballast Tank",
+								"Submarine Liana",
+								"Submarine Propeller",
+								"Underwater Mine",
+								"Water Thruster",
+								"Wind Vane",
+								"Yellow Sail"
+							],
+							"entity": [
+								"Amphistium",
+								"Cookiecutter Shark"
+							],
+							"item": [
+								"Amphistium Spawn Egg",
+								"Cookiecutter Shark Spawn Egg",
+								"Oar of Boat",
+								"Oxygen Bucket",
+								"Phycological Membrane",
+								"Seaglide",
+								"Steel Cable",
+								"Submarine Staff"
+							],
+							"group": [
+								"Create Abyss",
+								"Create Deep Seas"
+							],
+							"effect": [
+								"Suffocation"
+							]
+						},
+						"data": [
+							"dimension",
+							"loot_table",
+							"recipe",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 852,
+						"jars": [
+							"META-INF/jarjar/p19vrgc2-1.2.12-neoforge-mc1.21.1.jar",
+							"META-INF/jarjar/sable-companion-common-1.21.1-1.6.0.jar",
+							"META-INF/jarjar/XaDC71GB-1.4.8-neoforge-1.21.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/maxenonyme/createsubmarine/submarine/system/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"modrinth.com": [
+								"com/maxenonyme/createsubmarine/submarine/client/DeepSeasUpdateScreen.class",
+								"com/maxenonyme/createsubmarine/submarine/client/LithostitchedMissingScreen.class"
+							],
+							"api.modrinth.com": [
+								"com/maxenonyme/createsubmarine/submarine/system/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## [3.3.0]\n\n### Bug Fixes\n- **FPS Drop on Fast Sealed Ships:** A ship with a working oxygen system (or any boat with a dry hold) made the client rebuild every chunk section around it each time it moved, so at cruising speed (around 1 m/s and up) the chunks were rebuilt several times a second and the frame rate collapsed. Those rebuilds only matter with Sodium, where they hide world blocks such as kelp caught inside the hull; the sea itself is hidden per pixel. Without Sodium they are now skipped entirely, and with Sodium only the sections that actually hold something besides air and water are rebuilt, so sailing through open water costs nothing.\n- **Holes Left in the Sea After Joining (Sodium):** For the first frames after joining a world, before the pixel-perfect water culling is ready, Sodium builds the chunks with the block-by-block fallback, which removes the water blocks under a ship. Once the ship sailed away, those sea-only chunks were never rebuilt and kept a ship-shaped hole showing the sea floor. Every chunk section where the fallback removed water is now remembered and rebuilt as soon as the pixel-perfect culling takes over.\n- **Boat Engine Shift Placement:** Placing a Boat Engine while sneaking now flips it, like Create's directional blocks and the Submarine Propeller.\n\n## [3.2.0]\n\n### Changes\n- **Progressive Flooding Is Now Optional (off by default):** Progressive flooding placed real water blocks inside ships, and that water leaked through closed doors, trapdoors, slabs, stairs, Create machines and casings, while breaking a hull block that touched the sea left broken water artifacts instead of letting the sea in. It is now an experimental server option, `progressiveFlooding` (in the experimental section, off by default). With it off, a breach works like before 3.0.0: as soon as a hull block below the waterline is gone, the sea fills the whole room at once and its water culling turns off.\n  - **Submarines:** a broken hull block no longer leaves a \"plug\" that keeps the room sealed; the room opens to the sea straight away. Breaches saved by the progressive mode are ignored while it is off.\n  - **Boats:** a hold with any opening that sits in the sea (a missing hull block, an open trapdoor, a gap in the floor) counts as flooded: the sea shows inside it and it stops giving lift. Plugging the hole makes it dry again.\n\n### Bug Fixes\n- **Sea Showing Around Seats on Low Rafts:** A partial block in a hold (a Create seat, a slab, stairs) was only culled when every open side of it faced into the ship. A seat's open top faces the sky above the railing, so its cell was left out of the water culling, and on a raft low enough for the sea level to cross that cell the sea showed through the hole and cast blue sheets behind the seat. A partial block is now only left out when one of its open sides actually touches the sea.\n- **Stutter Inside Oxygenated Submarines:** Every time a sealed ship moved by a tenth of a block, the client rebuilt every chunk section around it so that world blocks caught inside the hull (kelp, seagrass) could be hidden. A submarine holding its depth or drifting gently crosses that threshold all the time, which gave a regular frame-time spike as long as you were aboard. With the pixel-perfect water culling active the sea is already hidden per pixel, so the chunks are now only rebuilt after half a block of movement again; the fine threshold is kept for the block-by-block fallback.\n- **Startup Warnings Without Optional Mods:** The compatibility mixins for Copycats+, Sodium, Iris and Distant Horizons were always registered, so without those mods Mixin still tried to load their target classes and printed \"Error loading class\" warnings at every startup, which looked like a missing dependency (issue #87). A mixin config plugin now drops those mixins before their targets are looked up when the matching mod is not installed.\n\n..."
+		},
+		{
+			"tag": "Alpha2.1.4",
+			"published": "2026-06-06T20:58:56Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 440437062,
+					"name": "create_submarine-2.1.4.jar",
+					"url": "https://github.com/MaxCreateMC/Create-Deep-Seas/releases/download/Alpha2.1.4/create_submarine-2.1.4.jar",
+					"size": 1679734,
+					"downloads": 35,
+					"inspection": 2,
+					"sha256": "891b586f8b2843e5ab3fa72d856290c8e7dc289ccf81196a2b032885848d7d5d",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "create_submarine",
+							"version": "2.1.4",
+							"name": "Create Deep Seas",
+							"description": "A submarine addon for the Create mod.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create",
+								"ponder",
+								"sable",
+								"aeronautics"
+							],
+							"suggests": [
+								"lithostitched"
+							],
+							"breaks": [
+								"sodium"
+							],
+							"breaksVersions": {
+								"sodium": "[mc1.21.1-0.6.13-neoforge]"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Ballast Vent",
+								"Copper Pressurized Glass",
+								"Creative Oxygenator",
+								"Electrolyzer",
+								"Floater",
+								"Industrial Alarm",
+								"Iron Pressurized Glass",
+								"Oxygen Diffuser",
+								"Pressurized Glass",
+								"Pulley",
+								"Submarine Ballast Tank",
+								"Submarine Propeller",
+								"Underwater Mine",
+								"Water Thruster"
+							],
+							"effect": [
+								"Suffocation"
+							],
+							"entity": [
+								"Amphistium",
+								"Cookiecutter Shark"
+							],
+							"item": [
+								"Amphistium Spawn Egg",
+								"Cookiecutter Shark Spawn Egg",
+								"Phycological Membrane",
+								"Steel Cable"
+							],
+							"group": [
+								"Create Deep Seas"
+							]
+						},
+						"data": [
+							"dimension",
+							"loot_table",
+							"recipe",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 198,
+						"jars": [
+							"META-INF/jarjar/sable-companion-common-1.21.1-1.5.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/maxenonyme/createsubmarine/submarine/system/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"modrinth.com": [
+								"com/maxenonyme/createsubmarine/submarine/client/DeepSeasUpdateScreen.class",
+								"com/maxenonyme/createsubmarine/submarine/client/LithostitchedMissingScreen.class"
+							],
+							"api.modrinth.com": [
+								"com/maxenonyme/createsubmarine/submarine/system/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [June 6, 2026] - Cookiecutter Sharks, Naval Mines, Steel Cable Power & Propellers\n\n### New Blocks & Features\n- **Cookiecutter Shark:** Added a new deep-sea predator with its own model, swim/idle animations and a latch-and-struggle attack behavior.\n- **Underwater Mines:** Added deployable naval mines that float to hold their depth, arm when a ship or creature gets close, and detonate with a large underwater shockwave — camera shake, launched debris, and area damage.\n- **Submarine Propeller:** Added a submarine propeller block with configurable power, client-side bubble/particle wake, and dedicated rendering.\n- **Steel Cables & Electrification:** Added steel cable visuals (connector and winch variants, ponder scenes) and a cable electrification system that carries energy along cables, throws sparks, and shocks entities touching a live line.\n- **Amphistium:** Added the Amphistium, a glowing schooling fish that spawns in the Abyss biome.\n\n### Configuration & User Interface\n- **Update Notifications:** Added an in-game update checker that queries Modrinth and shows a screen when a newer Deep Seas version is available, with the changelog and an \"ignore this version\" option.\n- **Lithostitched Reminder:** Added a startup screen that prompts you to install the recommended Lithostitched dependency when it is missing.\n- **Item Tooltips:** Mines, propellers and floaters now show descriptive tooltips.\n\n### Bug Fixes\n- **Mines no longer detonate on their own wreckage:** Fixed mines randomly exploding while you broke blocks off them to make them resurface. Each detached chunk becomes a brand-new sublevel spawned right next to the mine, which the proximity trigger mistook for an approaching ship. Debris now inherits the mine's owner at the exact moment of the split and is ignored by the trigger, while real ships still set the mine off.\n- **Mines no longer punch holes in the ocean:** Fixed mine explosions spawning their flying-block debris in a way that silently replaced the block at the target world position, carving air pockets into the surrounding water and terrain. Debris is now thrown without ever touching the parent world.\n- **Mine depth-keeping no longer lags the server:** Replaced the once-per-second full-volume scan each mine ran (to share buoyancy between mines) with live O(1) tracking, preventing TPS drops on large hulls.\n- **Cable energy network spam:** Throttled the block-update packets sent while energy flows through cables (roughly twice a second instead of every tick) to stop network lag.\n- **Update checker visibility:** Marked the update-check result fields `volatile` so the render thread reliably sees the values fetched on the background network thread.\n- **Corrupt client state file:** Loading an empty or corrupt `create_submarine_client_state.json` no longer throws — it now falls back to defaults.\n- **Sturdier cable collisions:** Hardened cable-versus-player collision (sublevel and parent-level handling, null rope-manager guards) and made the winch energy store thread-safe.\n- **Pulley concurrency & speed:** Clamped pulley slide speed to a configurable maximum and deferred block destruction/particles to the server tick to avoid concurrency crashes.\n- **Fog submersion detection:** Reworked the underwater fog check to skip occluded positions and confirm actual water, fixing incorrect fog states.\n- **Reduced particle spam:** Lowered ballast-vent and water-thruster particle counts and frequency.\n- **Double-unregister guard:** Submarine state is now only cleared once the driver claim is actually released, preventing double-unregister glitches when several control blocks are present.\n\n### Under the Hood\n- **Submarine Driver Registry:** Added a registry that grants a single exclusive \"driver\" block per submarine (hull controller / oxygen diffuser) using priorities and stale-claim eviction.\n- **Mine float guard:** A mine bolted onto a contraption larger than 5 blocks no longer acts as a ballast/floater.\n\n..."
+		},
+		{
+			"tag": "Beta",
+			"published": "2026-05-31T12:11:26Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 434438982,
+					"name": "create_submarine-2.1.3.jar",
+					"url": "https://github.com/MaxCreateMC/Create-Deep-Seas/releases/download/Beta/create_submarine-2.1.3.jar",
+					"size": 1369689,
+					"downloads": 16,
+					"inspection": 2,
+					"sha256": "734bef3d708b4ccb35f2196193f3af217a10ddcfc78a97493da3245822c56d2b",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "create_submarine",
+							"version": "2.1.3",
+							"name": "Create Deep Seas",
+							"description": "A submarine addon for the Create mod.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"lithostitched",
+								"neoforge",
+								"minecraft",
+								"create",
+								"ponder",
+								"sable"
+							],
+							"breaks": [
+								"sodium"
+							],
+							"breaksVersions": {
+								"sodium": "[mc1.21.1-0.6.13-neoforge]"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Create Deep Seas"
+							],
+							"block": [
+								"Ballast Vent",
+								"Copper Pressurized Glass",
+								"Creative Oxygenator",
+								"Electrolyzer",
+								"Floater",
+								"Industrial Alarm",
+								"Iron Pressurized Glass",
+								"Oxygen Diffuser",
+								"Submarine Ballast Tank",
+								"Water Thruster"
+							],
+							"item": [
+								"Phycological Membrane"
+							]
+						},
+						"data": [
+							"dimension",
+							"loot_table",
+							"recipe",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 143,
+						"jars": [
+							"META-INF/jarjar/sable-companion-common-1.21.1-1.5.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## [May 30, 2026] - Persistent Lianas, Fruit Reattachment & Configurable Oceans\n\n### Bug Fixes\n- **Lianas Surviving Reload:** Fixed creepvines breaking apart and floating to the surface after leaving and rejoining a world. Their topology (which segment anchors to the seabed, parent/child links, attached fruits) was never actually persisted — the spawn-time block-entity lookup silently failed, so nothing survived a reload. The full chain layout is now saved to a dedicated registry and every physics joint is rebuilt deterministically on load.\n- **No More Self-Fighting Lianas:** Fixed lianas jittering, folding and collapsing when bumped into after a reload. Each stacked liana block was running its own physics and stacking buoyancy/player forces several times over; only the segment's centre block now drives the simulation.\n- **Fruits Staying Attached:** Fixed creepvine fruits randomly dropping off on reload depending on chunk load order. Each fruit's rest position is now remembered and the fruit is snapped back into place before its joint is rebuilt, so it always reattaches where it belongs.\n\n### Configuration & User Interface\n- **Configurable Ocean Depth:** The Deeper Oceans feature is no longer locked to a fixed 10 blocks — a new `deeperOceansDepth` option (default 10, up to 256) lets you choose how far below vanilla the sea floor sits, with an in-config warning that large values can badly hurt world-generation and rendering performance.\n- **Deep Seas Welcome Screen:** Added a one-time welcome screen shown in front of the main menu, recommending you set up your Deep Seas preferences before diving in. It offers a button straight to the mod configuration and a \"maybe later\" button; either choice is remembered in the config TOML so it never shows again.\n\n### Under the Hood\n- **Reusable Plant Persistence:** Generalized the liana save system into a plant-agnostic `PlantPhysicsRegistry` that will back future physical plants, made it the single source of truth for segment topology, and dropped the redundant (and unreliable) block-entity NBT copy.\n\n## [May 29, 2026] - Abyss Dimension, Physical Lianas & Big Optimizations\n\n### New Blocks & Features\n- **Abyss Dimension:** Reintroduced the custom deep-ocean Abyss dimension with dedicated biome configs and custom worldgen.\n- **Physical Lianas & Seeds:** Added creepvines (submarine lianas) and creepvine seeds that grow, flow with water currents, and simulate realistic physics inside sublevels.\n- **PDA & Sound Effects:** Added a custom PDA menu overlay and registered new ambient/warning audio cues for Leviathans (roars and class detection warnings).\n- **New Diagnostics Command:** Added the `/submarine info` command to inspect current hull integrity, depth, crack counts, and whether your sub is hermetically sealed or breached.\n- **Spawning Command:** Added `/submarineliana spawnradius` to spawn creepvines inside a radius with custom density/probabilities.\n- **Client RAM Boost:** Allocated 20 GB of RAM for the game client config to handle large sublevel structures smoothly.\n\n### Performance & Optimizations\n- **Global LOD System:** Added a new LOD Optimizer (`LianaLODOptimizer`) that automatically pauses/freezes physics and ticking on distant creepvines to save CPU/FPS.\n- **Spawning Queue:** Spawning multiple lianas in a radius is now staggered (closest to the player first) and freezes other lianas during creation to prevent lag spikes.\n\n### Bug Fixes\n- **Liana Sublevel Lighting:** Fixed an issue where lianas in Sable sublevels rendered pitch black. They now dynamically fetch and reflect the real-world block light values (torches, glowstones, shaders) around them.\n- **Precise Pressure Calculations:** Completely reworked pressure depth logic to measure depth block-by-block relative to the actual water surface rather than checking the center of the sub globally.\n\n..."
+		},
+		{
+			"tag": "Alpha",
+			"published": "2026-05-20T22:03:01Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 425602002,
+					"name": "create_submarine-2.0.3.jar",
+					"url": "https://github.com/MaxCreateMC/Create-Deep-Seas/releases/download/Alpha/create_submarine-2.0.3.jar",
+					"size": 1141560,
+					"downloads": 36,
+					"inspection": 2,
+					"sha256": "d4f63189926616e82eae73f2d86c9815408991de5cbd4ebd5348ed69a77496a2",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "create_submarine",
+							"version": "2.0.0",
+							"name": "Create: Submarine",
+							"description": "A submarine addon for the Create mod.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create",
+								"ponder",
+								"sable"
+							],
+							"breaks": [
+								"sodium"
+							],
+							"breaksVersions": {
+								"sodium": "[mc1.21.1-0.6.13-neoforge]"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Create: Submarine"
+							],
+							"block": [
+								"Ballast Vent",
+								"Creative Oxygenator",
+								"Electrolyzer",
+								"Floater",
+								"Glass Pressurizer",
+								"Industrial Alarm",
+								"Oxygen Diffuser",
+								"Polluted Air",
+								"Pollution Debug Block",
+								"Submarine Ballast Tank",
+								"Water Thruster"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 105,
+						"jars": [
+							"META-INF/jarjar/sable-companion-common-1.21.1-1.5.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "* I'll be generating changelogs for future releases using an automated system."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-29T01:25:05.016Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T01:25:05.016Z",
+	"history": 1
+}

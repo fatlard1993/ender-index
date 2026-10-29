@@ -82,7 +82,7 @@
 						"unreadable": []
 					},
 					"icon": "041922dd067ed8066bc92157f40a743f7c3e177049b4ce6eef732e27f4f3772d.png",
-					"downloads": 85,
+					"downloads": 87,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -90,7 +90,8 @@
 						"shaders": true
 					}
 				}
-			]
+			],
+			"notes": "This is a straightforward port to 26.2"
 		},
 		{
 			"tag": "0.13.1+26.1",
@@ -167,7 +168,8 @@
 					},
 					"downloads": 63
 				}
-			]
+			],
+			"notes": "## Fixes\n- The game no longer crashes when running with REI, and the REI integration of the library mostly works again\n- Resolve [crash](https://github.com/wisp-forest/owo-lib/issues/480) with translation arg unpacker passing a null value instead of empty array\n\n## Additions\n- `BaseOwoContainerScreen` has gained a secondary constructor which allows specifying the texture width and height, since they're now final"
 		},
 		{
 			"tag": "0.13.0-alpha.15+1.21",
@@ -242,7 +244,8 @@
 					},
 					"downloads": 90
 				}
-			]
+			],
+			"notes": "## Compatibility Warning\nThis release represents a build of the largely untested braid-ui-1.21 branch, hence it is marked as an alpha. It is not entirely equivalent in features to 0.13.0 for 1.21.11+ and the features which were backported have not been comprehensively tested for backwards compatibility with mods compiled against previous 1.21 versions of owo-lib.\n\nThis release is provided primarily for mods like Arcane Repository and Trickster, which want to make use of braid on 1.21. Besides fixes for major compatibility issues we will not be supporting or updating it."
 		},
 		{
 			"tag": "0.13.0+26.1",
@@ -319,7 +322,8 @@
 					},
 					"downloads": 455
 				}
-			]
+			],
+			"notes": "This is a straightforward port to 26.1"
 		},
 		{
 			"tag": "0.13.0+1.21.11",
@@ -394,9 +398,10 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 308
+					"downloads": 310
 				}
-			]
+			],
+			"notes": "## API Renamings\nIn preparation for future unobfuscated versions of the game, owo-lib is now developed using the official Mojang Mappings and relevant API elements have been renamed accordingly. Besides a number of straight-forward adaptations (like `World` -> `Level`), this also meant that **the core class of owo-ui (previously `Component`) had to be renamed to `UIComponent`** to avoid a name collision with `net.minecraft.network.chat.Component`. Related classes follow suit, e.g. `ParentComponent` -> `ParentUIComponent`, `Containers` -> `UIContainers`.\n\n## Language Extensions\nIn addition to Rich Translations, owo-lib now supports nested language files which help to greatly reduce repetition in language keys. Additionally, to reduce conflict potential, **all of owo's language extensions are now opt-in**. Check out the relevant [section of the docs](https://docs.wispforest.io/owo/data-extensions/nested-lang).\n\n## JSON5 Support\nThe majority of JSON files in any data/resource pack can be converted to use JSON5 when owo-lib is configured to read and convert them to JSON on-the-fly. Once again, check out [the docs](https://docs.wispforest.io/owo/data-extensions/json5).\n\n## braid UI framework\nDue to unforeseen technical circumstances (I did not want to remap the entire library twice), this build includes an early pre-alpha version of the upcoming braid UI framework. While reasonably well-tested and somewhat mature feature-wise, we do not consider it ready for release and we make *absolutely no guarantees about API stability*.\n\nIf you want to try it out or toy around with it anyways, check out the [getting started guide](https://docs.wispforest.io/braid/getting-started). We'd love to get some early feedback!"
 		},
 		{
 			"tag": "0.12.24+1.21.9",
@@ -471,7 +476,8 @@
 					},
 					"downloads": 384
 				}
-			]
+			],
+			"notes": "## Additions\n- owo-ui components can use the new `inspectorDescriptor` getter to customize the text displayed below them when the inspector is active\n- `ReadView` and `WriteView` have new methods for getting/setting values in them using keyed Endecs\n\n## Fixes\n- `ModDataLoader` now works properly in a development environment using split sources\n- The surface setter on `DropdownComponent` now correctly returns the dropdown"
 		},
 		{
 			"tag": "0.12.23+1.21.8",
@@ -546,7 +552,8 @@
 					},
 					"downloads": 39
 				}
-			]
+			],
+			"notes": "## Fixes\n- Labels with text that has an empty style no longer crash when clicked on\n- Scissoring on draw contexts which have complex transforms should no longer incorrectly cut off content"
 		},
 		{
 			"tag": "0.12.21+1.21.6",
@@ -621,7 +628,8 @@
 					},
 					"downloads": 100
 				}
-			]
+			],
+			"notes": "This release is primarily a port to 1.21.6/7. Due to the massive vanilla refactors around GUI rendering in particular, this is a larger-than-usual update and we expect there will be some bugs and porting mistakes - please report anything you find!\n\n## Changes\n- `OwoBlurRenderer` has been replaced with `BlurQuadElementRenderState` in accordance with the vanilla GUI rendering changes\n\n## Removed\n- `(Block|Entity|Item)RegistryContainer`\n- `OwoItemSettings`, replaced by interface injection on `Item.Settings`\n- `DraggableContainer.alwaysOnTop`\n- `CodecUtils.ofEndec`, replaced by `toCodec`\n- `ConfigScreen.(registerProvider|getProvider|forEachProvider)`, replaced by `ConfigScreenProviders`"
 		},
 		{
 			"tag": "0.12.21+1.21.5",
@@ -696,7 +704,8 @@
 					},
 					"downloads": 153
 				}
-			]
+			],
+			"notes": "## Fixes\n- The blur pipeline now uses a custom vertex shader to avoid a random fog code dependency\n- `OwoBlurRenderer` now uses the depth buffer in its render pass to fix blur rendering issues on some drivers\n- owo no longer accidentally overwrites the vanilla `gui_textured` render pipeline"
 		},
 		{
 			"tag": "0.12.20+1.21.4",
@@ -771,7 +780,8 @@
 					},
 					"downloads": 289
 				}
-			]
+			],
+			"notes": "## Changes\n- Tooltip rendering on the owo-ui screen template classes can now be customized by overriding `drawComponentTooltip`\n\n## Fixes\n- owo-ui screens built using the provided template classes no longer stop rendering their tooltip after reinitializing (#314, Blodhgarm)"
 		},
 		{
 			"tag": "0.12.18+1.21.2",
@@ -846,7 +856,8 @@
 					},
 					"downloads": 75
 				}
-			]
+			],
+			"notes": "## Fixes\n- `TextureComponent` rendering now works properly again"
 		},
 		{
 			"tag": "0.12.9+1.20.5",
@@ -913,7 +924,8 @@
 					},
 					"downloads": 31
 				}
-			]
+			],
+			"notes": "This build is primarily a port of [0.12.9](https://modrinth.com/mod/owo-lib/version/0.12.9+1.20.5) to 1.21. This mandated a few other changes:\n\n### Endec changes\nThe `Endec` API is no longer built into owo-lib. Instead, owo now uses and ships the standalone [endec](https://github.com/wisp-forest/endec) library. This entails four major changes:\n- Endecs for Minecraft's types are no longer found on `BuiltInEndecs` but instead on `MinecraftEndecs`\n- DFU interop (namely, converting between codecs and endecs) is now handled through `CodecUtils.toCodec/toEndec` and related functions\n- A number of package changes, primarily `io.wispforest.owo.serialization` -> `io.wispforest.endec`\n- All JSON-related implementations are now named after the JSON library they use. In consequence, the previous `JsonSerializer` is now `GsonSerializer` and so on\n\n### Further Fixes\n- `EdmOps` no longer uses `null` as its empty value, fixing a number of edge cases with particular types of DFU codecs when doing interop\n- owo's `ScreenHandler` extensions don't require a `HandledScreen` anymore and now also support other screens which implement `ScreenHandlerProvider"
 		},
 		{
 			"tag": "0.12.6+1.20.3",
@@ -1358,5 +1370,7 @@
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T01:25:05.016Z",
 	"history": 1
 }

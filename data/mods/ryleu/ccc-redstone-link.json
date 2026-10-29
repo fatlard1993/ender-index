@@ -1,0 +1,316 @@
+{
+	"repo": "ryleu/ccc-redstone-link",
+	"host": "github",
+	"description": "CC: Create Redstone Link",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-05-12T00:47:36Z",
+	"pushed": "2026-06-27T01:22:26Z",
+	"releases": [
+		{
+			"tag": "v0.4.0",
+			"published": "2026-06-27T01:14:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 459134070,
+					"name": "cccredstonelink-0.4.0.jar",
+					"url": "https://github.com/ryleu/ccc-redstone-link/releases/download/v0.4.0/cccredstonelink-0.4.0.jar",
+					"size": 47201,
+					"downloads": 29,
+					"inspection": 2,
+					"sha256": "67badac5e6238ba034e6003020d11ba24820634e02647bb3a232d6739168be00",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cccredstonelink",
+							"version": "0.4.0",
+							"name": "CC: Create Redstone Link",
+							"description": "Bridge between Create Redstone Link and CC:Tweaked computers, with optional dye-color frequencies.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create",
+								"computercraft"
+							],
+							"suggests": [
+								"sable"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"CC Redstone Link Bridge"
+							],
+							"item": [
+								"CC Redstone Link Bridge"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 20,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's new\n\n- **`watchLinkSignal` / `unwatchLinkSignal` Lua API.** Subscribe an attached computer to a `redstone_link_change` event on a frequency pair (#5, PR #6 by @leohearts). Event shape: `redstone_link_change, freq1, freq2, newStrength, oldStrength, color1, color2`. `color*` is `nil` for uncolored slots. Watch-only state is ephemeral — re-subscribe on reboot. See the README for a longer example.\n- **Per-computer subscription tracking.** Each computer's `watchLinkSignal` is tracked independently, so two computers watching the same frequency pair both keep receiving events when one of them calls `unwatchLinkSignal` (which would otherwise have killed events for both). Detach cleans up subscriptions automatically.\n- **Pocket / turtle bridges get events when *they* move.** Create's network handler only fires `setReceivedStrength` when a transmitter changes, so a moving pocket bridge previously wouldn't get a `redstone_link_change` for walking into a stationary transmitter's range. The pocket and turtle upgrades now re-poll their listening channels every tick the holder has actually moved, fanning out events when the perceived signal flips.\n\nBuilt against Minecraft 1.21.1 / NeoForge 21.1.219 / Create 6.0.10 / CC:Tweaked 1.118.0. Sable 1.x is still an optional dependency."
+		},
+		{
+			"tag": "v0.3.0",
+			"published": "2026-06-27T00:48:31Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 459122074,
+					"name": "cccredstonelink-0.3.0.jar",
+					"url": "https://github.com/ryleu/ccc-redstone-link/releases/download/v0.3.0/cccredstonelink-0.3.0.jar",
+					"size": 44170,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "a154e5840b46e814cfdad90d8eff6031373c045607b24c706c9f1fe336f25a0e",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cccredstonelink",
+							"version": "0.3.0",
+							"name": "CC: Create Redstone Link",
+							"description": "Bridge between Create Redstone Link and CC:Tweaked computers, with optional dye-color frequencies.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create",
+								"computercraft"
+							],
+							"suggests": [
+								"sable"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"CC Redstone Link Bridge"
+							],
+							"item": [
+								"CC Redstone Link Bridge"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 20,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's new\n\n- **Bridge works on Sable contraptions.** A bridge block, pocket-bridge, or turtle-bridge can now read and send signals across a Sable sub-level boundary. Both the bridge itself sitting on a flying contraption and a stationary bridge in the world will correctly see each other in `getLinkSignal` after the sub-level's `logicalPose` is applied to both endpoints — the same trick Sable's own mixin on `RedstoneLinkNetworkHandler.updateNetworkOf` uses on Create's send path.\n\n## Compatibility\n\n[Sable](https://modrinth.com/mod/sable) is declared as an **optional** dependency. The mod runs without Sable installed (verified with Sable + Create Aeronautics removed from the load list), and the Sable-typed code is isolated in a separate class that's only resolved when Sable is present. Pinned compile-time against Sable `1.2.2` / sable-companion `1.6.0`; runtime range is `[1.2.0, 2.0)`.\n\nBuilt against Minecraft 1.21.1 / NeoForge 21.1.219 / Create 6.0.10 / CC:Tweaked 1.118.0."
+		},
+		{
+			"tag": "v0.2.0",
+			"published": "2026-06-26T03:33:08Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 458265661,
+					"name": "cccredstonelink-0.2.0.jar",
+					"url": "https://github.com/ryleu/ccc-redstone-link/releases/download/v0.2.0/cccredstonelink-0.2.0.jar",
+					"size": 42215,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "a5a1a97712b41efe96eefa9fc5070e1025151564f4c7da4abfb02d35da9c86f0",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cccredstonelink",
+							"version": "0.2.0",
+							"name": "CC: Create Redstone Link",
+							"description": "Bridge between Create Redstone Link and CC:Tweaked computers, with optional dye-color frequencies.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create",
+								"computercraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"CC Redstone Link Bridge"
+							],
+							"item": [
+								"CC Redstone Link Bridge"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 18,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's new\n\n- **Place the bridge on any side or the bottom of a block.** A new `FACING` block state property orients the bridge to whichever face was clicked — top (the existing behaviour), sides, or ceilings. Voxel shape and model rotation follow accordingly, and rotate/mirror are wired through so Create's wrench and vanilla world tools handle the new property.\n\n## Backward compatibility\n\nBridges placed in worlds created with v0.1.x or earlier load with `FACING=UP`, keeping their original floor-sitting orientation. This is achieved by registering `UP` as the property's default value — vanilla's `BlockState` codec fills any missing property from the block's default, so no separate DataFixer registration is needed and old worlds are not modified on load.\n\nBuilt against Minecraft 1.21.1 / NeoForge 21.1.219 / Create 6.0.10 / CC:Tweaked 1.118.0."
+		},
+		{
+			"tag": "v0.1.1",
+			"published": "2026-06-26T02:47:27Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 458239455,
+					"name": "cccredstonelink-0.1.1.jar",
+					"url": "https://github.com/ryleu/ccc-redstone-link/releases/download/v0.1.1/cccredstonelink-0.1.1.jar",
+					"size": 41073,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "e81291a2762a80b36daf5ee2874d451df9ffd58ed83e41c9a72d654f6c33dfde",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cccredstonelink",
+							"version": "0.1.1",
+							"name": "CC: Create Redstone Link",
+							"description": "Bridge between Create Redstone Link and CC:Tweaked computers, with optional dye-color frequencies.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create",
+								"computercraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"CC Redstone Link Bridge"
+							],
+							"item": [
+								"CC Redstone Link Bridge"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 18,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Fixes\n\n- **Respect Create's `linkRange` config when reading signals** (#2, reported by @aldveylor). `getLinkSignal` was iterating every transmitter on the network without doing a range check, so it would pick up signals that Create's own receivers correctly ignore as out-of-range. The bridge now filters by `closerThan(bridgePos, linkRange)` against the bridge's (or holder's, for the pocket/turtle upgrade) position, matching Create's own `RedstoneLinkNetworkHandler.withinRange` behavior.\n\nBuilt against Minecraft 1.21.1 / NeoForge 21.1.219 / Create 6.0.10 / CC:Tweaked 1.118.0."
+		},
+		{
+			"tag": "v0.1.0",
+			"published": "2026-06-26T02:24:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 458223682,
+					"name": "cccredstonelink-0.1.0.jar",
+					"url": "https://github.com/ryleu/ccc-redstone-link/releases/download/v0.1.0/cccredstonelink-0.1.0.jar",
+					"size": 40749,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "883969437bbbf5fd52a97de7f616eae5a49ba3b7b8f8227d6f35647a29b4378f",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cccredstonelink",
+							"version": "0.1.0",
+							"name": "CC: Create Redstone Link",
+							"description": "Bridge between Create Redstone Link and CC:Tweaked computers, with optional dye-color frequencies.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create",
+								"computercraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"CC Redstone Link Bridge"
+							],
+							"item": [
+								"CC Redstone Link Bridge"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 18,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's new\n\n- **Pocket-computer & turtle upgrades.** The Redstone Link Bridge is now also a CC:Tweaked upgrade. Craft a pocket computer (or turtle) with the bridge item to get a portable bridge peripheral. Works on both normal *and* advanced tiers.\n- **3D turtle upgrade model.** Thanks @samhaygood05 (#3) for the model files.\n- **Equipped variants in the creative tab.** The Redstone Blocks tab now lists pre-equipped Redstone Link Pocket Computers (normal & advanced) and Redstone Link Turtles (normal & advanced) alongside the bridge block, so you don't have to craft them by hand in creative.\n\nBuilt against Minecraft 1.21.1 / NeoForge 21.1.219 / Create 6.0.10 / CC:Tweaked 1.118.0."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-29T01:25:05.016Z",
+	"pictures": [
+		"docs/crafting.webp"
+	],
+	"picturesChecked": "2026-10-29T01:25:05.016Z",
+	"history": 1
+}

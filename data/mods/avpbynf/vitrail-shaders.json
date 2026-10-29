@@ -2,7 +2,7 @@
 	"repo": "avpbynf/vitrail-shaders",
 	"host": "github",
 	"description": "OptiFine-format shader packs, on Minecraft's native Vulkan renderer",
-	"stars": 109,
+	"stars": 110,
 	"archived": false,
 	"license": "LGPL-3.0",
 	"created": "2026-08-01T13:24:31Z",
@@ -18,7 +18,7 @@
 					"name": "vitrail-0.13.0-beta+mc26.2.jar",
 					"url": "https://github.com/avpbynf/vitrail-shaders/releases/download/v0.13.0-beta/vitrail-0.13.0-beta%2Bmc26.2.jar",
 					"size": 1868999,
-					"downloads": 29,
+					"downloads": 33,
 					"inspection": 2,
 					"sha256": "6f503696bf652037f88a8ca9cec83bef738e619104f31b14c911495174ff45a0",
 					"mods": [
@@ -81,7 +81,7 @@
 					"name": "vitrail-0.13.0-beta+mc26.3.jar",
 					"url": "https://github.com/avpbynf/vitrail-shaders/releases/download/v0.13.0-beta/vitrail-0.13.0-beta%2Bmc26.3.jar",
 					"size": 1878930,
-					"downloads": 61,
+					"downloads": 66,
 					"inspection": 2,
 					"sha256": "611fab38ac39f9d1b150c93c31daa1a77a605d828a4a11d99835dbcbcb4e3c88",
 					"mods": [
@@ -139,7 +139,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### Added\n\n- **`K` turns shaders off and back on**, as it does under Iris. Turning them back on returns to\n  the pack you had picked, and a line in chat says which way it went. If the pack cannot be drawn,\n  because it fails to load, is no longer in the folder or none was picked, shaders stay off and\n  the line says why, so the next press tries again. The key can be moved in the game's controls,\n  under Vitrail, beside the two that open the settings and reload the pack.\n\n### Fixed\n\n- **Distant Horizons' own clouds stay out of a pack that asks for that.** With Distant Horizons\n  installed, its blocky clouds were drawn over the pack's sky even when the pack writes\n  `dhClouds=off`, as Complementary does. They were hardest to miss under blindness, where the\n  pack's own clouds go dark and Distant Horizons' stayed bright. They are now held off for as long\n  as such a pack is loaded, as Iris does, and your own Distant Horizons setting is left as it was.\n- **Distant Horizons' menu says who holds a setting it will not let you move.** Where a pack\n  draws the far terrain, Vitrail holds off Distant Horizons' own fog and ambient occlusion, and\n  its clouds wherever a pack asks. The menu showed those lines locked and \"controlled by\n  UNKNOWN\", and Distant Horizons wrote a warning in the log for each. They are now held under\n  Vitrail's name, on a Distant Horizons recent enough to take one.\n- **Mining a block shows its cracks again on 26.3.** With a shader pack loaded, the crack overlay\n  never appeared and the block simply broke. 26.3 draws the crack over an ordinary block earlier in\n  the frame than 26.2 did, among the solid features, and Vitrail was only waiting for it among the\n  translucent ones. It is now drawn with the pack's `gbuffers_damagedblock` at either moment, so the\n  crack over stone and the crack over glass both show.\n- **Banners show their colours and patterns again on 26.3.** With a shader pack loaded, every\n  banner was plain white cloth. 26.3 draws a banner's colour layers among the solid features where\n  26.2 drew them with the translucent ones, and Vitrail only served them at the later moment, so\n  the game painted the colours itself underneath the pack's cloth. They are drawn with the pack's\n  translucent block program at the moment the game draws them, as under Iris.\n- **Bliss-based packs draw again, Eclipse among them.** Three things stood in their way, the\n  first two enough to turn the whole pack off:\n  - A pack may keep data in a one dimensional image. Bliss keeps a line of block data that way,\n    and the game's shader checks refused every program reading it, the pack's composites among\n    them. One dimensional images now pass those checks, as three dimensional ones already did.\n  - A pack may define a macro twice with different bodies, which NVIDIA's driver accepts and the\n    compiler Vitrail uses does not. Eclipse's composite2 does it with `diagonal3`. Each use now\n    gets the body in force where it stands, which is the driver's reading.\n  - A geometry stage that only passes each corner on is folded into the stage after it on a Mac.\n    Eclipse's terrain writes that stage in a shape the fold did not read (a block of varyings read\n    one corner at a time, a counter declared ahead of its loop, the position held in a local), so\n    the pack's terrain program was set aside and the terrain drawn without it. It is folded now.\n- **A held item no longer streaks while the player walks, on a Mac.** Under Photon the item in hand\n  carried short light dashes, one column every 32 pixels, for as long as the walk bob kept it\n  moving. Vitrail puts the game's own picture wherever something the game drew stands in front of\n  the pack's geometry, and it tells the two apart by comparing the depth the pack's fragment stage\n  saw with the depth the GPU stored. On a Mac the two can differ by a unit in the last place on\n  some pixels of a sloped surface, so those pixels read as covered and got the game's colour in\n\n..."
 		},
 		{
 			"tag": "v0.12.0-beta",
@@ -151,7 +152,7 @@
 					"name": "vitrail-0.12.0-beta+mc26.2.jar",
 					"url": "https://github.com/avpbynf/vitrail-shaders/releases/download/v0.12.0-beta/vitrail-0.12.0-beta%2Bmc26.2.jar",
 					"size": 1863425,
-					"downloads": 44,
+					"downloads": 45,
 					"inspection": 2,
 					"sha256": "9b7a06ffe602b7987185a4f0cb1780f61d1c8ecad413555b6b122385bdb42940",
 					"mods": [
@@ -214,7 +215,7 @@
 					"name": "vitrail-0.12.0-beta+mc26.3.jar",
 					"url": "https://github.com/avpbynf/vitrail-shaders/releases/download/v0.12.0-beta/vitrail-0.12.0-beta%2Bmc26.3.jar",
 					"size": 1872086,
-					"downloads": 175,
+					"downloads": 176,
 					"inspection": 2,
 					"sha256": "0823ba8ff806e9a1cc8520b7410783683d3a5f2213576212cecdeecc869bcfc8",
 					"mods": [
@@ -272,7 +273,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### Added\n\n- **Minecraft 26.3.** The same source builds a jar for 26.2 and one for 26.3, and each jar refuses\n  the other game. On 26.3 it needs NeoForge 26.3.0.16-beta or later, or Fabric Loader with Fabric\n  API, and the Sodium 0.9.2 built for 26.3. On NeoForge, Complementary Reimagined draws there as it\n  does on 26.2: its terrain, water, shadows, sky, sun, moon and stars, mobs, the hand, clouds, rain\n  and snow, particles and composites, and the game's translucent features the pack does not serve\n  are composed into its image as on 26.2, and so is Distant Horizons' far terrain, land and water\n  both, with the pack's own `dh_terrain` and `dh_water`. Compiled shader modules are kept on disk,\n  so a second load of a pack skips the compile. The game's improved transparency is turned off\n  while a pack draws, as Iris turns it off on the other backend and as on 26.2. One thing is not carried over yet: a program with a geometry stage is\n  served only where that stage passes each corner on, which is folded into the stage after it, as on\n  a Mac on either game, and any other such program is set aside with a line in the log.\n- **The compiling notice in the top-left corner can be turned off.** A Compile Notice switch on\n  Vitrail's page of the video settings hides the pulsing mark and its \"Compiling shaders...\" words.\n  It is on by default, the pack compiles exactly as before either way, and the F3 screen still\n  says when it is compiling.\n\n### Changed\n\n- **Shadow Reuse is off by default.** The shadow map is drawn again on every frame, as Iris draws\n  it, so the frame rate you read is the one of the same shadow work. The setting is still on the\n  engine page for anyone who wants the frames it wins, by keeping the ground of the map for one or\n  two frames. A value you already set yourself is kept.\n\n### Fixed\n\n- **World space reflections show the blocks they reflect instead of black.** A pack can name one\n  of the game's atlases as a texture of its own, and Complementary Reimagined colours its world\n  space reflections from the block atlas that way. An atlas is built while the game runs and is no\n  file of any resource pack, so Vitrail found no file and bound one black texel in its place, and\n  every block reflected from off screen came out black. A texture the game holds under that name\n  is now bound as it stands, as Iris binds it.\n- **Coloured lighting works on a Mac.** Vitrail no longer tells a pack it is running on a Mac.\n  Packs read that as Apple's OpenGL driver and switch off what it lacks: Complementary Reimagined\n  turned its coloured lighting (Advanced Color Tracing) off and painted an error over the picture\n  when it was asked for. On a Mac Vitrail draws through Vulkan on Metal, which has what the\n  setting needs, so it now works there, and so do the improved rain and the rest of what the pack\n  held back for Apple's driver.\n- **Shadow comparisons are enabled on a Mac.** The sampler a pack's shadow lookups compare through\n  is one a Mac's Vulkan driver only accepts once a feature of its portability rules is enabled, and\n  nothing enabled it. The driver drew the lookups anyway, but a launch under the Khronos validation\n  layer had them refused, and the terrain was then drawn with stale textures until the game\n  crashed. The feature is now enabled wherever those rules apply.\n- **Moving blocks are drawn through the shader pack instead of falling back to the game's shader.**\n  Falling blocks such as sand and blocks carried by pistons use Minecraft's moving-block pipelines,\n  which were not served by the pack. They are now routed to the same shader programs Iris uses for\n  those pipelines and carry what Iris gives them: the real light map, the normal of each face, its\n  tangent and the other terrain inputs a pack lights a block with.\n- **SEUS PTGI HRR 3 is no longer set aside as soon as it loads.** Its anti-aliasing header carries\n  a comment giving example settings for other platforms, and the engine read those examples as if\n\n\n..."
 		},
 		{
 			"tag": "v0.11.0-beta",
@@ -284,7 +286,7 @@
 					"name": "vitrail-0.11.0-beta+mc26.2.jar",
 					"url": "https://github.com/avpbynf/vitrail-shaders/releases/download/v0.11.0-beta/vitrail-0.11.0-beta%2Bmc26.2.jar",
 					"size": 1824144,
-					"downloads": 89,
+					"downloads": 90,
 					"inspection": 2,
 					"sha256": "90597be0e29fcb993c0757650b7d056ebb10f361132429a325300fbd67199d0f",
 					"mods": [
@@ -342,7 +344,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### Added\n\n- **A pack's three dimensional lookup table is served whatever it holds.** Some packs ship a block\n  of numbers rather than a picture, a table their shaders read in three directions: an atmosphere\n  sampled by height, by sun angle and by view angle, a noise field a cloud is carved out of. The\n  engine laid out the small ones and turned away any table written in full precision numbers, and\n  it read no pack file over eight megabytes at all, a limit meant for shader text. It also read\n  such a table only where the shader asked for it in the plainest of the two ways GLSL offers, and\n  a program that asked the other way was turned away with its table sitting ready in memory. A pack\n  hitting any of the three lost every program that read the table: on iterationT that was every\n  pass it draws the overworld with bar a handful, which left the bare picture on screen with none\n  of its sky, its clouds or its water put in. Such a table is now read to the length its own\n  declaration announces, however long the file is, at the precision the pack wrote it, and through\n  either way of asking.\n\n  Where a card cannot blend between two of those values, Apple's among them, the table is read at\n  its nearest entry instead and the log says so.\n\n- **A pack's geometry stage is drawn.** Some packs put a third shader between the two the engine\n  builds every draw from, and use it to work something out per triangle rather than per corner:\n  how coarse the texture on a block face is, whether a sky quad is the moon or the sun. The engine\n  bound the first and the last and nothing in between, so the last one asked for values nobody had\n  written and the whole program was turned away: on iterationT that took the terrain and the moon\n  out of the picture entirely. Those programs now draw.\n\n  It needs a card that can run such a shader, which the desktop cards do and Apple's do not. On a\n  card without one, a geometry stage that only passes each corner of a triangle on is folded into\n  the shader after it, which is what iterationT's terrain stage does, so its ground is drawn on a\n  Mac too. That stage also works out how fine a block's texture is from the whole triangle, and the\n  folded shader works the same size out for each pixel instead. Any other geometry stage is named in\n  the log on such a card, and the world keeps the game's own shader for that program rather than\n  drawing it with its middle missing: iterationT's sun and moon stay with the game on a Mac, its\n  stage telling the moon from the sun by a measure of the whole quad that no single pixel can see.\n\n- **A pack may now blend one of a pass's targets differently from the others.** A shader pack can\n  ask for a blend function per target rather than one for the whole program, and the engine read\n  those lines and then dropped them the moment two targets of one pass disagreed, putting the\n  program's plain function on all of them. Each line now lands on the target it names, which is\n  what decides the shape of anything drawn over something else: an overlay that should multiply, a\n  surface that should add, a second target written straight through while the first blends. The\n  shadow map is in, the same as anywhere else.\n\n  With it, `PER_BUFFER_BLENDING` is served, so that name alone no longer turns a pack away. It\n  needs a driver that lets the targets of one pass differ; where there is none the name is refused\n  as before and the whole-program function stands, which is the ground Iris refuses it on too.\n\n- **Temporal Fold, a new setting on the engine page.** A world drawn at a lower render scale loses\n  the thin things first, and those are what crawls as you move. The upscale cannot put them back,\n  because it only sees one frame. This blends each frame with the ones before it, matching every\n  pixel to where it stood a frame ago, so detail one frame missed can come from the frames before\n  it.\n\n\n..."
 		},
 		{
 			"tag": "v0.10.0-beta",
@@ -354,7 +357,7 @@
 					"name": "vitrail-0.10.0-beta+mc26.2.jar",
 					"url": "https://github.com/avpbynf/vitrail-shaders/releases/download/v0.10.0-beta/vitrail-0.10.0-beta%2Bmc26.2.jar",
 					"size": 1631343,
-					"downloads": 33,
+					"downloads": 34,
 					"inspection": 2,
 					"sha256": "d3861bb06df4123656ee0606b2a35f033f48495a8659c9b7dc64e9bf659e439d",
 					"mods": [
@@ -409,7 +412,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### Added\n\n- **Eight shadow colour buffers for a pack that asks for them.** A pack declaring\n  `HIGHER_SHADOWCOLOR` may now draw the light into `shadowcolor0` through `shadowcolor7` and read\n  them back, which is what Iris gives it. Before, a shadow program naming anything above\n  `shadowcolor1` had its whole target list thrown away and drew into the first two instead, which\n  is still what a pack that does not declare the flag gets, exactly as under Iris. And only the\n  buffers some program of the pack names are allocated now, so a pack writing `shadowcolor0` alone\n  pays for that one image where it used to pay for two.\n\n- **Two more capability flags are announced and no longer refuse a pack**, `HIGHER_SHADOWCOLOR`\n  and `SSBO`. The storage buffers behind the second were already built and filled from a pack's\n  own `bufferObject` lines, and the name was simply never claimed, so a pack that declared it could\n  not be drawn at all. A pack requiring either, or both, now loads.\n\n- **A pack can read the shadow map under a second, hardware-compared name.** `shadowtex0HW` and\n  `shadowtex1HW` are bound now, to the same two depth images as `shadowtex0` and `shadowtex1`,\n  and each is compared by the hardware where the pack declares it that way. Both names read back\n  black before, and a pack declaring it cannot be drawn without `SEPARATE_HARDWARE_SAMPLERS` was\n  refused at load over that name alone. That name refuses nothing now, though a pack that also\n  requires a name this engine has not built is still refused, the log listing what it asked for.\n  Nothing changes for a pack that never writes the two names.\n\n### Changed\n\n- **Distant Horizons' far terrain is read out again only once it has changed.** Every frame a pack\n  drew turned that mod's whole listing of far sections into this engine's own records twice over,\n  once for the land and once for the water, which for a far view is thousands of sections a frame\n  and the same ones in almost all of them. The listing is now compared against the one the last\n  reading came out of, and the reading is reused where nothing in it has moved, so a camera\n  standing still over settled far terrain does the work once instead of on every frame. Walking,\n  a view distance changed, terrain finishing its generation, anything that really moves the far\n  view reads it again as before. The picture is the same, and none of this has been measured, so\n  it says work removed rather than frames gained.\n\n- **Picking a pack freezes the game for less time.** Reading a pack walked the same shader files\n  over and over, once to find its directives, once for its chain, once for its chunk programs and\n  once more for each of its compute programs, and every one of those walks read the archive again\n  and pasted the same shared headers together again. A pack is now read once per file and each of\n  its programs assembled once for as long as it stays open, which is the wait before the picture\n  appears when you choose a pack, apply a setting, or step through a portal. Nothing about the\n  picture changes.\n\n- **A pack loads its entities, sky, clouds, weather, particles and far terrain in one reading.**\n  Each of those six families opened the pack again on the loading thread and worked out the same\n  plan and the same program tree for itself before reading its own files, which was most of the\n  archive walking a load did. They now share one reading, and the report of a pack that used to\n  hold the title screen and every Apply for a second or two is written from a background thread\n  instead. On Complementary Unbound the families take under a second of background work where\n  they took four. Nothing about the picture changes.\n\n### Fixed\n\n- **A `#if` decides like the compiler where one side of an `&&` or `||` cannot be worked out.**\n  A condition such as `X != 0 && 100 / X > 5` with `X` at zero was left undecided, because the\n  right side was worked out whatever the left one said, and an undecided condition kept its\n\n..."
 		},
 		{
 			"tag": "v0.9.0-beta",
@@ -421,7 +425,7 @@
 					"name": "vitrail-0.9.0-beta+mc26.2.jar",
 					"url": "https://github.com/avpbynf/vitrail-shaders/releases/download/v0.9.0-beta/vitrail-0.9.0-beta%2Bmc26.2.jar",
 					"size": 1514794,
-					"downloads": 61,
+					"downloads": 62,
 					"inspection": 2,
 					"sha256": "48d297b2f7c883fde8f3d81ffddac1edfa50ef40e0c6b993b61073551288b0a6",
 					"mods": [
@@ -476,7 +480,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### Added\n\n- **A Cache Cap slider on the video settings page**, how much compiled-shader disk this\n  engine may keep, 128 to 2048 mebibytes in steps of 128. `512 MiB` is the old hardcoded\n  ceiling and the default. Moving it applies at once, with no pack reload: lowering may drop\n  unused cached shaders. Written in `vitrail/module-cache-ceiling.txt`.\n\n- **A Shadow Map Scale slider under Video Settings**, on the mod's page beside Max Shadow\n  Distance. The shadow map is drawn at the chosen fraction of the resolution the pack asked\n  for, 25 to 100 percent, and the setting outlives whichever pack is chosen. Moving it reloads\n  the pack, which is what lets the pack be told the smaller number instead of being left to\n  work against a map it cannot see.\n\n  It is a setting of its own rather than something the FSR Render Scale takes along with it,\n  because of what it does to the picture. The pack works out its shadow blur, its shadow bias\n  and where it reads the map from the size it was given, so a smaller map is a less defined\n  shadow, softer where the pack smooths its own and coarser where it does not, and an image\n  the pack's author never saw. That is a trade worth offering and not worth making on\n  somebody's behalf, so at 100 percent, which is where it starts, the pack gets exactly the\n  map it asked for and nothing of the setting runs. The engine says at load when the setting\n  is in force.\n\n  What the render scale reaches and what it leaves alone is now written down, in\n  `docs/render-scale.md`.\n\n- **A switch that fills the shadow map from a box around you rather than the tight\n  silhouette.** An empty file `vitrail/box-shadow-cull` in the game folder, or\n  `-Dvitrail.boxShadowCull=true`. The silhouette stays the default, which is what other loaders\n  draw. The box was tried as the default, to stop leaf blocks popping at the sun's edge as you\n  move, and measuring it is why it did not stay: on one wooded scene it drew 875 sections where\n  the silhouette draws 322, and the frame ran twelve to twenty-eight percent slower depending on\n  how much stood around. It also stops bounding anything at all once Shadow Distance reaches\n  your render distance, which is where the slider sits at its maximum.\n\n  What the box covers up is a defect of this engine and the switch is not its fix: leaves can go\n  a frame without their shadow while you walk, if you run a mod that narrows what the game\n  considers visible. That is being fixed at its cause instead.\n\n- **A switch that hands every sine and cosine a pack writes back to the graphics driver.** An\n  empty file `vitrail/driver-trig` in the game folder, or `-Dvitrail.driverTrig=true`. They are\n  normally replaced at load with a helper that keeps its accuracy over a whole world coordinate,\n  where a driver's own can shed the low bits and show as shimmer. The switch exists so the two\n  can be compared in one world rather than across two builds, and the log says which of them a\n  pack load ended up with either way. A pack that defines its own sine keeps it in both states.\n\n### Changed\n\n- **Compute shaders now hit the compiled-module cache on a pack reload.** They used to miss\n  every time because the disk key hashed the load number the debug name carries. That number\n  is out of the key. Computes are compiled by this engine, not by the game's shader compiler;\n  what is kept is the compiled module and its bind table, the same files graphics shaders\n  already write under `vitrail/modules`. Vulkan pipelines are built each load as before.\n- **F3 names the pack the way Iris does.** The profile line is the scanned name or Custom, with\n  how many options sit outside it, and the shadow line is Sodium's `C: a/b D: d` without this\n  engine's own cull dialect.\n- **The compiling overlay no longer covers F3.** While the debug screen is open, \"Compiling\n  shaders...\" rides the Vitrail F3 line instead of the corner. Close F3 and the corner overlay\n  is as it was.\n\n..."
 		}
 	],
 	"readme": "README.md",
@@ -487,5 +492,12 @@
 		}
 	],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [
+		"docs/images/screenshot-lush-cave.jpg",
+		"docs/images/screenshot-mountains.jpg",
+		"docs/images/screenshot-ocean-ruins.jpg",
+		"docs/images/screenshot-savanna-sunset.jpg"
+	],
+	"picturesChecked": "2026-10-29T01:25:05.016Z",
 	"history": 1
 }

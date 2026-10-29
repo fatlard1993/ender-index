@@ -1,0 +1,435 @@
+{
+	"repo": "SlimeKnights/Mantle",
+	"host": "github",
+	"description": "Public shared library for Forge mods",
+	"stars": 227,
+	"archived": false,
+	"license": "MIT",
+	"created": "2013-10-19T13:02:13Z",
+	"pushed": "2026-10-29T00:52:47Z",
+	"releases": [
+		{
+			"tag": "v1.11.117",
+			"published": "2026-09-04T08:07:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 544005180,
+					"name": "Mantle-1.20.1-1.11.117.jar",
+					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.11.117/Mantle-1.20.1-1.11.117.jar",
+					"size": 1652715,
+					"downloads": 38,
+					"inspection": 2,
+					"sha256": "bcb9681f78dde0da7e63e92abb341dc0dc09503fc1ab78c96f9d40571edc240d",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "mantle",
+							"version": "1.11.117",
+							"name": "Mantle",
+							"description": "Shared code for Slime Knights mods and others.",
+							"minecraft": "[1.20.1,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"suggests": [
+								"jei"
+							]
+						}
+					],
+					"icon": "2bd122cdd01702c7df842f88d5f75e21c3c2a29976466a47cab61bf23061ed4d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 788,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Utility\n\n* Made `ModuleScreen#handleMouseReleased` called regardless of the mouse location (thanks @ryancircelli in #257)\n  * Allows handling releasing in a click and drag which is the main usage of that hook.\n  * Fixed scrollbar release being called from a too large area which caused it to be called outside the module below or to the right often, \n* Added a new alternative fallback fluid render type which better handles fog and block/sky light. Will be automatically used if the Mantle type is disabled.\n* Make entity JEI ingredient helper support tags.\n* Fix fluid renderer not properly applying block and sky light.\n\n### Combat\n\n* Work around issues with swapping hands and attacking too close together.\n* Make offhand attribute fetching more stable by not mutating attributes on the player.\n* Added `CombatHelper#isAttackable`, which is the start of melee attack logic.\n* Added damage source parameter to `CombatHelper#attack`.\n* Ensure blend is enabled for offhand cooldown attack indicator.\n\n### Blocks\n\n* Update `InventoryBlock#use` to better mirror `ChestBlock`/`AbstractFurnaceBlock`.\n* Improve stability and errors from `BaseContainerMenu#getTileEntityFromBuf`\n* Added `BlockEntityHelper#getLoaded` as a replacement for `BlockEntityHelper#get` (requiring way fewer lambdas).\n* Added `BlockEntityPacket` helper to more easily create packets that update a block entity on the client.\n\n### Error handling\n\n* Catch and log exceptions from failed multi-recipe expansion in `RecipeHelper#getJEIRecipes`. This should cause exceptions to skip adding recipes over making the whole plugin fail.\n* Improve logging for packet encoder exceptions in network wrapper.\n* Improve exception message for logging recipe serializer errors.\n\n### Loadable\n\n* Add \"while parsing\" debug info to legacy loadable.\n* Relocated `Loadables#RESOURCE_LOCATION` to `ResourceLocationLoadable#DEFAULT` to prevent a potential class loading deadlock.\n\n## Book\n\n* In book export commands, add new namespace option to export all books under a single namespace.\n* Implement converting PageContent's into HTML by @paypur in #231 and #245\n* Mantle book pages will handle exporting, but mods adding custom pages may need to implement the HTML export.\n* Html utilities under `slimeknights.mantle.util.html` are no longer marked unstable as part of this.\n\n## New Contributors\n* @paypur made their first contribution in https://github.com/SlimeKnights/Mantle/pull/231\n* @ryancircelli made their first contribution in https://github.com/SlimeKnights/Mantle/pull/257\n\n**Full Changelog**: https://github.com/SlimeKnights/Mantle/compare/v1.11.104...v1.11.117"
+		},
+		{
+			"tag": "v1.11.104",
+			"published": "2026-02-01T23:58:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 349267409,
+					"name": "Mantle-1.20.1-1.11.104.jar",
+					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.11.104/Mantle-1.20.1-1.11.104.jar",
+					"size": 1625005,
+					"downloads": 80,
+					"inspection": 2,
+					"sha256": "6052e47c3981064bd5213728eaa3c5418289f6f85b07a1cd4dd1505239248838",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "mantle",
+							"version": "1.11.104",
+							"name": "Mantle",
+							"description": "Shared code for Slime Knights mods and others.",
+							"minecraft": "[1.20.1,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "2bd122cdd01702c7df842f88d5f75e21c3c2a29976466a47cab61bf23061ed4d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 783,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Increased network version to 2. While this was done due to breaking changes on the network, thats not unique to this build; I just keep forgetting to increment network version.\n\n## Data packs\n\n* Added `mantle:soulbound` item tag. Any items in this are kept on the player upon death.\n  * Soulbound logic is reusable in mods like Tinkers' Construct by just using the NBT key from `MantleEvents` in `LivingDeathEvent`.\n* Added `mantle:elytra_flying` entity condition.\n* Added `mantle:has_loot_context_set` loot condition to allow running a global loot modifier on all loot tables of a type (e.g. entity loot tables).\n\n## Utility\n\n* Added `FluidPredicate`, like `ItemPredicate` but for fluids.\n* Added helpers for building HTML. Will be used in the future book export to HTML feature. For now consider them unstable.\n\n### Loadable\n\n* Added `LazyRegistryLoadable` for non-vanilla registries such as Forge Registries.\n  * Used in `Loadables#FLUID_TYPE`.\n* Optimize enum loadable fields when written to the packet buffer.\n\n## Commands\n\n* Added `/mantle hunger` command to add or set hunger levels. I cannot tell you how many times I needed to test a less full hungerbar.\n\n## Books\n\n* Added new linebreak option to force a newline, useful in bulleted lists. Should be more stable than any of the `\\n` based approaches. Works in book JSON.\n* Added helper to `TextData` for null-safe grabbing of the text contents (as its possible by some means to end up with null text).\n* Fix columns in index builder breaking if the last list item was split across lines.\n\n## Translations\n* Adding Russian Translation (1.20.1) by @deaddiesel in https://github.com/SlimeKnights/Mantle/pull/238 and https://github.com/SlimeKnights/Mantle/pull/242\n* es_cl localization by @imkingstar in https://github.com/SlimeKnights/Mantle/pull/243\n* Update Simplified Chinese Translation by @Don-Trueno in https://github.com/SlimeKnights/Mantle/pull/233\n\n## New Contributors\n* @deaddiesel made their first contribution in https://github.com/SlimeKnights/Mantle/pull/238\n* @imkingstar made their first contribution in https://github.com/SlimeKnights/Mantle/pull/243\n\n**Full Changelog**: https://github.com/SlimeKnights/Mantle/compare/v1.11.97...v1.11.104"
+		},
+		{
+			"tag": "v1.11.97",
+			"published": "2026-01-03T23:56:07Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 335984857,
+					"name": "Mantle-1.20.1-1.11.97.jar",
+					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.11.97/Mantle-1.20.1-1.11.97.jar",
+					"size": 1580683,
+					"downloads": 38,
+					"inspection": 2,
+					"sha256": "67c79f7cbea8f4d2be8987a7ee83d7a341b841de89c3c09acd2edbf7e539e61e",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "mantle",
+							"version": "1.11.97",
+							"name": "Mantle",
+							"description": "Shared code for Slime Knights mods and others.",
+							"minecraft": "[1.20.1,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "2bd122cdd01702c7df842f88d5f75e21c3c2a29976466a47cab61bf23061ed4d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 761,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's Changed\n\n* Shaped retextured recipe now supports copying texture from any input block instead of just using the block itself.\n* Added a config option to reenable the buggy fluid renderer, as shaders can't stand mods doing normal things.\n* Allow setting the texture for a retextured recipe using a key from the ingredients map. This will likely be the primary way to do it in the future.\n* Fixed wrong translation key for failing to write tags.\n\n**Full Changelog**: https://github.com/SlimeKnights/Mantle/compare/v1.11.95...v1.11.97"
+		},
+		{
+			"tag": "v1.11.96",
+			"published": "2025-12-31T02:02:15Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 334687723,
+					"name": "Mantle-1.20.1-1.11.96.jar",
+					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.11.96/Mantle-1.20.1-1.11.96.jar",
+					"size": 1578388,
+					"downloads": 285,
+					"inspection": 2,
+					"sha256": "d25c5dbf41c655a3a99a1cea71c5d7f60061201e4e65fdecffa89aafa56bc13f",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "mantle",
+							"version": "1.11.96",
+							"name": "Mantle",
+							"description": "Shared code for Slime Knights mods and others.",
+							"minecraft": "[1.20.1,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "2bd122cdd01702c7df842f88d5f75e21c3c2a29976466a47cab61bf23061ed4d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 761,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "* Shaped retextured recipe now supports copying texture from any input block instead of just using the block itself.\n* Added a config option to reenable the buggy fluid renderer, as shaders can't stand mods doing normal things.\n* Fixed wrong translation key for failing to write tags.\n\n**Full Changelog**: https://github.com/SlimeKnights/Mantle/compare/v1.11.95...v1.11.96"
+		},
+		{
+			"tag": "v1.11.95",
+			"published": "2025-12-22T23:57:06Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 331933397,
+					"name": "Mantle-1.20.1-1.11.95.jar",
+					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.11.95/Mantle-1.20.1-1.11.95.jar",
+					"size": 1577744,
+					"downloads": 21,
+					"inspection": 2,
+					"sha256": "40c2fde7b961653732f013547c12dd6ba067f4bdd550a5312f4e9537101ee25e",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "mantle",
+							"version": "1.11.95",
+							"name": "Mantle",
+							"description": "Shared code for Slime Knights mods and others.",
+							"minecraft": "[1.20.1,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "2bd122cdd01702c7df842f88d5f75e21c3c2a29976466a47cab61bf23061ed4d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 761,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Content\n\n* Allow wetting a sponge using fluid transfer.\n* Retextured blocks now show the block ID under advanced tooltips.\n\n## Commands\n\n* Allow registering custom tag sources for the tags command.\n* New command `/mantle sources ...` - lists all sources of a file in a resource pack or datapack.\n* New command `/mantle remove (structure_set|biome_modifier)` to allow disabling parts of worldgen. `/mantle remove_recipes` is now `/mantle remove recipes`.\n\n### Tags\n\n* Regrouped tag related commands as sub-commands of `/mantle tags`.\n    * `/mantle tags_for` is now `/mantle tags for`\n    * `/mantle view_tag` is now `/mantle tags view`\n    * `/mantle dump_tag` is now `/mantle tags entries`\n    * `/mantle dump_all_tags` is now `/mantle tags dump`\n    * `/mantle tag_preference` is now `/mantle tags preference`\n* Added `/mantle tags for targeted block` and `/mantle tags for targeted fluid` as the F3 debug screen is not always easy to navigate.\n* Tag viewing commands no longer sort the tag so its possible to view the natural ordering.\n* `/mantle tags entries` and `/mantle tags dump` now properly dumps tag removals.\n* New command `/mantle tags add ...` - adds the entry to the given tag in a generated datapack.\n* New command `/mantle tags remove ...` - removes the entry from to the given tag in a generated datapack.\n* New command `/mantle tags clear ...` - puts an empty replace tag in a generated datapack.\n\n## Fluids\n\n* Added `InvertedFluid` and `InvertedFluidType` for a basic implementation of reverse gravity fluids.\n* Added `BurningLiquidBlock` and `MobEffectLiquidBlock` to make it easier to create fluids that apply fire or a constant effect.\n* `FluidDeferredRegister` has been updated with helpers to build the above new classes automatically.\n* Fix fluid renderer not adjusting for fog properly (for example, the blindness effect).\n\n### Fluid textures\n\n* Replace `textures` helper with `root(ResourceLocation)` and argumentless versions of `still()` and alike that suffix the root.\n* Added a new data provider to generate camera textures from the first frame of a fluid texture.\n* Allow fluid textures to change the camera image opacity instead of it being hardcoded to 10%.\n* Add options to control fluid fog, including the start and end distances, the color, and the shape.\n\n## Helpers\n\n* Added `TextureColorHelper` for getting the average color of a block, item, or general sprite.\n* Added loadable helper that catches errors and supplies a default, for more safe JSON parsing.\n* Make the JEI crafting index helper public.\n\n### Deferred\n\n* `BlockDeferredRegister` has new helpers to add potted plant blocks.\n* Added `ArgumentTypeDeferredRegister`, `AttributeDeferredRegister`, and `PotionDeferredRegister` to aid in registering the respective objects.\n* Added `EnumDeferredRegister` to allow enum object registration for any registry without a dedicated register.\n\n### JSON\n\n* Added block predicates `mantle:blocks_motion` and `mantle:can_be_replaced`.\n* Added item predicate `mantle:has_container`.\n* Added Entity predicates `mantle:sprinting`, `mantle:has_effect`, `mantle:block_at_entity`, and `mantle:blocking`.\n* Added `mantle:load_condition` to all relevant loader registries. Allows using a load condition to change the object loaded. Requires condition context in the typed map for tag access.\n* Added potion display ingredient, which displays all variants of a potion bottle.\n* Fix potion ingredient not serializing in datagen properly.\n\n## Books\n\n* Improve placement of padding in books. Ensures its more likely to end up in the previous section and not mess with other indices.\n* Item lists no longer cycle during book export and reset to index 0.\n* Improve setting of element parents.\n* Change default scale for export command to 2.\n\n**Full Changelog**: https://github.com/SlimeKnights/Mantle/compare/v1.11.79...v1.11.95"
+		},
+		{
+			"tag": "v1.10.48",
+			"published": "2025-01-02T02:56:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 217302564,
+					"name": "Mantle-1.19.2-1.10.48.jar",
+					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.10.48/Mantle-1.19.2-1.10.48.jar",
+					"size": 1212496,
+					"downloads": 25,
+					"inspection": 2,
+					"sha256": "74e32d2689787d169ba27871688b0a9e6e9ffe08133a5cf5e269788b234d4e04",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "mantle",
+							"version": "1.10.48",
+							"name": "Mantle",
+							"description": "Shared code for Slime Knights mods and others.",
+							"minecraft": "[1.19.2,1.19.3)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "2bd122cdd01702c7df842f88d5f75e21c3c2a29976466a47cab61bf23061ed4d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 609,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Bug fix and backport update for Mantle.\n\n## JSON\n\n* Validate numeric values when serializing in loadables\n* Change field types for registry loadables to ResourceLocationLoadable, adds a few extra methods.\n* Added loot injectors to easily add new entries to loot tables.\n* Added new static field to `ResourceLocationLoadable` to minimize accidental fetches of the static field from `StringLoadable`\n* Added option for collection loadables to serialize single items to an entry instead of a list.\n* Added `has_entity` and `is_indirect` damage source predicates.\n* Enum map loadables now use enum maps for the internal data structure.\n* Added SimpleRecordLoadable for the common case of a loadable record with only one field parsing into itself.\n* Fix fluid container ingredient being marked as empty under some circumstances\n\n## Model\n\n* Implemented datagen helpers for custom block models\n* Fix connected models not supporting coloring fully\n* Fix crash when retextured blocks have invalid NBT\n* Fix potential crash with poorly written approaches to model rendering breaking the retextured block models.\n\n## Books\n\n* Fix missing page numbers on books\n* \n\n## Helpers\n\n* Make a couple fluid transfer helper functions public, so they can be used in Tinkers\n* Typed map builder now has a method that copies another typed map.\n* Building block objects and children all now have a forEach method over the children.\n\n## Commands\n* Added new BookCommand from 1.20 by @fuj1n in https://github.com/SlimeKnights/Mantle/pull/217, see [the docs](https://slimeknights.github.io/docs/commands/mantle/#export-book-images)\n* Book related commands are now client commands. This means you no longer need to register book IDs with the command for them to show as suggestions. The book IDs registration will be removed in 1.20.\n\n\n**Full Changelog**: https://github.com/SlimeKnights/Mantle/compare/v1.10.36...v1.10.48"
+		},
+		{
+			"tag": "v1.9.54",
+			"published": "2024-12-10T02:49:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 212272077,
+					"name": "Mantle-1.18.2-1.9.54.jar",
+					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.9.54/Mantle-1.18.2-1.9.54.jar",
+					"size": 1017823,
+					"downloads": 13,
+					"inspection": 2,
+					"sha256": "6d3845b4a835c19552ea7052ea26570c8c92d70b29451c35978b2f48cca156e2",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "mantle",
+							"version": "1.9.54",
+							"name": "Mantle",
+							"description": "Shared code for Slime Knights mods and others.",
+							"minecraft": "[1.18.2,1.19)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "2bd122cdd01702c7df842f88d5f75e21c3c2a29976466a47cab61bf23061ed4d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 495,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "This release for 1.18 notably backports the book export command from newer Mantle versions to 1.18. It also backports many bug fixes from the 1.19 version, as they were trivial to copy over and might as well if we are making another release.\n\n## Additions\n\n* Added new book export command for the sake of generating book pages on the website. See [Mantle Commands](https://slimeknights.github.io/docs/commands/mantle/#export-book-images) for more information.\n* Added a method to `GenericDataProvider` to save JSON using a codec.\n* Improve resource failure message when it is unable to be loaded.\n\n## Fixes\n\n* Fix crash from adding invalid NBT to retextured blocks (#207)\n* Fix missing page numbers on books (#218)\n* Fix missing sound when a fluid has no sound (SlimeKnights/TinkersConstruct#5185)\n* Fix `MantleItemLayer` not properly supporting animations with frame count mismatching frame list\n* Fix `ItemOutput` caching missing results\n* Fix `TagPreference` conflict if multiple registries have a tag with the same name. Also ensure its threadsafe\n* Fix log output for `FluidTooltipHandler` reporting the wrong number of parsed fluid tooltips\n* Fix AddLootEntryModifier reading the conditions array from the wrong location (SlimeKnights/TinkersConstruct#5268)"
+		},
+		{
+			"tag": "v1.8.37",
+			"published": "2022-03-15T01:37:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 59509466,
+					"name": "Mantle-1.18.1-1.8.37.jar",
+					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.8.37/Mantle-1.18.1-1.8.37.jar",
+					"size": 861969,
+					"downloads": 100,
+					"inspection": 2,
+					"sha256": "36364caefe8001e1ea180832cab87c7500cea2253f39edf81a90b14c4913435f",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "mantle",
+							"version": "1.8.37",
+							"name": "Mantle",
+							"description": "Shared code for Slime Knights mods and others.",
+							"minecraft": "[1.18.1,1.19)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "2bd122cdd01702c7df842f88d5f75e21c3c2a29976466a47cab61bf23061ed4d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 410,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "* Added harvest tiers command - lets you list all forge harvest tiers and generate the JSON file to change their order\n* Added option to dump a single tag to JSON, instead of just to chat or all tags to JSON\n* Fix fluids not rendering on fabulous graphics"
+		},
+		{
+			"tag": "v1.6.157",
+			"published": "2022-01-31T18:32:19Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 55449931,
+					"name": "Mantle-1.16.5-1.6.157.jar",
+					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.6.157/Mantle-1.16.5-1.6.157.jar",
+					"size": 806737,
+					"downloads": 131,
+					"inspection": 2,
+					"sha256": "74fd7d71e4384d26b1e3f4f10088f52574a2937c5901c9ad57b0884ea88965ef",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "mantle",
+							"version": "1.6.157",
+							"name": "Mantle",
+							"description": "Shared code for Slime Knights mods and others.",
+							"minecraft": "[1.16.5,1.17)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "2bd122cdd01702c7df842f88d5f75e21c3c2a29976466a47cab61bf23061ed4d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 408,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Hopefully the final release for 1.16.\n\n* For retexturable blocks, focusing on a no-texture variant now shows all recipe options in JEI, makes it easier to show just one variant.\n* Fixed auto uv on fluid quads not properly rotating (thanks RCXcrafter)\n* Fixed items in books not showing numbers (may cause books in TiC to be weird without the next update)\n* Added ko_kr translation (thanks mindy15963)\n* Added fr_fr translation (thanks Aarrn33)"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-29T01:25:05.016Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T01:25:05.016Z",
+	"history": 1
+}

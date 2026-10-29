@@ -1,0 +1,483 @@
+{
+	"repo": "nanite/Nanite-Library",
+	"host": "github",
+	"description": "Backing library for some of the Nanite mods",
+	"stars": 0,
+	"archived": false,
+	"license": "MPL-2.0",
+	"created": "2023-09-25T21:49:54Z",
+	"pushed": "2026-09-27T12:11:07Z",
+	"releases": [
+		{
+			"tag": "v26.1.2.7",
+			"published": "2026-09-27T16:06:46Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 593261099,
+					"name": "nanite-library-fabric-26.1.2.7.jar",
+					"url": "https://github.com/nanite/Nanite-Library/releases/download/v26.1.2.7/nanite-library-fabric-26.1.2.7.jar",
+					"size": 132439,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "609b15d9cdffd7f62fabdc6429077e3a1fa89edb17b5b746e03c393ce1ac93f4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "nanitelibrary",
+							"version": "26.1.2.7",
+							"name": "Nanite Library",
+							"description": "Library mod for the Nanite family of mods. Provides common code and utilities for the various Nanite mods, as well as a common APIs for cross-loader mods",
+							"minecraft": ">=26.1.0 <27.0.0",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"de_marhali_json5-java"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 78,
+						"jars": [
+							"META-INF/jars/json5-java-3.0.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 593261102,
+					"name": "nanite-library-neoforge-26.1.2.7.jar",
+					"url": "https://github.com/nanite/Nanite-Library/releases/download/v26.1.2.7/nanite-library-neoforge-26.1.2.7.jar",
+					"size": 131423,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "9c304d589d6e4cf99d5765cb6d06ce6ffe5f673e5f0370c991eed6e0fa4bfa0d",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "nanitelibrary",
+							"version": "26.1.2.7",
+							"name": "Nanite Library",
+							"description": "Library mod for the Nanite family of mods. Provides common code and utilities for the various Nanite mods, as well as a common APIs for cross-loader mods",
+							"minecraft": "[26.1,27)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 76,
+						"jars": [
+							"META-INF/jarjar/json5-java-3.0.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [26.1.2.7]\n\n### Added\n- `NetworkRegistry#versioned(String)` and `NetworkRegistry#optional()` to set a packet's network version and optionality on NeoForge\n  - Both are no-ops on Fabric as it has no version negotiation and never refuses connections over missing packets\n- `Config#restoreFromDisk()` and `ConfigManager#restoreSyncedConfigs()` to drop values synced from a server\n\n### Changed\n- Fabric registries are now deferred until `initialize()` is called, matching NeoForge's `DeferredRegister`\n- Registering an entry after its registry has been initialized now throws on both platforms instead of silently doing nothing\n- Accessing a Fabric registry entry before its registry is initialized now throws with the entry's id\n- Common configs now load as soon as they're registered, and reload when a server starts\n- Registering a config after its type has loaded now loads it immediately instead of throwing\n- Server configs on NeoForge now load before the world loads, matching Fabric\n- The config sync packet is now optional, so clients with the library can join servers without it (and vice versa)\n- The config sync packet no longer sends comments and supports much larger configs (256K characters, up from 32K)\n- `ConfigValue#set` now saves the config file\n- Config files now keep values in the order they're declared\n- `CreativeModeTabBuilder#populateFromRegistry` now reads the registry's entries when the tab is populated instead of when it's called\n\n### Deprecated\n- `ExecutionTarget` and the `NetworkRegistry` overloads that take one, handlers always run on the main thread\n\n### Fixed\n- Dedicated Fabric servers loading client-only networking classes when packets were registered\n- `NetworkRegistry#playBidirectional` crashing on NeoForge due to the payload being registered twice\n- `Platform#sendPacketToAllPlayers` doing nothing on NeoForge\n- `PlatformClient#registerResourcePackReloadListeners` never registering the listeners on NeoForge\n- Server configs never loading on Fabric\n- Sending an optional packet to a side without it throwing on NeoForge\n- Values synced from a server sticking around after disconnecting, and being able to be written to disk\n- Config keys removed from the file keeping their old value on reload\n- Duplicate config keys silently replacing each other, they now throw\n- `CreativeModeTabBuilder` crashing when no icon was set\n- `Lazy#invalidate` holding onto the old value"
+		},
+		{
+			"tag": "v26.2.0.2",
+			"published": "2026-09-27T11:58:39Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 592835430,
+					"name": "nanite-library-fabric-26.2.0.2.jar",
+					"url": "https://github.com/nanite/Nanite-Library/releases/download/v26.2.0.2/nanite-library-fabric-26.2.0.2.jar",
+					"size": 132439,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "5eb49bfea609684beff72e27d2c273eae605e878ba5d2b520155d8a9711a353b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "nanitelibrary",
+							"version": "26.2.0.2",
+							"name": "Nanite Library",
+							"description": "Library mod for the Nanite family of mods. Provides common code and utilities for the various Nanite mods, as well as a common APIs for cross-loader mods",
+							"minecraft": ">=26.2.0 <27.0.0",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"de_marhali_json5-java"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 78,
+						"jars": [
+							"META-INF/jars/json5-java-3.0.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 592835445,
+					"name": "nanite-library-neoforge-26.2.0.2.jar",
+					"url": "https://github.com/nanite/Nanite-Library/releases/download/v26.2.0.2/nanite-library-neoforge-26.2.0.2.jar",
+					"size": 131419,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2d749efdb3e80d412afe713432fb5ffd5247d322ee5fdbd5f4e439f681f7b530",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "nanitelibrary",
+							"version": "26.2.0.2",
+							"name": "Nanite Library",
+							"description": "Library mod for the Nanite family of mods. Provides common code and utilities for the various Nanite mods, as well as a common APIs for cross-loader mods",
+							"minecraft": "[26.2,27)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 76,
+						"jars": [
+							"META-INF/jarjar/json5-java-3.0.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [26.2.0.2]\n\n### Added\n- `NetworkRegistry#versioned(String)` and `NetworkRegistry#optional()` to set a packet's network version and optionality on NeoForge\n  - Both are no-ops on Fabric as it has no version negotiation and never refuses connections over missing packets\n- `Config#restoreFromDisk()` and `ConfigManager#restoreSyncedConfigs()` to drop values synced from a server\n\n### Changed\n- Fabric registries are now deferred until `initialize()` is called, matching NeoForge's `DeferredRegister`\n- Registering an entry after its registry has been initialized now throws on both platforms instead of silently doing nothing\n- Accessing a Fabric registry entry before its registry is initialized now throws with the entry's id\n- Common configs now load as soon as they're registered, and reload when a server starts\n- Registering a config after its type has loaded now loads it immediately instead of throwing\n- Server configs on NeoForge now load before the world loads, matching Fabric\n- The config sync packet is now optional, so clients with the library can join servers without it (and vice versa)\n- The config sync packet no longer sends comments and supports much larger configs (256K characters, up from 32K)\n- `ConfigValue#set` now saves the config file\n- Config files now keep values in the order they're declared\n- `CreativeModeTabBuilder#populateFromRegistry` now reads the registry's entries when the tab is populated instead of when it's called\n\n### Deprecated\n- `ExecutionTarget` and the `NetworkRegistry` overloads that take one, handlers always run on the main thread\n\n### Fixed\n- Dedicated Fabric servers loading client-only networking classes when packets were registered\n- `NetworkRegistry#playBidirectional` crashing on NeoForge due to the payload being registered twice\n- `Platform#sendPacketToAllPlayers` doing nothing on NeoForge\n- `PlatformClient#registerResourcePackReloadListeners` never registering the listeners on NeoForge\n- Server configs never loading on Fabric\n- Sending an optional packet to a side without it throwing on NeoForge\n- Values synced from a server sticking around after disconnecting, and being able to be written to disk\n- Config keys removed from the file keeping their old value on reload\n- Duplicate config keys silently replacing each other, they now throw\n- `CreativeModeTabBuilder` crashing when no icon was set\n- `Lazy#invalidate` holding onto the old value"
+		},
+		{
+			"tag": "v26.3.0.6",
+			"published": "2026-09-27T11:50:53Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 592821567,
+					"name": "nanite-library-fabric-26.3.0.6.jar",
+					"url": "https://github.com/nanite/Nanite-Library/releases/download/v26.3.0.6/nanite-library-fabric-26.3.0.6.jar",
+					"size": 132795,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "0e90bf08ecb6fa1fded3bcaa24723221839deeb7c360f286f7cf6614ce3cb0b1",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "nanitelibrary",
+							"version": "26.3.0.6",
+							"name": "Nanite Library",
+							"description": "Library mod for the Nanite family of mods. Provides common code and utilities for the various Nanite mods, as well as a common APIs for cross-loader mods",
+							"minecraft": ">=26.3.0 <27.0.0",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"de_marhali_json5-java"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 78,
+						"jars": [
+							"META-INF/jars/json5-java-3.0.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 592821577,
+					"name": "nanite-library-neoforge-26.3.0.6.jar",
+					"url": "https://github.com/nanite/Nanite-Library/releases/download/v26.3.0.6/nanite-library-neoforge-26.3.0.6.jar",
+					"size": 131421,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "66bb7e4afc5b3a0c0730d89a9274634f19fc68897be3982d3fc3157fea32681c",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "nanitelibrary",
+							"version": "26.3.0.6",
+							"name": "Nanite Library",
+							"description": "Library mod for the Nanite family of mods. Provides common code and utilities for the various Nanite mods, as well as a common APIs for cross-loader mods",
+							"minecraft": "[26.3,27)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 76,
+						"jars": [
+							"META-INF/jarjar/json5-java-3.0.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [26.3.0.6]\n\n### Added\n- `NetworkRegistry#versioned(String)` and `NetworkRegistry#optional()` to set a packet's network version and optionality on NeoForge\n  - Both are no-ops on Fabric as it has no version negotiation and never refuses connections over missing packets\n- `Config#restoreFromDisk()` and `ConfigManager#restoreSyncedConfigs()` to drop values synced from a server\n\n### Changed\n- Fabric registries are now deferred until `initialize()` is called, matching NeoForge's `DeferredRegister`\n- Registering an entry after its registry has been initialized now throws on both platforms instead of silently doing nothing\n- Accessing a Fabric registry entry before its registry is initialized now throws with the entry's id\n- Common configs now load as soon as they're registered, and reload when a server starts\n- Registering a config after its type has loaded now loads it immediately instead of throwing\n- Server configs on NeoForge now load before the world loads, matching Fabric\n- The config sync packet is now optional, so clients with the library can join servers without it (and vice versa)\n- The config sync packet no longer sends comments and supports much larger configs (256K characters, up from 32K)\n- `ConfigValue#set` now saves the config file\n- Config files now keep values in the order they're declared\n- `CreativeModeTabBuilder#populateFromRegistry` now reads the registry's entries when the tab is populated instead of when it's called\n\n### Deprecated\n- `ExecutionTarget` and the `NetworkRegistry` overloads that take one, handlers always run on the main thread\n\n### Fixed\n- Dedicated Fabric servers loading client-only networking classes when packets were registered\n- `NetworkRegistry#playBidirectional` crashing on NeoForge due to the payload being registered twice\n- `Platform#sendPacketToAllPlayers` doing nothing on NeoForge\n- `PlatformClient#registerResourcePackReloadListeners` never registering the listeners on NeoForge\n- Server configs never loading on Fabric\n- Sending an optional packet to a side without it throwing on NeoForge\n- Values synced from a server sticking around after disconnecting, and being able to be written to disk\n- Config keys removed from the file keeping their old value on reload\n- Duplicate config keys silently replacing each other, they now throw\n- `CreativeModeTabBuilder` crashing when no icon was set\n- `Lazy#invalidate` holding onto the old value"
+		},
+		{
+			"tag": "v26.3.0.5",
+			"published": "2026-09-24T21:53:05Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 586922273,
+					"name": "nanite-library-fabric-26.3.0.5.jar",
+					"url": "https://github.com/nanite/Nanite-Library/releases/download/v26.3.0.5/nanite-library-fabric-26.3.0.5.jar",
+					"size": 126686,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "4cd0e018c0e75171d728c4e20fa3e638a49dcadd9ca4d1998787263308acedab",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "nanitelibrary",
+							"version": "26.3.0.5",
+							"name": "Nanite Library",
+							"description": "Library mod for the Nanite family of mods. Provides common code and utilities for the various Nanite mods, as well as a common APIs for cross-loader mods",
+							"minecraft": ">=26.3.0 <27.0.0",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"de_marhali_json5-java"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 77,
+						"jars": [
+							"META-INF/jars/json5-java-3.0.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 586922296,
+					"name": "nanite-library-neoforge-26.3.0.5.jar",
+					"url": "https://github.com/nanite/Nanite-Library/releases/download/v26.3.0.5/nanite-library-neoforge-26.3.0.5.jar",
+					"size": 127682,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "7ac39d96577e3c431002cf53523211d2a1cd009c935fcaf9240f041cba58a7e9",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "nanitelibrary",
+							"version": "26.3.0.5",
+							"name": "Nanite Library",
+							"description": "Library mod for the Nanite family of mods. Provides common code and utilities for the various Nanite mods, as well as a common APIs for cross-loader mods",
+							"minecraft": "[26.3,27)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 76,
+						"jars": [
+							"META-INF/jarjar/json5-java-3.0.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [26.3.0.5]\n\n### Fixed\n- Generics issues with createResourceKey return type... Whoops."
+		},
+		{
+			"tag": "v26.3.0.4",
+			"published": "2026-09-24T21:49:35Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 586917295,
+					"name": "nanite-library-fabric-26.3.0.4.jar",
+					"url": "https://github.com/nanite/Nanite-Library/releases/download/v26.3.0.4/nanite-library-fabric-26.3.0.4.jar",
+					"size": 126705,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "e9d8200c5527ec54992dafb5ad850307ea405767b62ee33931610868ea1d9787",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "nanitelibrary",
+							"version": "26.3.0.4",
+							"name": "Nanite Library",
+							"description": "Library mod for the Nanite family of mods. Provides common code and utilities for the various Nanite mods, as well as a common APIs for cross-loader mods",
+							"minecraft": ">=26.3.0 <27.0.0",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"de_marhali_json5-java"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 77,
+						"jars": [
+							"META-INF/jars/json5-java-3.0.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 586917308,
+					"name": "nanite-library-neoforge-26.3.0.4.jar",
+					"url": "https://github.com/nanite/Nanite-Library/releases/download/v26.3.0.4/nanite-library-neoforge-26.3.0.4.jar",
+					"size": 127700,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "c9efbff5cc9fae91520b21fe389ac03adc385a88f367ae39d66df7b3744368c4",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "nanitelibrary",
+							"version": "26.3.0.4",
+							"name": "Nanite Library",
+							"description": "Library mod for the Nanite family of mods. Provides common code and utilities for the various Nanite mods, as well as a common APIs for cross-loader mods",
+							"minecraft": "[26.3,27)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 76,
+						"jars": [
+							"META-INF/jarjar/json5-java-3.0.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [26.3.0.4]\n\n### Added\n- More helper methods for tag + resource key creation in the RegistryHolder interface\n  - `TagKey<R> createTagKey(Registry<R> registry)`\n  - `TagKey<R> createTagKey(ResourceKey<? extends Registry<R>> registryKey)`\n  - `ResourceKey<T> createResourceKey(ResourceKey<? extends Registry<T>> registryKey)`\n  - `ResourceKey<T> createResourceKey(Registry<T> registry)`\n\n### Removed\n- Removed the `createKey` method from the RegistryHolder interface as it was redundant with the new helper methods."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-29T01:25:05.016Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T01:25:05.016Z",
+	"history": 1
+}

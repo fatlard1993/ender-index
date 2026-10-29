@@ -6,7 +6,7 @@
 	"archived": false,
 	"license": "Apache-2.0",
 	"created": "2025-06-04T11:48:45Z",
-	"pushed": "2026-10-27T18:02:37Z",
+	"pushed": "2026-10-28T10:45:41Z",
 	"releases": [
 		{
 			"tag": "0.7.1",
@@ -52,9 +52,17 @@
 								"sodium-extra",
 								"skysoft"
 							],
+							"breaksVersions": {
+								"noammaddons": "<1.2.5",
+								"sodium-extra": "<0.8.7",
+								"skysoft": "<0.1.18"
+							},
 							"conflicts": [
 								"sbo-kotlin"
-							]
+							],
+							"conflictsVersions": {
+								"sbo-kotlin": "*"
+							}
 						}
 					],
 					"scan": {
@@ -168,7 +176,7 @@
 						"unreadable": []
 					},
 					"icon": "f69d4917f70f1c2b3639285a001ecc3e5d430558f76fceb7acf96fcfb34ed5cc.webp",
-					"downloads": 15,
+					"downloads": 17,
 					"funding": [
 						{
 							"platform": "patreon",
@@ -225,9 +233,17 @@
 								"sodium-extra",
 								"skysoft"
 							],
+							"breaksVersions": {
+								"noammaddons": "<1.2.5",
+								"sodium-extra": "<0.9.2",
+								"skysoft": "<0.1.18"
+							},
 							"conflicts": [
 								"sbo-kotlin"
-							]
+							],
+							"conflictsVersions": {
+								"sbo-kotlin": "*"
+							}
 						}
 					],
 					"scan": {
@@ -341,7 +357,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 7,
+					"downloads": 8,
 					"funding": [
 						{
 							"platform": "patreon",
@@ -398,9 +414,17 @@
 								"sodium-extra",
 								"skysoft"
 							],
+							"breaksVersions": {
+								"noammaddons": "<1.2.5",
+								"sodium-extra": "<0.9.2",
+								"skysoft": "<0.1.18"
+							},
 							"conflicts": [
 								"sbo-kotlin"
-							]
+							],
+							"conflictsVersions": {
+								"sbo-kotlin": "*"
+							}
 						}
 					],
 					"scan": {
@@ -514,7 +538,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 3,
+					"downloads": 4,
 					"funding": [
 						{
 							"platform": "patreon",
@@ -531,7 +555,8 @@
 						"shaders": false
 					}
 				}
-			]
+			],
+			"notes": "# SBO 0.7.1 for Minecraft 26.3, 26.2 & 26.1.x\n\n# Minecraft 26.3 Support\nMinecraft 26.3 is now supported. Minecraft 26.2 and 26.1.x remain supported as well, although we recommend updating from 26.1.x to at least 26.2 now. Since this the first release of SBO for MC 26.3, please report any bugs or issues you encounter to us.\n\n# Chunk Caching feature\nWe have added Chunk Caching directly integrated onto SBO! This essentially the same idea as mods like Bobby and Hold That Chunk V2, it is just more performant and native to SBO, with no additional mods needed. The other mods had downsides such as:\n- Bobby needed you to enable Dynamic World Management or otherwise fully bugged out in Hypixel.\n- Bobby also saved chunks to disk, not just RAM, making it slower than necessary, as disk writes and chunk serialization are costly.\n- The alternative LOD mods required a recent GPU that supports their tech, and the LOD-to-real transition when moving around the Hub still caused added latency.\n- The Hold That Chunk V2 mod was more simple compared to Bobby, but it also lacked certain advanced domain-specific features which we included, for example to only cache and render chunks actually in the main Hub island, and not neighboring islands.\n\nSBO's Chunk Cache is both simple, performant and advanced in this regard:\n- It does not need additional configuration to prevent bugs like Dynamic World Management.\n- It does not save chunks to disk; RAM-only, which keeps it fast. No chunk serialization/deserialization, no disk-writes, improved SSD lifetime and I/O.\n- It still uses vanilla chunks, not baking/loading/rendering LODs, which means all GPUs that can run Minecraft can also run it, compared to e.g. mods like Voxy requiring OpenGL 4.6. Since the chunks use vanilla system, no baking or conversion from LOD to real chunk is needed when you move around from a real chunk to a cached chunk as well, making it have less latency.\n- We have added some domain-specific features that further enhance performance: The \"Chunk Cache Areas\" set to \"Hub\" will make the cache task not run in the first place for any other islands, the \"Cache Hub Island Only\" will make the cache only consider chunks actually in the main Hub Island and e.g. not other islands visible from the Hub (Spider's Den, The Park, The Barn), the \"Render Hub Island Only\" will additionally further cancel rendering of chunks not belonging or intersecting with the main Hub Island even if they are vanilla-loaded chunks not from cache, and \"Only Above Server Render Distance\" will make this whole process only work if your Render Distance is above the server's.\n\nWe have ran profilers and found the impact of the cache itself to be minimal compared to rendering all the chunks, which the vanilla does - so if you are trying to use an extreme value like 64 Render Distance - we still would recommend using a LOD mod instead, but 43 and 32 Render Distance values were perfectly fine per our tests, and 16 worked without any sort of FPS drop.\n\nNote that your client might only allow 16 Render Distance by default - the C2ME mod can bump this number up from the default based on how much RAM is allocated to the game. Typically, for 4GB maximum heap memory, it will be 43, but we recommend 32.\n\nThe Chunk Cache is default enabled, but due to \"Only Above Server Render Distance\" also being default enabled, it won't run and cause any performance loss if your Render Distance in the vanilla-options screen is set to 8 or less - it will only start working after 9 and more Render Distance.\n\n# Rare Mob Kill Time Message feature\n\n..."
 		},
 		{
 			"tag": "0.7.0",
@@ -830,7 +855,8 @@
 					},
 					"downloads": 5
 				}
-			]
+			],
+			"notes": "# SBO 0.7.0 for Minecraft 26.2 & 26.1.x\n\n# Upgrade Notes\nThis is one of our biggest releases so far. Every SBO window has been rebuilt from the ground up on our own UI library, the Party Finder is completely new, and supporters get Cloud Sync and the new SBO Badges. 13 bugs have been fixed in this release compared to 0.6.0. We highly recommend everyone updates when convenient.\n\nAs usual, here are the things you should keep in mind for this version:\n- Update Fabric Language Kotlin to 1.14.2+kotlin.2.4.21 or newer before launching the game with this version (Mandatory). Fabric Loader and Fabric API requirements are unchanged from 0.6.0.\n- Update SkySoft if you use it. Versions below 0.1.18 are now marked as incompatible, as they hide legitimate Diana mobs due to a bug in their Hide Glitched Mobs feature. The game will not launch with an older SkySoft version installed.\n- Your settings are kept. We replaced ResourcefulConfig with our own config system, but it reads and writes the same config/sbo/config.jsonc file, so nothing needs to be set up again.\n- Your SBO key is moved automatically. It is now stored per Minecraft account in <game dir>/.sbo/sbo-auth.json instead of SboData.json. If you have no key yet, the mod now sets one up on its own when a feature needs it - no more /generatesbokey and /sbokey needed for most players.\n- Party Finder settings now live inside the Party Finder window instead of the general settings menu. Your Auto Invite and Auto Requeue choices are taken over automatically.\n- The \"Rare Mob Spawn Sound\" option has been removed (read below). If you relied on it, set the mob-specific spawn sounds in /sbosounds instead.\n- Your master volume moved from the settings menu into /sbosounds. It is taken over automatically.\n- Elementa, UniversalCraft and ResourcefulConfig are no longer bundled with SBO. You do not need to install anything new - our UI library GuiLib is bundled with the mod.\n\n# Note for New MC Version Support\nMinecraft 26.3 support is still in progress and will come in a later release. Please be patient. We recommend staying at Minecraft 26.2 or 26.1.2 at the moment.\n\n# Brand New Party Finder\nThe Party Finder (/sbopf) has been rewritten from scratch, both in the mod and on our backend. It is no longer only for Diana - you can now find and create parties for Diana, Fishing, Mining, Kuudra, Bestiary, Rift, Safari and Slayer, plus Custom parties for everything else.\n\n- Parties ask for real requirements read from the Hypixel API (for example Magical Power, Diana Kills, Griffin rarity, Kuudra completions or slayer level), and the mod checks them for you before you join. A shared hint tells you when you need to turn on a Hypixel API setting and reload your stats.\n- Filter the party list by what parties ask for, by several bosses, locations and tiers at once, by party size and free spots, and search by player name or note. Your filters are saved per party type.\n- All subcategories show in one list, each party tagged with its subcategory, with party counts in the sidebar. Event parties (Spooky, Winter, Fishing Festival) are listed before the event starts.\n- Roles are now places with counts: the leader picks how many of each role they want, roles fill up as players join and taken roles are locked. The leader can change roles in the member menu, members can use !role. The leader picks their own role too.\n- Click a party member to see every stat of them in a side panel.\n- Manage your own party from the member menu: make someone party leader, make or remove moderator, or kick.\n- Join requests now go over a direct connection to the SBO server, with /msg as a fallback. You can also join parties without an SBO key.\n- Report parties that break the rules with a right click. A new Rules tab shows the rules.\n\n..."
 		},
 		{
 			"tag": "0.6.0",
@@ -1239,7 +1265,8 @@
 					},
 					"downloads": 17
 				}
-			]
+			],
+			"notes": "# SBO 0.6.0 for Minecraft 26.2 & 26.1.x\n\n# Upgrade Notes\n19 bugs have been fixed in this release compared to 0.5.2. We highly recommend everyone updates when convenient. We originally planned a 0.5.3 release, but it had a lot more to it than these bug fixes - so we ended up picking 0.6.0 as the version number. Those that were sticking out to 0.4.3 due to bugs in the 0.5.x series may now upgrade.\n\nAs usual, here are the things you should keep in mind for this version:\n- Update Fabric Loader, Fabric API, Fabric Language Kotlin before launching the game with this version (Mandatory). Update Iris and ModMenu if you have it as well (Optional).\n- Enable \"Show Title When Chain Ends\" since the bug reverting its default-enabled status has been fixed. We have not retroactively enabled it again for upgrading users - you must manually enable it yourself, unless you are not using SBO for the Diana burrows. New users will get the option as default enabled.\n- Ensure your Render Distance is set to at least 10 to avoid the nag on initial join to Skyblock about it. This enhances the solver quality as the mod can check for the grass block further away to determine whether a guess is in a valid spot or not.\n- If you want the advanced chains display with internal state mismatch detection, disable the new \"Simple Chains Overlay Mode\" option which is default enabled now which aims to provide a simpler overlay to not confuse casual players.\n- Run /sbobacktrackachievements to obtain the new achievements if you met the conditions in a previous event based on your past diana event data.\n\n# Note for New MC Version Support\nMinecraft 26.3 is too new at the moment for us to support, support will come in later releases. Please be patient. We recommend staying at Minecraft 26.2 or 26.1.2 at the moment.\n\n# Restored 26.1 and 26.1.1 Support\nWe have seen a few people stuck in 0.3.0-beta release due to it being the last release to support MC 26.1 and 26.1.1 while all our 0.4.0 and onward releases requiring MC 26.1.2. Since MC 26.1.2 is a small bug fix release by Mojang, you really should not be using 26.1 or 26.1.1; but if you were, we restored support for it, so that you are not stuck on an outdated and ancient mod version.\n\n# Spawn Chances Command\nAdded /sbospawnchances (/sbosc) to display rare mob spawn chances with given tracking value.\n\n# Ironman Overrides\nAdded an option to make everything in the Loot Tracker take NPC prices (contributed by crosby-moe), or if you can't sell an item to NPC show as 0 profit. This option is similar in nature to the previous NPC Price Overrides option that forces things normal profiles also NPC sell out of laziness, but is more strict and applies to all items. The !profit Party Command will show that NPC prices are being used for profit and money/hour calculations when this is enabled.\n\n# Sound Enhancements\nAdded custom sound options when a mob reaches low HP defined in your config. Set \"Sound HP Alert\" in /sbo menu, then configure the sounds at /sbosounds to use it.\n\nCustom sounds added into config/sbo/sounds directory can now be selected in /sbosounds without needing to restart the game.\n\nUp to three sounds can now play at same time instead of a single sound.\n\nThe /sbosounds menu is now also categorized into sound categories, making it less overwhelming.\n\n# Custom Drop Message Enhancements\nCustom drop messages now support some new parameters to get them upto the standard with the default message:\n - {since} : Replaced with how many mobs it took to get the drop. For example, \"7\".\n - {price} : The Auction House or Bazaar price of the drop. For example, \"28.7m\"\n - {lstext} : Replaced with the literal text \"(LS)\" if the drop was from lootshare, otherwise replaced with empty text \"\".\n\n# New Achievements\nAdded \"Oh baby a triple!\" - Get 3 manti-cores in 1 event.\nAdded \"I can turn into a bee now\" - Drop a Fateful Stinger.\nAdded \"Very greedy I see\" - Get 10 Crown of Greeds in one event.\n\n\n..."
 		},
 		{
 			"tag": "0.5.2",
@@ -1636,7 +1663,8 @@
 					},
 					"downloads": 14
 				}
-			]
+			],
+			"notes": "# SBO 0.5.2 for Minecraft 26.2 and 26.1.2\n\n# Bug fixes\n\n- Fixed \"Use Spade\" title showing via `requestSpade` even when Spade Guess is disabled in settings. The title will now only show if you have Spade Guess enabled.\n- Fixed Rare Mob waypoints not being removed when they should be, or being removed prematurely. The old chunk-loading check was too strict and would fail to clean up stale waypoints in many cases. Rewrote the stale removal logic to check proximity in a simpler and more reliable way.\n- Fixed \"Beam Distance\" option description not matching its actual behavior it was hiding all beacon beams, not just Rare Mob waypoint beams. Renamed to \"Beacon Beam Distance\" to clarify this.\n\n---\n\n**What changed:**\n- **Profile tracking** The mod now reads your active profile directly from the tab list (`Profile: ` entry) and persists the last queried profile name across sessions via `SboData.lastStatsProfile`. This means it can detect when you've actually switched profiles, not just guess.\n- **Smarter cache invalidation** Previously, switching profiles would still return cached stats from the old profile until you manually ran `/sboreloadstats`. Now, if the cached profile doesn't match the current one and the 20s cooldown has expired, the cache is bypassed automatically.\n- **Name mismatch detection** When the API returns a different player's name than the one currently logged in (e.g. after switching accounts), the mod re-fetches with cache bypass to prevent cross-contamination between accounts.\n- **`/sboreloadstats` command** Now forces a fresh API fetch with cache bypass, respecting the existing 20s cooldown to prevent spam.\n- **Profile switch hook updated** The chat regex was updated from `\"^Switching to profile (.*)$\"` to `\"^Your profile was changed to: (\\S+)\"` to match the actual Hypixel message format. The old regex was likely not capturing the profile name correctly.\n- **New internal architecture** Split `getPartyPlayerStats()` into `fetch()` as the core API call, with `load()` defaulting to cached reads and `reloadStats()` for forced refreshes.\n\n---\n\n# Default config changes\n\n- **`showTitleWhenChainEnds`** Default changed from `true` → `false`. The \"Use Spade\" title could fire incorrectly on a second solve attempt even when the first was successful, so it is now disabled by default.\n- **`Warp Block Difference`** Default changed from `10` → `22`. The previous default was too low and would suggest warping even when you were very close to the warp destination.\n- **`\"Beam Distance\"` renamed to `\"Beacon Beam Distance\"`** To better reflect that this option applies to all beacon beams, not just Rare Mob waypoint beams.\n\n---\n\n# API version header added\n\nThe mod now sends its version string in the `X-SBO-Version` HTTP header when making requests to the SBO backend server. This allows the backend to identify which mod version is making requests."
 		},
 		{
 			"tag": "0.5.1",
@@ -2003,7 +2031,8 @@
 					},
 					"downloads": 6
 				}
-			]
+			],
+			"notes": "# SBO 0.5.1 for Minecraft 26.2 and 26.1.2\n\n###  Improvements & Refactors\n* **API V2 Revamp:** Major refactor to address party finder latency and backend performance. (Read more abt it in the upcoming Announcement)\n\n###  Bug Fix\n* **Fix Startup Crash (MC 26.2):** Fixed an issue in 0.5.0-26.2 where launching the game required having a mod bundled with the new HM-API version (like Skyblocker)."
 		},
 		{
 			"tag": "0.4.3",
@@ -2316,7 +2345,8 @@
 					},
 					"downloads": 41
 				}
-			]
+			],
+			"notes": "# SBO 0.4.3 for Minecraft 26.1.2 and 1.21.11\n\n# Note on Minecraft 26.2 support\nThis release only supports Minecraft 26.1.2 and 1.21.11. Minecraft 26.2 support is planned for a future release, please be patient. To clarify, Hypixel's suggestion to upgrade to 26.2 only appears when joining with 1.21.11 or 1.21.10, and 26.1.2 will be supported for at least 3 months from now on since it won't be dropped till 26.3 releases.\n\n# Toggle-able Pause Menu button\nWe have added an option to disable the Pause Menu button SBO adds, in case you don't like it.\n\n# Sphinx Keybind\nNOTE: This feature is UAYOR (use at your own risk) as answering without chat open can be considered an unfair advantage over other players, but it does not do multiple things with one keypress because internally, we do not open the chat for you nor click to the message for you - we just run the command that would have normally ran if you have opened the chat and clicked on the answer directly, which is a single action.\n\nWe have added a new keybind to the vanilla Controls menu - when set to a button, it will answer the sphinx question without needing to open the chat and leftclick. If you set this key to leftclick (ignore the conflict warning), you can most likely answer the question and go straight to damaging the Sphinx as fast possible to avoid any time loss.\n\n# Hide LS Stats enhanced\nHide LS Stats option is enhanced to now also hide LS stats in the Diana Mobs Overlay, not just Diana Stats Overlay.\n\n# More fixes for missing Diana-V2 stuff\nAdded highest Manticore and Fateful Stinger Magic Find to the Magic Find Overlay and the !mf Party Command. We have also added the previously missing Minos Relic here, along with now tracking your highest Magic Find for Minos Relic (magic find from past drops are not tracked due to internal tracker being newly added). The internal tracker for Minos Relic was missing as before Diana-V2, Minos Relic drops used to not contain Magic Find in the chat message.\n\n# Burrow-found sound\nWe have changed the default value of the \"Burrow Found Sound\" option in Customization settings to \"notification\", and made it only play when detecting burrows from particles when close. This should make you notice better if the mod finds a new burrow behind you.\n\nThe internal ID of the option was changed so that the upgrading users also get the new default. You may get a prompt in chat that you need to enable the SBO Custom Sounds Data Pack resourcepack when a new treasure or mob burrow is discovered, as now the custom sounds are actually used by the out of box configuration, instead of being completely optional and upto the user. This is intended.\n\nThe extraction code was also fixed so that the built-in sounds are now correctly extracted from the jar onto the config/sounds directory and then to the resourcepacks/SBO Custom Sounds Data Pack/assets/sbo/sound directory.\n\n# Experimental features\nAdded \"Ongoing Chains Display\" - displays amount of chains you have started (from the chat message) and the amount of known burrow + arrow guess waypoints visible added by the mod. If these numbers do not match, it might mean that the mod has a bug causing a chain to not have a waypoint, or to have an additional waypoint not cleaned up without a chain started. This display will also show additional data if internal state of the mod is corrupt.\n\nNote that, the amounts of chains you have started does NOT save to disk, so it will be inherently wrong if you restart your game after starting some burrows and not finishing them (unless 30 minutes passes, at which server resets your burrows). If you are concerned with this, use the Diana NPC clear burrows feature for now; as this feature is currently experimental, no in-code fix for this is available, but is planned for next release.\n\nWith the 6 block distance and internal state fixes, Arrow Guess sometimes wiping a chain should be fully fixed - but ongoing chains display can still help you notice if it ever happens again.\n\n\n..."
 		},
 		{
 			"tag": "beta0.3.0",
@@ -2776,7 +2806,8 @@
 					},
 					"downloads": 12
 				}
-			]
+			],
+			"notes": "# READ: For upgrading users\nIt is advised to backup your .minecraft/config/SBO folder (or your instance folder if you are not using the official launcher) somewhere else before upgrading to this version as there was a change to how filesystem directories regarding the folders in config directory are handled, and another change about how your backups (for past events data) are handled. These changes should not cause issues, but better safe than be sorry.\n\nRenamed Museum --> MUSEUM to match other entries and name style standards. If you have disabled the museum warp, you might need to re-disable it after updating to this version.\n\n# Minecraft 26.1, 26.1.1 and 26.1.2 Support\nAdded Minecraft 26.1, 26.1.1 and 26.1.2 support. While less tested than the 1.21.11 and 1.21.10 versions, please test and give feedback.\n\n# First-Time User Experience Improvements\n- Added a !help command in case people do not know about /sbopartycommands.\n- Added a note to Diana Warp section telling the keys must be set in vanilla MC controls menu to avoid confusion.\n- Added a button to open Party Finder in Party Finder settings category in case new users do not know /sbopf command.\n\n# More Diana-V2 Polishing\n- Added amount of dropped Mythological Dyes, Shimmering Wools, Shimmering Wools (LS), Manti-cores, Manti-cores (LS) and killed Minos Kings, Minos Kings (LS), Mantis, Mantis (LS) to /sbopastevents.\n\n# Bugs Fixed\n## 1.21.11-specific\n- Fixed line to closest burrow not rendering in 1.21.11.\n\n## 1.21.10-specific\n- Fixed red outline for hud elements not being accurately sized when scale of the hud element is changed in 1.21.10.\n\n## All versions\n- Fixed diana detection without always diana debug option when diana is minister.\n- Fixed party commands not working when Hypixel language is set to anything else than English.\n- Fixed InvalidIdentifierException crash when your customization settings has a bad custom sound path.\n- Fixed not being able to Change View or Instasell/Sell offer when your Minecraft language is set to anything else than English.\n- Fixed duplicate directories in .minecraft/config when your filesystem is case-sensitive.\n- Fixed 0-byte zips and empty folders in the backup directory from non-atomic backup system.\n- Fixed trying to refresh mayor data every 1 second instead of every 1 minute when all previous refresh requests were failed. (Thanks lunaynx for the fix)\n- Fixed /ct reload being mentioned in Party Finder FAQ, replaced with suggestion to enable all API in SkyBlock settings instead now.\n- Fixed spaces in party finder notes showing up as %20.\n- Fixed Myth the Fish tracking not working.\n\n# New Optimizations\n- Optimized total width and height to be only calculated when needed using kotlin lazy.\n- Optimized various components related to ordered text, regex, system time millis, and short-circuiting conditionals.\n\n# Other Misc Changes\n- Removed 1.21.5 and 1.21.7 entirely from the codebase as Hypixel dropped support.\n- Bundle 1.21.11 version of hm-api in 1.21.11.\n- Update checker log messages changed from german to english.\n- Enhanced mod metadata with issues link and added bundled dependencies to dependencies section.\n- Migrated the project to Mojang mappings from Yarn.\n- Bump bundled universalcraft and elementa versions."
 		},
 		{
 			"tag": "beta0.2.0",
@@ -3215,11 +3246,14 @@
 					},
 					"downloads": 17
 				}
-			]
+			],
+			"notes": "# Skyblock Overhaul – Beta Release 0.2.0 (Achievements V2)\n\n## Achievement Overhaul\n- New Achievements GUI with an integrated **Search functionality** and a Type Filter - @Saotzuri\n- Added **Celestial** rarity and **43** new achievements (Myth the Fish, King's Soul, Chimera VII, etc.) - @ugo635 & @RolexDE\n- Complete rewrite of achievement logic including automatic data migration from legacy formats - @RolexDE & @ugo635\n- Added support for repeatable achievements (WIP/Debug option) - @RolexDE\n- Improved UI readability with text wrapping for achievement descriptions - @Saotzuri\n\n## Diana & Loot Improvements\n- Added individual sound and volume settings for every Rare Mob type - @ugo635\n- Added unique spawn announcements for Inquisitor, Sphinx, Manticore, and Minos King - @ugo635\n- Implemented **Mythological Dye** tracking and drop percentages in the loot overlay - @Saotzuri & @TheDGOfficial\n- Added customizable drop messages for Brain Food, Manti-Core, Fateful Stinger, and Shimmering Wool - @ugo635 & @RolexDE\n- Added an option to keep Arrow Guess waypoints when switching worlds/lobbies - @Saotzuri\n\n## Technical & Performance\n- Massive performance optimization for text rendering (OrderedText & Width Cache) - @TheDGOfficial\n- Added a built-in **Modrinth Update Checker** - @Saotzuri\n- Implemented Buffered Writers for data saving to prevent file corruption - @TheDGOfficial\n- Restricted the mod to client-side only to prevent server-side loading issues - @TheDGOfficial\n- Bumped Gradle, Actions, and internal dependencies - @TheDGOfficial\n\n## QoL & Fixes\n- New party commands: `!sessionstats` and `!sessionstat` - @ugo635\n- Fixed an issue where the King Soul achievement wouldn't track correctly - @ugo635\n- Fixed a bug where playtime wouldn't reset during an auto-reset - @TheDGOfficial\n- Refactored price calculation logic for more accurate profit tracking - @RolexDE\n- Fixed Total Profit display values - @ugo635\n- Fixed Cocoon detection - @Saotzuri\n\n## Feedback & Bug Reports\nThis is a major milestone for the beta. Please report any bugs or issues on our [Discord](https://discord.gg/QvM6b9jsJD) — your feedback is essential for refining the new achievement system."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-29T01:25:05.016Z",
 	"history": 1
 }
