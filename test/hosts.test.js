@@ -281,6 +281,37 @@ describe('a request', () => {
 			reset.server.stop();
 		}
 	});
+	test("one request's 429 holds every request to its host until the wait it asked for is over", async () => {
+		const { fetchSteady } = await import('../src/fetch');
+		const times = [];
+		const server = Bun.serve({
+			port: 0,
+			fetch: () => {
+				times.push(Date.now());
+
+				return times.length === 1
+					? new Response(null, { status: 429, headers: { 'retry-after': '1' } })
+					: new Response('ok');
+			},
+		});
+		const url = `http://localhost:${server.port}/`;
+
+		try {
+			const first = fetchSteady(url, undefined, { pauses: [0, 0] });
+
+			while (times.length === 0) await Bun.sleep(5);
+			await Bun.sleep(50);
+
+			const second = await fetchSteady(url, undefined, { pauses: [0, 0] });
+
+			expect(second.status).toBe(200);
+			expect((await first).status).toBe(200);
+			expect(times).toHaveLength(3);
+			expect(Math.min(times[1], times[2]) - times[0]).toBeGreaterThanOrEqual(950);
+		} finally {
+			server.stop();
+		}
+	});
 });
 
 describe('the rate limit', () => {

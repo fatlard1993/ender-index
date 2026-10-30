@@ -45,13 +45,22 @@ export const limitedBy = (host, response) => {
 	return new RateLimited(`${host} asks to be left alone until ${new Date(resetAt).toISOString()}`, resetAt);
 };
 
+/** When each host that answered 429 may be asked again: every request to it waits, not only the one it answered. */
+const quietUntil = new Map();
+
+const quietFor = host => (quietUntil.get(host) ?? 0) - Date.now();
+
 /**
  * fetch, asked again after a server error or a network failure, and after a 429 that says how long to wait when that
  * is not long; any other answer is returned as it came.
  */
 export const fetchSteady = async (url, init, { pauses = PAUSES, unsaid = UNSAID_WAIT, limit = REQUEST_LIMIT } = {}) => {
+	const { host } = new URL(url);
+
 	for (let attempt = 0, slowed = 0; ; ++attempt) {
 		let failure;
+
+		if (quietFor(host) > 0) await Bun.sleep(quietFor(host));
 
 		try {
 			const timeout = AbortSignal.timeout(limit);
@@ -63,10 +72,14 @@ export const fetchSteady = async (url, init, { pauses = PAUSES, unsaid = UNSAID_
 
 			if (wait !== undefined && wait <= WAIT_AT_MOST) {
 				await response.body?.cancel();
-				console.error(
-					`waiting ${Math.ceil(wait / 1000)}s: ${new URL(url).host} answered 429${askedToWait(response) === undefined ? ', saying for how long nowhere' : ''}`,
-				);
-				await Bun.sleep(wait);
+
+				if (quietFor(host) <= 0) {
+					console.error(
+						`waiting ${Math.ceil(wait / 1000)}s: ${host} answered 429${askedToWait(response) === undefined ? ', saying for how long nowhere' : ''}`,
+					);
+				}
+
+				quietUntil.set(host, Math.max(quietUntil.get(host) ?? 0, Date.now() + wait));
 				++slowed;
 				--attempt;
 
@@ -85,7 +98,7 @@ export const fetchSteady = async (url, init, { pauses = PAUSES, unsaid = UNSAID_
 			failure = said.message;
 		}
 
-		console.error(`retrying in ${pauses[attempt] / 1000}s: ${new URL(url).host} ${failure}`);
+		console.error(`retrying in ${pauses[attempt] / 1000}s: ${host} ${failure}`);
 		await Bun.sleep(pauses[attempt]);
 	}
 };
