@@ -81,6 +81,26 @@ export const installControls = entry => {
 	];
 };
 
+/** Star a mod's repository on GitHub, as the account ender signs in with, or take the star back. */
+export const starButton = entry => {
+	if (!local.canStar(entry)) return [];
+
+	const starred = local.isStarred(entry);
+
+	return [
+		new Button({
+			icon: 'star',
+			variant: starred ? undefined : 'flat',
+			textContent: starred ? 'Starred' : 'Star',
+			tooltip: starred ? 'Take back your star on GitHub' : 'Star it on GitHub, as the account ender signs in with',
+			onPointerPress: () =>
+				local
+					.star(entry, !starred)
+					.catch(error => new Notify({ intent: 'danger', content: `GitHub did not take that: ${error.message}` })),
+		}),
+	];
+};
+
 export const instancePicker = () =>
 	new Select({
 		options: local.instances.map(instance => ({

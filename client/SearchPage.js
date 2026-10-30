@@ -102,8 +102,10 @@ const PhoneOnly = styled(
 	`,
 );
 
-const filtersLabel = ({ side, released, host, sort, avoid, support, tag }) => {
-	const active = [side, released, host, sort !== 'best', avoid.length > 0, support, tag].filter(Boolean).length;
+const filtersLabel = ({ side, released, host, sort, avoid, support, tag, starred }) => {
+	const active = [side, released, host, sort !== 'best', avoid.length > 0, support, tag, starred].filter(
+		Boolean,
+	).length;
 
 	return active > 0 ? `Filters (${active})` : 'Filters';
 };
@@ -411,8 +413,9 @@ export default class SearchPage extends View {
 					: new EmptyState({
 							icon: 'magnifying-glass',
 							title: 'No mods match',
-							message:
-								'Every word has to appear in a mod id, name or description, and its jars have to fit the filters',
+							message: state.starred
+								? 'Only mods you starred on GitHub are shown: star one on its page, or take the Starred filter off'
+								: 'Every word has to appear in a mod id, name or description, and its jars have to fit the filters',
 						}),
 			);
 			more.elem.style.display = ranked.length > shown ? '' : 'none';
@@ -423,7 +426,10 @@ export default class SearchPage extends View {
 
 			history.replaceState(null, '', `${location.pathname}${writeQuery(state)}${location.hash}`);
 
-			ranked = refine(rank(entries, state.query, state), state);
+			ranked = refine(rank(entries, state.query, state), {
+				...state,
+				starredKeys: state.starred ? local.starred : undefined,
+			});
 
 			const bestOrder = state.query.trim() ? 'best match first' : 'most relied on first';
 			const order = state.sort === 'best' ? bestOrder : SORTS[state.sort].toLowerCase();
@@ -561,9 +567,35 @@ export default class SearchPage extends View {
 
 		supporting.elem.classList.toggle('selected', state.support);
 
+		const starring = new Button({
+			variant: 'chip',
+			icon: 'star',
+			textContent: 'Starred',
+			tooltip: 'Only mods you starred on GitHub',
+			style: { display: 'none' },
+			onPointerPress: () => {
+				state.starred = !state.starred;
+				starring.elem.classList.toggle('selected', state.starred);
+				restart();
+			},
+		});
+
+		starring.elem.classList.toggle('selected', state.starred);
+
+		/** Offered once ender web has said what the player starred, or said why it cannot. */
+		const showStars = () => {
+			if (local.starred === undefined && local.starsError === undefined) return;
+
+			starring.elem.style.display = '';
+			starring.elem.disabled = local.starred === undefined;
+			if (local.starsError) starring.elem.title = local.starsError;
+			if (state.starred) render();
+		};
+
 		const avoiding = new Row({
 			append: [
 				supporting,
+				starring,
 				new Meta({ textContent: 'Hide what reaches' }),
 				...Object.keys(CAPABILITIES).map(capability => {
 					const chip = new Button({
@@ -626,8 +658,12 @@ export default class SearchPage extends View {
 
 		const localBar = new Row();
 
+		local.subscribe(showStars, this.signal);
+
 		local.ready().then(available => {
 			if (!available || this.signal.aborted) return;
+
+			local.loadStars();
 
 			localBar.content([new Meta({ textContent: 'Installing into' }), instancePicker()]);
 

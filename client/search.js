@@ -60,6 +60,7 @@ export const readQuery = search => {
 		support: params.get('support') === '1',
 		author: authorOf(params.get('author')),
 		tag: params.get('tag')?.trim().toLowerCase() || undefined,
+		starred: params.get('starred') === '1',
 	};
 };
 
@@ -75,6 +76,7 @@ export const writeQuery = ({
 	support,
 	author,
 	tag,
+	starred,
 }) => {
 	const params = new URLSearchParams();
 
@@ -89,6 +91,7 @@ export const writeQuery = ({
 	if (support) params.set('support', '1');
 	if (author) params.set('author', author.replace(/^github:/, ''));
 	if (tag) params.set('tag', tag);
+	if (starred) params.set('starred', '1');
 
 	const written = params.toString();
 
@@ -113,7 +116,7 @@ const ORDER = {
  */
 export const refine = (
 	ranked,
-	{ side, released, host, sort = 'best', avoid = [], support, author, tag },
+	{ side, released, host, sort = 'best', avoid = [], support, author, tag, starredKeys },
 	now = Date.now(),
 ) => {
 	const kept = ranked.filter(
@@ -124,6 +127,7 @@ export const refine = (
 			(!support || (entry.funding?.length ?? 0) > 0) &&
 			(!author || ownerOf(entry) === author) &&
 			(!tag || (entry.tags ?? []).includes(tag)) &&
+			(!starredKeys || starredKeys.has(starKey(entry))) &&
 			!(entry.latest?.capabilities ?? []).some(capability => avoid.includes(capability)),
 	);
 
@@ -378,6 +382,9 @@ export const screenshotsOf = (markdown, raw, most = 6) => {
 
 /** Where a host lists releases with what each asset was downloaded; GitLab does not count them. */
 export const collectionKey = entry => `${entry.host ?? 'github'}:${entry.repo}`;
+
+/** A repository's key among a player's stars: GitHub names one whatever its case. */
+export const starKey = entry => collectionKey(entry).toLowerCase();
 
 /** One line that adds every collected mod; ender resolves each and what they require together. */
 export const installAllCommand = (entries, { instance } = {}) =>

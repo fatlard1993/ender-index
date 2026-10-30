@@ -19,6 +19,7 @@ import {
 	supportOf,
 	recordUrl,
 	readQuery,
+	starKey,
 	authorPath,
 	tagPath,
 	lineUrl,
@@ -50,6 +51,8 @@ describe('the search page', () => {
 		expect(writeQuery(state)).toBe('?q=fabric+api&mc=1.21.1&loader=fabric');
 		expect(readQuery(writeQuery(state))).toMatchObject({ query: 'fabric api', minecraft: '1.21.1', loader: 'fabric' });
 		expect(writeQuery({ query: '' })).toBe('');
+		expect(readQuery(writeQuery({ starred: true })).starred).toBe(true);
+		expect(starKey({ host: 'github', repo: 'CSneko/ctLib' })).toBe('github:csneko/ctlib');
 		expect(readQuery('?loader=bukkit&sort=random&avoid=network,teleport')).toMatchObject({
 			loader: undefined,
 			sort: 'best',
@@ -180,6 +183,7 @@ describe('the search page', () => {
 		expect(repos({ author: 'github:b' })).toEqual(['b/old']);
 		expect(repos({ author: 'github:d' })).toEqual([]);
 		expect(repos({ tag: 'ship' })).toEqual(['a/best']);
+		expect(repos({ starredKeys: new Set(['github:a/best', 'github:b/old']) })).toEqual(['a/best', 'b/old']);
 		expect(repos({ sort: 'stars' })).toEqual(['b/old', 'a/best', 'd/codeberg', 'c/network']);
 		expect(repos({ sort: 'downloads' })[0]).toBe('c/network');
 		expect(repos({ sort: 'used' })[0]).toBe('c/network');
@@ -340,5 +344,7 @@ describe('the Get ender page', () => {
 test('a mod with only its source installs with --build, which allows ender to build it', () => {
 	expect(installCommand({ repo: 'a/b', fromSource: true })).toBe('ender add gh:a/b --build');
 	expect(installCommand({ repo: 'a/b' })).toBe('ender add gh:a/b');
-	expect(installAllCommand([{ repo: 'a/b' }, { repo: 'a/c', fromSource: true }])).toBe('ender add gh:a/b gh:a/c --build');
+	expect(installAllCommand([{ repo: 'a/b' }, { repo: 'a/c', fromSource: true }])).toBe(
+		'ender add gh:a/b gh:a/c --build',
+	);
 });

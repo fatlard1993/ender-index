@@ -1,6 +1,6 @@
 import { readStorage, writeStorage } from '@vanilla-bean/components';
 
-import { collectionKey } from './search';
+import { collectionKey, starKey } from './search';
 
 const SELECTED_KEY = 'ender-index:instance';
 
@@ -20,6 +20,8 @@ const state = {
 	busy: new Set(),
 	error: undefined,
 	jobs: new Map(),
+	stars: undefined,
+	starsError: undefined,
 };
 
 const notify = () => {
@@ -57,7 +59,11 @@ const call = async (method, path, body) => {
 	});
 	const result = await response.json().catch(() => ({}));
 
-	if (!response.ok) throw new Error(result.error ?? `ender web answered ${response.status}`);
+	if (!response.ok) {
+		throw Object.assign(new Error(result.error ?? `ender web answered ${response.status}`), {
+			status: response.status,
+		});
+	}
 
 	return result;
 };
@@ -163,9 +169,12 @@ const change = async (verb, specs, keys, { build = false } = {}) => {
 	notify();
 
 	try {
-		const job = await finished(await start('POST', `${named(state.selected)}/${verb}`, { specs, ...(build ? { build } : {}) }), {
-			reloading: false,
-		});
+		const job = await finished(
+			await start('POST', `${named(state.selected)}/${verb}`, { specs, ...(build ? { build } : {}) }),
+			{
+				reloading: false,
+			},
+		);
 
 		return job.lines.join('\n');
 	} finally {
@@ -173,6 +182,24 @@ const change = async (verb, specs, keys, { build = false } = {}) => {
 		await refresh().catch(() => notify());
 	}
 };
+
+let starsAsked;
+
+/**
+ * The player's GitHub stars, asked of ender web once. An ender too old to keep them answers 404, and the page then
+ * offers nothing of stars; any other refusal, such as no account to sign in with, is kept to be said.
+ */
+const loadStars = () =>
+	(starsAsked ??= call('GET', 'stars')
+		.then(({ repositories }) => {
+			state.stars = new Set(repositories.map(repository => starKey({ host: 'github', repo: repository })));
+		})
+		.catch(error => {
+			if (error.status !== 404) state.starsError = error.message;
+		})
+		.finally(notify));
+
+const starPath = entry => `stars/${entry.repo.split('/').map(encodeURIComponent).join('/')}`;
 
 export const local = {
 	ready: () => (detected ??= detect().catch(() => false)),
@@ -219,4 +246,22 @@ export const local = {
 		change('add', entries.map(specFor), entries.map(collectionKey), { build }),
 	drop: (entries, specFor) => change('drop', entries.map(specFor), entries.map(collectionKey)),
 	subscribe: (listener, signal) => listen(listeners, listener, signal),
+	/** The keys of every repository the player starred, or undefined until ender web has said. */
+	get starred() {
+		return state.stars;
+	},
+	get starsError() {
+		return state.starsError;
+	},
+	loadStars,
+	canStar: entry => state.stars !== undefined && (entry.host ?? 'github') === 'github',
+	isStarred: entry => state.stars?.has(starKey(entry)) ?? false,
+	star: async (entry, starring) => {
+		await call(starring ? 'PUT' : 'DELETE', starPath(entry));
+
+		if (starring) state.stars.add(starKey(entry));
+		else state.stars.delete(starKey(entry));
+
+		notify();
+	},
 };

@@ -64,7 +64,7 @@ import {
 	similarTo,
 	worksWith,
 } from './related';
-import { collectButton, installControls } from './controls';
+import { collectButton, installControls, starButton } from './controls';
 import { local } from './local';
 import {
 	Chip,
@@ -719,8 +719,9 @@ export default class ModPage extends View {
 		const readme = new Stack({ append: new EmptyState({ loading: true, title: 'Fetching the readme' }) });
 		const gallery = new Stack();
 		const players = new Stack();
-		const controls = new Row({ append: [collectButton(entry), ...installControls(entry)] });
-		const redrawControls = () => controls.content([collectButton(entry), ...installControls(entry)]);
+		const controlsFor = () => [collectButton(entry), ...starButton(entry), ...installControls(entry)];
+		const controls = new Row({ append: controlsFor() });
+		const redrawControls = () => controls.content(controlsFor());
 		const downloads = downloadsPanel(entry, record);
 		const others = sameAuthor(entry, listing);
 		const related = relatedGroups(entry, listing);
@@ -799,7 +800,10 @@ export default class ModPage extends View {
 		this.bar.trail({ label: title });
 		collection.subscribe(redrawControls, signal);
 		local.subscribe(redrawControls, signal);
-		local.ready().then(redrawControls);
+		local.ready().then(served => {
+			redrawControls();
+			if (served) local.loadStars();
+		});
 
 		this.body.content([
 			new Row({
@@ -853,7 +857,11 @@ export default class ModPage extends View {
 						new Warning({
 							append: [
 								`${BUILT_FROM_SOURCE} `,
-								new Link({ href: askUrl(entry, 'release'), target: '_blank', textContent: 'Ask its author for a release' }),
+								new Link({
+									href: askUrl(entry, 'release'),
+									target: '_blank',
+									textContent: 'Ask its author for a release',
+								}),
 							],
 						}),
 					]
@@ -922,7 +930,9 @@ export default class ModPage extends View {
 									href: askUrl(entry, 'fund'),
 									target: '_blank',
 									textContent: 'I would pay its author',
-									tooltip: hint('Counted once per player on GitHub; when a few have asked, the index tells its author.'),
+									tooltip: hint(
+										'Counted once per player on GitHub; when a few have asked, the index tells its author.',
+									),
 								}),
 							],
 						}),
