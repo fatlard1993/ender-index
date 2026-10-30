@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       discover:
-        description: Search for new mod repositories before crawling
+        description: Search for new mod repositories before crawling, as each scheduled crawl does
         type: boolean
-        default: false
+        default: true
 
 permissions:
   contents: write
@@ -44,8 +44,7 @@ jobs:
           restore-keys: crawl-
       - name: discover
         if: inputs.discover || github.event_name == 'schedule'
-        run: |
-          if [ '${{ inputs.discover }}' = true ] || [ "$(date -u +%u)" = 7 ]; then bun run discover; else echo 'Discovery runs on Sundays'; fi
+        run: bun run discover
         working-directory: ender-index
         env:
           GITHUB_TOKEN: ${{ secrets.CRAWL_TOKEN || secrets.GITHUB_TOKEN }}

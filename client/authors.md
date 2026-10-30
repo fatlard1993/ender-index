@@ -41,7 +41,7 @@ A FUNDING.yml is read again weekly; a jar's links are read with the release.
 
 ## Being found
 
-Every Sunday the crawl looks for new mods. On GitHub it finds them by the metadata a loader keeps in source: `fabric.mod.json` or `quilt.mod.json` under `src/main/resources`, `mods.toml` or `neoforge.mods.toml` under `META-INF`. On GitHub, Codeberg and GitLab a topic finds them too: `minecraft-mod`, `fabric-mod`, `fabricmc`, `forge-mod`, `neoforge`, `neoforge-mod` or `quilt-mod`. A Modrinth project that links its source repository leads there as well, and so does a modpack the index lists that downloads a mod's jar from its releases. Once found, a mod's releases are read again by the nightly crawl.
+Every night the crawl looks for new mods. On GitHub it finds them by the metadata a loader keeps in source, searching a share of GitHub each night, so a new mod can take a few nights to turn up: `fabric.mod.json` or `quilt.mod.json` under `src/main/resources`, `mods.toml` or `neoforge.mods.toml` under `META-INF`. On GitHub, Codeberg and GitLab a topic finds them too: `minecraft-mod`, `fabric-mod`, `fabricmc`, `forge-mod`, `neoforge`, `neoforge-mod` or `quilt-mod`. A Modrinth project that links its source repository leads there as well, and so does a modpack the index lists that downloads a mod's jar from its releases. Once found, a mod's releases are read again by the nightly crawl.
 
 ## Your page
 

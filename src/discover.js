@@ -2,6 +2,7 @@ import { join } from 'node:path';
 
 import {
 	DATA,
+	readJson,
 	readLines,
 	readModrinthRepos,
 	readNoJars,
@@ -28,8 +29,23 @@ export const MANIFESTS = [
 
 export const TOPICS = ['minecraft-mod', 'fabric-mod', 'fabricmc', 'forge-mod', 'neoforge', 'neoforge-mod', 'quilt-mod'];
 
-/** Code search answers at most 1000 results per query, so each query is asked once per file size band. */
-const SIZES = ['size:<500', 'size:500..999', 'size:1000..1499', 'size:1500..2499', 'size:>=2500'];
+/** The most results code search answers for one query, however many match it. */
+export const RESULT_CAP = 1000;
+
+/** The file size bands each manifest is searched in before any is split; the last has no upper end. */
+const START_SIZES = [
+	[0, 499],
+	[500, 999],
+	[1000, 1499],
+	[1500, 2499],
+	[2500, null],
+];
+
+/** Where the search stopped, and the bands it searches in, each split until it matches no more than RESULT_CAP. */
+export const SLICES = 'discovery-slices.json';
+
+/** A night's share of the job for the manifest search; the bands it does not reach are searched the nights after. */
+const MINUTES = 25;
 
 /** Code search allows ten requests a minute. */
 const PAUSE = 6500;
@@ -122,33 +138,90 @@ const findPacks = async () => {
 	return found;
 };
 
-export const discover = async () => {
-	const found = new Set();
-	const queries = MANIFESTS.flatMap(manifest => SIZES.map(size => `${manifest} ${size}`));
+export const startingSlices = () => ({
+	next: 0,
+	slices: MANIFESTS.flatMap(manifest => START_SIZES.map(([from, to]) => ({ manifest, from, to }))),
+});
 
-	console.log(
-		`Searching ${queries.length} queries at ten requests a minute; this takes up to ${Math.ceil((queries.length * 10 * PAUSE) / 60_000)} minutes`,
-	);
+export const sliceQuery = ({ manifest, from, to }) => {
+	if (to === null) return `${manifest} size:>=${from}`;
+
+	return `${manifest} size:${from === to ? from : `${from}..${to}`}`;
+};
+
+/** A band split in two at its middle, or one with no upper end at twice its start. */
+const halves = slice => {
+	const middle = slice.to === null ? slice.from * 2 || 1 : Math.floor((slice.from + slice.to) / 2);
+
+	return [
+		{ ...slice, to: middle - (slice.to === null ? 1 : 0) },
+		{ ...slice, from: middle + (slice.to === null ? 0 : 1) },
+	];
+};
+
+/**
+ * Search the bands from where the last night stopped, until the deadline or once round them all. A band matching more
+ * than code search answers is split in two and its first half searched in its place, so over the nights every band
+ * comes to hold no more than RESULT_CAP, and every file is answered for.
+ */
+export const searchSlices = async ({ state, search, deadline, sleep = Bun.sleep, log = console.log }) => {
+	const slices = [...state.slices];
+	const found = new Set();
+	let next = state.next % slices.length;
+	let searched = 0;
+
+	const ask = async (slice, page) => {
+		const { items = [], total_count: total } = await search(sliceQuery(slice), page);
+
+		for (const repo of reposFrom(items)) found.add(repo);
+
+		await sleep(PAUSE);
+
+		return total;
+	};
 
 	try {
-		for (const query of queries) {
-			for (let page = 1; page <= 10; ++page) {
-				const { items = [], total_count: total } = await searchWaiting(query, page);
+		while (Date.now() < deadline && searched < slices.length) {
+			const slice = slices[next];
+			const total = await ask(slice, 1);
 
-				for (const repo of reposFrom(items)) found.add(repo);
+			if (total > RESULT_CAP && (slice.to === null || slice.from < slice.to)) {
+				slices.splice(next, 1, ...halves(slice));
 
-				await Bun.sleep(PAUSE);
-
-				if (page * 100 >= Math.min(total, 1000)) break;
+				continue;
 			}
 
-			console.log(`${query} :: ${found.size} repositories so far`);
+			for (let page = 2; (page - 1) * 100 < Math.min(total, RESULT_CAP); ++page) await ask(slice, page);
+
+			log(`${sliceQuery(slice)} :: ${total} files, ${found.size} repositories so far`);
+			next = (next + 1) % slices.length;
+			++searched;
 		}
 	} catch (error) {
 		if (!(error instanceof RateLimited)) throw error;
 
-		console.log(`Stopped searching at the rate limit; ${error.message}. Keeping the ${found.size} found so far.`);
+		log(`Stopped searching at the rate limit; ${error.message}`);
 	}
+
+	log(`Searched ${searched} of ${slices.length} size bands; the next night starts at band ${next + 1}`);
+
+	return { state: { next, slices }, found };
+};
+
+export const discover = async () => {
+	const slicesPath = join(DATA, SLICES);
+
+	console.log(
+		`Searching code for mod metadata for up to ${MINUTES} minutes, at ten requests a minute, from where the last discovery stopped`,
+	);
+
+	const { found, state } = await searchSlices({
+		state: await readJson(slicesPath, startingSlices()),
+		search: searchWaiting,
+		deadline: Date.now() + MINUTES * 60_000,
+	});
+
+	await Bun.write(slicesPath, `${JSON.stringify(state, null, '\t')}\n`);
 
 	// Codeberg and GitLab offer no code search across repositories, so there a topic is the sign.
 	for (const [host, adapter] of Object.entries({ codeberg, gitlab })) {

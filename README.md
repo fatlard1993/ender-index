@@ -127,6 +127,6 @@ ender is a sibling checkout (`../ender-launcher`), so the scanner is always the 
 
 ## Nightly
 
-[`.github/workflows/crawl.yml`](.github/workflows/crawl.yml) crawls at 04:17 UTC, discovers on Sundays, and commits whatever changed. A crawl that failed for some repository still commits what it found, then fails the run so the failure is seen.
+[`.github/workflows/crawl.yml`](.github/workflows/crawl.yml) crawls at 04:17 UTC, discovering before each crawl, and commits whatever changed. A crawl that failed for some repository still commits what it found, then fails the run so the failure is seen.
 
 Each crawl asks GitHub for a repository's details and releases conditionally, against responses kept in `.cache` between runs. An unchanged answer is a 304, which GitHub does not count against the rate limit, so a night's cost is the repositories that changed, not all of them. The Actions token allows 1000 requests an hour; when a crawl reaches the limit it stops, says when the limit resets, and the repositories it did not reach are crawled first the next night. A `CRAWL_TOKEN` secret (a fine-grained token with public read access, 5000 an hour) fills a large index sooner, and the workflow prefers it when present.
