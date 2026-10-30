@@ -22,6 +22,8 @@ const state = {
 	jobs: new Map(),
 	stars: undefined,
 	starsError: undefined,
+	login: undefined,
+	accountError: undefined,
 };
 
 const notify = () => {
@@ -199,6 +201,19 @@ const loadStars = () =>
 		})
 		.finally(notify));
 
+let accountAsked;
+
+/** Who ender signs in to GitHub as, asked once; an ender too old to say answers 404, and the page asks nothing as them. */
+const loadAccount = () =>
+	(accountAsked ??= call('GET', 'account')
+		.then(({ login }) => {
+			state.login = login;
+		})
+		.catch(error => {
+			if (error.status !== 404) state.accountError = error.message;
+		})
+		.finally(notify));
+
 const starPath = entry => `stars/${entry.repo.split('/').map(encodeURIComponent).join('/')}`;
 
 export const local = {
@@ -254,6 +269,17 @@ export const local = {
 		return state.starsError;
 	},
 	loadStars,
+	/** The GitHub login ender acts as, or undefined until it has said, or when it has none. */
+	get login() {
+		return state.login;
+	},
+	get accountError() {
+		return state.accountError;
+	},
+	loadAccount,
+	/** Each files an issue on the index as that account, and answers its link. */
+	ask: (entry, kind) => call('POST', 'asks', { kind, mod: collectionKey(entry) }),
+	listPack: pack => call('POST', 'listings', { pack }),
 	canStar: entry => state.stars !== undefined && (entry.host ?? 'github') === 'github',
 	isStarred: entry => state.stars?.has(starKey(entry)) ?? false,
 	star: async (entry, starring) => {

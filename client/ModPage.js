@@ -24,7 +24,6 @@ import { packCard } from './packs';
 import { shareUrl } from './shots';
 import {
 	BUILT_FROM_SOURCE,
-	askUrl,
 	CAPABILITIES,
 	INDEX,
 	collectionKey,
@@ -64,7 +63,7 @@ import {
 	similarTo,
 	worksWith,
 } from './related';
-import { collectButton, installControls, starButton } from './controls';
+import { askControl, collectButton, installControls, starButton } from './controls';
 import { local } from './local';
 import {
 	Chip,
@@ -857,11 +856,7 @@ export default class ModPage extends View {
 						new Warning({
 							append: [
 								`${BUILT_FROM_SOURCE} `,
-								new Link({
-									href: askUrl(entry, 'release'),
-									target: '_blank',
-									textContent: 'Ask its author for a release',
-								}),
+								askControl(entry, 'release', { textContent: 'Ask its author for a release' }),
 							],
 						}),
 					]
@@ -925,14 +920,10 @@ export default class ModPage extends View {
 						}),
 						new Row({
 							append: [
-								new Link({
+								askControl(entry, 'fund', {
 									variant: 'raised',
-									href: askUrl(entry, 'fund'),
-									target: '_blank',
 									textContent: 'I would pay its author',
-									tooltip: hint(
-										'Counted once per player on GitHub; when a few have asked, the index tells its author.',
-									),
+									tooltip: 'Counted once per player on GitHub; when a few have asked, the index tells its author.',
 								}),
 							],
 						}),

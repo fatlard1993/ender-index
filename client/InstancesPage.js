@@ -18,6 +18,7 @@ import { specFor } from 'ender-launcher/spec';
 import { collection } from './collection';
 import { loadVersions } from './data';
 import { lastSaid, local } from './local';
+import { listingButton } from './controls';
 import { instanceNameOf, packDialog } from './packMaker';
 import { LOADERS } from './search';
 import { Chip, Command, LAUNCHER, Meta, Row, Stack, Title, Warning, siteBar } from './ui';
@@ -145,11 +146,14 @@ const instanceCard = (instance, signal) => {
 		}
 	};
 	const publish = async fresh => {
+		let published;
+
 		status.elem.textContent = 'Publishing its chosen mods as a secret gist';
 
 		try {
 			const { url, line, updated, left = [] } = await local.publishInstance(instance.name, { fresh });
 
+			published = url;
 			told(
 				'success',
 				`${updated ? 'Updated' : 'Published'} at ${url}; ${line} installs it anywhere${left.length > 0 ? `. Left out, as only this machine has them: ${left.join(', ')}` : ''}`,
@@ -159,6 +163,11 @@ const instanceCard = (instance, signal) => {
 		} finally {
 			showJob();
 		}
+
+		if (published === undefined) return;
+
+		await local.loadAccount();
+		status.content([`Published at ${published} `, ...listingButton(published)]);
 	};
 	const client = instance.type === 'client';
 

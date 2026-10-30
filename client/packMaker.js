@@ -1,6 +1,7 @@
 import { Button, Dialog, Input, Label, Link, Notify, Select, copyToClipboard } from '@vanilla-bean/components';
 import { specFor } from 'ender-launcher/spec';
 
+import { listingButton } from './controls';
 import { loadVersions } from './data';
 import { lastSaid, local } from './local';
 import { LOADERS, readQuery } from './search';
@@ -41,6 +42,7 @@ const download = pack => {
 const publish = async (pack, result) => {
 	if (await local.ready()) {
 		result.content(new Meta({ textContent: 'Publishing it as a secret gist' }));
+		await local.loadAccount();
 
 		try {
 			const { url, line } = await local.publishPack(pack);
@@ -55,6 +57,7 @@ const publish = async (pack, result) => {
 				new Row({
 					append: [new Command({ tag: 'code', textContent: line }), new Meta({ textContent: 'installs it anywhere' })],
 				}),
+				new Row({ append: listingButton(url) }),
 			]);
 		} catch (error) {
 			result.content(new Meta({ textContent: `It was not published: ${error.message}` }));
