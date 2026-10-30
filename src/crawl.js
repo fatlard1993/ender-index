@@ -86,14 +86,28 @@ export const readModrinthRepos = async ({ resting = false } = {}) => {
 	return lines.filter(line => !restingOn(noJars[line]));
 };
 
+/** Hosts name a repository whatever its case, so lines differing only in case are one repository. */
+export const repositoryKey = line => line.toLowerCase();
+
+/** Each repository once, by the first of its lines. */
+export const uniqueRepositories = lines => {
+	const seen = new Set();
+
+	return [...lines].filter(line => !seen.has(repositoryKey(line)) && seen.add(repositoryKey(line)));
+};
+
 /**
  * The order a crawl takes repositories in: every one found on its own host before any known only from Modrinth, and
  * within each, the least recently fetched first, so a crawl cut short resumes where it stopped.
  */
 export const crawlOrder = (found, fromModrinth, ageOf, demand = new Map()) => {
-	const own = new Set(found);
+	const own = uniqueRepositories(found);
+	const ownKeys = new Set(own.map(repositoryKey));
 	const oldestFirst = lines => [...lines].sort((a, b) => ageOf(a) - ageOf(b));
-	const listed = [...oldestFirst(found), ...oldestFirst(new Set(fromModrinth.filter(line => !own.has(line))))];
+	const listed = [
+		...oldestFirst(own),
+		...oldestFirst(uniqueRepositories(fromModrinth).filter(line => !ownKeys.has(repositoryKey(line)))),
+	];
 	const wanted = listed.filter(line => demand.has(line) && !ageOf(line)).sort((a, b) => demand.get(b) - demand.get(a));
 	const first = new Set(wanted);
 
@@ -548,13 +562,15 @@ const minutes = wait => `${Math.ceil(wait / 60_000)} ${Math.ceil(wait / 60_000) 
  */
 export const REPO_LIMIT = 15 * 60 * 1000;
 
+class TookTooLong extends Error {}
+
 const within = (work, limit) => {
 	let timer;
 
 	return Promise.race([
 		work.finally(() => clearTimeout(timer)),
 		new Promise((_, reject) => {
-			timer = setTimeout(() => reject(new Error(`took longer than ${limit / 60_000} minutes`)), limit);
+			timer = setTimeout(() => reject(new TookTooLong(`took longer than ${limit / 60_000} minutes`)), limit);
 		}),
 	]);
 };
@@ -565,6 +581,7 @@ export const crawlEach = async (
 ) => {
 	const failures = [];
 	const stopped = [];
+	const slow = [];
 	const limits = new Map();
 	let waiting = repos;
 

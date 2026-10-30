@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 
-import { DATA, readLines, readModrinthRepos, readNoJars, readRepos } from './crawl';
+import { DATA, readLines, readModrinthRepos, readNoJars, readRepos, repositoryKey, uniqueRepositories } from './crawl';
 import * as codeberg from './codeberg';
 import { RateLimited } from './fetch';
 import { searchCode, searchRepositories } from './github';
@@ -60,7 +60,7 @@ const REPOSITORY_PAUSE = 2100;
 /** The repositories whose found file is at their root, which is where a pack is read from. */
 export const packsFrom = items => items.filter(item => !item.path.includes('/')).map(item => item.repository.full_name);
 
-const sorted = lines => [...new Set(lines)].sort((a, b) => a.localeCompare(b));
+const sorted = lines => uniqueRepositories(lines).sort((a, b) => a.localeCompare(b));
 
 /** A list of repositories, its header comment kept. */
 const writeList = async (file, lines, header) => {
@@ -173,8 +173,8 @@ export const discover = async () => {
 
 		const mods = await modrinthSources();
 		const modpacks = await modrinthSources({ type: 'modpack' });
-		const own = new Set(merged);
-		const ownPacks = new Set(packs);
+		const own = new Set(merged.map(repositoryKey));
+		const ownPacks = new Set(packs.map(repositoryKey));
 		const asJson = map =>
 			`${JSON.stringify(Object.fromEntries([...map].sort(([a], [b]) => a.localeCompare(b))), null, '\t')}\n`;
 
@@ -182,12 +182,12 @@ export const discover = async () => {
 		await Bun.write(join(DATA, 'modrinth-ids.json'), asJson(mods.ids));
 		await writeList(
 			'modrinth-repos.txt',
-			sorted([...mods.sources.values()].filter(line => !own.has(line))),
+			sorted([...mods.sources.values()].filter(line => !own.has(repositoryKey(line)))),
 			"# Known only from a Modrinth project's source link; crawled after every repository found on its host.",
 		);
 		await writeList(
 			'modrinth-packs.txt',
-			sorted([...modpacks.sources.values()].filter(line => !ownPacks.has(line))),
+			sorted([...modpacks.sources.values()].filter(line => !ownPacks.has(repositoryKey(line)))),
 			"# Packs known only from a Modrinth modpack's source link; crawled after every pack found on its host.",
 		);
 		console.log(

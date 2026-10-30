@@ -452,6 +452,10 @@ describe('the order a crawl takes repositories in', () => {
 		]);
 	});
 
+	test('takes lines differing only in case as one repository, as its host does', () => {
+		expect(crawlOrder(['A/Mod', 'a/mod', 'b/x'], ['b/X', 'c/y', 'C/Y'], () => 0)).toEqual(['A/Mod', 'b/x', 'c/y']);
+	});
+
 	test("every one found on its host before any known only from Modrinth, however new Modrinth's are", () => {
 		const ages = { 'a/old': 10, 'a/older': 5, 'm/new': 0, 'm/never': 0, 'a/both': 20 };
 
