@@ -7,7 +7,16 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import { RateLimited } from '../src/fetch';
-import { buildPacks, describeMods, fileAt, gistPack, packDemand, packPage, zipEntryByRanges } from '../src/packs';
+import {
+	buildPacks,
+	crawlPack,
+	describeMods,
+	fileAt,
+	gistPack,
+	packDemand,
+	packPage,
+	zipEntryByRanges,
+} from '../src/packs';
 
 const entry = repo => ({ repo, host: 'github' });
 
@@ -290,4 +299,12 @@ describe('a .mrpack on a host that serves ranges', () => {
 			await rm(directory, { recursive: true, force: true });
 		}
 	});
+});
+
+test('a pack repository gone from GitHub has no pack, so its record is dropped rather than the crawl failing', async () => {
+	const gone = async name => {
+		throw Object.assign(new Error(`GitHub 404 for /repos/${name}`), { status: 404 });
+	};
+
+	expect(await crawlPack('gone/pack', { scratch: tmpdir(), now: '', repository: gone })).toBeUndefined();
 });

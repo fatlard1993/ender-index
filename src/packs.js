@@ -226,14 +226,24 @@ export const describeMods = async (mods, { projectsByHash: byHash, projectsById:
 /**
  * A pack repository as the index keeps it: what it says of itself, and the pack in each format it has: an ender pack
  * and a packwiz pack at the head of its default branch, and the newest release's .mrpack. A .mrpack already read is
- * not downloaded again. Undefined when it has none of them.
+ * not downloaded again. Undefined when it has none of them, or is gone from GitHub.
  */
-export const crawlPack = async (name, { recorded, scratch, now, modrinth = { projectsByHash, projectsById } }) => {
+export const crawlPack = async (
+	name,
+	{ recorded, scratch, now, modrinth = { projectsByHash, projectsById }, repository = github.repository },
+) => {
 	const gistId = name.match(GIST_LINE)?.[1];
 
 	if (gistId) return gistPack(await github.gist(gistId), { now });
 
-	const repo = await github.repository(name);
+	const repo = await repository(name).catch(error => {
+		if (error.status === 404) return undefined;
+
+		throw error;
+	});
+
+	if (repo === undefined) return undefined;
+
 	const formats = {};
 	const enderSource = await fileAt(name, ENDER_PACK);
 
