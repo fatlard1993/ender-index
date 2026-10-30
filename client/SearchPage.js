@@ -666,6 +666,10 @@ export default class SearchPage extends View {
 			local.loadStars();
 
 			localBar.content([new Meta({ textContent: 'Installing into' }), instancePicker()]);
+			local.loadAccount().then(() => {
+				if (local.login && !this.signal.aborted)
+					localBar.append(new Link({ href: '#/mine', textContent: 'Your mods' }));
+			});
 
 			// Filters follow the instance, so what is offered is what it can load
 			const chosen = local.instances.find(instance => instance.name === local.selected);

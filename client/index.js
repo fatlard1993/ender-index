@@ -4,6 +4,7 @@ import AuthorsPage from './AuthorsPage';
 import CollectionBar from './CollectionBar';
 import GetPage from './GetPage';
 import InstancesPage from './InstancesPage';
+import MinePage from './MinePage';
 import ModPage from './ModPage';
 import PackPage from './PackPage';
 import PacksPage from './PacksPage';
@@ -24,6 +25,7 @@ new Page({
 					'/authors': AuthorsPage,
 					'/authors/:part': AuthorsPage,
 					'/instances': InstancesPage,
+					'/mine': MinePage,
 					'/mod/:host/:owner/:name': ModPage,
 				},
 				onRenderView: () => (document.title = 'ender index'),

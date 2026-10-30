@@ -78,3 +78,19 @@ export const loadShots = () => {
 
 	return shots;
 };
+
+const jsonOrNone = async name => {
+	const response = await fetch(`${INDEX}/${name}`);
+
+	if (response.status === 404) return {};
+	if (!response.ok) throw new Error(`${INDEX}/${name} answered ${response.status}`);
+
+	return response.json();
+};
+
+/** What players asked of each mod's author, and when an author was told; none before anyone has asked. */
+export const loadInterest = async () => {
+	const [interest, notices] = await Promise.all([jsonOrNone('interest.json'), jsonOrNone('notices.json')]);
+
+	return { interest, notices };
+};
