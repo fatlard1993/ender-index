@@ -308,3 +308,43 @@ test('a pack repository gone from GitHub has no pack, so its record is dropped r
 
 	expect(await crawlPack('gone/pack', { scratch: tmpdir(), now: '', repository: gone })).toBeUndefined();
 });
+
+describe('a pack read again', () => {
+	const PUSHED = '2026-10-01T00:00:00Z';
+	const packwiz = {
+		name: 'Kept',
+		minecraft: '1.21.1',
+		loader: 'fabric',
+		mods: [{ name: 'Sodium', file: 'sodium.jar' }],
+	};
+	const recorded = { repo: 'a/pack', pushed: PUSHED, formats: { packwiz } };
+	const quiet = { projectsByHash: async () => new Map(), projectsById: async () => new Map() };
+	const crawling = (pushed, read) =>
+		crawlPack('a/pack', {
+			recorded,
+			scratch: tmpdir(),
+			now: '',
+			modrinth: quiet,
+			repository: async () => ({ full_name: 'a/pack', pushed_at: pushed }),
+			releases: async () => [],
+			read,
+		});
+
+	test('keeps what its head said while it has not been pushed to, reading none of its files', async () => {
+		const read = async path => {
+			throw new Error(`read ${path}`);
+		};
+
+		expect((await crawling(PUSHED, read)).formats).toEqual({ packwiz });
+	});
+
+	test('reads its head again once it has been pushed to', async () => {
+		const asked = [];
+		const read = async (name, path) => {
+			asked.push(path);
+		};
+
+		expect(await crawling('2026-10-29T00:00:00Z', read)).toBeUndefined();
+		expect(asked).toContain('pack.toml');
+	});
+});

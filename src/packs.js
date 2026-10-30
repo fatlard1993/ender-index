@@ -32,7 +32,7 @@ export const fileAt = async (name, path, { fetching = fetchSteady } = {}) => {
 };
 
 /** The mods of a packwiz pack, each as its .pw.toml names it: by name, file, link and the site it is updated from. */
-const packwizMods = async (name, index) => {
+const packwizMods = async (name, index, read) => {
 	const listed = packwizMetafiles(index);
 	const metafiles = listed.length > 0 ? listed : (await github.filesOf(name)).filter(path => path.endsWith('.pw.toml'));
 	const sources = new Array(metafiles.length);
@@ -44,7 +44,7 @@ const packwizMods = async (name, index) => {
 			while (next < metafiles.length) {
 				const at = next++;
 
-				sources[at] = await fileAt(name, metafiles[at]);
+				sources[at] = await read(name, metafiles[at]);
 			}
 		}),
 	);
@@ -223,14 +223,52 @@ export const describeMods = async (mods, { projectsByHash: byHash, projectsById:
 	}
 };
 
+/** The formats read from the head of a pack's default branch: an ender pack, and a packwiz pack with its mods. */
+const readHeadFormats = async (name, read) => {
+	const formats = {};
+	const enderSource = await read(name, ENDER_PACK);
+
+	if (enderSource !== undefined) formats.ender = parseEnderPack(enderSource);
+
+	const packwizSource = await read(name, 'pack.toml');
+
+	if (packwizSource !== undefined) {
+		const pack = packwizPack(packwizSource);
+		const index = (await read(name, pack.index)) ?? '';
+
+		formats.packwiz = {
+			name: pack.name,
+			minecraft: pack.minecraft,
+			loader: pack.loader.type,
+			mods: await packwizMods(name, index, read),
+		};
+	}
+
+	return formats;
+};
+
+const headFormatsOf = ({ formats: { ender, packwiz } = {} }) => ({
+	...(ender ? { ender } : {}),
+	...(packwiz ? { packwiz } : {}),
+});
+
 /**
  * A pack repository as the index keeps it: what it says of itself, and the pack in each format it has: an ender pack
- * and a packwiz pack at the head of its default branch, and the newest release's .mrpack. A .mrpack already read is
- * not downloaded again. Undefined when it has none of them, or is gone from GitHub.
+ * and a packwiz pack at the head of its default branch, and the newest release's .mrpack. The head is read again only
+ * once the repository has been pushed to, and a .mrpack already read is not downloaded again. Undefined when it has
+ * none of them, or is gone from GitHub.
  */
 export const crawlPack = async (
 	name,
-	{ recorded, scratch, now, modrinth = { projectsByHash, projectsById }, repository = github.repository },
+	{
+		recorded,
+		scratch,
+		now,
+		modrinth = { projectsByHash, projectsById },
+		repository = github.repository,
+		releases = github.releases,
+		read = fileAt,
+	},
 ) => {
 	const gistId = name.match(GIST_LINE)?.[1];
 
@@ -244,26 +282,12 @@ export const crawlPack = async (
 
 	if (repo === undefined) return undefined;
 
-	const formats = {};
-	const enderSource = await fileAt(name, ENDER_PACK);
+	const formats =
+		recorded?.pushed !== undefined && recorded.pushed === repo.pushed_at
+			? headFormatsOf(recorded)
+			: await readHeadFormats(name, read);
 
-	if (enderSource !== undefined) formats.ender = parseEnderPack(enderSource);
-
-	const packwizSource = await fileAt(name, 'pack.toml');
-
-	if (packwizSource !== undefined) {
-		const pack = packwizPack(packwizSource);
-		const index = (await fileAt(name, pack.index)) ?? '';
-
-		formats.packwiz = {
-			name: pack.name,
-			minecraft: pack.minecraft,
-			loader: pack.loader.type,
-			mods: await packwizMods(name, index),
-		};
-	}
-
-	const found = mrpackRelease(await github.releases(name));
+	const found = mrpackRelease(await releases(name));
 
 	if (found) {
 		const kept = recorded?.formats?.mrpack;
