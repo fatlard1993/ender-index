@@ -1,0 +1,102 @@
+{
+	"repo": "eragaxshim/mbtw",
+	"host": "github",
+	"stars": 3,
+	"archived": false,
+	"license": "CC0-1.0",
+	"created": "2021-02-02T20:35:05Z",
+	"pushed": "2024-09-13T14:56:11Z",
+	"releases": [
+		{
+			"tag": "1.0.0-alpha.4",
+			"published": "2021-02-23T15:01:33Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 32482642,
+					"name": "mbtw-1.0.0-alpha.4.jar",
+					"url": "https://github.com/eragaxshim/mbtw/releases/download/1.0.0-alpha.4/mbtw-1.0.0-alpha.4.jar",
+					"size": 587925,
+					"downloads": 111,
+					"inspection": 2,
+					"sha256": "d39873160313e639799fe3140c3d3444ad600da47399d657940414d5a41ca674",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mbtw",
+							"version": "1.0.0-alpha.4",
+							"name": "ModernBTW",
+							"description": "",
+							"minecraft": "1.16.5",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft",
+								"json-model-extensions"
+							],
+							"provides": [
+								"json-model-extensions",
+								"frex"
+							]
+						}
+					],
+					"icon": "06e5c38ed9a8076f23d27061ae47d64234934ecf8ce3534f8108544a2d821134.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Brick Oven",
+								"Clay Brick",
+								"Coal Ore",
+								"Deep Coal Ore",
+								"Deep Iron Ore",
+								"Deep Stone",
+								"Gravel Slab",
+								"Hard Coal Ore",
+								"Hard Iron Ore",
+								"Hard Stone",
+								"Iron Ore",
+								"Loose Cobblestone",
+								"Loose Cobblestone Slab",
+								"Stone"
+							],
+							"item": [
+								"Chunk of Iron Ore",
+								"Loose Stone",
+								"Pile of Coal Dust",
+								"Pile of Gravel",
+								"Pile of Iron Ore",
+								"Pointy Stick",
+								"Sharp Rock"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 257,
+						"jars": [
+							"META-INF/jars/jmx-mc116-1.21.182.jar",
+							"META-INF/jars/jmx-mc116-1.21.182.jar!META-INF/jars/frex-mc116-4.5.201.jar",
+							"META-INF/jars/frex-mc116-4.6.202.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "1.0.0-alpha.4\nAdditions\n- Loose Cobblestone Slab added\n- Loot tables added for stratified stone and ore blocks; including Silk Touch behavior\nLoose stone drops from break level transitions are hardcoded, explosion behavior and full block drop encoded in loot tables. For proper explosion behavior, explosion loot conditions were modified using Mixins\n- Recipes added for various items, including slabs\n- Added Brick Oven and associated iron nugget recipe\nBrick Oven is very slow, early-game furnace. Item slot single-stack behavior remains to-do.\n- Added Clay Brick\nClay Brick bakes in the sun in a little under a day. Bricks are required to construct a Brick Oven. Clay Bricks are destroyed when walked or landed on. \n\nChanges\n- JMX (JSON Model Extensions) is now required. It enables the overlay texture for the Clay Brick (and other things in the future most likely).\n\nOther\n- Added some additional attribution for FlowerChild (creator of BTW)\n\n1.0.0-alpha.3\nAdditions\n- World generation added for Deep Stone, Hard Stone (GenerationStepStratifierMixin)\n- World generation added for all stratified versions of Coal Ore, Iron Ore (ReplaceUndergroundOreFeatureMixin)\n- Added logic for breaking of standard Stone, so it turns into Mbtw Stone and no longer drops standard cobblestone\n\nChanges\n- Replaced notRemoveBlock in MbtwMixin (now renamed RedirectBreakMixin) with InterceptBreakBlockMixin; the latter is a callback injector while the former was a redirect\n- InterceptBreakBlockMixin leverages changed structure of InterceptBreakBlock and its children, which now return the modified BlockState instead of acting on the world themselves\n\n(StratificationChunkMixin and RedirectBreakMixin are deprecated)\n\n1.0.0.alpha.2\nAdditions\n- Added ChiselItem, similar to a pickaxe; added the Sharp Rock and Pointy Stick as Stone and Wood variants\n- Added Gravel Slab and Pile of Gravel, Gravel Slab is a FallingSlabBlock, which extends SlabBlock and copies Vanilla FallingBlock code\n- Added InterceptBreakBlock as a general class of blocks that need additional break logic but not necessarily multiple stages\n- Added Hard Stone and Deep Stone as seperate stratification blocks\n- Added Chunk of Iron Ore, Pile of Iron Ore, Pile of Coal Dust, Loose Stone items\n- Added break logic (correct drops and correct amount of break level delta for correct tools, also for chisels) for pickaxes for stone; they drop correct amount of Loose Stones or a Loose Cobblestone\n- Added stratified Coal Ore and Iron Ore and correct drops, they implement StratifiedOreBlock which is a simpler version of MultiBreakBlock; if they are broken once they turn into MultiBreakBlock equivalents\n\nChanges\n- Removed StratifiedBlock, standard MultiBreakBlock is used now\n- MultiBreakBlock now has seperate break_level and broken properties; it extends InterceptBreakBlock\n- Changed notRemoveBlock MbtwMixin to make it simpler, some logic has been moved to MultiBreakBlock, it now does not remove if the booleanproperty broken is false\n- Loose Cobblestone is also a Falling Block\n- Pointy Stick is now a standard Chisel Item\n- Mbtw now uses Canvas, might drop in the future if I cannot figure out how to use it\n\n1.0.0.alpha.1\nAdditions\n- Added MultiBreakBlock and StratifiedBlock, MbtwMixin notRemoveBlock() prevents the removal of the block if it is not fully broken\n- Added a Pointy Stick, as well as Loose Cobblestone and Stone (StratifiedBlock)"
+		}
+	],
+	"readme": null,
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

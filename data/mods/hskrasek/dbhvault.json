@@ -1,0 +1,453 @@
+{
+	"repo": "hskrasek/dbhvault",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "Apache-2.0",
+	"created": "2026-05-10T14:55:13Z",
+	"pushed": "2026-10-04T18:57:36Z",
+	"releases": [
+		{
+			"tag": "v1.2.1",
+			"published": "2026-10-04T19:09:36Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 610456892,
+					"name": "dbhvault-1.2.1.jar",
+					"url": "https://github.com/hskrasek/dbhvault/releases/download/v1.2.1/dbhvault-1.2.1.jar",
+					"size": 8178065,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "35ea0e3c5c9f85025e9a064713e76dfa263ee947b9af137a413a69ce30ce6f41",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dbhvault",
+							"version": "1.2.1",
+							"name": "DBHVault",
+							"description": "Daily Backup, Heaven's Vault — server-side world backups for Dashboarders Heaven.",
+							"minecraft": ">=26.1 <26.3",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"io_sentry_sentry",
+								"io_sentry_sentry-log4j2",
+								"net_peanuuutz_tomlkt_tomlkt-jvm",
+								"com_github_luben_zstd-jni"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1005,
+						"jars": [
+							"META-INF/jars/sentry-8.40.0.jar",
+							"META-INF/jars/sentry-log4j2-8.40.0.jar",
+							"META-INF/jars/tomlkt-jvm-0.3.7.jar",
+							"META-INF/jars/zstd-jni-1.5.6-3.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/internal/ManifestVersionReader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/internal/debugmeta/ResourcesDebugMetaLoader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/transport/HttpConnection.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"native": {
+								"META-INF/jars/zstd-jni-1.5.6-3.jar!com/github/luben/zstd/util/Native$1.class": [
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/zstd-jni-1.5.6-3.jar!com/github/luben/zstd/util/Native$2.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {
+							"sentry.io": [
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/SentryOptions$DistributionOptions.class"
+							],
+							"docs.sentry.io": [
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/util/InitUtil.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1.2.1] — 2026-07-02\n\n### Fixed\n\n- **Idle-skip could permanently skip backups while the world was still\n  changing.** Player activity was only recorded on *join*, so a long or AFK\n  session froze the activity timestamp at session start; a mid-session backup\n  then \"satisfied\" the world-dirty check and every later scheduled backup was\n  skipped — losing the tail of the session. Activity is now recorded on both\n  join and disconnect, and the scheduler never skips while anyone is online.\n- **Tar archives could be silently corrupted by files changing size\n  mid-archive.** `noSave` does not block player-data/stats/advancements\n  saves, so a file rewritten between the tar header and the content copy\n  misaligned every subsequent entry. Entries now copy exactly the byte count\n  promised in the header (truncating growth, zero-padding shrinkage).\n- **A retention failure deleted the backup that had just succeeded.**\n  Retention/prune ran inside the same `try` whose failure path deletes the\n  partial archive. Retention now runs after the archive is safely on disk;\n  its failures are logged and the backup is kept.\n- **zstd-unavailable hosts wrote zip data into `.tar.zst` files.** The\n  archive-format fallback changed the archiver but not the filename. The\n  orchestrator now names files by the *effective* format.\n- **`/vault schedule pause` let one more backup fire.** The scheduler acted\n  on a config snapshot taken before its interval delay; the enabled flag is\n  now re-read at tick time.\n- **Out-of-range values in a hand-edited `dbhvault.toml` are clamped** to the\n  same ranges the `/vault` commands enforce. Previously `intervalHours = 0`\n  busy-spun the scheduler, a negative `keepLast` crashed retention after\n  every successful archive, and a zstd level above 22 failed every backup.\n- **`/vault config reload` on a malformed file silently replaced it with\n  defaults** (and stripped comments). The reload now fails with a chat error\n  and leaves the running config and the file untouched.\n- USTAR entry-name limit is measured in bytes, not chars — multibyte UTF-8\n  names near the 100-byte limit were silently truncated instead of rejected.\n- A `backupDirectory` inside the world directory (which would recursively\n  archive its own output) is detected at startup and falls back to\n  `./backups` with an error log.\n- Manual backup failures now reach Sentry (previously only scheduled ones).\n- Prune deletions that fail are logged instead of silently ignored, and\n  backup listing no longer breaks if a file vanishes mid-scan."
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-10-04T19:09:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 610456823,
+					"name": "dbhvault-1.2.0.jar",
+					"url": "https://github.com/hskrasek/dbhvault/releases/download/v1.2.0/dbhvault-1.2.0.jar",
+					"size": 8176218,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "792703268083ff3b956875ab10f200326281e6bcff039b56aea9c0faf5201960",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dbhvault",
+							"version": "1.2.0",
+							"name": "DBHVault",
+							"description": "Daily Backup, Heaven's Vault — server-side world backups for Dashboarders Heaven.",
+							"minecraft": ">=26.1 <26.3",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"io_sentry_sentry",
+								"io_sentry_sentry-log4j2",
+								"net_peanuuutz_tomlkt_tomlkt-jvm",
+								"com_github_luben_zstd-jni"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1005,
+						"jars": [
+							"META-INF/jars/sentry-8.40.0.jar",
+							"META-INF/jars/sentry-log4j2-8.40.0.jar",
+							"META-INF/jars/tomlkt-jvm-0.3.7.jar",
+							"META-INF/jars/zstd-jni-1.5.6-3.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/internal/ManifestVersionReader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/internal/debugmeta/ResourcesDebugMetaLoader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/transport/HttpConnection.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"native": {
+								"META-INF/jars/zstd-jni-1.5.6-3.jar!com/github/luben/zstd/util/Native$1.class": [
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/zstd-jni-1.5.6-3.jar!com/github/luben/zstd/util/Native$2.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {
+							"sentry.io": [
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/SentryOptions$DistributionOptions.class"
+							],
+							"docs.sentry.io": [
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/util/InitUtil.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1.2.0] — 2026-06-22\n\n### Added\n\n- Minecraft 26.2 support — built against 26.2 with a `>=26.1 <26.3`\n  compatibility range, so one jar loads on both 26.1 and 26.2.\n\n### Fixed\n\n- Runtime `/vault retention` edits now propagate to the pruner without a\n  restart (retention config is resolved per-backup instead of snapshotted at\n  startup).\n- Backup sizes in chat are humanized and bolded; the mod name renders green."
+		},
+		{
+			"tag": "v1.3.0",
+			"published": "2026-10-04T18:58:20Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 610434596,
+					"name": "dbhvault-1.3.0.jar",
+					"url": "https://github.com/hskrasek/dbhvault/releases/download/v1.3.0/dbhvault-1.3.0.jar",
+					"size": 8177998,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "f0a8d9a780d221a3e72ff9ac77d838e09648972e9666aa9836839e6125029a0b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dbhvault",
+							"version": "1.3.0",
+							"name": "DBHVault",
+							"description": "Daily Backup, Heaven's Vault — server-side world backups for Dashboarders Heaven.",
+							"minecraft": ">=26.1 <26.4",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"io_sentry_sentry",
+								"io_sentry_sentry-log4j2",
+								"net_peanuuutz_tomlkt_tomlkt-jvm",
+								"com_github_luben_zstd-jni"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1005,
+						"jars": [
+							"META-INF/jars/sentry-8.40.0.jar",
+							"META-INF/jars/sentry-log4j2-8.40.0.jar",
+							"META-INF/jars/tomlkt-jvm-0.3.7.jar",
+							"META-INF/jars/zstd-jni-1.5.6-3.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/internal/ManifestVersionReader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/internal/debugmeta/ResourcesDebugMetaLoader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/transport/HttpConnection.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"native": {
+								"META-INF/jars/zstd-jni-1.5.6-3.jar!com/github/luben/zstd/util/Native$1.class": [
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/zstd-jni-1.5.6-3.jar!com/github/luben/zstd/util/Native$2.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {
+							"sentry.io": [
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/SentryOptions$DistributionOptions.class"
+							],
+							"docs.sentry.io": [
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/util/InitUtil.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1.3.0] — 2026-10-04\n\n### Added\n\n- Minecraft 26.3 support — built against 26.3 (Loader 0.19.5, Fabric API\n  0.161.0+26.3) with a `>=26.1 <26.4` compatibility range, so one jar loads\n  on 26.1 through 26.3."
+		},
+		{
+			"tag": "v1.1.2",
+			"published": "2026-05-10T21:12:18Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 416894108,
+					"name": "dbhvault-1.1.2.jar",
+					"url": "https://github.com/hskrasek/dbhvault/releases/download/v1.1.2/dbhvault-1.1.2.jar",
+					"size": 8172274,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a4bde36e30ebd674c58c9f35842688f17709c72f3cbcd88a39e292f545ce33d2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dbhvault",
+							"version": "1.1.2",
+							"name": "DBHVault",
+							"description": "Daily Backup, Heaven's Vault — server-side world backups for Dashboarders Heaven.",
+							"minecraft": "~26.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"io_sentry_sentry",
+								"io_sentry_sentry-log4j2",
+								"net_peanuuutz_tomlkt_tomlkt-jvm",
+								"com_github_luben_zstd-jni"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1003,
+						"jars": [
+							"META-INF/jars/sentry-8.40.0.jar",
+							"META-INF/jars/sentry-log4j2-8.40.0.jar",
+							"META-INF/jars/tomlkt-jvm-0.3.7.jar",
+							"META-INF/jars/zstd-jni-1.5.6-3.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/internal/ManifestVersionReader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/internal/debugmeta/ResourcesDebugMetaLoader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/transport/HttpConnection.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"native": {
+								"META-INF/jars/zstd-jni-1.5.6-3.jar!com/github/luben/zstd/util/Native$1.class": [
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/zstd-jni-1.5.6-3.jar!com/github/luben/zstd/util/Native$2.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {
+							"sentry.io": [
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/SentryOptions$DistributionOptions.class"
+							],
+							"docs.sentry.io": [
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/util/InitUtil.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1.1.2] — 2026-05-10\n\n### Fixed\n\n- Sentry's Log4j2 appender was attaching to the **root** logger instead of\n  `dev.skrasek.dbhvault`. `Configuration.getLoggerConfig(name)` returns the\n  *nearest enclosing* `LoggerConfig`, so on a vanilla server with no explicit\n  mod logger registered it fell back to root — routing every WARN+ log line\n  in the JVM through `SentryAppender`. The visible symptom was Sentry issues\n  from `net.minecraft.network.PacketEncoder` (e.g. `EncoderException: Sending\n  unknown packet 'clientbound/minecraft:disconnect'`) and other vanilla\n  networking errors that have nothing to do with the mod.\n- `Telemetry.attachLog4j2Appender` now creates a dedicated `LoggerConfig` at\n  exactly `dev.skrasek.dbhvault` when one doesn't already exist, with\n  `additive=true` so mod log lines still flow to the server console.\n- `beforeSend` now drops events whose `logger` is set to a namespace outside\n  `dev.skrasek.dbhvault.*` (defense in depth against future log-routing\n  regressions). Explicit `Sentry.captureException` calls from mod code are\n  unaffected — they don't set `event.logger`."
+		},
+		{
+			"tag": "v1.1.1",
+			"published": "2026-05-10T20:35:18Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 416875728,
+					"name": "dbhvault-1.1.1.jar",
+					"url": "https://github.com/hskrasek/dbhvault/releases/download/v1.1.1/dbhvault-1.1.1.jar",
+					"size": 8171774,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "c4d126bd2a1c9c8709e68cc422d1f5487361fa335bc35c4cc5dad0ee049f4c4d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dbhvault",
+							"version": "1.1.1",
+							"name": "DBHVault",
+							"description": "Daily Backup, Heaven's Vault — server-side world backups for Dashboarders Heaven.",
+							"minecraft": "~26.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"io_sentry_sentry",
+								"io_sentry_sentry-log4j2",
+								"net_peanuuutz_tomlkt_tomlkt-jvm",
+								"com_github_luben_zstd-jni"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1003,
+						"jars": [
+							"META-INF/jars/sentry-8.40.0.jar",
+							"META-INF/jars/sentry-log4j2-8.40.0.jar",
+							"META-INF/jars/tomlkt-jvm-0.3.7.jar",
+							"META-INF/jars/zstd-jni-1.5.6-3.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/internal/ManifestVersionReader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/internal/debugmeta/ResourcesDebugMetaLoader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/transport/HttpConnection.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"native": {
+								"META-INF/jars/zstd-jni-1.5.6-3.jar!com/github/luben/zstd/util/Native$1.class": [
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/zstd-jni-1.5.6-3.jar!com/github/luben/zstd/util/Native$2.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {
+							"sentry.io": [
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/SentryOptions$DistributionOptions.class"
+							],
+							"docs.sentry.io": [
+								"META-INF/jars/sentry-8.40.0.jar!io/sentry/util/InitUtil.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1.1.1] — 2026-05-10\n\n### Fixed\n\n- Bundle `tomlkt`, `zstd-jni`, and `sentry-log4j2` via Loom's\n  Jar-in-Jar (`include(...)`). Previously these were `implementation`-only,\n  so the published jar ran on a dedicated server with three missing\n  classpath libraries:\n  - `tomlkt` crashed `ConfigManager` at boot with\n    `NoClassDefFoundError: net/peanuuutz/tomlkt/Toml`.\n  - `zstd-jni` silently failed `detectZstdAvailable()`, downgrading\n    `.tar.zst` backups to `.zip`.\n  - `sentry-log4j2` silently failed `Telemetry.init()`, leaving Sentry\n    as a no-op even when a DSN was baked in.\n- The Sentry inclusion excludes the `org.apache.logging.log4j` group so\n  Minecraft's bundled log4j remains the sole copy on the classpath."
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "A Fabric server-only mod for Minecraft 26.1.x, written in Kotlin.",
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

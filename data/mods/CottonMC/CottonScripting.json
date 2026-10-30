@@ -1,0 +1,251 @@
+{
+	"repo": "CottonMC/CottonScripting",
+	"host": "github",
+	"description": "JSR-223 scripting in data packs!",
+	"stars": 3,
+	"archived": false,
+	"license": "MIT",
+	"created": "2019-05-09T10:40:23Z",
+	"pushed": "2021-04-03T19:39:06Z",
+	"releases": [
+		{
+			"tag": "v2.0.0-pre.1",
+			"published": "2020-06-05T21:45:17Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 21459127,
+					"name": "CottonScripting-2.0.0-pre.1+1.15.2.jar",
+					"url": "https://github.com/CottonMC/CottonScripting/releases/download/v2.0.0-pre.1/CottonScripting-2.0.0-pre.1%2B1.15.2.jar",
+					"size": 106814,
+					"downloads": 11,
+					"inspection": 2,
+					"sha256": "075065b2f473fc121999d7fd90efe0557e025d019e7c2126729a020c813a05d5",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cotton-scripting",
+							"version": "2.0.0-pre.1+1.15.2",
+							"name": "Cotton Scripting",
+							"description": "Run scripting languages from data packs.",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"parchment"
+							],
+							"provides": [
+								"parchment"
+							]
+						}
+					],
+					"icon": "25fde2a69b07691427d118beb6299aaa798ffbfe1d50f02bf4b14cc691b1ae4a.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 37,
+						"jars": [
+							"META-INF/jars/Parchment-1.0.2+1.15.2.jar"
+						],
+						"capabilities": {
+							"classloading": {
+								"META-INF/jars/Parchment-1.0.2+1.15.2.jar!io/github/cottonmc/parchment/impl/ScriptClassLoader.class": [
+									"extends java/lang/ClassLoader"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n - ### Huge API overhaul\n - ### Parchment is now used to parse and compile scripts\n - ### Deprecated many obsolete methods\n - ### Improved Javadocs\n - ###### ~~Removed Herobrine~~\n\n# Very Basic Script\n```js\nvar source = cotton.getSource();\nvar entity = (source.isEntity() ? source.getEntity() : undefined);\nvar name = source.getName();\nvar dim = source.getWorld().getDimension();\n\ncotton.runCommand(\"tellraw @a \\\"\" + name + \" is in the world \" + dim.getName() + \"\\\"\");\n```\n## API Notes\n`cotton` is the `CottonScript`. It is responsible for holding all necessary objects and is used for accessing `ServerSource`. The `ServerSource` object is the source (entity, player, console, script, etc.) which ran the script. Documentation will be found in the README section."
+		},
+		{
+			"tag": "1.2.0+1.14",
+			"published": "2019-05-12T10:35:13Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 12590407,
+					"name": "cotton-scripting-1.2.0+1.14.jar",
+					"url": "https://github.com/CottonMC/CottonScripting/releases/download/1.2.0%2B1.14/cotton-scripting-1.2.0%2B1.14.jar",
+					"size": 256082,
+					"downloads": 16,
+					"inspection": 2,
+					"sha256": "2a59fb0b29f252e29f6438ea34c7793816bfccbdbc27c227a32772c394b27e2d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cotton-scripting",
+							"version": "1.2.0+1.14",
+							"name": "Cotton Scripting",
+							"description": "Run scripting languages from data packs.",
+							"environment": "*",
+							"depends": [],
+							"provides": [
+								"fabric"
+							]
+						}
+					],
+					"icon": "25fde2a69b07691427d118beb6299aaa798ffbfe1d50f02bf4b14cc691b1ae4a.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 209,
+						"jars": [
+							"META-INF/jars/fabric-0.2.7+build.127.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Consolidate all commands under the `/script` command, now as `/script run`, `/script engines`, and `/script tag`.\n- Change the `/script` argument types so that a vanilla client can connect to a Cotton Scripting server without being kicked for not having the necessary argument type registered.\n- Rename ScriptContext to CottonScriptContext to avoid confusion with the javax ScriptContext.\n- Pass a copy of CottonScriptContext as `cotton_context` on script evaluation, alongside the fresh copies of the context passed to all functions.\n  - This allows you to mutate the original CottonScriptContext while still retaining the original accessible in functions.\n- Add a method to run scripts as the server. It will likely be moved into a class in the API package soon.\n- Add a mutative method to CottonScriptContext to change the context's command source.\n- Add methods to ScriptTools to obtain command sources for the server and for players.\n- Change the internal ScriptCommandExecutor to be passed a World instead of a ServerCommandSource.\n- Register default script tags for `cotton:tick`, `cotton:load`, and `cotton:world_storage_listeners`\n  - `cotton:tick` and `cotton:load` will be changed to the `minecraft:` namespace upon next release.\n  - There is currently an unresolved issue preventing script tags from properly loading. This will hopefully be fixed by next release.\n- Add a World Storage system for reading and writing persistent data without the use of the Scoreboard.\n  - WorldStorage comprises of one manager class and two `PersistentState`s.\n  - EntityWorldStorage stores data associated with individual identities similar to the Scoreboard, GlobalWorldStorage stores data associated with the world itself.\n  - Both EntityWorldStorage and GlobalWorldStorage can have booleans, integers, floats, doubles, and strings written and read, with support for dynamic typing.\n  - Whenever either WorldStorage is written to, all the scripts in the `cotton:world_storage_listeners` tag will be evaluated."
+		},
+		{
+			"tag": "1.1.0+1.14",
+			"published": "2019-05-11T03:21:23Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 12564535,
+					"name": "cotton-scripting-1.1.0+1.14.jar",
+					"url": "https://github.com/CottonMC/CottonScripting/releases/download/1.1.0%2B1.14/cotton-scripting-1.1.0%2B1.14.jar",
+					"size": 253941,
+					"downloads": 8,
+					"inspection": 2,
+					"sha256": "3d3f7d17cc93271125c12696659b644ff8776cf4580f3d9900c3ecf452c30d27",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cotton-scripting",
+							"version": "1.1.0+1.14",
+							"name": "Cotton Scripting",
+							"description": "Run scripting languages from data packs.",
+							"environment": "*",
+							"depends": [],
+							"provides": [
+								"fabric"
+							]
+						}
+					],
+					"icon": "25fde2a69b07691427d118beb6299aaa798ffbfe1d50f02bf4b14cc691b1ae4a.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 210,
+						"jars": [
+							"META-INF/jars/fabric-0.2.7+build.127.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Reorganize classes into API and Impl packages.\n- Add a command to list all currently available scripting engines or check if a file extension has an available engine.\n- Create a new argument type for `/script` commands for future script tag support (command syntax has not changed)\n- Convert `ScriptContext#getCommandPosition()` to an `int[]` array to prevent the need to call obfuscated code from scripts.\n- Add `ScriptContext#getCallerUuid()` and `ScriptContext#getCommandDimension()` so scripts can know more about the circumstances under which they were called.\n- Add Javadocs to all `ScriptContext` methods, including emphasis on which methods are only usable for passthrough.\n- Add a new `ScriptTools` class for more efficient methods of common uses. Included:\n  - Methods to get localized text and localized names of registered objects.\n  - Methods to perform raytraces from either an etity's look vector or an arbitrary position/pitch/yaw.\n  - Methods to obtain command executors for other entities based on either UUID or vanilla [entity target selector arguments](https://minecraft.gamepedia.com/Commands#Target_selector_arguments)."
+		},
+		{
+			"tag": "1.0.0+1.14",
+			"published": "2019-05-09T22:26:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 12507132,
+					"name": "cotton-scripting-1.0.0+1.14-SNAPSHOT.jar",
+					"url": "https://github.com/CottonMC/CottonScripting/releases/download/1.0.0%2B1.14/cotton-scripting-1.0.0%2B1.14-SNAPSHOT.jar",
+					"size": 239025,
+					"downloads": 9,
+					"inspection": 2,
+					"sha256": "e61c97925083469a24368889b83fce3500e07567f26b8e92ed50b409eac43a42",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cotton-scripting",
+							"version": "1.0.0+1.14",
+							"name": "Cotton Scripting",
+							"description": "Run scripting languages from data packs.",
+							"environment": "*",
+							"depends": [],
+							"provides": [
+								"fabric"
+							]
+						}
+					],
+					"icon": "25fde2a69b07691427d118beb6299aaa798ffbfe1d50f02bf4b14cc691b1ae4a.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 202,
+						"jars": [
+							"META-INF/jars/fabric-0.2.7+build.127.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 12506846,
+					"name": "cotton-scripting-1.0.0+1.14-SNAPSHOT.remapped.jar",
+					"url": "https://github.com/CottonMC/CottonScripting/releases/download/1.0.0%2B1.14/cotton-scripting-1.0.0%2B1.14-SNAPSHOT.remapped.jar",
+					"size": 23246,
+					"downloads": 9,
+					"inspection": 2,
+					"sha256": "54d2d5be2ff6cdb3fb6f7fd311156d71b5df98cccb19723920c4275e75b8ba19",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cotton-scripting",
+							"version": "1.0.0+1.14",
+							"name": "Cotton Scripting",
+							"description": "Run scripting languages from data packs.",
+							"environment": "*",
+							"depends": [],
+							"provides": []
+						}
+					],
+					"icon": "25fde2a69b07691427d118beb6299aaa798ffbfe1d50f02bf4b14cc691b1ae4a.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 0,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Provide a first release of the API."
+		}
+	],
+	"readme": "README.MD",
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

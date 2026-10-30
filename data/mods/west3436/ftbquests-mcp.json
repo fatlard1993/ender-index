@@ -1,0 +1,244 @@
+{
+	"repo": "west3436/ftbquests-mcp",
+	"host": "github",
+	"description": "FTB Quests MCP integration: a live-server bridge mod + Claude Code companion plugin for authoring quests",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-06-17T17:30:38Z",
+	"pushed": "2026-10-19T20:08:30Z",
+	"releases": [
+		{
+			"tag": "mc1.20.1-v1.2.0",
+			"published": "2026-10-19T20:08:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 657310377,
+					"name": "ftbquests-bridge-forge-1.20.1-1.2.0.jar",
+					"url": "https://github.com/west3436/ftbquests-mcp/releases/download/mc1.20.1-v1.2.0/ftbquests-bridge-forge-1.20.1-1.2.0.jar",
+					"size": 50794,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "fb5ff63fbebe60064da33c0811235f145c284a2f16f41a75a63237d8ded0e61e",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "ftbqbridge",
+							"version": "1.2.0",
+							"name": "FTB Quests Bridge",
+							"description": "Loopback HTTP+JSON bridge for authoring FTB Quests content.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"architectury",
+								"ftbquests"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 28,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First release of the `ftbquests-bridge` mod for **Minecraft 1.20.1 on Forge**, built against FTB Quests 2001.x and tested against **2001.4.11**. Ported by @mmyddd in #18.\n\nOn Minecraft 1.21.1 (NeoForge or Fabric)? Keep using [v1.1.0](https://github.com/west3436/ftbquests-mcp/releases/tag/v1.1.0). Nothing changes there.\n\n## Requirements\n\n- Minecraft 1.20.1 with Forge 47 or newer\n- **FTB Quests 2001.4.11 or newer**, FTB Library, FTB Teams and Architectury API\n\nThe mod declares the FTB Quests version it needs, so on an older FTB Quests the loader stops at startup with a clear message instead of failing on first use.\n\n## How it differs from the 1.21.1 bridge\n\n- **Same API.** The HTTP routes and protocol (v1) are identical, so the Claude Code plugin works without changes.\n- **Titles, subtitles and descriptions can all be written.** On 1.21.1 only titles can. The field shape depends on the object type:\n  - a chapter's `subtitle` is a list of strings, and chapters have no `description`\n  - a quest's `subtitle` is a single string and its `description` is a list of strings\n\n  If you send the wrong shape, the bridge converts it and says so in a `warnings` array instead of silently losing the text.\n- **`ftbq_health` also reports `minecraftVersion` and `ftbQuestsVersion`.**\n- **A timeout (504) means the outcome is unknown.** A change that was already running may still have been applied, so read the object back before retrying.\n\n## Install\n\nDownload `ftbquests-bridge-forge-1.20.1-1.2.0.jar` and put it in the server's `mods/` folder next to FTB Quests, FTB Library, FTB Teams and Architectury API. Start the server once. It writes `config/ftbquests-bridge.json` (settings) and `config/ftbquests-bridge/runtime.json` (port and access token), which is what the Claude Code plugin connects with.\n\nPlugin setup is in the [plugin README](https://github.com/west3436/ftbquests-mcp/blob/mc1.20.1-v1.2.0/ftbquests-plugin/README.md)."
+		},
+		{
+			"tag": "v1.1.0",
+			"published": "2026-10-16T17:23:03Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 648048130,
+					"name": "ftbquests-bridge-fabric-1.21.1-1.1.0.jar",
+					"url": "https://github.com/west3436/ftbquests-mcp/releases/download/v1.1.0/ftbquests-bridge-fabric-1.21.1-1.1.0.jar",
+					"size": 51865,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "74146c8deef96a49589571c2929cc32c776343787056d0efe26cb553f777f578",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "ftbqbridge",
+							"version": "1.1.0",
+							"name": "FTB Quests Bridge",
+							"description": "Loopback HTTP+JSON bridge for authoring FTB Quests content.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"java",
+								"fabric-api",
+								"architectury",
+								"ftbquests"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 648048131,
+					"name": "ftbquests-bridge-neoforge-1.21.1-1.1.0.jar",
+					"url": "https://github.com/west3436/ftbquests-mcp/releases/download/v1.1.0/ftbquests-bridge-neoforge-1.21.1-1.1.0.jar",
+					"size": 51997,
+					"downloads": 10,
+					"inspection": 2,
+					"sha256": "da28c73e5ae4f744ef32e659a7369b4bb7a32efd51cff9fa2a202997ed06f3b7",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "ftbqbridge",
+							"version": "1.1.0",
+							"name": "FTB Quests Bridge",
+							"description": "Loopback HTTP+JSON bridge for authoring FTB Quests content.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"architectury",
+								"ftbquests"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Compatibility release: the `ftbquests-bridge` mod now works with current FTB Quests releases (**2101.1.31 and newer**, built and tested against **2101.1.36**).\n\n## Why upgrade\n\nv1.0.0 was built against FTB Quests 2101.1.27. FTB reworked the quest-object API in 2101.1.28, so on newer FTB Quests every create failed with a 500 (`IllegalAccessError` / `NoSuchMethodError`) and deletes were broken (#15). v1.1.0 ports the bridge to the current API.\n\n## Breaking change\n\n**Requires FTB Quests 2101.1.31 or newer.** The mod now declares this as a required dependency, so on an older FTB Quests the loader stops at startup with a clear message instead of failing on first use. If you're stuck on FTB Quests ≤ 2101.1.27, stay on v1.0.0. 2101.1.28–2101.1.30 aren't supported by either version.\n\n## Changes\n\n- **Create, edit, delete and the quest map work again** on FTB Quests 2101.1.31+ (#15, #16).\n- **Deleting a chapter group** removes the group and everything in it, including the chapters' `.snbt` files, so nothing comes back after a restart.\n- **Edited titles reach connected players straight away**, instead of only after they log back in.\n- Trying to delete the quest file itself or the default chapter group now returns a 400 error.\n- **Fabric** has now been live-tested on a dedicated server, not just compiled.\n\n## Install\n\nDownload the jar for your loader and put it in the server's `mods/` folder, replacing any older `ftbquests-bridge` jar. FTB Quests 2101.1.31+, FTB Library and Architectury API need to be there too.\n\n- **Fabric** → `ftbquests-bridge-fabric-1.21.1-1.1.0.jar`\n- **NeoForge** → `ftbquests-bridge-neoforge-1.21.1-1.1.0.jar`\n\nThe companion Claude Code plugin hasn't changed in this release, so there's nothing to update on the Claude Code side. Setup steps are in the [README](https://github.com/west3436/ftbquests-mcp/blob/v1.1.0/ftbquests-plugin/README.md).\n\n**Full changelog:** https://github.com/west3436/ftbquests-mcp/compare/v1.0.0...v1.1.0"
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-06-24T19:37:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 456940476,
+					"name": "ftbquests-bridge-fabric-1.0.0.jar",
+					"url": "https://github.com/west3436/ftbquests-mcp/releases/download/v1.0.0/ftbquests-bridge-fabric-1.0.0.jar",
+					"size": 49865,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "ac4c87f1a75b061505f586ac964aef3ba9db9b21da442575ce9c46b77c1f89b0",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "ftbqbridge",
+							"version": "1.0.0",
+							"name": "FTB Quests Bridge",
+							"description": "Loopback HTTP+JSON bridge for authoring FTB Quests content.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"java",
+								"fabric-api",
+								"architectury"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 28,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 456940478,
+					"name": "ftbquests-bridge-neoforge-1.0.0.jar",
+					"url": "https://github.com/west3436/ftbquests-mcp/releases/download/v1.0.0/ftbquests-bridge-neoforge-1.0.0.jar",
+					"size": 49999,
+					"downloads": 168,
+					"inspection": 2,
+					"sha256": "7182434a96729bee9ccbe5a79119f9a6f0cdbfb27f0b32d3d8b0d4f43f52f00a",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "ftbqbridge",
+							"version": "1.0.0",
+							"name": "FTB Quests Bridge",
+							"description": "Loopback HTTP+JSON bridge for authoring FTB Quests content.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"architectury"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 28,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First stable release of **ftbquests-mcp** — author and edit FTB Quests content on a **live** Minecraft server from Claude Code. Edits are applied through the server's own quest APIs and broadcast to connected players in real time.\n\nThe project ships two halves:\n\n- **`ftbquests-bridge` mod** — a loopback HTTP+JSON API inside the Minecraft server (this release's downloadable artifacts).\n- **`ftbquests` Claude Code plugin** — an MCP server exposing `ftbq_*` tools, the `ftbquests` skill, and the `/ftbq-status` and `/ftbq-new-chapter` slash commands.\n\n## Requirements\n\n- Minecraft **1.21.1** server (**NeoForge** or **Fabric**) running **FTB Quests** + **FTB Library** + **Architectury API**.\n- **Node 18+** on the machine where Claude Code runs.\n\n## Install the mod\n\nDownload the jar matching your loader and drop it into the server's `mods/` folder alongside FTB Quests, FTB Library, and Architectury API:\n\n- **Fabric** → `ftbquests-bridge-fabric-1.0.0.jar`\n- **NeoForge** → `ftbquests-bridge-neoforge-1.0.0.jar`\n\nStart the server once to generate `config/ftbquests-bridge/runtime.json` (bridge port + auth token), then set up the companion plugin per the [README](https://github.com/west3436/ftbquests-mcp/blob/v1.0.0/ftbquests-plugin/README.md).\n\n## Highlights\n\n- Create, edit, move, and delete chapters, quests, tasks, rewards, and dependencies on a running server.\n- Query the live registry (blocks/items) and FTB Quests task/reward type schemas.\n- Loopback-only binding (`127.0.0.1`) for the SSH'd-admin scenario."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

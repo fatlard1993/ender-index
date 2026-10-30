@@ -1,0 +1,124 @@
+{
+	"repo": "Conflux-Union/xaero-autosync_r",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-07-15T12:44:26Z",
+	"pushed": "2026-07-20T05:47:13Z",
+	"releases": [
+		{
+			"tag": "v3.0.0-alpha.7",
+			"published": "2026-07-20T05:07:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 483081681,
+					"name": "xaero-mapsync_r-3.0.0-alpha.7.jar",
+					"url": "https://github.com/Conflux-Union/xaero-autosync_r/releases/download/v3.0.0-alpha.7/xaero-mapsync_r-3.0.0-alpha.7.jar",
+					"size": 506697,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "fcdbe7b6a20fceb4c8da150e3fad67142203fbad5ab9fc76039d7317ab7f25bf",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "xaero-mapsync_r",
+							"version": "3.0.0-alpha.7",
+							"name": "Xaero Map Sync",
+							"description": "Shared server map and public waypoint synchronization for Minecraft 1.17.1 Fabric servers across all published Xaero map versions.",
+							"minecraft": "~1.17.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric"
+							],
+							"provides": [],
+							"suggests": [
+								"xaeroworldmap",
+								"xaerominimap"
+							]
+						}
+					],
+					"icon": "00d99da4ec61fdefbcd1226ba8c15610936af93b12d29dc5bb2dc9f6ec965c43.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 207,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Xaero Map Sync 3.0.0-alpha.7\n\n这是面向 Minecraft Java Edition `1.17.1` Fabric 的alpha.7版本。\n\n## 主要变化\n\n- 支持所有已发布并明确标记 Minecraft `1.17.1` 的 Xaero World Map Fabric 文件：`1.14.5.2` 至 `1.37.8`，共 74 个版本。\n- 支持所有已发布并明确标记 Minecraft `1.17.1` 的 Xaero Minimap Fabric 文件：`21.12.5.1` 至 `23.9.7`，共 80 个版本。\n- 修复 World Map `1.17.3` 的过渡 API：该版本包含 shape-cache 类，但仍使用三参数 `setTile` 且没有缓存 getter。适配器现在根据真实方法能力选择 API。\n- 未知或不完整的反射组合仍会在修改 Xaero 地图数据前禁用对应桥接。\n- 建立长期 `release` 分支，发布必须经过 `feature/* -> master -> release` 两级 Pull Request 和两轮 Build/Qodana 门禁。\n\n## 验证结果\n\n- 从公开 CurseForge 索引精确匹配并验证 74 个 World Map 与 80 个 Minimap JAR，共 154 个 fixture、146,682,190 字节。\n- 154/154 通过 ZIP/JAR 完整性、`fabric.mod.json`、mod id、版本、Minecraft `1.17.1` 依赖和非 Forge 元数据检查。\n- 154/154 通过适配器使用成员的完整 ASM 二进制契约检查。\n- 完整测试套件：291 tests，0 failures，0 errors，0 skipped。\n- `feature -> master` PR #8：Build 与 Qodana 全部通过。\n- `master -> release` PR #9：第二轮 Build、release 来源门禁与 Qodana 全部通过。\n- `release` 合并提交 `16ebf745022cc623dd187aff56756b043e5e7961` 的 push Build/Qodana 与 tag Build 全部通过。\n\n上述矩阵证明元数据和二进制反射契约兼容，不等同于对 154 个上游版本分别完成游戏内人工端到端运行。此版本仍为 alpha；请先备份世界和客户端 Xaero 地图目录，并在 staging 或测试服务器验证。\n\n## 兼容性\n\n- Minecraft `1.17.1`\n- Fabric Loader `>= 0.19.3`\n- Fabric API `0.46.1+1.17`\n- Java `16+`\n- 网络协议 `v11`（未变化）\n- 地图存储格式 `v6`（未变化）\n\n仅支持 Fabric；不支持 Forge 或 NeoForge 文件。\n\n## 发布资产\n\n- `xaero-mapsync_r-3.0.0-alpha.7.jar`：可安装 Mod。\n- `xaero-mapsync_r-3.0.0-alpha.7-sources.jar`：源码归档，不是可加载 Mod。\n- `SHA256SUMS`：上述两个 JAR 的 SHA-256。\n\n本 Release 不包含或分发任何 Xaero 上游 JAR。\n\n## 回滚\n\n停止服务端和客户端，恢复升级前的 Mod JAR。协议 v11 和存储 v6 未变化，不需要数据迁移；不要删除 `tiles-v6/`、共享路径点数据或客户端 Xaero 地图目录。\n\n## What's Changed\n* docs(readme): add bilingual repository overview by @mgHurryo in https://github.com/Conflux-Union/xaero-autosync_r/pull/6\n* feat(xaero): support all Fabric map releases for Minecraft 1.17.1 by @mgHurryo in https://github.com/Conflux-Union/xaero-autosync_r/pull/7\n* fix(xaero): support transitional world map cache API by @mgHurryo in https://github.com/Conflux-Union/xaero-autosync_r/pull/8\n* chore(release): promote 3.0.0-alpha.7 by @mgHurryo in https://github.com/Conflux-Union/xaero-autosync_r/pull/9\n\n\n**Full Changelog**: https://github.com/Conflux-Union/xaero-autosync_r/compare/v3.0.0-alpha.6...v3.0.0-alpha.7"
+		},
+		{
+			"tag": "v3.0.0-alpha.6",
+			"published": "2026-07-17T14:25:24Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 480462515,
+					"name": "xaero-mapsync_r-3.0.0-alpha.6.jar",
+					"url": "https://github.com/Conflux-Union/xaero-autosync_r/releases/download/v3.0.0-alpha.6/xaero-mapsync_r-3.0.0-alpha.6.jar",
+					"size": 501230,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "8f078010ccde2621ca1004f50c938fc8ecfc41332a9ebb7277a5160e32c72613",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "xaero-mapsync_r",
+							"version": "3.0.0-alpha.6",
+							"name": "Xaero Map Sync",
+							"description": "Shared server map and public waypoint synchronization for Minecraft 1.17.1 Fabric servers using pinned Xaero map versions.",
+							"minecraft": "~1.17.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric"
+							],
+							"provides": [],
+							"suggests": [
+								"xaeroworldmap",
+								"xaerominimap"
+							]
+						}
+					],
+					"icon": "00d99da4ec61fdefbcd1226ba8c15610936af93b12d29dc5bb2dc9f6ec965c43.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 206,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's Changed\n* feat(sync): establish complete shared map foundation by @mgHurryo in https://github.com/Conflux-Union/xaero-autosync_r/pull/1\n* refactor(map-sync)!: apply atomic region synchronization by @mgHurryo in https://github.com/Conflux-Union/xaero-autosync_r/pull/2\n* chore(merge): integrate all active branches by @mgHurryo in https://github.com/Conflux-Union/xaero-autosync_r/pull/4\n* feat(map-sync)!: recover map gaps from online Xaero clients by @mgHurryo in https://github.com/Conflux-Union/xaero-autosync_r/pull/3\n* docs(license): switch from CC0/LGPL-3.0 to MIT license by @mgHurryo in https://github.com/Conflux-Union/xaero-autosync_r/pull/5\n\n## New Contributors\n* @mgHurryo made their first contribution in https://github.com/Conflux-Union/xaero-autosync_r/pull/1\n\n**Full Changelog**: https://github.com/Conflux-Union/xaero-autosync_r/commits/v3.0.0-alpha.6"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "Xaero Map Sync is a shared map and waypoint synchronization mod for Minecraft Java Edition 1.17.1 Fabric servers.",
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

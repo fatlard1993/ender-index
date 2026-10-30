@@ -1,0 +1,70 @@
+{
+	"repo": "IzmYuta/SimpleMobSwitch",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2025-05-28T11:19:15Z",
+	"pushed": "2025-05-30T04:39:32Z",
+	"releases": [
+		{
+			"tag": "1.0.0",
+			"published": "2025-05-30T04:39:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 259358045,
+					"name": "simplemobswitch-1.0.0.jar",
+					"url": "https://github.com/IzmYuta/SimpleMobSwitch/releases/download/1.0.0/simplemobswitch-1.0.0.jar",
+					"size": 19980,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "157ee519684370b472cc034386b3e3527c7ec149a24e1ab5b9b39fbd5d72979a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "simplemobswitch",
+							"version": "1.0.0",
+							"name": "Simple Mob Switch",
+							"description": "敵対モブの自然湧きを間接的に停止・再開する制御機能を提供するMOD",
+							"minecraft": "~1.21.5",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": "f8689407e7d8f831b95f94e391e03f50a8fc88b1be70abd6e9280bba1b612b5d.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 3,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# SimpleMobSwitch Mod - ChangeLog\n\n## [1.0.0] - 2025-5-30\n\n### 🎉 初回リリース / Initial Release\n\n#### ✨ 新機能 / New Features\n\n- **動的モブキャップ制御システム / Dynamic Mob Cap Control System**\n  - プレイヤー数に応じて自動的にダミーモブ（シュルカー）をスポーン / Automatically spawns dummy mobs (Shulkers) based on player count\n  - 基本計算式: `プレイヤー数 × 70体 = 必要ダミーモブ数` / Basic formula: `Player count × 70 = Required dummy mobs`\n  - リアルタイムでのモブ数調整機能 / Real-time mob count adjustment\n\n- **コマンドシステム / Command System**\n  - `/mobswitch on` - モブスイッチ有効化 / Enable mob switch\n  - `/mobswitch off` - モブスイッチ無効化 / Disable mob switch\n  - OP権限（レベル2以上）による制御 / Requires OP permission (level 2+)\n\n- **永続化システム / Persistence System**\n  - サーバー再起動後の状態復元機能 / State restoration after server restart\n  - NBTCompound形式でのワールドデータ保存 / World data saved in NBTCompound format\n  - ダミーモブUUIDの管理 / Dummy mob UUID management\n\n- **スポーンチャンク方式採用 / Spawn Chunk Method**\n  - 常時ロードされるスポーンチャンクを利用 / Utilizes always-loaded spawn chunks\n  - 安定したチャンクローディング / Stable chunk loading\n  - ネザーポータル方式に依存しない設計 / Independent from nether portal methods\n\n#### 🔧 技術仕様 / Technical Specifications\n\n- **対応バージョン / Supported Version**: Minecraft 1.20.x + Fabric\n- **配置位置 / Placement**: スポーンチャンクから3チャンク離れた地点（Y=1000） / 3 chunks away from spawn chunk (Y=1000)\n- **エンティティタイプ / Entity Type**: シュルカー（`EntityType.SHULKER`） / Shulker (`EntityType.SHULKER`)\n\n#### ⚡ パフォーマンス最適化 / Performance Optimization\n\n- **AI処理最適化 / AI Processing Optimization**\n  - ダミーモブのAI無効化（`setAiDisabled(true)`） / Dummy mob AI disabled (`setAiDisabled(true)`)\n  - 物理演算無効化（`setNoGravity(true)`） / Physics disabled (`setNoGravity(true)`)\n  - 音響処理無効化（`setSilent(true)`） / Sound processing disabled (`setSilent(true)`)\n\n- **視覚的最適化 / Visual Optimization**\n  - ダミーモブの透明化（`setInvisible(true)`） / Dummy mobs invisible (`setInvisible(true)`)\n  - カスタム名非表示（`setCustomNameVisible(false)`） / Custom name hidden (`setCustomNameVisible(false)`)\n  - 無敵化による意図しない削除防止（`setInvulnerable(true)`） / Invulnerable to prevent accidental removal (`setInvulnerable(true)`)\n\n- **メモリ効率化 / Memory Efficiency**\n  - UUIDベースの軽量な状態管理 / Lightweight UUID-based state management\n  - 最小限のデータ保存 / Minimal data storage\n\n#### 🛡️ 安全性機能 / Safety Features\n\n- **エラーハンドリング / Error Handling**\n  - スポーン失敗時の適切な処理 / Proper handling of spawn failures\n  - 状態整合性チェック機能 / State consistency checking\n  - 詳細なログ出力（INFO、ERRORレベル） / Detailed logging (INFO, ERROR levels)\n\n- **サーバーライフサイクル管理 / Server Lifecycle Management**\n  - 起動時の自動状態復元 / Automatic state restoration on startup\n  - 終了時の適切なクリーンアップ / Proper cleanup on shutdown\n  - プレイヤー参加/退出時の動的調整 / Dynamic adjustment on player join/leave\n\n#### 📋 制約事項 / Limitations\n\n- **ディメンション制限 / Dimension Limitation**: オーバーワールドのみ対応 / Overworld only\n- **権限要件 / Permission Requirement**: OP権限（レベル2以上）が必要 / Requires OP permission (level 2+)\n- **影響範囲 / Impact Scope**: サーバー全体のモブスポーンに影響 / Affects server-wide mob spawning\n\n#### 🔍 実装詳細 / Implementation Details\n\n- **Mixin使用 / Mixin Usage**: MinecraftServerクラスへの軽微な介入 / Minimal intervention to MinecraftServer class\n- **非侵襲的設計 / Non-invasive Design**: 既存のゲームシステムへの最小限の影響 / Minimal impact on existing game systems\n- **Fabric API**: 標準的なFabric MOD開発手法を採用 / Standard Fabric mod development practices\n\n---\n\n### 📖 使用方法 / Usage\n\n1. MODをサーバーの`mods`フォルダに配置 / Place the mod in the server's `mods` folder\n2. サーバーを起動 / Start the server\n3. OP権限で `/mobswitch on` コマンドを実行 / Execute `/mobswitch on` command with OP permission\n4. プレイヤー数に応じて自動的にモブスポーンが制御されます / Mob spawning will be automatically controlled based on player count\n\n### 🎯 対象ユーザー / Target Users\n\n- サーバー管理者 / Server administrators\n- モブファーム運営者 / Mob farm operators\n- パフォーマンス重視のサーバー運営者 / Performance-focused server operators\n- 建築プロジェクトでモブスポーンを制御したいプレイヤー / Players who want to control mob spawning for building projects\n\n### 🔗 参考資料 / References\n\n- [Minecraft Wiki - Mob Switch](https://minecraft.fandom.com/wiki/Tutorials/Mob_switch)\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "SimpleMobSwitchは、Minecraft 1.20.x Fabric環境で動作するモブスポーン制御Modです。プレイヤー数に応じて動的にダミーモブ（シュルカー）をスポーンさせ、モブキャップメカニズムを利用してサーバー全体のモブスポーンを制御します。",
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

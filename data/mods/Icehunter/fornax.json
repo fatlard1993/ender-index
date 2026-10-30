@@ -1,0 +1,295 @@
+{
+	"repo": "Icehunter/fornax",
+	"host": "github",
+	"description": "A Vulkan rendering engine for Minecraft, built as a companion mod to Sodium. Loads shaderpacks written in its own TOML and GLSL format.",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-08-23T04:19:43Z",
+	"pushed": "2026-10-04T20:27:34Z",
+	"releases": [
+		{
+			"tag": "v0.4.0",
+			"published": "2026-09-09T07:24:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 552234046,
+					"name": "fornax-0.4.0+mc26.2.jar",
+					"url": "https://github.com/Icehunter/fornax/releases/download/v0.4.0/fornax-0.4.0%2Bmc26.2.jar",
+					"size": 1635225,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "9252e2f1d279d19996ff98e34425847a05d92bb3071fb157a1bc3d4be2896f33",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "fornax",
+							"version": "0.4.0+mc26.2",
+							"name": "Fornax",
+							"description": "Vulkan shaderpack loader and rendering engine. Loads Vulkan-native shader packs with deferred rendering, LabPBR materials, SSAO, TAA, SSR and supersampling.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"sodium",
+								"yet_another_config_lib_v3"
+							],
+							"provides": [
+								"com_electronwill_night-config_core",
+								"com_electronwill_night-config_toml"
+							]
+						}
+					],
+					"icon": "060d63802ac5cff0310bc0c6029a0ae32f3d06bb44840b1f35439e7fa9c3bfb9.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 806,
+						"jars": [
+							"META-INF/jars/core-3.8.1.jar",
+							"META-INF/jars/toml-3.8.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/core-3.8.1.jar!com/electronwill/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/core-3.8.1.jar!com/electronwill/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/core-3.8.1.jar!com/electronwill/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 0.4.0\n\n## Voxels\n- Face data now tracks its source per face, not per cell (fixes stale light/face data on refresh)\n- Fixed vertex grid cracks at section edges\n- Batch uploads reuse one buffer and fence instead of allocating each time (faster)\n- Face data shrunk from 18,432 to 16,128 bytes per slot\n- Model and sprite reads split from GPU upload lifetime\n- Chunks now queue a harvest on arrival, so missed sections fill in without waiting on camera move\n\n## Water\n- Water prepass now draws for every water tier, not just reflection mode\n- Prepass targets no longer depend on the draw gate\n- Fixed cloud shadows and fluid column height scans\n\n## World data for packs\n- Packs can read the world's day count and day fraction\n- Day values crossfade over real time instead of cutting at the day boundary\n- Wider climate data: temperature, downfall, biome tags\n- Nether fog options added\n- End portal and gateway get their own slot\n- Glass refraction strength exposed to terrain\n\n## Graph engine\n- Compute results reuse across frames when inputs match\n- Independent passes can overlap instead of waiting in strict order\n- New consolidate pass for reading several targets through one array texture\n- Passes can be gated per dimension\n- 3D volume textures supported for compute passes\n\n## Debug and profiling\n- GPU/CPU timings tagged by frame ID\n- Profiler overlay can filter by pass, counter, or slowest only\n- Can dump one frame's raw pass inputs/outputs\n\n## Fixes\n- Deferred slot reporting fixed for forward and particle paths\n- Linear-filter check no longer looks at compute-only images\n- Tests now pin field order in u_Globals, not just total size\n\n## Docs\n- Fixed stale mixin and test counts in AGENTS.md\n- Fixed u_Globals byte size in ARCHITECTURE.md\n\n**Full Changelog**: https://github.com/Icehunter/fornax/compare/v0.3.0...v0.4.0"
+		},
+		{
+			"tag": "v0.3.0",
+			"published": "2026-08-26T09:06:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 530554276,
+					"name": "fornax-0.3.0+mc26.2.jar",
+					"url": "https://github.com/Icehunter/fornax/releases/download/v0.3.0/fornax-0.3.0%2Bmc26.2.jar",
+					"size": 1456617,
+					"downloads": 8,
+					"inspection": 2,
+					"sha256": "b5b97a2bbe58a9e11a04c5cf1534f4d6c6c88613101e6f11d6345de260b29f0d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "fornax",
+							"version": "0.3.0+mc26.2",
+							"name": "Fornax",
+							"description": "Vulkan shaderpack loader and rendering engine. Loads Vulkan-native shader packs with deferred rendering, LabPBR materials, SSAO, TAA, SSR and supersampling.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"sodium",
+								"yet_another_config_lib_v3"
+							],
+							"provides": [
+								"com_electronwill_night-config_core",
+								"com_electronwill_night-config_toml"
+							]
+						}
+					],
+					"icon": "060d63802ac5cff0310bc0c6029a0ae32f3d06bb44840b1f35439e7fa9c3bfb9.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 733,
+						"jars": [
+							"META-INF/jars/core-3.8.1.jar",
+							"META-INF/jars/toml-3.8.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/core-3.8.1.jar!com/electronwill/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/core-3.8.1.jar!com/electronwill/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/core-3.8.1.jar!com/electronwill/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- feat: add Always mode for frame generation, fix Metal HUD toggle (3803835)\n- fix: four stale/misattributed doc comments and a diagnostic misattribution (05fc6ec)\n- fix: shadow texel-snap runs its absolute-position transform in double (57dc347)\n- fix: cross-queue wait-stage matching misses .history readers and a hardcoded stage (46a5209)\n- docs: comments state the current reason, never the incident history (2192497)\n- chore: strip narrative/incident-history language from code comments (fa38c28)\n- fix: PackReload's resource-reload future is missing its exceptionally handler (b01e075)\n- fix: check fence-wait results, guard storage-buffer bind, add COPY wait-stage (b9111b2)\n- fix: defer atlas rebuild past real render-loop submits, close remaining VRAM/thread gaps (9afee18)\n- fix: hoist-and-free GPU builders, MetalFX device-loss handling, sidecar VRAM budget (bf1ce8d)\n- fix: catch per-frame resolve failures in COPY/MIPCHAIN dispatch (bbf6aa1)\n- fix: NoiseTexture assigns texture/view atomically (698c44a)\n- fix: honest overflow-page VRAM accounting, real device VRAM query (68324db)\n- fix: deactivate frame generation on pack teardown (b03c53f)\n- fix: roll GraphRunner back to inactive on a failed pack switch (db90cea)\n- fix: recognize FULLSCREEN/PARTICLES readers of surfaceFluidClipmap and waterActors (1a777cb)\n- fix: free partially-created Vulkan handles on compute pipeline build failure (144f66e)\n- fix: persist sunPathRotation changes on settings save (46dcc12)\n- Create FUNDING.yml (e0509e6)\n\n**Full Changelog**: https://github.com/Icehunter/fornax/compare/v0.2.0...v0.3.0"
+		},
+		{
+			"tag": "v0.2.0",
+			"published": "2026-08-23T09:54:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 526069624,
+					"name": "fornax-0.2.0+mc26.2.jar",
+					"url": "https://github.com/Icehunter/fornax/releases/download/v0.2.0/fornax-0.2.0%2Bmc26.2.jar",
+					"size": 1433268,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "bf11b9da18b9b8efd3ac34c6cf229e479d8e1c660c4993e8a472a91e12c8c643",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "fornax",
+							"version": "0.2.0+mc26.2",
+							"name": "Fornax",
+							"description": "Vulkan shaderpack loader and rendering engine. Loads Vulkan-native shader packs with deferred rendering, LabPBR materials, SSAO, TAA, SSR and supersampling.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"sodium",
+								"yet_another_config_lib_v3"
+							],
+							"provides": [
+								"com_electronwill_night-config_core",
+								"com_electronwill_night-config_toml"
+							]
+						}
+					],
+					"icon": "060d63802ac5cff0310bc0c6029a0ae32f3d06bb44840b1f35439e7fa9c3bfb9.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 723,
+						"jars": [
+							"META-INF/jars/core-3.8.1.jar",
+							"META-INF/jars/toml-3.8.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/core-3.8.1.jar!com/electronwill/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/core-3.8.1.jar!com/electronwill/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/core-3.8.1.jar!com/electronwill/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "What Changed:\n\n- page the block atlas automatically instead of behind a flag\n  - the flag was off by default, so a 512x pack just failed to load with \"try a lower resolution resourcepack\" and nothing pointing at the switch.\n  - paging only ever runs when the alternative is that failure, so there was nothing for a setting to choose.\n- drop labPBR sidecars from every atlas, not just blocks.\n  - entity and banner atlases were carrying 786 MB of maps nothing samples.\n- size the sprite-bounds grid to the pack. \n  - a coarse grid forces a coarse placement pitch and wastes most of an overflow page. packs read it through fornax_spriteGridCell now instead of hardcoding the number.\n- cap overflow pages by available memory rather than a fixed count, so a pack that will not fit refuses at load instead of swapping the machine.\n- log the sprite-bounds grid size when it rebuilds the grid is resized per pack now, and nothing said what it ended up at, so there was no way to tell whether a big pack's grid was released.\n\n**Full Changelog**: https://github.com/Icehunter/fornax/compare/v0.1.0...v0.2.0"
+		},
+		{
+			"tag": "v0.1.0",
+			"published": "2026-08-23T04:41:12Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 525829647,
+					"name": "fornax-0.1.0+mc26.2.jar",
+					"url": "https://github.com/Icehunter/fornax/releases/download/v0.1.0/fornax-0.1.0%2Bmc26.2.jar",
+					"size": 1431555,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "a923e2625311f45258b441b011e479e25b0acc63342ec9896c4979558be35049",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "fornax",
+							"version": "0.1.0+mc26.2",
+							"name": "Fornax",
+							"description": "Vulkan shaderpack loader and rendering engine. Loads Vulkan-native shader packs with deferred rendering, LabPBR materials, SSAO, TAA, SSR and supersampling.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"sodium",
+								"yet_another_config_lib_v3"
+							],
+							"provides": [
+								"com_electronwill_night-config_core",
+								"com_electronwill_night-config_toml"
+							]
+						}
+					],
+					"icon": "060d63802ac5cff0310bc0c6029a0ae32f3d06bb44840b1f35439e7fa9c3bfb9.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 723,
+						"jars": [
+							"META-INF/jars/core-3.8.1.jar",
+							"META-INF/jars/toml-3.8.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/core-3.8.1.jar!com/electronwill/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/core-3.8.1.jar!com/electronwill/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/core-3.8.1.jar!com/electronwill/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Requires Minecraft 26.2, Fabric Loader 0.19.2 or newer, Sodium 0.9.1 or 0.9.2, and Java 25.\n\nFornax bundles no shaderpack. Shaders start off with none selected, so installing it\nchanges nothing until a pack is added and chosen. See `docs/PACK-FORMAT.md` for how to\nwrite one."
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "github",
+			"url": "https://github.com/sponsors/Icehunter"
+		}
+	],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

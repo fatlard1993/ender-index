@@ -1,0 +1,270 @@
+{
+	"repo": "DIVI4ik/Spoilage-Enhanced",
+	"host": "github",
+	"description": "Food spoilage for Minecraft 26.2: per-item freshness timers with fresh/stale/rotten stages, aging inside chests, hoppers, bundles and mob storage. One jar for Fabric, Forge and NeoForge.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-06-13T10:56:14Z",
+	"pushed": "2026-10-01T12:09:55Z",
+	"releases": [
+		{
+			"tag": "v1.1.2-26.2",
+			"published": "2026-10-01T12:10:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 603187827,
+					"name": "spoilage_enhanced_26.2-1.1.2.jar",
+					"url": "https://github.com/DIVI4ik/Spoilage-Enhanced/releases/download/v1.1.2-26.2/spoilage_enhanced_26.2-1.1.2.jar",
+					"size": 469600,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "cd7a1266501cf9487bc9bf508c1dd05ec69445f2a883839a2417741d2ef0e12c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "spoilage_enhanced",
+							"version": "1.1.2",
+							"name": "Spoilage Enhanced",
+							"description": "Food rots. Every edible carries a freshness timer through fresh, stale and rotten - in your inventory and in storage.",
+							"minecraft": ">=26.0",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						},
+						{
+							"loader": "neoforge",
+							"id": "spoilage_enhanced",
+							"version": "1.1.2",
+							"name": "Spoilage Enhanced",
+							"description": "Food in Minecraft never goes off. This mod makes it.\n\nEvery edible item carries a freshness timer and moves through three stages: fresh, stale and\nrotten. A stack is not one timer - ten apples can be five fresh and five rotten, and the worst\none is always handed over first.\n\nFood ages in storage too: chests, barrels, shulker boxes, your ender chest, hoppers, storage\nminecarts, villager and trader inventories, llama and donkey chests, and bundles - including a\nbundle inside a shulker box inside a chest.\n\nStale food feeds you less and may bring nausea; rotten food poisons you, but makes the best\ncompost in the game. You cannot plant rotten seeds, and a growing crop has no clock at all -\nit starts when the plant is ripe.\n\nFood is detected automatically, including from other mods. Configure anything in\nconfig/spoilage_enhanced.json and apply it with /spoilage config reload.",
+							"minecraft": "[26,)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						},
+						{
+							"loader": "forge",
+							"id": "spoilage_enhanced",
+							"version": "1.1.2",
+							"name": "Spoilage Enhanced",
+							"description": "Food in Minecraft never goes off. This mod makes it.\n\nEvery edible item carries a freshness timer and moves through three stages: fresh, stale and\nrotten. A stack is not one timer - ten apples can be five fresh and five rotten, and the worst\none is always handed over first.\n\nFood ages in storage too: chests, barrels, shulker boxes, your ender chest, hoppers, storage\nminecarts, villager and trader inventories, llama and donkey chests, and bundles - including a\nbundle inside a shulker box inside a chest.\n\nStale food feeds you less and may bring nausea; rotten food poisons you, but makes the best\ncompost in the game. You cannot plant rotten seeds, and a growing crop has no clock at all -\nit starts when the plant is ripe.\n\nFood is detected automatically, including from other mods. Configure anything in\nconfig/spoilage_enhanced.json and apply it with /spoilage config reload.",
+							"minecraft": "[26,)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "349fb00190e0561b4046878bef07256e778960ff7ea2dfc1a0b15b88bdc73a4b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Spoiled Apple"
+							],
+							"block": [
+								"Composter"
+							],
+							"group": [
+								"Spoilage Enhanced"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 130,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Spoilage Enhanced v1.1.2 [26.2] — Release Notes\n\nCumulative major update over **v1.1.1**.\n\nThis release brings dramatic server performance optimizations, an intelligent multi-layer heuristic preventing any non-food block or material from ever being falsely detected as food, complete multi-loader compatibility (Fabric, Forge, NeoForge), and robust arithmetic safety guards across all game systems.\n\n---\n\n### 1. Performance & Server Tick Optimizations\n\n* **Container Sweep Tick Budgeting (`haveTime`):**\n  * The background container sweep (`ContainerAgingSweepMixin`) now strictly monitors the server's tick budget via `haveTime`.\n  * If the server is saturated or lagging behind (e.g. during heavy world generation or entity spikes), the sweep yields immediately. Because food aging is a pure, idempotent function of absolute `gameTime`, food seamlessly catches up in the next available tick without producing lag spikes.\n* **Starvation Protection:**\n  * If a low-spec server remains saturated for over 40 consecutive ticks (2 seconds), an adaptive time-capped slice (maximum 1.5 ms) executes to ensure continuous progress without ever freezing or hitching.\n* **C2ME & Chunk System Optimization (20x Query Reduction):**\n  * The sweep now inspects `holder.getPos()` directly from `GenerationChunkHolder` before querying ticking state.\n  * Over 95% of chunks are filtered out via integer coordinate phase arithmetic without invoking C2ME's synchronized `getTickingChunk()` lookup, reducing CPU time during fast flight by over 80%.\n* **Unopened Dungeon Loot Table Protection:**\n  * Containers with pending loot tables (`getLootTable() != null`), such as unopened chests in Roguelike Dungeons, desert pyramids, and villages, are bypassed completely during world generation sweeps.\n  * This prevents premature loot generation, loot table rolls, slot iterations, and synchronous logging during chunk generation.\n* **Single-Pass Container Traversal:**\n  * Replaced the dual-pass probe/update loops with a streamlined single-pass traversal.\n  * Completely empty containers are skipped instantly (`isEmpty()`). Non-food items (cobblestone, tools, dirt, ingots) are filtered out via a zero-allocation check and never touch data component updates.\n* **Client & HUD Cache Optimizations:**\n  * Fixed cache eviction orders in `TooltipTextCache` and `SpoilageEnhancedTranslations.formatTime`.\n  * Added per-tick memoization in `ClientBlockSpoilageCache` to eliminate redundant raycast/HUD computations.\n\n---\n\n### 2. Universal Non-Food Material Filtering\n\n* **Ice & Frozen Blocks Protection:**\n  * Regular ice, packed ice, blue ice, and frosted ice are permanently exempted from spoilage. They will never spoil, receive freshness bars, or be registered as food containers.\n* **Universal Non-Food Material Filter (`isKnownNonFoodMaterial`):**\n  * Implemented an extensive, categorized semantic filter that automatically rejects modded and vanilla non-food items:\n    * **Minerals, Ores & Metals:** `_ore`, `_raw_ore`, `raw_iron`, `raw_copper`, `raw_gold`, `_ingot`, `diamond`, `emerald`, `amethyst`, `quartz`, `ruby`, `sapphire`, `topaz`, `coal`, `redstone`, `lapis_lazuli`, `_dust`, `_shard`, `_crystal`, `_gem`. *(Raw meats like `raw_beef` and culinary nuggets like `chicken_nugget` are safely preserved!)*\n    * **Building & Construction:** `_slab`, `_stairs`, `_wall`, `_fence`, `_fence_gate`, `_door`, `_trapdoor`, `_pane`, `_glass`, `_brick`, `_bricks`, `_tiles`, `_planks`, `_pillar`, `_bars`, `_chain`, `_rod`, `_lantern`, `_torch`, `_scaffolding`, `_button`, `_pressure_plate`, `_sign`, `_anvil`.\n    * **Geology & Terrain:** `_stone`, `_cobblestone`, `_deepslate`, `_granite`, `_diorite`, `_andesite`, `_tuff`, `_basalt`, `_obsidian`, `_sandstone`, `_gravel`, `_sand`, `_dirt`, `_mud`, `_clay`, `_concrete`, `_terracotta`.\n    * **Redstone & Mechanisms:** `_piston`, `_dispenser`, `_dropper`, `_hopper`, `_observer`, `_repeater`, `_comparator`, `_rail`.\n\n..."
+		},
+		{
+			"tag": "v1.1.1-26.2",
+			"published": "2026-09-22T15:30:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 581986544,
+					"name": "spoilage_enhanced_26.2-1.1.1.jar",
+					"url": "https://github.com/DIVI4ik/Spoilage-Enhanced/releases/download/v1.1.1-26.2/spoilage_enhanced_26.2-1.1.1.jar",
+					"size": 464604,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "bffb94dcba43f385f973b1b8278bdb03fefd8e89366524d7e3ea6d301cbda2bf",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "spoilage_enhanced",
+							"version": "1.1.1",
+							"name": "Spoilage Enhanced",
+							"description": "Food rots. Every edible carries a freshness timer through fresh, stale and rotten - in your inventory and in storage.",
+							"minecraft": ">=26.0",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						},
+						{
+							"loader": "neoforge",
+							"id": "spoilage_enhanced",
+							"version": "1.1.1",
+							"name": "Spoilage Enhanced",
+							"description": "Food in Minecraft never goes off. This mod makes it.\n\nEvery edible item carries a freshness timer and moves through three stages: fresh, stale and\nrotten. A stack is not one timer - ten apples can be five fresh and five rotten, and the worst\none is always handed over first.\n\nFood ages in storage too: chests, barrels, shulker boxes, your ender chest, hoppers, storage\nminecarts, villager and trader inventories, llama and donkey chests, and bundles - including a\nbundle inside a shulker box inside a chest.\n\nStale food feeds you less and may bring nausea; rotten food poisons you, but makes the best\ncompost in the game. You cannot plant rotten seeds, and a growing crop has no clock at all -\nit starts when the plant is ripe.\n\nFood is detected automatically, including from other mods. Configure anything in\nconfig/spoilage_enhanced.json and apply it with /spoilage config reload.",
+							"minecraft": "[26,)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						},
+						{
+							"loader": "forge",
+							"id": "spoilage_enhanced",
+							"version": "1.1.1",
+							"name": "Spoilage Enhanced",
+							"description": "Food in Minecraft never goes off. This mod makes it.\n\nEvery edible item carries a freshness timer and moves through three stages: fresh, stale and\nrotten. A stack is not one timer - ten apples can be five fresh and five rotten, and the worst\none is always handed over first.\n\nFood ages in storage too: chests, barrels, shulker boxes, your ender chest, hoppers, storage\nminecarts, villager and trader inventories, llama and donkey chests, and bundles - including a\nbundle inside a shulker box inside a chest.\n\nStale food feeds you less and may bring nausea; rotten food poisons you, but makes the best\ncompost in the game. You cannot plant rotten seeds, and a growing crop has no clock at all -\nit starts when the plant is ripe.\n\nFood is detected automatically, including from other mods. Configure anything in\nconfig/spoilage_enhanced.json and apply it with /spoilage config reload.",
+							"minecraft": "[26,)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "349fb00190e0561b4046878bef07256e778960ff7ea2dfc1a0b15b88bdc73a4b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Spoiled Apple"
+							],
+							"block": [
+								"Composter"
+							],
+							"group": [
+								"Spoilage Enhanced"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 130,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Cumulative update over v1.1.0 — 115 changes to the mod's code.\n\n### Food now ages where it did not before\n\nIn v1.1.0 spoilage largely stopped at the edge of the player's inventory. It no longer does:\n\n* **Placed containers** — chests, barrels, shulker boxes, and the player's ender chest.\n* **Hoppers** — contents age instead of sitting frozen (this was a reported bug).\n* **Minecarts with chests, fridges and brewing stands.**\n* **Mob-held storage** — villager and wandering trader inventories, llama, donkey and mule chests, and food an allay is carrying.\n* **Bundles, including nested ones** — a bundle inside a shulker box inside a chest used to be a freezer. Item frames too.\n\n### Performance\n\nEntities that age their contents used to do it on the same tick as every other entity created\nin the same tick, once a second. Large groups — a rail yard of storage minecarts, a flock of\nallays, a room of containers — produced a periodic lag spike. The work is now spread across the\nsecond, so the cost stays flat as numbers grow.\n\n### Correctness\n\n* Freshness timers no longer overflow on long-running worlds, in the container, item-entity,\n  stem-growth and command paths.\n* HUD text, tooltips and bar counts are tied to the server you are connected to, so labels\n  cannot carry over from a previous world after switching servers.\n* Bar counts are cleared when the game language changes.\n\n### Diagnosability\n\nA long list of silently swallowed errors now log instead: config and game directory resolution\non Forge and NeoForge, platform lookups, recipe scanning, and save failures. A broken install\nused to misbehave quietly; now it says so in the log.\n\n---\n\nBuilt from the same code as the internal 1.1.30 build. The source in this repository is the\n1.1.0 snapshot — this release ships the jar only.\n\n### Tested on\n\n* **Forge 26.2-65.1.2** — dedicated server reached `Done (…)! For help` with this jar on 2026-09-22 21:20.\n* **NeoForge 26.2.0.68** — dedicated server reached `Done (…)! For help` with this jar on 2026-09-22 21:22.\n\nFabric is exercised continuously by the development harness."
+		},
+		{
+			"tag": "v1.1.0-26.2",
+			"published": "2026-09-07T17:28:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 549144367,
+					"name": "spoilage_enhanced_26.2-1.1.0.jar",
+					"url": "https://github.com/DIVI4ik/Spoilage-Enhanced/releases/download/v1.1.0-26.2/spoilage_enhanced_26.2-1.1.0.jar",
+					"size": 282842,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "29f366ef0c62d0069048a130b234e9813d7430bc03473174f29200dce6d290f9",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "spoilage_enhanced",
+							"version": "1.1.0",
+							"name": "Spoilage Enhanced",
+							"description": "Dynamic, realistic food and block spoilage with stages, overlays, and deep integrations.",
+							"minecraft": ">=26.0",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						},
+						{
+							"loader": "neoforge",
+							"id": "spoilage_enhanced",
+							"version": "1.1.0",
+							"name": "Spoilage Enhanced",
+							"description": "Dynamic, realistic food and block spoilage with stages, overlays, and deep integrations.",
+							"minecraft": "[26,)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						},
+						{
+							"loader": "forge",
+							"id": "spoilage_enhanced",
+							"version": "1.1.0",
+							"name": "Spoilage Enhanced",
+							"description": "Dynamic, realistic food and block spoilage with stages, overlays, and deep integrations.",
+							"minecraft": "[26,)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "f07e7f988f5d336081954641679d2063aa04427cbab73ba2c54c28bdaf991def.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Spoiled Apple"
+							],
+							"block": [
+								"Composter"
+							],
+							"group": [
+								"Spoilage Enhanced"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 107,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Spoilage Enhanced 1.1.0 — Minecraft 26.2\n\nSingle jar for **Fabric, Forge and NeoForge**.\n\n### New in this release\n\n**Localisation.** The mod now ships five languages, loaded automatically from your game's\nlanguage setting — no resource pack needed:\n\n| Language | Locale |\n| --- | --- |\n| English | `en_us` |\n| Русский | `ru_ru` |\n| Українська | `uk_ua` |\n| Español (España) | `es_es` |\n| Español (Latinoamérica) | `es_mx` |\n\n**A config that explains itself.** `config/spoilage_enhanced.json` now opens with a step-by-step\nguide: how to make an item spoil, how to give it a custom duration (with a worked example), how to\nstop something spoiling, and what every section does. Your edits are never overwritten.\n\n### Fixes since 1.0.x\n\n- **Fruiting trees from other mods** are recognised properly. A tree whose fruit is picked by\n  right-click — and therefore appears in no loot table — is now learned from the harvest itself,\n  so it gets freshness like any other crop.\n- **Cave vines** were wrong in both directions: a vine carrying berries was not tracked, and a bare\n  one was. Ripeness is now read from what actually changes the yield, not from a growth counter\n  that measured something else. Breaking a berried vine no longer hands you rotten glow berries.\n- **A spoiled cake can be placed again**, and eating a slice of it now poisons you — the effects\n  live on the block-eating path, where they belong.\n- **`excluded_blocks` actually excludes.** An excluded block no longer picks up a freshness timer\n  as soon as a player looks at it.\n- Assorted correctness and hot-path fixes; block breaking no longer pays for a loot-table probe.\n\n### Install\n\nDrop the jar into `mods/`. Requires Minecraft 26.2 and Fabric API on Fabric."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

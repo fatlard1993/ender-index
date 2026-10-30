@@ -1,0 +1,214 @@
+{
+	"repo": "AzureAaron/hm-api",
+	"host": "github",
+	"description": "Library for interacting with Hypixel's Mod API.",
+	"stars": 9,
+	"archived": false,
+	"license": "Apache-2.0",
+	"created": "2024-07-10T17:36:09Z",
+	"pushed": "2026-09-16T03:32:41Z",
+	"releases": [
+		{
+			"tag": "1.0.3+26.1",
+			"published": "2026-03-24T23:19:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 380783673,
+					"name": "hm-api-1.0.3+26.1.jar",
+					"url": "https://github.com/AzureAaron/hm-api/releases/download/1.0.3%2B26.1/hm-api-1.0.3%2B26.1.jar",
+					"size": 74282,
+					"downloads": 48,
+					"inspection": 2,
+					"sha256": "aae61e301534587255058a8ce57a911f845b8b72fe190c6d8d17c3f5d561d88f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hm-api",
+							"version": "1.0.3+26.1",
+							"name": "HM Api",
+							"description": "Library for interacting with Hypixel's Mod API.",
+							"minecraft": "~26.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "833ea7778ecee3ea9f44302d44b472ded4e592741e4d9e0363fc202cb55853a9.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 43,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Highlights\n- Fix issue with Polymer\n- Updated to 26.1"
+		},
+		{
+			"tag": "1.0.1+1.21.2",
+			"published": "2024-10-22T20:15:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 200996859,
+					"name": "hm-api-1.0.1+1.21.2.jar",
+					"url": "https://github.com/AzureAaron/hm-api/releases/download/1.0.1%2B1.21.2/hm-api-1.0.1%2B1.21.2.jar",
+					"size": 74172,
+					"downloads": 57,
+					"inspection": 2,
+					"sha256": "bd5ad58ffed5ca635c05c67067d42d86050b43ee3554c56248920650fc579e1a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hm-api",
+							"version": "1.0.1+1.21.2",
+							"name": "HM Api",
+							"description": "Library for interacting with Hypixel's Mod API.",
+							"minecraft": "~1.21.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "833ea7778ecee3ea9f44302d44b472ded4e592741e4d9e0363fc202cb55853a9.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 43,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Update to 1.21.2/1.21.3\n  - The only part that broke was the chat logging for received packets which had to be manually enabled in debug mode only, otherwise the old build works fine.\n\nThe API remains the same as the previous release."
+		},
+		{
+			"tag": "1.0.1+1.21.1",
+			"published": "2024-08-16T07:35:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 186318675,
+					"name": "hm-api-1.0.1+1.21.1.jar",
+					"url": "https://github.com/AzureAaron/hm-api/releases/download/1.0.1%2B1.21.1/hm-api-1.0.1%2B1.21.1.jar",
+					"size": 74155,
+					"downloads": 16,
+					"inspection": 2,
+					"sha256": "65bae1b4e01fd3a24de26ea1f12cb253590bf1493340491c6878548ae8d35f0b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hm-api",
+							"version": "1.0.1+1.21.1",
+							"name": "HM Api",
+							"description": "Library for interacting with Hypixel's Mod API.",
+							"minecraft": "~1.21",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "833ea7778ecee3ea9f44302d44b472ded4e592741e4d9e0363fc202cb55853a9.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 43,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- The constructors of classes from the library's API have been made private as they provided no value (and shouldn't have been used due to everything being static).\n- Added documentation for every packet and data class to assist developers in being able to understand how they work :)\n- Added the `RankType` sealed interface which each rank related enum now implements.\n  - This should greatly simplify working across the 3 enums as there is now a concrete common type shared between them.\n  - The sealed nature of the interface enables the use of Java 21's powerful exhaustive pattern matching on all possible enum values which is great for working with the `RankType` type.\n- The `RankType` interface also contains two new static helper methods for working with `RankType`s:\n  - The `getEffectiveRank` method gets the \"effective\" rank out of all 3 enums, see the documentation for more info on the method's behaviour.\n  - The `compare` method is a comparator which allows for comparisons between `RankType` instances to determine which ones are less than/equal to/greater than each other (see documentation for how ranks are compared).\n- Compile against 1.21.1"
+		},
+		{
+			"tag": "1.0.0",
+			"published": "2024-07-11T19:35:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 179042039,
+					"name": "hm-api-1.0.0+1.21.jar",
+					"url": "https://github.com/AzureAaron/hm-api/releases/download/1.0.0/hm-api-1.0.0%2B1.21.jar",
+					"size": 70951,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "915a4f0ba1856d0e4a2d8e3419f777d6655cf7ecfab56a2b90904212024e7f07",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hm-api",
+							"version": "1.0.0+1.21",
+							"name": "HM Api",
+							"description": "Library for interacting with Hypixel's Mod API.",
+							"minecraft": "~1.21",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "833ea7778ecee3ea9f44302d44b472ded4e592741e4d9e0363fc202cb55853a9.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 41,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First Release! :)"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

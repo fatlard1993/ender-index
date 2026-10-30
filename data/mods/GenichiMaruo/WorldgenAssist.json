@@ -1,0 +1,691 @@
+{
+	"repo": "GenichiMaruo/WorldgenAssist",
+	"host": "github",
+	"description": "Experimental Fabric mod for Minecraft Java Edition 26.3: each player assists their own terrain generation concurrently; the server remains authoritative.",
+	"stars": 0,
+	"archived": false,
+	"created": "2026-08-31T17:45:43Z",
+	"pushed": "2026-10-08T21:27:16Z",
+	"releases": [
+		{
+			"tag": "v0.1.0-alpha.9+mc26.3",
+			"published": "2026-10-08T21:25:52Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 623051806,
+					"name": "worldgen-assist-0.1.0-alpha.9+mc26.3.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.9%2Bmc26.3/worldgen-assist-0.1.0-alpha.9%2Bmc26.3.jar",
+					"size": 608454,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "808e1245c80d522e9fa51916be05239ccd015bb65368bbe19d1a9515fbe75c0d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.9+mc26.3",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted Minecraft world generation.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "3b7c53636a2587bc0befaa54ee9d8efb808485dd21e833ffcef86a7ce233c0ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 257,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 623051808,
+					"name": "worldgen-assist-forge-0.1.0-alpha.9+mc26.3.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.9%2Bmc26.3/worldgen-assist-forge-0.1.0-alpha.9%2Bmc26.3.jar",
+					"size": 599621,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "3317bff2eca829fb2171be994dd84019959254bab5b79c8950c874ae8d16476c",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.9+mc26.3",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted world generation.",
+							"minecraft": "[26.3,26.4)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "3b7c53636a2587bc0befaa54ee9d8efb808485dd21e833ffcef86a7ce233c0ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 251,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 623051846,
+					"name": "worldgen-assist-neoforge-0.1.0-alpha.9+mc26.3.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.9%2Bmc26.3/worldgen-assist-neoforge-0.1.0-alpha.9%2Bmc26.3.jar",
+					"size": 590712,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "97544e1c3f31c2ba06cd3c66044c398308e9a6139b65fb9ae3b2bc2c59f5e5ac",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.9+mc26.3",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted world generation.",
+							"minecraft": "[26.3,26.4)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "3b7c53636a2587bc0befaa54ee9d8efb808485dd21e833ffcef86a7ce233c0ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 245,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Worldgen Assist 0.1.0-alpha.9 — Minecraft 26.3\n\n## 日本語\n\nForge／NeoForgeの計算依頼受付を改善する任意機能と、その検証結果をまとめたアルファ版です。\n\n- 計算依頼を、描画などを扱うクライアントの主処理を待たず、既存の上限付き計算担当へ渡せます。\n- 接続ごとに依頼の有効性を管理します。ディメンション移動・切断・通信切替で古い依頼と返答を\n  失効させ、移動後の通常処理が完了してから新しい依頼を受け付けます。遅れて届く旧接続の\n  処理や、連続して受信した移動通知も対象です。\n- ネイティブ版に最大4件の依頼まとめ送りを追加しました。各依頼の所有者・期限・取り消し・\n  検証は従来どおりです。\n- **両機能は既定で無効**です。支援・シード開示・完全地形・別クライアント照合も明示設定です。\n  地形生成、検証量、サーバーの最終権限を変更していません。仮描画はありません。\n\n### 成果と限界\n\n弱いi7-7700Kサーバーと強いi7-12700K上の2クライアント、距離32で、\n同じ候補JAR・両条件とも支援あり・まとめ送り無効・各条件ウォームアップ1回／同じ3領域を\n通常受付→直接受付の順に比較しました。同じ回の比率の中央値です。\n\n| 直接受付ONの変化 | Forge | NeoForge |\n| --- | ---: | ---: |\n| 往復待ち時間 | **-21.28%** | **-17.26%** |\n| チャンク完成（FULL） | -2.92% | -0.20% |\n| 両クライアントへの受信 | -3.68% | -1.26% |\n| サーバーCPU時間 | **+9.99%** | -3.43% |\n| tick p95 | +3.16% | -0.58% |\n\n往復待ち時間は両ローダーの全3回で減少しました。完成はForgeの3回／NeoForgeの2回で改善。\nただし生成全体の効果は小さく、ForgeのCPU負担は増加しています。逆順の比較は未実施で、\n大幅な高速化、alpha.8との直接比較、支援そのもののON/OFF効果や一般的な保証は示していません。\n受信には描画完了を含みません。別のまとめ送り比較では速度向上を確認できませんでした。\n\n新しい対象3テストと3ローダービルドを一括実行して成功。\n両ネイティブ版でそれぞれ25段階の確認を通過し、着地・採掘・設置・移動・再接続と\n停止後の保存を確認しました。8人分の保存状態はHealth20・死亡／ダメージ統計0、\n設置したCOBBLESTONEも保持。4条件それぞれで50内部／162周辺チャンク、\n10,649,600照明値の不一致0です。新しいテスト用MODは配布物に含めません。\n\nFabricは従来の動作を維持し、今回の任意受付は登録しません。変更していない生成処理の\n3ローダー各882座標の一致と、Fabricでの従来の速度・通常プレイ検証は元のJARの証跡を保持します。\n以前の約20.93%短縮を今回の受付変更による成果として扱っていません。\n\n### 導入\n\nMinecraft **26.3 / Java25**、Fabric **0.19.5 + API0.161.0+26.3**、\nForge **66.0.3**、NeoForge **26.3.0.13-beta**の対応JARを使用します。\n**通信プロトコル14／ネイティブ通信6**。サーバーと参加クライアントを同時に更新してください。\n\n任意の直接受付はForge／NeoForge各クライアントのJava引数\n`-Dworldgen_assist.native.client_request_ingress=true` で有効にします。\nまとめ送りはサーバーの `-Dworldgen_assist.native.request_batching=true` という別の実験です。\n詳しい支援設定は添付のINSTALL.ja.mdを参照してください。\n\n配布版は検証済みalpha.9-dev.2と版情報だけが異なることを照合しました。\n添付の検証記録とSHA256SUMS.txtに正確な証跡・配布ハッシュを記載しています。\nソースJARは導入用ではありません。\n\n信頼できる参加者の試用向けです。シード秘匿・共謀対策は未解決。\n完全地形は対象条件を満たすvanilla Overworldに限定され、任意の独自生成器は対象外です。\nサーバー再起動、継続探索・戦闘・危険な環境・長時間運用は未検証のため、**アルファを継続**します。\n\n## English\n\nAlpha.9 adds optional bounded native request admission without client MAIN waiting,\nconnection-bound revocation before respawn/disconnect/protocol changes, and safe\nMAIN restoration after original respawn completion. Old callbacks never revive;\nqueued consecutive respawns retain suspension. Native bounded 1..4-job batching\nis a separate switch. Both switches default false; remote assistance and seed\ndisclosure remain explicit. Generation, audit amounts and server authority remain.\n\nWeak i7-7700K server/two clients on a stronger i7-12700K PC/view32, same dev.2 JAR,\nboth assisted, batching disabled, one excluded warmup/three matched regions,\nMAIN first. Median matched NETWORK/MAIN ratios: Forge/NeoForge job RTT\n**-21.28%/-17.26%**, FULL **-2.92%/-0.20%**, receipt **-3.68%/-1.26%**,\nserver CPU **+9.99%/-3.43%**, tick p95 **+3.16%/-0.58%**.\nAll RTT repeats lower; FULL3/3 versus2/3 faster. Gains are small and Forge CPU\nrises. No opposite-order reproducibility, alpha.8 comparison, general assistance\nON/OFF proof or universal/substantial acceleration. Receipt excludes rendering.\nSeparate batching comparison demonstrated no speed gain.\n\nExactly three affected methods/three builds pass in one sequential batch.\nBoth native loaders pass all25 lifetime/gameplay/stopped-save/light steps;\nall8 saved players Health20/deaths0/damage0 with exact placed COBBLESTONE.\nEach of four own-light cases compares50 interior/162 halo chunks/10,649,600\nvalues with zero differences. Probe MODs/worlds/logs are excluded from assets.\nFabric registers no new native hooks. Prior unchanged generation three-loader882\nand Fabric performance/gameplay evidence retain original identities; the old\n20.93% figure is not attributed to this request-admission change.\n\nRequires Minecraft26.3/Java25 with Fabric0.19.5 + API0.161.0+26.3,\nForge66.0.3 or NeoForge26.3.0.13-beta. **Protocol14/native6: update both sides.**\nOptional client Java argument `-Dworldgen_assist.native.client_request_ingress=true`\n\n..."
+		},
+		{
+			"tag": "v0.1.0-alpha.8+mc26.3",
+			"published": "2026-10-07T15:02:39Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 619023332,
+					"name": "worldgen-assist-0.1.0-alpha.8+mc26.3.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.8%2Bmc26.3/worldgen-assist-0.1.0-alpha.8%2Bmc26.3.jar",
+					"size": 598944,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "a7567f942e497c53507483b61f71dd2881ccfad42a44a4ceb3233c759b75a926",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.8+mc26.3",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted Minecraft world generation.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "3b7c53636a2587bc0befaa54ee9d8efb808485dd21e833ffcef86a7ce233c0ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 250,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 619023340,
+					"name": "worldgen-assist-forge-0.1.0-alpha.8+mc26.3.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.8%2Bmc26.3/worldgen-assist-forge-0.1.0-alpha.8%2Bmc26.3.jar",
+					"size": 588673,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "3e570f38dd7d12679eed75d6225736b840077b471d30ecd6a1c6bb3cf8e21bc1",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.8+mc26.3",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted world generation.",
+							"minecraft": "[26.3,26.4)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "3b7c53636a2587bc0befaa54ee9d8efb808485dd21e833ffcef86a7ce233c0ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 244,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 619023354,
+					"name": "worldgen-assist-neoforge-0.1.0-alpha.8+mc26.3.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.8%2Bmc26.3/worldgen-assist-neoforge-0.1.0-alpha.8%2Bmc26.3.jar",
+					"size": 579212,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "8aede0b8f8d75d483ac92f834a049adc173e73bda710167be4a6f56a4d48aa7a",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.8+mc26.3",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted world generation.",
+							"minecraft": "[26.3,26.4)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "3b7c53636a2587bc0befaa54ee9d8efb808485dd21e833ffcef86a7ce233c0ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 238,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Worldgen Assist 0.1.0-alpha.8 — Minecraft 26.3\n\n## 日本語\n\n弱いサーバーと強いクライアントでの地形生成を改善した、新しいアルファ版です。\n\n- 既存の生成依頼・依存関係を早く観測し、上限付きの依頼索引と結果キャッシュで待機を減らしました。\n- サーバー上のFEATURESと照明初期化の順序・領域所有を管理し、重ならない生成を並列実行できます。\n  ステージの本体終了後も、元の適用・状態公開が終わるまで必要な保護を保持します。\n- 完全地形の反映で元のパレット処理を再利用し、バイオーム入力の再計算を減らしました。\n  実際の依頼に、サーバーが完了した3×3 BIOMESの不変データを渡せます。\n- バイオームだけが異なるクライアント結果は、地形全体が一致する場合に両候補を保持し、\n  反映直前のサーバーの入力と完全一致する元の候補を選びます。合わなければ通常生成へ戻ります。\n- 明示設定、別クライアント照合、秘密のサーバー監査、所有者・世代・期限・範囲・反映前検査を維持します。\n  支援と新機能は既定で無効です。仮描画はありません。\n\n### 測定結果と検証範囲\n\n弱いi7-7700Kサーバーと、強いi7-12700K上の2クライアント、距離32、\n各条件ウォームアップ1回・測定3回で、順序を逆にして比較しました。\n支援なし／ありで同じJAR、同じcooperative NOISE・parallel FEATURESを使用しています。\n\n| 指標 | 支援ありの変化 |\n| --- | ---: |\n| チャンク完成（FULL） | **20.93%短縮** |\n| 両クライアントへの受信 | **21.20%短縮** |\n| サーバーCPU時間 | **19.63%減少** |\n| tick処理時間p95 | **8.95%増加** |\n\n同じ領域ごとの6組の比率の中央値です。完成・受信・CPUは全6組で改善し、\ntick p95は全6組で悪化しました。6組は同じ3座標を再利用しています。\n各回10,658タスク、各人3,461必須チャンク受信を確認。受信は描画完了ではありません。\nalpha.7との直接比較、新入力変更だけの効果、他環境での保証にはしていません。\n\n最新の対象4テスト・3ビルドが一括で成功。Fabric／Forge／NeoForgeそれぞれ\n882必須座標で地形・装飾・保存構造物・照明の不一致0でした。\nFabricの通常サバイバル検証も支援なし／あり・両参加者で着地、採掘、設置、再接続を通過。\n停止後の4人分の保存状態はHealth20・死亡／ダメージ統計0、設置ブロックを保存しました。\n実際の操作地点周辺で各条件50内部／162周辺チャンク、10,649,600照明値が一致しました。\n\n配布版は検証済みdev.23と版情報のみ異なることを確認しました。\n元の実行証跡は元のJARに紐づけ、公開版を新規実行したとは扱いません。\n詳細・配布ハッシュは添付の検証記録に記載しています。\n\n### 導入と制限\n\nMinecraft **26.3 / Java25**、Fabric **0.19.5 + API0.161.0+26.3**、\nForge **66.0.3**、NeoForge **26.3.0.13-beta**の対応JARを使います。\n**通信プロトコル14／ネイティブ通信5**のため、サーバーと参加者を同時に更新してください。\n添付のINSTALL.md／INSTALL.ja.mdの実験設定が必要です。\n\nシード開示を明示的に選ぶ信頼できる参加者向けです。秘匿・共謀への耐性は未解決。\n完全地形は対応するvanilla Overworldに限定され、任意の独自生成器は対象外です。\nネイティブ版の通常プレイ、サーバー再起動、継続探索・戦闘・危険な環境・長時間運用は\n未検証で、**β版にはしていません**。既存の失敗記録は保持しています。\nソースJARは導入用ではありません。ワールドと検証用ログは添付していません。\n\n## English\n\nThis alpha improves generation on a weaker server assisted by stronger clients.\nIt adds indexed bounded early demand, cached results, original-format bulk\napplication, guarded parallel FEATURES/light initialization with full original\nstage-publication ownership, and immutable completed server BIOMES inputs for\nactual complete-terrain assignments. Biome-only peer disagreement can retain\nboth unchanged terrain-equal outputs and select the original candidate exactly\nmatching current authoritative inputs before writes. Unsupported cases retain\nlocal fallback; no provisional rendering.\n\nSame dev.23 JAR on both sides of each comparison, weaker i7-7700K server/two\nclients sharing a stronger i7-12700K PC, view32, identical cooperative NOISE/\nparallel FEATURES, one warmup/three measured regions in each execution order:\nmedian six paired ratios FULL **-20.93%**, receipt **-21.20%**, server CPU\n**-19.63%**, all six improve; tick p95 **+8.95%**, all six worsen. Six pairs\nreuse three coordinates. Each repeat10,658 tasks/3,461 required receipts per\nowner. Receipt excludes rendering. Not an alpha.7 comparison, isolated causal\nattribution to the biome-input edit, or a general guarantee.\n\nLatest four affected methods/three builds pass; all882 required coordinates per\nFabric/Forge/NeoForge fixture agree for terrain, decoration, saved structures\nand lighting. Basic peaceful survival landing/mining/placing/client reconnect\npasses on Fabric in both conditions/both actors. All four stopped saved players\nhave Health20/deaths0/damage0, exact placed blocks persist. Each condition's\nactual interaction sites pass50 interior/162 halo chunks/10,649,600 light values.\n\nRequires Minecraft26.3/Java25, Fabric0.19.5 + API0.161.0+26.3, Forge66.0.3 or\nNeoForge26.3.0.13-beta. **Protocol14/native channel5 requires updating server\nand participating clients together.** Offload, raw-seed disclosure, complete/\npeer and new experimental policies remain explicit/off by default. Read the\nattached measured-profile guides and exact verification/checksums. Release\npackaging verified version metadata is the sole dev.23 runtime difference;\nprior evidence retains original identities, without a fresh release runtime run.\n\n\n..."
+		},
+		{
+			"tag": "v0.1.0-alpha.7+mc26.3",
+			"published": "2026-10-04T15:22:25Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 610076301,
+					"name": "worldgen-assist-0.1.0-alpha.7+mc26.3.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.7%2Bmc26.3/worldgen-assist-0.1.0-alpha.7%2Bmc26.3.jar",
+					"size": 466451,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "5afda9bf8f17fdd9b81913efe912b2939630d878ee0e4be6703dc64ab5f67505",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.7+mc26.3",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted Minecraft world generation.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "3b7c53636a2587bc0befaa54ee9d8efb808485dd21e833ffcef86a7ce233c0ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 202,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 610076345,
+					"name": "worldgen-assist-forge-0.1.0-alpha.7+mc26.3.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.7%2Bmc26.3/worldgen-assist-forge-0.1.0-alpha.7%2Bmc26.3.jar",
+					"size": 457104,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "95991456f42bc91ef27d64da5fa8f06fa67d90423da1f7c069a95da34a37c2e9",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.7+mc26.3",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted world generation.",
+							"minecraft": "[26.3,26.4)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "3b7c53636a2587bc0befaa54ee9d8efb808485dd21e833ffcef86a7ce233c0ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 196,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 610076386,
+					"name": "worldgen-assist-neoforge-0.1.0-alpha.7+mc26.3.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.7%2Bmc26.3/worldgen-assist-neoforge-0.1.0-alpha.7%2Bmc26.3.jar",
+					"size": 444996,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "ad4cd467d497f1eb813319c3acfc40abae2f23d5a64851bc8fe29d98e686bbbe",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.7+mc26.3",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted world generation.",
+							"minecraft": "[26.3,26.4)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "3b7c53636a2587bc0befaa54ee9d8efb808485dd21e833ffcef86a7ce233c0ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 189,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Worldgen Assist 0.1.0-alpha.7 — Minecraft 26.3\n\n## 日本語\n\n地形計算の分散範囲を広げ、サーバーの計算量を減らしたアルファ版です。\n**大幅な高速化は未達のため、β版にはしていません。**\n\n- Minecraft **26.3 / Java 25**。Fabric **0.19.5** + API **0.161.0+26.3**、\n  Forge **66.0.3**、NeoForge **26.3.0.13-beta** の専用JARを配布します。\n- 通信プロトコルは **12**。サーバーと参加クライアントを同時に更新してください。\n- 明示的に選んだOverworldの完全地形モードでは、地形・表面・洞窟の計算結果を返します。\n  サーバーが渡す上限付きの構造物情報により、村などの周辺地形も支援できます。\n  構造物・木・鉱石の配置、照明、保存、ゲームプレイはサーバーが管理します。\n- 別クライアントによる全体照合を追加しました。各人の最初の2件をサーバーで全計算して\n  確認した後、適格な別クライアントがいる場合は全体一致とサーバー側の秘密の1/64抽選を\n  使います。通常のサーバー検証は1/8です。途中失敗・世代変更・期限・上限を確認し、\n  対応外の場合は通常生成へ戻ります。照合相手もサーバーが割り当てます。\n- 不要な依頼の取り消し、既存の生成依存関係の早期観測、バイオーム計算のキャッシュ、\n  非同期待機と検証受付の改善を含みます。仮描画は実装していません。\n\n### 実機での結果\n\n弱いサーバーPC（i7-7700K、CPU制限なし）と強いクライアントPC（i7-12700K上で2人分）を\n使い、距離32、1回ウォームアップ後に同じ領域を3回ずつ比較しました。両条件とも同じ\nサーバー並列生成方式です。以下は**同じ領域ごとの比率の中央値**です。\n\n| 指標 | 支援ありの変化 | 改善回数 |\n| --- | ---: | ---: |\n| チャンク完成（FULL） | **2.24%短縮** | 3/3 |\n| 両クライアントへの到着 | **1.74%短縮** | 3/3 |\n| サーバーCPU時間 | **20.53%減少** | 3/3 |\n| tick処理時間p95 | **0.32%増加** | 1/3 |\n\n各回10,658生成タスク、各人3,461チャンクの受信を確認しました。受信は描画完了を含みません。\n測定順は通常生成→支援で、逆順・長時間運用・他構成での効果は未確認です。\nalpha.6との直接比較ではありません。サーバーの計算量は減りましたが、待ち時間の短縮は小幅です。\n\n変更に関係する7テストと3ローダービルドを一括実行しました。通常生成との地形一致は\nFabric **1,813**、Forge **1,971**、NeoForge **2,002**チャンクで不一致0件。\n構造物周辺の新しい経路を実際に反映した一致確認も各ローダーで通過しました。\n公開JARは検証済みdev.16と**版情報のみ異なる**ことを照合済みです。元の検証を公開JARの\n新規実行とは扱いません。詳細とハッシュは添付の検証記録に記載しています。\n\n支援・完全地形・別クライアント照合は既定で無効です。シードを開示する明示設定が必要で、\n信頼できる参加者向けです。シード秘匿・悪意ある参加者や共謀への耐性は未解決です。\n完全地形モードは対応するvanilla Overworldに限定され、任意の独自生成器は対象外です。\n添付の日英導入案内とチェックサムを確認してください。ソースJARは導入用ではありません。\n\n## English\n\nThis alpha expands terrain offload and reduces server computation. Substantial\nacceleration remains unachieved, so this is **not a beta**.\n\nRequires Minecraft26.3/Java25; separate Fabric0.19.5 + API0.161.0+26.3,\nForge66.0.3 and NeoForge26.3.0.13-beta artifacts. **Protocol12 requires updating\nthe server and participating clients together.** Explicit complete-terrain mode\nreturns terrain/surface/carver output for eligible vanilla Overworld contexts,\nincluding bounded server-issued structure shaping. Structures/features/light/\nsaving/gameplay remain server-owned; there is no provisional rendering.\n\nOptional distinct-client verification compares entire immutable outputs. Both\nowners first pass two independent server full audits. With a suitable trusted\npeer, private server audit draws use1/64; default server verification uses1/8.\nFailures, disconnects, epochs, bounds and guarded final application retain local\nfallback. Peer collusion/hostile-client proof and seed secrecy remain unresolved.\nRemote/seed disclosure/complete/peer choices remain explicit and off by default.\n\nOn an unrestricted weaker i7-7700K server and two clients sharing a stronger\ni7-12700K PC, view32/one warmup/three same-region repeats, **median paired\nratios** improved FULL2.24%, receipt1.74%, server CPU20.53%, all three repeats;\ntick p95 increased0.32%(only one repeat lower). Both conditions used the same\ncooperative backend. Each repeat completed10,658 tasks and3,461 receipts per\nowner. Receipt excludes rendering. Vanilla-first order only; not an alpha.6\ncomparison or a general speed guarantee. CPU distribution improved much more\nthan completion latency.\n\nSeven affected tests/three builds passed. Fresh matching terrain digests:\nFabric1,813/Forge1,971/NeoForge2,002,zero mismatch,including actual shaped and\npeer-approved applications. Native view4 is functional evidence only. Release\npackaging verifies that only version metadata differs from tested dev.16;\noriginal runtime identities are retained. Arbitrary generators/mod compatibility\nand long sessions remain unverified. Read the attached guides, verification and\nchecksums; do not install source JARs."
+		},
+		{
+			"tag": "v0.1.0-alpha.6+mc26.3",
+			"published": "2026-10-03T03:33:03Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 607057223,
+					"name": "worldgen-assist-0.1.0-alpha.6+mc26.3.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.6%2Bmc26.3/worldgen-assist-0.1.0-alpha.6%2Bmc26.3.jar",
+					"size": 363675,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "2e98caa38f6e7fa020b97bc2093f4904c767ba0e50a00d93cf2a5c47355a0d3d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.6+mc26.3",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted Minecraft world generation.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "3b7c53636a2587bc0befaa54ee9d8efb808485dd21e833ffcef86a7ce233c0ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 164,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 607057270,
+					"name": "worldgen-assist-forge-0.1.0-alpha.6+mc26.3.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.6%2Bmc26.3/worldgen-assist-forge-0.1.0-alpha.6%2Bmc26.3.jar",
+					"size": 354926,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "94945ed1195a282c52f6b818f78cdaea9f68fd4f13267cf21c323c5bb398023f",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.6+mc26.3",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted world generation.",
+							"minecraft": "[26.3,26.4)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "3b7c53636a2587bc0befaa54ee9d8efb808485dd21e833ffcef86a7ce233c0ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 158,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 607057297,
+					"name": "worldgen-assist-neoforge-0.1.0-alpha.6+mc26.3.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.6%2Bmc26.3/worldgen-assist-neoforge-0.1.0-alpha.6%2Bmc26.3.jar",
+					"size": 342871,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "ba83ca3a0106d0299b17241b993f9a39e5da8b7014d06f6603d720afa42ae7d6",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.6+mc26.3",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted world generation.",
+							"minecraft": "[26.3,26.4)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "3b7c53636a2587bc0befaa54ee9d8efb808485dd21e833ffcef86a7ce233c0ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 151,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Worldgen Assist 0.1.0-alpha.6 — Minecraft 26.3\n\n## 日本語\n\nクライアントの計算をサーバーの新規地形生成へ活用する改善をまとめたアルファ版です。\nサーバーが担当範囲と最終ワールド状態を管理し、各参加者が本人の地形密度計算を支援します。\n\n- Minecraft Java Edition **26.3 / Java25**。Fabric Loader **0.19.5** + Fabric\n  API **0.161.0+26.3**、Forge **66.0.3**、NeoForge **26.3.0.13-beta** の\n  各導入用JARとソースJARを配布します。`-sources.jar`は導入用ではありません。\n- **サーバーと参加クライアントをalpha.6へ同時更新してください。** 通信プロトコルは\n  **6**になり、alpha.5（プロトコル4）とは支援通信できません。\n- 対応するOverworld生成では補間前の5種類の地形グリッドと表面データを返し、\n  大きな完成密度データの転送を減らします。ブロック配置・装飾・保存などはサーバーが行います。\n- 未生成チャンクの早期予告、生成開始後の不要な依頼・結果の取り消し、検証処理の\n  生成コンテキスト再利用を追加し、計算・管理の無駄を減らします。\n- 任意のサーバー並列生成、上限付きの依頼枠拡大、返答待ちと独立した別チャンクの\n  処理を重ねる実験設定を提供します。上限・本人・通信世代・期限・通常生成への復帰を維持します。\n- Fabricクライアントは通信受信から上限付き計算キューへ依頼を渡し、描画スレッドでの\n  受付待ちを減らします。Forge／NeoForgeは既存の受信経路を維持します。\n- 対象を絞った一括検証と32チャンク全範囲の測定スクリプト、CPU診断を追加しました。\n\n### 性能と検証\n\n別PCのサーバーを2論理CPU・Java認識CPU数2へ制限し、2人接続で測定した3回の中央値です。\n**両条件とも同じサーバー並列生成方式**で、支援の有無を比較しています。\n下表は通常の既定値ではなく、添付導入案内の非同期待機・依頼枠拡大を使った実験設定です。\n\n| 距離32 | 支援なし | 支援あり | 変化 |\n| --- | ---: | ---: | ---: |\n| チャンク完成（FULL） | 298.62秒 | 293.00秒 | **1.88%短縮** |\n| 両クライアントへの到着 | 314.19秒 | 309.66秒 | **1.44%短縮** |\n| サーバーCPU時間 | 624.86秒 | 583.50秒 | **6.62%減少** |\n| tick処理時間p95 | 49.91ms | 51.72ms | **3.64%増加** |\n\n完成・受信は3回中2回改善、CPU時間は3回とも減少しました。各回10,658件の地形生成と\n各人3,461件の全件受信を確認しました。距離10では完成6.66%・受信7.20%・CPU9.65%減少。\nただし実行順固定の3回比較で、**安定した高速化や一般的な効果は未確立**です。\nalpha.5との直接比較でもありません。受信は描画完了を含みません。\n距離32の最大200ms待機から通常生成への復帰は158/225/173件あり、依頼自体の期限切れとは区別しています。\n\n最新のFabric・Overworld・2人接続の一致確認で、**共通1,813チャンクの不一致0件**、\n両人の非同期待機後のグリッド利用を確認しました。3ローダーの配布JARは検証済みdev.12と\n版情報のみ異なり、コード・Mixin・その他のリソース、ソースJARの内容は一致します。\n元の候補の検証記録を配布版の新規実行として扱っていません。\nForge／NeoForgeの変更後の実行、長時間運用、任意のMODとの互換性は未確認です。\n\n**リモート支援は既定で無効**です。有効化にはワールドシードを参加者へ開示する別の\n明示設定が必要です。信頼できる参加者の使い捨て検証ワールド向けで、シード秘匿性は未解決です。\n抜き取り検証は悪意ある結果のすべてを認証するものではありません。\n任意の独自生成器・クライアントにないノイズ定義、26.2の公開シード専用経路は対象外です。\n添付の日英導入案内・検証記録・`SHA256SUMS.txt`を確認してください。\n\n## English\n\nThis alpha packages client-assisted terrain improvements while retaining\nserver-owned assignment, bounded validation, local fallback and final world state.\n\n- Requires **Minecraft26.3 / Java25**. Separate installable/source JARs for\n  Fabric **0.19.5** + API **0.161.0+26.3**, Forge **66.0.3** and NeoForge\n  **26.3.0.13-beta**. Update server and participating clients together:\n  **protocol6 is incompatible with alpha.5 protocol4**.\n- Eligible Overworld work returns five pre-interpolation terrain grids and\n  surface intermediates. Adds earlier generation hints, obsolete-result\n  retirement, private cached validation contexts and bounded larger windows.\n- Optional cooperative server generation and asynchronous demand waiting let\n  independent work continue. Owner/epoch/deadline/cancellation limits remain.\n  Fabric clients admit requests from the network into bounded worker queues;\n  native loaders retain their existing request route.\n- Adds focused sequential gates, full-distance32 comparisons and CPU diagnostics.\n\nWith an **explicit experimental profile**, a separate server restricted to two\nlogical CPUs/JVM2 and two clients at distance32 showed median FULL\n**298.62s →293.00s (-1.88%)**, receipt **314.19s →309.66s (-1.44%)**, server\nCPU **624.86s →583.50s (-6.62%)**, tick p95 **49.91ms →51.72ms (+3.64%)**.\nBoth modes used the same cooperative scheduler. Completion/receipt improved\ntwo of three repeats, CPU all three; **stable/general speedup is not established**.\nThis fixed-order comparison is not alpha.5 versus alpha.6. Receipt excludes\nrender completion. Short demand waits fell back158/225/173 times at distance32.\n\nLatest Fabric Overworld two-owner correctness matched **1,813 shared NOISE\ndigests**, both owners actually awaited and consumed grids. All final JAR\nentries except exact version metadata match the tested dev.12 candidates;\nall source archive entries match. Runtime evidence retains original hashes.\nLatest native runtime, long sessions and arbitrary mod compatibility are unverified.\n\n\n..."
+		},
+		{
+			"tag": "v0.1.0-alpha.5+mc26.3",
+			"published": "2026-09-29T14:07:59Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 598373787,
+					"name": "worldgen-assist-0.1.0-alpha.5+mc26.3.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.5%2Bmc26.3/worldgen-assist-0.1.0-alpha.5%2Bmc26.3.jar",
+					"size": 312274,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "629085b905a1b86da6e8a62a79c2b8c452063568807a770ab7e0ef94cb539eeb",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.5+mc26.3",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted Minecraft world generation.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "3b7c53636a2587bc0befaa54ee9d8efb808485dd21e833ffcef86a7ce233c0ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 140,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 598373858,
+					"name": "worldgen-assist-forge-0.1.0-alpha.5+mc26.3.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.5%2Bmc26.3/worldgen-assist-forge-0.1.0-alpha.5%2Bmc26.3.jar",
+					"size": 308272,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "e029dd1c80ca6cab5467c67fa2c29c0d19e0a2ccd611a5715a54e1d14df5ef3d",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.5+mc26.3",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted world generation.",
+							"minecraft": "[26.3,26.4)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "3b7c53636a2587bc0befaa54ee9d8efb808485dd21e833ffcef86a7ce233c0ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 137,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 598373928,
+					"name": "worldgen-assist-neoforge-0.1.0-alpha.5+mc26.3.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.5%2Bmc26.3/worldgen-assist-neoforge-0.1.0-alpha.5%2Bmc26.3.jar",
+					"size": 296213,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "78ce94a79fb92ac222ac2ae6759997462a375e3092e8af21e0619ab4080177b3",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.5+mc26.3",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted world generation.",
+							"minecraft": "[26.3,26.4)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "3b7c53636a2587bc0befaa54ee9d8efb808485dd21e833ffcef86a7ce233c0ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 130,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Worldgen Assist 0.1.0-alpha.5 — Minecraft 26.3\n\n## 日本語\n\nクライアントの計算能力を新規地形生成に利用する仕組みを改善したアルファ版です。\nサーバーが依頼範囲・最終ワールド状態を管理し、参加者は本人の地形密度計算を支援します。\n\n- Minecraft Java Edition **26.3 / Java 25**。Fabric Loader **0.19.5** + Fabric\n  API **0.161.0+26.3**、Forge **66.0.3**、NeoForge **26.3.0.13-beta** の\n  各導入用 JAR とソース JAR を配布します。`-sources.jar` は導入用ではありません。\n- **サーバーと参加クライアントを alpha.5 に揃えてください。** プロトコル4の\n  float32密度転送に変更し、非圧縮密度データを従来の半分にしました。\n  alpha.4（プロトコル3）とは支援通信できません。\n- 生成コンテキストを再利用し、クライアント計算中に検証用サンプルを準備します。\n  実際の生成予定を利用した先行計算とキャッシュ、応答時間に合わせた待機、\n  複数参加者への公平な割り当てを追加しました。\n- クライアントは計算スレッドから返信します。Fabric はサーバーのメインスレッドを\n  経由する受信待ちを減らし、最大4依頼のまとめ送りに対応します。\n  Forge／NeoForge は個別依頼と従来のサーバー受信経路を維持します。\n- 両側に互換ノイズ設定がある追加ディメンションと、vanilla ノイズ生成器を明示的に\n  使うカスタムラッパーを実験的に受け入れます。任意の独自生成器への対応ではありません。\n- 最新候補の Fabric・Overworld・2人接続の一致検証で、共有 NOISE ダイジェスト\n  **1,802件が一致**しました。配布版は3ローダーとも候補 JAR とバージョン情報だけが\n  異なり、その他のアーカイブ内容はすべて一致しています。配布版でゲームを再実行した\n  検証ではなく、元の候補に紐づく証跡と同一内容の確認です。\n\n### 性能と制限\n\n別PCのサーバーを2論理CPUに制限し、クライアント2台で測定した3回の中央値です。\n\n| 対象9×9範囲の完了時間 | 支援なし | 支援あり |\n| --- | ---: | ---: |\n| 地形生成（NOISE） | 11.26秒 | 7.45秒 |\n| チャンク完成（FULL） | 14.58秒 | 14.84秒 |\n| 両クライアントへの到着 | 17.44秒 | 17.80秒 |\n\n地形生成は約34%前倒しできましたが、**プレイヤーの待ち時間短縮は未達成**です。\nこの測定は前回リリースとの直接比較ではありません。測定中には支援待ちの期限切れに\nよる通常生成への切り替えが20件ありました。任意の環境での高速化は保証しません。\n最新変更の Forge／NeoForge 実行検証、長時間運用、任意のMODとの互換性は未確認です。\n\n**リモート支援は既定で無効**です。有効化には別の明示設定でワールドシードを参加者へ\n開示します。信頼できる参加者と使い捨ての検証ワールド向けです。非公開シードの秘匿性は\n未解決で、26.2の公開シード専用 transcript 経路は26.3に含まれません。\n添付の日英導入案内・検証記録・`SHA256SUMS.txt` を確認してください。\n\n## English\n\nThis alpha improves client-assisted terrain computation while keeping job\nassignment, validation and final world state authoritative on the server.\n\n- Requires **Minecraft Java Edition 26.3 / Java 25**. Separate installable and\n  source JARs are provided for Fabric **0.19.5** + Fabric API **0.161.0+26.3**,\n  Forge **66.0.3**, and NeoForge **26.3.0.13-beta**.\n- Upgrade the server and all participating clients to **alpha.5** together.\n  Protocol **4** transports exact float32 densities, halving raw density bytes.\n  Assistance is incompatible with alpha.4's protocol 3.\n- Adds context reuse, authoritative sample preparation during client work,\n  observed-generation prefetch, ready-result caching, adaptive waiting and\n  fair admission across owners. Clients reply directly from their workers.\n- Fabric adds connection-scoped network ingress before the main-thread packet\n  queue and optional batches of up to four requests. Forge/NeoForge retain\n  individual requests and their previous server receive routes.\n- Experimentally admits compatible additional dimensions and explicit vanilla\n  noise delegates; arbitrary custom algorithms and client-unavailable noise\n  registries are unsupported.\n- The latest Fabric Overworld two-owner candidate matched **1,802** shared NOISE\n  digests. All three release JARs differ from their saved candidates only in\n  version metadata; every other archive entry matches. Runtime evidence retains\n  its original candidate identity rather than being relabeled as a final-JAR run.\n\nThe selected three-repeat benchmark used a separate server limited to two\nlogical CPUs and two clients. Median target NOISE-region completion was\n**11.26s vanilla / 7.45s assisted**, FULL completion **14.58s / 14.84s**, and\nreceipt by both clients **17.44s / 17.80s**. **Player wait-time reduction remains\nunproven.** This is not a direct comparison with alpha.4. Twenty measured demand\nwaits fell back to local generation. Latest native-loader runtime, long sessions\nand arbitrary mod compatibility are not verified.\n\nRemote assistance is **off by default**. A separate explicit choice discloses\nthe raw seed to trusted participants. Use disposable test worlds; private-seed\nconfidentiality remains unresolved. The 26.2 public-seed transcript fixture is\nnot included. Read the attached installation notes, verification record and\n`SHA256SUMS.txt`. Sources JARs are for developers, not installation.\n\n\n..."
+		},
+		{
+			"tag": "v0.1.0-alpha.3+mc26.2",
+			"published": "2026-09-23T09:50:04Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 583471120,
+					"name": "worldgen-assist-0.1.0-alpha.3+mc26.2.jar",
+					"url": "https://github.com/GenichiMaruo/WorldgenAssist/releases/download/v0.1.0-alpha.3%2Bmc26.2/worldgen-assist-0.1.0-alpha.3%2Bmc26.2.jar",
+					"size": 457239,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "ffedd9d8b780a6496500aca955d1d62c3ab7de4ff85209caa55d760d8bdf2ac9",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "worldgen_assist",
+							"version": "0.1.0-alpha.3+mc26.2",
+							"name": "Worldgen Assist",
+							"description": "Experimental client-assisted Minecraft world generation.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 212,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Worldgen Assist 0.1.0-alpha.3 — Minecraft 26.2\n\n## 日本語\n\n信頼できる参加者のクライアントが、それぞれ本人の新規地形生成を同時に支援する\n実験的プレリリースです。trusted raw-seed経路の対象を vanilla の Overworld・\nNether・End に広げ、**設定 → WorldgenAssist** にゲーム内設定画面を追加しました。\nクライアントの参加設定は再接続後、サーバー方針は再起動後に反映されます。\nリモートからサーバー方針を変更できるのは管理者だけです。\n\n- Minecraft Java Edition **26.2 / Fabric Loader 0.19.3 / Fabric API\n  0.156.0+26.2 / Java 25**（検証JDK 25.0.4）。サーバーと参加する\n  クライアントに同じ `worldgen-assist-0.1.0-alpha.3+mc26.2.jar` を入れてください。\n  `-sources.jar` は導入用ではありません。\n- **リモート支援は既定で無効**。trusted raw-seed経路は別の明示設定でシードを\n  クライアントに開示します。transcriptフィクスチャは公開シード **8675309のみ**。\n  非公開シードの秘匿性と公開サーバーでの安全性は未解決です。\n- 3組の選択した全ディメンション正しさ検証では、共有NOISEダイジェスト\n  **4,284個**が一致。264テスト/58スイートのチェックポイント後、最終JARの\n  設定修正は対象を絞ったテストとビルドで確認しました。全テストやゲーム内での\n  接続済み設定画面操作は最終JARで再実行していません。\n- 12組の性能測定では、**すべて支援ありの処理量が通常生成を下回りました**。\n  高速化は実証していません。測定JARと最終JARの差は設定関連クラスのみです。\n  通常生成サーバーの終了が時折失敗し、検証ログにはオフライン認証・Realms\n  エラーもあります。\n\n添付の日英導入案内と `SHA256SUMS.txt` を確認してください。MOD追加ディメンション、\nカスタムジェネレーター、大規模な人数や長時間運用は保証しません。\n\n## English\n\nThis experimental prerelease lets trusted players' clients concurrently assist\ntheir own eligible new terrain. The trusted raw-seed route now covers vanilla\nOverworld, Nether and End. **Options → WorldgenAssist** opens the in-game\nsettings. Client participation applies on reconnect; saved server policy needs\na server restart and remote edits require administrator permission.\n\n- Requires **Minecraft Java Edition 26.2, Fabric Loader 0.19.3, Fabric API\n  0.156.0+26.2 and Java 25** (verified with JDK 25.0.4). Install the same\n  `worldgen-assist-0.1.0-alpha.3+mc26.2.jar` on server and participating clients.\n  The sources JAR is for developers.\n- **Remote assistance is off by default.** Trusted raw-seed mode explicitly\n  discloses the seed to clients; the separate transcript fixture accepts only\n  public seed **8675309**. Private-seed confidentiality and hostile-server\n  safety remain unresolved.\n- Three selected all-dimension correctness pairs matched **4,284** shared\n  NOISE digests. After a 264-test/58-suite checkpoint, final-JAR settings fixes\n  passed focused tests and a build. The full suite and connected settings-menu\n  exchange were not rerun on the final JAR.\n- Assisted throughput was **lower in all twelve measured conditions**. No\n  speedup is demonstrated. The measured and final JARs differ only in settings\n  classes. An intermittent vanilla server shutdown and offline authentication/\n  Realms errors remain in the evidence logs.\n\nUse the attached English/Japanese installation notes and `SHA256SUMS.txt`.\nMod-added dimensions, custom generators, large groups and long-running use are\noutside verified scope.\n\n[Verification details / 検証詳細](https://github.com/GenichiMaruo/WorldgenAssist/blob/v0.1.0-alpha.3%2Bmc26.2/docs/releases/v0.1.0-alpha.3%2Bmc26.2-verification.md)"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

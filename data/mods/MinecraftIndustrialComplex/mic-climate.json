@@ -1,0 +1,257 @@
+{
+	"repo": "MinecraftIndustrialComplex/mic-climate",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"created": "2026-09-18T00:36:06Z",
+	"pushed": "2026-10-24T09:44:15Z",
+	"releases": [
+		{
+			"tag": "0.2.2",
+			"published": "2026-10-24T09:44:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 671873802,
+					"name": "mic_climate-1.21.1-0.2.2.jar",
+					"url": "https://github.com/MinecraftIndustrialComplex/mic-climate/releases/download/0.2.2/mic_climate-1.21.1-0.2.2.jar",
+					"size": 282804,
+					"downloads": 45,
+					"inspection": 2,
+					"sha256": "67a887857eabd3249ebf094aa1711aabd0608a356670e87d33d764d220f19a7a",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "mic_climate",
+							"version": "0.2.2",
+							"name": "MIC Climate",
+							"description": "One ambient temperature for the whole pack: feeds Project Atmosphere into Thermoo and makes Power Grid, Destroy and friends read it",
+							"minecraft": "[1.21.1, 1.22)",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"neoforge",
+								"thermoo",
+								"fabric_api"
+							],
+							"suggests": [
+								"powergrid",
+								"destroy",
+								"projectatmosphere",
+								"thermoo_patches",
+								"legendarysurvivaloverhaul",
+								"crowns",
+								"deeptime",
+								"sereneseasons",
+								"sereneseasonsplus"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 125,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Hemisphere seasons read the right latitude on every Deep Time world, including its cube worlds.\n\nWhat changed since 0.2.1:\n\n- mic_climate now reads latitude and the planet's radius through Deep Time's planet API (`api.planet.DeepTimePlanet`, version 1), which answers on the sphere a world stands for whatever map lays it out in blocks. The old path went through the world's circumference and projection kind, which mean nothing on a cube world; the new one is right there, and on any map Deep Time adds later.\n- The old Deep Time paths and their fallbacks are gone (the latitude from z and the circumference, `circumferenceBlocks`, `projectionKind`); Deep Time's climate API 6 removed those calls.\n- `/mic_climate probe` prints the planet's radius (`planet R <km>`) where it printed the circumference and projection kind.\n\nUse it with a Deep Time that has the planet API (climate API 6 or later) and update the two together: with an older Deep Time the hemisphere seasons stay off (a warning is logged once). Deep Time stays an optional dependency and this jar needs no Deep Time to load.\n\nTested: `./gradlew build` and GameTests 37 of 37, with and without `-PwithAtmosphere`, on a server without Deep Time. Deep Time's own contract test (63 of 63 on its Lambert, Petroff-Guyou and cube worlds) covers the planet API.\n\nRequires: Minecraft 1.21.1, NeoForge 21.1.238 or newer, Thermoo 4.8 or newer, Forgified Fabric API. Optional: Power Grid, Destroy, Project Atmosphere, Serene Seasons, Serene Seasons Plus, Legendary Survival Overhaul, Create: CROWNS, Deep Time (with the planet API for the hemisphere seasons)."
+		},
+		{
+			"tag": "0.2.1",
+			"published": "2026-10-23T00:13:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 667473295,
+					"name": "mic_climate-1.21.1-0.2.1.jar",
+					"url": "https://github.com/MinecraftIndustrialComplex/mic-climate/releases/download/0.2.1/mic_climate-1.21.1-0.2.1.jar",
+					"size": 283500,
+					"downloads": 14,
+					"inspection": 2,
+					"sha256": "975c8be0d6f421cc105d696ffd7fe86da6f1ff01cc10e40492b9bcb7eed510e3",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "mic_climate",
+							"version": "0.2.1",
+							"name": "MIC Climate",
+							"description": "One ambient temperature for the whole pack: feeds Project Atmosphere into Thermoo and makes Power Grid, Destroy and friends read it",
+							"minecraft": "[1.21.1, 1.22)",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"neoforge",
+								"thermoo",
+								"fabric_api"
+							],
+							"suggests": [
+								"powergrid",
+								"destroy",
+								"projectatmosphere",
+								"thermoo_patches",
+								"legendarysurvivaloverhaul",
+								"crowns",
+								"deeptime",
+								"sereneseasons",
+								"sereneseasonsplus"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 125,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Fixes a multi-second server stall when Project Atmosphere loads a new region.\n\nWhat changed since 0.2.0:\n\n- Project Atmosphere 0.9.1.2 builds a new `RandomState` (the overworld noise settings, noise registry and seed) for every forecast square it samples: the start-up forecast, every region no save holds, every regeneration, on whichever thread asks. With C2ME every density function is then compiled again on that thread, which stalled the server tick for 1.2 to 3.6 s the first time something (for example a temperature query for a region Project Atmosphere had not loaded) asked. mic_climate now gives Project Atmosphere's biome sampler one shared `RandomState` per server, the same state Project Atmosphere would build, built once. The samples are identical; a GameTest compares 1,875 points against a state built Project Atmosphere's way.\n- The new mixin applies in any world with Project Atmosphere present, not only Deep Time or Destroy worlds. The other Project Atmosphere mixins are still limited to Deep Time or Destroy worlds.\n\nTested: `./gradlew build` and GameTests 37 of 37, with and without `-PwithAtmosphere`. On a full-pack server with rtsim, the server-thread samples on Project Atmosphere's new-region path went from 190 to 0 (the start-up forecast still builds its state once on the server thread).\n\nBuilt against Deep Time's climate API version 4; Deep Time stays an optional dependency and this jar needs no Deep Time to load.\n\nRequires: Minecraft 1.21.1, NeoForge 21.1.238 or newer, Thermoo 4.8 or newer, Forgified Fabric API. Optional: Power Grid, Destroy, Project Atmosphere, Serene Seasons, Serene Seasons Plus, Legendary Survival Overhaul, Create: CROWNS, Deep Time."
+		},
+		{
+			"tag": "0.2.0",
+			"published": "2026-10-16T23:40:21Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 648958046,
+					"name": "mic_climate-1.21.1-0.2.0.jar",
+					"url": "https://github.com/MinecraftIndustrialComplex/mic-climate/releases/download/0.2.0/mic_climate-1.21.1-0.2.0.jar",
+					"size": 265973,
+					"downloads": 55,
+					"inspection": 2,
+					"sha256": "db4798c91dfd7dd56e765df7c1fcb2eeb7bed2f472eb2a8d5391740b91906ccf",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "mic_climate",
+							"version": "0.2.0",
+							"name": "MIC Climate",
+							"description": "One ambient temperature for the whole pack: feeds Project Atmosphere into Thermoo and makes Power Grid, Destroy and friends read it",
+							"minecraft": "[1.21.1, 1.22)",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"neoforge",
+								"thermoo",
+								"fabric_api"
+							],
+							"suggests": [
+								"powergrid",
+								"destroy",
+								"projectatmosphere",
+								"thermoo_patches",
+								"legendarysurvivaloverhaul",
+								"crowns",
+								"deeptime",
+								"sereneseasons",
+								"sereneseasonsplus"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 116,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Hemisphere seasons on Deep Time planets, with latitude taken from Deep Time's own climate API.\n\nWhat is new since 0.1.0:\n\n- Seasons follow latitude on Deep Time planets. The southern hemisphere runs half a year out from the north, season strength fades toward the equator (none at the equator, full from 45 degrees), the tropical wet and dry band follows the sun, and Serene Seasons, Serene Seasons Plus and Project Atmosphere (snow, crops, colours, precipitation, temperature) all read the local season. Two server settings (`/mic_climate seasons on|off` and the full-season latitude) are synced to clients.\n- Latitude comes from Deep Time's climate API (version 4: `DeepTimeClimate.latitudeDeg(level, x, z)`), so it is right on the Petroff-Guyou world, where latitude depends on x as well as z. On a Lambert world, or with an older Deep Time (API 2), it falls back to the old formula. Without Deep Time, nothing changes.\n- Deep Time stays a soft dependency (`optional` in `neoforge.mods.toml`); this jar needs no Deep Time to load.\n- Project Atmosphere: the hybrid pollution hook and the regional sunlight hook share one scheduler mixin.\n\nBuilt against Deep Time commit 18764200 (climate API version 4). Tested on the VM: `./gradlew build` and GameTests 35 of 35, with and without `-PwithAtmosphere`; a Deep Time planet probe on a Petroff-Guyou world showed no seasons at z = 0 and opposite hemispheres at every x.\n\nRequires: Minecraft 1.21.1, NeoForge 21.1.238 or newer, Thermoo 4.8 or newer, Forgified Fabric API. Optional: Power Grid, Destroy, Project Atmosphere, Serene Seasons, Serene Seasons Plus, Legendary Survival Overhaul, Create: CROWNS, Deep Time."
+		},
+		{
+			"tag": "0.1.0",
+			"published": "2026-09-18T00:36:39Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 571469156,
+					"name": "mic_climate-1.21.1-0.1.0.jar",
+					"url": "https://github.com/MinecraftIndustrialComplex/mic-climate/releases/download/0.1.0/mic_climate-1.21.1-0.1.0.jar",
+					"size": 103447,
+					"downloads": 106,
+					"inspection": 2,
+					"sha256": "775dc48e96272af4de09c7fc04f75571a7e2aef812e2e63c395af96a846b82f6",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "mic_climate",
+							"version": "0.1.0",
+							"name": "MIC Climate",
+							"description": "One ambient temperature for the whole pack: feeds Project Atmosphere into Thermoo and makes Power Grid, Destroy and friends read it",
+							"minecraft": "[1.21.1, 1.22)",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"neoforge",
+								"thermoo",
+								"fabric_api"
+							],
+							"suggests": [
+								"powergrid",
+								"destroy",
+								"projectatmosphere",
+								"thermoo_patches",
+								"legendarysurvivaloverhaul",
+								"crowns"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 51,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Thermoo-based temperature connector for the MIC pack. Unifies ambient temperature across Project Atmosphere, Serene Seasons, Destroy pollution, Legendary Survival Overhaul, PowerGrid and CROWNS."
+		}
+	],
+	"readme": null,
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

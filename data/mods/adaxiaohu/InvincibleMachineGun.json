@@ -1,0 +1,437 @@
+{
+	"repo": "adaxiaohu/InvincibleMachineGun",
+	"host": "github",
+	"description": "A personal addon for the Meteor client that adds various entertainment modules.  some third‑party modules have been modified and are included.[English support!]",
+	"stars": 54,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2026-03-16T08:31:48Z",
+	"pushed": "2026-10-27T10:07:35Z",
+	"releases": [
+		{
+			"tag": "1.9.0",
+			"published": "2026-10-25T14:31:29Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 686232169,
+					"name": "InvincibleMachineGun1.21.11-1.9.0.jar",
+					"url": "https://github.com/adaxiaohu/InvincibleMachineGun/releases/download/1.9.0/InvincibleMachineGun1.21.11-1.9.0.jar",
+					"size": 18867385,
+					"downloads": 34,
+					"inspection": 2,
+					"sha256": "9af52dc2ef7ef29ffab28e724c538fcde9540b5dce5b2e7d0190ac77ab514008",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "invincible_machine_gun",
+							"version": "1.9.0",
+							"name": "Invincible Machine Gun",
+							"description": "没敌机关枪",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": [
+								"com_github_weisj_jsvg"
+							]
+						}
+					],
+					"icon": "5199dd6d800d33beb88347ab5a21d0f57cc9fc6ae2cdb2eb7eb658abf309dfad.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 1659,
+						"jars": [
+							"META-INF/jars/jsvg-2.0.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jsvg-2.0.0.jar!com/github/weisj/jsvg/parser/SVGLoader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jsvg-2.0.0.jar!com/github/weisj/jsvg/parser/impl/ExternalDocumentLoader.class": [
+									"java/net/URL.openStream"
+								],
+								"com/codigohasta/addon/modules/RTsearch.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"www.w3.org": [
+								"META-INF/jars/jsvg-2.0.0.jar!com/github/weisj/jsvg/parser/impl/StaxSVGLoader.class",
+								"META-INF/jars/jsvg-2.0.0.jar!com/github/weisj/jsvg/parser/resources/impl/MissingImageResource.class"
+							],
+							"i.imgur.com": [
+								"com/codigohasta/addon/modules/RTsearch.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "1.21.11没敌机关枪更新2026. 10.25\n版本号是1.9.0\n\n# 更新日志 — 1.9.0\n\n\n\n本次是一个大版本：**新增 34 个模块（其中 19 个 HUD）+ 4 套底层框架**，重写了 TP 移动发包体系，\n重做了矩阵着色器，把 sfIMG 子系统对齐到上游 1.1.7.2。另含账号合规整改\n所以如此咱就构建产物，相较以前也是有较大的体积增加，现在有18MB了，主要是那个字体占的空间多。\n<img width=\"180\" height=\"180\" alt=\"BOSH`6I}0$K4$(1I0CWD%SJ\" src=\"https://github.com/user-attachments/assets/ce61b70d-0b27-4bc9-b6f4-5c371c04f6f7\" />\n\n---\n\n## 一、新增模块\n已注册模块数：**110 → 143**（新增 34 个、停用 1 个）。\n### 1.1 HUD 类（19 个，新增 `IMG-hud` 分类）\n\n首次引入「继承 `Module` 的 HUD」体系，与 Meteor 原生 `HudElement` 区分开，统一挂在\n`AddonTemplate.IMG_HUD_CATEGORY` 下。\n<img width=\"147\" height=\"471\" alt=\"image\" src=\"https://github.com/user-attachments/assets/35f9ef8f-1507-4b15-9450-4b70acff0f75\" />\n<img width=\"1658\" height=\"872\" alt=\"image\" src=\"https://github.com/user-attachments/assets/3282847e-60e8-4b84-bd4f-1246ceaa7482\" />\n\n| 模块 | 说明 |\n|---|---|\n| `SakuraTargetHud` | 目标显示：圆角面板 + 旋转透视标 |\n| `ImgWatermarkHud` | 水印组件 |\n| `PlayerListHud` | 玩家列表，随身边玩家更新 |\n| `Notifier` | 通知器：图腾弹出、低耐久护甲横幅、死亡、药水到期、进出视野、被提及 |\n| `NotificationsWidget` | 模块开关提示弹窗（队列 + 出入场动画 + 音效） |\n| `ArmorHud` | 装备耐久（`AbstractPanelHud`） |\n| `InventoryHud` | 背包内容面板 |\n| `CooldownsHud` | 物品冷却 |\n| `PotionsHud` | 药水效果 |\n| `KeybindsHud` | 快捷键列表 |\n| `PvpResourcesHud` | PvP 资源余量 |\n| `FlightHud` | 鞘翅飞行数据 |\n| `ChestCounterHud` | 箱子计数（`AbstractRowHud`） |\n| `CoordHud` | 坐标 |\n| `FpsHud` | 帧率 |\n| `PingHud` | 延迟 |\n| `TpsHud` | 服务器 TPS |\n| `SpeedHud` | 移动速度 |\n| `CrosshairHud` | 自定义准星 |\n\n### 1.2 TP / 系列战斗（11 个）\n基础参考于gcore。\n| 模块 | 说明 |\n|---|---|\n| `TPServerEquivalent` | TP 服务端等价。 TP 体系的总开关，开启后各 TP 模块走「服务端等价」移动模拟 就可以通过原版 |\n| `GAntiLag` | 防回拉（原版规则实现，含同刻去重、异步处理） |\n| `TpAnchorAura` | 如来真掌·生锚打击（远程重生锚打击） |\n| `GLightTpAnchorAura` | 轻量·生锚打击（合法通路版本） |\n| `GcoreTpCrystalAura` | 如来真掌·魔术水晶（凭空在目标脚下生成水晶、瞬移引爆） |\n| `GAntiExplosion` | 如来真掌·凌波微步（爆炸前预判伤害 → 移开 → 打爆 → 回位）\n| `GTpaura` | TP 光环（打人的刀暂不好用没修） |\n| `GTpbot` | TP 机械人（一直瞬移到别人身边） |\n| `GcoreGTrap` | 困阵（黑曜石/重生锚围死目标） |\n| `GcoreWebAura` | 天罗地网（蜘蛛网 + 上下黑曜石封堵） |\n| `GSuperVClip` | 超级 VClip（一键垂直瞬移） |\n\n### 1.3 其它（4 个）\n\n| 模块 | 说明 |\n|---|---|\n| `StandGui` | 仿 Stand 菜单的 HUD 菜单（gta的菜单我模仿做一个） |\n| `AlienSprint` | 强制疾跑 Alien（Rotation 模式）—— 从注释状态重新启用 ，修了修还是没弄好转头模式|\n| `RoundRotation` | 第三人称显示服务端看到的朝向 没啥用 |\n| `GcoreTpDiagnostic` | TP 诊断（开发用，日志移动包与 s08 回拉） |\n\n### 1.4 新增命令\n\n- `ImgNotifyCommand`（`img-notify [type] [text] [seconds]`）：手动往通知系统塞一条通知，用于单独验证队列/动画/类型/图标/过期。\n\n### 1.5 停用\n\n- `TpAnchor` 从注册表移除，由 `TpAnchorAura` 取代。\n\n---\n\n## 二、新增底层框架（4 套）\n\n### 2.1 `utils/gcore` — TP 移动与战斗核心（56 个文件）\n最大的新增包。核心是**在客户端复刻服务端移动预算规则**：\n有这个就能做各种tp能力了\n\n- `GcoreMoveBudget` — 本 tick 已发移动包计数器（服务端 `receivedMovePacketCount - knownMovePacketCount` 的客户端镜像）\n- `GcoreMoveSequenceUtil` — 垫包序列规划（拱门路径、逐点模拟服务端阈值 `max(100, (10·i·speed)²)`）\n- `GcoreServerEquivMove` — 服务端等价移动模拟（按 `ThreadLocal` 区分调用方模块）\n- `GcoreTpUtil` / `GcoreTpAnchorUtil` / `GcoreTpCrystalUtil` / `GcoreTrapUtil` — 各模块的定位、放置、引爆流程\n- 另有爆炸预测、方块/实体/射线工具、任务队列、主线程派发等一批基础设施\n\n### 2.2 `utils/sakura` — 2D 渲染层（17 个新文件 + 16 个 mixin accessor）\n有这个就可以学到怎么绘制面板\n- `Shader2DUtil` — 圆角矩形、模糊、毛玻璃、故障、阴影、渐变等 2D 着色器封装\n- `SakuraTextRenderer` — 自带字形缓存与 CPU 裁剪的文本渲染\n- `SakuraSvgIcons` — SVG 图标栅格化 + `drawViaMesh()`（走 `MeshBuilder` 通路，不用裸 GL）\n- `GlStateSnapshot` — GL 状态快照/还原\n- `SakuraEntityPortrait` — 从模型 UV 反查生物头像（不硬编码贴图坐标）\n- `AbstractPanelHud` / `AbstractRowHud` — HUD 面板与行式 HUD 基类\n- `sakura.*TargetAccessor` × 16 — 让各战斗模块把当前目标暴露给 `SakuraTargetHud`\n\n### 2.3 `utils/standgui` — Stand 菜单框架（15 个新文件）\n好玩做的，“自从gta有be之后我就没再玩过gta。”\n状态、渲染、输入、树结构、历史、编辑器、命令、存档、快捷键分层拆分。\n\n### 2.4 `utils/notify` — 通知系统（6 个新文件）\n\n`ImgNotifications` 队列 + `ImgNotificationType` 类型色 + `NotifySounds` 音效 + `ArmorAlert` 低甲横幅状态机。\n\n### 2.5 其它\n\n- `utils/img/ImgPositionPredict` — 目标位置预判（NONE / LINEAR / EXP_WEIGHTED），供 如来神掌 降龙十八掌 索敌使用\n- `utils/alien/AlienRenderYawOffset` + 3 个 AlienSprint 配套 mixin 没修好的\n- `SfImgMixinPlugin` + `SlimefunHelperCompat` — 检测到独立 SlimefunHelper 模组时**自动跳过**本项目的 sfIMG mixin 包，避免两边 accessor 默认方法冲突导致 `IncompatibleClassChangeError` 可以多开\n- `SfConfigMigration` — sfIMG 配置路径迁移表（上游 1.1.7.2 重排了设置分组，不做迁移老配置会静默回默认值）\n\n---\n\n## 三、优化的模块\n\n\n..."
+		},
+		{
+			"tag": "1.7.1",
+			"published": "2026-09-13T14:47:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 561382440,
+					"name": "InvincibleMachineGun1.21.11-1.0.jar",
+					"url": "https://github.com/adaxiaohu/InvincibleMachineGun/releases/download/1.7.1/InvincibleMachineGun1.21.11-1.0.jar",
+					"size": 2336923,
+					"downloads": 134,
+					"inspection": 2,
+					"sha256": "aefbf53fed57e2ea9a56cd1b5034f5b1d8da12b92fcfa461145bde32402e56f7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "invincible_machine_gun",
+							"version": "1.0",
+							"name": "Invincible Machine Gun",
+							"description": "没敌机关枪",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": []
+						}
+					],
+					"icon": "5199dd6d800d33beb88347ab5a21d0f57cc9fc6ae2cdb2eb7eb658abf309dfad.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 460,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/codigohasta/addon/modules/RTsearch.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"i.imgur.com": [
+								"com/codigohasta/addon/modules/RTsearch.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 本次更新2个模块\n\n# 蓝调时刻着色器，模仿那种氛围，灰深蓝色多云天气，和高对比度的地面场景，描绘出深刻的时光。。。\n此着色器可能稍需电脑性能。。。\n\n<img width=\"1653\" height=\"869\" alt=\"image\" src=\"https://github.com/user-attachments/assets/920c8ac2-24ea-45f2-819b-4cdb0ddd3194\" />\n是谁在敲打我窗，，，\n<img width=\"1657\" height=\"869\" alt=\"image\" src=\"https://github.com/user-attachments/assets/277d41ee-7cbe-4203-94fd-7b54a25fcfb9\" />\n<img width=\"1651\" height=\"869\" alt=\"image\" src=\"https://github.com/user-attachments/assets/aa0ae704-7c08-4812-acfd-602a5d3fb427\" />\n\n# 竖模块列表 ，是偶然间点出了网易云音乐的悬浮歌词的竖模式，于是做了这种模块列表。\n~为其添加了大量特效动画，有一种特效库限时免费的感觉。。。\n<img width=\"1654\" height=\"872\" alt=\"image\" src=\"https://github.com/user-attachments/assets/f47fa50a-f199-43e6-98d7-6150273bcbf6\" />\n-----------------------开发交流-------------------------\n\nInvincibleMachineGun插件开发交流群\n591460122"
+		},
+		{
+			"tag": "1.7.0",
+			"published": "2026-09-04T20:59:57Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 545819495,
+					"name": "InvincibleMachineGun1.21.11-1.0.jar",
+					"url": "https://github.com/adaxiaohu/InvincibleMachineGun/releases/download/1.7.0/InvincibleMachineGun1.21.11-1.0.jar",
+					"size": 2227689,
+					"downloads": 142,
+					"inspection": 2,
+					"sha256": "140729e24a35c775f7ce911d55cf982cbbb4f73bc6ffed7877478d13cb46e276",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "invincible_machine_gun",
+							"version": "1.0",
+							"name": "Invincible Machine Gun",
+							"description": "没敌机关枪",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": []
+						}
+					],
+					"icon": "5199dd6d800d33beb88347ab5a21d0f57cc9fc6ae2cdb2eb7eb658abf309dfad.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 436,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/codigohasta/addon/modules/RTsearch.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"i.imgur.com": [
+								"com/codigohasta/addon/modules/RTsearch.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 没敌机关枪 · 2026年9月5日更新\n\n本次更新添加了 **6 个着色器模块** 和 **1 个功能模块**。以及追加更新的英文支持\n\n---\n\n## 🎨 新增着色器模块\n\n### 1. 终结者 HUD 着色器\n让你化身没敌的 T-800 型魔鬼终结者，相当没敌。  \n开启后，你将搭载同款电子眼，以及电影里面的各种音效。扫描一切 列表塞满了各种数据\n—— 暗红色滤镜、扫描线，时间倒带回到那个科幻片的 **1984 年**。  \n（当然，只是视觉上变叼了，实际上没有属性加强，哈哈。）\n\n被终结时还有特技：**电视停机** —— 致敬《终结者 2》结局 T-800 在高热铁水中消失的经典画面。这意味着你被终结了。\n\n![image](https://github.com/user-attachments/assets/fa0a458c-11a1-4a26-ab32-b38e6f7e0df6)\n![image](https://github.com/user-attachments/assets/50670487-f8db-42a0-8eca-781f9a20fc76)\n![image](https://github.com/user-attachments/assets/826f5ee3-ab07-4ac7-8eb7-ad97d6e23db4)\n<img width=\"1405\" height=\"796\" alt=\"image\" src=\"https://github.com/user-attachments/assets/16020f3e-b6f6-40cc-8f0b-27b51f13514a\" />\n*也可能是鬼王达。。。\n\n---\n\n### 2. 合成器浪潮着色器\n源自 B 站 **樱田妮妮 ii** 制作的模组，我拿出了里面的顶点着色器和片元着色器。\n我后来改进了一些设置，得以在 **1.21.11** 版本可以玩。\n\n![image](https://github.com/user-attachments/assets/feb51ba6-91d4-452d-b2a7-43bbd81b24b1)\n\n---\n\n### 3. 矩阵着色器\n模仿电影《矩阵》的色彩风格，是合成器浪潮的变式。\n\n![image](https://github.com/user-attachments/assets/ee7fd327-4895-44ea-a42d-0f2d3c1c8ad0)\n\n---\n\n### 4. 樱花着色器\n带点小清新风格的单调着色器，现在这个版本会在屏幕上固定飘一些白色圆粒子。\n\n![image](https://github.com/user-attachments/assets/1bd99d50-b678-4721-848c-a709b46e88f7)\n\n---\n\n### 5. 蓝调着色器\n本来想模仿雨天黄昏的感觉——天空一片深蓝色，带点白，淡淡伤感。  \n**1.21.4** 版本比较贴近主题，现在这个版本可以自由调整各种色彩，相当随意。\n\n![image](https://github.com/user-attachments/assets/5a74117c-3ba3-499a-83b9-8d76fae8bf49)\n\n---\n\n### 6. 寂静岭着色器\n这个PS2风格有两种模式，模仿游戏里的 **表世界** 和 **里世界**。  \n- **表世界**：一片白雾，天空像录像机里的风景，安静而诡异。  \n- **里世界**：压抑的黑红色雾，暗红黑天空，充满不安定的惊悚恐怖元素，哈哈。\n\n![image](https://github.com/user-attachments/assets/486c5252-4731-43e8-8410-31a5e55252c1)\n![image](https://github.com/user-attachments/assets/fb42cb4a-2d5f-47e7-9b52-b72dd7c93fe3)\n\n---\n\n## ⚙️ 更新的1个功能模块\n\n### 熔炉清道夫\n这个模块会帮你把熔炉组里 **不可冶炼** 的物品自动拿出来。  \n使用前请确保熔炉组正在烧东西，因为它是根据熔炉是否在燃烧来判断有没有堵住的。\n\n## ⚙️ 追加更新的英文支持模块\n现在非中文用户（游戏语言非简体，繁体）会自动启动英文翻译模块，变成英文界面。\n当然也可以手动启动这个模块。当启动后重开菜单即可变换语言\n---\n\n## 💬 开发交流\n\n欢迎加入 **InvincibleMachineGun 插件开发交流群**  \nQQ 群：`591460122`  \n欢迎吹水、交流。"
+		},
+		{
+			"tag": "1.6.0",
+			"published": "2026-07-20T05:17:52Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 483077103,
+					"name": "InvincibleMachineGun1.21.11-07.20.jar",
+					"url": "https://github.com/adaxiaohu/InvincibleMachineGun/releases/download/1.6.0/InvincibleMachineGun1.21.11-07.20.jar",
+					"size": 1252389,
+					"downloads": 676,
+					"inspection": 2,
+					"sha256": "306c2d0a4a8320c85c5473292024dd418da00c3551d4a41ecefe0ae09da5105b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "invincible_machine_gun",
+							"version": "1.0",
+							"name": "Invincible Machine Gun",
+							"description": "没敌机关枪",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": []
+						}
+					],
+					"icon": "5199dd6d800d33beb88347ab5a21d0f57cc9fc6ae2cdb2eb7eb658abf309dfad.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 395,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/codigohasta/addon/modules/RTsearch.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"i.imgur.com": [
+								"com/codigohasta/addon/modules/RTsearch.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "没敌机关枪2026.7.20更新\n\n新增自动开宝库（AutoVault.java）模块：\n当你有宝库钥匙的时候，右键宝库可以自动静默换成对应的钥匙来打开试炼宝库。比较方便打这个地下城\n<img width=\"455\" height=\"449\" alt=\"image\" src=\"https://github.com/user-attachments/assets/9872aac8-f05b-425a-b1d8-9df973e0f76e\" />\n新增合成栏携带（XCarry.java）模块：\n让你的合成栏可以多放4个东西\n<img width=\"643\" height=\"260\" alt=\"image\" src=\"https://github.com/user-attachments/assets/edcb114c-0006-45d5-a01f-a372e69f3baf\" />\n新增界面操作快捷键（ScreenActions.java）模块：\n可以让你在界面打开的情况下执行一些操作。交互。在一些有cmi快捷潜影盒的服务器里可以刷物品\n<img width=\"1257\" height=\"769\" alt=\"image\" src=\"https://github.com/user-attachments/assets/d377b569-f7c1-4bf6-82c3-612b2ece7772\" />\n新增MobHud （MobHud.java）模块：\n在你的界面显示几个方块，显示一些数值。模拟钢铁人，或者魔鬼终结者，铁甲威龙的界面。娱乐哈哈。\n<img width=\"558\" height=\"702\" alt=\"image\" src=\"https://github.com/user-attachments/assets/ccfa10a2-4cf2-4521-9002-31819c6446a3\" />\n新增岩浆泄露预警（LavaESP.java）模块：\n在岩浆临近的方块显示渲染来提示自己，挖开这个方块后面将遇到岩浆。。挖矿时候比较有用，提前知道有没有岩浆降低风险。\n<img width=\"1920\" height=\"1014\" alt=\"image\" src=\"https://github.com/user-attachments/assets/f09f462a-7417-4efb-997f-2f6f909c3162\" />\n----------------\n尝试的CustomFishingBot.java模块，给一个服务器钓鱼插件搞得自动钓鱼，没做成。\n\n修复了聊天隐藏者ChatHider.java关闭没有正常恢复字体透明度的问题\n\n这些东东早就做好了，没release。有点懒。"
+		},
+		{
+			"tag": "1.5.0",
+			"published": "2026-05-29T14:29:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 433238854,
+					"name": "InvincibleMachineGun1.21.11-2026.5.29.jar",
+					"url": "https://github.com/adaxiaohu/InvincibleMachineGun/releases/download/1.5.0/InvincibleMachineGun1.21.11-2026.5.29.jar",
+					"size": 1201223,
+					"downloads": 655,
+					"inspection": 2,
+					"sha256": "c567375bfb88f28fc7c10f519145891edf00f22f646b4c6eb0163a5b8b23c1cb",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "invincible_machine_gun",
+							"version": "1.0",
+							"name": "Invincible Machine Gun",
+							"description": "没敌机关枪",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": []
+						}
+					],
+					"icon": "5199dd6d800d33beb88347ab5a21d0f57cc9fc6ae2cdb2eb7eb658abf309dfad.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 382,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/codigohasta/addon/modules/RTsearch.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"i.imgur.com": [
+								"com/codigohasta/addon/modules/RTsearch.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 更新日志\n与源模块 性能上有差异，只是好玩，不保证可用性\n有些抄来的模块可能有bug，可能会导致自崩\n> 自上次提交 e0c774b 以来的变更\n\n\n---\n\n## 新增模块 (18个)\n\n### LeavesHack 移植模块\n- **AutoRefreshTrade** — 自动刷村民附魔书（遍历交易→挖讲台→放讲台循环）\n- **GlobalSetting** — LeavesHack 全局设置（包放置、旋转修复、鞘翅设置等）\n- **LegitNoFallLeaves** — LeavesHack 版摔落伤害规避\n- **PacketMinePlus** — LeavesHack 版发包挖掘3\n- **ScaffoldPlusLeaves** — LeavesHack 版脚手架增强\n- **PrinterLeaves** — LeavesHack 版打印/建筑辅助\n- **AutoAnchor** — 自动放置锚点\n- **AutoCity** — 自动挖脚\n- **AutoCrystal** — 自动水晶\n- **AutoTorch** — 自动插火把\n- **FireworkElytraFly** — 烟花鞘翅飞行\n- **PistonCrystal** — 活塞水晶\n- **PlaceRender** — 放置渲染\n\n### 其他新模块\n\n\n- **BMWSprint** — BMW 强制疾跑\n- **Freeze** — 冻结\n- **NoFallimg** — 没摔伤\n- **Stuck** — 定身术\n- **Ambience** — 环境/视觉修改\n- **自动开宝库** -- 自动开试炼宝库，自动切换到对应钥匙\n\n## 模块优化/修复\n\n- **ElytraFly** — 重抄alien\n- **ScaffoldPlus** — 精简代码（-379 行），移除冗余逻辑\n- **TpAura** — 传送光环改进tp，静默切换重锤（+110 行）\n- **MaceDMGPlus** — 静默切换（+64 行）\n- **LegitNoFall** — 改进摔落检测逻辑\n- **AlienV4PacketMine** — 修复：\n  - SWAP 操作在村民交易界面打开时槽位越界崩溃\n  - `FALL_FLYING` → `GLIDING`（1.21.11）\n  - 延迟执行的 switchBack 增加 `inInventory()` 安全检查\n- **AdaPacketMine**, **AlienSprint**, **AutoDoubleHand**, **KillFX**, **xhPacketMinePlus** — 小优化\n\n## Mixin 新增/修改\n\n- **MixinAmbience*** — 环境渲染 Mixin 系列（天空、雾、光照、云、方块）\n- **MixinBMWClientPlayerEntity**, **MixinBMWLivingEntity** — BMW 模块支持\n- **MixinFireworkRocketEntity** — 烟花火箭实体 Mixin\n- **MixinKeyboardInput** — 键盘输入 Mixin\n- **MixinLivingEntity**, **MixinPlayerEntity** — 实体/玩家 Mixin\n- **PlayerInteractEntityC2SPacketAccessor** — 交互包访问器\n- **IVec3d** — Vec3d 接口\n- **EntityMixin** — 实体 Mixin 修改（+46 行）\n- **MixinClientPlayerEntity** — 客户端玩家 Mixin 修改（+52 行）\n- **LivingEntityAccessor** — 添加新访问器方法\n\n## 工具类 (Utils) 新增\n\n### LeavesHack 工具类\n`src/main/java/com/codigohasta/addon/utils/leaveshack/`\n- BlockUtil, InventoryUtil, Rotation, CombatUtil, DamageUtil\n- EntityUtil, MoveFixUtil, Render3DUtil\n- 事件: ElytraUpdateEvent, KeyboardInputEvent, MoveEvent, RenderLeaves3DEvent, TravelEvent\n\n### BMW 工具类\n`src/main/java/com/codigohasta/addon/utils/bmw/`\n- BMWDirectionalInput, BMWPlayerUtil, BMWRotation, BMWRotationManager, BMWRotationUtil\n\n### Epsilon 工具类\n`src/main/java/com/codigohasta/addon/utils/epsilon/`\n- EpsilonMovementUtil\n\n### OpenMyau 工具类\n`src/main/java/com/codigohasta/addon/utils/openmyau/`\n- ChatColors, ChatUtil\n\n### 其他新工具类\n- **TpUtils** — 传送工具\n- **AlienMovementUtil** — 新增加速移动工具\n- **AlienEntityUtil** — `inInventory()` 增加 `PlayerScreenHandler` 安全检查，防止容器界面下的 SWAP 崩溃\n\n## 基础设施\n\n- **fabric.mod.json** — 更新依赖/入口\n- **invincible_machine_gun.mixins.json** — 注册所有新 Mixin\n- **invincible-machine-gun.accesswidener** — 新增访问宽限文件\n- **build.gradle.kts** — 构建配置更新\n\n## 开发交流\nInvincibleMachineGun插件开发交流群\n591460122\n欢迎交流"
+		},
+		{
+			"tag": "1.2",
+			"published": "2026-03-25T17:35:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 381436511,
+					"name": "InvincibleMachineGun1.21.11.jar",
+					"url": "https://github.com/adaxiaohu/InvincibleMachineGun/releases/download/1.2/InvincibleMachineGun1.21.11.jar",
+					"size": 613740,
+					"downloads": 123,
+					"inspection": 2,
+					"sha256": "04f6fe5522c3d6cc7d8a4bfc4234ab937387ed76db2ce93f59a34115c7061268",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "invincible_machine_gun",
+							"version": "1.0",
+							"name": "Invincible Machine Gun",
+							"description": "没敌机关枪",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": []
+						}
+					],
+					"icon": "5199dd6d800d33beb88347ab5a21d0f57cc9fc6ae2cdb2eb7eb658abf309dfad.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 170,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/codigohasta/addon/modules/RTsearch.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"i.imgur.com": [
+								"com/codigohasta/addon/modules/RTsearch.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 381436791,
+					"name": "InvincibleMachineGun1.21.4.jar",
+					"url": "https://github.com/adaxiaohu/InvincibleMachineGun/releases/download/1.2/InvincibleMachineGun1.21.4.jar",
+					"size": 794266,
+					"downloads": 241,
+					"inspection": 2,
+					"sha256": "28fe5f151823f18a9029c892aeeb323344c3f4fd396d172cbbe20245cdc8cf9f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "invincible-machine-gun",
+							"version": "0.1.0",
+							"name": "Invincible Machine Gun 没敌机关枪",
+							"description": "Having various practical functions for Meteor Client 添加多种实用功能.",
+							"minecraft": "1.21.4 || 1.21.9",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": []
+						}
+					],
+					"icon": "5199dd6d800d33beb88347ab5a21d0f57cc9fc6ae2cdb2eb7eb658abf309dfad.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 228,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/codigohasta/addon/modules/RTsearch.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"i.imgur.com": [
+								"com/codigohasta/addon/modules/RTsearch.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "本次更新内容\n1.新添加了Follower模块，可以使你一直看向目标，穿着鞘翅时候可以自动打烟花追过去。\n<img width=\"442\" height=\"832\" alt=\"image\" src=\"https://github.com/user-attachments/assets/ab2d3c18-d482-462f-b326-cbe82769bd0c\" />\n\n2.新添加了没敌机关枪(ArrowDmg,32kbow,)模块，在射箭的时候给自己往后移动距离再回原位，使箭的伤害大量提高。\n（有人建议做这个模块，我觉得比较有意思，本来也有计划要做这个玩的。所以我抄来了。原理自wurst抄袭过来，并且抄用了一些裤子条纹的代码方法，感谢以上来源~。）\n<img width=\"756\" height=\"925\" alt=\"image\" src=\"https://github.com/user-attachments/assets/36b0f10d-324b-4399-ac7c-512436fd8325\" />\n\n双发扳机：可以让一次射击中自动射出第二箭，如果第二箭造成更高伤害，在10tick的无敌帧里，可以记录两次伤害。以此打断图腾。\n自瞄：简单的客户端自动瞄准\n渲染：当你瞄准到目标时候，给目标画一个框子。屏幕上画一条线，当你开启自动距离时候，可以随着距离来改变渲染线的颜色，以此来判              断当前位置能不能打出高速箭。\n\n3.新添加了大力投手模块，可以让你丢的投掷物以极高速移动。从Trouser-Streak抄过来的，并且做出了一些修改。\n<img width=\"804\" height=\"705\" alt=\"image\" src=\"https://github.com/user-attachments/assets/349c930e-4ef1-4832-97fd-520c806d39c4\" />\n\n-------其他改动-----\n1.修改了FastCrossbow，现在支持副手快速射击了，并且让 弓 也支持快速射击。\n2.修改了TpAnchor，改进了tp能力。\n<img width=\"463\" height=\"932\" alt=\"image\" src=\"https://github.com/user-attachments/assets/81491fad-9d94-4857-8f48-58d3e9f7bf2a\" />\n----------计划更新---\n可能会整理一下功能名字，比如每个功能前面加个字母，不同字母代表不同类型的功能\n--------------\n\n1.21.4的模块没有同步更新，因为我没怎么玩1.21.4版本了，有点懒得弄，如果有玩1.21.4版本的 有兴趣的可以帮帮移植一下 提交到仓库。"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

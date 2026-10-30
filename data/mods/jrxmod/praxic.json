@@ -1,0 +1,280 @@
+{
+	"repo": "jrxmod/praxic",
+	"host": "github",
+	"description": "PRAXIC — Server-side AntiCheat mod for Fabric",
+	"stars": 2,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-05-06T05:40:07Z",
+	"pushed": "2026-09-17T07:51:19Z",
+	"releases": [
+		{
+			"tag": "v0.6.0",
+			"published": "2026-05-23T12:02:39Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 427854285,
+					"name": "praxic-0.6.0.jar",
+					"url": "https://github.com/jrxmod/praxic/releases/download/v0.6.0/praxic-0.6.0.jar",
+					"size": 103148,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "8d279a316e057b93240fce14b586f5b0271afcadd159c5b6a460349a191a1959",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "praxic",
+							"version": "0.6.0",
+							"name": "PRAXIC",
+							"description": "Server-side AntiCheat for Fabric 1.21.1",
+							"minecraft": "~1.21.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "d5982cb98c217d17687224548cbfcf97424c0776dee5c0e1d400364c1fb9815d.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 39,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/jrxmod/praxic/util/DiscordWebhook.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/jrxmod/praxic/util/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.modrinth.com": [
+								"com/jrxmod/praxic/util/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "⚡ **New**\n\n- **RotationCheck** — detects aim assistance during combat. Flags unnatural camera snaps that real players can't produce.\n- **SprintCheck** — catches sprinting when the game itself forbids it: low hunger or Blindness effect active.\n- **BoatFlyCheck** — detects flying while riding a boat. Knows the difference between falling off a cliff and hovering in the sky.\n- **Cancellable Event API** — `PraxicViolationEvent` now returns `boolean`. Addons like REVEX can fully take over punishment handling.\n\n🔧 **Improved**\n\n- **FlyCheck** — cleaned up internal logic, removed legacy code now handled by the Movement State Machine.\n- **Join Grace** — players get a short immunity window after connecting. No more false flags on login.\n- **17 checks total** — PRAXIC now covers Movement, Combat, World, and Client categories.\n\n🐛 **Fixed**\n\n- Fixed false positives when falling off cliffs while riding a boat.\n- Fixed false flag on server join when already seated in a boat.\n\n⚠️ **API Notice**\n\nThis version changes `PraxicViolationEvent` from `void` to `boolean` return. If you use **REVEX** or custom addons, rebuild them against PRAXIC 0.6.0 before updating."
+		},
+		{
+			"tag": "v0.5.0",
+			"published": "2026-05-20T14:28:27Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 425289691,
+					"name": "praxic-0.5.0.jar",
+					"url": "https://github.com/jrxmod/praxic/releases/download/v0.5.0/praxic-0.5.0.jar",
+					"size": 97645,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "02af5ce8ff29dcecd86ec73ff4aa5d3e6aaebdd71ef4f3ad1fd0f777e2878674",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "praxic",
+							"version": "0.5.0",
+							"name": "PRAXIC",
+							"description": "Server-side AntiCheat for Fabric 1.21.1",
+							"minecraft": "~1.21.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "d5982cb98c217d17687224548cbfcf97424c0776dee5c0e1d400364c1fb9815d.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 36,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/jrxmod/praxic/util/DiscordWebhook.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/jrxmod/praxic/util/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.modrinth.com": [
+								"com/jrxmod/praxic/util/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### ⚡ New\n- **Movement State Machine** — smarter, centralized movement analysis. Fewer false positives, better detection accuracy across all checks.\n- **Y-Prediction Engine** — new physics-based flight detection. Catches fly and hover cheats that threshold-based checks miss.\n- **Improved UI** — `/praxic status` now groups checks by category: Movement · Combat · World · Client · System.\n- **Human-readable messages** — kicked or banned players now see clear reasons instead of internal check names.\n\n### 🔧 Improved\n- **NoFallCheck** — smarter damage verification, significantly fewer false positives on normal gameplay.\n- **VelocityCheck** — now correctly distinguishes combat knockback from environmental damage.\n- **FlyCheck** — streamlined detection, removed redundant logic now covered by Y-Prediction.\n\n### 🐛 Fixed\n- Fixed false positives on death screen before respawn.\n- Fixed false flags when taking fall damage or explosion knockback.\n- Fixed NoFallCheck triggering on short falls under 6 blocks.\n- Fixed VelocityCheck flagging projectile hits (arrows, etc.)"
+		},
+		{
+			"tag": "v0.4.1",
+			"published": "2026-05-17T09:24:12Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 422411465,
+					"name": "praxic-0.4.1.jar",
+					"url": "https://github.com/jrxmod/praxic/releases/download/v0.4.1/praxic-0.4.1.jar",
+					"size": 92421,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a2e7c55ed4f815e4eaed72c11a560e53e3e55d62f2e55ab193292f0f8fd44694",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "praxic",
+							"version": "0.4.1",
+							"name": "PRAXIC",
+							"description": "Server-side AntiCheat for Fabric 1.21.1",
+							"minecraft": "~1.21.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "d5982cb98c217d17687224548cbfcf97424c0776dee5c0e1d400364c1fb9815d.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 34,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/jrxmod/praxic/util/DiscordWebhook.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/jrxmod/praxic/util/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.modrinth.com": [
+								"com/jrxmod/praxic/util/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 0.4.1 — Patch\n### Fixed\n- JesusCheck: false positives when falling into water or exiting water.\n  Added independent grace timer (15 ticks), wasInWater transition guard,\n  and downward movement check (dy < -0.01)."
+		},
+		{
+			"tag": "v0.4.0",
+			"published": "2026-05-16T09:22:52Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 421715654,
+					"name": "praxic-0.4.0.jar",
+					"url": "https://github.com/jrxmod/praxic/releases/download/v0.4.0/praxic-0.4.0.jar",
+					"size": 92208,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "d3a639beebd0e458b2d7976ed1e7babd8cbe592c8420c1afe23d090bdeeea3a3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "praxic",
+							"version": "0.4.0",
+							"name": "PRAXIC",
+							"description": "Server-side AntiCheat for Fabric 1.21.1",
+							"minecraft": "~1.21.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "d5982cb98c217d17687224548cbfcf97424c0776dee5c0e1d400364c1fb9815d.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 34,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/jrxmod/praxic/util/DiscordWebhook.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/jrxmod/praxic/util/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.modrinth.com": [
+								"com/jrxmod/praxic/util/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 0.4.0 — Engine Update\n### Added\n- VL Decay: violation levels decrease by 1 every 5 seconds without new flags.\n- Setback: new action type — teleports player back to last safe ground position instead of kicking.\n- Lag Compensation: dynamic check thresholds based on player ping, capped at 500ms to prevent spoofing.\n- JesusCheck: detects walking on water surface. Accounts for Frost Walker, lily pads, water exit grace period and knockback.\n- VelocityCheck: detects knockback cancellation by measuring horizontal displacement after taking damage.\n- /praxic whitelist add/remove/list — exclude players from all checks. Persistent across restarts.\n- /praxic history <player> — view last 10 violation entries per player. Persistent, works for offline players."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [
+		"docs/assets/divider.png",
+		"docs/assets/feature-actions.png",
+		"docs/assets/feature-detection.png",
+		"docs/assets/feature-engine.png",
+		"docs/assets/hero.png"
+	],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

@@ -1,0 +1,805 @@
+{
+	"repo": "banlog1/zsg-rooms",
+	"host": "github",
+	"description": "Private rooms for mcsr using the zsg filter/s (FSG mod), includes many features like rng standardisation.",
+	"stars": 1,
+	"archived": false,
+	"license": "CC0-1.0",
+	"created": "2026-07-11T15:07:45Z",
+	"pushed": "2026-10-16T16:09:54Z",
+	"releases": [
+		{
+			"tag": "v1.1.0",
+			"published": "2026-10-16T16:12:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 647865306,
+					"name": "zsg-replay-viewer-0.6.0.jar",
+					"url": "https://github.com/banlog1/zsg-rooms/releases/download/v1.1.0/zsg-replay-viewer-0.6.0.jar",
+					"size": 427312,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "bf3ef8f5ce0c8238769749669af6a87e3d8cc362b24943927d163ac63ac4232c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "zsg-replay-viewer",
+							"version": "0.6.0",
+							"name": "ZSG Replay Viewer",
+							"description": "Optional speedrun playback controls for ReplayMod 1.16.1-2.6.27.",
+							"minecraft": "1.16.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"replaymod"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 204,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 647865313,
+					"name": "zsg-rooms-1.1.0.jar",
+					"url": "https://github.com/banlog1/zsg-rooms/releases/download/v1.1.0/zsg-rooms-1.1.0.jar",
+					"size": 913823,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "aaf50f9c394251adbeb5d2a8f86393cb7216e2fcd9e259303ac57ee8c3fc5a8f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "zsg-rooms",
+							"version": "1.1.0",
+							"name": "ZSG Rooms",
+							"description": "Private synchronized filtered-seed races for Minecraft speedrunners.",
+							"minecraft": "~1.16.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric"
+							],
+							"provides": []
+						}
+					],
+					"icon": "7aa406f7e3aeb386b10d918b4e883808fc5ca9b7deca64cb8a424ec0bd715f1a.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 418,
+						"jars": [
+							"assets/zsg-rooms/replay/zsg-replay-writer.jar"
+						],
+						"capabilities": {
+							"network": {
+								"zsgrooms/modid/net/RoomSocketTransport$ClientHandler.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close"
+								],
+								"zsgrooms/modid/net/RoomSocketTransport$RoomClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"zsgrooms/modid/net/SimpleWebSocketClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"zsgrooms/modid/replay/ReplayLibraryInstaller.class": [
+									"java/net/URL.openConnection"
+								],
+								"zsgrooms/modid/seedbank/SeedBankClient.class": [
+									"java/net/URL.openConnection"
+								],
+								"zsgrooms/modid/update/UpdateManager.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"zsgrooms/modid/replay/ReplayPrototype$Library.class": [
+									"java/net/URLClassLoader.<init>",
+									"java/net/URLClassLoader.loadClass",
+									"java/net/URLClassLoader.close"
+								],
+								"zsgrooms/modid/replay/ReplayPrototype.class": [
+									"java/net/URLClassLoader.close"
+								]
+							},
+							"exec": {
+								"zsgrooms/modid/update/UpdateManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"zsg-rooms-seeds.banlogzzz.workers.dev": [
+								"zsgrooms/modid/seedbank/SeedBankClient.class"
+							],
+							"your-relay.workers.dev": [
+								"zsgrooms/modid/ui/RoomSetupScreen.class"
+							],
+							"api.github.com": [
+								"zsgrooms/modid/update/UpdateManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Replay Overhaul\n\n- **New replay controls:** Transparent playback bar, hand-pixelled split icons, a camera selector, overlapping-event chooser, centered progress arrow, go-to-time dialog and explicit hide/show controls. Replay settings are organized into Playback, Analysis and Display tabs.\n- **ZSG Replay Library:** Browse, search and play recordings without the old ReplayMod file chooser. Rename recordings without rewriting their contents, or delete a selected recording after confirmation. Choose where new recordings are saved in Rooms' Recording settings; existing files stay where they are.\n- **Optional Detailed Capture and Faithful Follow:** New detailed recordings can replay the runner's render distance, F1 visibility, F5 perspective, attack indicator, survival HUD and automatically displayed inventory, crafting-table and chest screens. Use your bound inventory key for separate read-only inspection. Recorded pauses have a gray overlay and centered label.\n- **Seeking while viewing containers:** Automatic recorded inventory and container screens work with the normal playback bar, including scrubbing, auto-hide and explicit hide/show. Manual inspection remains a separate view. Run timers and the piglin counter can also be shown in Faithful Follow.\n- **Recorded render-distance indicator:** An optional top-left display follows the runner's captured render distance through playback and seeks. Missing coverage is shown as unavailable, not replaced with the viewer's setting.\n- **Clickable splits:** Compare recorded milestones across matching race recordings and click a time to seek and follow that runner. Separate reset worlds remain separate; unavailable splits are not guessed.\n- **Historical player and mob trails:** Trace players and selected mob types, with customizable duration, color, thickness, opacity and fading. Once the history index is ready, enabling trails or seeking shows the selected recent window immediately rather than waiting for it to accumulate.\n- **Piglin analysis:** Fresh recordings capture completed barter outcomes for an item-filterable, sortable history with totals and jumps to each trade. Optional bartering labels and a compact piglin-face counter make recorded activity easier to read.\n\n## Recording Notes\n\nDetailed Capture is **off by default** and applies to the next recording. Existing recordings and Follow: Details remain supported; information that was not recorded cannot be reconstructed. Barter history requires a new recording, but does not require Detailed Capture.\n\nDetailed Capture samples screen state rather than recording video, and does not capture mouse-cursor movement. Recorded render distance cannot recreate chunks absent from the replay. Its bounded disk-backed track reports coverage gaps and stops extra capture at its size limit without stopping normal packet recording. Multi-hour AA testing and comparative performance profiling remain follow-up work; keep Detailed Capture optional for long sessions. Guided tutorials and aligned comparison ghosts are not part of this release.\n\nThis release updates **ZSG Rooms to 1.1.0** and **Replay Viewer to 0.6.0**. ReplayMod remains **1.16.1-2.6.27** and is still installed separately. The in-mod updater can update an already-installed viewer. No room-relay or seed-service deployment is required.\n\n\n## Downloads\n\n- **zsg-rooms-1.1.0.jar**: the main mod. ReplayMod is not required for racing or recording.\n- **zsg-replay-viewer-0.6.0.jar**: optional playback controls. Install alongside [ReplayMod **1.16.1-2.6.27**](https://www.replaymod.com/download/), on Minecraft 1.16.1 with Fabric Loader 0.19.3+.\n- **zsg-replay-viewer-0.6.0-sources.jar**: viewer source, not an installable mod. GPL-3.0-or-later; the core remains CC0-1.0. Full build scripts are in the tagged source archive.\n- **zsg-rooms-filter-gallery.zip**: optional picker and loading artwork. Put it in `resourcepacks` and enable it in Minecraft, not in `mods`. The images are not bundled in either mod.\n\n\n..."
+		},
+		{
+			"tag": "v1.0.32",
+			"published": "2026-10-04T19:36:56Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 610504040,
+					"name": "zsg-replay-viewer-0.5.0.jar",
+					"url": "https://github.com/banlog1/zsg-rooms/releases/download/v1.0.32/zsg-replay-viewer-0.5.0.jar",
+					"size": 233450,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c12fa70390b192d761f3bc454c9ba44e31657a0c8bbae652066c29cdaf6590cd",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "zsg-replay-viewer",
+							"version": "0.5.0",
+							"name": "ZSG Replay Viewer",
+							"description": "Optional speedrun playback controls for ReplayMod 1.16.1-2.6.27.",
+							"minecraft": "1.16.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"replaymod"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 128,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 610504041,
+					"name": "zsg-rooms-1.0.32.jar",
+					"url": "https://github.com/banlog1/zsg-rooms/releases/download/v1.0.32/zsg-rooms-1.0.32.jar",
+					"size": 872798,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "500d68ddd5ec8b77e14844a1c6ff794f0d011c2e9fc9a6280b0b9cb889c6b7dd",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "zsg-rooms",
+							"version": "1.0.32",
+							"name": "ZSG Rooms",
+							"description": "Private synchronized filtered-seed races for Minecraft speedrunners.",
+							"minecraft": "~1.16.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric"
+							],
+							"provides": []
+						}
+					],
+					"icon": "7aa406f7e3aeb386b10d918b4e883808fc5ca9b7deca64cb8a424ec0bd715f1a.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 402,
+						"jars": [
+							"assets/zsg-rooms/replay/zsg-replay-writer.jar"
+						],
+						"capabilities": {
+							"network": {
+								"zsgrooms/modid/net/RoomSocketTransport$ClientHandler.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close"
+								],
+								"zsgrooms/modid/net/RoomSocketTransport$RoomClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"zsgrooms/modid/net/SimpleWebSocketClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"zsgrooms/modid/replay/ReplayLibraryInstaller.class": [
+									"java/net/URL.openConnection"
+								],
+								"zsgrooms/modid/seedbank/SeedBankClient.class": [
+									"java/net/URL.openConnection"
+								],
+								"zsgrooms/modid/update/UpdateManager.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"zsgrooms/modid/replay/ReplayPrototype$Library.class": [
+									"java/net/URLClassLoader.<init>",
+									"java/net/URLClassLoader.loadClass",
+									"java/net/URLClassLoader.close"
+								],
+								"zsgrooms/modid/replay/ReplayPrototype.class": [
+									"java/net/URLClassLoader.close"
+								]
+							},
+							"exec": {
+								"zsgrooms/modid/update/UpdateManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"zsg-rooms-seeds.banlogzzz.workers.dev": [
+								"zsgrooms/modid/seedbank/SeedBankClient.class"
+							],
+							"your-relay.workers.dev": [
+								"zsgrooms/modid/ui/RoomSetupScreen.class"
+							],
+							"api.github.com": [
+								"zsgrooms/modid/update/UpdateManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's New\n\n- **Reorganized personal settings:** General, HUD, Loading, Recording and Advanced categories, with scrolling, clearer tooltips and a compact layout for smaller screens. Testing overrides are visibly marked. Existing preferences are preserved.\n- **Survival and command permissions:** Rooms always creates Survival worlds. With Allow Cheats off, saved-world, operator and LAN permission flags can no longer grant player cheat commands, including `/seed`. Unrelated singleplayer worlds and Atum defaults are left unchanged.\n- **Adult animal guarantee:** Minimum Nearby Animals now counts adults only and adds adults when needed. Existing babies are left alone.\n- **Loading logo fix:** Chunk-progress colors no longer show through the logo's transparent areas. Reduced redundant drawing while keeping the same progress and position presets.\n- **Lower bookkeeping overhead:** Reduced natural-spawn counter allocations and repeated tournament bracket and standings calculations without changing spawn outcomes or tournament rules.\n\nAll runners should update to **ZSG Rooms 1.0.32** for the same rule fixes. **Replay Viewer remains 0.5.0** and ReplayMod remains **1.16.1-2.6.27**. No room-relay deployment is required.\n\n\n## Downloads\n\n- **zsg-rooms-1.0.32.jar**: the main mod. ReplayMod is not required for racing or recording.\n- **zsg-replay-viewer-0.5.0.jar**: optional playback controls. Install alongside [ReplayMod **1.16.1-2.6.27**](https://www.replaymod.com/download/), on Minecraft 1.16.1 with Fabric Loader 0.19.3+.\n- **zsg-replay-viewer-0.5.0-sources.jar**: viewer source, not an installable mod. GPL-3.0-or-later; the core remains CC0-1.0. Full build scripts are in the tagged source archive.\n- **zsg-rooms-filter-gallery.zip**: optional picker and loading artwork. Put it in `resourcepacks` and enable it in Minecraft, not in `mods`. The images are not bundled in either mod.\n\nEnable recording under **Settings > Recording**. If ReplayMod is installed, disable its Record Singleplayer, Record Server, and Automatic Recording options first. SpeedRunIGT is needed during recording for RTA/IGT data. Player switching currently uses manually shared files.\n\nThe in-game updater updates ZSG Rooms and an already-installed Replay Viewer. Install the viewer manually the first time; ReplayMod and resource packs remain manual updates. Updaters through ZSG Rooms 1.0.28 update only the core. [Replay setup and controls](https://github.com/banlog1/zsg-rooms/blob/v1.0.32/replay-viewer/README.md).\n\n<details>\n<summary>Optional Download SHA-256</summary>\n\n```text\nc12fa70390b192d761f3bc454c9ba44e31657a0c8bbae652066c29cdaf6590cd  zsg-replay-viewer-0.5.0.jar\n159158cf6e0751857519a5055504028274d3f287fbd75148a3526d55f595bf35  zsg-replay-viewer-0.5.0-sources.jar\n96ba22cbd685860139a2d6dd1939f84a93f70dd64a251b7a13bc68196e62d912  zsg-rooms-filter-gallery.zip\n```\n\n</details>"
+		},
+		{
+			"tag": "v1.0.31",
+			"published": "2026-10-02T23:29:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 606709932,
+					"name": "zsg-replay-viewer-0.5.0.jar",
+					"url": "https://github.com/banlog1/zsg-rooms/releases/download/v1.0.31/zsg-replay-viewer-0.5.0.jar",
+					"size": 233450,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c12fa70390b192d761f3bc454c9ba44e31657a0c8bbae652066c29cdaf6590cd",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "zsg-replay-viewer",
+							"version": "0.5.0",
+							"name": "ZSG Replay Viewer",
+							"description": "Optional speedrun playback controls for ReplayMod 1.16.1-2.6.27.",
+							"minecraft": "1.16.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"replaymod"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 128,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 606709926,
+					"name": "zsg-rooms-1.0.31.jar",
+					"url": "https://github.com/banlog1/zsg-rooms/releases/download/v1.0.31/zsg-rooms-1.0.31.jar",
+					"size": 841312,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c722056e4019e81f8be33f3416c1bc288a7d4566ece46a115702b2322272310c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "zsg-rooms",
+							"version": "1.0.31",
+							"name": "ZSG Rooms",
+							"description": "Private synchronized filtered-seed races for Minecraft speedrunners.",
+							"minecraft": "~1.16.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric"
+							],
+							"provides": []
+						}
+					],
+					"icon": "7aa406f7e3aeb386b10d918b4e883808fc5ca9b7deca64cb8a424ec0bd715f1a.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 388,
+						"jars": [
+							"assets/zsg-rooms/replay/zsg-replay-writer.jar"
+						],
+						"capabilities": {
+							"network": {
+								"zsgrooms/modid/net/RoomSocketTransport$ClientHandler.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close"
+								],
+								"zsgrooms/modid/net/RoomSocketTransport$RoomClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"zsgrooms/modid/net/SimpleWebSocketClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"zsgrooms/modid/replay/ReplayLibraryInstaller.class": [
+									"java/net/URL.openConnection"
+								],
+								"zsgrooms/modid/seedbank/SeedBankClient.class": [
+									"java/net/URL.openConnection"
+								],
+								"zsgrooms/modid/update/UpdateManager.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"zsgrooms/modid/replay/ReplayPrototype$Library.class": [
+									"java/net/URLClassLoader.<init>",
+									"java/net/URLClassLoader.loadClass",
+									"java/net/URLClassLoader.close"
+								],
+								"zsgrooms/modid/replay/ReplayPrototype.class": [
+									"java/net/URLClassLoader.close"
+								]
+							},
+							"exec": {
+								"zsgrooms/modid/update/UpdateManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"zsg-rooms-seeds.banlogzzz.workers.dev": [
+								"zsgrooms/modid/seedbank/SeedBankClient.class"
+							],
+							"your-relay.workers.dev": [
+								"zsgrooms/modid/ui/RoomSetupScreen.class"
+							],
+							"api.github.com": [
+								"zsgrooms/modid/update/UpdateManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's New\n\n- **Correct seed-bank spawns:** Rooms now receives the filter's intended structure coordinates instead of searching for another nearby structure. This fixes cases where a village seed sent runners to the wrong village without its blacksmith. Existing bank entries have been backfilled. Spawn preparation happens before chunk preloading, and resets retain the same target. Bank launches with missing or invalid coordinates are rejected.\n- Added **No Temple Hostile Spawns** in Game Rules. Enabled in Standard presets and disabled in Raw, it prevents natural hostile spawning inside desert temples and their treasure chambers on any seed type, including AA. Existing mobs are not removed, and outside mobs can still walk in.\n- Added **Race Format** with 1-20 shared seeds and a separate finisher limit, both defaulting to one. Runners advance independently; placements use one real-time clock including loading and resets. Multi-seed skips add 30 minutes. Single-seed forfeits remain a loss without a penalty. Increase Finishers to allow more placements.\n- Added optional **Tournaments**: single-elimination brackets with best-of 1/3/5/7 matches, player-selected byes and an interactive bracket, or points tournaments with configurable rounds and placement scores. Only the current bracket pair races. Keep the host's game open; tournament progress cannot resume after restarting Minecraft.\n- Added the **ZSG loading indicator**, with the clean-pixel logo filling over the chunk-progress square. Choose ZSG or Vanilla in Loading Screen settings; position presets remain available. The logo works without the optional artwork pack.\n- Improved **Replay Viewer** indexing and cache reuse for chest contents, milestones and player data. Quick mode now shows recorded held items. Added optional experimental **Seek batching** for normal playback. It remains off by default; speed gains are not established and lighting may differ.\n- Automatic sequence advances and same-seed resets stay in one replay. Recorded chest contents remain available, but unopened-loot prediction is disabled for multi-seed recordings because that metadata currently supports one seed per file.\n\n**All runners must update ZSG Rooms to 1.0.31.** Rooms using bank filters or the temple spawning rule will not start with guests missing the spawn-rules update. Update the optional **ZSG Replay Viewer to 0.5.0**; ReplayMod remains **1.16.1-2.6.27**. No room-relay deployment is required.\n\n\n## Downloads\n\n- **zsg-rooms-1.0.31.jar**: the main mod. ReplayMod is not required for racing or recording.\n- **zsg-replay-viewer-0.5.0.jar**: optional playback controls. Install alongside [ReplayMod **1.16.1-2.6.27**](https://www.replaymod.com/download/), on Minecraft 1.16.1 with Fabric Loader 0.19.3+.\n- **zsg-replay-viewer-0.5.0-sources.jar**: viewer source, not an installable mod. GPL-3.0-or-later; the core remains CC0-1.0. Full build scripts are in the tagged source archive.\n- **zsg-rooms-filter-gallery.zip**: optional picker and loading artwork. Put it in `resourcepacks` and enable it in Minecraft, not in `mods`. The images are not bundled in either mod.\n\nEnable recording under **Settings > Replays**. If ReplayMod is installed, disable its Record Singleplayer, Record Server, and Automatic Recording options first. SpeedRunIGT is needed during recording for RTA/IGT data. Player switching currently uses manually shared files.\n\nThe in-game updater updates ZSG Rooms and an already-installed Replay Viewer. Install the viewer manually the first time; ReplayMod and resource packs remain manual updates. Updaters through ZSG Rooms 1.0.28 update only the core. [Replay setup and controls](https://github.com/banlog1/zsg-rooms/blob/v1.0.31/replay-viewer/README.md).\n\n<details>\n<summary>Optional Download SHA-256</summary>\n\n```text\nc12fa70390b192d761f3bc454c9ba44e31657a0c8bbae652066c29cdaf6590cd  zsg-replay-viewer-0.5.0.jar\n\n..."
+		},
+		{
+			"tag": "v1.0.30",
+			"published": "2026-09-27T23:35:38Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 594003337,
+					"name": "zsg-replay-viewer-0.4.0.jar",
+					"url": "https://github.com/banlog1/zsg-rooms/releases/download/v1.0.30/zsg-replay-viewer-0.4.0.jar",
+					"size": 215847,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "6bd5052b41ef6ab54a8b1eb7a15dc7ce623b75ba8d3b2f1006a6798165fb369b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "zsg-replay-viewer",
+							"version": "0.4.0",
+							"name": "ZSG Replay Viewer",
+							"description": "Optional speedrun playback controls for ReplayMod 1.16.1-2.6.27.",
+							"minecraft": "1.16.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"replaymod"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 115,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 594003334,
+					"name": "zsg-rooms-1.0.30.jar",
+					"url": "https://github.com/banlog1/zsg-rooms/releases/download/v1.0.30/zsg-rooms-1.0.30.jar",
+					"size": 749217,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "cde565c770e7583f83fc072cba5443f0f56faf7c5a66178930d984508833d469",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "zsg-rooms",
+							"version": "1.0.30",
+							"name": "ZSG Rooms",
+							"description": "Private synchronized filtered-seed races for Minecraft speedrunners.",
+							"minecraft": "~1.16.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric"
+							],
+							"provides": []
+						}
+					],
+					"icon": "7aa406f7e3aeb386b10d918b4e883808fc5ca9b7deca64cb8a424ec0bd715f1a.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 362,
+						"jars": [
+							"assets/zsg-rooms/replay/zsg-replay-writer.jar"
+						],
+						"capabilities": {
+							"network": {
+								"zsgrooms/modid/net/RoomSocketTransport$ClientHandler.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close"
+								],
+								"zsgrooms/modid/net/RoomSocketTransport$RoomClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"zsgrooms/modid/net/SimpleWebSocketClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"zsgrooms/modid/replay/ReplayLibraryInstaller.class": [
+									"java/net/URL.openConnection"
+								],
+								"zsgrooms/modid/seedbank/SeedBankClient.class": [
+									"java/net/URL.openConnection"
+								],
+								"zsgrooms/modid/update/UpdateManager.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"zsgrooms/modid/replay/ReplayPrototype$Library.class": [
+									"java/net/URLClassLoader.<init>",
+									"java/net/URLClassLoader.loadClass",
+									"java/net/URLClassLoader.close"
+								],
+								"zsgrooms/modid/replay/ReplayPrototype.class": [
+									"java/net/URLClassLoader.close"
+								]
+							},
+							"exec": {
+								"zsgrooms/modid/update/UpdateManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"zsg-rooms-seeds.banlogzzz.workers.dev": [
+								"zsgrooms/modid/seedbank/SeedBankClient.class"
+							],
+							"your-relay.workers.dev": [
+								"zsgrooms/modid/ui/RoomSetupScreen.class"
+							],
+							"api.github.com": [
+								"zsgrooms/modid/update/UpdateManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's New\n\n- Added **AA Thunderless** to the filter picker. Win by completing all advancements except Very Very Frightening; leaving the End does not finish the race. SpeedRunIGT switches categories during the race and restores your previous category afterward.\n- The AA temple bank requires at least 22 starting gunpowder, a village within 70 blocks, two extra temples within 1,024 blocks, and a modeled route to three End ships. It retains our temple and Nether checks, including stables requirements. AA stays outside the random mix and allows repeats when its recent-family selection is exhausted.\n- Added **Analysis > Mob Highlights** in Replay Viewer. Search and select mob types, choose an outline color, and see them through walls. Selections survive seeking and player switching. Existing recordings work; no recorder changes are needed.\n- Fixed Nether preload ticket sizing and terrain scheduling, with cleanup on disconnect and shutdown. Destination preparation remains bounded and adapts to server tick time.\n- Reduced replay-saving allocations and removed long metadata serialization from the capture lock, without changing recorded detail, timestamps, or file formats.\n- Expanded the hosted seed banks and added resumable AA-only overnight filtering and filter diagnostics. Seed data remains outside the mod download.\n\nUpdate **ZSG Rooms to 1.0.30** and the optional **ZSG Replay Viewer to 0.4.0**. ReplayMod remains **1.16.1-2.6.27**. All players in an AA room should use the updated core mod.\n\n\n## Downloads\n\n- **zsg-rooms-1.0.30.jar**: the main mod. ReplayMod is not required for racing or recording.\n- **zsg-replay-viewer-0.4.0.jar**: optional playback controls. Install alongside [ReplayMod **1.16.1-2.6.27**](https://www.replaymod.com/download/), on Minecraft 1.16.1 with Fabric Loader 0.19.3+.\n- **zsg-replay-viewer-0.4.0-sources.jar**: viewer source, not an installable mod. GPL-3.0-or-later; the core remains CC0-1.0. Full build scripts are in the tagged source archive.\n- **zsg-rooms-filter-gallery.zip**: optional picker and loading artwork. Put it in `resourcepacks` and enable it in Minecraft, not in `mods`. The images are not bundled in either mod.\n\nEnable recording under **Settings > Replays**. If ReplayMod is installed, disable its Record Singleplayer, Record Server, and Automatic Recording options first. SpeedRunIGT is needed during recording for RTA/IGT data. Player switching currently uses manually shared files.\n\nThe in-game updater updates ZSG Rooms and an already-installed Replay Viewer. Install the viewer manually the first time; ReplayMod and resource packs remain manual updates. Updaters through ZSG Rooms 1.0.28 update only the core. [Replay setup and controls](https://github.com/banlog1/zsg-rooms/blob/v1.0.30/replay-viewer/README.md).\n\n<details>\n<summary>Optional Download SHA-256</summary>\n\n```text\n6bd5052b41ef6ab54a8b1eb7a15dc7ce623b75ba8d3b2f1006a6798165fb369b  zsg-replay-viewer-0.4.0.jar\n708f4d0cb1a91aeba927d19338c76764d2a698ecc635291afe746085cb9e8950  zsg-replay-viewer-0.4.0-sources.jar\n96ba22cbd685860139a2d6dd1939f84a93f70dd64a251b7a13bc68196e62d912  zsg-rooms-filter-gallery.zip\n```\n\n</details>"
+		},
+		{
+			"tag": "v1.0.29",
+			"published": "2026-09-25T20:42:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 589205054,
+					"name": "zsg-replay-viewer-0.3.0.jar",
+					"url": "https://github.com/banlog1/zsg-rooms/releases/download/v1.0.29/zsg-replay-viewer-0.3.0.jar",
+					"size": 203222,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "3fdc6dd538ffc399b77ff3e2e025edf70eef25b0d6f4102273b49485c33d9375",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "zsg-replay-viewer",
+							"version": "0.3.0",
+							"name": "ZSG Replay Viewer",
+							"description": "Optional speedrun playback controls for ReplayMod 1.16.1-2.6.27.",
+							"minecraft": "1.16.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"replaymod"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 108,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 589205053,
+					"name": "zsg-rooms-1.0.29.jar",
+					"url": "https://github.com/banlog1/zsg-rooms/releases/download/v1.0.29/zsg-rooms-1.0.29.jar",
+					"size": 720951,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "cdafa79841e10810f0077cbcaa43494005871880d9c9166210f40aaed673be55",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "zsg-rooms",
+							"version": "1.0.29",
+							"name": "ZSG Rooms",
+							"description": "Private synchronized filtered-seed races for Minecraft speedrunners.",
+							"minecraft": "~1.16.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric"
+							],
+							"provides": []
+						}
+					],
+					"icon": "7aa406f7e3aeb386b10d918b4e883808fc5ca9b7deca64cb8a424ec0bd715f1a.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 348,
+						"jars": [
+							"assets/zsg-rooms/replay/zsg-replay-writer.jar"
+						],
+						"capabilities": {
+							"network": {
+								"zsgrooms/modid/net/RoomSocketTransport$ClientHandler.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close"
+								],
+								"zsgrooms/modid/net/RoomSocketTransport$RoomClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"zsgrooms/modid/net/SimpleWebSocketClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.close"
+								],
+								"zsgrooms/modid/replay/ReplayLibraryInstaller.class": [
+									"java/net/URL.openConnection"
+								],
+								"zsgrooms/modid/seedbank/SeedBankClient.class": [
+									"java/net/URL.openConnection"
+								],
+								"zsgrooms/modid/update/UpdateManager.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"zsgrooms/modid/replay/ReplayPrototype$Library.class": [
+									"java/net/URLClassLoader.<init>",
+									"java/net/URLClassLoader.loadClass",
+									"java/net/URLClassLoader.close"
+								],
+								"zsgrooms/modid/replay/ReplayPrototype.class": [
+									"java/net/URLClassLoader.close"
+								]
+							},
+							"exec": {
+								"zsgrooms/modid/update/UpdateManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"zsg-rooms-seeds.banlogzzz.workers.dev": [
+								"zsgrooms/modid/seedbank/SeedBankClient.class"
+							],
+							"your-relay.workers.dev": [
+								"zsgrooms/modid/ui/RoomSetupScreen.class"
+							],
+							"api.github.com": [
+								"zsgrooms/modid/update/UpdateManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's New\n\n- Added our own Buried Treasure and Ruined Portal seed banks. Both use our stables requirements. RP seeds require a completable frame without obsidian mining, a golden axe or pickaxe, and usable ignition, without requiring Looting or a fixed stronghold position.\n- ZSG Rooms Mode now draws our Temple, Village, Shipwreck and Buried Treasure at 20% each, our Ruined Portal at 15%, and RP Seedbank at 5% for the occasional Looting run. Original filters remain individually selectable.\n- Standard ZSG Rooms now enables every room rule except cheats, including reduced zero-cycle fly-aways and shared first Nether entry. The Vanilla Barters variant keeps only boosted barters off as well; Raw is unchanged.\n- RP chest and frame repairs are automatic on both portal filters, including random-mode draws. Safe terrain clearance helps expose the chest. The repair setting is now a testing override for other seed types.\n- Shipwreck Spawn Close keeps a safe natural spawn within 60 blocks; otherwise it searches for the nearest safe island or coast within 128 blocks, falling back to the original spawn when needed.\n- Replay freecam can inspect recorded chest contents and, after the run is released for viewing, predicted unopened vanilla loot where metadata is available. Unknown or changed contents remain marked accordingly. Player sounds are now on by default; seeking stays silent.\n- Reduced recorder allocation overhead and increased bounded buffer headroom for chunk-loading bursts, with better diagnostics for incomplete recordings.\n- The updater now supports an already-installed Replay Viewer. Added BT/RP overnight collection and faster model-only search policies; the expanded seed bank stays outside the mod download.\n\nUpdate both **ZSG Rooms 1.0.29** and the optional **ZSG Replay Viewer 0.3.0**. ReplayMod remains **1.16.1-2.6.27**. Older recordings remain usable; chest metadata features need recordings made with the updated recorder. Updaters from 1.0.28 or earlier update only the core, so update the viewer manually once or check again after restarting the new core.\n\n\n## Downloads\n\n- **zsg-rooms-1.0.29.jar**: the main mod. ReplayMod is not required for racing or recording.\n- **zsg-replay-viewer-0.3.0.jar**: optional playback controls. Install alongside [ReplayMod **1.16.1-2.6.27**](https://www.replaymod.com/download/), on Minecraft 1.16.1 with Fabric Loader 0.19.3+.\n- **zsg-replay-viewer-0.3.0-sources.jar**: viewer source, not an installable mod. GPL-3.0-or-later; the core remains CC0-1.0. Full build scripts are in the tagged source archive.\n- **zsg-rooms-filter-gallery.zip**: optional picker and loading artwork. Put it in `resourcepacks` and enable it in Minecraft, not in `mods`. The images are not bundled in either mod.\n\nEnable recording under **Settings > Replays**. If ReplayMod is installed, disable its Record Singleplayer, Record Server, and Automatic Recording options first. SpeedRunIGT is needed during recording for RTA/IGT data. Player switching currently uses manually shared files.\n\nThe in-game updater updates ZSG Rooms and an already-installed Replay Viewer. Install the viewer manually the first time; ReplayMod and resource packs remain manual updates. Updaters through ZSG Rooms 1.0.28 update only the core. [Replay setup and controls](https://github.com/banlog1/zsg-rooms/blob/v1.0.29/replay-viewer/README.md).\n\n<details>\n<summary>Optional Download SHA-256</summary>\n\n```text\n3fdc6dd538ffc399b77ff3e2e025edf70eef25b0d6f4102273b49485c33d9375  zsg-replay-viewer-0.3.0.jar\n85ad48f48a0d4503c768811d97f3df8f32102169c57b9c93e9295f38acce57ce  zsg-replay-viewer-0.3.0-sources.jar\n96ba22cbd685860139a2d6dd1939f84a93f70dd64a251b7a13bc68196e62d912  zsg-rooms-filter-gallery.zip\n```\n\n</details>"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [
+		"branding/zsg-rooms/zsg-rooms-square-128.png",
+		"branding/zsg-rooms/zsg-rooms-square-512.png",
+		"branding/zsg-rooms/zsg-rooms-square-64.png",
+		"branding/zsg-rooms/zsg-rooms-transparent-128.png",
+		"branding/zsg-rooms/zsg-rooms-transparent-512.png",
+		"branding/zsg-rooms/zsg-rooms-transparent-64.png"
+	],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

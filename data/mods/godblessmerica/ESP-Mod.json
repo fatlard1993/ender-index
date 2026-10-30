@@ -1,0 +1,226 @@
+{
+	"repo": "godblessmerica/ESP-Mod",
+	"host": "github",
+	"description": "A client-side Fabric ESP mod - see entity outlines through walls.",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-06-05T00:32:39Z",
+	"pushed": "2026-10-06T02:42:57Z",
+	"releases": [
+		{
+			"tag": "v2.0.2",
+			"published": "2026-10-06T02:42:57Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 614254820,
+					"name": "esp-mod-2.0.2.jar",
+					"url": "https://github.com/godblessmerica/ESP-Mod/releases/download/v2.0.2/esp-mod-2.0.2.jar",
+					"size": 107594,
+					"downloads": 42,
+					"inspection": 2,
+					"sha256": "ae785c2a923ddff0afad52fda3809443d63fda83e95fc5885e99a65375bbc5a2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "espmod",
+							"version": "2.0.2",
+							"name": "ESP Mod",
+							"description": "An ESP mod that shows entity outlines and hitboxes through walls.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "35f7161d143b7bc7856d4adce370e1fa2d7d6073fd84d248b8f6d86e12298a62.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 46,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# ESP Mod v2.0.2 \n\n## Changes from v2.0.1\n\n- Skip chunks entirely outside Box Range before checking individual cached blocks. The existing per-block range check still determines which boxes are drawn.\n- Reuse the drawing style for each block type in a chunk, instead of creating a style for every box.\n- Avoid creating empty chunk caches for untracked block changes, and remove caches when their last match disappears.\n\nThe v2.0.1 chunk-boundary update fix and existing presets, colors, settings and dependency requirements are retained. Sections without tracked blocks are still skipped during scans, with one chunk scanned per tick.\n\n## Validation\n\nThe build and assertion self-check pass, covering chunk-boundary updates, cache cleanup, negative coordinates, exact range boundaries, and a grid comparison confirming the chunk filter does not reject in-range blocks. No FPS improvement has been measured on lower-end hardware, and these rendering changes have not yet been visually checked in Minecraft.\n\n## Installation\n\nRequires Minecraft **26.3**, Java **25+**, Fabric Loader **0.19.5+**, and Fabric API for **26.3** (built against **0.161.0+26.3**). Mod Menu **21.0.0** is optional."
+		},
+		{
+			"tag": "v2.0.1",
+			"published": "2026-10-06T02:26:20Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 614215203,
+					"name": "esp-mod-2.0.1.jar",
+					"url": "https://github.com/godblessmerica/ESP-Mod/releases/download/v2.0.1/esp-mod-2.0.1.jar",
+					"size": 107165,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "c948129c4b84a9605039e761657cebc2727ffd83459387be6658019b55e73e94",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "espmod",
+							"version": "2.0.1",
+							"name": "ESP Mod",
+							"description": "An ESP mod that shows entity outlines and hitboxes through walls.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "35f7161d143b7bc7856d4adce370e1fa2d7d6073fd84d248b8f6d86e12298a62.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 46,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# ESP Mod v2.0.1 - Block ESP patch\n\nThis patch addresses missing ore boxes at chunk boundaries reported in v2.0.0. Minecraft and dependency requirements remain the same.\n\n## Changes from v2.0.0\n\n- Placing or removing tracked blocks updates the cache immediately, including in loaded chunks awaiting their first scan. Previously, these updates were discarded until the chunk was scanned.\n- Changing tracked types or selecting a preset keeps existing results instead of blanking the cache. Nearby chunks are rescanned first.\n- Block changes are captured through the client state's dirty-block hook, including changes that bypass the notification flags used by the previous hook.\n\nThe box-range setting still applies to block and entity boxes. Entity ESP uses a separate per-frame entity lookup and was unaffected by this cache issue.\n\nRequires Minecraft **26.3**, Java **25+**, Fabric Loader **0.19.5+**, and Fabric API for **26.3** (built against **0.161.0+26.3**). Mod Menu **21.0.0** is optional."
+		},
+		{
+			"tag": "v2.0.0",
+			"published": "2026-10-06T01:57:25Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 614157251,
+					"name": "esp-mod-2.0.0.jar",
+					"url": "https://github.com/godblessmerica/ESP-Mod/releases/download/v2.0.0/esp-mod-2.0.0.jar",
+					"size": 106443,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "50281fd7645341707c25cc070714deaed41aa050cac76a1aa15cf4a3350c8029",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "espmod",
+							"version": "2.0.0",
+							"name": "ESP Mod",
+							"description": "An ESP mod that shows entity outlines and hitboxes through walls.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "35f7161d143b7bc7856d4adce370e1fa2d7d6073fd84d248b8f6d86e12298a62.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 46,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# ESP Mod v2.0.0\n\nThis update brings Minecraft 26.3 support, block ESP, custom box colors, and a revised configuration menu. It follows the v1.0.0 release, which was named Spectral ESP and targeted Minecraft 26.1.2.\n\n## v1.0.0 vs. v2.0.0\n\n| Feature | v1.0.0 | v2.0.0 |\n|---|---|---|\n| Minecraft version | 26.1.2 | 26.3 |\n| ESP targets | Entities | Entities and selected blocks |\n| Entity selection | Search the full registry and toggle types | Add, toggle, recolor, or remove tracked types |\n| Entity box colors | Fixed player, mob, and other-entity colors | Custom colors per entity type |\n| Entity presets | Players, Mobs, Vehicles, Technical, All Entities bulk toggles | Players, Mobs, Vehicles, Decorative, Projectiles, Items & Drops, Mods, Other; existing settings are preserved |\n| Block presets | None | Ores, Containers, Valuables, and individual block selection |\n| Box range | No configurable limit | 8–512 blocks or automatic render distance |\n| Toggle key | `G` | Unbound by default; set it in the menu or Controls |\n| Saved settings | `spectral-esp.json`; master enabled state not saved | Separate entity/block configs; enabled states saved |\n\n## Features and cleanup\n\n- Entity and block box colors can be chosen with RGB sliders or a `#RRGGBB` hex value, with a live color preview.\n- The master toggle controls entity and block ESP together. Entity outlines and hitboxes have separate Show/Hide controls.\n- Tracked invisible entities can show glowing outlines. Outline colors continue to follow Minecraft's normal behavior.\n- Menus use Minecraft's native keyboard navigation, focus, dragging, and narration handling. Escape returns to the previous menu or cancels color selection/key rebinding.\n- Block scanning processes loaded chunks gradually on the client thread. Scanned positions update when blocks change and are removed when chunks unload.\n- Entity lookups use registered entity types directly. Unused code, redundant caches, and unnecessary concurrent collections were removed.\n- Config saves finish writing before replacing the existing file. Invalid files are logged and backed up, duplicate/invalid entries are filtered, and the saved box range is constrained to its supported values.\n- Input handling and entity box submission were updated for Minecraft 26.3."
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-06-05T00:41:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 438838743,
+					"name": "esp-mod-1.0.0.jar",
+					"url": "https://github.com/godblessmerica/ESP-Mod/releases/download/v1.0.0/esp-mod-1.0.0.jar",
+					"size": 49234,
+					"downloads": 26,
+					"inspection": 2,
+					"sha256": "b972221c464135077c896c75656c6df327237559e240d6000106f71ed2609fb4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "espmod",
+							"version": "1.0.0",
+							"name": "ESP Mod",
+							"description": "An ESP mod that shows entity outlines and hitboxes through walls.",
+							"minecraft": "~26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "35f7161d143b7bc7856d4adce370e1fa2d7d6073fd84d248b8f6d86e12298a62.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 20,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "ESP Mod v1.0.0\n--------------------\n\n### ESP Display\n\n- **Outline ESP** - glowing entity outlines visible through walls\n- **Hitbox ESP** - colored wireframe boxes rendered through walls\n- Players shown in red, mobs in orange, other entities in yellow\n\n### Entity Presets\n\n- Quick toggles for **Players**, **Mobs**, **Vehicles**, **Technical**, and **All Entities**\n\n### Advanced Entity Settings\n\n- Full scrollable list of every registered entity type grouped by category\n- Search bar to filter by name\n- Per-entity **Show/Hide** toggle\n\n### Config Menu\n\n- Open in-game with `\\`\n- Rebind keys directly in the config screen\n- `G` toggles ESP on/off\n- Mod Menu support included"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

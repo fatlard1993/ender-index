@@ -1,0 +1,298 @@
+{
+	"repo": "finneritter/NAMM-legacy",
+	"host": "github",
+	"description": "Minecraft PvP utility mod with macros, target HUD, and hacked-client-style UI — Fabric 1.21.11",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-03-18T19:08:03Z",
+	"pushed": "2026-03-24T01:13:22Z",
+	"releases": [
+		{
+			"tag": "v3.7.0",
+			"published": "2026-03-24T01:13:22Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 380120900,
+					"name": "namm-3.7.0.jar",
+					"url": "https://github.com/finneritter/NAMM-legacy/releases/download/v3.7.0/namm-3.7.0.jar",
+					"size": 319078,
+					"downloads": 71,
+					"inspection": 2,
+					"sha256": "23270246b03aed48d5e7f2d582706349456327f32c739c63263ab34c5935efc9",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "namm",
+							"version": "3.7.0",
+							"name": "NAMM",
+							"description": "Minecraft PvP utility mod with macros, target HUD, and hacked-client-style UI",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "be57a63723fd8de563ea2f467c716f1bad932df17885891e148b17ee3b8a1178.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 44,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"apache.org": [
+								"com/namm/config/RazerSynapseImporter.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's New\n\n### Delay Variance\nAdds human-like randomization to macro timing so actions don't look robotic.\n\n- **Your set delay is always the minimum** — variance only adds time on top, never reduces it\n- **Settings slider** (0-5) controls aggressiveness:\n  - **0** — OFF, exact timing (default)\n  - **1** — +0-3ms (barely noticeable, safest)\n  - **2** — +0-8ms (subtle)\n  - **3** — +0-15ms (moderate)\n  - **4** — +0-25ms (noticeable)\n  - **5** — +0-40ms (aggressive)\n- **Hotbar-safe** — even at max, a 50ms delay only becomes 50-90ms, which won't break slot switching sequences\n- Uses `ThreadLocalRandom` for zero-contention randomness across concurrent macros\n- Visual slider bar in Settings shows current level with accent color fill\n\n**Requirements:** Minecraft 1.21.11 · Fabric Loader ≥ 0.18.2 · Fabric API · Java 21+"
+		},
+		{
+			"tag": "v3.6.0",
+			"published": "2026-03-24T01:05:28Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 380117324,
+					"name": "namm-3.6.0.jar",
+					"url": "https://github.com/finneritter/NAMM-legacy/releases/download/v3.6.0/namm-3.6.0.jar",
+					"size": 318138,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "1caec4597b9c2aaca6b87b50726e4344e341e2969a1d5c8dbd4cbdd382b53399",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "namm",
+							"version": "3.6.0",
+							"name": "NAMM",
+							"description": "Minecraft PvP utility mod with macros, target HUD, and hacked-client-style UI",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "be57a63723fd8de563ea2f467c716f1bad932df17885891e148b17ee3b8a1178.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 44,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"apache.org": [
+								"com/namm/config/RazerSynapseImporter.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's New\n\n### Precision Timing Engine\n- **Hybrid busy-wait delays** — `Thread.sleep` handles the coarse phase, then a `System.nanoTime()` spin loop with `Thread.onSpinWait()` nails the final 2ms. Delays are now accurate to <1ms instead of ±15ms.\n- **Pre-snapshot step arrays** — step lists are copied to arrays before execution, eliminating iterator allocation on every loop cycle.\n\n### Faster Macro Startup\n- **Bounded thread pool** (core 2, max 8) with `MAX_PRIORITY` — warm threads are always ready, no thread creation lag on trigger.\n- **Silent restart** — restarting a macro no longer flashes a \"disabled\" toast before \"enabled\".\n- **Safe stopAll()** — iterates a snapshot to prevent ConcurrentModificationException.\n\n### Input Hot Path\n- **Cached key lookups** — `InputConstants.Key` objects are cached per keyCode so looping macros skip the map lookup after the first iteration.\n- **Ordinal enum comparison** — action type checks use pre-cached int ordinals instead of enum identity.\n- **Removed redundant DELAY guard** — one fewer branch in the critical path.\n\n### Trigger Detection\n- **Merged TOGGLE_LOOP/HOLD_TO_PLAY** — identical logic consolidated into one case.\n- **IdentityHashMap for chat commands** — zero string allocation per tick (was creating `\"cmd:\" + name` every tick).\n- **Early exit** — skips all processing when no macros or commands are configured.\n\n### Test Suite\n- **330 tests** (up from 261), 0 failures\n- Timing precision tests verify ±10ms tolerance with <5ms standard deviation\n- Concurrency safety and thread interrupt contract coverage\n\n**Requirements:** Minecraft 1.21.11 · Fabric Loader ≥ 0.18.2 · Fabric API · Java 21+"
+		},
+		{
+			"tag": "v3.5.0",
+			"published": "2026-03-24T00:45:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 380109231,
+					"name": "namm-3.5.0.jar",
+					"url": "https://github.com/finneritter/NAMM-legacy/releases/download/v3.5.0/namm-3.5.0.jar",
+					"size": 316831,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "7fb29db2d225fabba4d4fe01cbb94b2420eced01301dceaec034bcbc06c3db45",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "namm",
+							"version": "3.5.0",
+							"name": "NAMM",
+							"description": "Minecraft PvP utility mod with macros, target HUD, and hacked-client-style UI",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "be57a63723fd8de563ea2f467c716f1bad932df17885891e148b17ee3b8a1178.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 44,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"apache.org": [
+								"com/namm/config/RazerSynapseImporter.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's New\n\n### Target HUD\nOn-screen opponent info panel that shows health bar, armor slots, totem indicator, and active potion effects for the player you're looking at or recently hit.\n\n- **Crosshair targeting** — automatically locks onto players in your crosshair\n- **Sticky targeting** — attacking a player resets the 3-second display timeout\n- **Draggable** — open the NAMM menu and drag the panel anywhere on screen\n- **Persistent position** — saved to config across sessions\n- **Settings toggle** — enable/disable from the Settings window\n\n### Other Changes\n- Updated mod description to better reflect the mod's purpose\n- Updated README with reorganized feature list\n- Version bump to 3.5.0\n\n### Full Changelog\n- `feat: v3.5.0 — add Target HUD module for opponent info display`\n- `chore: bump version to 3.5.0, update README and mod description`\n\n**Requirements:** Minecraft 1.21.11 · Fabric Loader ≥ 0.18.2 · Fabric API · Java 21+"
+		},
+		{
+			"tag": "v3.4.0",
+			"published": "2026-03-24T00:18:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 380099077,
+					"name": "namm-3.4.0.jar",
+					"url": "https://github.com/finneritter/NAMM-legacy/releases/download/v3.4.0/namm-3.4.0.jar",
+					"size": 308108,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "5774acb23e69508e97245db6fde85caaec3b2beb86aa835e81f3b96cfebb9001",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "namm",
+							"version": "3.4.0",
+							"name": "NAMM",
+							"description": "Not Another Macro Mod - Razer Synapse-style macro creation for Minecraft",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "be57a63723fd8de563ea2f467c716f1bad932df17885891e148b17ee3b8a1178.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 43,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"apache.org": [
+								"com/namm/config/RazerSynapseImporter.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's New\n\nAdded a comprehensive test suite with **261 tests** across 14 test classes, taking NAMM from zero test coverage to solid foundation coverage.\n\n### Test Coverage\n\n| Package | Tests | What's Covered |\n|---------|-------|----------------|\n| `model/` | ~30 | All POJOs, enums, copy semantics, edge cases |\n| `config/` | ~70 | JSON round-trips, malformed input, Razer XML import, XXE protection |\n| `executor/` | 3 | Executor construction, interrupt contracts |\n| `input/` | 7 | Rising/falling edge detection logic |\n| `util/` | 51 | All 78 key name mappings, mouse buttons |\n| `ui/` | ~100 | Theme values, toast thread safety, icon UV coordinates |\n\n### Build Changes\n- Added JUnit 5 + Mockito test dependencies\n- Version bump to 3.4.0\n\n### Known Issues Found During Testing\n- `TOGGLE_LOOP` and `HOLD_TO_PLAY` playback modes behave identically (both act as hold-to-play)\n- Single-digit char keys in Razer XML imports (e.g., `Key=\"5\"`) are silently dropped\n- These will be addressed in a future release\n\n**Full Changelog**: https://github.com/finneritter/NAMM/compare/v3.3.1...v3.4.0"
+		},
+		{
+			"tag": "v3.3.1",
+			"published": "2026-03-20T00:20:34Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 377582105,
+					"name": "namm-3.3.1.jar",
+					"url": "https://github.com/finneritter/NAMM-legacy/releases/download/v3.3.1/namm-3.3.1.jar",
+					"size": 308107,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "35be797674a2b010917fa4bf9d5b7509445d8816498eac75b2c4b66a34a86eb3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "namm",
+							"version": "3.3.1",
+							"name": "NAMM",
+							"description": "Not Another Macro Mod - Razer Synapse-style macro creation for Minecraft",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "be57a63723fd8de563ea2f467c716f1bad932df17885891e148b17ee3b8a1178.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 43,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"apache.org": [
+								"com/namm/config/RazerSynapseImporter.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Bug Fix\n\n- **Fixed add step popup clicks** — the Input/Delay popup now works reliably regardless of scroll position or window placement. The popup rendered outside the window bounds (via overflow rendering) but clicks were only being forwarded for the content area. Added overflow click handling so popup clicks register even when the popup appears outside the window.\n\n## Installation\nDrop `namm-3.3.1.jar` into your `.minecraft/mods/` folder. Requires Fabric Loader 0.18.2+, Fabric API, and Java 21."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

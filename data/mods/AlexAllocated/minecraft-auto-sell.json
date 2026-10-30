@@ -1,0 +1,263 @@
+{
+	"repo": "AlexAllocated/minecraft-auto-sell",
+	"host": "github",
+	"description": "Client-only Fabric mod that safely automates an approved Minecraft /sell inventory workflow",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-08-21T09:54:04Z",
+	"pushed": "2026-08-27T22:04:47Z",
+	"releases": [
+		{
+			"tag": "v1.0.6",
+			"published": "2026-08-27T22:05:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 532927456,
+					"name": "autosell-1.0.6.jar",
+					"url": "https://github.com/AlexAllocated/minecraft-auto-sell/releases/download/v1.0.6/autosell-1.0.6.jar",
+					"size": 38645,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "d756e59646479699ed7d6c52c4bdd1d93ee97165844c22a827ce03969c751906",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "autosell",
+							"version": "1.0.6",
+							"name": "Auto Sell",
+							"description": "Automatically deposits a full player inventory into an approved server sell menu.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 16,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What changed\n\nThis is a diagnostic-focused release. It keeps the v1.0.5 selling behavior and adds the evidence needed to diagnose the remaining invisible-slot stall.\n\n- Writes a dedicated rolling trace to `logs/autosell-debug.log`.\n- Records state phases/timers, exact inventory and sell-menu item IDs/counts, screen changes, container/state IDs, `/sell` attempts, clicks, acknowledgements, retries, closes, and 10-second heartbeats.\n- Adds **F7 – Capture Auto Sell Diagnostics**. Press F7 immediately when the problem is visible; it writes an `incident_marker` with a complete snapshot and copies the exact log path.\n- Keeps `autosell-debug.log` and `autosell-debug-previous.log` capped at 4 MiB each. Ordinary writes are batched so diagnostics do not add a disk flush to every item transfer.\n- Does not record chat, coordinates, player name, or server address.\n\n## What to send after a failure\n\nBefore toggling the mod, disconnecting, or restarting Minecraft, press **F7** and attach `autosell-debug.log`. If requested, also attach `autosell-debug-previous.log` from the same folder.\n\n## Install\n\n1. Install Minecraft Java 26.2, Fabric Loader 0.19.3 or newer, and Fabric API for Minecraft 26.2.\n2. Download **autosell-1.0.6.jar** from the Assets section below.\n3. Copy the JAR into the Minecraft `mods` directory, replacing the older Auto Sell JAR.\n4. Join the server and press **F6** to enable Auto Sell.\n\nAuto Sell always starts disabled. F6 and F7 can be changed in Minecraft Controls."
+		},
+		{
+			"tag": "v1.0.5",
+			"published": "2026-08-25T13:40:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 529257698,
+					"name": "autosell-1.0.5.jar",
+					"url": "https://github.com/AlexAllocated/minecraft-auto-sell/releases/download/v1.0.5/autosell-1.0.5.jar",
+					"size": 27188,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "dde4c6c1ba2eb2ce5a47c3032a4890eab8a4d2b8703dd41b16936733fc2210b8",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "autosell",
+							"version": "1.0.5",
+							"name": "Auto Sell",
+							"description": "Automatically deposits a full player inventory into an approved server sell menu.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 14,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What changed\n\n- Restores fast transfer pacing: the default delay is now 1 tick after each server acknowledgement instead of 3 ticks.\n- If one occupied slot appears empty and leaves the client stuck at 35/36 slots for 5 seconds, Auto Sell opens the sell window to refresh the server inventory and continue.\n- Preserves the server-acknowledged transfer flow and five-attempt recovery limit that stopped the interrupted-transfer loop.\n- Existing v1.0.4 configs using the old default click delay migrate automatically; custom delay values remain unchanged.\n\n## Install\n\n1. Install Minecraft Java 26.2, Fabric Loader 0.19.3 or newer, and Fabric API for Minecraft 26.2.\n2. Download **autosell-1.0.5.jar** from the Assets section below.\n3. Copy the JAR into the Minecraft `mods` directory, replacing the older Auto Sell JAR.\n4. Join the server and press **F6** to enable Auto Sell.\n\nAuto Sell always starts disabled. The F6 key can be changed in Minecraft Controls."
+		},
+		{
+			"tag": "v1.0.4",
+			"published": "2026-08-24T20:46:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 528164545,
+					"name": "autosell-1.0.4.jar",
+					"url": "https://github.com/AlexAllocated/minecraft-auto-sell/releases/download/v1.0.4/autosell-1.0.4.jar",
+					"size": 25533,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "ee4f75ca1cff91d897f19415b60f65103037b74cdcb5e6c75f97908c1ed52fb6",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "autosell",
+							"version": "1.0.4",
+							"name": "Auto Sell",
+							"description": "Automatically deposits a full player inventory into an approved server sell menu.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 13,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What changed\n\n- Sends server-authoritative item moves and waits for each menu-state acknowledgement before continuing or closing. This prevents late updates for an already-closed container from creating invisible/ghost inventory slots.\n- Queues at most the number of empty sell-menu slots, so a 35-slot menu never receives a failing 36th move.\n- Confirms both the visible screen and the underlying container are closed, then gives the server 500 ms to finish the sale before another `/sell`.\n- Automatically recovers from failed window opens, interrupted transfers, no-progress transfers, and unacknowledged moves.\n- Uses one bounded recovery budget: after five retries without a successful sale, Auto Sell disables itself until the toggle key is pressed.\n- Replaces the old retry settings with `clickAckTimeoutTicks`, `postCloseDelayTicks`, `retryDelayTicks`, and `maxRetries`; existing config files are migrated automatically.\n\n## Install\n\n1. Fully close Minecraft. This also clears any ghost inventory state left by an older version.\n2. Remove the older Auto Sell JAR from the Minecraft `mods` directory.\n3. Install Minecraft Java 26.2, Fabric Loader 0.19.3 or newer, and Fabric API for Minecraft 26.2.\n4. Download **autosell-1.0.4.jar** from the Assets section below and copy it into the `mods` directory.\n5. Join the server and press **F6** to enable Auto Sell.\n\nAuto Sell always starts disabled. F6 can be changed in Minecraft Controls."
+		},
+		{
+			"tag": "v1.0.3",
+			"published": "2026-08-24T08:20:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 527300744,
+					"name": "autosell-1.0.3.jar",
+					"url": "https://github.com/AlexAllocated/minecraft-auto-sell/releases/download/v1.0.3/autosell-1.0.3.jar",
+					"size": 23265,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "ff91146c7be5210b4b1469918d7f614b18c2cc0bcfb2dfdb55558a791e4d3733",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "autosell",
+							"version": "1.0.3",
+							"name": "Auto Sell",
+							"description": "Automatically deposits a full player inventory into an approved server sell menu.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 13,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What changed\n\n- Removes the fixed three-second wait after every successful sale.\n- Confirms that the sell window has actually closed, then immediately starts the next cycle if the inventory is full again.\n- Waits without sending `/sell` if the sell window or another GUI is still open.\n- Keeps the v1.0.2 safety behavior: a sell window that fails to open is retried once after three seconds, and a late-opening window is accepted without a duplicate command.\n- Removes `postSaleDelayTicks`; existing config files are rewritten automatically on the next Minecraft launch.\n\n## Install\n\n1. Remove the older Auto Sell JAR from the Minecraft `mods` directory.\n2. Install Minecraft Java 26.2, Fabric Loader 0.19.3 or newer, and Fabric API for Minecraft 26.2.\n3. Download **autosell-1.0.3.jar** from the Assets section below and copy it into the `mods` directory.\n4. Join the server and press **F6** to enable Auto Sell.\n\nAuto Sell always starts disabled. F6 can be changed in Minecraft Controls."
+		},
+		{
+			"tag": "v1.0.2",
+			"published": "2026-08-24T07:56:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 527271929,
+					"name": "autosell-1.0.2.jar",
+					"url": "https://github.com/AlexAllocated/minecraft-auto-sell/releases/download/v1.0.2/autosell-1.0.2.jar",
+					"size": 23414,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "86f6200e7649d525e98bfc1e532e79633011d4287aba6dc82b78e0196aa0fc54",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "autosell",
+							"version": "1.0.2",
+							"name": "Auto Sell",
+							"description": "Automatically deposits a full player inventory into an approved server sell menu.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 13,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What changed\n\n- Waits 3 seconds after a successful sale before starting another `/sell` cycle.\n- If the sell window does not open within 5 seconds, waits 3 seconds and retries `/sell` once.\n- Accepts a late-opening sell window during the retry delay without sending a duplicate command.\n- Adds configurable `postSaleDelayTicks`, `screenRetryDelayTicks`, and `maxScreenOpenRetries` settings. Existing config files are extended automatically the next time Minecraft starts.\n\n## Install\n\n1. Remove the older Auto Sell JAR from the Minecraft `mods` directory.\n2. Install Minecraft Java 26.2, Fabric Loader 0.19.3 or newer, and Fabric API for Minecraft 26.2.\n3. Download **autosell-1.0.2.jar** from the Assets section below and copy it into the `mods` directory.\n4. Join the server and press **F6** to enable Auto Sell.\n\nAuto Sell always starts disabled. F6 can be changed in Minecraft Controls."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}

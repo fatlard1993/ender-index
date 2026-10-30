@@ -1,0 +1,206 @@
+{
+	"repo": "Den1zzDev/sdl-wayland-tweaks",
+	"host": "github",
+	"description": "High-performance native Wayland enhancements and SDL3 optimizations for Minecraft on Linux.",
+	"stars": 6,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-09-26T16:21:35Z",
+	"pushed": "2026-10-12T19:01:47Z",
+	"releases": [
+		{
+			"tag": "v1.2.1",
+			"published": "2026-10-12T19:03:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 634698892,
+					"name": "sdl-wayland-tweaks-26.3-1.2.1.jar",
+					"url": "https://github.com/Den1zzDev/sdl-wayland-tweaks/releases/download/v1.2.1/sdl-wayland-tweaks-26.3-1.2.1.jar",
+					"size": 25977,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "23f712c69260c56fdec897893aae8d630b632d5c99bc8b03b0ca0d2f6c983f4e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "sdl-wayland-tweaks",
+							"version": "26.3-1.2.1",
+							"name": "SDL Wayland Tweaks",
+							"description": "High-performance native Wayland enhancements and SDL3 optimizations for Minecraft on Linux.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4378a26b02328bc69bf479c887e02656d3749711510a8df2dff787b3c1d9cb28.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 14,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Fixes and improvements\n\n### Windowing and display\n* **True 1:1 borderless fullscreen:** Strips both the 1-pixel window width offset and framebuffer padding that Minecraft adds on Wayland. The window now matches the native monitor bounds exactly, allowing compositors (such as GNOME, KDE Plasma, Hyprland, and COSMIC) to engage direct scanout.\n* **Native RenderPearl tearing mode:** Async page flip now hooks into RenderPearl's presentation mode selector to request `PresentMode.IMMEDIATE`. This sets the swap interval to 0 on the render thread and enables compositor tearing when V-Sync is disabled.\n* **Surface configuration deduplication:** Surface reconfiguration is now only requested when the tearing state actually changes, preventing redundant swapchain rebuilds when exiting configuration menus.\n\n### Input and controls\n* **IME Tab completion and navigation:** Codepoint 9 (`\\t`) is now explicitly whitelisted in the IME control character filter. Tab completion in chat and Tab cycling through UI buttons work as intended when Wayland IMEs are active.\n* **Read-only text field protection:** Middle-click paste from the Linux primary selection now verifies whether an `EditBox` is editable before inserting text.\n* **Smoother relative mouse motion:** Lowered the sub-pixel remainder threshold from `1e-5` to `1e-10`, ensuring fractional movements reported by Wayland relative pointer events are retained across frames.\n* **Camera snapping fix:** Removed custom mid-tick yaw offsets from mouse handling. Minecraft's native `rotLerp` handles 180-degree boundary interpolation cleanly on its own.\n\n### Configuration defaults\n* `preventMinimizeOnFocusLoss` and `focusClickthrough` now default to `true` to align with expected desktop behavior on Linux."
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-10-03T11:55:12Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 607733386,
+					"name": "sdl-wayland-tweaks-26.3-1.2.0.jar",
+					"url": "https://github.com/Den1zzDev/sdl-wayland-tweaks/releases/download/v1.2.0/sdl-wayland-tweaks-26.3-1.2.0.jar",
+					"size": 25310,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "59b21967cc1c8bb005f4e438e812eda4fe8c4b6f18c75b8bf0dee36f7bff69f9",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "sdl-wayland-tweaks",
+							"version": "26.3-1.2.0",
+							"name": "SDL Wayland Tweaks",
+							"description": "High-performance native Wayland enhancements and SDL3 optimizations for Minecraft on Linux.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4378a26b02328bc69bf479c887e02656d3749711510a8df2dff787b3c1d9cb28.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 12,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's Changed in v1.2.0\n\n### Fixes & Stability\n* **Camera Angle Snap Fix**: Fixed the jarring 360° visual camera flip when crossing the 180° yaw boundary by applying matched delta offsets to both `yRot` and `yRotO` during yaw wrapping.\n* **Sub-Pixel Motion Delta Precision**: Corrected mouse remainder accumulation math, respecting `invertMouseX`, `invertMouseY`, and first-person scoping state.\n* **Idle Drift Prevention**: Enforced deadzones on mouse delta residuals to prevent stationary mice from spamming `FramerateLimitTracker` and keeping the GPU awake.\n* **Grab Reassertion on Alt-Tab**: Added `SDL_SetWindowRelativeMouseMode` to grab recovery so Wayland compositors restore raw pointer lock immediately upon returning focus to the window.\n* **Placebo Hint Removal**: Replaced the nonexistent `SDL_VIDEO_WAYLAND_ALLOW_TEARING` string with standard `SDL_GL_SetSwapInterval(0)` and RenderPearl swapchain invalidation for low-latency tearing on compositors supporting `wp_tearing_control_v1`.\n\n### New Features & Enhancements\n* **Global IME Sanitization**: Added `KeyboardHandlerMixin` to intercept and discard raw ASCII control characters (< 32) emitted by Wayland IME composition engines before they enter screens, chat, books, or signs.\n* **Multiline Middle-Click Paste**: Extended Linux primary selection middle-click paste support to multiline text fields (`MultiLineEditBox`), preserving line breaks and formatting.\n* **Dynamic Runtime Hint Updates**: In-game ModMenu settings now apply SDL3 hints immediately without requiring a client restart.\n* **Config Screen Overhaul**: Added descriptive tooltips for all 14 settings, formatted toggle statuses, and introduced responsive vertical spacing to prevent clipping on low-resolution displays.\n* **Display Scale Tracking**: Hooked framebuffer resize events to continuously monitor Wayland fractional display scale and pixel density via SDL3.\n* **Security Policy Update**: Updated `SECURITY.md` for 1.2.x with private vulnerability reporting through `deniz@den1zz.dev`.\n\n**Full Changelog**: https://github.com/Den1zzDev/sdl-wayland-tweaks/compare/v1.1.0...v1.2.0"
+		},
+		{
+			"tag": "v1.1.0",
+			"published": "2026-09-26T17:58:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 591163836,
+					"name": "sdl-wayland-tweaks-26.3-1.1.0.jar",
+					"url": "https://github.com/Den1zzDev/sdl-wayland-tweaks/releases/download/v1.1.0/sdl-wayland-tweaks-26.3-1.1.0.jar",
+					"size": 21756,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "78da532e6bc183ec4cf4e78362e935291874b707cfe38d664a7f6f302e971261",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "sdl-wayland-tweaks",
+							"version": "26.3-1.1.0",
+							"name": "SDL Wayland Tweaks",
+							"description": "High-performance native Wayland enhancements and SDL3 optimizations for Minecraft on Linux.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4378a26b02328bc69bf479c887e02656d3749711510a8df2dff787b3c1d9cb28.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 10,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's Changed in v1.1.0\n\n- **Sub-pixel mouse delta retention**: Retains fractional rotation remainders across frames in `MouseHandler` so subtle, high-DPI mouse movements aren't lost to floating-point truncation. Automatically normalizes yaw angles to `[-180, 180]` to prevent large-angle float precision degradation.\n- **Wayland tearing protocol support**: Sets `SDL_VIDEO_WAYLAND_ALLOW_TEARING` early and during swap interval changes so SDL3 requests `wp_tearing_control_v1` on Wayland compositors that support tearing page flips.\n- **Middle-click primary selection paste**: Adds middle-click paste support to text fields from the Linux Wayland primary selection buffer via SDL3 (disabled by default in configuration).\n- **In-game configuration toggles**: Added toggles for middle-click paste and mouse delta accumulation to the ModMenu configuration screen.\n\n**Full Changelog**: https://github.com/Den1zzDev/sdl-wayland-tweaks/compare/v1.0.1...v1.1.0"
+		},
+		{
+			"tag": "v1.0.1",
+			"published": "2026-09-26T16:55:25Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 591095232,
+					"name": "sdl-wayland-tweaks-26.3-1.0.1.jar",
+					"url": "https://github.com/Den1zzDev/sdl-wayland-tweaks/releases/download/v1.0.1/sdl-wayland-tweaks-26.3-1.0.1.jar",
+					"size": 19395,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "6978922411c17dd9a204ff6dc7b74b8c5e17fe3974df42f7e6e1f336e94e4a7a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "sdl-wayland-tweaks",
+							"version": "26.3-1.0.1",
+							"name": "SDL Wayland Tweaks",
+							"description": "High-performance native Wayland enhancements and SDL3 optimizations for Minecraft on Linux.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4378a26b02328bc69bf479c887e02656d3749711510a8df2dff787b3c1d9cb28.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 9,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Fixes in v1.0.1\n\n- **Fix Window Mixin constructor crash**: Marked constructor `@At(\"HEAD\")` callback as static to prevent bytecode initialization errors before `super()`.\n- **Fix EditBox Mixin signature**: Updated `EditBox.charTyped` injector descriptor to target Minecraft 26.3 `CharacterEvent` record instead of legacy primitive char parameters.\n- **Documentation & Open Source**: Cleaned up documentation, added contributing guide with AI transparency guidelines, and published issue templates."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T06:55:31.998Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"history": 1
+}
