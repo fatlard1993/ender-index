@@ -1,11 +1,21 @@
 import { join } from 'node:path';
 
-import { DATA, readLines, readModrinthRepos, readNoJars, readRepos, repositoryKey, uniqueRepositories } from './crawl';
+import {
+	DATA,
+	readLines,
+	readModrinthRepos,
+	readNoJars,
+	readPacks,
+	readRepos,
+	repositoryKey,
+	uniqueRepositories,
+} from './crawl';
 import * as codeberg from './codeberg';
 import { RateLimited } from './fetch';
 import { searchCode, searchRepositories } from './github';
 import * as gitlab from './gitlab';
 import { modrinthSources } from './modrinth';
+import { releasedByPacks } from './packs';
 import { triage, writeNoJars } from './triage';
 
 /** Where each loader keeps its metadata in a source tree. Finding one is how a repository says it is a mod. */
@@ -154,7 +164,10 @@ export const discover = async () => {
 	}
 
 	const existing = await readRepos();
-	const merged = sorted([...existing, ...found]);
+	const released = releasedByPacks(await readPacks());
+	const merged = sorted([...existing, ...found, ...released]);
+
+	console.log(`Packs download release jars from ${released.length} GitHub repositories, each listed with those found`);
 
 	await writeList('repos.txt', merged, '# Mod repositories found on their hosts');
 

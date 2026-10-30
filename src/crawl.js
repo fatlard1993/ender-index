@@ -729,6 +729,9 @@ const packFiles = async () =>
 		? [...new Bun.Glob('**/*.json').scanSync(PACKS)].map(file => join(PACKS, file))
 		: [];
 
+/** Every pack repository's record on disk. */
+export const readPacks = async () => Promise.all((await packFiles()).map(file => Bun.file(file).json()));
+
 export const recordFiles = async () =>
 	[...new Bun.Glob('**/*.json').scanSync(join(DATA, 'mods'))].map(file => join(DATA, 'mods', file));
 
@@ -740,7 +743,7 @@ export const writeLists = async () => {
 	const records = await Promise.all((await recordFiles()).map(file => Bun.file(file).json()));
 	const themes = themesOf(records);
 	const search = buildSearch(records, themes, await readJson(join(DATA, 'sources.json'), {}));
-	const packs = await Promise.all((await packFiles()).map(file => Bun.file(file).json()));
+	const packs = await readPacks();
 
 	await writeJsonLines(join(DATA, 'search.json'), search);
 	const built = buildPacks(packs, search, records, await readJson(join(DATA, 'modrinth-ids.json'), {}));
@@ -771,7 +774,7 @@ export const crawl = async ({ only } = {}) => {
 		),
 	);
 	const modrinthIds = await readJson(join(DATA, 'modrinth-ids.json'), {});
-	const demand = packDemand(await Promise.all((await packFiles()).map(file => Bun.file(file).json())), modrinthIds);
+	const demand = packDemand(await readPacks(), modrinthIds);
 	const repos = crawlOrder(found, fromModrinth, line => ages.get(line), demand);
 	const knownBad = new Map(
 		(await readJson(join(DATA, 'known-bad.json'), [])).map(entry => [entry.sha256, entry.reason]),

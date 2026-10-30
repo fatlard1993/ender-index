@@ -344,6 +344,9 @@ export const packPage = pack => (pack.host === 'gist' ? `gist/${pack.repo}` : pa
 
 const RELEASE = /^https:\/\/github\.com\/([^/]+\/[^/]+)\/releases\/download\//;
 
+/** The GitHub repository a pack's mod comes from by name: the release its jar downloads from, or its spec. */
+const namedRepository = mod => mod.url?.match(RELEASE)?.[1] ?? mod.spec?.match(/^(?:gh|github):(.+)$/)?.[1];
+
 const keyOfLine = line => (line.includes(':') ? line : `github:${line}`);
 
 const LINE_URLS = { codeberg: 'https://codeberg.org/', gitlab: 'https://gitlab.com/' };
@@ -367,7 +370,7 @@ const matcher = (entries, records, modrinthIds) => {
 			for (const asset of release.assets) byFile.set(asset.name, `${record.host}:${record.repo}`);
 
 	return mod => {
-		const named = mod.url?.match(RELEASE)?.[1] ?? mod.spec?.match(/^(?:gh|github):(.+)$/)?.[1];
+		const named = namedRepository(mod);
 		const project = mod.modrinth ?? mod.url?.match(MODRINTH_FILE)?.[1];
 		const linked = project && modrinthIds[project];
 		const key = named ? `github:${named}` : (byFile.get(mod.file) ?? (linked ? keyOfLine(linked) : undefined));
@@ -383,7 +386,7 @@ const matcher = (entries, records, modrinthIds) => {
  */
 export const whereFrom = (mod, modrinthIds = {}) => {
 	const project = mod.modrinth ?? mod.url?.match(MODRINTH_FILE)?.[1];
-	const released = mod.url?.match(RELEASE)?.[1] ?? mod.spec?.match(/^(?:gh|github):(.+)$/)?.[1];
+	const released = namedRepository(mod);
 	const source =
 		(released && `https://github.com/${released}`) ??
 		mod.source ??
@@ -398,6 +401,21 @@ export const whereFrom = (mod, modrinthIds = {}) => {
 
 	return { ...(source ? { source } : {}), jar, ...(project ? { modrinth: mod.slug ?? project } : {}) };
 };
+
+/**
+ * The GitHub repositories packs download a mod's jar from by its release, or name by a spec: each has releases holding
+ * a mod, as a pack installing from it shows, whether or not a search would find it.
+ */
+export const releasedByPacks = packs =>
+	[
+		...new Set(
+			packs.flatMap(pack =>
+				Object.values(pack.formats ?? {}).flatMap(format =>
+					(format.mods ?? []).map(mod => namedRepository(typeof mod === 'string' ? { spec: mod } : mod)),
+				),
+			),
+		),
+	].filter(Boolean);
 
 /** The repositories packs use that the index has not read, by how many packs use each: the crawl reads these first. */
 export const packDemand = (packs, modrinthIds = {}) => {
