@@ -69,12 +69,6 @@ export const Chip = styled(
 	`,
 );
 
-/**
- * A tooltip for a sentence: one is never scrolled, since it lets the pointer through, so it is given the height its
- * text takes rather than a popover's default.
- */
-export const hint = textContent => ({ textContent, maxHeight: 320 });
-
 export const Warning = styled.Component(
 	({ colors }) => `
 		color: ${colors.warning};

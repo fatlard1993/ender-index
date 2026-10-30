@@ -67,7 +67,6 @@ import {
 	date,
 	fetchReadme,
 	siteBar,
-	hint,
 	loadJson,
 	screenshots,
 } from './ui';
@@ -326,7 +325,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 						new Row({
 							append: [
 								...cautions.map(
-									({ label, text }) => new Chip({ addClass: 'finding', textContent: label, tooltip: hint(text) }),
+									({ label, text }) => new Chip({ addClass: 'finding', textContent: label, tooltip: text }),
 								),
 								...loadersOf(entry).map(loader => new Chip({ textContent: loader })),
 								...themeChips(entry, pickTheme),
@@ -334,7 +333,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 									? [
 											new Chip({
 												textContent: `${fitting.versions.join(', ')}${fitting.more > 0 ? ` +${fitting.more}` : ''}`,
-												tooltip: hint('The newest Minecraft releases its jars declare'),
+												tooltip: 'The newest Minecraft releases its jars declare',
 											}),
 										]
 									: []),
@@ -343,7 +342,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 										new Chip({
 											addClass: 'finding',
 											textContent: `reaches ${capability}`,
-											tooltip: hint(CAPABILITIES[capability]),
+											tooltip: CAPABILITIES[capability],
 										}),
 								),
 							],

@@ -85,7 +85,6 @@ import {
 	forStrangers,
 	siteBar,
 	stat,
-	hint,
 	loadJson,
 	TILES,
 	tiles,
@@ -469,7 +468,7 @@ const downloadRow = ({ asset }) => {
 						: new Link({ href: asset.url, textContent: asset.name, tooltip: 'Download this jar' }),
 					...loaders.map(loader => new Chip({ textContent: LOADERS[loader] ?? loader })),
 					...ranges.map(
-						range => new Chip({ textContent: `Minecraft ${rangeLabel(range)}`, tooltip: hint(`Declared as ${range}`) }),
+						range => new Chip({ textContent: `Minecraft ${rangeLabel(range)}`, tooltip: `Declared as ${range}` }),
 					),
 					new Meta({
 						textContent: [
