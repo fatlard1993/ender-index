@@ -599,6 +599,13 @@ export const crawlEach = async (
 			try {
 				await within(crawlRepo(line), repoLimit);
 			} catch (error) {
+				if (error instanceof TookTooLong) {
+					slow.push(line);
+					console.log(`set aside ${line} :: ${error.message}`);
+
+					return;
+				}
+
 				if (!(error instanceof RateLimited)) {
 					failures.push(line);
 					console.error(`failed  ${line} :: ${error.message}`);
@@ -653,6 +660,12 @@ export const crawlEach = async (
 		await beforeWait();
 		await sleep(wait);
 		waiting = later;
+	}
+
+	if (slow.length > 0) {
+		stopped.push(
+			`Set aside ${slow.join(', ')}: ${slow.length === 1 ? 'it' : 'each'} took longer than ${repoLimit / 60_000} minutes, and is left for a later crawl`,
+		);
 	}
 
 	return { failures, stopped };

@@ -409,7 +409,10 @@ describe('a crawl held up', () => {
 		});
 
 		expect(asked).toEqual(['a/stalls', 'b/fine']);
-		expect(outcome.failures).toEqual(['a/stalls']);
+		expect(outcome.failures).toEqual([]);
+		expect(outcome.stopped).toEqual([
+			`Set aside a/stalls: it took longer than ${50 / 60_000} minutes, and is left for a later crawl`,
+		]);
 	});
 
 	test('a request that never answers is given up on at its limit and asked again', async () => {
