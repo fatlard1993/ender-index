@@ -4,8 +4,8 @@ import { specFor } from 'ender-launcher/spec';
 import { collection } from './collection';
 import { local } from './local';
 import { loadInterest } from './data';
-import { BUILT_FROM_SOURCE, askUrl, askedUrl, hasAsked, titleOf } from './search';
-import { Chip } from './ui';
+import { BUILT_FROM_SOURCE, askUrl, askedUrl, askedCount, hasAsked, titleOf } from './search';
+import { Chip, Meta } from './ui';
 
 const specOf = entry => specFor(entry.host ?? 'github', entry.repo);
 
@@ -82,15 +82,46 @@ export const installControls = entry => {
 	];
 };
 
+/** How many players have asked this of a mod, with the index's note to its author once there is one. */
+const askedLine = (entry, kind) => {
+	const line = new Meta({ tag: 'span' });
+
+	loadInterest()
+		.then(({ interest, notices }) => {
+			const { count, note } = askedCount(interest, notices, entry, kind);
+
+			if (count === 0) return;
+
+			line.content([
+				` ${count} ${count === 1 ? 'player has' : 'players have'} asked`,
+				...(note
+					? [
+							': ',
+							new Link({
+								href: note.issue.url,
+								target: '_blank',
+								textContent: note.draft ? 'a draft of the note to its author' : 'the note to its author',
+							}),
+						]
+					: []),
+			]);
+		})
+		.catch(() => {});
+
+	return line;
+};
+
 /**
- * Ask the index for a way to pay a mod's author, or for a built release. Served by ender signed in to GitHub, one press
- * files the ask as that account; otherwise it opens the issue form, filled in, for the player to send.
+ * Ask the index for a way to pay a mod's author, or for a built release, beside how many have asked. Served by ender
+ * signed in to GitHub, one press files the ask as that account; otherwise it opens the issue form, filled in, for the
+ * player to send.
  */
 export const askControl = (entry, kind, { textContent, tooltip, variant }) => {
 	const holder = new Component({
 		tag: 'span',
 		append: new Link({ href: askUrl(entry, kind), target: '_blank', textContent, tooltip, variant }),
 	});
+	const control = new Component({ tag: 'span', append: [holder, askedLine(entry, kind)] });
 
 	local.ready().then(async served => {
 		if (!served) return;
@@ -143,7 +174,7 @@ export const askControl = (entry, kind, { textContent, tooltip, variant }) => {
 		);
 	});
 
-	return holder;
+	return control;
 };
 
 /** Ask the index to list a published pack, as the GitHub account ender signs in with; nothing when it has none. */

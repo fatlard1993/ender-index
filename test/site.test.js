@@ -32,6 +32,7 @@ import {
 	repositoryUrl,
 	titleOf,
 	writeQuery,
+	askedCount,
 	askedUrl,
 	hasAsked,
 } from '../client/search';
@@ -360,6 +361,21 @@ describe('an ask already made', () => {
 		expect(hasAsked(interest, entry, 'release', 'me')).toBe(false);
 		expect(hasAsked(interest, entry, 'fund', 'someone')).toBe(false);
 		expect(hasAsked({}, entry, 'fund', 'me')).toBe(false);
+	});
+
+	test('is counted for every player, with the note to its author while that is open', () => {
+		const issue = { repo: 'fatlard1993/ender-index', number: 9, url: 'https://github.com/x/9' };
+
+		expect(
+			askedCount(interest, { 'github:FabricMC/fabric-api': { fund: { issue, draft: true } } }, entry, 'fund'),
+		).toEqual({
+			count: 1,
+			note: { issue, draft: true },
+		});
+		expect(
+			askedCount(interest, { 'github:FabricMC/fabric-api': { fund: { issue, closed: '2026-10-30' } } }, entry, 'fund'),
+		).toEqual({ count: 1 });
+		expect(askedCount({}, {}, entry, 'release')).toEqual({ count: 0 });
 	});
 
 	test("links to the player's issues on the index naming the mod", () => {
