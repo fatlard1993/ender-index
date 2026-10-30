@@ -109,6 +109,7 @@ export const recordInterest = async ({
 		return { counted: false, say: `${settled}, so there is nothing to ask its author for. Thanks for asking!` };
 
 	const asking = new Set(interest[key]?.[kind] ?? []);
+	const again = asking.has(login);
 
 	asking.add(login);
 
@@ -122,7 +123,7 @@ export const recordInterest = async ({
 		interest: { ...interest, [key]: { ...interest[key], [kind]: [...asking].sort() } },
 		notices: due ? { ...notices, [key]: { ...notices[key], [kind]: { at: now.slice(0, 10), count } } } : notices,
 		notice: due ? { repo: mod, ...KINDS[kind].notice(title, count) } : undefined,
-		say: `Counted: ${count} ${count === 1 ? 'player' : 'players'} ${KINDS[kind].asked} of ${title}. ${toldWhen(noticed, due)}`,
+		say: `${again ? 'You asked this before, and are counted once: still' : 'Counted:'} ${count} ${count === 1 ? 'player' : 'players'} ${KINDS[kind].asked} of ${title}. ${toldWhen(noticed, due)}`,
 	};
 };
 

@@ -74,6 +74,8 @@ describe('asking', () => {
 		expect(results[3].notice.title).toBe('3 players would like a built release of Big Boats');
 		expect(results[3].notice.body).toContain('#/authors/releases');
 		expect(results[4].say).toContain('Its author was told on 2026-10-29');
+		expect(results[1].say).toMatch(/^Counted: 2 players/);
+		expect(results[2].say).toMatch(/^You asked this before, and are counted once: still 2 players/);
 		expect(state.interest['github:a/boats'].release).toEqual(['ann', 'bo', 'cy', 'di']);
 	});
 
