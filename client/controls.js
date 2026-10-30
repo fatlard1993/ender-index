@@ -83,14 +83,12 @@ export const installControls = entry => {
 };
 
 /** How many players have asked this of a mod, with the index's note to its author once there is one. */
-const askedLine = (entry, kind) => {
+const askedLine = asked => {
 	const line = new Meta({ tag: 'span' });
 
-	loadInterest()
-		.then(({ interest, notices }) => {
-			const { count, note } = askedCount(interest, notices, entry, kind);
-
-			if (count === 0) return;
+	asked
+		.then(({ count, note, closed }) => {
+			if (count === 0 || closed) return;
 
 			line.content([
 				` ${count} ${count === 1 ? 'player has' : 'players have'} asked`,
@@ -111,26 +109,40 @@ const askedLine = (entry, kind) => {
 	return line;
 };
 
+const closedNote = closed =>
+	new Meta({
+		tag: 'span',
+		append: [
+			`Its author closed the index's note on ${closed.on}, so it asks no more: `,
+			new Link({ href: closed.url, target: '_blank', textContent: 'the note' }),
+		],
+	});
+
 /**
- * Ask the index for a way to pay a mod's author, or for a built release, beside how many have asked. Served by ender
- * signed in to GitHub, one press files the ask as that account; otherwise it opens the issue form, filled in, for the
- * player to send.
+ * Ask the index for a way to pay a mod's author, or for a built release, beside how many have asked; or, once its
+ * author closed the index's note on it, that. Served by ender signed in to GitHub, one press files the ask as that
+ * account; otherwise it opens the issue form, filled in, for the player to send.
  */
 export const askControl = (entry, kind, { textContent, tooltip, variant }) => {
 	const holder = new Component({
 		tag: 'span',
 		append: new Link({ href: askUrl(entry, kind), target: '_blank', textContent, tooltip, variant }),
 	});
-	const control = new Component({ tag: 'span', append: [holder, askedLine(entry, kind)] });
+	const asked = loadInterest()
+		.then(({ interest, notices }) => ({ interest, ...askedCount(interest, notices, entry, kind) }))
+		.catch(() => ({ interest: {}, count: 0 }));
+	const control = new Component({ tag: 'span', append: [holder, askedLine(asked)] });
+
+	asked.then(({ closed }) => closed && holder.content(closedNote(closed)));
 
 	local.ready().then(async served => {
 		if (!served) return;
 
 		await local.loadAccount();
 
-		if (!local.login) return;
+		const { interest, closed } = await asked;
 
-		const { interest } = await loadInterest().catch(() => ({ interest: {} }));
+		if (!local.login || closed) return;
 
 		if (hasAsked(interest, entry, kind, local.login)) {
 			holder.content(

@@ -295,6 +295,27 @@ describe('a notice to an author', () => {
 		expect(result.replies[0].say).toContain("Its author closed the index's note on 2026-10-29");
 	});
 
+	test('closed by its author with no ask since is learned on the next run', async () => {
+		const github = fakeGithub({ issues: { [INDEX]: [askIssue(2, 'ann')] } });
+		const author = fakeGithub();
+		const first = await processing(github, {}, { live: true, noticeApi: author.api });
+		const [posted] = author.repos['a/boats'];
+
+		Object.assign(posted, { state: 'closed', closed_at: '2026-10-31T09:00:00Z' });
+
+		const live = { live: true, noticeApi: author.api };
+		const quiet = await processing(github, { interest: first.interest, notices: first.notices }, live);
+
+		expect(quiet.notices['github:a/boats'].fund).toMatchObject({ closed: '2026-10-31', count: 1 });
+
+		author.calls.length = 0;
+
+		const next = await processing(github, { interest: quiet.interest, notices: quiet.notices }, live);
+
+		expect(next.notices).toEqual(quiet.notices);
+		expect(author.calls).toEqual([]);
+	});
+
 	test('that GitHub refuses is a failure the run reports, and the count is kept', async () => {
 		const github = fakeGithub({ issues: { [INDEX]: [askIssue(2, 'ann')] } });
 		const refusing = async (method, path, body) => {

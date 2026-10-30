@@ -15,12 +15,13 @@ const LACKS = {
 
 const ASKED = { funding: 'would pay you', releases: 'asked for a built release' };
 
-const needLine = ({ need, asked, told }) =>
+const needLine = ({ need, asked, told, closed }) =>
 	new Warning({
 		append: [
 			`${LACKS[need]} `,
 			...(asked > 0 ? [`${count(asked)} ${asked === 1 ? 'player' : 'players'} ${ASKED[need]}. `] : []),
 			...(told ? [`The index told you on ${told}. `] : []),
+			...(closed ? [`You closed its note on ${closed}, so it passes on no more asks. `] : []),
 			new Link({ href: authorsPath(need), textContent: 'How to fix that' }),
 		],
 	});

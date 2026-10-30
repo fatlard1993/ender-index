@@ -18,7 +18,7 @@ test("an account's mods are listed with what each lacks, the asks for it, and wh
 		interest: { 'github:me/source': { fund: ['a', 'b'], release: ['a'] } },
 		notices: {
 			'github:me/source': {
-				fund: { at: '2026-10-29', count: 3 },
+				fund: { at: '2026-10-29', count: 3, closed: '2026-10-31' },
 				release: { at: '2026-10-30', count: 1, draft: true },
 			},
 		},
@@ -26,7 +26,7 @@ test("an account's mods are listed with what each lacks, the asks for it, and wh
 
 	expect(mods.map(({ entry: { repo } }) => repo)).toEqual(['me/source', 'me/unpaid', 'Me/fine']);
 	expect(mods[0].needs).toEqual([
-		{ need: 'funding', asked: 2, told: '2026-10-29' },
+		{ need: 'funding', asked: 2, told: '2026-10-29', closed: '2026-10-31' },
 		{ need: 'releases', asked: 1, told: undefined },
 	]);
 	expect(mods[2].needs).toEqual([]);

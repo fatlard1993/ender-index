@@ -221,6 +221,13 @@ export const postNotice = async ({ api, placed, marker, recorded }) => {
 	return { issue: at(created) };
 };
 
+/** The day a notice was closed, or undefined while it is open. */
+const closedOn = async (api, { repo, number }) => {
+	const issue = await api('GET', `/repos/${repo}/issues/${number}`);
+
+	return issue.state === 'closed' ? issue.closed_at.slice(0, 10) : undefined;
+};
+
 const ASK_TITLES = new Map([
 	[INDEX_ISSUES.fund.title, 'fund'],
 	[INDEX_ISSUES.release.title, 'release'],
@@ -248,7 +255,7 @@ const noteLine = notice => {
 
 /**
  * Count every open ask on the index, then post or update the notice of each mod and ask whose count, or place, its
- * notice does not show yet. Answers the counts, the notices, what to reply to each ask, and the notices that failed.
+ * notice does not show yet, and learn which of the rest their authors closed. Answers the counts, the notices, what to reply to each ask, and the notices that failed.
  */
 export const processAsks = async ({
 	indexApi,
@@ -284,7 +291,19 @@ export const processAsks = async ({
 			const target = live && key.startsWith('github:') ? key.slice('github:'.length) : INDEX_REPOSITORY;
 			const inPlace = recorded?.issue?.repo === target;
 
-			if (inPlace && (recorded.count === logins.length || recorded.closed)) continue;
+			if (inPlace && recorded.closed) continue;
+
+			if (inPlace && recorded.count === logins.length) {
+				try {
+					const closed = await closedOn(recorded.draft ? indexApi : noticeApi, recorded.issue);
+
+					if (closed) notices[key] = { ...notices[key], [kind]: { ...recorded, closed } };
+				} catch (error) {
+					failures.push(`${key} ${kind}: ${error.message}`);
+				}
+
+				continue;
+			}
 
 			const described = await describe(modOf(key), kind, { read, donations });
 

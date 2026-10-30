@@ -8,6 +8,12 @@ const NEEDS = {
 	releases: entry => Boolean(entry.fromSource),
 };
 
+/** When the index told the author, and when they closed its note; a draft on the index told no one. */
+const told = notice =>
+	notice && !notice.draft
+		? { told: notice.at, ...(notice.closed ? { closed: notice.closed } : {}) }
+		: { told: undefined };
+
 /** The asks that go with each need, as the index counts them. */
 const ASKS = { funding: 'fund', releases: 'release' };
 
@@ -27,7 +33,7 @@ export const yourMods = ({ entries, login, interest = {}, notices = {} }) =>
 				needs: needs.map(need => ({
 					need,
 					asked: interest[key]?.[ASKS[need]]?.length ?? 0,
-					told: notices[key]?.[ASKS[need]]?.draft ? undefined : notices[key]?.[ASKS[need]]?.at,
+					...told(notices[key]?.[ASKS[need]]),
 				})),
 			};
 		})

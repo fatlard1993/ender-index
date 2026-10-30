@@ -363,7 +363,7 @@ describe('an ask already made', () => {
 		expect(hasAsked({}, entry, 'fund', 'me')).toBe(false);
 	});
 
-	test('is counted for every player, with the note to its author while that is open', () => {
+	test('is counted for every player, with the note to its author while open, and when its author closed it', () => {
 		const issue = { repo: 'fatlard1993/ender-index', number: 9, url: 'https://github.com/x/9' };
 
 		expect(
@@ -374,6 +374,14 @@ describe('an ask already made', () => {
 		});
 		expect(
 			askedCount(interest, { 'github:FabricMC/fabric-api': { fund: { issue, closed: '2026-10-30' } } }, entry, 'fund'),
+		).toEqual({ count: 1, closed: { on: '2026-10-30', url: issue.url } });
+		expect(
+			askedCount(
+				interest,
+				{ 'github:FabricMC/fabric-api': { fund: { issue, draft: true, closed: '2026-10-30' } } },
+				entry,
+				'fund',
+			),
 		).toEqual({ count: 1 });
 		expect(askedCount({}, {}, entry, 'release')).toEqual({ count: 0 });
 	});
