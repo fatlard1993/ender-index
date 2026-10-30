@@ -504,7 +504,7 @@ export const slug = text =>
 
 /**
  * The form a player asks through for something of a mod, filled in with the mod: `fund` to pay its author, `release`
- * for a built release. When a few have asked, the index tells its author.
+ * for a built release. The index tells its author, and keeps the count on its note to them.
  */
 export const askUrl = (entry, kind) =>
 	`${REPOSITORY}/issues/new?${new URLSearchParams({ template: `${kind}.yml`, mod: `${entry.host ?? 'github'}:${entry.repo}` })}`;

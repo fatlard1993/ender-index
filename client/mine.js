@@ -27,7 +27,7 @@ export const yourMods = ({ entries, login, interest = {}, notices = {} }) =>
 				needs: needs.map(need => ({
 					need,
 					asked: interest[key]?.[ASKS[need]]?.length ?? 0,
-					told: notices[key]?.[ASKS[need]]?.at,
+					told: notices[key]?.[ASKS[need]]?.draft ? undefined : notices[key]?.[ASKS[need]]?.at,
 				})),
 			};
 		})

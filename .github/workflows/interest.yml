@@ -2,7 +2,11 @@ name: interest
 
 on:
   issues:
-    types: [opened, edited]
+    types: [opened, edited, reopened]
+  # Each run counts every open ask, so one GitHub cancels while it waits behind another is counted by the next
+  schedule:
+    - cron: '41 */6 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -15,9 +19,10 @@ jobs:
     # By label from the form; by title from ender, as GitHub drops the labels of an issue opened through its API by
     # anyone who cannot triage this repository
     if: >-
-      github.event.issue.state == 'open' && (contains(github.event.issue.labels.*.name, 'interest') ||
+      github.event_name != 'issues' || (github.event.issue.state == 'open' &&
+      (contains(github.event.issue.labels.*.name, 'interest') ||
       github.event.issue.title == 'I would pay this mod''s author' ||
-      github.event.issue.title == 'I want a built release of this mod')
+      github.event.issue.title == 'I want a built release of this mod'))
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -33,48 +38,42 @@ jobs:
           bun-download-url: https://github.com/oven-sh/bun/releases/download/bun-v1.4.0/bun-linux-x64.zip
       - run: bun install
         working-directory: ender-index
-      - name: count
+      - name: count, and post or update each notice
+        id: count
         working-directory: ender-index
         env:
           GH_TOKEN: ${{ github.token }}
-          INTEREST_BODY: ${{ github.event.issue.body }}
-          INTEREST_KIND: ${{ (contains(github.event.issue.labels.*.name, 'fund') || github.event.issue.title == 'I would pay this mod''s author') && 'fund' || 'release' }}
-          INTEREST_LOGIN: ${{ github.event.issue.user.login }}
-          INTEREST_ISSUE: ${{ github.event.issue.number }}
-          INTEREST_SAY: ${{ runner.temp }}/say.md
-          NOTICE_FILE: ${{ runner.temp }}/notice.json
-          # Until this is live, a notice due is posted here as a draft to read, never on the author's repository
+          INTEREST_REPLIES: ${{ runner.temp }}/replies.json
+          # Until this is live, a notice is posted here as a draft to read, never on the author's repository
           NOTICES: ${{ vars.NOTICES || 'draft' }}
           NOTICE_TOKEN: ${{ secrets.NOTICE_TOKEN }}
         run: |
+          gh label create notice-draft --color BFD4F2 --description 'A notice to an author, posted here to read first' 2>/dev/null || true
+          code=0
+          bun src/interest.js count || code=$?
+          [ "$code" = 0 ] || [ "$code" = 2 ] || exit "$code"
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+      - name: keep the counts
+        working-directory: ender-index
+        run: |
           git config user.name 'ender-index'
           git config user.email 'ender-index@users.noreply.github.com'
+          git add data
+          git diff --cached --quiet && exit 0
+          git commit -qm 'Interest: counted the open asks'
           for attempt in 1 2 3; do
-            git fetch -q origin main && git reset -q --hard origin/main
-            rm -f "$NOTICE_FILE"
-            code=0
-            bun src/interest.js || code=$?
-            [ "$code" = 0 ] || break
-            git add data
-            git diff --cached --quiet && break
-            git commit -qm "Interest: counted from #$INTEREST_ISSUE"
-            git push -q && break
-            code=1
+            git pull -q --rebase origin main && git push -q && exit 0
+            sleep 5
           done
-          if [ "$code" = 1 ] || [ ! -s "$INTEREST_SAY" ]; then
-            gh issue comment "$INTEREST_ISSUE" --body 'The index could not count this just now; it is looked into from the failed run.'
-            exit 1
-          fi
-          gh issue comment "$INTEREST_ISSUE" --body-file "$INTEREST_SAY"
-          [ "$code" = 0 ] && gh issue close "$INTEREST_ISSUE" --reason completed
-          [ -s "$NOTICE_FILE" ] || exit 0
-          title=$(jq -r .title "$NOTICE_FILE")
-          jq -r .body "$NOTICE_FILE" > "$RUNNER_TEMP/notice.md"
-          host=$(jq -r .repo.host "$NOTICE_FILE")
-          repo=$(jq -r .repo.name "$NOTICE_FILE")
-          if [ "$NOTICES" = live ] && [ "$host" = github ]; then
-            GH_TOKEN="$NOTICE_TOKEN" gh issue create -R "$repo" --title "$title" --body-file "$RUNNER_TEMP/notice.md"
-          else
-            gh label create notice-draft --color BFD4F2 --description 'A notice to an author, posted here to read first' 2>/dev/null || true
-            gh issue create --label notice-draft --title "Draft for $host:$repo: $title" --body-file "$RUNNER_TEMP/notice.md"
-          fi
+          exit 1
+      - name: answer and close each ask
+        working-directory: ender-index
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INTEREST_REPLIES: ${{ runner.temp }}/replies.json
+        run: bun src/interest.js reply
+      - name: say a notice failed
+        if: steps.count.outputs.code == '2'
+        run: |
+          echo "::error::A notice could not be posted; the count step's log says which and why"
+          exit 1

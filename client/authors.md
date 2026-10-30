@@ -56,9 +56,9 @@ Each mod has a page, made from what the repository already holds:
 
 ## Notices
 
-Players can ask for two things on a mod's page: a way to pay its author, when the index knows none, and a built release, when it has only its source. Each player is counted once. When three have asked, the index opens one issue on the repository saying so, with a link here. It does that once per repository for each, and closing the issue is the whole answer it needs.
+Players can ask for two things on a mod's page: a way to pay its author, when the index knows none, and a built release, when it has only its source. Each player is counted once. On the first ask, the index opens one issue on the repository saying so, with a link here, and keeps the count on it up to date as more players ask. Closing the issue is the whole answer it needs: the index leaves it closed, and posts nothing more.
 
-To see where your mods stand before then, run `ender web` signed in to GitHub (`gh auth login`) and open **Your mods** from its search page: each of your mods, what the index cannot do for it, and how many players have asked.
+To see where your mods stand, run `ender web` signed in to GitHub (`gh auth login`) and open **Your mods** from its search page: each of your mods, what the index cannot do for it, and how many players have asked.
 
 ## Questions
 

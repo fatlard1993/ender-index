@@ -16,7 +16,12 @@ test("an account's mods are listed with what each lacks, the asks for it, and wh
 		entries,
 		login: 'ME',
 		interest: { 'github:me/source': { fund: ['a', 'b'], release: ['a'] } },
-		notices: { 'github:me/source': { fund: { at: '2026-10-29', count: 3 } } },
+		notices: {
+			'github:me/source': {
+				fund: { at: '2026-10-29', count: 3 },
+				release: { at: '2026-10-30', count: 1, draft: true },
+			},
+		},
 	});
 
 	expect(mods.map(({ entry: { repo } }) => repo)).toEqual(['me/source', 'me/unpaid', 'Me/fine']);

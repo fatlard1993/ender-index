@@ -923,7 +923,8 @@ export default class ModPage extends View {
 								askControl(entry, 'fund', {
 									variant: 'raised',
 									textContent: 'I would pay its author',
-									tooltip: 'Counted once per player on GitHub; when a few have asked, the index tells its author.',
+									tooltip:
+										'Counted once per player on GitHub; the index tells its author, and keeps the count on its note to them.',
 								}),
 							],
 						}),
