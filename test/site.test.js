@@ -32,6 +32,8 @@ import {
 	repositoryUrl,
 	titleOf,
 	writeQuery,
+	askedUrl,
+	hasAsked,
 } from '../client/search';
 
 const entry = (extra = {}) => ({
@@ -347,4 +349,23 @@ test('a mod with only its source installs with --build, which allows ender to bu
 	expect(installAllCommand([{ repo: 'a/b' }, { repo: 'a/c', fromSource: true }])).toBe(
 		'ender add gh:a/b gh:a/c --build',
 	);
+});
+
+describe('an ask already made', () => {
+	const entry = { host: 'github', repo: 'FabricMC/fabric-api' };
+	const interest = { 'github:FabricMC/fabric-api': { fund: ['me'] } };
+
+	test('is known from the counts, by the player and the kind of ask', () => {
+		expect(hasAsked(interest, entry, 'fund', 'me')).toBe(true);
+		expect(hasAsked(interest, entry, 'release', 'me')).toBe(false);
+		expect(hasAsked(interest, entry, 'fund', 'someone')).toBe(false);
+		expect(hasAsked({}, entry, 'fund', 'me')).toBe(false);
+	});
+
+	test("links to the player's issues on the index naming the mod", () => {
+		const url = new URL(askedUrl(entry, 'me'));
+
+		expect(url.pathname).toBe('/fatlard1993/ender-index/issues');
+		expect(url.searchParams.get('q')).toBe('is:issue author:me "github:FabricMC/fabric-api"');
+	});
 });

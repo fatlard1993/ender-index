@@ -3,7 +3,8 @@ import { specFor } from 'ender-launcher/spec';
 
 import { collection } from './collection';
 import { local } from './local';
-import { BUILT_FROM_SOURCE, askUrl, titleOf } from './search';
+import { loadInterest } from './data';
+import { BUILT_FROM_SOURCE, askUrl, askedUrl, hasAsked, titleOf } from './search';
 import { Chip } from './ui';
 
 const specOf = entry => specFor(entry.host ?? 'github', entry.repo);
@@ -98,6 +99,16 @@ export const askControl = (entry, kind, { textContent, tooltip, variant }) => {
 
 		if (!local.login) return;
 
+		const { interest } = await loadInterest().catch(() => ({ interest: {} }));
+
+		if (hasAsked(interest, entry, kind, local.login)) {
+			holder.content(
+				new Link({ href: askedUrl(entry, local.login), target: '_blank', textContent: `Asked, as ${local.login}` }),
+			);
+
+			return;
+		}
+
 		let asking = false;
 
 		holder.content(
@@ -114,9 +125,15 @@ export const askControl = (entry, kind, { textContent, tooltip, variant }) => {
 					asking = true;
 
 					try {
-						const { url } = await local.ask(entry, kind);
+						const { url, before } = await local.ask(entry, kind);
 
-						holder.content(new Link({ href: url, target: '_blank', textContent: `Asked, as ${local.login}` }));
+						holder.content(
+							new Link({
+								href: url,
+								target: '_blank',
+								textContent: `${before ? 'Asked before' : 'Asked'}, as ${local.login}`,
+							}),
+						);
 					} catch (error) {
 						asking = false;
 						new Notify({ intent: 'danger', content: `The index was not asked: ${error.message}` });
@@ -143,9 +160,15 @@ export const listingButton = link => {
 			button.elem.disabled = true;
 
 			try {
-				const { url } = await local.listPack(link);
+				const { url, before } = await local.listPack(link);
 
-				holder.content(new Link({ href: url, target: '_blank', textContent: 'Asked the index to list it' }));
+				holder.content(
+					new Link({
+						href: url,
+						target: '_blank',
+						textContent: before ? 'Asked the index to list it before' : 'Asked the index to list it',
+					}),
+				);
 			} catch (error) {
 				button.elem.disabled = false;
 				new Notify({ intent: 'danger', content: `The index was not asked to list it: ${error.message}` });

@@ -508,3 +508,11 @@ export const slug = text =>
  */
 export const askUrl = (entry, kind) =>
 	`${REPOSITORY}/issues/new?${new URLSearchParams({ template: `${kind}.yml`, mod: `${entry.host ?? 'github'}:${entry.repo}` })}`;
+
+/** The issues a player opened on the index naming a mod. */
+export const askedUrl = (entry, login) =>
+	`${REPOSITORY}/issues?${new URLSearchParams({ q: `is:issue author:${login} "${collectionKey(entry)}"` })}`;
+
+/** Whether the index has counted this player asking this of a mod. */
+export const hasAsked = (interest, entry, kind, login) =>
+	interest[collectionKey(entry)]?.[kind]?.includes(login) ?? false;

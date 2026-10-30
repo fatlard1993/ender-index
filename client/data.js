@@ -88,9 +88,14 @@ const jsonOrNone = async name => {
 	return response.json();
 };
 
-/** What players asked of each mod's author, and when an author was told; none before anyone has asked. */
-export const loadInterest = async () => {
-	const [interest, notices] = await Promise.all([jsonOrNone('interest.json'), jsonOrNone('notices.json')]);
+let interestRead;
 
-	return { interest, notices };
+/** What players asked of each mod's author, and when an author was told; none before anyone has asked. */
+export const loadInterest = () => {
+	interestRead ??= Promise.all([jsonOrNone('interest.json'), jsonOrNone('notices.json')]).then(
+		([interest, notices]) => ({ interest, notices }),
+	);
+	interestRead.catch(() => (interestRead = undefined));
+
+	return interestRead;
 };
