@@ -1,0 +1,333 @@
+{
+	"repo": "MinecraftTAS/TASmod",
+	"host": "github",
+	"description": "Minecraft Tool-Assisted Speedrun (TAS) Tools with input playback",
+	"stars": 43,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2020-12-11T20:32:23Z",
+	"pushed": "2026-10-06T10:12:11Z",
+	"releases": [
+		{
+			"tag": "Beta2.1",
+			"published": "2026-02-06T20:04:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 351852581,
+					"name": "TASmod-1.12.2-Beta2.1.jar",
+					"url": "https://github.com/MinecraftTAS/TASmod/releases/download/Beta2.1/TASmod-1.12.2-Beta2.1.jar",
+					"size": 707189,
+					"downloads": 413,
+					"inspection": 2,
+					"sha256": "9702b5c0e3a44b2b183b937f6ecb954ea0e4591b15057b490cb00cdb09544580",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "tasmod",
+							"version": "Beta2.1",
+							"name": "Tool-Assisted Speedrun Mod",
+							"description": "Saves tickperfect inputs to a file and is able to play it back.",
+							"minecraft": "1.12.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "1a17f7d1e37e3bed339e638ca7107c7f94f6e0f16b30b0c14aa456a8be1a4821.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 377,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/minecrafttas/tasmod/util/ShieldDownloader.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"minecrafttas.com": [
+								"com/minecrafttas/tasmod/util/ShieldDownloader.class"
+							],
+							"raw.githubusercontent.com": [
+								"com/minecrafttas/tasmod/util/ShieldDownloader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Fixes\n* [Savestates] Fixes game hanging when trying to load a nonexistant temp savestate by @ScribbleTAS in https://github.com/MinecraftTAS/TASmod/pull/279\n* [Savestates] Fix temporary savestates triggering on fullrecord/fullplay/restart by @ScribbleTAS in https://github.com/MinecraftTAS/TASmod/pull/280\n* [Common] Server fails to start when opening 2 Minecraft instances by @forester302 in https://github.com/MinecraftTAS/TASmod/pull/281"
+		},
+		{
+			"tag": "Beta2.0",
+			"published": "2025-10-25T19:40:18Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 308642814,
+					"name": "TASmod-1.12.2-Beta2.jar",
+					"url": "https://github.com/MinecraftTAS/TASmod/releases/download/Beta2.0/TASmod-1.12.2-Beta2.jar",
+					"size": 709163,
+					"downloads": 165,
+					"inspection": 2,
+					"sha256": "4b8a1326eab407fb0f6bf36c684f01c76d929beb4f66240114ae33bc5a00a0bd",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "tasmod",
+							"version": "Beta2",
+							"name": "Tool-Assisted Speedrun Mod",
+							"description": "Saves tickperfect inputs to a file and is able to play it back.",
+							"minecraft": "1.12.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "1a17f7d1e37e3bed339e638ca7107c7f94f6e0f16b30b0c14aa456a8be1a4821.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 377,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/minecrafttas/tasmod/util/ShieldDownloader.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"minecrafttas.com": [
+								"com/minecrafttas/tasmod/util/ShieldDownloader.class"
+							],
+							"raw.githubusercontent.com": [
+								"com/minecrafttas/tasmod/util/ShieldDownloader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Highlights\n- New savestate system ported from [LoTAS-Light](https://github.com/MinecraftTAS/LoTAS-Light)\n- Added temporary savestates for `/record` and `/play`\n\n## New\n### Savestate Indexing\n- `/savestate` now displays the savestates better, adding clickable elements into chat\n- Savestates can now be renamed\n\t- This can be done via `/savestate rename <index> <newName>`\n\t- When savestating via hotkey, a gui screen will be displayed for renaming the savestate you just created\n- Savestates now store the time and date, when they were created\n\t- Can be seen when hovering over the savestate name\n\n### Temporary savestates\nUsing `/record` and `/play` would be a bit limiting, since any change to the world, like breaking blocks may desync the TAS.\n\nNow, a temporary savestate is created when starting a new recording with `/record` (i.e. when the input count is set to 0).   \nUsing `/play` will load that savestate at the beginning.\n\n> [!NOTE]\n> This will not impact the savestate 0 used for /fullrecord and /fullplay\n\nUse `/record nosave` and `/play nosave` to get the old behaviour\n### Savestate folder structure\nSavestates are now grouped in a subfolder by worldname\nWhereas before, the `.minecraft/saves/savestates` folder would look like this:\n```\nsavestates/ \n├── New-World-Savestate1\n├── New-World-Savestate2 \n├── New-World--Savestate1 \n├── New-World--Savestate2 \n├── Worldname-Savestate1 \n├── Worldname-Savestate2 \n├── Worldname-Savestate3 \n├── New-World-info.txt \n├── New-World--info.txt \n└── Worldname-info.txt\n```\nwhich made the savestate folder kind of a mess when using multiple worlds.\nNow it looks like this\n```\nsavestates/\n├── New-World-Savestates\n│   ├── New-World-Savestate1\n│   ├── New-World-Savestate2\n│   └── New-World-info.txt\n├── New-World--Savestates\n│   ├── New-World--Savestate1\n│   ├── New-World--Savestate2\n│   └── New-World--info.txt\n└── Worldname-Savestates\n    ├── Worldname-Savestate1\n    ├── Worldname-Savestate2\n    ├── Worldname-Savestate3\n    └── Worldname-info.txt\n```\nwhere all savestates are grouped by world.\n### Savestate data\nBefore, the savestate data was located in `worldname/tasmod/savestateData.txt`.  \nThis made savestates incompatible with i.e. LoTAS which would store it in `worldname/lotas/savestateData.txt`.   \n\nTo bring everything together, savestate data is now stored in `worldname/tas/savestate.json`\n\n### Tickrate 0 Warn\nAdded a chat message that will notify you, when the game was automatically set to 0 and what hotkey to press to unpause.\n## Fixes\n- Fixed `/restartandplay` straight up not working"
+		},
+		{
+			"tag": "Beta1.2",
+			"published": "2025-09-30T18:29:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 298998442,
+					"name": "TASmod-1.12.2-Beta1.2.jar",
+					"url": "https://github.com/MinecraftTAS/TASmod/releases/download/Beta1.2/TASmod-1.12.2-Beta1.2.jar",
+					"size": 658182,
+					"downloads": 60,
+					"inspection": 2,
+					"sha256": "21ece485d78fa3710ab814e2e4139ba0b6fb8f52292edc1c5b8a0f6370a7f158",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "tasmod",
+							"version": "Beta1.2",
+							"name": "Tool-Assisted Speedrun Mod",
+							"description": "Saves tickperfect inputs to a file and is able to play it back.",
+							"minecraft": "1.12.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "1a17f7d1e37e3bed339e638ca7107c7f94f6e0f16b30b0c14aa456a8be1a4821.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 347,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/minecrafttas/tasmod/util/ShieldDownloader.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"minecrafttas.com": [
+								"com/minecrafttas/tasmod/util/ShieldDownloader.class"
+							],
+							"raw.githubusercontent.com": [
+								"com/minecrafttas/tasmod/util/ShieldDownloader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Fixes\n- Fix error in console when joining a world\n## Dependencies\n- Update to Loom 1.11\n- Update Gradle to 8.14\n- Update Fabric Loader"
+		},
+		{
+			"tag": "Beta1.1",
+			"published": "2025-08-06T16:01:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 279954865,
+					"name": "TASmod-1.12.2-Beta1.1.jar",
+					"url": "https://github.com/MinecraftTAS/TASmod/releases/download/Beta1.1/TASmod-1.12.2-Beta1.1.jar",
+					"size": 549185,
+					"downloads": 283,
+					"inspection": 2,
+					"sha256": "32241bcdfb8414937fbdedbeaa1c98560fdf9f119907135573831b91799a4aa8",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "tasmod",
+							"version": "Beta1.1",
+							"name": "Tool-Assisted Speedrun Mod",
+							"description": "Saves tickperfect inputs to a file and is able to play it back.",
+							"minecraft": "1.12.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "1a17f7d1e37e3bed339e638ca7107c7f94f6e0f16b30b0c14aa456a8be1a4821.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 289,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/minecrafttas/tasmod/util/ShieldDownloader.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"minecrafttas.com": [
+								"com/minecrafttas/tasmod/util/ShieldDownloader.class"
+							],
+							"raw.githubusercontent.com": [
+								"com/minecrafttas/tasmod/util/ShieldDownloader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Fixes\n- Fix respawning and /tp not moving the camera\n- Fix loadstates failing to move the player in some custom maps"
+		},
+		{
+			"tag": "Beta1.0",
+			"published": "2025-07-25T17:04:19Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 276354243,
+					"name": "TASmod-1.12.2-Beta1.0.jar",
+					"url": "https://github.com/MinecraftTAS/TASmod/releases/download/Beta1.0/TASmod-1.12.2-Beta1.0.jar",
+					"size": 549418,
+					"downloads": 59,
+					"inspection": 2,
+					"sha256": "130ebccfc14c75fae7aa7d720fd584ab2dfd6ec6edfd8b0699c961f168f78234",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "tasmod",
+							"version": "Beta1.0",
+							"name": "Tool-Assisted Speedrun Mod",
+							"description": "Saves tickperfect inputs to a file and is able to play it back.",
+							"minecraft": "1.12.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "1a17f7d1e37e3bed339e638ca7107c7f94f6e0f16b30b0c14aa456a8be1a4821.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 289,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/minecrafttas/tasmod/util/ShieldDownloader.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"minecrafttas.com": [
+								"com/minecrafttas/tasmod/util/ShieldDownloader.class"
+							],
+							"raw.githubusercontent.com": [
+								"com/minecrafttas/tasmod/util/ShieldDownloader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "This is the first Beta release of TASmod with a lot of reworks, better architecture and a new mod loader.\n\n# Highlights\n## Legacy Fabric\nThis release switches the modloader from Forge to [LegacyFabric](https://legacyfabric.net/). The reason behind this is that forge 1.12.2 is just very old and unsupported. Plus, Legacy Fabric gives us built-in Mixin support and less modifications to the source code. The downside is that forge mods are incompatible with legacy fabric. However, some mods are already backported to legacy fabric.\n\n## Input Engine\nThe input engine or playback engine is the part of the code that hooks into the vanilla input system and redirects the inputs, so that they can be recorded or changed.\n\nIn Alpha, I found a flaw in how the inputs are set up. The idea behind it was that inputs can only happen once every tick, except for the mouse that can happen more times a tick, due to GUI-Screens. That idea was flawed and this introduced awkward compromises.\n\nSo for Beta, the input engine was extended to allow inputs in between ticks for Keyboard and Camera Angle as well, which I named \"Subticks\". Now inputs should behave exactly like vanilla.\n\n### Interpolation\nStoring subticks for mouse and camera also has the added benefit of allowing for better input interpolation.\n\nNormally, cursor location in GUIs and the camera angle are processed at 20 tps, which is very apparent to the player. So for the camera, TASmod-Alpha basically guessed some camera angles to fill in between the ticks, to make it look more watchable.  \n\nNow in Beta, all camera interpolation is handled by the subticks, so it should look pretty close to vanilla.\n\nIn addition to that, the cursor in GUI screens is also interpolated the same way now, which also fixes some issues with scroll bars\n\n## Input saving/loading (Serialisation)\nWith a new input engine comes the challenge of actually storing the new inputs.\nThis required a new structure of the TASfile to allow for easy editing.\n\nThe new structure goes as follows:\n```\n1|Keyboard|Mouse|Camera\n\t1|Keyboard-Subtick|Mouse-Subtick|Camera-Subtick\n\t2|Keyboard-Subtick|Mouse-Subtick|Camera-Subtick\n\t3|Keyboard-Subtick|Mouse-Subtick|Camera-Subtick\n2|Keyboard|Mouse|Camera\n\t1|Keyboard-Subtick|Mouse-Subtick|Camera-Subtick\n\t2|Keyboard-Subtick|Mouse-Subtick|Camera-Subtick\n3|Keyboard|Mouse|Camera\n4|Keyboard|Mouse|Camera\n```\n\nTicks are the same as the before, with Mouse inputs having their subtick syntax removed which is now moved to the indented \"subtick\" part of a tick.\n\n## Serialisation APIs\nAfter revisiting the old serialisation code it became clear, that a serious overhaul is needed, as a lot of things were hardcoded.\n\nTo get around this I created 3 APIs that modders can use to add their own functionality to the TASfile.\n\n### Metadata\nData about the TAS like credits, start position and options at the beginning of the file can now be dynamically added. Modders can also create add-ons for TASmod and you can store custom metadata in the header.\n\n### FileCommands\nA feature that was prototyped by PancakeTAS during the Alpha was \"Control Bytes\". With a special $ syntax, you could add a line to the TASfile and when the playback passes that line, the command would've been executed, for something like disabling the HUD or a nameplate in the corner\n\nThis feature has been expanded (and renamed) so modders can add their own file commands that TASers can add to their files.\n\nIn the future I would like to rewrite LoTAS as a separate Add-On to TASmod so it uses this system. Then we can merge functionalities and have LoTAS functions with TASmod playback\n\n### Flavors\nBy far the greatest effort was modularizing the serialisation itself. Modders can now easily create their own file format for TASmod, maybe to support other file formats from other tools and export them back to it. I named the file syntax \"Flavor\" as that name exists for the many different Markdown-Flavors that different sites like GitHub or GitLab use\n\n## Savestates\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "patreon",
+			"url": "https://www.patreon.com/tasmod"
+		}
+	],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

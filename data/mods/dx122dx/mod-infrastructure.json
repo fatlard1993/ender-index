@@ -1,0 +1,124 @@
+{
+	"repo": "dx122dx/mod-infrastructure",
+	"host": "github",
+	"description": "A modular client-side infrastructure mod for Minecraft 1.20.1 Fabric, providing a shared module framework and a built-in debugger submodule.",
+	"stars": 0,
+	"archived": false,
+	"license": "AGPL-3.0",
+	"created": "2026-08-05T06:20:15Z",
+	"pushed": "2026-08-30T16:05:06Z",
+	"releases": [
+		{
+			"tag": "v0.1.0-alpha.20",
+			"published": "2026-08-06T07:48:16Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 503647529,
+					"name": "billy-inf-0.1.0-alpha.20.jar",
+					"url": "https://github.com/dx122dx/mod-infrastructure/releases/download/v0.1.0-alpha.20/billy-inf-0.1.0-alpha.20.jar",
+					"size": 1169825,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "8a878860c69ca67cf3d789f18c04da9810c1a41caf88a4773358edb7f4e2e62d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "billy-inf",
+							"version": "0.1.0-alpha.20",
+							"name": "Billy's Mod infrastructure",
+							"description": "A general-purpose client-side infrastructure mod. Ships a debug submodule (debug actions and toggleable debug features) that activates built-in component packs only when their target mod is present.",
+							"minecraft": "~1.20.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cloth-config"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 40,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- fix: 修复调试器命名空间改写并统一 config 路径规则 (0.1.0-alpha.20) (8a812de)\n- refactor: 模块发现推迟到所有模组加载后 (0.1.0-alpha.19) --- 1. InfrastructureMod 不再在 onInitializeClient 内直调 ModuleRegistry.discover()，改挂 ClientLifecycleEvents.CLIENT_STARTED，确保模块初始化严格晚于全部模组的客户端入口点，避免下游模块早于其宿主模组初始化； 2. InfrastructureCommands 命令注册回调内补一次幂等 discover() 兜底，异常启动流程下不丢模块命令； 3. 同步更新 InfrastructureMod / ModuleRegistry / IModule / InfrastructureCommands 的 javadoc 与 README（中英）：说明发现时机及「不得在模块初始化中做需更早时机的注册」约束； 4. mod_version 升至 0.1.0-alpha.19。 (554288d)\n- feat: 新增 core.config 配置框架与 core.security 配置锁定 (0.1.0-aplha.18) --- 1. 新增 core.config：ConfigPath（module:id/dot.path，id==module 时可省略）、    ConfigDescriptor（持 Supplier<Object> 配置源、默认值、危险标记、GUI 回调）、    ConfigManager（统一 get/set/reset/list/suggest/resolve，写入前校验锁定）； 2. 新增 core.security：SecurityPolicyViolationException、    server.ServerAuthorizationRequiredException、server.ConfigLocker    （迁自 chunkscanner ConfigurationLocker，锁 key 改为全路径，新增 registerDefaultLocks）； 3. IModule 移除 Object getConfig()，改为 List<ConfigDescriptor> getConfigDescriptors()；    ModuleConfigReflectionAccessor 全部方法改收 ConfigDescriptor，新增 applyLockedValue； 4. /inf config 重写：get|set|reset 收完整路径，新增 reload|gui [config_id]； 5. DebuggerModule 适配新描述符 API；补充中英文语言键； 6. 迁入 ConfigLockerTest，build.gradle 接入 JUnit 5。 (9d65c5f)"
+		},
+		{
+			"tag": "v0.1.0-alpha.1",
+			"published": "2026-08-05T17:30:17Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 502902275,
+					"name": "billy-inf-0.1.0-alpha.1.jar",
+					"url": "https://github.com/dx122dx/mod-infrastructure/releases/download/v0.1.0-alpha.1/billy-inf-0.1.0-alpha.1.jar",
+					"size": 1150699,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "019fb798a2a240ab5f587d43297f4e010923ad917ff5f32ae9306ea397f6a40c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "billy-inf",
+							"version": "0.1.0-alpha.1",
+							"name": "Billy's Mod infrastructure",
+							"description": "A general-purpose client-side infrastructure mod. Ships a debug submodule (debug actions and toggleable debug features) that activates built-in component packs only when their target mod is present.",
+							"minecraft": "~1.20.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cloth-config"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 31,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- chore(ci): 修复发布工作流环境名拼写并支持 dev 标签 (9fa8ecb)\n- ci: 为发布工作流添加运行环境配置 (17ca4ed)\n- ci: 改用 SemVer 并以 git tag 驱动发布 (5e6b31c)\n- docs: 全面重写 README.md 并新增英文版 README_EN.md (6ce29f6)\n- refactor: 新增 core.cli 层级补全/解析工具并重构 config 命令 (20260805.17) (c0daa97)\n- refactor: 将 chunkscanner 调试包外置为扩展点并解耦 (20260805.16) (c7c936c)\n- fix(debugger): 修复命令补全、配置收集及初始化健壮性 (34fde72)\n- refactor: 将 debugger 纳入模块系统并改为 SPI 统一注册（无命名空间 id） (20260805.14) --- 1. 新增 debugger/DebuggerModule 实现 IModule，以模块身份接入 core.module 框架：    - id=debugger（无命名空间纯名称），version 取模组元数据；配置复用 DebuggerConfigLoader，命令复用 buildDbgCommands 2. IModule.getId() 返回类型由 Identifier 改为 String（纯模块名，不再带 billy-inf: 命名空间） 3. ModuleRegistry 新增 discover()：基于 Java SPI(META-INF/services) 自动发现并登记全部模块，    消除 onInitializeClient 中逐个模块显式注册；新增模块只需在 services 文件加一行，启动代码零改动 4. InfrastructureMod 改用 ModuleRegistry.discover() 精简初始化；InfrastructureCommands 移除显式 dbg 挂载，改由 ModuleCommandRegistrar 统一挂载 5. normalizeModuleId 简化为原样返回（不再补命名空间前缀）；语言文件新增 module_debugger_name/desc 6. 版本号 20260805.12 → 20260805.14 (174b7b3)\n- feat: 新增 core.module 模块化框架 (20260805.12) (5f08371)\n- refactor: 更名 Billy's Mod infrastructure 并新增 /inf info 命令 (20260805.11) (2e427fe)\n- chore: 更新 fabric.mod.json 中的联系方式 (22d5017)\n- refactor: 更名 Billy's Debug Tools 并解除 chunkscanner 强依赖 (20260805.10) (80caba3)\n- fix: 修复 /cs dbg 补全器崩溃 + id 含冒号解析失败（重构为 IdentifierArgumentType）(20260805.9) (4638486)\n- feat: 合并配置锁定器 Mixin 为单文件 (7ac22b0)\n- fix: 修复 dbg 的 Action/Feature 因 Identifier 解析返回 null 而全部未注册 (20260805.6) (c4c8668)\n- feat: 新增 /cs dbg action info 子命令 (20260805.6) (37cb45b)\n- feat: 新增模拟进入/离开服务器调试动作 (20260805.5) (fdfd21c)\n- feat(debugger): 添加 ChunkScanner 配置锁定调试功能 (aee6020)\n- feat(commands): 为动作命令添加参数补全功能 (6703de6)\n- feat: 新增  ModMenu 联动 (20260805.2) (f076de9)\n- feat: 新增 Action/Feature 调试框架 (20260805.1) (5f19be4)\n- Initial Commit (522a7bf)"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

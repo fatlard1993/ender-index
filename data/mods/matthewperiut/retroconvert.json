@@ -1,0 +1,487 @@
+{
+	"repo": "matthewperiut/retroconvert",
+	"host": "github",
+	"description": "Automatically converts Babric b1.7.3 mods in the mods folder to Ornithe by rewriting their intermediary bytecode at launch.",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-06-06T05:04:59Z",
+	"pushed": "2026-08-01T15:38:02Z",
+	"releases": [
+		{
+			"tag": "1.0.4",
+			"published": "2026-08-01T15:38:03Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 498021435,
+					"name": "retroconvert-1.0.4+mcb1.7.3.jar",
+					"url": "https://github.com/matthewperiut/retroconvert/releases/download/1.0.4/retroconvert-1.0.4%2Bmcb1.7.3.jar",
+					"size": 122681,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "2137d22563f0d2a4dbdbc53f673bb2df08e53e0373482058dfc5565d4f9925d8",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "retroconvert",
+							"version": "1.0.4+mcb1.7.3",
+							"name": "RetroConvert",
+							"description": "Automatically converts Babric b1.7.3 mods in the mods folder to Ornithe by rewriting their intermediary bytecode at launch.",
+							"minecraft": "1.0.0-beta.7.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": "12ac04bf0a3eedb25a1140befce18b073cb7313caa2a7406fd99f3d6828fd51c.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/periut/retroconvert/Bundler.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/periut/retroconvert/Converter.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"com/periut/retroconvert/LoaderGrip.class": [
+									"java/net/URLClassLoader.close"
+								],
+								"com/periut/retroconvert/Relauncher.class": [
+									"java/net/URLClassLoader.<init>"
+								]
+							},
+							"exec": {
+								"com/periut/retroconvert/SwapHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"repo1.maven.org": [
+								"com/periut/retroconvert/Bundler.class"
+							],
+							"matthewperiut.github.io": [
+								"com/periut/retroconvert/Converter.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 498021436,
+					"name": "retroconvert-gradle-1.0.4.jar",
+					"url": "https://github.com/matthewperiut/retroconvert/releases/download/1.0.4/retroconvert-gradle-1.0.4.jar",
+					"size": 123716,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "3f39a1b069549b7e35de808447918c30f1be90ee8882cbb63751a9cd1d5fb2b8",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/periut/retroconvert/Bundler.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/periut/retroconvert/Converter.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"com/periut/retroconvert/Relauncher.class": [
+									"java/net/URLClassLoader.<init>"
+								]
+							},
+							"exec": {
+								"com/periut/retroconvert/SwapHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"repo1.maven.org": [
+								"com/periut/retroconvert/Bundler.class"
+							],
+							"matthewperiut.github.io": [
+								"com/periut/retroconvert/Converter.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Ornithe libraries (OSL and friends) ship .classtweaker files, the accesswidener successor. They carry the same intermediary token soup, so both the converter's text-resource rewrite and the plugin's residue scan now handle them like accesswideners.\n\nThose same libraries are multi-version and compiled against the newest version in their range, so they reference members that do not exist in b1.7.3. Calamus numbers every version separately, so there is nothing to convert those tokens to. The post-conversion residue check now splits leftovers into tokens the b1.7.3 map actually covers (real gaps, still a warning) and the rest (logged at info instead of shouting about a gap that cannot exist).\n\nAlso drops the b1.7.3 method entries that never existed there.\n\nMod and gradle plugin both at 1.0.4."
+		},
+		{
+			"tag": "1.0.3",
+			"published": "2026-07-31T08:02:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 496419121,
+					"name": "retroconvert-1.0.3+mcb1.7.3.jar",
+					"url": "https://github.com/matthewperiut/retroconvert/releases/download/1.0.3/retroconvert-1.0.3%2Bmcb1.7.3.jar",
+					"size": 122730,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c1770b3363862db4a4f5e27273c14c6004e57998307c07814b304a7c908e253a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "retroconvert",
+							"version": "1.0.3+mcb1.7.3",
+							"name": "RetroConvert",
+							"description": "Automatically converts Babric b1.7.3 mods in the mods folder to Ornithe by rewriting their intermediary bytecode at launch.",
+							"minecraft": "1.0.0-beta.7.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": "12ac04bf0a3eedb25a1140befce18b073cb7313caa2a7406fd99f3d6828fd51c.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/periut/retroconvert/Bundler.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/periut/retroconvert/Converter.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"com/periut/retroconvert/LoaderGrip.class": [
+									"java/net/URLClassLoader.close"
+								],
+								"com/periut/retroconvert/Relauncher.class": [
+									"java/net/URLClassLoader.<init>"
+								]
+							},
+							"exec": {
+								"com/periut/retroconvert/SwapHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"repo1.maven.org": [
+								"com/periut/retroconvert/Bundler.class"
+							],
+							"matthewperiut.github.io": [
+								"com/periut/retroconvert/Converter.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 496419119,
+					"name": "retroconvert-gradle-1.0.3.jar",
+					"url": "https://github.com/matthewperiut/retroconvert/releases/download/1.0.3/retroconvert-gradle-1.0.3.jar",
+					"size": 123129,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "1dc5144ab1899844540d0c475b28a9263e04578d52e67fe8e5e596154387021f",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/periut/retroconvert/Bundler.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/periut/retroconvert/Converter.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"com/periut/retroconvert/Relauncher.class": [
+									"java/net/URLClassLoader.<init>"
+								]
+							},
+							"exec": {
+								"com/periut/retroconvert/SwapHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"repo1.maven.org": [
+								"com/periut/retroconvert/Bundler.class"
+							],
+							"matthewperiut.github.io": [
+								"com/periut/retroconvert/Converter.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Fixes two gaps in ornithe -> babric reverse conversion that left calamus tokens in the output jar. Both surfaced at launch as `InvalidInjectionException: could not find any targets matching 'm_NNNNNNNN'`.\n\n- **Falsely ambiguous method tokens.** A calamus token declared on several owners but mapping to a single babric token was treated as ambiguous and dropped from the bare-name reverse map, so mixin annotation strings (which carry no owner) were never converted. 6 of the 9 reverse-disambiguation entries in the shipped table were affected.\n- **Access wideners named `<modid>.accessWidener`.** Extension matching was case-sensitive, so those files were copied through untouched with their calamus field tokens intact.\n\n`babricJar` now scans its own output and warns with any calamus tokens it finds, so a mapping gap shows up at build time instead of at mixin apply.\n\n1.0.2 is skipped."
+		},
+		{
+			"tag": "1.0.1",
+			"published": "2026-06-10T02:23:34Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 443282924,
+					"name": "retroconvert-1.0.0+mcb1.7.3.jar",
+					"url": "https://github.com/matthewperiut/retroconvert/releases/download/1.0.1/retroconvert-1.0.0%2Bmcb1.7.3.jar",
+					"size": 122562,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "6f7f8a06f2a4e84de8937c07ecd1f9acc2983ad776bf8f7319dc43758b2ced41",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "retroconvert",
+							"version": "1.0.0+mcb1.7.3",
+							"name": "RetroConvert",
+							"description": "Automatically converts Babric b1.7.3 mods in the mods folder to Ornithe by rewriting their intermediary bytecode at launch.",
+							"minecraft": "1.0.0-beta.7.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": "12ac04bf0a3eedb25a1140befce18b073cb7313caa2a7406fd99f3d6828fd51c.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/periut/retroconvert/Bundler.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/periut/retroconvert/Converter.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"com/periut/retroconvert/LoaderGrip.class": [
+									"java/net/URLClassLoader.close"
+								],
+								"com/periut/retroconvert/Relauncher.class": [
+									"java/net/URLClassLoader.<init>"
+								]
+							},
+							"exec": {
+								"com/periut/retroconvert/SwapHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"repo1.maven.org": [
+								"com/periut/retroconvert/Bundler.class"
+							],
+							"matthewperiut.github.io": [
+								"com/periut/retroconvert/Converter.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 443282925,
+					"name": "retroconvert-gradle-1.0.1.jar",
+					"url": "https://github.com/matthewperiut/retroconvert/releases/download/1.0.1/retroconvert-gradle-1.0.1.jar",
+					"size": 121429,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "f15bb265b380d9de0bd3781c20efd4d89279fb096c367a7d9d0025f1243db354",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/periut/retroconvert/Bundler.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/periut/retroconvert/Converter.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"com/periut/retroconvert/Relauncher.class": [
+									"java/net/URLClassLoader.<init>"
+								]
+							},
+							"exec": {
+								"com/periut/retroconvert/SwapHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"repo1.maven.org": [
+								"com/periut/retroconvert/Bundler.class"
+							],
+							"matthewperiut.github.io": [
+								"com/periut/retroconvert/Converter.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Gradle Plugin"
+		},
+		{
+			"tag": "1.0.0",
+			"published": "2026-06-06T05:08:24Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 439954658,
+					"name": "retroconvert-1.0.0+mcb1.7.3.jar",
+					"url": "https://github.com/matthewperiut/retroconvert/releases/download/1.0.0/retroconvert-1.0.0%2Bmcb1.7.3.jar",
+					"size": 107202,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "faefcddf2b347cee09bdaf20d267e294039251ce81074c2800cc29716ea41b72",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "retroconvert",
+							"version": "1.0.0+mcb1.7.3",
+							"name": "RetroConvert",
+							"description": "Automatically converts Babric b1.7.3 mods in the mods folder to Ornithe by rewriting their intermediary bytecode at launch.",
+							"minecraft": "1.0.0-beta.7.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": "12ac04bf0a3eedb25a1140befce18b073cb7313caa2a7406fd99f3d6828fd51c.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 25,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/periut/retroconvert/Converter.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"com/periut/retroconvert/LoaderGrip.class": [
+									"java/net/URLClassLoader.close"
+								],
+								"com/periut/retroconvert/Relauncher.class": [
+									"java/net/URLClassLoader.<init>"
+								]
+							},
+							"exec": {
+								"com/periut/retroconvert/SwapHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"matthewperiut.github.io": [
+								"com/periut/retroconvert/Converter.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Created an easy translation layer for already compiled babric mods to use ornithe.\nThis can be used as either an ornithe mod or launcher java agent\n\nTested against many mods and seems to work 100% of the time unless breaking changes in the new toolchain (like my mod starac just decimating certain functions in lwjgl) messes with it.\nTest mods that succeeded:\n- Accessory API\n- Aether\n- BHCreative\n- BetterF3\n- Cryonic Config\n- Glass Config API 3\n- HudTweaks\n- InventoryTweaks\n- MiscTweaks\n- QuickAdditions\n- Retro Commands\n- RetroConvert\n- Staráč\n- Station API\n- Third Person Fix\n- ZastavkaAPI"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

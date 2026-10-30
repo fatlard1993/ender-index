@@ -1,0 +1,434 @@
+{
+	"repo": "makomi-1/redstonelink-makomi",
+	"host": "github",
+	"stars": 1,
+	"archived": false,
+	"license": "LGPL-3.0",
+	"created": "2026-03-01T12:06:34Z",
+	"pushed": "2026-05-05T11:22:12Z",
+	"releases": [
+		{
+			"tag": "1.21.1-1.3.5-alpha",
+			"published": "2026-04-15T13:31:45Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 397021231,
+					"name": "redstonelink-makomi-fabric-1.21.1-1.3.5-alpha.jar",
+					"url": "https://github.com/makomi-1/redstonelink-makomi/releases/download/1.21.1-1.3.5-alpha/redstonelink-makomi-fabric-1.21.1-1.3.5-alpha.jar",
+					"size": 1375581,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "364a0000affaf5d305856e6c403a13552d98a56b765c11593d0b0eabd2342de6",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "redstonelink",
+							"version": "1.3.5-alpha",
+							"name": "RedstoneLink-makomi",
+							"description": "A feature-rich wireless redstone-like mod.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "da8de441fa4cb2cfbbd8b77be382861985537e4a64fc9c2095a97991c6dc6784.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"RedstoneLink"
+							],
+							"item": [
+								"Advancement Icon: Come Find Me in the End",
+								"Advancement Icon: Constellation",
+								"Advancement Icon: Master Strategist",
+								"Advancement Icon: Wireless Age",
+								"Linked Pulse Button",
+								"Linked Pulse Emitter",
+								"Linked Pulse Linker",
+								"Linked Redstone Core",
+								"Linked Redstone Core (Transparent)",
+								"Linked Redstone Dust Core",
+								"Linked Redstone Dust Core (Transparent)",
+								"Linked Sync Emitter",
+								"Linked Sync Lever",
+								"Linked Sync Linker",
+								"Linked Toggle Button",
+								"Linked Toggle Emitter",
+								"Linked Toggle Linker",
+								"Quick Link Tool",
+								"RL Icon",
+								"Receive Filter",
+								"Redstone Link Component",
+								"Send Filter",
+								"State Panel Tool"
+							],
+							"block": [
+								"Linked Pulse Button",
+								"Linked Pulse Emitter",
+								"Linked Redstone Core",
+								"Linked Redstone Core (Transparent)",
+								"Linked Redstone Dust Core",
+								"Linked Redstone Dust Core (Transparent)",
+								"Linked Sync Emitter",
+								"Linked Sync Lever",
+								"Linked Toggle Button",
+								"Linked Toggle Emitter",
+								"Receive Filter",
+								"Send Filter"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 560,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Update Overview**\nThis update focuses on three main areas: \"Channel Mode\", \"Extension of Filter Capabilities\", and \"GUI/External Experience Fixes\". Compared to `1.2.7-alpha`, the current version has completed the collection and application of node channel mode, filter channel mode, filter aliases, quick-link to channels, as well as related synchronization re-issuance/invalidity gap fixes. The overall usability and consistency have significantly improved. \n**Detailed Update Content** \n**1. New Channel Mode**\n- The node now supports switching between two connection modes: `serial` and `channel`.\n- In the channel mode, each channel has its own value. After the node switches to the channel mode, it will automatically re-establish the corresponding connection relationships based on the channels.\n- Quick-link now supports the collection and application of channel cache, and it is no longer a reserved entry point.\n- The pairing GUI now supports channel input and mode switching. The channel workflow can be directly used.\n- The near-extrinsic display and related interfaces have supplemented the display of channel information, making it easier to observe the current node status. \n\n**2. Enhanced Filter Functionality**\n- The `send / receive` filter now supports channel mode, allowing for target filtering based on either `serial / channel` selection.\n- During operation, the filter automatically matches based on the current mode of the serving node, either by serial number or channel.\n- Quick-link now can directly apply the cached serial number or channel to the filter.\n- The filter now supports aliases, and aliases will be reflected in the GUI, tooltips, and near-extrinsics.\n- The related configuration for filters and drop retention links have been synchronized and expanded to the new mode. \n\n**3. Synchronization Link and Edge Change Fix**\n- Fixed the issue where \"new edges added result in gaps in sync re-sending\" in the filter scenario.\n- Completed the supplementation of the runtime re-sending/invalidation logic for both the sender and receiver filters.\n- Added corresponding bench functional use cases and regression suites to cover channel filtering and sync edge change scenarios. \n\n**4. GUI and Interaction Fixes**\n- Fixed the issue where the input boxes in the filter GUI could not be clicked for input.\n- Fixed the problem with the stroke display of Chinese text in the GUI.\n- The alias submission process in the GUI has been integrated into `Confirm`, and no longer requires separate saving.\n- Several interface descriptions and display details of the quick-link, filter, and pairing GUIs have been optimized synchronously. \n\n**5. Documentation and Instructions are Updated Simultaneously**\n- The necessary documents such as instructions, English instructions, item reference books, etc. have been fully updated to reflect the current functional status.\n- Detailed explanations have been provided for new features such as channel mode, filter channel mode, aliases, and near-exposure.\n\n\n**更新概览**\n本次更新重点围绕“频道模式”“过滤器能力扩展”“GUI/外显体验修复”三条线展开。相较 `1.2.7-alpha`，当前版本已经补齐节点频道模式、过滤器频道模式、过滤器别名、quick-link 对频道的采集与应用，以及相关的同步补发/失效缺口修复，整体可用性和一致性明显提升。\n\n**详细更新内容**\n\n**1. 新增频道模式**\n- 节点现已支持 `serial / channel` 两种连接模式切换。\n- 频道模式采用独立频道值，节点切到频道模式后会按频道自动重建对应连接关系。\n- quick-link 已支持频道缓存的采集与应用，不再是预留入口。\n- 配对 GUI 已支持频道输入与模式切换，频道工作流可直接使用。\n- 近外显与相关界面已补充频道信息显示，便于观察当前节点状态。\n\n**2. 过滤器功能增强**\n- `send / receive` 过滤器现已支持频道模式，可按 `serial / channel` 二选一进行目标过滤。\n- 过滤器运行时会根据被服务节点当前所处模式，自动按序号或频道进行匹配。\n- quick-link 现可直接把序号缓存或频道缓存应用到过滤器。\n- 过滤器现已支持别名，别名会体现在 GUI、tooltip 和近外显中。\n- 过滤器相关配置与掉落保留链路已同步扩展到新模式。\n\n**3. 同步链路与边变化修复**\n- 修复了过滤器场景下“新增边后 sync 补发存在缺口”的问题。\n- 对发送端与接收端过滤器的运行时补发/失效逻辑都做了补齐。\n- 增加了对应 bench functional 用例和回归套件，覆盖频道过滤与 sync 边变化场景。\n\n**4. GUI 与交互修复**\n- 修复了过滤器 GUI 输入框无法点击输入的问题。\n- 修复了 GUI 中文文字描边显示问题。\n- 配对 GUI 中别名提交流程已并入 `Confirm`，不再需要单独保存。\n- quick-link、过滤器、配对 GUI 的若干界面文案与显示细节已同步优化。\n\n**5. 文档与说明同步**\n- 使用说明、英文说明、物品图鉴等文档已补齐到当前功能状态。\n- 对频道模式、过滤器频道模式、别名、近外显等新行为都已补充说明。"
+		},
+		{
+			"tag": "1.21.1-1.2.7-alpha",
+			"published": "2026-04-14T13:53:03Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 396235261,
+					"name": "redstonelink-makomi-fabric-1.21.1-1.2.7-alpha.jar",
+					"url": "https://github.com/makomi-1/redstonelink-makomi/releases/download/1.21.1-1.2.7-alpha/redstonelink-makomi-fabric-1.21.1-1.2.7-alpha.jar",
+					"size": 1333174,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "fdf78ff2f4cb9625d06be1be060b2c25bd50f9d5a96c771722df5a100ab43f46",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "redstonelink",
+							"version": "1.2.7-alpha",
+							"name": "RedstoneLink-makomi",
+							"description": "A feature-rich wireless redstone-like mod.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "da8de441fa4cb2cfbbd8b77be382861985537e4a64fc9c2095a97991c6dc6784.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"RedstoneLink"
+							],
+							"item": [
+								"Advancement Icon: Come Find Me in the End",
+								"Advancement Icon: Constellation",
+								"Advancement Icon: Master Strategist",
+								"Advancement Icon: Wireless Age",
+								"Linked Pulse Button",
+								"Linked Pulse Emitter",
+								"Linked Pulse Linker",
+								"Linked Redstone Core",
+								"Linked Redstone Core (Transparent)",
+								"Linked Redstone Dust Core",
+								"Linked Redstone Dust Core (Transparent)",
+								"Linked Sync Emitter",
+								"Linked Sync Lever",
+								"Linked Sync Linker",
+								"Linked Toggle Button",
+								"Linked Toggle Emitter",
+								"Linked Toggle Linker",
+								"Quick Link Tool",
+								"RL Icon",
+								"Receive Filter",
+								"Redstone Link Component",
+								"Send Filter",
+								"State Panel Tool"
+							],
+							"block": [
+								"Linked Pulse Button",
+								"Linked Pulse Emitter",
+								"Linked Redstone Core",
+								"Linked Redstone Core (Transparent)",
+								"Linked Redstone Dust Core",
+								"Linked Redstone Dust Core (Transparent)",
+								"Linked Sync Emitter",
+								"Linked Sync Lever",
+								"Linked Toggle Button",
+								"Linked Toggle Emitter",
+								"Receive Filter",
+								"Send Filter"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 550,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**1.2.7alpha Update Content**\nThis update, based on the continuous iterations following `1.0.0beta`, focuses on improving the filter system, custom node aliases, interface presentation, and interaction experience. At the same time, it continues to refine the signal model, strengthen the quick connection tool, and enhance the testing and verification of links. \n\n**Filter System**\n- Added send filters and receive filters, supporting independent placement, editing, recipe, item, and area previews.\n- Filters support node set rules and signal threshold rules, which can be applied respectively to the `triggerSource` and `core` paths.\n- The filter operation logic has been completed for `sync` dispatch, replay, and lifecycle links.\n- Reimplemented the filter activation method of \"neighbor redstone input as the master switch\".\n- The quick connection tool now supports collecting, applying, and related interactions with filters.\n- Added near and external display information for filters, and supplemented multiple sets of functional and performance boundary use cases. \n\n**Custom Node Aliases**\n- A new custom node alias system has been added, supporting commands for setting, removing, listing, and reverse-lookup of aliases by their names.\n- Aliases have been integrated into some readout and display paths, with a unified display format of \"Alias (#ID)\".\n- The `triggerSource/core` pairing interface now supports direct modification of node aliases.\n- Support for Chinese aliases has been added.\n- In-game testing of the alias-related command group has been completed. \n\n**GUI Beautification and Interaction Experience**\n- Unified style beautification was carried out for the filter interface, pairing interface, status panel, and quick connection tool interface.\n- Multiple sets of GUI backgrounds, titles, icons, and header rendering support were added and organized.\n- The input box, button, layout, and partial interface feedback display logic were optimized.\n- Issues related to the determination of GUI background bounding boxes were fixed. \n\n**Signal Model and Operational Logic**\n- Completed the convergence of the signal model: `toggle/pulse` is explicitly defined as event semantics, while only `sync` retains state semantics.\n- The arbitration, concurrent bucket, persistence, and recalculation links on the `core` side were further simplified and organized accordingly.\n- Supplementary and corrected verification cases for some loop boundaries and operational state behaviors were added. \n\n**Quick Connection Tools and Near-UI Visibility**\n- Optimize the usage, caching, and submission links of the quick connection tool.\n- Add a QLT channel mode and supplement corresponding textures and GUI theme switching.\n- Enhance the near-UI visibility/HUD display performance of nodes and filters.\n\n**Bug Fixes**\n- Fixed the issue where the tooltip information for filters was missing.\n- Fixed the problem where handheld filters could not be opened for editing.\n- Fixed the issue where filters did not have normal drop items.\n- Fixed the failure of the driver design and matrix use cases for some filters. \n\n**Testing and Documentation**\n- Refactor and enhance `Bench.FunctionalTrace` and related bench toolchains.\n- Add various in-game tests such as filter matrices, hidden interception states, loop boundaries, and alias command groups.\n- Synchronize updates to the README, usage instructions, mechanism explanations, and related documentation in both Chinese and English.\n\n**1.2.7alpha 更新内容**\n本次更新在 `1.0.0beta` 之后的连续迭代基础上，重点完善了过滤器系统、自定义节点别名、界面表现与交互体验，同时继续收敛信号模型、补强快速连接工具与测试验证链路。\n\n**过滤器系统**\n- 新增发送过滤器与接收过滤器，支持独立放置、编辑、配方、物品与区域预览。\n- 过滤器支持节点集合规则与信号阈值规则，可分别对 `triggerSource` 与 `core` 路径生效。\n- 过滤器运行逻辑补齐到 `sync` 派发、replay 与生命周期链路。\n- 重新实现“邻居红石输入作为总开关”的过滤器启用方式。\n- 快速连接工具已支持对过滤器进行采集、应用与相关交互。\n- 新增过滤器近外显信息，并补充多组功能与性能边界用例。\n\n**自定义节点别名**\n- 新增自定义节点别名系统，支持命令设置、移除、列出与按别名反查序号。\n- 别名已接入部分读取输出与显示链路，显示格式统一为“别名(#序号)”。\n- `triggerSource/core` 配对界面已支持直接修改节点别名。\n- 已补充中文别名支持。\n- 已补充别名相关命令组的游戏内测试。\n\n**GUI 美化与交互体验**\n\n\n..."
+		},
+		{
+			"tag": "1.21.1-1.2.8-alpha",
+			"published": "2026-04-14T11:53:52Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 396134387,
+					"name": "redstonelink-makomi-fabric-1.21.1-1.2.8-alpha.jar",
+					"url": "https://github.com/makomi-1/redstonelink-makomi/releases/download/1.21.1-1.2.8-alpha/redstonelink-makomi-fabric-1.21.1-1.2.8-alpha.jar",
+					"size": 1333795,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "b8669ec7c6cb7afd3e4c36ff16149380df9a4725673e67a7bc92f4c453ec2aea",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "redstonelink",
+							"version": "1.2.8-alpha",
+							"name": "RedstoneLink-makomi",
+							"description": "A feature-rich wireless redstone-like mod.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "da8de441fa4cb2cfbbd8b77be382861985537e4a64fc9c2095a97991c6dc6784.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"RedstoneLink"
+							],
+							"item": [
+								"Advancement Icon: Come Find Me in the End",
+								"Advancement Icon: Constellation",
+								"Advancement Icon: Master Strategist",
+								"Advancement Icon: Wireless Age",
+								"Linked Pulse Button",
+								"Linked Pulse Emitter",
+								"Linked Pulse Linker",
+								"Linked Redstone Core",
+								"Linked Redstone Core (Transparent)",
+								"Linked Redstone Dust Core",
+								"Linked Redstone Dust Core (Transparent)",
+								"Linked Sync Emitter",
+								"Linked Sync Lever",
+								"Linked Sync Linker",
+								"Linked Toggle Button",
+								"Linked Toggle Emitter",
+								"Linked Toggle Linker",
+								"Quick Link Tool",
+								"RL Icon",
+								"Receive Filter",
+								"Redstone Link Component",
+								"Send Filter",
+								"State Panel Tool"
+							],
+							"block": [
+								"Linked Pulse Button",
+								"Linked Pulse Emitter",
+								"Linked Redstone Core",
+								"Linked Redstone Core (Transparent)",
+								"Linked Redstone Dust Core",
+								"Linked Redstone Dust Core (Transparent)",
+								"Linked Sync Emitter",
+								"Linked Sync Lever",
+								"Linked Toggle Button",
+								"Linked Toggle Emitter",
+								"Receive Filter",
+								"Send Filter"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 550,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# `1.2.8-alpha` compared to `1.2.7-alpha` can be summarized as a minor version update focused on bug fixes, with three key points:\n- Fixed the semantic issue of mixed signal coverage: Later arriving `pulse/toggle` now correctly clears the truth value left by earlier `sync`, eliminating the situation where \"later signals become ineffective\". Semantically, it becomes \"the latest signal within a tick takes precedence\", but within the same tick, `sync` still has the highest priority.\n- Fixed the issue of empty GUI aliases not being saved: Now, when the alias is left blank in the pairing interface, it can be submitted normally, resulting in the current alias being cleared and reverting to the default `#number` display, instead of saving failure.\n- Synchronized correction of regression assertions and dedicated test cases: Updated the old mixed replay assertion criteria and added dedicated/functional regression related to the replay time key to prevent old `sync` replay errors from overriding the results of later events.\n# `1.2.8-alpha` 相对 `1.2.7-alpha` 可以概括为一次以修复为主的小版本更新，重点有 3 项：\n- 修复 mixed 信号覆盖语义问题：更晚到达的 `pulse/toggle` 现在会正确清掉更早 `sync` 留下的真值，不再出现“后来信号反而失效”的情况。语义上变成“跨 tick 以最新信号为准”，但同 tick 里仍保持 `sync` 最高优先级。\n- 修复 GUI 空别名无法保存：pairing 界面里别名留空时现在可以正常提交，效果是清空当前别名并回到默认 `#序号` 显示，而不是保存失败。\n- 同步修正回归断言与专项用例：更新了旧的 mixed replay 断言口径，并补了 replay 时间键相关的 dedicated/functional 回归，避免旧 `sync` 的 replay 错误覆盖更晚事件结果。"
+		},
+		{
+			"tag": "1.21.1-1.0.0-beta",
+			"published": "2026-04-09T05:10:21Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 392142540,
+					"name": "redstonelink-makomi-fabric-1.21.1-1.0.0-beta.jar",
+					"url": "https://github.com/makomi-1/redstonelink-makomi/releases/download/1.21.1-1.0.0-beta/redstonelink-makomi-fabric-1.21.1-1.0.0-beta.jar",
+					"size": 1116600,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "4bcbf90c181fa21b52aaa8aab31db82cc088a7e9e873392ea105c5105a5893f7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "redstonelink",
+							"version": "1.0.0-beta",
+							"name": "RedstoneLink-makomi",
+							"description": "A feature-rich wireless redstone-like mod.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "da8de441fa4cb2cfbbd8b77be382861985537e4a64fc9c2095a97991c6dc6784.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"RedstoneLink"
+							],
+							"item": [
+								"Advancement Icon: Come Find Me in the End",
+								"Advancement Icon: Constellation",
+								"Advancement Icon: Master Strategist",
+								"Advancement Icon: Wireless Age",
+								"Linked Pulse Button",
+								"Linked Pulse Emitter",
+								"Linked Pulse Linker",
+								"Linked Redstone Core",
+								"Linked Redstone Core (Transparent)",
+								"Linked Redstone Dust Core",
+								"Linked Redstone Dust Core (Transparent)",
+								"Linked Sync Emitter",
+								"Linked Sync Lever",
+								"Linked Sync Linker",
+								"Linked Toggle Button",
+								"Linked Toggle Emitter",
+								"Linked Toggle Linker",
+								"Quick Link Tool",
+								"RL Icon",
+								"Redstone Link Component",
+								"State Panel Tool"
+							],
+							"block": [
+								"Linked Pulse Button",
+								"Linked Pulse Emitter",
+								"Linked Redstone Core",
+								"Linked Redstone Core (Transparent)",
+								"Linked Redstone Dust Core",
+								"Linked Redstone Dust Core (Transparent)",
+								"Linked Sync Emitter",
+								"Linked Sync Lever",
+								"Linked Toggle Button",
+								"Linked Toggle Emitter"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 468,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			]
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "一个使用了时间优先 + 同一时间固定优先级仲裁模型，并区分了状态信号（sync）与事件信号(pulse/toggle)且信号持久化，以及序号配对实现连接的无线红石类模组，支持跨维度、中继延迟 和权限管理等，提供连接（接收）核心的透明变种和快速连接工具等。",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [
+		"docs/background_icon.png",
+		"docs/collect.gif",
+		"docs/cross_chunk.gif",
+		"docs/direct.gif",
+		"docs/filter.gif",
+		"docs/graph.gif",
+		"docs/hide.gif",
+		"docs/link.gif",
+		"docs/linker.gif",
+		"docs/node.gif",
+		"docs/recipe/minecraft/block/acacia_planks.png",
+		"docs/recipe/minecraft/block/andesite.png",
+		"docs/recipe/minecraft/block/bamboo_planks.png",
+		"docs/recipe/minecraft/block/birch_planks.png",
+		"docs/recipe/minecraft/block/blackstone.png",
+		"docs/recipe/minecraft/block/cherry_planks.png",
+		"docs/recipe/minecraft/block/chest.png",
+		"docs/recipe/minecraft/block/cobbled_deepslate.png",
+		"docs/recipe/minecraft/block/cobblestone.png",
+		"docs/recipe/minecraft/block/crimson_planks.png",
+		"docs/recipe/minecraft/block/dark_oak_planks.png",
+		"docs/recipe/minecraft/block/deepslate.png",
+		"docs/recipe/minecraft/block/diorite.png",
+		"docs/recipe/minecraft/block/glass.png",
+		"docs/recipe/minecraft/block/granite.png",
+		"docs/recipe/minecraft/block/jungle_planks.png",
+		"docs/recipe/minecraft/block/lever.png",
+		"docs/recipe/minecraft/block/mangrove_planks.png",
+		"docs/recipe/minecraft/block/mossy_cobblestone.png",
+		"docs/recipe/minecraft/block/oak_planks.png",
+		"docs/recipe/minecraft/block/polished_andesite.png",
+		"docs/recipe/minecraft/block/polished_blackstone.png",
+		"docs/recipe/minecraft/block/polished_deepslate.png",
+		"docs/recipe/minecraft/block/polished_diorite.png",
+		"docs/recipe/minecraft/block/polished_granite.png",
+		"docs/recipe/minecraft/block/red_sand.png",
+		"docs/recipe/minecraft/block/redstone_block.png",
+		"docs/recipe/minecraft/block/sand.png",
+		"docs/recipe/minecraft/block/spruce_planks.png",
+		"docs/recipe/minecraft/block/stone.png"
+	],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

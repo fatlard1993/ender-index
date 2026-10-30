@@ -1,0 +1,126 @@
+{
+	"repo": "Crash09N/nativium",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "Apache-2.0",
+	"created": "2026-10-17T19:59:04Z",
+	"pushed": "2026-10-24T10:59:01Z",
+	"releases": [
+		{
+			"tag": "v1.0.0",
+			"published": "2026-10-24T10:59:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 672030299,
+					"name": "nativium-1.0.0.jar",
+					"url": "https://github.com/Crash09N/nativium/releases/download/v1.0.0/nativium-1.0.0.jar",
+					"size": 6236333,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "386b8a6bbb3cf2be9115bffbcfcaf83f2e207c768a21077c40a7f13e6fa6179f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "nativium",
+							"version": "1.0.0",
+							"name": "Nativium",
+							"description": "Metal rendering backend for Minecraft on Apple Silicon. Runs vanilla, Sodium and Fabric rendering mods on Metal.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"io_github_kokodio_metal-jvm",
+								"nativium-gl",
+								"nativium-iris",
+								"nativium_voxy_natives"
+							],
+							"suggests": [
+								"sodium",
+								"iris"
+							],
+							"breaks": [
+								"metallium",
+								"metallum",
+								"mcopt-metal",
+								"metalrender",
+								"minecraft_metal"
+							],
+							"breaksVersions": {
+								"metallium": "*",
+								"metallum": "*",
+								"mcopt-metal": "*",
+								"metalrender": "*",
+								"minecraft_metal": "*"
+							},
+							"conflicts": [
+								"sodium",
+								"iris"
+							],
+							"conflictsVersions": {
+								"sodium": "<0.9.2",
+								"iris": "<1.11.6 || >=1.12"
+							}
+						}
+					],
+					"icon": "3aacf203fd89752db34c23a01279a5fca135a8f8806c1ab2d5aa4d4c1dc6be68.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 895,
+						"jars": [
+							"META-INF/jars/metal-jvm-0.1.0.jar",
+							"META-INF/jars/nativium-gl-1.0.0.jar",
+							"META-INF/jars/nativium-iris-1.0.0.jar",
+							"META-INF/jars/nativium-voxy-natives-1.0.0+rocksdb.10.2.1.lwjgl.3.4.1.jar"
+						],
+						"capabilities": {
+							"unsafe": {
+								"META-INF/jars/nativium-gl-1.0.0.jar!de/nprmedia/nativium/gl/GlShadowObjects.class": [
+									"sun/misc/Unsafe.allocateInstance",
+									"sun/misc/Unsafe.objectFieldOffset",
+									"sun/misc/Unsafe.putInt",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.putObject"
+								],
+								"META-INF/jars/nativium-gl-1.0.0.jar!de/nprmedia/nativium/gl/MetalGLCapabilities.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								],
+								"META-INF/jars/nativium-iris-1.0.0.jar!de/nprmedia/nativium/iris/FakeGlCapabilities.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								],
+								"META-INF/jars/nativium-iris-1.0.0.jar!de/nprmedia/nativium/iris/post/VoxyIrisBridge.class": [
+									"sun/misc/Unsafe.allocateInstance",
+									"sun/misc/Unsafe.objectFieldOffset",
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putInt",
+									"sun/misc/Unsafe.putBoolean"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Nativium renders Minecraft 26.3 through Apple's **Metal** API on Apple Silicon Macs, compatible with Sodium, Iris shader packs, Voxy and Distant Horizons.\n\n## Install\n\n1. Apple Silicon Mac with macOS 26 or newer, Minecraft 26.3, Fabric Loader 0.19.5+, Java 25, Fabric API.\n2. Put `nativium-1.0.0.jar` into your instance's `mods/` folder. Sodium 0.9.x is recommended; Iris 1.11.6+ is optional for shader packs.\n3. Start the game. F3 shows a \"Nativium ...\" line when Metal is active.\n\nOne jar contains everything: the Metal backend, `nativium-gl` (OpenGL → Metal for mods like Voxy), the `nativium-iris` shader-pack adapter (LGPL-3.0, separate nested jar) and Voxy's macOS natives. On Windows, Linux or Intel Macs it does nothing. Details: [docs/RELEASE.md](https://github.com/Crash09N/nativium/blob/main/docs/RELEASE.md).\n\n## Highlights\n\n- Metal is the default engine on Apple Silicon; Sodium runs natively on Metal.\n- Iris shader packs on Metal, including compute shaders, SSBOs and geometry shaders (which macOS OpenGL cannot run): Complementary Reimagined/Unbound, Photon 1.3b/1.4, BSL, Bliss, Rethinking Voxels.\n- Voxy runs on macOS (it cannot on Apple's OpenGL 4.1), also under shader packs and with Voxy Server Side; Distant Horizons under shader packs.\n- Compatibility center: start-up mod scan, status screen, automatic OpenGL fallback instead of crash loops.\n\n## Performance (M3 Max, 2560x1440 fullscreen, VSync off, Sodium)\n\n| Scene | Metal | OpenGL |\n|---|---|---|\n| Light (render distance 12) | 1541 fps | 602 fps |\n| Render distance 32 | 500 fps | 308 fps |\n| Complementary Reimagined | 98 fps | 80 fps |\n| Voxy + Photon 1.4 | 63 fps | cannot run |\n\nFull table: [docs/benchmarks/release-2026-10-24.md](https://github.com/Crash09N/nativium/blob/main/docs/benchmarks/release-2026-10-24.md).\n\n## Known limits\n\nVoxy LOD water seam (upstream Voxy), weaker enchantment glint under shader packs (same on OpenGL), tessellation shaders and mipmapped shadow maps not supported, nativium-gl covers a subset of OpenGL. Full list: [docs/RELEASE.md](https://github.com/Crash09N/nativium/blob/main/docs/RELEASE.md#known-limits-100-from-docsstatusmd).\n\nUpgrading from Metallium: remove the old `metallium-*.jar`; settings are copied over on the first start.\n\n**Next (in planning):** Apple-native features (MetalFX upscaling, frame interpolation, Game Mode) and an NVIDIA path.\n\nLicence: MIT (the `nativium-iris` adapter is LGPL-3.0). Credits: [README](https://github.com/Crash09N/nativium#credits--licenses)."
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "Formerly Metallium (renamed 2026-10-21; same project, same repository). Metal optimisation on Apple Silicon now, an NVIDIA path later.",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

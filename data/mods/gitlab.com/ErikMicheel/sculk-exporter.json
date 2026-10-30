@@ -89,7 +89,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "SculkMetrics v0.2.0\n\n## Added\n\n- Bearer token authentication on every endpoint: `token` (`SCULK_TOKEN`) or `token-file` (`SCULK_TOKEN_FILE`), which\n  works with agenix and sops-nix. Without either, the endpoints stay open.\n- `metrics-disabled` (`SCULK_METRICS_DISABLED`): switch off whole metric groups (`jvm`, `tick`, `players`,\n  `players-known`, `chunks`, `entities`, `block-entities`, `world-size`). A disabled group is not collected at all.\n- `sculk_players_whitelisted` and `sculk_whitelist_enabled`: whitelist size and state.\n- `sculk_players_known`: players who have ever joined, counted from the player data files on a background thread\n  (key `players-known-interval`, default `1m`). A new player counts from their first save, not from joining.\n\n## Changed\n\n- `token` and `token-file`, which v0.1.0 only warned about, now take effect: an endpoint that was open with one of\n  them set requires the token after the upgrade.\n\n---\n\nSHA-256 of `sculk-exporter-paper-0.2.0.jar`:\n\n```\n819221427ee9cc6a64318a5ffab50e4c3d73710d4aedb660956fe4d33bf47ca3  sculk-exporter-paper-0.2.0.jar\n```\n\nReproduce the build and compare the hash:\n\n```sh\nnix build gitlab:ErikMicheel/sculk-exporter/v0.2.0#paper\nsha256sum result/sculk-exporter-paper-0.2.0.jar\n```\n\nFetch it with Nix:\n\n```nix\nfetchurl {\n  url = \"https://gitlab.com/api/v4/projects/88029117/packages/generic/sculk-exporter/0.2.0/sculk-exporter-paper-0.2.0.jar\";\n  hash = \"sha256-gZIhQn7pzGpkMYpf+rUOTD1zcQ1K7bZglW/k0zv0fKM=\";\n}\n```"
 		},
 		{
 			"tag": "v0.1.0",
@@ -172,7 +173,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "SHA-256 of `sculk-exporter-paper-0.1.0.jar`:\n\n```\nc22e9bcb0514deaa58cdf3025bb59c57ed50eab6501426c5ddba9e15f1721366  sculk-exporter-paper-0.1.0.jar\n```\n\nReproduce the build and compare the hash:\n\n```sh\nnix build gitlab:ErikMicheel/sculk-exporter/v0.1.0#paper\nsha256sum result/sculk-exporter-paper-0.1.0.jar\n```\n\nFetch it with Nix:\n\n```nix\nfetchurl {\n  url = \"https://gitlab.com/api/v4/projects/88029117/packages/generic/sculk-exporter/0.1.0/sculk-exporter-paper-0.1.0.jar\";\n  hash = \"sha256-wi6bywUU3qpYzfMCW7WcV+1Q6rZQFCbF3bqeFfFyE2Y=\";\n}\n```"
 		}
 	],
 	"readme": "README.md",

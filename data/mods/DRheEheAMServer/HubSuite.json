@@ -1,0 +1,551 @@
+{
+	"repo": "DRheEheAMServer/HubSuite",
+	"host": "github",
+	"description": "A server-side multi-world management mod for MC 26.1.2 Fabric.",
+	"stars": 2,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-10-04T14:52:25Z",
+	"pushed": "2026-10-22T03:55:11Z",
+	"releases": [
+		{
+			"tag": "v0.5.0-beta.1",
+			"published": "2026-10-15T13:32:59Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 643967912,
+					"name": "hubsuite-0.5.0-beta.1.jar",
+					"url": "https://github.com/DRheEheAMServer/HubSuite/releases/download/v0.5.0-beta.1/hubsuite-0.5.0-beta.1.jar",
+					"size": 677275,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "7e5666fc4b718f20fd466fc12154e80dd753590a0c8bf9f46af52efedf3ff138",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hubsuite",
+							"version": "0.5.0-beta.1",
+							"name": "HubSuite",
+							"description": "纯服务端的多世界服务器套件：对话框注册/登录、假人大厅、生存/创造/空岛三个独立子服，并对 HuskHomes 与 Text Placeholder API 做适配。",
+							"minecraft": "26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"polymer-core"
+							],
+							"provides": [],
+							"suggests": [
+								"huskhomes",
+								"placeholder-api",
+								"luckperms",
+								"jei"
+							]
+						}
+					],
+					"icon": "d666372d1c32796fa0c693d02e27b1c99dc57f5ab1678809a0820a55e9f19848.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 218,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"cn/dreamgary/hubsuite/integration/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"cn/dreamgary/hubsuite/npc/SkinFetcher.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"cn/dreamgary/hubsuite/config/HubSuiteConfig$ClientCompatConfig.class"
+							],
+							"api.github.com": [
+								"cn/dreamgary/hubsuite/integration/UpdateChecker.class"
+							],
+							"api.mojang.com": [
+								"cn/dreamgary/hubsuite/npc/SkinFetcher.class"
+							],
+							"sessionserver.mojang.com": [
+								"cn/dreamgary/hubsuite/npc/SkinFetcher.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 643967903,
+					"name": "hubsuite-client-0.5.0-beta.1.jar",
+					"url": "https://github.com/DRheEheAMServer/HubSuite/releases/download/v0.5.0-beta.1/hubsuite-client-0.5.0-beta.1.jar",
+					"size": 81610,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "747e0f6b1b5dbf8c92f2bab803da4f1cee332071409e1c99f7e4fdb5fa73f8be",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hubsuite-client",
+							"version": "0.5.0-beta.1",
+							"name": "HubSuite Client",
+							"description": "HubSuite 服务端的客户端配套模组：自定义物品的分层渲染、装配台等自定义界面。强制安装（见 docs/客户端契约.md）。",
+							"minecraft": "26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "d666372d1c32796fa0c693d02e27b1c99dc57f5ab1678809a0820a55e9f19848.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 30,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 客户端\n⬆️ **建议更新** —— 客户端 v0.5.0-beta.1\n客户端指纹：`5a5fcd31bf553b4d`（alpha.2 是 `fad05fd11877bd71`）\n这一版客户端多了：**装配台界面**、**装配台方块**、钓竿的**裂纹层与抛竿层**。\n\n## 服务端\nv0.5.0-beta.1 —— 0.6「钓竿系统」的**全部七步**都在这一版里。\n\n### 新玩法\n- **装配台**（新方块）：钓竿 + **杆 / 线 / 钩** 四个语义格。放材料即消耗：同种杆材料**修补回满**、\n  不同种**换底**（耐久回满）、换线 / 换钩**不动耐久**；放错部位的材料根本放不进去。\n  配方：钓竿 + 铁锭 + 工作台 + 4 木板（配方书里能看到）。关界面把东西还给你，拆了方块东西掉出来。\n- **铁砧升级**：钓竿 + 钻石 / 绿宝石 / 青金石 / 红石 → 打上该升级（只有一个升级槽，再来一个直接替换）。\n  花费走**原版累计惩罚**：升得越多越贵。\n- **耐久与断线**：钓上来一次 **−1**；**断线**（线的概率，5‰~7‰）→ **空手而归** + **−3** + 装备损坏音效；\n  耐久见底**不能钓**（模型叠裂纹），只能回装配台修。\n- **青金石附魔**：钓上来的**装备**按**附魔台 15 级**等价附魔；挂青金石升级则按 **30 级**\n  并有 **25%** 追加一个**宝藏附魔**（附魔台本来不给的那几种，**诅咒除外**）。\n- **岩浆钓鱼改看钩**：黑曜石钩 / 下界合金钩才能在岩浆里钓 —— 不再需要专用竿。\n\n### ⚠️ 迁移提示（请务必看一眼）\n- **旧的熔岩钓竿不会消失**：进服时会自动换成「原版钓竿 + 黑曜石钩」，**附魔与自定义名字保留**、\n  **磨损比例照搬**（旧竿快坏了，新竿也快坏）。换完会有提示。\n- 没装客户端模组的玩家：玩法（钓上来的东西、附魔、装配台）**完全一样**，只是钓竿外观是原版样子、\n  装配台看起来像锻造台。\n\n## 最低客户端版本\n不强制（`clientCompat.mode` 默认 `warn`：只提示，不拦人）。想强制就在配置里改成 `enforce`。\n\n## 怎么装\n服务端：`hubsuite-0.5.0-beta.1.jar` + Fabric API（26.1.2）。\n客户端：`hubsuite-client-0.5.0-beta.1.jar` → 玩家客户端的 `mods/`（同样的 Fabric Loader + Fabric API）。\n\n## 已验证 / 未验证（如实写）\n**已验证**（开发环境实机 + 自检 268 项）：\n- 装配台界面与方块（界面截图、方块在世界里渲染、注册表同步不再断线）\n- 钓竿全链路的数据契约：材质表 / 属性公式 / 装配规则 / 铁砧升级 / 断线边界 / 附魔宝藏池 / 旧竿换算\n- 双端握手、真物品、分层渲染的素材齐全性\n\n**未验证 / 已知问题**：\n- **客户端的画面仍未在你的正式环境验收过**（只有作者的开发客户端）—— 这一版内容很多，麻烦重点看一眼\n- 装配台的**美术仍然是占位色块**（四个格子 + 标签），方块贴图也是占位；真图待美术\n- `/rod` 管理员命令还在（方便测试）；正常玩家用装配台方块\n- 客户端仍**不是**强制安装；资源包 / Polymer 下线要等切强制安装之后"
+		},
+		{
+			"tag": "v0.5.0-alpha.2",
+			"published": "2026-10-15T12:29:07Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 643802904,
+					"name": "hubsuite-0.5.0-alpha.2.jar",
+					"url": "https://github.com/DRheEheAMServer/HubSuite/releases/download/v0.5.0-alpha.2/hubsuite-0.5.0-alpha.2.jar",
+					"size": 650887,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "1abca133164ae7f3bbbb9d3f3bf82b7ac6c8161130194f3eb5059876fd7b0d76",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hubsuite",
+							"version": "0.5.0-alpha.2",
+							"name": "HubSuite",
+							"description": "纯服务端的多世界服务器套件：对话框注册/登录、假人大厅、生存/创造/空岛三个独立子服，并对 HuskHomes 与 Text Placeholder API 做适配。",
+							"minecraft": "26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"polymer-core"
+							],
+							"provides": [],
+							"suggests": [
+								"huskhomes",
+								"placeholder-api",
+								"luckperms",
+								"jei"
+							]
+						}
+					],
+					"icon": "d666372d1c32796fa0c693d02e27b1c99dc57f5ab1678809a0820a55e9f19848.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 208,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"cn/dreamgary/hubsuite/integration/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"cn/dreamgary/hubsuite/npc/SkinFetcher.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"cn/dreamgary/hubsuite/config/HubSuiteConfig$ClientCompatConfig.class"
+							],
+							"api.github.com": [
+								"cn/dreamgary/hubsuite/integration/UpdateChecker.class"
+							],
+							"api.mojang.com": [
+								"cn/dreamgary/hubsuite/npc/SkinFetcher.class"
+							],
+							"sessionserver.mojang.com": [
+								"cn/dreamgary/hubsuite/npc/SkinFetcher.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 643802889,
+					"name": "hubsuite-client-0.5.0-alpha.2.jar",
+					"url": "https://github.com/DRheEheAMServer/HubSuite/releases/download/v0.5.0-alpha.2/hubsuite-client-0.5.0-alpha.2.jar",
+					"size": 76908,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "ff7f0560c8fbbff81374caaac60241a7aab1f5eb8b19f13c38561b797158e2c4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hubsuite-client",
+							"version": "0.5.0-alpha.2",
+							"name": "HubSuite Client",
+							"description": "HubSuite 服务端的客户端配套模组：自定义物品的分层渲染、装配台等自定义界面。强制安装（见 docs/客户端契约.md）。",
+							"minecraft": "26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "d666372d1c32796fa0c693d02e27b1c99dc57f5ab1678809a0820a55e9f19848.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 27,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 客户端\n⬆️ **建议更新** —— 客户端 v0.5.0-alpha.2\n客户端指纹：`fad05fd11877bd71`（与 alpha.1 的 `2cd1c01e57718f4e` **不同** → 这一版客户端确实有改动，请一并更新）\n\n## 服务端\nv0.5.0-alpha.2\n\n- **装配台**（新）：自定义菜单 + **自定义界面**（标题「钓竿装配台」，四个语义格：钓竿 / 杆 / 线 / 钩）。\n  规则已实现：杆位同种材料**修补回满**、不同种**换底**（耐久回满）、线 / 钩只换属性**不动耐久**、\n  放错部位的材料根本放不进去、耐久满时不浪费材料；关界面把东西还给玩家。\n  目前用管理员命令 `/rod` 打开（0.6 会换成方块 + 方块实体）。\n- **钓竿外观补两层**：抛竿时叠「钓线」层（不再整根变成原版抛竿贴图）、耐久见底时叠「裂纹」层\n- **修复**：用 `/register`、`/login` **命令**登录成功后，进服时弹出的登录表单不会自己关、\n  一直盖在屏幕上（玩家只能手动点退出）。现在认证成功即关闭。\n- 自检 **263 项**全部通过\n\n## 最低客户端版本\n不强制（`clientCompat.mode` 默认 `warn`：只提示、不拦人）。\n\n## 怎么装客户端\n`hubsuite-client-0.5.0-alpha.2.jar` → 玩家客户端的 `mods/`（同样的 Fabric Loader + Fabric API 26.1.2）。\n不装也能玩：没装的客户端继续走 Polymer 映射，看到的是原来的样子。\n\n## 已验证 / 未验证（如实写）\n**已验证**（开发环境实机）：\n- 装配台界面能在客户端打开（截图确认标题、四个语义格与标签、玩家背包）\n- 装配规则 12 组断言（修补 / 满耐久不消耗 / 换底 / 换线换钩不动耐久 / 非法材料原样返回）\n- 钓竿裂纹层与抛竿层在客户端正常叠出来\n- 命令登录后，服务端确实把那张登录表单关掉了\n\n**未验证 / 已知问题**：\n- **客户端渲染与界面仍未在正式环境验收过**（只有作者的开发客户端）—— 装配台是这一版的新东西，尤其麻烦看一眼\n- 装配台的**美术是占位色块**（四个格子 + 标签），真图以后替换；也还没有方块，用 `/rod` 打开\n- 装配台只有 4 个语义格 + 背包，没有结果格（所以不存在免费合成的工作台漏洞）\n- `/rod` 目前需要管理员权限（0.6 方块化之后会变成任何人都能用）"
+		},
+		{
+			"tag": "v0.5.0-alpha.1",
+			"published": "2026-10-15T12:01:19Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 643730672,
+					"name": "hubsuite-0.5.0-alpha.1.jar",
+					"url": "https://github.com/DRheEheAMServer/HubSuite/releases/download/v0.5.0-alpha.1/hubsuite-0.5.0-alpha.1.jar",
+					"size": 639114,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "4b46aabd620ad9dfc67ca2143a6ae53f3ddeefb5bdb26ebfd7bdc848b47e3e8d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hubsuite",
+							"version": "0.5.0-alpha.1",
+							"name": "HubSuite",
+							"description": "纯服务端的多世界服务器套件：对话框注册/登录、假人大厅、生存/创造/空岛三个独立子服，并对 HuskHomes 与 Text Placeholder API 做适配。",
+							"minecraft": "26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"polymer-core"
+							],
+							"provides": [],
+							"suggests": [
+								"huskhomes",
+								"placeholder-api",
+								"luckperms",
+								"jei"
+							]
+						}
+					],
+					"icon": "d666372d1c32796fa0c693d02e27b1c99dc57f5ab1678809a0820a55e9f19848.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 202,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"cn/dreamgary/hubsuite/integration/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"cn/dreamgary/hubsuite/npc/SkinFetcher.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"cn/dreamgary/hubsuite/config/HubSuiteConfig$ClientCompatConfig.class"
+							],
+							"api.github.com": [
+								"cn/dreamgary/hubsuite/integration/UpdateChecker.class"
+							],
+							"api.mojang.com": [
+								"cn/dreamgary/hubsuite/npc/SkinFetcher.class"
+							],
+							"sessionserver.mojang.com": [
+								"cn/dreamgary/hubsuite/npc/SkinFetcher.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 643730686,
+					"name": "hubsuite-client-0.5.0-alpha.1.jar",
+					"url": "https://github.com/DRheEheAMServer/HubSuite/releases/download/v0.5.0-alpha.1/hubsuite-client-0.5.0-alpha.1.jar",
+					"size": 63313,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "870ef8848ddf1671a42282bd5e9013ab7d7c5d0c15a0365382bf39278db4bd7c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hubsuite-client",
+							"version": "0.5.0-alpha.1",
+							"name": "HubSuite Client",
+							"description": "HubSuite 服务端的客户端配套模组：自定义物品的分层渲染、装配台等自定义界面。强制安装（见 docs/客户端契约.md）。",
+							"minecraft": "26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "d666372d1c32796fa0c693d02e27b1c99dc57f5ab1678809a0820a55e9f19848.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 19,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 客户端\n⬆️ **建议更新** —— 客户端 v0.5.0-alpha.1\n装了会看到**真物品**与**逐层叠出来的钓竿**；**不装也能玩**（服务端按玩家能力分流，没装的继续看原来的样子）。\n\n## 服务端\nv0.5.0-alpha.1\n\n- **双端模组**：新增可选的客户端模组 `hubsuite-client`（同一份 Release 里的另一个 jar）\n- **握手**：进服时交换 版本 / 协议号 / 指纹 / 能力清单（`hubsuite:hello` / `hello_ack` / `welcome`），\n  服务端按玩家能力决定发真物品还是发 Polymer 映射 —— 老客户端行为完全不变\n- **5 个自定义物品全部支持真物品**：地狱线 / 熔岩钓竿 / 三种渔桶（客户端自带模型贴图，含渔桶「有饵」变体）\n- **钓竿数据契约**：杆 / 线 / 钩 / 升级写在原版钓竿的数据组件里；耐久 ×10 整数（512.5 → 5125）、全程无浮点；\n  属性公式（耐久 / 速度 / 幸运 / 断线 / 岩浆）与自检同批落地\n- 自检 **261 项**全部通过\n\n## 最低客户端版本\n不强制（`clientCompat.mode` 默认 `warn`：只提示、不拦人）。想强制就把 `config/hubsuite/config.json` 里的\n`clientCompat.mode` 改成 `enforce`（没装 / 版本过低的会被踢出并看到下载地址）。\n\n## 怎么装客户端\n`hubsuite-client-0.5.0-alpha.1.jar` → 玩家客户端的 `mods/`（同样的 Fabric Loader + Fabric API 26.1.2）。\n\n客户端指纹：`2cd1c01e57718f4e` —— 下次发版对比这个值（或者看 Release 说明里的这一行）就知道客户端有没有变。\n\n## 已验证 / 未验证（如实写）\n\n**已在开发环境实机验证**：\n- 双端握手通过、服务端记录到正确的版本 / 协议 / 指纹 / 能力清单\n- 真物品：地狱线、熔岩钓竿、三种渔桶（含「有饵」变体）在客户端侧都是真物品 id\n- 钓竿分层渲染：给玩家 `/give` 一根带 `custom_model_data` 的钓竿，热键栏图标四层颜色正确（钻石杆 + 地狱丝线 + 黑曜石钩 + 青金石升级）\n\n**未验证 / 已知问题**：\n- **客户端渲染没有在正式客户端环境验收过**（目前只在作者的开发客户端里跑过）—— 请帮忙看一眼\n- 装配台界面、断线/损坏、青金石附魔属于 **0.6.0**，本版没有\n- 进服**之前**就放在背包里的自定义物品，要等一次同步才会变成真物品（已做「握手后补发背包」，边角情况仍可能出现）\n- 与本次无关的老毛病：用 `/register` **命令**注册成功后，先前弹出的注册对话框不会自动关闭"
+		},
+		{
+			"tag": "v0.4.0-alpha.6",
+			"published": "2026-10-14T09:42:06Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 639920489,
+					"name": "hubsuite-0.4.0-alpha.6.jar",
+					"url": "https://github.com/DRheEheAMServer/HubSuite/releases/download/v0.4.0-alpha.6/hubsuite-0.4.0-alpha.6.jar",
+					"size": 573357,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "3d102e91fc1466d7ed46134a53ae10cc33e8cfa71dcd0b0eafd9635f35e90df6",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hubsuite",
+							"version": "0.4.0-alpha.6",
+							"name": "HubSuite",
+							"description": "纯服务端的多世界服务器套件：对话框注册/登录、假人大厅、生存/创造/空岛三个独立子服，并对 HuskHomes 与 Text Placeholder API 做适配。",
+							"minecraft": "26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"polymer-core"
+							],
+							"provides": [],
+							"suggests": [
+								"huskhomes",
+								"placeholder-api",
+								"luckperms",
+								"jei"
+							]
+						}
+					],
+					"icon": "d666372d1c32796fa0c693d02e27b1c99dc57f5ab1678809a0820a55e9f19848.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 177,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"cn/dreamgary/hubsuite/integration/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"cn/dreamgary/hubsuite/npc/SkinFetcher.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"cn/dreamgary/hubsuite/integration/UpdateChecker.class"
+							],
+							"api.mojang.com": [
+								"cn/dreamgary/hubsuite/npc/SkinFetcher.class"
+							],
+							"sessionserver.mojang.com": [
+								"cn/dreamgary/hubsuite/npc/SkinFetcher.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "> **测试版（Alpha）**。0.x 阶段不保证存档 / 配置格式兼容。\n\n## 新内容\n\n### 渔桶可以混装钓饵\n- 一只桶能装**任意几种**钓饵（6 种都能进），容量按**总个数**算：木 **64** / 铁 **256** / 钻 **1024**。\n- 钓鱼时按档次 **二重压缩 → 压缩 → 普通** 顺序消耗（先扣最高档），加速按\"这次会扣的那种\"算。\n- 装 / 取仍是原版收纳袋那套：左键全装、右键装一个、右键空格子取一组；tooltip 显示\"内容物 总数/容量 + 明细\"。\n\n### \"用错环境\"的规则\n| 副手 | 环境匹配 | 环境不匹配 |\n|---|---|---|\n| **散饵**（钓饵本身） | 加速 +10% / +25% / +45% | 速度 **−40%**（等待 ×1.67），而且**照样扣 1 个** |\n| **渔桶** | 按桶里**最高档的匹配饵**加速 | **完全不生效**（不减速、也不扣，桶护饵） |\n\n- 普通饵只在水里、地狱饵只在岩浆里\"算数\"；压缩不压缩一个价。\n- 惩罚值可配：`fishing.bait.familyMismatchPenalty`（默认 `0.40`）。\n\n### 数值与贴图\n- 钓饵堆叠上限 **16**（原 8）。\n- 渔桶贴图只看 **空 / 有饵** 两种：装了任何饵（含混装）都是 `<桶>_bait`，不再按饵的种类分。\n- 资源包瘦身：渔桶模型从 21 个降到 **6 个**，`HubSuite-资源包模板.zip` 现在 **47 个条目**。\n- **熔岩钓竿的两张贴图**（普通 / 抛竿）已按提供的图放进资源包模板。\n\n## 升级注意\n- **必须装 Polymer**：把 `polymer-bundled-0.16.5+26.1.2.jar` 放进 `mods/`，否则 Fabric Loader 拒绝加载本模组。\n- 自定义物品的**外观**需要资源包（`pack_format = 84`）：解压仓库根目录的 `HubSuite-资源包模板.zip`，改完贴图直接用。\n- 钓饵堆叠 8 → 16：老存档里已有的 8 个一组不会自动合并（无害）。\n- alpha 阶段不承诺存档 / 配置格式兼容。\n\n## 验证\n- 内置自检：**通过 232 项，失败 0 项**（看门狗 0 次）。\n- 产物按流程从 GitHub 真实下载校验（`fabric.mod.json` 的 id / version / 依赖）。\n\n## 已知问题 / 未验证\n- **实机手感未验证**：渔桶点击交互（装 / 取 / 混装）、岩浆钓鱼、减速手感都要真人试。\n- 没有资源包时，自定义物品显示为 Polymer 的占位（试炼钥匙 / 钓竿），名字是翻译键 `item.hubsuite.<id>`。"
+		},
+		{
+			"tag": "v0.4.0-alpha.5",
+			"published": "2026-10-13T15:45:22Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 637485160,
+					"name": "hubsuite-0.4.0-alpha.5.jar",
+					"url": "https://github.com/DRheEheAMServer/HubSuite/releases/download/v0.4.0-alpha.5/hubsuite-0.4.0-alpha.5.jar",
+					"size": 567712,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "dab5716ada98f658aa18b9f8a2787877b8d76e280f67a4caa78376ba6d4626b0",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hubsuite",
+							"version": "0.4.0-alpha.5",
+							"name": "HubSuite",
+							"description": "纯服务端的多世界服务器套件：对话框注册/登录、假人大厅、生存/创造/空岛三个独立子服，并对 HuskHomes 与 Text Placeholder API 做适配。",
+							"minecraft": "26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"polymer-core"
+							],
+							"provides": [],
+							"suggests": [
+								"huskhomes",
+								"placeholder-api",
+								"luckperms",
+								"jei"
+							]
+						}
+					],
+					"icon": "d666372d1c32796fa0c693d02e27b1c99dc57f5ab1678809a0820a55e9f19848.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 176,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"cn/dreamgary/hubsuite/integration/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"cn/dreamgary/hubsuite/npc/SkinFetcher.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"cn/dreamgary/hubsuite/integration/UpdateChecker.class"
+							],
+							"api.mojang.com": [
+								"cn/dreamgary/hubsuite/npc/SkinFetcher.class"
+							],
+							"sessionserver.mojang.com": [
+								"cn/dreamgary/hubsuite/npc/SkinFetcher.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "> **测试版（Alpha）**。0.x 阶段不保证存档 / 配置格式兼容。\n\n## 这个版本改了什么\n\n### 渔桶（钓饵收纳袋）×3\n- **木渔桶 / 铁渔桶 / 钻石渔桶**，容量 16 / 64 / 1024 个饵。\n- 操作和原版收纳袋一样：背包里把饵\"点\"到桶上装入（左键全装、右键装一个），\n  空手右键点桶（或拿桶右键空格子）取出一组。\n- 一桶只装一种饵；普通 / 地狱 / 压缩 / 二重压缩都能进，按\"个\"计数。\n- **副手拿桶钓鱼即可生效**：加速按桶里饵的档次算（+10% / +25% / +45%），钓上来从桶里扣 1。\n- **桶的贴图随内容变化**：空桶 / 装了饵 / 装的哪种饵，各是各的模型\n  （资源包要提供 21 个模型 id；仓库根目录的 `HubSuite-资源包模板.zip` 已含全部 JSON + 占位贴图）。\n\n### 钓饵堆叠 64 → 8（含压缩档）\n大量携带请用渔桶。\n\n### 修复：配方书发现不了自定义配方\n之前的配方解锁 advancement 只有 `recipe_unlocked` 一个条件（等于\"解锁自己\"，永远不触发）。\n现在拿到对应材料就自动解锁（钓饵 ↔ 水桶、渔桶 ↔ 木板/铁锭/钻石 …共 15 条）。\n\n## 升级注意\n- 资源包要加 3 个渔桶 × 7 状态 = 21 个模型（模板 zip 已含占位贴图，解压改图即可）。\n- 无配置 / 存档结构变化，直接换 jar。\n\n## 已验证 / 未验证\n- ✅ 自检 230 项全绿（含渔桶装取 / 容量 / 堆叠 / 假玩家副手消耗 / 模型切换）。\n- ⚠️ 收纳袋式点击的手感、动态贴图的实际效果 —— **实机未验证**（要资源包 + 真人）。"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

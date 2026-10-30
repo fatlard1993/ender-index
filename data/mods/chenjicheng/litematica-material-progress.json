@@ -1,0 +1,72 @@
+{
+	"repo": "chenjicheng/litematica-material-progress",
+	"host": "github",
+	"description": "Server-authoritative material collection progress for shared Litematica schematics (Syncmatica add-on, Fabric 1.21.11)",
+	"stars": 0,
+	"archived": false,
+	"license": "LGPL-3.0",
+	"created": "2026-10-18T17:10:47Z",
+	"pushed": "2026-10-19T03:56:16Z",
+	"releases": [
+		{
+			"tag": "v0.1.0",
+			"published": "2026-10-19T03:12:11Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 655102336,
+					"name": "litematica-material-progress-0.1.0.jar",
+					"url": "https://github.com/chenjicheng/litematica-material-progress/releases/download/v0.1.0/litematica-material-progress-0.1.0.jar",
+					"size": 153171,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "901e9a42bc9bb60c67541b210cf37a6da99ec6f1fb2f702e870d3307f3fbae83",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lmp",
+							"version": "0.1.0",
+							"name": "Litematica Material Progress",
+							"description": "为共享原理图（Litematica + Syncmatica）划定材料区，由服务端异步扫描容器，内置菜单显示所需 / 已收集 / 还差。",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"syncmatica",
+								"litematica",
+								"malilib"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 64,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "服务端权威的材料收集进度，用于共享原理图（Litematica + Syncmatica）。在世界里划出一块材料区，把相关容器放进去：游戏内菜单按原理图列出每种材料的所需、已收集与还差，并给出两个进度指标——完成种类/总种类、已收集数/所需数。\n\n这是首个公开版本（M0–M3）。\n\n## 安装\n\n需要 Minecraft 1.21.11、Fabric Loader 0.18.2 或更高、Fabric API。\n\n1. 把 `litematica-material-progress-0.1.0.jar` 放进**客户端与服务端**的 `mods/` 目录。模组的 `environment` 为 `*`，两端都要安装：客户端提供界面与入口，服务端负责扫描、权威数据与原理图解析。\n2. 客户端另需 Litematica 0.26.x 与 malilib 0.27.x，用于材料清单界面与放置列表里的入口。\n3. 要显示「所需材料」，两端再装 Syncmatica。服务端始终只需要 Fabric API，不要把 Litematica 或 malilib 装到专用服务器上。\n\n不要使用 `-dev.jar`。它使用开发期名称，进入游戏后会在首个界面初始化时抛出 `NoClassDefFoundError`。\n\n## 这个版本能做什么\n\n- **从共享原理图直接划定材料区。** 放置列表里，每个已共享的原理图行上有一个「材料」按钮。点开后，在设置界面里点「用原理图范围」或「用 Litematica 当前选区」取范围，再点「保存」即自动绑定该原理图。不需要输入命令。\n- **服务端扫描，客户端只负责显示。** 扫描按每 tick 2ms 分片推进；服务器本来就忙时整片跳过，并且绝不为扫描加载区块。\n- **同时看两个进度。** 材料清单的 Total、Missing、Available 分别是所需、还差、材料区内已收集；标题栏再给出种类进度与数量进度，并标注结果按全量原理图统计。\n\n## 验证\n\n发布前运行的检查：\n\n| 命令 | 覆盖 | 结果 |\n| --- | --- | --- |\n| `./gradlew test` | 111 个单元测试：计数语义、区域编辑校验、协议编解码、缓存更新规则、语言文件一致性 | 通过 |\n| `./gradlew runGameTest` | 真实专用服务端：扫描真实区块里的容器、取消后不复活已删除区域、扫描期间的编辑不被回滚、扫描开销 | 通过 |\n| `./gradlew runClientGameTest` | 真实客户端：进度界面的两个维度、设置界面的保存与删除、用真实原理图跑通「放置行入口 → 设置 → 保存 → 服务端解析」 | 通过 |\n\n扫描开销实测（256 个区块、16384 个容器）：每 tick 用于扫描的时间 p50 2.02ms、p99 2.03ms，扫描前后已加载区块数不变。\n\n## 已知限制\n\n- 未在真实存档的复杂原理图上验证：模组方块、超大调色板、旧数据版本、多子区域与镜像旋转。\n- 放置行按钮依赖 Litematica `WidgetSchematicPlacement` 的构造函数签名。上游改签名后按钮不再出现，客户端不会因此崩溃；此时可以用控制台命令 `/lmp region ...` 管理材料区。\n- 修改材料区需要权限等级 2。未开启作弊的单人世界里，主机权限等级为 0，保存会被明确拒绝。\n- 读取 `.litematic` 时没有限制解压后的大小；损坏或构造过的文件可能耗尽服务端内存。\n- 尚未实现「按区域中心自动绑定共享放置」。界面路径不需要它：绑定随保存一起发生。\n\n完整的设计与实现说明见仓库里的 `docs/design.md`。"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

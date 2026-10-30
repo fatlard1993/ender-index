@@ -1,0 +1,74 @@
+{
+	"repo": "dwgx/strict",
+	"host": "github",
+	"description": "Fabric server access-control and mod verification experiment for Minecraft 1.21.x",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2025-05-01T05:01:05Z",
+	"pushed": "2026-07-10T22:23:00Z",
+	"releases": [
+		{
+			"tag": "publish",
+			"published": "2025-05-01T05:17:38Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 250956942,
+					"name": "strict-1.0-SNAPSHOT.jar",
+					"url": "https://github.com/dwgx/strict/releases/download/publish/strict-1.0-SNAPSHOT.jar",
+					"size": 338272,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "6f55059ab9bc1a3753fbb6642eafce0db9098c4db7e274b44c76729d3e46810f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "strict",
+							"version": "1.0-SNAPSHOT",
+							"name": "Strict Mod",
+							"description": "一个增强 Minecraft 服务器安全性的 Fabric 模组，通过模组验证、加密令牌认证和访问控制，确保只有授权玩家和批准模组可加入。支持私密模式、黑名单管理和详细日志。",
+							"minecraft": "1.21.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft"
+							],
+							"provides": [
+								"org_yaml_snakeyaml"
+							]
+						}
+					],
+					"icon": "2dc782d3e097b9a38a8c5baf9f8f61add6d89ca6a4e7a77ea4092a0d994c09fa.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 249,
+						"jars": [
+							"META-INF/jars/snakeyaml-2.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/snakeyaml-2.0.jar!org/yaml/snakeyaml/DumperOptions.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Strict Mod\n\n**Strict Mod** 是一个为 Minecraft Fabric 设计的模组，旨在通过模组验证、玩家认证和服务器访问控制增强服务器安全性。它确保只有经过授权的玩家和使用允许模组的客户端能够加入服务器，使用加密令牌验证和可配置的模组策略。\n\n## 目录\n- [功能概述](#功能概述)\n- [主要特性](#主要特性)\n- [安装指南](#安装指南)\n    - [环境要求](#环境要求)\n    - [服务器安装](#服务器安装)\n    - [客户端安装](#客户端安装)\n- [使用方法](#使用方法)\n    - [玩家指南](#玩家指南)\n    - [管理员指南](#管理员指南)\n- [命令列表](#命令列表)\n- [配置说明](#配置说明)\n    - [配置文件示例](#配置文件示例)\n    - [配置项详解](#配置项详解)\n- [技术实现](#技术实现)\n    - [客户端-服务器握手](#客户端-服务器握手)\n    - [令牌系统](#令牌系统)\n    - [模组验证](#模组验证)\n    - [访问控制](#访问控制)\n    - [流程图](#流程图)\n- [代码结构](#代码结构)\n- [构建与依赖](#构建与依赖)\n- [日志系统](#日志系统)\n- [故障排查](#故障排查)\n- [未来改进](#未来改进)\n- [许可证](#许可证)\n\n## 功能概述\n\nStrict Mod 提供以下核心功能：\n\n- ✅ **模组验证**：强制客户端使用批准的模组，防止作弊或不兼容模组。\n- 🔒 **玩家认证**：通过加密令牌验证玩家身份，防止冒充。\n- 🛡️ **访问控制**：支持公开和私密服务器模式，私密模式下新玩家需管理员审批。\n- ⚠️ **黑名单管理**：按 UUID 或计算机名称封禁玩家。\n- ⚙️ **灵活配置**：通过 YAML 配置文件管理模组策略、服务器设置和黑名单。\n\n## 主要特性\n\n| 特性 | 描述 |\n|------|------|\n| 安全握手 | 客户端与服务器通过 `strict:check` 通道进行双向验证，确保模组和玩家身份合法。 |\n| 动态白名单 | 支持实时更新允许/排除的模组列表，兼容 Fabric 模组。 |\n| 审批系统 | 私密模式下，管理员可通过点击按钮审批或拒绝新玩家加入。 |\n| 加密通信 | 使用 AES-GCM 加密和 SHA-256 哈希保护令牌，防止篡改和重放攻击。 |\n| 详细日志 | 记录模组验证、玩家认证和审批事件，便于调试和监控。 |\n\n## 安装指南\n\n### 环境要求\n\n- **Minecraft 版本**：1.21.3（或 `build.gradle` 中指定的兼容版本）\n- **Fabric Loader**：0.15.0+（版本在 `build.gradle` 中指定）\n- **Fabric API**：1.0+（版本在 `build.gradle` 中指定）\n- **Java**：21（在 `build.gradle` 中配置）\n\n### 服务器安装\n\n1. 构建模组：\n   ```bash\n   ./gradlew build\n   ```\n2. 复制文件：\n   ```bash\n   cp build/libs/strict-1.0-SNAPSHOT.jar server/mods/\n   cp fabric-api-<version>.jar server/mods/\n   ```\n3. 启动服务器，首次运行会生成配置文件：\n   ```\n   config/\n   └── strict/\n       └── config.yml\n   ```\n4. 编辑 `config/strict/config.yml` 配置模组策略、密钥等（见 [配置说明](#配置说明)）。\n\n### 客户端安装\n\n1. 安装必要文件：\n   ```bash\n   cp build/libs/strict-1.0-SNAPSHOT.jar client/mods/\n   cp fabric-api-<version>.jar client/mods/\n   ```\n2. 启动 Minecraft 客户端并连接到运行 Strict Mod 的服务器。\n3. 确保客户端模组与服务器的 `allowedMods` 或 `allowFabricMods` 设置匹配。\n\n## 使用方法\n\n### 玩家指南\n\n1. 在客户端安装 Strict Mod 和 Fabric API。\n2. 连接到运行 Strict Mod 的服务器，客户端会自动发送模组列表和加密令牌。\n3. 若服务器为私密模式且你是新玩家，需等待管理员审批（通过后可再次连接）。\n4. 确保只使用服务器允许的模组（查看服务器的 `allowedMods` 或联系管理员）。\n\n### 管理员指南\n\n1. 使用 `/strict` 命令管理服务器（需权限等级 4，即管理员权限）。\n2. 监控玩家加入尝试：\n    - 公开模式：合法玩家直接加入。\n    - 私密模式：新玩家触发审批通知，包含 `[同意]`、 `[拒绝]` 和 `[拉黑]` 按钮。\n3. 配置 `config/strict/config.yml` 设置模组白名单、黑名单和服务器模式。\n4. 查看日志（`latest.log`）或启用详细日志（`/strict log true`）以调试问题。\n\n## 命令列表\n\nStrict Mod 提供 `/strict` 命令及其子命令，所有命令需要管理员权限（权限等级 4）。\n\n| 命令 | 描述 | 示例 |\n|------|------|------|\n| `/strict mode public` | 切换到公开模式（无需审批）。 | `/strict mode public` |\n| `/strict mode private` | 切换到私密模式（新玩家需审批）。 | `/strict mode private` |\n| `/strict log <true/false>` | 启用/禁用详细日志。 | `/strict log true` |\n| `/strict accept <player>` | 批准待审批玩家加入。 | `/strict accept dwgx1337` |\n| `/strict reject <player>` | 拒绝待审批玩家。 | `/strict reject dwgx1337` |\n| `/strict blacklist add <player>` | 按 UUID 和计算机名称拉黑玩家。 | `/strict blacklist add dwgx1337` |\n| `/strict blacklist remove <identifier>` | 从黑名单移除玩家。 | `/strict blacklist remove <uuid>` |\n| `/strict blacklist list` | 列出黑名单玩家。 | `/strict blacklist list` |\n| `/strict info <player>` | 显示玩家信息（模组、UUID、计算机名称等）。 | `/strict info dwgx1337` |\n| `/strict mod allow <modId>` | 将模组添加到允许列表。 | `/strict mod allow fabric-api` |\n| `/strict mod exclude <modId>` | 将模组添加到排除列表。 | `/strict mod exclude cheatmod` |\n| `/strict mod remove <modId>` | 从允许/排除列表移除模组。 | `/strict mod remove fabric-api` |\n| `/strict mod allowFabric <true/false>` | 启用/禁用自动允许 Fabric 模组。 | `/strict mod allowFabric false` |\n| `/strict mod list` | 列出允许/排除模组及 Fabric 模组策略。 | `/strict mod list` |\n| `/strict reload` | 重新加载 `config.yml`。 | `/strict reload` |\n\n**实现**：`com.strict.command.CommandHandler`\n\n## 配置说明\n\n### 配置文件示例\n\n模组使用 YAML 配置文件 `config/strict/config.yml`，由 `com.strict.config.ConfigManager` 管理。首次启动服务器时生成默认配置文件。\n\n```yaml\nprivateMode: false\nlogEnabled: true\nsecretKey: \"dwgx1337\"\nsecretKeyHash: \"\"\nallowedMods:\n  - minecraft\n  - strict\n  - fabricloader\n  - java\n  - mixinextras\n  - org_yaml_snakeyaml\nexcludedMods: []\nallowFabricMods: true\nblacklistedPlayers: []\n```\n\n### 配置项详解\n\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

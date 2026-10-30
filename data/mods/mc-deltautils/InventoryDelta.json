@@ -1,0 +1,165 @@
+{
+	"repo": "mc-deltautils/InventoryDelta",
+	"host": "github",
+	"description": "InventoryDelta is a lightweight, modular system for defining and applying 'localized inventory-state transformations (i.e Deltas)' within Minecraft.",
+	"stars": 0,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2025-11-27T14:16:30Z",
+	"pushed": "2025-11-29T16:16:11Z",
+	"releases": [
+		{
+			"tag": "v0.11-Alpha",
+			"published": "2025-11-27T21:25:24Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 321620274,
+					"name": "InventoryDelta-v0.11-Alpha.jar",
+					"url": "https://github.com/mc-deltautils/InventoryDelta/releases/download/v0.11-Alpha/InventoryDelta-v0.11-Alpha.jar",
+					"size": 70341,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "b2cf287c8acac89609e634bae55e8bc408f7d03ca0cb59a4ce46bb3d2d010dfe",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventorydelta",
+							"version": "v0.11-Alpha",
+							"name": "InventoryDelta",
+							"description": "InventoryDelta applies focused Deltas (e.g., AutoCraftSlot Delta, AutoTradeSlot Delta, AutoSmeltSlot Delta) using a consistent naming approach for inventory transformations.",
+							"minecraft": "1.21.10",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"fabric-language-kotlin",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 25,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Release Difference Receipt\n\n## Overview\n- Added focused Deltas for trading, crafting, and smelting refills to streamline inventory flow.\n- Introduced configurable AutoSmelt profiles with UI for per-smelter recipe and fuel selection.\n- Wired Mod Menu and keybind access plus JSON-backed settings to make Deltas toggleable in game.\n\n## Key Changes\n- TransferSlotRefill Delta - `src/main/kotlin/inventorydelta/delta/transfer/TransferSlotRefillDelta.kt` `src/main/java/inventorydelta/mixin/trade/TradeOutputSlotMixin.java`: After trades, refills villager input slots from the player inventory when matching stacks exist.\n- AutoCraftSlot Delta - `src/main/kotlin/inventorydelta/delta/craft/AutoCraftSlotDelta.kt` `src/main/java/inventorydelta/mixin/crafting/CraftingResultSlotMixin.java`: Snapshots crafting inputs and restocks the grid after a craft while honoring mismatched manual placements.\n- AutoSmeltSlot Delta - `src/main/kotlin/inventorydelta/delta/smelt/AutoSmeltSlotDelta.kt` `src/main/java/inventorydelta/mixin/smelting/FurnaceScreenHandlerMixin.java` `src/main/java/inventorydelta/mixin/smelting/BlastFurnaceScreenHandlerMixin.java` `src/main/java/inventorydelta/mixin/smelting/SmokerScreenHandlerMixin.java`: On smelter open, fills recipe and fuel slots from configured templates per smelter type when matching items are in the inventory.\n- Settings and config UX - `src/main/kotlin/inventorydelta/ui/SettingsScreenFactory.kt` `src/main/kotlin/inventorydelta/ui/SmeltDefinitionPickerScreen.kt` `src/main/kotlin/inventorydelta/ui/SmeltItemCatalog.kt` `src/main/kotlin/inventorydelta/config/InventoryDeltaConfig.kt` `src/main/kotlin/inventorydelta/client/InventoryDeltaClientMod.kt` `src/main/kotlin/inventorydelta/ui/InventoryDeltaModMenuIntegration.kt`: Added Cloth Config screen, Mod Menu hook, keybind to open settings, and per-smelter recipe/fuel pickers backed by JSON persistence with defaults and legacy merge.\n- Mod metadata and build - `src/main/resources/fabric.mod.json` `build.gradle.kts`: Declared Fabric 1.21.10 target, Kotlin 2.2.21 toolchain, bundled Cloth Config and Mod Menu dependencies, and wired version expansion.\n\n## Compatibility Notes\n- Targets Minecraft 1.21.10 with Fabric Loader 0.18.1, Fabric API 0.138.3, and Fabric Language Kotlin 1.13.7; earlier game versions are unsupported.\n- Config file now stores `smeltProfiles` per smelter and normalizes invalid or blank entries; legacy `ingredientId` and `fuelId` fields are migrated on load.\n- AutoSmelt will populate empty or matching smelter slots on GUI open; it will not replace different items but will consume matching inventory stacks automatically."
+		},
+		{
+			"tag": "v0.1-Alpha",
+			"published": "2025-11-27T17:42:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 321566855,
+					"name": "InventoryDelta-v0.1-Alpha.jar",
+					"url": "https://github.com/mc-deltautils/InventoryDelta/releases/download/v0.1-Alpha/InventoryDelta-v0.1-Alpha.jar",
+					"size": 25519,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "cb0cbbc4c8a56e4d654f87de1cded71265e8323c9f43ed9f7433c55b3dd98b0a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventorydelta",
+							"version": "v0.1-Alpha",
+							"name": "InventoryDelta",
+							"description": "InventoryDelta applies focused Deltas (e.g., AutoCraftSlot Delta, AutoTradeSlot Delta) using a consistent naming approach for inventory transformations.",
+							"minecraft": "1.21.10",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"fabric-language-kotlin",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 13,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Release Receipt:\n## Current Features\n######   > AutoTradeSlot Delta: Refills villager/wandering trader input slots after each trade using player inventory; respects manual slots and rapid trades; mixin on `TradeOutputSlot` tails into Kotlin logic.\n######   > AutoCraftSlot Delta: After crafting, refills the crafting grid using the pre-craft layout from player inventory; ignores mismatched manual placements; mixin on `CraftingResultSlot` heads/tails into Kotlin logic.\n######   > Settings UI: Cloth Config screen listing Delta toggles; accessible via Mod Menu integration and client keybind (`K` by default, category Inventory).\n## Dependencies\n######   > Cloth Config Fabric 20.0.149\n######   > Mod Menu 16.0.0-rc.1"
+		},
+		{
+			"tag": "v0.0-Alpha",
+			"published": "2025-11-27T17:03:34Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 321554457,
+					"name": "InventoryDelta-v0.0-Alpha.jar",
+					"url": "https://github.com/mc-deltautils/InventoryDelta/releases/download/v0.0-Alpha/InventoryDelta-v0.0-Alpha.jar",
+					"size": 19498,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "0b787a2e16885ad4b3446a8bd581005b018345d72c9d260a188677b7e52f39ce",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventorydelta",
+							"version": "v0.0-Alpha",
+							"name": "InventoryDelta",
+							"description": "InventoryDelta applies focused Deltas (e.g., CraftingSlotRefill Delta, InventoryStackMerge Delta) using a consistent naming approach for inventory transformations.",
+							"minecraft": "1.21.10",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"fabric-language-kotlin",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Release Receipt:\n## Current Features\n######   > TransferSlotRefill Delta: Refills villager/wandering trader input slots after each trade using player inventory; respects manual slots and rapid trades; mixin on `TradeOutputSlot` tails into Kotlin logic.\n######   > Config system: JSON at `config/inventorydelta.json`, toggles per-Delta; guarded in runtime logic.\n######   > Settings UI: Cloth Config screen listing Delta toggles; accessible via Mod Menu integration and client keybind (`K` by default, category Inventory).\n######   > Mixin config: `inventorydelta.mixins.json` registered in `fabric.mod.json`.\n## Dependencies\n######   > Cloth Config Fabric 20.0.149\n######   > Mod Menu 16.0.0-rc.1"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

@@ -1,0 +1,116 @@
+{
+	"repo": "JR1811/simple-nutrition",
+	"host": "github",
+	"description": "A simple nutrition modifying Fabric Minecraft Mod",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2024-10-21T21:57:24Z",
+	"pushed": "2025-09-09T16:23:49Z",
+	"releases": [
+		{
+			"tag": "0.0.2",
+			"published": "2024-10-25T04:38:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 201623103,
+					"name": "simple-nutrition-0.0.2.jar",
+					"url": "https://github.com/JR1811/simple-nutrition/releases/download/0.0.2/simple-nutrition-0.0.2.jar",
+					"size": 47803,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "7886127800051bcca217e06b6d5486d9df0a342300a401b49d7c2af955e87cbd",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "simple-nutrition",
+							"version": "0.0.2",
+							"name": "Simple Nutrition",
+							"description": "A simple nutrition modifying Fabric Minecraft Mod",
+							"minecraft": "~1.18.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "8c591b8d6c95f1852d09adbee08b68514d309616ba32fa41fbe0265b350215ed.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 19,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Digestion and Command Update (0.0.2 Release)\n\n## Content\n\n### Gameplay\n\nSaved Items will now store their _(world)_ time when they have been eaten. A new system will now compare the player's digestive capabilities and that consumed time to figure out when an Item has finished the digestion process.\n\nPlayers start with the same digestion performance but will be able to improve their digestion speed. When the stomach is filled _(a full list of stored Items which have been eaten and are in the process of digestion, which is also known as Digestion Buffer)_ the currently eaten item is being analyzed for its hunger points that it gives to the player. The more nutrition you get out of that item, the higher the chance of improving the digestion speed.\n\nSo for example, if you have a food item which gives you 3 hunger points (1.5 chicken drumsticks in Minecraft's GUI) you have a chance of 15%, since the maximum is 20 Hunger points, to improve the digestion speed.\n\nCurrently, the digestion speed improvement is hard-coded to be between 20 ticks and 100 ticks (again taking the percentage of the consumed item's hunger points).  So if you have an item, which fills the player up completely (20 Hunger points), their digestion speed will improve by 5 seconds with a chance of 100%.\n\nThe possible digestion improvement time will not be applied if the player's digestion time is below 300 ticks (15 sec). This doesn't limit the actual player's digestion time, being manually set to lower values using the newly introduced commands.\n\nAlso, any drinkable item removes now only the oldest entry in the digestion process.\n\nThe values are experimental, subject to change and may even need a rework, depending on how broken those are actually in a real environment. For any ideas and suggestions, make use of the [GitHub Issues page](https://github.com/JR1811/simple-nutrition/issues).\n\n### Gamerules\n\n- Added new `APPLY_NUTRITION_FATIGUE` Boolean (true / false) Gamerule to toggle the whole nutrition system. No new items will be added to the digestion buffer, and already existing ones will keep ticking down until they also will be removed.\n- Added new `STORED_NUTRITION_BUFFER_SIZE` Integer (number) Gamerule which defines how many nutrition items can be stored on a player. When the buffer (saved eaten Nutrition Items) is full on a specific player, the oldest entries will be removed, even if the digestion didn't finish yet. The default is set to 10 items.\n\n#### Commands\n\n- `/nutrition clear` clears the digestion buffer completely. You can specify a player (or multiple players) after the command to clear that for other players, instead of yourself.\n- `/nutrition digestion` add a player (or multiple players) to check out their current digestion speed. Add a number (long) after that to set it to a specific time in ticks.\n- `/nutrition of` add a player (or multiple players) to check out the stored entries in their digestion buffer and their digestion speed.\n\n#### Config\n\nThe mod has now an **optional** compatibility with [Cloth Config](https://modrinth.com/mod/cloth-config). Having Cloth config installed, you can change values, which are usually hard coded.\n\n- `loadGui` adds an addition to the player's inventory screen to display the Digestion Buffer. It will only render, if the Digestion Buffer contains entries. This value is turned off by default and won't be available without Cloth Config!\n- `baseDigestionTime` sets the base digestion time, with which players start out. This value is 6000 ticks (5 min) by default and won't adjustable be without Cloth Config!"
+		},
+		{
+			"tag": "0.0.1",
+			"published": "2024-10-22T05:28:38Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 200831400,
+					"name": "simple-nutrition-0.0.1.jar",
+					"url": "https://github.com/JR1811/simple-nutrition/releases/download/0.0.1/simple-nutrition-0.0.1.jar",
+					"size": 21390,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "7d427554f5c6e1310a448ecb9316687fed068ce4a8e137083b03664b84575855",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "simple-nutrition",
+							"version": "0.0.1",
+							"name": "Simple Nutrition",
+							"description": "A simple nutrition modifying Fabric Minecraft Mod",
+							"minecraft": "~1.18.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "692550916e7d258efc05b16a7993e3888e8b4f3acfa2caa62650e00c3e6e2f6a.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 13,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Initial Release\n\n## Content\n\n- Added basic nutrition functionality\n\n## Changes\n\n[none]\n\n## Fixes\n\n[none]"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

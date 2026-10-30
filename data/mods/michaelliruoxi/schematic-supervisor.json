@@ -1,0 +1,81 @@
+{
+	"repo": "michaelliruoxi/schematic-supervisor",
+	"host": "github",
+	"description": "Fabric client mod that builds Litematica schematics for you, layer by layer, restocking from chests and verifying the result.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-10-01T19:27:38Z",
+	"pushed": "2026-10-04T23:12:18Z",
+	"releases": [
+		{
+			"tag": "v0.2.0",
+			"published": "2026-10-04T23:12:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 610903878,
+					"name": "schematic-supervisor-0.2.0.jar",
+					"url": "https://github.com/michaelliruoxi/schematic-supervisor/releases/download/v0.2.0/schematic-supervisor-0.2.0.jar",
+					"size": 1343486,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "98173205c3f644a47d4a9b0d44d31c31bf7209a7103855559182ba90e7719d1a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "schematic_supervisor",
+							"version": "0.2.0",
+							"name": "Schematic Supervisor",
+							"description": "Builds a selected Litematica schematic layer by layer with flight, restocks from registered chests, recovers from common faults, and verifies the result.",
+							"minecraft": "~1.21.8",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"malilib",
+								"litematica",
+								"baritone"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 575,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"io/github/schematicsupervisor/fabric/CompanionGateway.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"127.0.0.1": [
+								"io/github/schematicsupervisor/fabric/SupervisorSettings.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "The first public release: the **Schematic Supervisor** mod 0.2.0 for Minecraft 1.21.8 (Fabric), and its optional Windows **monitor** 0.4.0.\n\nIt builds a Litematica schematic for you: it flies over the build, places it one layer at a time, restocks from chests you register, tills and plants farmland, and checks the finished build twice.\n\n> [!WARNING]\n> Many servers forbid automation mods. Check the rules before you use this mod anywhere other than your own world or server.\n\n## Downloads\n\n- **`schematic-supervisor-0.2.0.jar`**: the mod. Put it in your `mods` folder together with the four mods below.\n- **`SchematicSupervisor.exe`**: the optional monitor for Windows, with progress, a chunk map, time remaining, Pause and Continue, and alerts on your desktop or phone. It needs no installation and no Python.\n\n## Requirements\n\nMinecraft Java Edition 1.21.8 with Fabric Loader 0.19.3 or newer, plus:\n\n| Mod | Version |\n| --- | --- |\n| [Fabric API](https://modrinth.com/mod/fabric-api) | 0.136.1+1.21.8 |\n| [MaLiLib](https://modrinth.com/mod/malilib) | 0.25.7 |\n| [Litematica](https://modrinth.com/mod/litematica) | 0.23.7 |\n| [Baritone API (Fabric)](https://github.com/cabaletta/baritone/releases/tag/v1.15.0) | 1.15.0, the `baritone-api-fabric-1.15.0.jar` build |\n\nThe [README](https://github.com/michaelliruoxi/schematic-supervisor#install-the-mod) covers installing everything and starting a first build.\n\n## What it can build\n\n- Farmland, wheat, and any full block without properties (dirt, stone, planks, wool, concrete, glass, glowstone, …). The mod names any block it can't build, with its position, when the placement loads.\n- One enabled sub-region of the selected Litematica placement.\n- You must be allowed to fly; the mod takes off by itself but never grants flight.\n- Materials come from chests you register. Buying from a server shop is off unless `config\\schematic-supervisor\\shop.json` says `\"enabled\": true`.\n\n## Notable in this release\n\n- **Recovers by itself.** If flight switches off while the server still allows it, the mod takes off again. Brief server trouble is retried after 30, 90 and 270 seconds before the build pauses. Start and Resume take off by themselves.\n- **Picks up where it left off.** Every Start checks what is already built, and progress survives closing the game.\n- **Local control is locked down.** The control port listens only on `127.0.0.1`, starting work needs the pairing file, and a request that stalls is dropped after 8 seconds.\n\nEvery change is in the [changelog](https://github.com/michaelliruoxi/schematic-supervisor/blob/v0.2.0/CHANGELOG.md).\n\n## Checksums (SHA-256)\n\n```\n98173205c3f644a47d4a9b0d44d31c31bf7209a7103855559182ba90e7719d1a  schematic-supervisor-0.2.0.jar\nfd71a451629914dc7807f01efb46f77b0af82fcaf9f82594c15a2dd72ad836d5  SchematicSupervisor.exe\n```\n\nThe monitor isn't code-signed, so Windows SmartScreen may warn the first time you run it: choose **More info**, then **Run anyway**. To verify a download, compare its checksum above with the output of `Get-FileHash <file>` in PowerShell.\n\nReleased under the MIT license."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

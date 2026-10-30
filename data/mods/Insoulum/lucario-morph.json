@@ -1,0 +1,430 @@
+{
+	"repo": "Insoulum/lucario-morph",
+	"host": "github",
+	"description": "You can now play as Lucario, Mega Lucario or Riolu. Also there's 10+ skins with shiny variants, thanks to Lucario Overhaul mod.",
+	"stars": 1,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-10-21T23:04:24Z",
+	"pushed": "2026-10-30T12:07:50Z",
+	"releases": [
+		{
+			"tag": "1.8.0",
+			"published": "2026-10-28T09:18:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 684455841,
+					"name": "lucariomorph-fabric-26.3-1.8.0.jar",
+					"url": "https://github.com/Insoulum/lucario-morph/releases/download/1.8.0/lucariomorph-fabric-26.3-1.8.0.jar",
+					"size": 455439,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "d7db3461b943a3aa229e209a1e74cbd9817b06332f9abf9ae51c6156f4b728af",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lucariomod",
+							"version": "1.8.0",
+							"name": "Lucario Morph",
+							"description": "Play as Lucario, Mega Lucario or Riolu: the /lucario and /riolu commands replace the player model (models and animations from Lucario Overhaul by JoeSeff). Client-side only: works on any server, even vanilla — morphs and emote animations sync through an external service (you can add your own mirror in the config), and your morph record is automatically protected against spoofing via Mojang authentication.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							],
+							"conflicts": [
+								"customplayermodels",
+								"skinshifter",
+								"remorphed"
+							],
+							"conflictsVersions": {
+								"customplayermodels": "*",
+								"skinshifter": "*",
+								"remorphed": "*"
+							}
+						}
+					],
+					"icon": "9054537edc7265b101e0e1045ec93017222585861f186b67a7d323a74616746d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 52,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/lucario/client/AuthClient.class": [
+									"java/net/http/HttpClient.sendAsync"
+								],
+								"dev/lucario/client/EmoteSync.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newWebSocketBuilder"
+								],
+								"dev/lucario/client/SyncClient.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"sessionserver.mojang.com": [
+								"dev/lucario/client/AuthClient.class"
+							],
+							"193.164.155.75": [
+								"dev/lucario/client/SyncConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "1.8.0 - client-only: server side removed, sync through the external service only\n\nThe mod no longer runs on Minecraft servers at all (\"environment\": \"client\"):\n- removed the \"main\" entrypoint, MorphManager (per-world lucariomod_morphs.json\n  storage) and the dev.lucario.net package (the lucariomod:morph S2C payload)\n- removed the server-side /lucario and /riolu registration and the payload\n  receiver in LucarioClient; LucarioMod is now just the MOD_ID/logger holder\n- morph and emote visibility for other players comes only from the external\n  sync service (WebSocket push + fallback poll + heartbeat); the client\n  /lucario and /riolu commands with MorphApplier are the single apply path\n- README updated: single sync mode, brigadier priority note, 1.8.0 section"
+		},
+		{
+			"tag": "1.7.8",
+			"published": "2026-10-28T04:28:36Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 683814616,
+					"name": "lucariomorph-fabric-26.3-1.7.8.jar",
+					"url": "https://github.com/Insoulum/lucario-morph/releases/download/1.7.8/lucariomorph-fabric-26.3-1.7.8.jar",
+					"size": 465685,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "102fc24195b20884c23347526b3821ee2afcb500951f844d77689383e131fdf3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lucariomod",
+							"version": "1.7.8",
+							"name": "Lucario Morph",
+							"description": "Play as Lucario, Mega Lucario or Riolu: the /lucario and /riolu commands replace the player model (models and animations from Lucario Overhaul by JoeSeff). Works on servers without the mod too: morphs and emote animations sync through an external service (you can add your own mirror in the config), and your morph record is automatically protected against spoofing via Mojang authentication.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							],
+							"conflicts": [
+								"customplayermodels",
+								"skinshifter",
+								"remorphed"
+							],
+							"conflictsVersions": {
+								"customplayermodels": "*",
+								"skinshifter": "*",
+								"remorphed": "*"
+							}
+						}
+					],
+					"icon": "9054537edc7265b101e0e1045ec93017222585861f186b67a7d323a74616746d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 56,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/lucario/client/AuthClient.class": [
+									"java/net/http/HttpClient.sendAsync"
+								],
+								"dev/lucario/client/EmoteSync.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newWebSocketBuilder"
+								],
+								"dev/lucario/client/SyncClient.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"sessionserver.mojang.com": [
+								"dev/lucario/client/AuthClient.class"
+							],
+							"193.164.155.75": [
+								"dev/lucario/client/SyncConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "push-first sync (WS push while connected, full HTTP poll only as a fallback), exactly one publish per emote event with its cause attached, the debugChat option (chat trace off by default, the log file always carries the full trace), NetDebug diagnostics."
+		},
+		{
+			"tag": "1.7.7",
+			"published": "2026-10-28T00:38:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 683336848,
+					"name": "lucariomorph-fabric-26.3-1.7.7.jar",
+					"url": "https://github.com/Insoulum/lucario-morph/releases/download/1.7.7/lucariomorph-fabric-26.3-1.7.7.jar",
+					"size": 459797,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "010d273c0e41c436ed771fdfe822c8ff32b0809bbf17cace7dfdeb1e40835c44",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lucariomod",
+							"version": "1.7.7",
+							"name": "Lucario Morph",
+							"description": "Play as Lucario, Mega Lucario or Riolu: the /lucario and /riolu commands replace the player model (models and animations from Lucario Overhaul by JoeSeff). Works on servers without the mod too: morphs and emote animations sync through an external service (you can add your own mirror in the config), and your morph record is automatically protected against spoofing via Mojang authentication.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							],
+							"conflicts": [
+								"customplayermodels",
+								"skinshifter",
+								"remorphed"
+							],
+							"conflictsVersions": {
+								"customplayermodels": "*",
+								"skinshifter": "*",
+								"remorphed": "*"
+							}
+						}
+					],
+					"icon": "9054537edc7265b101e0e1045ec93017222585861f186b67a7d323a74616746d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 55,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/lucario/client/AuthClient.class": [
+									"java/net/http/HttpClient.sendAsync"
+								],
+								"dev/lucario/client/EmoteSync.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newWebSocketBuilder"
+								],
+								"dev/lucario/client/SyncClient.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"sessionserver.mojang.com": [
+								"dev/lucario/client/AuthClient.class"
+							],
+							"193.164.155.75": [
+								"dev/lucario/client/SyncConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			]
+		},
+		{
+			"tag": "1.7.6",
+			"published": "2026-10-26T02:16:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 676738106,
+					"name": "lucariomorph-fabric-26.3-1.7.6.jar",
+					"url": "https://github.com/Insoulum/lucario-morph/releases/download/1.7.6/lucariomorph-fabric-26.3-1.7.6.jar",
+					"size": 459615,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "204730b46d750571ca646592d58063e91c7471fdd24178ff3da11195a9f62ce8",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lucariomod",
+							"version": "1.7.6",
+							"name": "Lucario Morph",
+							"description": "Play as Lucario, Mega Lucario or Riolu: the /lucario and /riolu commands replace the player model (models and animations from Lucario Overhaul by JoeSeff). Works on servers without the mod too: morphs and emote animations sync through an external service (you can add your own mirror in the config), and your morph record is automatically protected against spoofing via Mojang authentication.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							],
+							"conflicts": [
+								"customplayermodels",
+								"skinshifter",
+								"remorphed"
+							],
+							"conflictsVersions": {
+								"customplayermodels": "*",
+								"skinshifter": "*",
+								"remorphed": "*"
+							}
+						}
+					],
+					"icon": "9054537edc7265b101e0e1045ec93017222585861f186b67a7d323a74616746d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 55,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/lucario/client/AuthClient.class": [
+									"java/net/http/HttpClient.sendAsync"
+								],
+								"dev/lucario/client/EmoteSync.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newWebSocketBuilder"
+								],
+								"dev/lucario/client/SyncClient.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"sessionserver.mojang.com": [
+								"dev/lucario/client/AuthClient.class"
+							],
+							"193.164.155.75": [
+								"dev/lucario/client/SyncConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			]
+		},
+		{
+			"tag": "1.7.5",
+			"published": "2026-10-25T20:53:22Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 676099377,
+					"name": "lucariomorph-fabric-26.3-1.7.5.jar",
+					"url": "https://github.com/Insoulum/lucario-morph/releases/download/1.7.5/lucariomorph-fabric-26.3-1.7.5.jar",
+					"size": 658402,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a9e254fd68c48844611cb96d0fb850a296e8fff03b9cacde2bf9a4b33bf503d3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lucariomod",
+							"version": "1.7.5",
+							"name": "Lucario Morph",
+							"description": "Play as Lucario, Mega Lucario or Riolu: the /lucario and /riolu commands replace the player model (models and animations from Lucario Overhaul by JoeSeff). Works on servers without the mod too: morphs and emote animations sync through an external service (you can add your own mirror in the config), and your morph record is automatically protected against spoofing via Mojang authentication.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							],
+							"conflicts": [
+								"customplayermodels",
+								"skinshifter",
+								"remorphed"
+							],
+							"conflictsVersions": {
+								"customplayermodels": "*",
+								"skinshifter": "*",
+								"remorphed": "*"
+							}
+						}
+					],
+					"icon": "9054537edc7265b101e0e1045ec93017222585861f186b67a7d323a74616746d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 55,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/lucario/client/AuthClient.class": [
+									"java/net/http/HttpClient.sendAsync"
+								],
+								"dev/lucario/client/EmoteSync.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newWebSocketBuilder"
+								],
+								"dev/lucario/client/SyncClient.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"sessionserver.mojang.com": [
+								"dev/lucario/client/AuthClient.class"
+							],
+							"193.164.155.75": [
+								"dev/lucario/client/SyncConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			]
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

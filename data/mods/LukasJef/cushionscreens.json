@@ -1,0 +1,215 @@
+{
+	"repo": "LukasJef/cushionscreens",
+	"host": "github",
+	"description": "cushionscreens",
+	"stars": 2,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-07-22T19:02:30Z",
+	"pushed": "2026-08-24T06:48:55Z",
+	"releases": [
+		{
+			"tag": "0.8.1",
+			"published": "2026-07-27T16:28:50Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 491670027,
+					"name": "cushionscreens-0.8.1.jar",
+					"url": "https://github.com/LukasJef/cushionscreens/releases/download/0.8.1/cushionscreens-0.8.1.jar",
+					"size": 73232,
+					"downloads": 97,
+					"inspection": 2,
+					"sha256": "a3aa75172cafa970983bbfc6efb58f9b19fce9b385677a463eb871e06099c2da",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cushionscreens",
+							"version": "0.8.1",
+							"name": "CushionScreens",
+							"description": "Show images, GIFs, and videos (with optional audio) on a screen made of cushions.",
+							"minecraft": "*",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 26,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"dev/atrixx/cushionscreens/CushionAudio.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"dev/atrixx/cushionscreens/CushionVideo.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"dev/atrixx/cushionscreens/CushionUrlFetch.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.8.1\n\n**New**\n- `{safemode:true}` attribute for `/cushionscreens video` - loads and plays very long videos in 5-minute chunks instead of decoding the whole file upfront, so they start quickly and don't use huge amounts of memory. Works together with `loop`, `audio`, and `seek` (as the starting point). There's a short pause between chunks while the next one loads, since chunks aren't pre-fetched ahead of time yet.\n\n## 0.8.0\n\nFirst public release under the CushionScreens name. This version brought a large number of changes on top of the original private fork - grouped by topic rather than by internal build number, since 0.1.0–0.7.0 were never distributed anywhere.\n\n**New commands**\n- `/cushionscreens url <link> [{attrs}]` - download and show an image or GIF directly from an http(s) link (detected by file signature, not URL extension).\n- `/cushionscreens pause` / `/cushionscreens resume` - freeze and continue the current frame/pattern (and audio) without reloading anything.\n- `/cushionscreens maxframes <number>` - configurable cap on how many video frames get decoded (global setting, default 2000).\n\n**New `{attributes}` syntax**\n- Options that used to be separate literal flags (`colors=64`, `bake`) are now a single trailing NBT compound, e.g. `{colors:176,loop:true,volume:75,seek:30,scaling:fit}` - same style Minecraft uses for item components.\n- `colors`: `16` (default), `17` (16 + one true black), `64` (copper bulb oxidation stages), `80` (64 + a non-glowing variant), `176` (all supported light levels).\n- `loop`: video/GIF repeats forever (audio included) instead of stopping on a blank screen after playing once (new default: stop after one play-through).\n- `volume`: 0-100, applied via the client's own audio gain control, independent of Minecraft's sound sliders.\n- `seek`: start video (and its audio) partway in, using FFmpeg's fast input-side seeking.\n- `scaling`: `stretch` (default, unchanged), `crop` (fill without distortion), `fit` (letterbox/pillarbox with black bars).\n\n**Extended color system**\n- Every screen now sits on a lit waxed copper bulb by default, so it glows at night even without using an extended color count.\n- Colors 64/80/176 place a different light-emitting block under each cushion to unlock extra brightness levels per color; values are based on real in-game color measurements rather than a theoretical brightness curve.\n\n**Persistence & lifecycle**\n- A built screen is now remembered across server restarts and rejoining (previously had to be rebuilt every time).\n- `bake` (image only): shows the image, then stops tracking those cushions as \"the screen\" - they become a permanent fixture, untouched by future commands.\n\n**Audio**\n- Video can now stream synced audio to players over the network (optionally to specific players/selectors only).\n- Audio now stops automatically on disconnect/return to the title screen, and pauses/resumes together with the game's own pause menu (singleplayer only, as expected).\n\n**Fixes**\n- Fixed videos silently restarting/looping after roughly 2 minutes regardless of actual length (old hardcoded frame cap).\n- Fixed a crash (\"Invalid player data\") that occurred specifically in creative mode / with cheats enabled, caused by an unregistered custom command argument type.\n- Fixed a command parser error when combining `audio` with a target selector and trailing attributes.\n\n**Renaming**\n- Project, package, command name, author, and all identifiers changed from the original private fork to CushionScreens / atrixx."
+		},
+		{
+			"tag": "new_features",
+			"published": "2026-07-23T15:46:27Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 487350267,
+					"name": "cushionscreens-0.8.0.jar",
+					"url": "https://github.com/LukasJef/cushionscreens/releases/download/new_features/cushionscreens-0.8.0.jar",
+					"size": 69988,
+					"downloads": 23,
+					"inspection": 2,
+					"sha256": "1f4ecfe567e37ce8edf6f557a3c6d440018afdc4c22df7ded12d20cf75e8e428",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cushionscreens",
+							"version": "0.8.0",
+							"name": "CushionScreens",
+							"description": "Show images, GIFs, and videos (with optional audio) on a screen made of cushions.",
+							"minecraft": "*",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 25,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"dev/atrixx/cushionscreens/CushionAudio.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"dev/atrixx/cushionscreens/CushionVideo.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"dev/atrixx/cushionscreens/CushionUrlFetch.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.8.0\n\nFirst public release under the CushionScreens name. This version brought a large number of changes on top of the original private fork — grouped by topic rather than by internal build number, since 0.1.0–0.7.0 were never distributed anywhere.\n\n**New commands**\n- `/cushionscreens url <link> [{attrs}]` — download and show an image or GIF directly from an http(s) link (detected by file signature, not URL extension).\n- `/cushionscreens pause` / `/cushionscreens resume` — freeze and continue the current frame/pattern (and audio) without reloading anything.\n- `/cushionscreens maxframes <number>` — configurable cap on how many video frames get decoded (global setting, default 2000).\n\n**New `{attributes}` syntax**\n- Options that used to be separate literal flags (`colors=64`, `bake`) are now a single trailing NBT compound, e.g. `{colors:176,loop:true,volume:75,seek:30,scaling:fit}` — same style Minecraft uses for item components.\n- `colors`: `16` (default), `17` (16 + one true black), `64` (copper bulb oxidation stages), `80` (64 + a non-glowing variant), `176` (all supported light levels).\n- `loop`: video/GIF repeats forever (audio included) instead of stopping on a blank screen after playing once (new default: stop after one play-through).\n- `volume`: 0-100, applied via the client's own audio gain control, independent of Minecraft's sound sliders.\n- `seek`: start video (and its audio) partway in, using FFmpeg's fast input-side seeking.\n- `scaling`: `stretch` (default, unchanged), `crop` (fill without distortion), `fit` (letterbox/pillarbox with black bars).\n\n**Extended color system**\n- Every screen now sits on a lit waxed copper bulb by default, so it glows at night even without using an extended color count.\n- Colors 64/80/176 place a different light-emitting block under each cushion to unlock extra brightness levels per color; values are based on real in-game color measurements rather than a theoretical brightness curve.\n\n**Persistence & lifecycle**\n- A built screen is now remembered across server restarts and rejoining (previously had to be rebuilt every time).\n- `bake` (image only): shows the image, then stops tracking those cushions as \"the screen\" — they become a permanent fixture, untouched by future commands.\n\n**Audio**\n- Video can now stream synced audio to players over the network (optionally to specific players/selectors only).\n- Audio now stops automatically on disconnect/return to the title screen, and pauses/resumes together with the game's own pause menu (singleplayer only, as expected).\n\n**Fixes**\n- Fixed videos silently restarting/looping after roughly 2 minutes regardless of actual length (old hardcoded frame cap).\n- Fixed a crash (\"Invalid player data\") that occurred specifically in creative mode / with cheats enabled, caused by an unregistered custom command argument type.\n- Fixed a command parser error when combining `audio` with a target selector and trailing attributes.\n\n**Renaming**\n- Project, package, command name, author, and all identifiers changed from the original private fork to CushionScreens / atrixx."
+		},
+		{
+			"tag": "release",
+			"published": "2026-07-22T19:10:01Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 486318236,
+					"name": "cushionscreens-0.7.0.jar",
+					"url": "https://github.com/LukasJef/cushionscreens/releases/download/release/cushionscreens-0.7.0.jar",
+					"size": 55729,
+					"downloads": 15,
+					"inspection": 2,
+					"sha256": "57f0f7c914db6fed5e23a9c2c0d6f6335f1728973424018b297d49b74608b28c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cushionscreens",
+							"version": "0.7.0",
+							"name": "CushionScreens",
+							"description": "Show images, GIFs, and videos (with optional audio) on a screen made of cushions.",
+							"minecraft": "*",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 19,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"dev/atrixx/cushionscreens/CushionAudio.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"dev/atrixx/cushionscreens/CushionVideo.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			]
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

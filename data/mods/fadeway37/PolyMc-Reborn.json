@@ -1,0 +1,252 @@
+{
+	"repo": "fadeway37/PolyMc-Reborn",
+	"host": "github",
+	"description": "Server-side Fabric compatibility layer for presenting supported modded content to unmodified Minecraft clients.",
+	"stars": 3,
+	"archived": false,
+	"license": "LGPL-3.0",
+	"created": "2026-07-20T13:28:38Z",
+	"pushed": "2026-07-31T09:35:25Z",
+	"releases": [
+		{
+			"tag": "v0.9.1+26.1.2",
+			"published": "2026-07-31T09:36:07Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 496514216,
+					"name": "polymc-reborn-0.9.1+26.1.2.jar",
+					"url": "https://github.com/fadeway37/PolyMc-Reborn/releases/download/v0.9.1%2B26.1.2/polymc-reborn-0.9.1%2B26.1.2.jar",
+					"size": 634786,
+					"downloads": 9,
+					"inspection": 2,
+					"sha256": "5165935b84c1d9a541ae2e6457668ec05d411e35a94b927b1e95c3dbb47bdaf4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "polymc-reborn",
+							"version": "0.9.1+26.1.2",
+							"name": "PolyMc Reborn",
+							"description": "A conservative Polymer-backed compatibility platform for vanilla clients.",
+							"minecraft": "=26.1.2",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"polymer-core",
+								"polymer-blocks",
+								"polymer-resource-pack",
+								"polymer-virtual-entity",
+								"polymer-registry-sync-manipulator"
+							],
+							"provides": [
+								"polymc"
+							],
+							"breaks": [
+								"polymc-extra"
+							],
+							"breaksVersions": {
+								"polymc-extra": "*"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 283,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 496514219,
+					"name": "polymc-reborn-api-0.9.1+26.1.2.jar",
+					"url": "https://github.com/fadeway37/PolyMc-Reborn/releases/download/v0.9.1%2B26.1.2/polymc-reborn-api-0.9.1%2B26.1.2.jar",
+					"size": 63660,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "4913f30b6579e75148d4850ca95d4b3a6930b5b0a8cd32eab106cd14b0b7ea9c",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 54,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# PolyMc Reborn 0.9.1 release notes\n\nThis update closes the gap between building a compatibility resource pack and\nactually delivering it to players.\n\n## Resource-pack delivery\n\n- Reborn can host the generated pack directly from the server.\n- Players receive the current pack automatically when they join under\n  `REQUIRED` or `OPTIONAL` policy.\n- Identical pack content keeps a stable content identity, while each connection\n  gets a fresh protocol offer so reconnects are handled correctly.\n- Pack URLs include the content hash, preventing clients from reusing an older\n  cached archive after a real change.\n- Operators can bind the host locally, expose a fixed port, or advertise an\n  HTTP(S) reverse-proxy address.\n- Manual pack construction remains the default. Servers that prefer it can\n  enable one build on every startup.\n\n## Safer operation\n\n- A required-pack server no longer admits a joining client when hosting is\n  enabled but no verified pack is ready.\n- Rebuilds publish an immutable snapshot only after SHA-1, SHA-256, size, and\n  content identity agree.\n- The built-in HTTP endpoint serves only the current ZIP through `GET` and\n  `HEAD`; it has no upload, directory listing, or arbitrary-file access.\n- Existing configurations keep their previous delivery behavior until the new\n  host section is added, avoiding an unexpected second pack push during an\n  upgrade.\n\n## Diagnostics\n\nThe pack command and latest pack report now show the content UUID, both hashes,\nhost state, public URL, and request counters without exposing local paths.\n\n## Generic compatibility\n\n- Mod signs that inherit Minecraft's normal sign contracts can now combine\n  bounded live plain text with a generated standing, wall, or hanging surface\n  when a matching local sign sheet can be identified safely.\n- Conventional block entities can expose bounded live item snapshots through\n  standard containers, Fabric item storage, or persisted `ItemStack` data.\n- Display-backed blocks can reuse protocol-native vanilla sign states and\n  other proven collision-and-outline matches instead of settling for a shared\n  approximate carrier.\n- Standard resource-defined simple particles can use their own sprite frames\n  through short-lived animated displays. Custom client physics and arbitrary\n  particle programs still use the semantic fallback.\n- Item-bearing projectiles can use their real item model while a bounded\n  interaction entity follows the authoritative server projectile.\n- Dynamic custom crafting recipes continue through the ordinary grid with\n  server-authoritative matching, output, and remainders. Recipes that expose\n  bounded public ingredients and results can also receive a browse-only\n  display.\n- Reconnect verification now waits for an ordered vanilla synchronization\n  marker and compares semantic server inventory snapshots, avoiding timing\n  guesses and unstable debug strings.\n\nAs before, compatibility remains bounded by what Reborn can project safely.\nThe server keeps real Mod content and mechanics authoritative, native Polymer\nsupport wins, and unknown client programs or private protocols are not guessed."
+		},
+		{
+			"tag": "v0.9.0+26.1.2",
+			"published": "2026-07-26T11:06:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 490284084,
+					"name": "polymc-reborn-0.9.0+26.1.2.jar",
+					"url": "https://github.com/fadeway37/PolyMc-Reborn/releases/download/v0.9.0%2B26.1.2/polymc-reborn-0.9.0%2B26.1.2.jar",
+					"size": 548404,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "b2e90c814c226ece028f52301a461dc4c49d00525d684f16f69ae9f70a122109",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "polymc-reborn",
+							"version": "0.9.0+26.1.2",
+							"name": "PolyMc Reborn",
+							"description": "A conservative Polymer-backed compatibility platform for vanilla clients.",
+							"minecraft": "=26.1.2",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"polymer-core",
+								"polymer-blocks",
+								"polymer-resource-pack",
+								"polymer-virtual-entity",
+								"polymer-registry-sync-manipulator"
+							],
+							"provides": [
+								"polymc"
+							],
+							"breaks": [
+								"polymc-extra"
+							],
+							"breaksVersions": {
+								"polymc-extra": "*"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 255,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 490284091,
+					"name": "polymc-reborn-api-0.9.0+26.1.2.jar",
+					"url": "https://github.com/fadeway37/PolyMc-Reborn/releases/download/v0.9.0%2B26.1.2/polymc-reborn-api-0.9.0%2B26.1.2.jar",
+					"size": 63659,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "05bb4a6438adba097b34486d5cff27b98b4d98e5c289a3725990044f6fd195c7",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 54,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# New features\n\n- Items can keep more of their usual behaviour on an ordinary Minecraft client, including food and drink use, container remainders, stack limits, cooldowns, tools, equipment, weapon timing, repair data, and vanilla attributes.\n- More custom storage and processing screens can open as familiar vanilla inventories. Their real slots, clicks, Shift-click actions, and server progress continue to be handled by the original Mod on the server.\n- Display-backed blocks can refresh their resource-pack model when the real block changes state. This improves crops, open and closed variants, serving stages, and other blocks whose appearance changes while playing.\n- More Mod recipes can appear in the recipe book through safe vanilla displays. Recipe matching, ingredients, tools, results, and crafting behaviour remain authoritative on the server.\n- Server owners can optionally build the final resource pack during startup. This is disabled by default; `/polymcreborn pack build` remains the normal manual route.\n\n# Fixes / Changes\n\n- Automatic item mappings are reconsidered after item data finishes loading, while native Polymer support, administrator mappings, and explicit adapters continue to take priority.\n- Block carrier selection now checks collision and outline shapes separately. When no exact vanilla shape exists, Reborn keeps a conservative interaction shape instead of presenting an approximate match as exact.\n- Vanilla recipes keep their normal recipe-book placement behaviour even when unrelated Mod items share the same visible vanilla carrier.\n- Unknown or unsafe client data continues to fall back safely instead of replacing the real server-side object or mechanic.\n\nBuilt for Minecraft `26.1.2`, Fabric Loader `0.19.3`, and Java `25`."
+		},
+		{
+			"tag": "v0.4.0-rc.2+26.1.2",
+			"published": "2026-07-21T16:57:39Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 483842777,
+					"name": "polymc-reborn-0.4.0-rc.2+26.1.2.jar",
+					"url": "https://github.com/fadeway37/PolyMc-Reborn/releases/download/v0.4.0-rc.2%2B26.1.2/polymc-reborn-0.4.0-rc.2%2B26.1.2.jar",
+					"size": 406426,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "958a072f3851921c4a7dc9a77389c553d5e3786ec4ace6db7ef37f30716a7bef",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "polymc-reborn",
+							"version": "0.4.0-rc.2+26.1.2",
+							"name": "PolyMc Reborn",
+							"description": "A conservative Polymer-backed compatibility platform for vanilla clients.",
+							"minecraft": "=26.1.2",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"polymer-core",
+								"polymer-blocks",
+								"polymer-resource-pack",
+								"polymer-virtual-entity",
+								"polymer-registry-sync-manipulator"
+							],
+							"provides": [
+								"polymc"
+							],
+							"breaks": [
+								"polymc-extra"
+							],
+							"breaksVersions": {
+								"polymc-extra": "*"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 200,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# PolyMc Reborn 0.4.0 RC2 release notes\n\nPolyMc Reborn `0.4.0-rc.2+26.1.2` is a repository-independence and release\ninfrastructure candidate for exactly Minecraft 26.1.2. Its runtime Java,\nMixin, Access Widener, mapping schema, mapping algorithm, stable API\ndescriptors, compatibility strategy, and behavioral defaults are unchanged\nfrom RC1.\n\n## Changed in RC2\n\n- Active development moved from the original GitHub fork to an independent\n  `fadeway37/PolyMc-Reborn` repository with `main` as its default branch.\n- The former fork's branches, pull requests, workflow records, and draft\n  releases are retained in the owner-restricted\n  [PolyMc-Reborn-Archive](https://github.com/fadeway37/PolyMc-Reborn-Archive).\n  Restricting its visibility detached the current GitHub fork-network metadata;\n  upstream lineage remains documented through Git ancestry and attribution.\n- The project README now serves as a long-term installation, capability,\n  compatibility-boundary, and documentation entry point.\n- Repository URLs, branch targets, templates, Maven metadata, release artifact\n  names, and the candidate version now refer to RC2 and the independent\n  repository.\n- Public repository checks reject prohibited release-process residue in new\n  branches, pull requests, commits, and selected public surfaces without\n  rewriting legitimate historical commits.\n- Release provenance is rebuilt in the independent repository and binds the\n  RC2 commit and exact main Mod JAR, API JAR, SBOM, and checksum manifests.\n\n## Unchanged compatibility and security boundaries\n\nThe server continues to keep real modded objects and mechanics authoritative,\nwith Polymer supplying bounded vanilla-facing representations. Native Polymer\nbehavior wins by default. Packet fallback and creative reverse mapping remain\ndisabled; unknown clients remain `VANILLA`; and arbitrary GUI/entity inference,\ncomplex-shape promises, broad packet rewriting, remote compatibility code, and\na mandatory companion client remain outside this release.\n\nPolyMc Reborn does not promise that every mod works. External-mod results are\nlimited to the exact versions and named features in the inspected release\nevidence.\n\n## Verification scope\n\nRepository identity changes invalidate reuse of RC1 hosted provenance as RC2\nproof. RC2 therefore repeats unit, API, GameTest, dedicated-server,\nsingle-client, multi-client, external-mod, upgrade, expansion, soak,\ncross-platform reproducibility, artifact-content, checksum, and GitHub\nprovenance gates. The final status and known gaps are recorded in\n[the RC2 verification record](../verification/0.4.0-rc.2.md).\n\nThe automated client includes minimal Fabric test modules and is not a pure\nzero-mod client. Pure zero-mod vanilla automation remains `NOT_RUN` for RC2.\n\n## Attribution\n\nPolyMc Reborn is a community-maintained successor initially derived from\n[TheEpicBlock/PolyMc](https://github.com/TheEpicBlock/PolyMc). It is not\nofficially endorsed by, or maintained as a direct continuation by, the\noriginal authors. The project is licensed under `LGPL-3.0-or-later` with\nupstream notices preserved."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

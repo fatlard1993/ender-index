@@ -1,0 +1,254 @@
+{
+	"repo": "dko2i31902udhaal/drnfqilsw",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"created": "2026-08-21T09:57:35Z",
+	"pushed": "2026-08-26T11:51:16Z",
+	"releases": [
+		{
+			"tag": "v0.4.0",
+			"published": "2026-08-26T11:51:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 530736741,
+					"name": "brutalist-0.4.0.jar",
+					"url": "https://github.com/dko2i31902udhaal/drnfqilsw/releases/download/v0.4.0/brutalist-0.4.0.jar",
+					"size": 154454,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "5d521cdbd2c9e0262eb288932c64f751f341efdca8e825b206dec8449ae98d60",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "brutalist",
+							"version": "0.4.0",
+							"name": "Brutalist World",
+							"description": "一個只有混凝土巨型幾何體的世界。自訂 ChunkGenerator，沒有地形、沒有植物，只有量體。",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"biome": [
+								"Concrete"
+							]
+						},
+						"data": [
+							"dimension",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 52,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/xinbow99/brutalist/npc/Llm.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"openrouter.ai": [
+								"com/xinbow99/brutalist/npc/NpcConfig.class"
+							],
+							"generativelanguage.googleapis.com": [
+								"com/xinbow99/brutalist/npc/NpcConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "城市裡住了一個人，天際線上多了三種東西，水往下掉的地方立起了壩。\n\n## 有人可以說話了\n\n候車亭底下站著一個叫 Mira 的豬布林。走近，照常在聊天室講話，他剛好聽得到，也在聊天室裡回你。沒有對話介面，沒有選項樹。\n\n- **他只知道他看得到的東西。** context 裡是他眼前那棟樓的生成參數——所以他講得出「那棟倒梯形有兩百二十七格高」「第五十七格的懸挑板少了一片」，卻**解釋不了自己怎麼知道**。這不是故意演出來的效果，是「只餵他當下的觀測、不給任何後設知識」這一條規則自己長出來的。有玩家說他「很像亞斯伯格症」。\n- **記憶跨對話而且是共用的**——所有人共享同一份，他會自己壓縮。你昨天跟他講的事，他今天會對別人提起。\n- **時間問 timeline，而且只講時段**。他不會報時，他會說「天要黑了」。\n- 模型走 Google 原生 API，OpenRouter 那套留著可切；換模型只要改 config 一個欄位。\n\n修掉兩個會破壞角色的東西：他不再帶著隨機的金裝（`finalizeSpawn` 會塞裝備，而 `addFreshEntity` 內部是**同步**送出配對封包的，所以事後清除永遠來不及——改成先組好、最後才放進世界），也不再把 `[說話者]` 標記抄進自己的回話裡。\n\n## 三種新設施\n\n- **電視塔**：底盤寬、往上沿曲線收束，內部一路盤旋的階梯繞著中空的梯井，不同高度隨機長出環形平台。開窗跟著高度隨機，有環的地方一定開，所以從裡面往上看是一段一段的光。\n- **穀倉群**：兩種樣式可以在同一塊地混出現——一排排的圓筒加艙頂作業室，或是單獨／成對的巨型筒倉、頂上一圈開窗的環形工作室。\n- **長跨大廳**：圓形的馬戲團與方形的市場。柱廊撐起環梁，屋頂三種（下垂的碟、摺板、拱），室內淨高四十四到七十格——**進去抬頭才是重點**。場心積水，圓形的是一圈階梯座位圍著一池水，方形的整片淹掉。地板落在真實地面上，不架高；柱腳、地板、屋頂都吃周遭的泥土侵蝕與風化。\n\n## 高架與水\n\n- **高架拉高了兩倍多**，不再跟管線水溝在視覺上打架。橋墩在接近橋面的地方張開成拱——關鍵是**用「空隙」來定義拱**而不是用實體：先畫出半橢圓的開口，橋墩是「不在開口裡的部分」。反過來做會得到一片扁塌的牆。\n- **排水渠的段界上立壩**。水位本來就是一段一段往下掉的，現在那個落差有了理由：壩體、溢流口、下游的階梯式消能塊。壩改地形高度而不是疊方塊，所以地表材質、草、基座全部自己跟上。\n\n## 其他\n\n- `/brutalist find <plaza|depot|plant|tower|mast|silo|hall>` 直接傳送到最近的那一種。\n- 全世界的 NPC 都叫 Mira。"
+		},
+		{
+			"tag": "v0.3.0",
+			"published": "2026-08-23T09:45:08Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 526066149,
+					"name": "brutalist-0.3.0.jar",
+					"url": "https://github.com/dko2i31902udhaal/drnfqilsw/releases/download/v0.3.0/brutalist-0.3.0.jar",
+					"size": 98349,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c569ddfbbef40df759f41123f0c944573798ea5fa4cdecd7e384ecdd97a30e47",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "brutalist",
+							"version": "0.3.0",
+							"name": "Brutalist World",
+							"description": "一個只有混凝土巨型幾何體的世界。自訂 ChunkGenerator，沒有地形、沒有植物，只有量體。",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"biome": [
+								"Concrete"
+							]
+						},
+						"data": [
+							"dimension",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 36,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "量體第一次有了裡面，裝置物換了一套字彙，高架學會爛掉。\n\n## 建築的室內\n\n三百格高的量體以前是實心的。現在它們被挖空了，每隔一段留一片樓板。\n\n- **一條不變式撐起整件事**：室內只能在「往六個方向各走五格都還是實心」的地方動手。這一條同時買到兩件事——外殼有了厚度下限，所以立面開窗與風化那兩個「離表面多近」的判斷永遠問不到室內；而且它對**每一種形狀**都成立，室內從頭到尾不知道有 `Form` 這個東西。\n- **挖空不回饋給 `solid()`**。基座往哪補、屋頂設備長在哪、天橋接哪面牆，問的都是結構；室內只有「把已經決定要放的方塊改成空氣」這一個權力。\n- **窗深與殼厚是同一個常數**，所以窗是打穿的——不然窗底跟室內之間永遠夾著幾格實心，那個窗從外面看是凹槽、從裡面看是牆。\n- 一層淨高八到三十格，橫跨好幾條窗帶，不隔間。窗帶落在天花板下面成為高側窗。\n- 圓筒會開一個**巨大的天井**，從地面一路灌穿屋頂到天空。\n\n順帶修掉一個一直都在的 bug：直櫺用的軸判斷錯了，導致每棟樓有兩面牆從來沒開過窗，只在牆的內側挖了看不見的洞。\n\n## 裝置藝術\n\n評價標準換成「它有沒有用到城市的字彙」——正交長方體、退縮、懸挑板、圓筒、方孔、水平窗帶、柱陣。用到任何一樣，裝置物就退回成一棟很小的建築。\n\n- **晶體叢**：兩到五顆多面體互相咬住往上長，每顆是八面體與長方體的交集，可以再轉四十五度。四十五度的面是整座城市唯一沒有的東西。\n- **傾斜的環**（新）：一到三個大環，傾角永遠不對齊任何世界座標軸。半徑由每一軸的真實投影反推，所以同一個淨空裡站得下直徑兩倍大的環。\n- **正弦鰭**：高度改由兩道正弦相疊，不再是白雜訊。\n- **遊走的疊板**：位移改成逐層累加，整疊會歪成一座快要倒的塔，而相鄰兩層必定重疊。\n- 拿掉「裂開的方碑」——那就是 `ASSEMBLY` 在做的事。\n\n## 高架\n\n- **會爛了**：橋面、欄牆、橋墩都吃同一套風化。門檻隨離表面的深度往上加，所以破口是往裡收的凹坑而不是貫穿的洞——欄牆最先不見、路面破了底板還在、橋墩啃穿邊角但芯還留著。\n- **橋墩統一成一種**。原本四種輪替，但高架的重複性正是它的表情；每隔三十格換一種過去的辦法，讀起來是四段不同的橋接在一起。\n\n## 廣場與車站\n\n- 邊界改由土地從外圈往內**有機侵蝕**咬出來，最深三十格。完美的長方形水泥板正是它看起來假的原因。\n- 月台與軌道區寬度加倍，改成雙線。拿掉緣石。"
+		},
+		{
+			"tag": "v0.2.0",
+			"published": "2026-08-21T12:00:10Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 523685889,
+					"name": "brutalist-0.2.0.jar",
+					"url": "https://github.com/dko2i31902udhaal/drnfqilsw/releases/download/v0.2.0/brutalist-0.2.0.jar",
+					"size": 46360,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "b4005cb68bce1e5dea9efd32819d0da6699e2573531b8abe844550db67ba35ff",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "brutalist",
+							"version": "0.2.0",
+							"name": "Brutalist World",
+							"description": "一個只有混凝土巨型幾何體的世界。自訂 ChunkGenerator，沒有地形、沒有植物，只有量體。",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"biome": [
+								"Concrete"
+							]
+						},
+						"data": [
+							"dimension",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 21,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "丟進 mods/，伺服器 server.properties 設 `level-type=brutalist\\:brutalism`。需要 Fabric Loader 0.19.3 與 Fabric API，Minecraft 26.2。只有伺服器要裝。"
+		},
+		{
+			"tag": "v0.1.0",
+			"published": "2026-08-21T10:01:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 523560862,
+					"name": "brutalist-0.1.0.jar",
+					"url": "https://github.com/dko2i31902udhaal/drnfqilsw/releases/download/v0.1.0/brutalist-0.1.0.jar",
+					"size": 39396,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a0709d21bbd6711815911af314960c0a289637d936a0a402bf5f2b2ad3c2f671",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "brutalist",
+							"version": "0.1.0",
+							"name": "Brutalist World",
+							"description": "一個只有混凝土巨型幾何體的世界。自訂 ChunkGenerator，沒有地形、沒有植物，只有量體。",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"biome": [
+								"Concrete"
+							]
+						},
+						"data": [
+							"dimension",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 18,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "一個沒有自然地形的 Minecraft 世界類型：起伏的岩盤上散落巨型的粗獷主義量體，穿插廢棄的高架橋與高壓電塔。\n\n**伺服器端專用——沒裝模組的原版客戶端可以正常連線。** 只有開伺服器的人需要裝。\n\n## 需求\n\n- Minecraft **26.2**\n- Fabric Loader 0.19.3 以上\n- [Fabric API](https://modrinth.com/mod/fabric-api)\n- Java 25\n\n## 安裝\n\n單機：把 `brutalist-0.1.0.jar` 跟 Fabric API 一起丟進 `mods/`，建立世界時 **Create New World → World Type** 切到 **粗獷主義 / Brutalism**。\n\n伺服器：同樣丟進 `mods/`，然後在 `server.properties` 設\n\n```properties\nlevel-type=brutalist\\:brutalism\n```\n\n反斜線要留著——Java 的 properties 格式會吃掉沒跳脫的冒號。\n\n## 內容\n\n- 地面在 y=20 上下起伏 ±8，往上到 y=383 都是天空\n- 六種量體：板樓、梯形、倒梯形、核心懸挑、圓筒、穿孔牆；2×2 街廓為一組，會出現橫跨兩格的巨型量體\n- 石頭／鵝卵石／安山岩／凝灰岩／深板岩混合，表面有稀疏的自然破損\n- 高架橋（有塌掉的跨距）與高壓電塔線（導線會斷）\n\n尺度參數在世界預設的 JSON 裡，改完開新世界就生效，不用重編。"
+		}
+	],
+	"readme": null,
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

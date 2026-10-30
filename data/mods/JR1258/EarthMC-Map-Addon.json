@@ -1,0 +1,568 @@
+{
+	"repo": "JR1258/EarthMC-Map-Addon",
+	"host": "github",
+	"description": "TownyMap Addon is a client-side EarthMC map extension for Xaero’s World Map and Xaero’s Minimap. It overlays EarthMC Towny data directly onto your in-game maps, making it much easier to read towns, nations, players, borders, claims, and useful Towny status information without leaving Minecraft.",
+	"stars": 5,
+	"archived": false,
+	"license": "Apache-2.0",
+	"created": "2026-05-26T10:54:37Z",
+	"pushed": "2026-10-25T00:06:31Z",
+	"releases": [
+		{
+			"tag": "v1.4.10-26.3",
+			"published": "2026-10-25T00:06:31Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 673642817,
+					"name": "earthmc-map-addon-26.3-1.4.10.jar",
+					"url": "https://github.com/JR1258/EarthMC-Map-Addon/releases/download/v1.4.10-26.3/earthmc-map-addon-26.3-1.4.10.jar",
+					"size": 1391499,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "716f245b523f9b0fef0c0882d600cc1d9af8c7b2b5f610ab89f8c67aaa6a07c7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "townymapaddon",
+							"version": "1.4.10",
+							"name": "EarthMC Map Addon",
+							"description": "Overlays EarthMC Towny town borders and online players on Xaero's WorldMap.",
+							"minecraft": ">=26.3 <26.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaerominimap",
+								"xaeroworldmap"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "71f9803596b6e9933241f8efe345f86d9c32ceb36a0166d948bc910a17509898.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 147,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"net/townymap/api/AllianceClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/ArchiveClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/BlocklistClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/EarthMcApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/SquaremapApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/render/PlayerHeadImages.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/SquaremapTileRenderer.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"map.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"breakthebot.sparked.network": [
+								"net/townymap/api/AllianceClient.class"
+							],
+							"web.archive.org": [
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"raw.githubusercontent.com": [
+								"net/townymap/api/BlocklistClient.class"
+							],
+							"api.earthmc.net": [
+								"net/townymap/api/EarthMcApiClient.class"
+							],
+							"discord.com": [
+								"net/townymap/gui/BlockedScreen.class"
+							],
+							"mc-heads.net": [
+								"net/townymap/render/PlayerHeadImages.class"
+							],
+							"discord.gg": [
+								"net/townymap/util/DiscordUrl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Performance**\n- The periodic stutter is gone. Working out which town owns each visible chunk used to land on one frame every so often; it now runs on a background thread while the previous view keeps drawing.\n- Claim outlines draw as merged runs instead of one call per chunk side: a third to a fifth of the geometry in dense areas.\n\n**Less data used**\n- The EarthMC API is now asked for compressed responses, and only for the fields that are actually read. Opening the rankings went from 4.7 MB to 133 KB.\n- Idle clients back off. Standing still with no map open drops roughly 37 MB an hour to about 6; moving resets it instantly. The wilderness alert is exempt, since idling is the state it exists for.\n- The player feed polls slower when only the minimap is up, and not at all when nothing displays it.\n- Claims now honour the polling interval the map server asks for, so EarthMC can slow every client down without waiting for a mod update. Requests also identify their version now.\n\n**Search**\n- Picking a result zooms to fit it instead of keeping whatever zoom you were already at, and flashes the claim it found so you can pick it out from its neighbours. Nations frame every member claim. Both can be turned off under World Map.\n\nAvailable for Minecraft **1.21.11**, **26.1.x**, **26.2** and **26.3**."
+		},
+		{
+			"tag": "v1.4.10-26.2",
+			"published": "2026-10-25T00:06:28Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 673642696,
+					"name": "earthmc-map-addon-26.2-1.4.10.jar",
+					"url": "https://github.com/JR1258/EarthMC-Map-Addon/releases/download/v1.4.10-26.2/earthmc-map-addon-26.2-1.4.10.jar",
+					"size": 1391113,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "98d0b9606c258f14061d522a7fa8662efeb5c052aca4e37ac5dc008e09b3065a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "townymapaddon",
+							"version": "1.4.10",
+							"name": "EarthMC Map Addon",
+							"description": "Overlays EarthMC Towny town borders and online players on Xaero's WorldMap.",
+							"minecraft": ">=26.2 <26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaerominimap",
+								"xaeroworldmap"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "71f9803596b6e9933241f8efe345f86d9c32ceb36a0166d948bc910a17509898.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 147,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"net/townymap/api/AllianceClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/ArchiveClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/BlocklistClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/EarthMcApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/SquaremapApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/render/PlayerHeadImages.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/SquaremapTileRenderer.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"map.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"breakthebot.sparked.network": [
+								"net/townymap/api/AllianceClient.class"
+							],
+							"web.archive.org": [
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"raw.githubusercontent.com": [
+								"net/townymap/api/BlocklistClient.class"
+							],
+							"api.earthmc.net": [
+								"net/townymap/api/EarthMcApiClient.class"
+							],
+							"discord.com": [
+								"net/townymap/gui/BlockedScreen.class"
+							],
+							"mc-heads.net": [
+								"net/townymap/render/PlayerHeadImages.class"
+							],
+							"discord.gg": [
+								"net/townymap/util/DiscordUrl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Performance**\n- The periodic stutter is gone. Working out which town owns each visible chunk used to land on one frame every so often; it now runs on a background thread while the previous view keeps drawing.\n- Claim outlines draw as merged runs instead of one call per chunk side: a third to a fifth of the geometry in dense areas.\n\n**Less data used**\n- The EarthMC API is now asked for compressed responses, and only for the fields that are actually read. Opening the rankings went from 4.7 MB to 133 KB.\n- Idle clients back off. Standing still with no map open drops roughly 37 MB an hour to about 6; moving resets it instantly. The wilderness alert is exempt, since idling is the state it exists for.\n- The player feed polls slower when only the minimap is up, and not at all when nothing displays it.\n- Claims now honour the polling interval the map server asks for, so EarthMC can slow every client down without waiting for a mod update. Requests also identify their version now.\n\n**Search**\n- Picking a result zooms to fit it instead of keeping whatever zoom you were already at, and flashes the claim it found so you can pick it out from its neighbours. Nations frame every member claim. Both can be turned off under World Map.\n\nAvailable for Minecraft **1.21.11**, **26.1.x**, **26.2** and **26.3**."
+		},
+		{
+			"tag": "v1.4.10-26.1.x",
+			"published": "2026-10-25T00:06:25Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 673642631,
+					"name": "earthmc-map-addon-26.1.2-1.4.10.jar",
+					"url": "https://github.com/JR1258/EarthMC-Map-Addon/releases/download/v1.4.10-26.1.x/earthmc-map-addon-26.1.2-1.4.10.jar",
+					"size": 1390891,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "8b0bb02ccbe237f65384ea0be51120c02e10fa24fc5b111da69a5e0b973386e5",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "townymapaddon",
+							"version": "1.4.10",
+							"name": "EarthMC Map Addon",
+							"description": "Overlays EarthMC Towny town borders and online players on Xaero's WorldMap.",
+							"minecraft": ">=26.1 <26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaerominimap",
+								"xaeroworldmap"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "71f9803596b6e9933241f8efe345f86d9c32ceb36a0166d948bc910a17509898.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 147,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"net/townymap/api/AllianceClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/ArchiveClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/BlocklistClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/EarthMcApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/SquaremapApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/render/PlayerHeadImages.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/SquaremapTileRenderer.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"map.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"breakthebot.sparked.network": [
+								"net/townymap/api/AllianceClient.class"
+							],
+							"web.archive.org": [
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"raw.githubusercontent.com": [
+								"net/townymap/api/BlocklistClient.class"
+							],
+							"api.earthmc.net": [
+								"net/townymap/api/EarthMcApiClient.class"
+							],
+							"discord.com": [
+								"net/townymap/gui/BlockedScreen.class"
+							],
+							"mc-heads.net": [
+								"net/townymap/render/PlayerHeadImages.class"
+							],
+							"discord.gg": [
+								"net/townymap/util/DiscordUrl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Performance**\n- The periodic stutter is gone. Working out which town owns each visible chunk used to land on one frame every so often; it now runs on a background thread while the previous view keeps drawing.\n- Claim outlines draw as merged runs instead of one call per chunk side: a third to a fifth of the geometry in dense areas.\n\n**Less data used**\n- The EarthMC API is now asked for compressed responses, and only for the fields that are actually read. Opening the rankings went from 4.7 MB to 133 KB.\n- Idle clients back off. Standing still with no map open drops roughly 37 MB an hour to about 6; moving resets it instantly. The wilderness alert is exempt, since idling is the state it exists for.\n- The player feed polls slower when only the minimap is up, and not at all when nothing displays it.\n- Claims now honour the polling interval the map server asks for, so EarthMC can slow every client down without waiting for a mod update. Requests also identify their version now.\n\n**Search**\n- Picking a result zooms to fit it instead of keeping whatever zoom you were already at, and flashes the claim it found so you can pick it out from its neighbours. Nations frame every member claim. Both can be turned off under World Map.\n\nAvailable for Minecraft **1.21.11**, **26.1.x**, **26.2** and **26.3**."
+		},
+		{
+			"tag": "v1.4.10",
+			"published": "2026-10-25T00:06:21Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 673642523,
+					"name": "earthmc-map-addon-1.21.11-1.4.10.jar",
+					"url": "https://github.com/JR1258/EarthMC-Map-Addon/releases/download/v1.4.10/earthmc-map-addon-1.21.11-1.4.10.jar",
+					"size": 1398224,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "bdaf1d344acb919a4bf9a77fb8842daea4e0d4a6ec586453b3ec38d88e82e200",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "townymapaddon",
+							"version": "1.4.10",
+							"name": "EarthMC Map Addon",
+							"description": "Overlays EarthMC Towny town borders and online players on Xaero's WorldMap.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaerominimap",
+								"xaeroworldmap"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "71f9803596b6e9933241f8efe345f86d9c32ceb36a0166d948bc910a17509898.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 149,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"net/townymap/api/AllianceClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/ArchiveClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/BlocklistClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/EarthMcApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/SquaremapApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/render/PlayerHeadImages.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/SquaremapTileRenderer.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"map.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"breakthebot.sparked.network": [
+								"net/townymap/api/AllianceClient.class"
+							],
+							"web.archive.org": [
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"raw.githubusercontent.com": [
+								"net/townymap/api/BlocklistClient.class"
+							],
+							"api.earthmc.net": [
+								"net/townymap/api/EarthMcApiClient.class"
+							],
+							"discord.com": [
+								"net/townymap/gui/BlockedScreen.class"
+							],
+							"mc-heads.net": [
+								"net/townymap/render/PlayerHeadImages.class"
+							],
+							"discord.gg": [
+								"net/townymap/util/DiscordUrl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Performance**\n- The periodic stutter is gone. Working out which town owns each visible chunk used to land on one frame every so often; it now runs on a background thread while the previous view keeps drawing.\n- Claim outlines draw as merged runs instead of one call per chunk side: a third to a fifth of the geometry in dense areas.\n\n**Less data used**\n- The EarthMC API is now asked for compressed responses, and only for the fields that are actually read. Opening the rankings went from 4.7 MB to 133 KB.\n- Idle clients back off. Standing still with no map open drops roughly 37 MB an hour to about 6; moving resets it instantly. The wilderness alert is exempt, since idling is the state it exists for.\n- The player feed polls slower when only the minimap is up, and not at all when nothing displays it.\n- Claims now honour the polling interval the map server asks for, so EarthMC can slow every client down without waiting for a mod update. Requests also identify their version now.\n\n**Search**\n- Picking a result zooms to fit it instead of keeping whatever zoom you were already at, and flashes the claim it found so you can pick it out from its neighbours. Nations frame every member claim. Both can be turned off under World Map.\n\nAvailable for Minecraft **1.21.11**, **26.1.x**, **26.2** and **26.3**."
+		},
+		{
+			"tag": "v1.4.9-26.3",
+			"published": "2026-10-21T13:16:05Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 662565048,
+					"name": "earthmc-map-addon-26.3-1.4.9.jar",
+					"url": "https://github.com/JR1258/EarthMC-Map-Addon/releases/download/v1.4.9-26.3/earthmc-map-addon-26.3-1.4.9.jar",
+					"size": 1375912,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "d74f78c1c0b5fbea6851eb90d6e61a43596f4b5d68392b4dea70b0223206c350",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "townymapaddon",
+							"version": "1.4.9",
+							"name": "EarthMC Map Addon",
+							"description": "Overlays EarthMC Towny town borders and online players on Xaero's WorldMap.",
+							"minecraft": ">=26.3 <26.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaerominimap",
+								"xaeroworldmap"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "71f9803596b6e9933241f8efe345f86d9c32ceb36a0166d948bc910a17509898.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 143,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"net/townymap/api/AllianceClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/ArchiveClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/BlocklistClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/EarthMcApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/SquaremapApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/render/PlayerHeadImages.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/SquaremapTileRenderer.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"map.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"breakthebot.sparked.network": [
+								"net/townymap/api/AllianceClient.class"
+							],
+							"web.archive.org": [
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"raw.githubusercontent.com": [
+								"net/townymap/api/BlocklistClient.class"
+							],
+							"api.earthmc.net": [
+								"net/townymap/api/EarthMcApiClient.class"
+							],
+							"discord.com": [
+								"net/townymap/gui/BlockedScreen.class"
+							],
+							"mc-heads.net": [
+								"net/townymap/render/PlayerHeadImages.class"
+							],
+							"discord.gg": [
+								"net/townymap/util/DiscordUrl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Shop waypoints from /qs find now appear for every result. The parser insisted on wording QuickShop does not always print, so most shops were skipped in silence, and a slow search timed out before its results arrived.\n- Fixed the mod sometimes sitting idle on EarthMC with every setting correct. A threading bug could latch the \"is this EarthMC\" check onto the wrong answer for the rest of the session.\n- Planning mode reworked: the placement hint showed garbled text and hovering a chip did nothing. Hold shift to place a chain, escape to cancel, right-click a pin to remove it, and a new chip clears the plan. Counts and numbering update when a town is removed, and the markers and buttons now match the rest of the mod.\n- New setting: Town Claims On Minimap, for hiding claims there without turning off the whole minimap overlay.\n- The mod now says when it is idle because the server is not recognised as EarthMC, rather than drawing nothing with no explanation.\n- Adding waypoints no longer flashes \"default\" across the minimap."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

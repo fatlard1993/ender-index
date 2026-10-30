@@ -1,0 +1,573 @@
+{
+	"repo": "KristopherZlo/lumi",
+	"host": "github",
+	"description": "Version control for your creations to save builds, compare changes, restore earlier states.",
+	"stars": 2,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2026-04-21T00:18:21Z",
+	"pushed": "2026-10-21T16:40:52Z",
+	"releases": [
+		{
+			"tag": "v0.2.0-rc.2",
+			"published": "2026-10-12T09:19:10Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 633280122,
+					"name": "lumi-0.2.0-rc.2.jar",
+					"url": "https://github.com/KristopherZlo/lumi/releases/download/v0.2.0-rc.2/lumi-0.2.0-rc.2.jar",
+					"size": 2209456,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "e32d4cb73383038055eee76452530ded99c2eaaa00e377e31d2ac59c2f843464",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lumi",
+							"version": "0.2.0-rc.2",
+							"name": "Lumi",
+							"description": "Fast, durable world history for Minecraft builders.",
+							"minecraft": "1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 839,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"io/github/lumi/telemetry/TelemetryHttpSender.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"io/github/lumi/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"buymeacoffee.com": [
+								"io/github/lumi/client/ui/LumiPageScreen.class"
+							],
+							"www.paypal.com": [
+								"io/github/lumi/client/ui/LumiPageScreen.class"
+							],
+							"github.com": [
+								"io/github/lumi/client/ui/LumiPageScreen.class"
+							],
+							"lumi.zloyxp.cc": [
+								"io/github/lumi/telemetry/TelemetryHttpSender.class"
+							],
+							"kristopherzlo.github.io": [
+								"io/github/lumi/update/UpdateChecker.class"
+							],
+							"raw.githubusercontent.com": [
+								"io/github/lumi/update/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Lumi 0.2.0 RC2 replaces the Alpha history engine with Lumi V2.\nThese changes cover the updates since [Lumi 0.1.0 Alpha](https://github.com/KristopherZlo/lumi/releases/tag/v0.1.0).\n\n## Before you update\n\n**V2 starts a new Lumi history. It does not import Alpha patch-v9 or snapshot-v8 history.**\n\nBefore you update Lumi, make a backup of your world and its Lumi data.\nOld saved versions and branches do not appear in V2 automatically.\n\n## Installation\n\n- Use Minecraft **1.21.11**, Fabric Loader **0.19.2+**, Fabric API **0.141.3+1.21.11**, and Java **21**.\n- Install `lumi-0.2.0-rc.2.jar`.\n- For a dedicated server, also install Lumi on each client that uses Lumi screens or overlays.\n- Server actions require operator permission.\n- **Lumi no longer requires owo-lib or Cloth Config.** WorldEdit and Axiom remain optional. V2 has no separate FAWE integration.\n\n## History and world safety\n\n- Lumi now stores immutable world objects in hash-verified packs. Atomic references and operation journals protect history during interrupted operations.\n- Each initialized dimension has a protected **Initial** saved version.\n- Save captures the exact world state during a dimension freeze. It then releases the freeze and publishes the saved version.\n- Edits after the capture remain pending for the next Save.\n- Restore checks the persisted blocks, block entities, entities, and affected world data before it reports success.\n- Recovery checks which operation phase completed. It avoids another world apply when the persisted result already matches the requested state.\n- History cleanup preserves data that active Save operations still need. Lumi also retries failed origin captures and flushes pending writes during shutdown.\n- Rename changes the display name without a rewrite of the saved version. Deleted history retains recovery references until cleanup.\n\n## Shared worlds and Restore\n\n- Each dimension has one shared active workspace and branch. Only one history operation can change that dimension at a time.\n- Queued actions check permissions, history references, and scope revisions again when they start.\n- After world changes start, the server owns the operation. It completes or recovers the operation if the client disconnects.\n- Full Restore uses a compact confirmation dialog. Partial Restore and outside-selection Restore use the wooden sword selection.\n- Zone Restore applies the exact zone scope.\n- **Quick Restore now uses `Alt+R` by default.** It restores the active workspace to its current saved version. `Alt+Z` can undo Quick Restore.\n- With the wooden sword equipped, Undo and Redo affect selection history only. Empty selection history cannot trigger a world action.\n- Restore and action capture now handle more lighting and entity cases. Tests cover duplicate entity UUIDs and supported WorldEdit/Axiom edits.\n\n## Compare and highlight\n\n- Compare shows two branch/version columns with separate page controls. It opens the world highlight directly.\n- Green, red, and amber still identify added, removed, and changed blocks. The Action key enables x-ray.\n- Compare prepares geometry outside the render thread. It reuses GPU meshes, removes duplicate edges, and limits the resident cache.\n- Camera checks exclude geometry outside the view. Dense leaf changes retain the individual block grid.\n- **H hides the highlight and keeps the prepared buffers.** The same prepared view can appear again without another rebuild.\n- The HUD shows a preparation percentage and progress bar. The first highlight appears when the visible batches are ready.\n\n## Screens and zones\n\n- **Lumi screens now use fixed GUI scale 2.** Tooltips use the same scale across Minecraft GUI Scale settings and window sizes.\n- Zone Save and Amend use current zone statistics, including changes to entities only. Zone See Changes stays inside the zone.\n- Zone entry failures preserve the previous focus. Zone resizing invalidates old statistics. Overlapping zone outlines handle shared faces correctly.\n\n..."
+		},
+		{
+			"tag": "v0.1.0",
+			"published": "2026-07-13T07:27:04Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 475212432,
+					"name": "lumi-0.1.0.jar",
+					"url": "https://github.com/KristopherZlo/lumi/releases/download/v0.1.0/lumi-0.1.0.jar",
+					"size": 3720857,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "7bb9f7583000a42e5aa0b6565567704e9ab7cc657701257119f16d5affcd377d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lumi",
+							"version": "0.1.0",
+							"name": "Lumi",
+							"description": "Builder-friendly project history for Minecraft structures.",
+							"minecraft": "1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"owo",
+								"cloth-config"
+							],
+							"provides": [
+								"cloth-config",
+								"owo-sentinel"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1718,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar",
+							"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar!META-INF/jars/basic-math-0.6.1.jar",
+							"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/OwoSentinel.class": [
+									"java/net/URL.openStream"
+								],
+								"io/github/luma/client/specialthanks/SpecialThanksCatalogSource.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"io/github/luma/client/update/HttpUpdateSource.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"io/github/luma/telemetry/JavaNetTelemetryHttpTransport.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							},
+							"exec": {
+								"io/github/luma/client/diagnostics/NvidiaSmiClientGpuMetricsProbe.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							],
+							"api.modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/OwoSentinel.class"
+							],
+							"modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/SentinelConsole.class"
+							],
+							"github.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/SentinelWindow.class",
+								"io/github/luma/client/update/UpdateChatMessageFactory.class",
+								"io/github/luma/ui/navigation/ProjectSidebarNavigation.class"
+							],
+							"raw.githubusercontent.com": [
+								"io/github/luma/client/specialthanks/SpecialThanksCatalogSource.class",
+								"io/github/luma/client/update/UpdateCheckService.class"
+							],
+							"kristopherzlo.github.io": [
+								"io/github/luma/client/update/UpdateCheckService.class"
+							],
+							"lumi.zloyxp.cc": [
+								"io/github/luma/telemetry/TelemetryService.class"
+							],
+							"buymeacoffee.com": [
+								"io/github/luma/ui/navigation/ProjectSidebarNavigation.class"
+							],
+							"www.paypal.com": [
+								"io/github/luma/ui/navigation/ProjectSidebarNavigation.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Lumi 0.1.0 Alpha brings project-oriented version history to Minecraft builders.\n\nIncludes:\n- Named versions with previews, tags, and change summaries\n- Branches, comparison overlays, and version merging\n- Full, region, and outside-selection restore\n- Quick rollback, recent undo/redo, and crash recovery\n- Work zones for large builds\n- Best-effort WorldEdit, FAWE, and Axiom capture\n- Dedicated server support\n\nMinecraft 1.21.11 ? Fabric ? Java 21+\n\nAlpha software: keep normal world backups."
+		},
+		{
+			"tag": "v0.1.0-alpha.3-testers.3",
+			"published": "2026-07-08T04:26:44Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 469890472,
+					"name": "lumi-0.1.0-alpha.3.jar",
+					"url": "https://github.com/KristopherZlo/lumi/releases/download/v0.1.0-alpha.3-testers.3/lumi-0.1.0-alpha.3.jar",
+					"size": 3804558,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "9f5d2e62bea6d605408b5d5c13a5d58cb7d6d85ce6ffe888708f718fcfb29781",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lumi",
+							"version": "0.1.0-alpha.3",
+							"name": "Lumi",
+							"description": "Builder-friendly project history for Minecraft structures.",
+							"minecraft": "1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"owo",
+								"cloth-config"
+							],
+							"provides": [
+								"cloth-config",
+								"owo-sentinel"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1748,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar",
+							"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar!META-INF/jars/basic-math-0.6.1.jar",
+							"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/OwoSentinel.class": [
+									"java/net/URL.openStream"
+								],
+								"io/github/luma/client/specialthanks/SpecialThanksCatalogSource.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"io/github/luma/client/update/HttpUpdateSource.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"io/github/luma/telemetry/JavaNetTelemetryHttpTransport.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							},
+							"exec": {
+								"io/github/luma/client/diagnostics/NvidiaSmiClientGpuMetricsProbe.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							],
+							"api.modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/OwoSentinel.class"
+							],
+							"modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/SentinelConsole.class"
+							],
+							"github.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/SentinelWindow.class",
+								"io/github/luma/client/update/UpdateChatMessageFactory.class",
+								"io/github/luma/ui/navigation/ProjectSidebarNavigation.class"
+							],
+							"raw.githubusercontent.com": [
+								"io/github/luma/client/specialthanks/SpecialThanksCatalogSource.class",
+								"io/github/luma/client/update/UpdateCheckService.class"
+							],
+							"kristopherzlo.github.io": [
+								"io/github/luma/client/update/UpdateCheckService.class"
+							],
+							"lumi.zloyxp.cc": [
+								"io/github/luma/telemetry/TelemetryService.class"
+							],
+							"buymeacoffee.com": [
+								"io/github/luma/ui/navigation/ProjectSidebarNavigation.class"
+							],
+							"www.paypal.com": [
+								"io/github/luma/ui/navigation/ProjectSidebarNavigation.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's changed since v0.1.0-alpha.3\n\n- Improved live undo/redo capture around TNT, explosions, fluids, fire, falling blocks, and entity fallout.\n- Made restore and rollback flows safer: restore is undoable, stale redo/fallout capture is guarded, and zone/branch restore switching is more reliable.\n- Added guarded merge/support actions and fixed compare/merge previews for hidden fallout changes.\n- Improved entity history coverage for placed entities, armor stand equipment, entity-only pending changes, and action overlays.\n- Polished UI scaling, restore entity list sizing, zone creation hints, and Special Thanks rendering, including the Nayakochii skin asset.\n\n## Build\n\n- Minecraft 1.21.11, Fabric Loader 0.19.2.\n- Built from c229031f10ddbcc25028c0391bef83541aa5cae4.\n- Verified with `./gradlew.bat clean build` on Java 21.\n- SHA-256: `9F5D2E62BEA6D605408B5D5C13A5D58CB7D6D85CE6FFE888708F718FCFB29781`."
+		},
+		{
+			"tag": "v0.1.0-alpha.3",
+			"published": "2026-07-05T00:34:58Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 466745413,
+					"name": "lumi-0.1.0-alpha.3.jar",
+					"url": "https://github.com/KristopherZlo/lumi/releases/download/v0.1.0-alpha.3/lumi-0.1.0-alpha.3.jar",
+					"size": 3768168,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "54484e9a25b6af1d10cf2a400c97a3e524553122bac49bb838a1b54ba99c4551",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lumi",
+							"version": "0.1.0-alpha.3",
+							"name": "Lumi",
+							"description": "Builder-friendly project history for Minecraft structures.",
+							"minecraft": "1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"owo",
+								"cloth-config"
+							],
+							"provides": [
+								"cloth-config",
+								"owo-sentinel"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1734,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar",
+							"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar!META-INF/jars/basic-math-0.6.1.jar",
+							"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/OwoSentinel.class": [
+									"java/net/URL.openStream"
+								],
+								"io/github/luma/client/specialthanks/SpecialThanksCatalogSource.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"io/github/luma/client/update/HttpUpdateSource.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"io/github/luma/telemetry/JavaNetTelemetryHttpTransport.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							},
+							"exec": {
+								"io/github/luma/client/diagnostics/NvidiaSmiClientGpuMetricsProbe.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							],
+							"api.modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/OwoSentinel.class"
+							],
+							"modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/SentinelConsole.class"
+							],
+							"github.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/SentinelWindow.class",
+								"io/github/luma/client/update/UpdateChatMessageFactory.class"
+							],
+							"raw.githubusercontent.com": [
+								"io/github/luma/client/specialthanks/SpecialThanksCatalogSource.class",
+								"io/github/luma/client/update/UpdateCheckService.class"
+							],
+							"kristopherzlo.github.io": [
+								"io/github/luma/client/update/UpdateCheckService.class"
+							],
+							"lumi.zloyxp.cc": [
+								"io/github/luma/telemetry/TelemetryService.class"
+							],
+							"buymeacoffee.com": [
+								"io/github/luma/ui/navigation/ProjectSidebarNavigation.class"
+							],
+							"www.paypal.com": [
+								"io/github/luma/ui/navigation/ProjectSidebarNavigation.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Lumi alpha-0.1.0 - Testers #2\n\nChanges since Testers #1:\n- Improved live undo/redo ownership for TNT, redstone chains, explosions, and mob fallout.\n- Prevented replay-restored TNT from re-igniting through stale queued ticks and block events.\n- Added player-scoped undo/redo selection, queued Alt+Z/Alt+Y requests, and native-tool verification before history completion.\n- Improved restore/rollback reliability, player respawn restoration, and large overlay performance.\n- Completed localized UI coverage for English, Russian, German, Spanish, Finnish, and French.\n\nTarget:\n- Minecraft 1.21.11\n- Fabric Loader 0.19.2+\n- Fabric API 0.141.3+1.21.11\n- Java 21+\n\nAlpha note: keep normal world backups while testing."
+		},
+		{
+			"tag": "v0.1.0-alpha.2",
+			"published": "2026-06-30T06:54:18Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 461900062,
+					"name": "lumi-0.1.0-alpha.2.jar",
+					"url": "https://github.com/KristopherZlo/lumi/releases/download/v0.1.0-alpha.2/lumi-0.1.0-alpha.2.jar",
+					"size": 3694446,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "ab39a00b382c594d270b5fa237da52be569863fb1207061b0df89cc6981e6e5f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lumi",
+							"version": "0.1.0-alpha.2",
+							"name": "Lumi",
+							"description": "Builder-friendly project history for Minecraft structures.",
+							"minecraft": "1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"owo",
+								"cloth-config"
+							],
+							"provides": [
+								"cloth-config",
+								"owo-sentinel"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1711,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar",
+							"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar!META-INF/jars/basic-math-0.6.1.jar",
+							"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/OwoSentinel.class": [
+									"java/net/URL.openStream"
+								],
+								"io/github/luma/client/specialthanks/SpecialThanksCatalogSource.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"io/github/luma/client/update/HttpUpdateSource.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"io/github/luma/telemetry/JavaNetTelemetryHttpTransport.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							},
+							"exec": {
+								"io/github/luma/client/diagnostics/NvidiaSmiClientGpuMetricsProbe.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							],
+							"api.modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/OwoSentinel.class"
+							],
+							"modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/SentinelConsole.class"
+							],
+							"github.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/SentinelWindow.class",
+								"io/github/luma/client/update/UpdateChatMessageFactory.class"
+							],
+							"raw.githubusercontent.com": [
+								"io/github/luma/client/specialthanks/SpecialThanksCatalogSource.class",
+								"io/github/luma/client/update/UpdateCheckService.class"
+							],
+							"kristopherzlo.github.io": [
+								"io/github/luma/client/update/UpdateCheckService.class"
+							],
+							"lumi.zloyxp.cc": [
+								"io/github/luma/telemetry/TelemetryService.class"
+							],
+							"buymeacoffee.com": [
+								"io/github/luma/ui/navigation/ProjectSidebarNavigation.class"
+							],
+							"www.paypal.com": [
+								"io/github/luma/ui/navigation/ProjectSidebarNavigation.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Lumi alpha-0.1.0\n\nRelease for testers #1.\n\nThis is an early alpha build for Minecraft builders testing Lumi's project-oriented build history: project, version, branch, compare, restore, and recovery workflows.\n\nTarget:\n- Minecraft 1.21.11\n- Fabric Loader 0.19.2+\n- Fabric API 0.141.3+1.21.11\n- Java 21+\n\nLanguages included now:\n- English (US)\n- Russian\n- German\n- Spanish (Spain)\n- Finnish\n- French (France)\n\nAlpha note: keep normal world backups while testing."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [
+		"lumi-banner.png"
+	],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

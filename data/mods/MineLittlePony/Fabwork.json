@@ -1,0 +1,410 @@
+{
+	"repo": "MineLittlePony/Fabwork",
+	"host": "github",
+	"description": "Experimental networking API and mod sync library for Fabric",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2022-12-29T21:13:37Z",
+	"pushed": "2026-09-18T12:38:03Z",
+	"releases": [
+		{
+			"tag": "1.4.1+26.3",
+			"published": "2026-09-18T12:42:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 572608379,
+					"name": "fabwork-1.4.1+26.3.jar",
+					"url": "https://github.com/MineLittlePony/Fabwork/releases/download/1.4.1%2B26.3/fabwork-1.4.1%2B26.3.jar",
+					"size": 57565,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "36d440a1275c5f9bfa61eff9599c80ed5f06759294f65fa42781a908e0a37f30",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "fabwork",
+							"version": "1.4.1+26.3",
+							"name": "Fabwork",
+							"description": "Enhanced Networking for Fabric",
+							"minecraft": ">=26.3-rc.3",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"fabricloader",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 32,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "If you have issues using the [26.X.X](https://github.com/MineLittlePony/Fabwork/releases/tag/1.4.1%2B26.1) version, try this one.\n\n# Changelog\n - Rebuilt against 26.3"
+		},
+		{
+			"tag": "1.4.1+26.1",
+			"published": "2026-04-24T17:26:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 404636084,
+					"name": "fabwork-1.4.1+26.1.jar",
+					"url": "https://github.com/MineLittlePony/Fabwork/releases/download/1.4.1%2B26.1/fabwork-1.4.1%2B26.1.jar",
+					"size": 57231,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "cc446cafef7893f3b0ba99b721754fbdfc4ac6886333eb1adb0f4af8bc261017",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "fabwork",
+							"version": "1.4.1+26.1",
+							"name": "Fabwork",
+							"description": "Enhanced Networking for Fabric",
+							"minecraft": ">=26.1",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"fabricloader",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 32,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n - Fixed startup crash when registering C2S packet types"
+		},
+		{
+			"tag": "1.4.0+26.1",
+			"published": "2026-04-09T16:07:39Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 392502150,
+					"name": "fabwork-1.4.0+26.1.jar",
+					"url": "https://github.com/MineLittlePony/Fabwork/releases/download/1.4.0%2B26.1/fabwork-1.4.0%2B26.1.jar",
+					"size": 57231,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "bc568b62b4b840915667559052e52eaa15249b5ecc20f077007141cfab1ed8c0",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "fabwork",
+							"version": "1.4.0+26.1",
+							"name": "Fabwork",
+							"description": "Enhanced Networking for Fabric",
+							"minecraft": ">=26.1",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"fabricloader",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 32,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n - Updated to 26.1\n - Removed deprecations\n \n \n# Migration\n\nThe old \"Packet\" model that was deprecated in previous releases has now been removed along with any methods that relied on them. \n\nThere are no longer any restriction on the data types you can register. Developers are encouraged to move to the new methods. Handlers can be registered by going through the packet type you get back from the register methods, or by implementing the optional `Handled` interface on your data type.\n   \nExamples:\n\nOld\n```java\n// ModInitializer\nstatic S2CPacket<MyClientPacket> TYPE = SimpleNetworking.serverToClient(new Identifier(\"mymod\", \"mypacket\"), MyClientPacket::new);\n\n// MyClientPacket\nclass MyClientPacket implements Packet<Player> {\n   public MyClientPacket(RegistryFriendlyByteBuf buffer) {\n   }\n\n   @Override\n   public void handle(Player player) {\n   \n   }\n   \n   @Override\n   public void toBuffer(RegistryFriendlyByteBuf buffer) {\n     ...\n   }\n}\n```\n\nNew\n```java\n// ModInitializer\nstatic S2CPacket<MyClientPacket> TYPE = SimpleNetworking.serverToClient(new Identifier(\"mymod\", \"mypacket\"), MyClientPacket.STREAM_CODEC);\n\n// MyClientPacket\nrecord MyClientPacket(...) {\n      public static final StreamCodec<MyClientPacket> STREAM_CODEC = ...;\n}\n\n// ClientModInitializer\nTYPE.receiver().addPersistentListener(myPacket -> {\n    ...\n});\n```"
+		},
+		{
+			"tag": "1.3.3+1.21.10",
+			"published": "2025-10-10T17:53:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 302804656,
+					"name": "fabwork-1.3.3+1.21.10.jar",
+					"url": "https://github.com/MineLittlePony/Fabwork/releases/download/1.3.3%2B1.21.10/fabwork-1.3.3%2B1.21.10.jar",
+					"size": 59550,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "347c53b4facd5831141448bf7bc1967b967dc3f07ff3c81c4bccef22fced7fe2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "fabwork",
+							"version": "1.3.3+1.21.10",
+							"name": "Fabwork",
+							"description": "Enhanced Networking for Fabric",
+							"minecraft": ">=1.21.6",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"fabricloader",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 34,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n - Updated to 1.21.10\n - Deprecated methods are now marked for removal in Minecraft 1.22. Set your clocks, everyone!"
+		},
+		{
+			"tag": "1.3.2+1.21.7",
+			"published": "2025-07-18T12:53:07Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 274113396,
+					"name": "fabwork-1.3.2+1.21.7.jar",
+					"url": "https://github.com/MineLittlePony/Fabwork/releases/download/1.3.2%2B1.21.7/fabwork-1.3.2%2B1.21.7.jar",
+					"size": 59427,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "b7a1b7d6670488aea2f802a610253b7cdbf37465a7cba6bd1bd688c6a1da2d62",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "fabwork",
+							"version": "1.3.2+1.21.7",
+							"name": "Fabwork",
+							"description": "Enhanced Networking for Fabric",
+							"minecraft": ">=1.21.6",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"fabricloader",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 34,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n- Updated to 1.21.7\n- That's all, folk!"
+		},
+		{
+			"tag": "1.3.2+1.21",
+			"published": "2024-10-14T19:11:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 239872444,
+					"name": "fabwork-1.3.2+1.21.jar",
+					"url": "https://github.com/MineLittlePony/Fabwork/releases/download/1.3.2%2B1.21/fabwork-1.3.2%2B1.21.jar",
+					"size": 59424,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "e452e90414a7abd109a23b60681c7b87be3e4906e4dd036398fd08cb83d4938b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "fabwork",
+							"version": "1.3.2+1.21",
+							"name": "Fabwork",
+							"description": "Enhanced Networking for Fabric",
+							"minecraft": ">=1.21-pre2",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"fabricloader",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 34,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n- Updated apis to make more effective use of PacketCodecs. You can now only need a packet codec to register a packet type\n- Packets don't necessarily have to implement the Packet interface and `Packet` has been depreicated\n- `HandledPacket` has been depricated and replaced with `Handled`"
+		},
+		{
+			"tag": "1.3.1+1.20.5",
+			"published": "2024-09-04T11:04:43Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 190341631,
+					"name": "fabwork-1.3.1+1.20.5.jar",
+					"url": "https://github.com/MineLittlePony/Fabwork/releases/download/1.3.1%2B1.20.5/fabwork-1.3.1%2B1.20.5.jar",
+					"size": 58579,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "60ecc7b3c71782d435c120cb420f448c61c8964e831bb77baa0bebb29b1c6108",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "fabwork",
+							"version": "1.3.1+1.20.5",
+							"name": "Fabwork",
+							"description": "Enhanced Networking for Fabric",
+							"minecraft": ">=1.20.5<=1.20.6",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"fabricloader",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 33,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n- Fixed server disconnects due to packets failing to serialize #3"
+		},
+		{
+			"tag": "1.3.0+1.20.2",
+			"published": "2023-09-27T18:27:07Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 128018788,
+					"name": "fabwork-1.3.0+1.20.2.jar",
+					"url": "https://github.com/MineLittlePony/Fabwork/releases/download/1.3.0%2B1.20.2/fabwork-1.3.0%2B1.20.2.jar",
+					"size": 60845,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "bc42accccd05a03a6c4b658faade6fb32fe9e05842bd549287f378a6b21991dd",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "fabwork",
+							"version": "1.3.0+1.20.2",
+							"name": "Fabwork",
+							"description": "Enhanced Networking for Fabric",
+							"minecraft": ">=1.20.2",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"fabricloader",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 35,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n - Updated to 1.20.2\n - Fabwork will now do its verification in the configuration stage before a player enters the world\n - The sender generic type for HandledPacket no longer has to extend PlayerEntity\n - Removed the unneccessary generic type from Packet\n - Deprecated `ServerConnectionEvents` (use Fabric API's own `ServerConfigurationEvents` instead)"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

@@ -1,0 +1,67 @@
+{
+	"repo": "Kelvinlby/xaero-enhance",
+	"host": "github",
+	"description": "Rendering optimization for Xaero World Map and Xaero Plus",
+	"stars": 3,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-10-27T14:45:07Z",
+	"pushed": "2026-10-27T15:29:54Z",
+	"releases": [
+		{
+			"tag": "v1.0.0",
+			"published": "2026-10-27T15:29:55Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 682010822,
+					"name": "xaero-enhance-1.0.0.jar",
+					"url": "https://github.com/Kelvinlby/xaero-enhance/releases/download/v1.0.0/xaero-enhance-1.0.0.jar",
+					"size": 48826,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "29e3cb0dd8f0a61132dcf4ec2ff1930bdd4d189c27fda34a52ed189665b5d090",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "xaero-enhance",
+							"version": "1.0.0",
+							"name": "Xaero Enhance",
+							"description": "Performance enhancement for Xaero's World Map: builds map chunk textures in parallel off the render thread.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"xaeroworldmap"
+							],
+							"provides": []
+						}
+					],
+					"icon": "439926ec0c0ff010df1448c97b3512c0142ec8f76967d1219d029e34e61070d8.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 28,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First release. A client-side performance mod for Xaero's World Map that keeps the render thread free while the world map screen is open.\n\n**Requires:** Minecraft 1.21.11, Fabric Loader 0.19.0+, Xaero's World Map 1.47.2. XaeroPlus 2.37.2 is optional; its optimizations turn on only when it's installed.\n\n### What it does\n- **Builds map chunk textures in parallel on worker threads.** Xaero normally builds them on the render thread one chunk at a time. Regions being mapped around the player keep Xaero's immediate path.\n- **Keeps Xaero's per-frame upload budget.** Xaero normally lifts it when the camera stops, which stalls zoomed-out maps.\n- **Loads regions faster.** The map screen requests 4 regions per round instead of 1 leaf region and 2 zoomed-out regions. Xaero's limit on regions in flight still applies.\n- **XaeroPlus chunk highlights** (NewChunks, OldChunks, Portals, ...) are built on worker threads and point-sampled to about one quad per screen pixel when zoomed out, so sparse highlights stay sparse.\n- **XaeroPlus highlight cache:** finding entries that left the map window happens on a worker, and changes to the cache are spread over frames on the render thread. The cache's data is only read off-thread, never changed there, so mods reading it see the same data.\n\n### Scope\nEverything runs only while the world map screen is open. Work for chunks that scroll off screen is cancelled immediately. Closing the screen cancels all background work and applies pending XaeroPlus cache changes. After that, Xaero, XaeroPlus and the minimap run exactly as they do without this mod."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

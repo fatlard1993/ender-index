@@ -1,0 +1,78 @@
+{
+	"repo": "dx122dx/qab",
+	"host": "github",
+	"description": "QShop Auto Buy (QAB): a Fabric 1.20.1 client mod that builds a shopping list from schematics, plans purchases from a Chunk Scanner QShop database, and auto-navigates to shops to buy — inventory-aware, with auto-stashing.",
+	"stars": 0,
+	"archived": false,
+	"license": "AGPL-3.0",
+	"created": "2026-07-31T12:16:36Z",
+	"pushed": "2026-08-30T16:05:15Z",
+	"releases": [
+		{
+			"tag": "v1.0.0-dev.1",
+			"published": "2026-08-05T18:29:38Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 502951293,
+					"name": "qshop-auto-buy-1.0.0-dev.1.jar",
+					"url": "https://github.com/dx122dx/qab/releases/download/v1.0.0-dev.1/qshop-auto-buy-1.0.0-dev.1.jar",
+					"size": 248825,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "77c1879b818e9a7062ad9c5a48d2d5859a5a1529e5c14ff4d17155113072dc1a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "qshop-auto-buy",
+							"version": "1.0.0-dev.1",
+							"name": "QShop Auto Buy",
+							"description": "QShop automatic buying helper.",
+							"minecraft": "~1.20.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"chunkscanner"
+							],
+							"provides": [
+								"net_sandrohc_schematic4j"
+							]
+						}
+					],
+					"icon": "1bc5dc694e9c70374a6b88055ba2a2ab224b038a8c2541b710e63e06485b4ea5.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 113,
+						"jars": [
+							"META-INF/jars/schematic4j-1.1.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/schematic4j-1.1.0.jar!net/sandrohc/schematic4j/nbt/Deserializer.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- ci: 添加 Gradle 构建缓存配置，加速 CI 构建。 (6a4c188)\n- ci(publish): 添加自动发布工作流并简化版本号 (874849e)\n- fix: 修复到达 QShop 后无法正确看向告示牌 (1.0.0-dev-20260805.3) (c4b0f93)\n- feat: 存货点机制与智能容量预判 (1.0.0-dev-20260805.2) (68c3008)\n- refactor: 迁移到 chunkscanner 新版公共 api 并更新依赖 (1.0.0-dev-20260805.1) (cb95ad0)\n- docs: 重写 README (a485597)\n- fix: 修改自动购买条件为\"玩家能点到牌子即可\"，不再错误地假设牌在地面，要求玩家必须到达指定位置 (1.0.0-dev-20260804.2) (ecc1608)\n- fix: 修复导航到达后无法点击告示牌导致队列卡死 (1.0.0-dev-20260803.5) (77ce879)\n- fix: 修复 /qab generate list 静态初始化顺序导致崩溃 (1.0.0-dev-20260803.4) --- 1. 修复了 BlockMappingConfig 中 merged 字段声明早于 DEFAULT_UNOBTAINABLE/    DEFAULT_IRREGULAR/DEFAULT_COMPOSITE 三张默认表，导致 buildDefault() 读到 null    并抛出 ExceptionInInitializerError 使游戏崩溃的问题——将 merged 声明下移至    三张默认表之后，并补充注释说明该声明位置不可上移； 2. 加固了 merge() 对外部配置的空值处理：过滤 unobtainable 中的 null/空白项，    校验 irregular 的键值非空，校验 composite 的列表非空且长度不小于 2，    避免用户手写 JSON 含 null 时污染映射表。 (046e4c1)\n- build: 从Chunk Scanner工程自动获取版本号 --- 避免手动同步版本号导致构建失败，并在路径失效时回退到兜底值。 (03a8803)\n- refactor: 重构包结构和配置管理 (1.1.0-dev-20260802.5) (93da8dc)\n- feat(generate): 支持外部化方块映射配置并修复命令发送 (f5b8b0c)\n- fix: 修复方块特殊形式导致清单物品不可购买 (1.0.0-dev-20260803.2) (e7c1cf4)\n- feat: 新增 /qab generate list 原理图购物清单生成命令 (1.0.0-dev-20260803.1) (3fe0c24)\n- ci: 修复 GitHub Actions 编译 (qab) --- checkout chunkscanner 到兄弟目录，先编译 chunkscanner 再编译 qab，解决 flatDir 找不到依赖的问题。 (4b882a5)\n- feat: 新增 /qab nav apply 自动寻路+到达自动购买 (1.0.0-dev-20260802.6) (f5ae20f)\n- fix: 修复命令相关问题 (1.0.0-dev-20260802.5) (2f982e0)\n- fix(qab): 优化数据库选择校验报错与资源释放 (1.0.0-dev-20260802.4) (33bc185)\n- refactor(qab): 重构数据库加载流程并移除peek命令 (e42006d)\n- feat: 校验结果展示优化 (1.0.0-dev-20260802.2) (14ca863)\n- feat: QShopDbLoader 适配 DbPackage API (1.0.0-dev-20260802.1) (c2e1152)\n- feat: 命令文本本地化并细化错误提示 (1.0.0-dev-20260801.4) (c170586)\n- fix: 修复客户端入口点类型不匹配导致游戏启动崩溃 (1.0.0-dev-20260801.3) (c22b91f)\n- feat: 注册 /qab select db|list 和 /qab plan 命令 (1.0.0-dev-20260801.2) (fcec359)\n- feat: 集成 chunkscanner QShop 数据加载器 (1.1.0-dev-20260801.1) --- 1. 新增 QShopDbLoader：通过 IChunkDb.FactoryRegistry 工厂模式解压并加载 chunkscanner ZIP 导出； 2. 新增 ShopExportData：QShop 导出数据容器类； 3. QShopAutoBuy 入口串联加载 → 规划全链路； 4. build.gradle 添加 chunkscanner 依赖； 5. fabric.mod.json 添加 chunkscanner recommends 声明。 (bdda3d2)\n- build(gradle): 优化 gradle 配置 (574a4f8)\n- Initial Commit (c43b4a3)"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

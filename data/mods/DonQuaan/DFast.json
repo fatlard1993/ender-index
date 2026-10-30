@@ -1,0 +1,281 @@
+{
+	"repo": "DonQuaan/DFast",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-07-18T18:43:46Z",
+	"pushed": "2026-09-29T03:43:32Z",
+	"releases": [
+		{
+			"tag": "v0.2.0",
+			"published": "2026-09-29T03:42:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 597164585,
+					"name": "dfast-0.2.0.jar",
+					"url": "https://github.com/DonQuaan/DFast/releases/download/v0.2.0/dfast-0.2.0.jar",
+					"size": 75864,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "ad9e56ff7650e8f26e432dbc2342a54acd28ff5df3d593e174f9167ac0957392",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dfast",
+							"version": "0.2.0",
+							"name": "DFast",
+							"description": "Frame-time HUD with p99 and 1%/0.1% lows, a repeatable Bench Mode, and JVM launcher advice matched to your Java version and RAM. Leaves render-ahead control to Sodium when it is installed.",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 35,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "DFast 0.2.0 turns DFast into a measuring tool you can trust: a frame-time HUD that stays out of the way, and a repeatable benchmark that writes its results to disk.\n\n## For players\n\n- **Frame-time HUD (F9)** — FPS averaged over the last 5 s, the last frame time and p99 frame time, the 1% and 0.1% lows over up to 60 s, and which mod controls render-ahead. Each line shows the span it really covers. Only real gameplay frames are counted: menus, loading overlays, pauses and alt-tab never show up as stutter, but genuine hitches do. The HUD is redrawn four times a second into a texture, so it costs one textured quad per frame and allocates nothing per frame (checked with JFR in the game).\n- **Bench Mode** — start the game with `-Ddfast.bench=short` (or `ci`, `long`). DFast opens or creates a fixed-seed world, flies the same camera path every time, measures every frame uncapped, writes `dfast/bench/<run>/result.json`, `system.json` and `frametimes.txt`, and quits. Your own video settings are restored afterwards. `system.json` records your hardware, driver, video settings and mod list, with no file paths or user names.\n- **Render-ahead** — with Sodium, Sodium stays in charge. Without Sodium, DFast's experimental one-frame limiter stays **off**: measured on an RTX 4060 laptop (8 interleaved runs per setting), it lowered the 1% low by 15%. Its effect on input latency cannot be measured yet (planned for 0.4.0 with PresentMon).\n\n## For modpack authors and testers\n\n- `tools/bench_compare.py` compares two setups with a 95% Welch t confidence interval and the smallest difference the runs can detect. It needs at least 5 runs per setup and rejects runs that failed, generated the world, overflowed, or ran with a different power source, refresh rate, fullscreen state, GPU or resolution. On the development laptop, 8 runs per setup detect differences of about 10 to 12%.\n- CI runs the real client under Linux with Java 21 and 25, alone and with Sodium 0.6.13 and 0.8.13, before any release is published.\n\n## Requirements\n\nMinecraft 1.21.1, Fabric Loader 0.19.3+, Fabric API 0.116.13+, Java 21+.\n\n## Known limits\n\n- Input-to-photon latency is not measured yet.\n- If you use Bench Mode on a slow machine, the world save at exit can take a long time; this release waits for it. The next release adds a watchdog that ends the process two minutes after the results are written.\n\nDFast is developed with AI assistance (Claude); every change is reviewed and tested before release. License: PolyForm Noncommercial 1.0.0 with the DonQuaan Addendum."
+		},
+		{
+			"tag": "v0.2.0-beta.3",
+			"published": "2026-09-29T00:13:57Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 596751298,
+					"name": "dfast-0.2.0-beta.3.jar",
+					"url": "https://github.com/DonQuaan/DFast/releases/download/v0.2.0-beta.3/dfast-0.2.0-beta.3.jar",
+					"size": 30159,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "6ef98a42dfcfc08db5bd51253df805f37b7451a5f3019d0de19fc13654aeebd4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dfast",
+							"version": "0.2.0-beta.3",
+							"name": "DFast",
+							"description": "Frame-time HUD and JVM launcher advice matched to your Java version and RAM. Leaves render-ahead control to Sodium when it is installed.",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 17,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Hotfix for 0.2.0-beta.2. Everyone on beta.1 or beta.2 should update.**\n\n### Fixed\n- **JVM advice could stop Java 21 from starting.** beta.2 could suggest `-XX:+UseCompactObjectHeaders`, which Java 21 rejects. Advice now follows your Java version: Compact Object Headers only on Java 24–26, `-XX:+ZGenerational` only on Java 21–22, and a heap size matched to your RAM (never more than half of it).\n- **RAM was never detected** (always reported as -1). It is now read correctly and rounded to the nearest GiB.\n- **Render-ahead now has one owner.** With Sodium installed, DFast leaves the CPU render-ahead limit to Sodium and runs no fence loop of its own. Without Sodium, DFast's experimental limiter is **off by default**. beta.1/beta.2 wrote `renderQueueLimiter=true` into every config automatically; that value is reset once when the config is migrated.\n- **Minecraft version is enforced.** DFast now requires exactly Minecraft 1.21.1 and Fabric API 0.116.13 or newer instead of loading on any 1.21.x and failing later.\n- Removed the missing mod icon and the empty mixin config.\n\n### Changed\n- Diagnostics (hardware, JVM advice, render-ahead owner) go to `.minecraft/dfast/dfast.log`; `latest.log` gets one line.\n- Config files are written atomically, without comments, and are never overwritten when they cannot be read.\n- The HUD (F9) uses the same number format in every language and refreshes its text 4 times per second. Vietnamese translation added.\n- Only the mod jar is attached to releases (no sources jar that could be dropped into `mods/` by mistake).\n\n### Known limitation\nThe experimental limiter (only when you enable it without Sodium) still waits inside the HUD callback. It moves to a proper start-of-frame hook, with measurements, in 0.4.0.\n\n### Verified\n84 unit tests (mutation check 8/8), CI on Linux, and the client started on Windows with DFast alone and with Sodium 0.6.13.\n\nDFast is developed with AI assistance; every change is reviewed and tested before release."
+		},
+		{
+			"tag": "v0.2.0-beta.2",
+			"published": "2026-09-17T09:36:34Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 569939103,
+					"name": "dfast-0.2.0-beta.2.jar",
+					"url": "https://github.com/DonQuaan/DFast/releases/download/v0.2.0-beta.2/dfast-0.2.0-beta.2.jar",
+					"size": 15946,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "fbc209103b9942237eb99a846ddb910a5c28eb1768ccbc4356e8c7ea6cf7f999",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dfast",
+							"version": "0.2.0-beta.2",
+							"name": "DFast",
+							"description": "Don Fast — zero-config, hardware-aware performance meta-optimizer chuyên Windows + Intel + Nvidia RTX 2000+. Tự nhận phần cứng, tự tối ưu JVM & stack, thêm lớp Windows-native mỏng.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium",
+								"lithium"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: https://github.com/DonQuaan/DFast/compare/v0.2.0-beta.1...v0.2.0-beta.2"
+		},
+		{
+			"tag": "v0.2.0-beta.1",
+			"published": "2026-09-17T09:23:10Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 569917201,
+					"name": "dfast-0.2.0-beta.1.jar",
+					"url": "https://github.com/DonQuaan/DFast/releases/download/v0.2.0-beta.1/dfast-0.2.0-beta.1.jar",
+					"size": 15871,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "0fd96fa974bfd4962e1ce8ad430723a520b79a99fd69b4b9a25d6c5a3d2ff877",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dfast",
+							"version": "0.2.0-beta.1",
+							"name": "DFast",
+							"description": "Don Fast — zero-config, hardware-aware performance meta-optimizer chuyên Windows + Intel + Nvidia RTX 2000+. Tự nhận phần cứng, tự tối ưu JVM & stack, thêm lớp Windows-native mỏng.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium",
+								"lithium"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: https://github.com/DonQuaan/DFast/compare/v0.1.0...v0.2.0-beta.1"
+		},
+		{
+			"tag": "v0.1.0",
+			"published": "2026-07-19T02:40:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 482006191,
+					"name": "dfast-0.1.0.jar",
+					"url": "https://github.com/DonQuaan/DFast/releases/download/v0.1.0/dfast-0.1.0.jar",
+					"size": 7250,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2194485e38765dc78598344b35eec2e5048fe06be79bbd7c1f0cc2e6029a3799",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dfast",
+							"version": "0.1.0",
+							"name": "DFast",
+							"description": "Don Fast — zero-config, hardware-aware performance meta-optimizer chuyên Windows + Intel + Nvidia RTX 2000+. Tự nhận phần cứng, tự tối ưu JVM & stack, thêm lớp Windows-native mỏng.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium",
+								"lithium"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 3,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: https://github.com/DonQuaan/DFast/commits/v0.1.0"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "A performance companion mod for Minecraft (Fabric). It does not replace Sodium or Lithium.",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

@@ -1,0 +1,388 @@
+{
+	"repo": "l4nternnn/monvhua-effect",
+	"host": "github",
+	"description": "Minecraft 1.21.8 Fabric 模组：计分板驱动的魔女化阶段系统 + 千里眼/模仿/搬运/身体部件/镜像/重力/传送门/绘画等子系统；客户端与服务端都需安装",
+	"stars": 2,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2026-05-15T14:51:27Z",
+	"pushed": "2026-10-15T08:50:22Z",
+	"releases": [
+		{
+			"tag": "1.0.14",
+			"published": "2026-10-12T15:34:48Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 634223118,
+					"name": "monvhua-1.0.14.jar",
+					"url": "https://github.com/l4nternnn/monvhua-effect/releases/download/1.0.14/monvhua-1.0.14.jar",
+					"size": 64065442,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "fc7aeda2393aa638032f9479213360e0b87bc7ea45d066341d0cf9439e2210ab",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "monvhua",
+							"version": "1.0.14",
+							"name": "魔女化",
+							"description": "魔女化状态效果系统 + 千里眼/视线诱导/身体部件/镜像/搬运等辅助功能，由 monvhua 计分板控制阶段。",
+							"minecraft": "~1.21.8",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"modernui"
+							],
+							"provides": [
+								"org_commonmark_commonmark",
+								"com_electronwill_night-config_core",
+								"com_electronwill_night-config_toml"
+							],
+							"suggests": [
+								"axiom",
+								"bettercommandblockui"
+							]
+						}
+					],
+					"icon": "768c48de354202a0bc80a19d24d3482adbc9a934f3aeeb5c47334ef8c2ac503c.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Area Tip Stick",
+								"Eraser",
+								"Light Portal",
+								"Light Portal Frame",
+								"Overlay Paint Brush",
+								"Paint Bucket",
+								"Paint Paper",
+								"Skeletal Head",
+								"Skeletal Left Arm",
+								"Skeletal Left Leg",
+								"Skeletal Right Arm",
+								"Skeletal Right Leg",
+								"Skeletal Torso",
+								"Spray Paint Can",
+								"|Magic: Block Hole|",
+								"|Magic: Plant|",
+								"|Magic: Possession|",
+								"|Magic: Through|"
+							],
+							"block": [
+								"Light Portal",
+								"Light Portal Frame",
+								"Paint Bucket",
+								"Skeletal Head",
+								"Skeletal Left Arm",
+								"Skeletal Left Leg",
+								"Skeletal Right Arm",
+								"Skeletal Right Leg",
+								"Skeletal Torso",
+								"|Magic: Block Hole|"
+							],
+							"effect": [
+								"High Witchification",
+								"Light Witchification",
+								"Medium Witchification",
+								"Proto-Witch",
+								"Sane",
+								"Severe Witchification",
+								"Tainted",
+								"Witch"
+							]
+						},
+						"data": [
+							"loot_table"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 1907,
+						"jars": [
+							"META-INF/jars/commonmark-0.25.0.jar",
+							"META-INF/jars/core-3.8.2.jar",
+							"META-INF/jars/toml-3.8.2.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/core-3.8.2.jar!com/electronwill/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/core-3.8.2.jar!com/electronwill/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/core-3.8.2.jar!com/electronwill/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							},
+							"exec": {
+								"com/kuilunfuzhe/monvhua/features/paint/PaintPaperImportScreen.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.environment",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Minecraft 1.21.8 Fabric 模组：以 `monvhua` 计分板为唯一权威输入，把「魔女化」做成 8 个可量化阶段，\n并围绕这套阶段数值挂载千里眼、模仿、搬运、身体部件、镜像、重力、绘画、穿墙等一整套能力。\n\n**客户端与服务端都必须安装。**\n\n## 安装要求\n\n| 依赖 | 版本 |\n| --- | --- |\n| Minecraft | `1.21.8` |\n| Fabric Loader | `>= 0.16.0` |\n| Fabric API | `0.136.1+1.21.8` |\n| Modern UI | **必需**（缺失无法启动） |\n| Java | `>= 21` |\n\n安装后需由管理员手动创建计分板，模组不会自行创建：\n\n```mcfunction\n/scoreboard objectives add monvhua dummy 魔女化\n/tag @s add ema\n/scoreboard players set @s monvhua 45\n```\n\n## 本版本包含\n\n- **魔女化阶段**：112 个纯显示状态效果（14 角色 × 8 阶段），阶段变化推送提示与角色台词\n- **千里眼**：实体标记与锚点、观看目标视角、洞察印记、能量管理\n- **模仿**：15 个角色扮演、声波震荡与静音\n- **搬运 / 牵手**：抱姿与第一人称相机渲染重定向、双人刚性牵手\n- **身体部件 / 骨架部件**：死亡掉落、拾取、放置、合并、换肤，GeckoLib 骨骼 bend 姿态与 3D 姿态编辑器\n- **镜像**：FBO 重渲染的第三人称镜像视口\n- **重力**：定向受力与表面行走两种逻辑、区域重力、反转区域\n- **传送门**：框架围成的成对光门、远程区块推流视图\n- **绘画**：方块面 / 玩家皮肤 / 模型逐像素绘制、图片导入、可放置画板\n- **其他**：动作系统、漂浮、幻想字幕、命令面板、箱子映射、秋千、活动气泡、区域提示、文字区域、\n  故障平面与玩家故障、黑洞、植物魔法、受伤出血、热背包存档、玩家列表限制\n\n## 构建产物\n\n- `monvhua-1.0.14.jar` — 放入客户端与服务端的 `mods/` 目录\n- `monvhua-1.0.14-sources.jar` — 对应源码\n\n安装、按键、物品、完整命令速查（含权限）、配置与世界存档位置、以及 23 条已知限制，见仓库\n[README](https://github.com/l4nternnn/monvhua-effect#readme)；\n模块结构见 README 中的架构图（`architecture/monvhua-architecture.png`）。"
+		},
+		{
+			"tag": "0.3.1-Beta",
+			"published": "2026-05-21T16:05:41Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 426284113,
+					"name": "monvhua-0.3.1-Beta.jar",
+					"url": "https://github.com/l4nternnn/monvhua-effect/releases/download/0.3.1-Beta/monvhua-0.3.1-Beta.jar",
+					"size": 195628,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e08ad6b6f6e795dd1b7d644ad062444230d40ade5449d8a76585da0ba0ab8649",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "monvhua",
+							"version": "0.3.1-Beta",
+							"name": "魔女化状态效果",
+							"description": "纯显示用途的魔女化阶段状态效果系统，由 monvhua 计分板驱动。",
+							"minecraft": "~1.21.8",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "768c48de354202a0bc80a19d24d3482adbc9a934f3aeeb5c47334ef8c2ac503c.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"effect": [
+								"High Witchification",
+								"Light Witchification",
+								"Medium Witchification",
+								"Proto-Witch",
+								"Sane",
+								"Severe Witchification",
+								"Tainted",
+								"Witch"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 4,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "全角色文案实装，许可证迁移至 GPLv3"
+		},
+		{
+			"tag": "0.3.0-Beta",
+			"published": "2026-05-21T16:05:35Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 426284015,
+					"name": "monvhua-0.3.0-Beta.jar",
+					"url": "https://github.com/l4nternnn/monvhua-effect/releases/download/0.3.0-Beta/monvhua-0.3.0-Beta.jar",
+					"size": 65026,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e95df0cae7c9904b62bd3352c433e3409d0496a80a24ca51e47056aa3f4e53c0",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "monvhua",
+							"version": "0.3.0-Beta",
+							"name": "魔女化状态效果",
+							"description": "纯显示用途的魔女化阶段状态效果系统，由 monvhua 计分板驱动。",
+							"minecraft": "~1.21.8",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "768c48de354202a0bc80a19d24d3482adbc9a934f3aeeb5c47334ef8c2ac503c.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"effect": [
+								"High Witchification",
+								"Light Witchification",
+								"Medium Witchification",
+								"Proto-Witch",
+								"Sane",
+								"Severe Witchification",
+								"Tainted",
+								"Witch"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 4,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "12 角色专属 tainted 三段文案 + 随机调度"
+		},
+		{
+			"tag": "0.2.0-Beta",
+			"published": "2026-05-21T16:05:30Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 426283941,
+					"name": "monvhua-0.2.0-Beta.jar",
+					"url": "https://github.com/l4nternnn/monvhua-effect/releases/download/0.2.0-Beta/monvhua-0.2.0-Beta.jar",
+					"size": 54788,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "55a1513d6df1a0fffce2ea1899d0f4d4d1bf81bf6b904c822ecd16a0bf7d11fd",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "monvhua",
+							"version": "0.2.0-Beta",
+							"name": "魔女化状态效果",
+							"description": "纯显示用途的魔女化阶段状态效果系统，由 monvhua 计分板驱动。",
+							"minecraft": "~1.21.8",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "768c48de354202a0bc80a19d24d3482adbc9a934f3aeeb5c47334ef8c2ac503c.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"effect": [
+								"High Witchification",
+								"Light Witchification",
+								"Medium Witchification",
+								"Proto-Witch",
+								"Sane",
+								"Severe Witchification",
+								"Tainted",
+								"Witch"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 4,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "14 角色 x 8 阶段独立效果系统"
+		},
+		{
+			"tag": "0.4.1-Beta",
+			"published": "2026-05-21T16:00:39Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 426280271,
+					"name": "monvhua-0.4.1-Beta.jar",
+					"url": "https://github.com/l4nternnn/monvhua-effect/releases/download/0.4.1-Beta/monvhua-0.4.1-Beta.jar",
+					"size": 196451,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "bac3377c5a7c484a18ad3ce281b5de14b0a012c1b8641ec21888a244946a2ba8",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "monvhua",
+							"version": "0.4.1-Beta",
+							"name": "魔女化状态效果",
+							"description": "纯显示用途的魔女化阶段状态效果系统，由 monvhua 计分板驱动。",
+							"minecraft": "~1.21.8",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "768c48de354202a0bc80a19d24d3482adbc9a934f3aeeb5c47334ef8c2ac503c.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"effect": [
+								"High Witchification",
+								"Light Witchification",
+								"Medium Witchification",
+								"Proto-Witch",
+								"Sane",
+								"Severe Witchification",
+								"Tainted",
+								"Witch"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 4,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 0.4.1-Beta\n\n### 此版本包含\n\n**0.4.0**：\n- WITCH（魔女）阶段不再仅靠 90 分触发，改为需要玩家同时持有 `MonvhuaFull` 标签\n\n**0.4.1**：\n- **飞行能力**：同时持有 `Floating` 与 `MonvhuaFull` 标签时，获得创造模式飞行能力（非创造模式），免疫摔落伤害，聊天栏显示深红色提示「您已获得飞行能力，尽情杀戮吧！」\n\n> 注意：服务器 `server.properties` 中需设置 `allow-flight=true`"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [
+		"architecture/monvhua-architecture.png"
+	],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

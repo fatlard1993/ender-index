@@ -1,0 +1,172 @@
+{
+	"repo": "GongSunFangYun/NoMoreZombies",
+	"host": "github",
+	"description": "A assistant mod specifically designed for the Hypixel Zombies mode",
+	"stars": 3,
+	"archived": false,
+	"license": "LGPL-3.0",
+	"created": "2026-08-28T14:29:46Z",
+	"pushed": "2026-10-01T10:57:58Z",
+	"releases": [
+		{
+			"tag": "pre-release-0.2",
+			"published": "2026-10-01T03:17:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 603058592,
+					"name": "NoMoreZombies-0.2.0-pre.jar",
+					"url": "https://github.com/GongSunFangYun/NoMoreZombies/releases/download/pre-release-0.2/NoMoreZombies-0.2.0-pre.jar",
+					"size": 2044020,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "22973dc8bf48a4b9287f5eeec66f902e157cecfa3cf3b2c7785a2e26b91458c8",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "nomorezombies",
+							"version": "0.2.0-pre",
+							"name": "NoMoreZombies",
+							"description": "More Features, Fewer Zombies!",
+							"minecraft": "1.21.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"malilib"
+							],
+							"provides": []
+						}
+					],
+					"icon": "c7abae319a4eadfa01d34aa7dac8cec4164abbb42fb9065682e5e692b19ac943.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 201,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"cn/gsfy/nmz/client/config/ApiKeyCrypto.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"cn/gsfy/nmz/client/data/HypixelApiClient.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"cn/gsfy/nmz/client/utils/AvatarUtils.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"api.mojang.com": [
+								"cn/gsfy/nmz/client/data/HypixelApiClient.class"
+							],
+							"api.hypixel.net": [
+								"cn/gsfy/nmz/client/data/HypixelApiClient.class"
+							],
+							"sessionserver.mojang.com": [
+								"cn/gsfy/nmz/client/data/HypixelApiClient.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# NoMoreZombies 更新日志 / Changelog\n\n各位老东西们，本次更新带来了伤害数字、抽奖统计 HUD、可拖拽计分板，以及全面重做的 HUD 编辑器。以下按类别列出全部改动。\nHey old-timers, this update brings damage numbers, a roll-stats HUD, a draggable scoreboard, and a fully rebuilt HUD editor. All changes are listed below by category.\n\n---\n\n## 新增 / Added\n\n### 伤害数字 / Damage Numbers\n- 击中敌人时弹出红色数字，治疗或复活队友时升起绿色数字。\n- A red number pops off an enemy when you hit it; a green one rises when you heal or revive a teammate.\n- 数字为**实际损失/恢复的血量**，且**只显示数字**——无单位、无文字，秒杀也和其他命中一样显示普通数字。\n- The number is the **health actually lost or gained**, and it is **digits only** — no units, no words; an instakill shows a plain number like any other hit.\n- 默认关闭，开关位于 QoL 页面，可绑定快捷键。\n- Off by default; the toggle sits on the QoL page and can be bound to a hotkey.\n- **渲染模式**（普通 / 穿墙）在 Global 页面设置，与现有的穿墙渲染距离滑块共用——超过该距离后数字不再穿墙显示，和 ESP 框、血条行为一致。\n- Its **render mode** (Normal / Through walls) is on the Global page and shares the existing through-wall render distance slider — past that range a number stops showing through walls, just like the ESP boxes and health bars.\n- 仅在小游戏 Zombies 中生效；\"移除所有粒子\"**不会**影响它——伤害数字不是原版粒子。\n- It only works in a Zombies game, and \"Remove all particles\" does **not** affect it — damage numbers are not vanilla particles.\n\n### 抽奖统计 HUD / Roll Stats HUD\n- 统计你自己的幸运箱抽奖次数，显示每种奖励获得的次数以及是在本局第几次抽奖中获得的，每个奖励名称旁有小图标。\n- Counts your own Lucky Chest rolls and shows how many of each reward you got and at which roll of the game, with a small item icon next to every reward name.\n- 追踪十一种奖励（Zombies 武器 + 两个技能）；没有映射图标的奖励不会被统计。\n- Eleven rewards are tracked (the Zombies weapons plus the two skills); a reward without a mapped icon is not counted.\n- **默认开启**，首次开箱前显示 `Total Rolls 0` 和空表格。\n- It is **on by default** and shows `Total Rolls 0` over an empty table until your first Lucky Chest.\n- 计数**可跨意外退出保留**：退出后重新加入同一局游戏，数据会恢复；开始新游戏则归零。\n- The counts **survive an accidental exit**: quit and rejoin the same game and they come back; starting a new game still zeroes them.\n\n### 可拖拽计分板 HUD / Draggable Scoreboard HUD\n- 原版右侧边栏现在可以像模组自带 HUD 一样移动和缩放。\n- The vanilla right-hand sidebar can now be moved and scaled like the mod's own HUDs.\n- **默认关闭**——在 HUD 编辑器中放置后才会启用；关闭它会隐藏整个边栏。\n- It ships **off** — place it in the HUD editor to use it; turning it off hides the whole sidebar.\n\n### HUD 位置现在与分辨率无关 / HUD Positions Are Now Resolution-Independent\n- 固定在边缘的 HUD 在改变窗口大小、改变 GUI 缩放或在另一台机器上游戏时，仍会停留在该边缘；居中的元素保持居中。\n- A HUD you pinned to an edge stays on that edge when you change the window size, change the GUI scale, or play on another machine; anything centred stays centred.\n- 位置就是你松手的位置——详见下方\"改动\"。\n- Positions are exactly where you let go — see Changed below.\n\n### 全新 HUD 编辑器（三栏工作台）/ New HUD Editor (Three-Pane Workbench)\n- 组件库、画布、操作区三栏布局。\n- Component library, canvas, and action area in a three-pane layout.\n- HUD 通过注册表（`RegisterHUD` + `HudEntry`）注册，新增 HUD 不再需要修改编辑器代码。\n- HUDs register through a registry (`RegisterHUD` + `HudEntry`), so adding a HUD no longer requires editing the editor.\n- 每个元素在组件库和画布上都有固定的样例预览。\n- Every element has a fixed sample preview in the library and on the canvas.\n\n### 难度感知的 Boss 回合检测 / Difficulty-Aware Boss Round Detection\n- 支持普通 / 困难 / 安息三种难度，为全部四张 Zombies 地图提供逐地图、逐难度的 Boss 回合数据（包括外星游乐园的 57 个真实 Boss 回合）。\n- Supports Normal / Hard / RIP with per-map, per-difficulty boss round data for all four Zombies maps (including Alien Arcadium's 57 real boss rounds).\n- 由 Global Overview HUD、RKPM 广播跳过、Boss 回合道具回收三处共用。\n- Shared by the Global Overview HUD, the RKPM broadcast skip, and boss-round powerup reclaiming.\n\n---\n\n## 改动 / Changed\n\n### 编辑器不再自动吸附到边缘或中心 / The Editor No Longer Snaps to an Edge or the Centre\n- 位置就是你松手的位置：拖到距边缘 1 像素处就停在 1 像素处；完全拖到边缘则完全贴合，换分辨率后仍保持贴合。\n- A position is exactly where you let go: drag a HUD to 1 pixel from an edge and it stays 1 pixel away; drag it fully onto an edge and it lands flush, and stays flush on another resolution.\n- **精确居中现在只需一次点击**——使用\"放置\"按钮（或右键点击列表中的条目）。\n\n..."
+		},
+		{
+			"tag": "pre-release-0.1",
+			"published": "2026-08-30T03:05:05Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 536075219,
+					"name": "NoMoreZombies-pre-release-0.1.jar",
+					"url": "https://github.com/GongSunFangYun/NoMoreZombies/releases/download/pre-release-0.1/NoMoreZombies-pre-release-0.1.jar",
+					"size": 354162,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "c103d0181a2aaac377e27d29d99c1099b5e31d87d157c41af0e70d4d99915a87",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "nomorezombies",
+							"version": "pre-release-0.1",
+							"name": "NoMoreZombies",
+							"description": "More Features, Fewer Zombies!",
+							"minecraft": "1.21.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"malilib"
+							],
+							"provides": []
+						}
+					],
+					"icon": "c7abae319a4eadfa01d34aa7dac8cec4164abbb42fb9065682e5e692b19ac943.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 143,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"cn/gsfy/nmz/client/config/ApiKeyCrypto.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"cn/gsfy/nmz/client/data/HypixelApiClient.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"cn/gsfy/nmz/client/util/AvatarManager.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"api.mojang.com": [
+								"cn/gsfy/nmz/client/data/HypixelApiClient.class"
+							],
+							"api.hypixel.net": [
+								"cn/gsfy/nmz/client/data/HypixelApiClient.class"
+							],
+							"sessionserver.mojang.com": [
+								"cn/gsfy/nmz/client/data/HypixelApiClient.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "老大，你走了我们吃什么\n是啊，吃什么"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

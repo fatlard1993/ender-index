@@ -1,0 +1,273 @@
+{
+	"repo": "mattmcbeardface/pages-of-atlas",
+	"host": "github",
+	"description": "Minecraft Fabric mod that enables ultra-high-resolution resource packs by transparently distributing oversized texture atlases across multiple physical atlas pages.",
+	"stars": 5,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-08-17T06:21:37Z",
+	"pushed": "2026-10-11T05:37:20Z",
+	"releases": [
+		{
+			"tag": "v0.4.2-26.3",
+			"published": "2026-10-11T05:37:28Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 629894812,
+					"name": "pagesofatlas-0.4.2-26.3.jar",
+					"url": "https://github.com/mattmcbeardface/pages-of-atlas/releases/download/v0.4.2-26.3/pagesofatlas-0.4.2-26.3.jar",
+					"size": 292336,
+					"downloads": 12,
+					"inspection": 2,
+					"sha256": "a9eeb661a205f4e41cb2b98792e8b5a60cc8ced7ad849e6d9f9753f6a0088b96",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "pagesofatlas",
+							"version": "0.4.2-26.3",
+							"name": "Pages of Atlas",
+							"description": "Client-side support for distributing oversized Minecraft texture atlases across multiple physical GPU texture pages.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"iris",
+								"sodium"
+							],
+							"provides": []
+						}
+					],
+					"icon": "0484f8bf33044c6b42ba21c3cbdb3ae008a12db11c4c9d8537a6212c21b47681.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 98,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Pages of Atlas 0.4.2 — Minecraft 26.3\n\nPages of Atlas 0.4.2 is a correctness release for oversized resource packs on Minecraft 26.3. It preserves one logical atlas while safely splitting oversized block textures across as many as four physical GPU texture pages.\n\n### Highlights\n\n- Minecraft 26.3 and RenderPearl compatibility.\n- GPU-safe virtual block-atlas paging with a 16384×16384 ceiling per physical page.\n- A logical 32768×32768 atlas backed by up to four physical textures.\n- Iris integration for paged diffuse, normal, and specular terrain textures.\n- LabPBR normal/specular mapping, mipmaps, and parallax occlusion mapping support.\n- Shader-independent sampler integration validated with Complementary Unbound and Photon.\n\n### Fixed since 0.4.1\n\n- Prevented large-GPU configurations from bypassing paging and attempting an unsafe monolithic 32768×32768 upload.\n- Added explicit failure when an atlas requires more than four physical pages or when a paged upload cannot complete safely.\n- Preserved authoritative sprite placement during page-anchor selection.\n- Corrected Minecraft 26.3 2D texture allocation for neutral PBR fallback textures.\n- Corrected neutral-normal channel encoding and LabPBR mip generation.\n- Preserved gradient and explicit-LOD sampling for normal, specular, and POM shader paths.\n- Restored Iris sampler units and RenderPearl physical texture-view attachment for all paged diffuse, normal, and specular samplers, including pipeline switches and reloads.\n- Added regression tests for paging policy, allocation contracts, shader transformation, sampler registration, and actual `FrontendRenderPass` texture delivery.\n\n### Validation\n\nRuntime-tested on Minecraft 26.3 with Patrix 256×, all four diffuse pages, full normal/specular/POM rendering, shader switching, Complementary Unbound, and Photon. Automated paging and PBR verification suites also pass from a clean build.\n\n### Known limits\n\n- This artifact is for Minecraft 26.3 only.\n- A logical block atlas is limited to four physical pages.\n- High-resolution PBR pages require substantial VRAM, and initial synchronous page construction can cause temporary rendering stalls.\n- Overflow-page animated PBR companions currently use their initial frame; animation advancement is not yet supported.\n\n### SHA-256\n\n```text\na9eeb661a205f4e41cb2b98792e8b5a60cc8ced7ad849e6d9f9753f6a0088b96  pagesofatlas-0.4.2-26.3.jar\n```\n\nThe existing Minecraft 26.2 release is unchanged."
+		},
+		{
+			"tag": "v0.4.1-26.3",
+			"published": "2026-10-04T04:20:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 609109979,
+					"name": "pagesofatlas-0.4.1-26.3.jar",
+					"url": "https://github.com/mattmcbeardface/pages-of-atlas/releases/download/v0.4.1-26.3/pagesofatlas-0.4.1-26.3.jar",
+					"size": 260086,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "dc7ff26b6d2fdfcd0191c125cea7e704218ebc6cbed2ca62147f7b954e1b0389",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "pagesofatlas",
+							"version": "0.4.1-26.3",
+							"name": "Pages of Atlas",
+							"description": "Client-side support for distributing oversized Minecraft texture atlases across multiple physical GPU texture pages.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"iris",
+								"sodium"
+							],
+							"provides": []
+						}
+					],
+					"icon": "0484f8bf33044c6b42ba21c3cbdb3ae008a12db11c4c9d8537a6212c21b47681.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 81,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Pages of Atlas 0.4.1 — Minecraft 26.3\n\nThis is a hotfix release for the Minecraft 26.3 build of Pages of Atlas.\n\n### Fixed\n\n- Fixed PBR physical-page uploads occurring while Sodium's externally owned terrain RenderPass was still active.\n- Moved deferred PBR page construction to a RenderPearl-safe frame boundary before world rendering begins.\n- Fixed custom item-cutout rendering by declaring the required default color target state.\n- Fixed the RenderPearl color-attachment mismatch that could crash block/item rendering with high-resolution Patrix configurations.\n\n### Validation\n\nValidated on Minecraft 26.3 with:\n\n- Patrix 26.3 resource packs\n- Patrix Bonus Blocks\n- Continuity\n- Sodium\n- Iris\n- Photon with shaders enabled\n- Shaders disabled\n- Runtime resource reloads with F3+T\n\nThe Minecraft 26.2 build is not affected by this hotfix and remains at 0.4.0-26.2."
+		},
+		{
+			"tag": "v0.4.0-26.3",
+			"published": "2026-10-04T01:10:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 608868939,
+					"name": "pagesofatlas-0.4.0-26.3.jar",
+					"url": "https://github.com/mattmcbeardface/pages-of-atlas/releases/download/v0.4.0-26.3/pagesofatlas-0.4.0-26.3.jar",
+					"size": 259110,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "5289165259f29ac48cdb4b25c61e7e65f00063053d1ce42ee397a6cbc149ff21",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "pagesofatlas",
+							"version": "0.4.0-26.3",
+							"name": "Pages of Atlas",
+							"description": "Client-side support for distributing oversized Minecraft texture atlases across multiple physical GPU texture pages.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"iris",
+								"sodium"
+							],
+							"provides": []
+						}
+					],
+					"icon": "0484f8bf33044c6b42ba21c3cbdb3ae008a12db11c4c9d8537a6212c21b47681.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 80,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Pages of Atlas 0.4.0 — Minecraft 26.3\n\n0.4.0 is a major rendering architecture update. It replaces the previous direct multi-page block-atlas model with a production virtual-atlas system for oversized resource packs, and this build ports that architecture to Minecraft 26.3's new rendering stack.\n\n### Virtual atlas architecture\n\n- Added a fixed 32768×32768 logical block-atlas address space backed by four independently allocated physical atlas pages.\n- Each physical page remains within the 16384×16384 GPU texture-size limit.\n- Oversized block atlases automatically use the virtual-atlas renderer.\n- Resource packs that fit on a single physical page continue to use Minecraft's normal single-atlas path.\n- Added logical virtual sprites so Minecraft, Fabric Renderer API, Sodium, and Continuity can operate in one continuous sprite/UV space.\n- Physical sprites remain responsible for actual GPU upload and page-local texture storage.\n- Added generation-aware publication so a new atlas generation does not become active until its physical-page state is ready.\n\n### Terrain and item rendering\n\n- Added dedicated virtual-atlas terrain shaders.\n- Terrain rendering now resolves physical-page ownership from logical atlas UVs and converts to page-local coordinates at render time.\n- Added page-aware block-item rendering across vanilla/Fabric Renderer API, Indigo, and Sodium paths.\n- Added page-aware Sodium extended block-model rendering, including item frames.\n- Updated logical sprite lookup for Fabric Renderer API, Sodium, and Continuity.\n- Preserved correct PBR normal/specular alignment with the corresponding diffuse page.\n- Preserved page-local derivatives and mip selection after virtual-to-physical UV conversion.\n\n### Shader compatibility\n\n- Expanded Iris shader transformation support for virtual-atlas sampling.\n- Fixed Photon POM coordinate routing through the virtual atlas.\n- Fixed Solas compatibility for shader programs with different mid-texture-coordinate inputs.\n- Validated with Photon/POM, Solas, Complementary / Unbound, and Shrimple.\n\n### Minecraft 26.3 port\n\n- Migrated GPU texture, render-pass, pipeline, and bind-group integration to RenderPearl.\n- Added Minecraft 26.3 multidraw terrain support.\n- Added 26.3 OIT/translucency pipeline support.\n- Updated Sodium integration for 0.9.3-alpha.1.\n- Updated Iris integration for 1.11.7.\n- Updated Fabric Renderer API integration for Minecraft 26.3.\n- Updated item rendering for the 26.3 vertex format, including UV3 forwarding.\n- Removed the obsolete manual OpenGL sampler-unit remapping; RenderPearl now manages sampler bindings directly.\n\n### Runtime validation\n\nValidated with:\n\n- Vanilla textures\n- Patrix 128x\n- Sodium\n- Iris\n- Continuity\n- Item frames\n- Runtime resource reloads\n- Photon, including POM\n- Solas\n- Complementary / Unbound\n- Shrimple\n\nA high-resolution Patrix configuration produced a logical 32768×32768 block atlas containing 12,702 sprites while all physical textures remained within the 16384×16384 GPU limit.\n\n### Requirements\n\n- Minecraft 26.3\n- Fabric Loader 0.19.3+\n- Fabric API 0.161.0+\n- Iris 1.11.7+\n- Sodium 0.9.3-alpha.1+\n\nContinuity is optional.\n\n### SHA-256\n\n`5289165259f29ac48cdb4b25c61e7e65f00063053d1ce42ee397a6cbc149ff21`\n\nCompared with the previous v0.3.15 release, 0.4.0-26.3 changes 50 files with 3,674 insertions and 790 deletions."
+		},
+		{
+			"tag": "v0.4.0-26.2",
+			"published": "2026-10-04T01:07:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 608865439,
+					"name": "pagesofatlas-0.4.0-26.2.jar",
+					"url": "https://github.com/mattmcbeardface/pages-of-atlas/releases/download/v0.4.0-26.2/pagesofatlas-0.4.0-26.2.jar",
+					"size": 258426,
+					"downloads": 14,
+					"inspection": 2,
+					"sha256": "7cf71fbb6c1a593da0cf8694d05d68e42d54bccd97bd5ec0a2e3c84d7c03ce2f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "pagesofatlas",
+							"version": "0.4.0-26.2",
+							"name": "Pages of Atlas",
+							"description": "Client-side support for distributing oversized Minecraft texture atlases across multiple physical GPU texture pages.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"iris",
+								"sodium"
+							],
+							"provides": []
+						}
+					],
+					"icon": "0484f8bf33044c6b42ba21c3cbdb3ae008a12db11c4c9d8537a6212c21b47681.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 81,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Pages of Atlas 0.4.0 — Minecraft 26.2\n\n0.4.0 replaces the previous direct multi-page block-atlas rendering model with a production virtual-atlas architecture for oversized resource packs.\n\n### Added\n\n- Added a fixed 32768×32768 logical block-atlas address space backed by four independently allocated physical atlas pages, each capped at 16384×16384.\n- Added automatic virtual-atlas activation when the block atlas requires more than one physical texture.\n- Added logical virtual sprites so Minecraft, Fabric Renderer API, Sodium, and Continuity can operate in one continuous sprite/UV space while Pages of Atlas retains separate physical sprites for GPU upload.\n- Added dedicated virtual-atlas terrain shaders for Minecraft and Sodium.\n- Added page-aware item and block-model rendering for vanilla/Fabric Renderer API, Indigo, and Sodium rendering paths.\n- Added page-aware Sodium extended block-model rendering used by item frames and other block-model feature renderers.\n- Added generation-aware publication of virtual atlas plans and uploads.\n- Added optional virtual-atlas diagnostics for page placement, physical-page routing, and UV conversion.\n\n### Changed\n\n- Reworked oversized block-atlas packing around one logical atlas instead of exposing physical pages directly to normal sprite lookup and rendering.\n- Terrain now derives physical-page ownership from logical atlas UVs and converts those coordinates to page-local UVs at render time.\n- Reworked block-item rendering to resolve the correct physical page per quad.\n- Updated Fabric Renderer API and Indigo quad handling for logical-to-physical page translation.\n- Updated Sodium sprite lookup and terrain rendering for the logical atlas.\n- Updated Continuity CTM lookup to search the combined logical sprite space.\n- Expanded Iris shader transformation support for virtual-atlas UV conversion, physical-page sampling, and PBR companion textures.\n- Preserved normal/specular PBR page alignment with the corresponding diffuse physical page.\n- Removed the previous proof-of-concept activation path; oversized block atlases now select the production virtual renderer automatically.\n- Resource packs that fit on one physical page continue to use Minecraft's normal single-atlas path.\n\n### Fixed\n\n- Fixed item-frame and Sodium extended block-model rendering when a block texture resides on a secondary physical atlas page.\n- Fixed logical sprite lookup for Fabric Renderer API, Sodium, and Continuity while retaining physical page-zero state required by upload and PBR code.\n- Fixed page-local terrain sampling so implicit derivatives and mip selection remain correct after virtual-to-physical UV conversion.\n- Fixed Photon POM coordinate routing through the virtual atlas.\n- Fixed Solas compatibility for shader programs whose mid-texture-coordinate inputs differ from other Iris shader packs.\n\n### Compatibility\n\nValidated on Minecraft 26.2 with high-resolution Patrix resource packs, Sodium, Iris, Continuity, Photon, Solas, and Complementary / Unbound.\n\n### Requirements\n\n- Minecraft 26.2\n- Fabric Loader 0.19.3+\n- Fabric API 0.156.0+\n- Iris 1.11.2+\n- Sodium 0.9.1+\n\n### SHA-256\n\n`7cf71fbb6c1a593da0cf8694d05d68e42d54bccd97bd5ec0a2e3c84d7c03ce2f`"
+		},
+		{
+			"tag": "v0.3.15",
+			"published": "2026-09-08T00:49:40Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 549624867,
+					"name": "pagesofatlas-0.3.15.jar",
+					"url": "https://github.com/mattmcbeardface/pages-of-atlas/releases/download/v0.3.15/pagesofatlas-0.3.15.jar",
+					"size": 224148,
+					"downloads": 21,
+					"inspection": 2,
+					"sha256": "72cc378132e0f9ea98bde33e9db755f84552da9d922652f27f74d7d486ebdbdb",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "pagesofatlas",
+							"version": "0.3.15",
+							"name": "Pages of Atlas",
+							"description": "Client-side support for distributing oversized Minecraft texture atlases across multiple physical GPU texture pages.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"iris",
+								"sodium"
+							],
+							"provides": []
+						}
+					],
+					"icon": "0484f8bf33044c6b42ba21c3cbdb3ae008a12db11c4c9d8537a6212c21b47681.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 69,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Fixes\n\n- Fixes block-item textures on secondary physical atlas pages rendering gray in inventory and hotbar GUI slots.\n- Aligns page-specific item pipelines with Minecraft 26.2's native item shader and complete diffuse, overlay, and lightmap sampler contract.\n- Preserves per-quad physical-page routing for item models whose quads span multiple atlas pages."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

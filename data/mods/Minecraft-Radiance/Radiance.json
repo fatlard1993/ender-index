@@ -1,0 +1,675 @@
+{
+	"repo": "Minecraft-Radiance/Radiance",
+	"host": "github",
+	"description": "Radiance is rebuilt of Minecraft renderer on a Vulkan C++ backend, featuring native Hardware Ray Tracing on Windows & Linux. Break free from OpenGL limits for Minecraft.",
+	"stars": 1166,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2025-12-28T19:38:26Z",
+	"pushed": "2026-09-30T10:51:44Z",
+	"releases": [
+		{
+			"tag": "v0.1.4-alpha",
+			"published": "2026-03-21T21:14:39Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 379050956,
+					"name": "Radiance-0.1.4-alpha-fabric-1.21.4-linux.jar",
+					"url": "https://github.com/Minecraft-Radiance/Radiance/releases/download/v0.1.4-alpha/Radiance-0.1.4-alpha-fabric-1.21.4-linux.jar",
+					"size": 17011179,
+					"downloads": 1988,
+					"inspection": 2,
+					"sha256": "3e3d21eaef7f2644ad85e3286db01dbce3c82fd213804300e3040f67d8470771",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "radiance",
+							"version": "0.1.4-alpha",
+							"name": "Radiance",
+							"description": "A Minecraft mod that uses modern Vulkan C++ as backend renderer.",
+							"minecraft": "1.21.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft"
+							],
+							"provides": [
+								"org_yaml_snakeyaml"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 431,
+						"jars": [
+							"META-INF/jars/snakeyaml-2.5.jar"
+						],
+						"capabilities": {
+							"native": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/lang/System.load"
+								]
+							},
+							"network": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/radiance/client/pipeline/ModuleEntry.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"unsafe": {
+								"com/radiance/client/UnsafeManager.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								]
+							}
+						},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/snakeyaml-2.5.jar!org/yaml/snakeyaml/DumperOptions.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- New features\n  - Pipeline settings rewrite\n    - Add preset mode for simplified settings\n    - Add default module position to avoiod module overlap\n  - Simplified labPBR texture load (No pre-process is necessary)\n  - Tone mapping enhanced\n    - Add center mode (depends on the pixels around cross air) and global mode\n    - Add more mapping methods\n    - Expose more settings\n  - Integrated [Nvidia SHaRC](https://github.com/NVIDIA-RTX/SHARC)\n  - Integrated [XeSS SR](https://github.com/intel/xess) (Windows only)\n  - Ray Tracing module improved\n    - Expose the part of ray tracing shaders for dynamic runtime modification (experimental, WIP)\n    - Optimized the internal RT shaders for less registers and SMs usage\n    - Split reflection and refraction in two paths for better reflection and refraction results\n  - Rewrite NRD module following the [NRD sample](https://github.com/NVIDIA-RTX/NRD-Sample), works fine for reflections with Reblur. Relax will be added in the next versions. \n    - Expose almost all ReBlur settings\n    - Still a little bit noise for refractions. Optimization is WIP.\n  - Add internal emission textures. It is still recommended to use a PBR terxture pack for better experience\n- Issues fix\n  - Fix the bug where it is pure black at certain time\n  - Fix the path for wide character (Although DLSS still needs path with ASCII characters)\n  - Fix the bug of the DLSS mode settings\n  - Remove the selection box and hit box from the tracing path\n  - Fix the incorrect labPBR decode\n  - Fix hand for incorrect render issue\n  - Fix the wrong vulkan texture format\n  - Fix the module shift issue in pipeline mode\n  - Fix memory leakage on host and GPU\n  - Remove the hard dependency on DLSS. If the DLSS libs are absent, it will default to NRD.\n  - Fixed the missing biome texture for grass block sides."
+		},
+		{
+			"tag": "v0.1.3-alpha",
+			"published": "2026-02-10T01:10:38Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 353337936,
+					"name": "Radiance-0.1.3-alpha-fabric-1.21.4-linux.jar",
+					"url": "https://github.com/Minecraft-Radiance/Radiance/releases/download/v0.1.3-alpha/Radiance-0.1.3-alpha-fabric-1.21.4-linux.jar",
+					"size": 13327413,
+					"downloads": 2160,
+					"inspection": 2,
+					"sha256": "f55bdf2dd7a338544f60e92cc415e1ba5094c38e96791384e9b8ba674d19244a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "radiance",
+							"version": "0.1.3-alpha",
+							"name": "Radiance",
+							"description": "A Minecraft mod that uses modern Vulkan C++ as backend renderer.",
+							"minecraft": "1.21.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft"
+							],
+							"provides": [
+								"org_yaml_snakeyaml"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 417,
+						"jars": [
+							"META-INF/jars/snakeyaml-2.5.jar"
+						],
+						"capabilities": {
+							"native": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/lang/System.load"
+								]
+							},
+							"network": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/radiance/client/pipeline/ModuleEntry.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"unsafe": {
+								"com/radiance/client/UnsafeManager.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								]
+							}
+						},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/snakeyaml-2.5.jar!org/yaml/snakeyaml/DumperOptions.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 355515172,
+					"name": "Radiance-0.1.3-alpha-fabric-1.21.4-windows-debug.jar",
+					"url": "https://github.com/Minecraft-Radiance/Radiance/releases/download/v0.1.3-alpha/Radiance-0.1.3-alpha-fabric-1.21.4-windows-debug.jar",
+					"size": 16177762,
+					"downloads": 1180,
+					"inspection": 2,
+					"sha256": "43ea6f86f038ed7004b961d80b431ffa8190ef4ad38d064dc29f49d38b41ab4e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "radiance",
+							"version": "0.1.3-alpha",
+							"name": "Radiance",
+							"description": "A Minecraft mod that uses modern Vulkan C++ as backend renderer.",
+							"minecraft": "1.21.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft"
+							],
+							"provides": [
+								"org_yaml_snakeyaml"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 417,
+						"jars": [
+							"META-INF/jars/snakeyaml-2.5.jar"
+						],
+						"capabilities": {
+							"native": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/lang/System.load"
+								]
+							},
+							"network": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/radiance/client/pipeline/ModuleEntry.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"unsafe": {
+								"com/radiance/client/UnsafeManager.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								]
+							}
+						},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/snakeyaml-2.5.jar!org/yaml/snakeyaml/DumperOptions.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 353338258,
+					"name": "Radiance-0.1.3-alpha-fabric-1.21.4-windows.jar",
+					"url": "https://github.com/Minecraft-Radiance/Radiance/releases/download/v0.1.3-alpha/Radiance-0.1.3-alpha-fabric-1.21.4-windows.jar",
+					"size": 14897566,
+					"downloads": 9312,
+					"inspection": 2,
+					"sha256": "6a5587a6840b28993619aeb1c9702d98d6477ca0c2c082557b526ce75c96b3c6",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "radiance",
+							"version": "0.1.3-alpha",
+							"name": "Radiance",
+							"description": "A Minecraft mod that uses modern Vulkan C++ as backend renderer.",
+							"minecraft": "1.21.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft"
+							],
+							"provides": [
+								"org_yaml_snakeyaml"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 417,
+						"jars": [
+							"META-INF/jars/snakeyaml-2.5.jar"
+						],
+						"capabilities": {
+							"native": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/lang/System.load"
+								]
+							},
+							"network": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/radiance/client/pipeline/ModuleEntry.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"unsafe": {
+								"com/radiance/client/UnsafeManager.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								]
+							}
+						},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/snakeyaml-2.5.jar!org/yaml/snakeyaml/DumperOptions.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Thank you for your patient. We can finally release our first alpha version v0.1.3.\n\n* add dynamic pipeline with modularized render blocks\n* CPU bottleneck issue solved (1.5x performance gain now)\n* UI issue solved\n* PBR texture packs supported\n* update to the latest DLSS version\n* added experimental NRD and FSR3 for non-nvidia users\n* fix the bug where glowing particles appear problematic\n* fix the bug where the particles get through at the corners\n* fix the bug where the banner and shield patterns are not displayed correctly\n* fix the bug where the boats are not rendered correctly\n* fix the bug where the end portal and gateway are pure gray\n* optimize the world loading and VRAM usage"
+		},
+		{
+			"tag": "v0.1.2-preview",
+			"published": "2026-01-05T02:23:10Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 336367535,
+					"name": "Radiance-0.1.2-preview-fabric-1.21.4-linux.jar",
+					"url": "https://github.com/Minecraft-Radiance/Radiance/releases/download/v0.1.2-preview/Radiance-0.1.2-preview-fabric-1.21.4-linux.jar",
+					"size": 19701823,
+					"downloads": 1548,
+					"inspection": 2,
+					"sha256": "374a987faf2fea15952568c8b8fe2fd7b5b73c64492bbf0b207070e98baaad2e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "radiance",
+							"version": "0.1.2-preview",
+							"name": "Radiance",
+							"description": "A Minecraft mod that uses modern Vulkan C++ as backend renderer.",
+							"minecraft": "1.21.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 148,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/lang/System.load"
+								]
+							},
+							"network": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"com/radiance/client/UnsafeManager.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 336364941,
+					"name": "Radiance-0.1.2-preview-fabric-1.21.4-windows.jar",
+					"url": "https://github.com/Minecraft-Radiance/Radiance/releases/download/v0.1.2-preview/Radiance-0.1.2-preview-fabric-1.21.4-windows.jar",
+					"size": 8000758,
+					"downloads": 10717,
+					"inspection": 2,
+					"sha256": "6dbb141c7ec36ff41e63aab0b307e681ced42db471ccde14799da109a60edba7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "radiance",
+							"version": "0.1.2-preview",
+							"name": "Radiance",
+							"description": "A Minecraft mod that uses modern Vulkan C++ as backend renderer.",
+							"minecraft": "1.21.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 148,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/lang/System.load"
+								]
+							},
+							"network": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"com/radiance/client/UnsafeManager.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "* Screenshot functionality is now available\n* Tuned the exposure algorithm for better sensitivity to bright areas, leading to less over-exposure\n\n**What's Next**: This marks the last preview before alpha (where the code will be available). We are shifting focus to a new development phase, which planned to introduce:\n* totally refactor the rendering pipeline to a modularized and customizable one\n* PBR texture pack support\n* Support for more industrial modules (e.g., FSR, NRD)\n* Fixes for known bugs\n\nThank you for your feedback so far. Stay tuned, and we look forward to sharing more with you (hopefully) soon!"
+		},
+		{
+			"tag": "v0.1.1-preview",
+			"published": "2026-01-02T17:23:04Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 335569859,
+					"name": "Radiance-0.1.1-preview-fabric-1.21.4-linux.jar",
+					"url": "https://github.com/Minecraft-Radiance/Radiance/releases/download/v0.1.1-preview/Radiance-0.1.1-preview-fabric-1.21.4-linux.jar",
+					"size": 19605941,
+					"downloads": 632,
+					"inspection": 2,
+					"sha256": "8ca6a4111e538733ba39e92f1b608d3bdff26a7bde472ef981aab36d3613ee43",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "radiance",
+							"version": "0.1.1-preview",
+							"name": "Radiance",
+							"description": "A Minecraft mod that uses modern Vulkan C++ as backend renderer.",
+							"minecraft": "1.21.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 146,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/lang/System.load"
+								]
+							},
+							"network": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"com/radiance/client/UnsafeManager.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 335565773,
+					"name": "Radiance-0.1.1-preview-fabric-1.21.4-windows.jar",
+					"url": "https://github.com/Minecraft-Radiance/Radiance/releases/download/v0.1.1-preview/Radiance-0.1.1-preview-fabric-1.21.4-windows.jar",
+					"size": 7997582,
+					"downloads": 3841,
+					"inspection": 2,
+					"sha256": "ed58e8771912a0c91cb30f06bb20aeb2f90f33e538014a7cc92bb264129fac1a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "radiance",
+							"version": "0.1.1-preview",
+							"name": "Radiance",
+							"description": "A Minecraft mod that uses modern Vulkan C++ as backend renderer.",
+							"minecraft": "1.21.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 146,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/lang/System.load"
+								]
+							},
+							"network": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"com/radiance/client/UnsafeManager.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "* Fixed the issue of frame flashback when moving"
+		},
+		{
+			"tag": "v0.1.0-preview",
+			"published": "2026-01-01T14:05:47Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 335531632,
+					"name": "Radiance-0.1.0-preview-fabric-1.21.4-linux.jar",
+					"url": "https://github.com/Minecraft-Radiance/Radiance/releases/download/v0.1.0-preview/Radiance-0.1.0-preview-fabric-1.21.4-linux.jar",
+					"size": 19534677,
+					"downloads": 97,
+					"inspection": 2,
+					"sha256": "391d7e1ba0c3f3e1e138f89d3f86bf3f89731d5dddeca4bde8a8ce20204d3ba5",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "radiance",
+							"version": "0.1.0-preview",
+							"name": "Radiance",
+							"description": "A Minecraft mod that uses modern Vulkan C++ as backend renderer.",
+							"minecraft": "1.21.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 146,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/lang/System.load"
+								]
+							},
+							"network": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"com/radiance/client/UnsafeManager.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 335192119,
+					"name": "Radiance-0.1.0-preview-fabric-1.21.4-windows.jar",
+					"url": "https://github.com/Minecraft-Radiance/Radiance/releases/download/v0.1.0-preview/Radiance-0.1.0-preview-fabric-1.21.4-windows.jar",
+					"size": 7993786,
+					"downloads": 872,
+					"inspection": 2,
+					"sha256": "06e202f65c115a4f25ec1439760e08914156790724db54ba15c51062303f7ad7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "radiance",
+							"version": "0.1.0-preview",
+							"name": "Radiance",
+							"description": "A Minecraft mod that uses modern Vulkan C++ as backend renderer.",
+							"minecraft": "1.21.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 146,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/lang/System.load"
+								]
+							},
+							"network": {
+								"com/radiance/client/RadianceClient.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"com/radiance/client/UnsafeManager.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "* First public preview version\n* Full Vulkan rendering backend implementation\n* Basic hardware ray tracing, and path tracing support. Features DLSS 4."
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "buy_me_a_coffee",
+			"url": "https://buymeacoffee.com/radiance.mod"
+		}
+	],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [
+		".assets/cover-0.1.6.png"
+	],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

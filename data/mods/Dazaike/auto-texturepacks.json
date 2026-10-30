@@ -1,0 +1,67 @@
+{
+	"repo": "Dazaike/auto-texturepacks",
+	"host": "github",
+	"description": "Fabric mod: auto-reapplies your resource/texture packs in saved order shortly after the game loads",
+	"stars": 0,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-09-12T23:28:39Z",
+	"pushed": "2026-09-12T23:28:47Z",
+	"releases": [
+		{
+			"tag": "v1.0.0",
+			"published": "2026-09-12T23:28:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 560133619,
+					"name": "auto-texturepacks-1.0.0.jar",
+					"url": "https://github.com/Dazaike/auto-texturepacks/releases/download/v1.0.0/auto-texturepacks-1.0.0.jar",
+					"size": 63548,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "7b960424eb1861905792c0a632c96bf166d83ad0200d164165cdd39c09fcc645",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "auto-texturepacks",
+							"version": "1.0.0",
+							"name": "Auto Texture Packs",
+							"description": "Re-applies your resource/texture packs in the saved order shortly after the game finishes loading.",
+							"minecraft": "26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "99b4e86c9aa0e04c6df13a7ab97bb69ed2b9f50258f7c0be0afb23e2b11fd442.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 9,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [v1.0.0] - 2026-09-12\n\nInitial release. No prior tag exists, so this covers the full history of the project to date.\n\n### Added\n\n- Client-only Fabric mod scaffold for Minecraft 26.1.2 + Fabric Loader `0.19.5`, built with Fabric Loom `1.17` and Gradle `9.5.1`, targeting Java 25 (auto-provisioned via the Foojay toolchain resolver when the host JDK is older).\n- `AutoPacksConfig`: JSON-persisted settings (`enabled`, `delaySeconds` clamped 0–30s, `notifyOnApply`, `skipIfAlreadyApplied`, `snapshot`) stored at `config/auto-texturepacks.json`; corrupt/missing config falls back to defaults without crashing.\n- `PackSnapshot`: captures the current resource-pack selection, in order, excluding Minecraft's \"required\" packs (vanilla plus every mod's own auto-registered resource pack) so counts and comparisons only ever reflect real, user-toggleable packs.\n- `AutoApplyScheduler`: arms a one-shot countdown on game start (only when enabled and a snapshot exists) and fires exactly once per launch, regardless of which screen is showing.\n- `PackApplier`: re-selects the saved pack order, skips the reload when the current selection already matches (configurable), reports packs that went missing since the snapshot was taken, and shows a toast/chat notification summarizing what happened.\n- `AutoPacksConfigScreen`: vanilla-widget settings screen — enable toggle, delay slider, notification toggle, skip-if-match toggle, read-only saved-order list, and **Use current pack order** / **Apply now** / **Done** buttons.\n- Mod Menu integration (`ModMenuIntegration`) as the only entry point to the settings screen — no vanilla Options button, no chat command.\n- Mod icon.\n\n### Fixed\n\nIssues found and resolved during development, before this first release:\n\n- Snapshot capture and pack-apply comparisons no longer count Minecraft's auto-included \"required\" packs (vanilla + every mod's own resource pack, ~48 entries) as part of the saved order — previously this could silently wipe a real pack selection while reporting a misleading \"48 packs applied\".\n- Removed automatic snapshot capture on game close (`CLIENT_STOPPING`): it could silently overwrite a deliberately saved pack order with whatever happened to be selected (or not selected) at the moment the player quit. The saved order now only changes via the explicit **Use current pack order** button.\n- A manual **Apply now** click no longer leaves the scheduled auto-apply timer pending; without this, the timer could fire again shortly after a manual apply and redundantly reload with no visible change.\n- Pack reloads are now forced immediately instead of using Minecraft's deferrable public `reloadResourcePacks()` API, which silently postpones the reload while the boot loading overlay is still showing (routinely true when the auto-apply timer fires) and flushes it later on its own — this was the source of an apparent \"double apply\" with no mod involvement in the second reload."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

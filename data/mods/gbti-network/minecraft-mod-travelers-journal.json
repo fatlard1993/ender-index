@@ -1,0 +1,299 @@
+{
+	"repo": "gbti-network/minecraft-mod-travelers-journal",
+	"host": "github",
+	"description": "Server side fabric mod from Travelers' series. Creates book that can be given on join that has dynamic contents controlled by the admin. ",
+	"stars": 1,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2024-12-29T17:33:51Z",
+	"pushed": "2026-10-18T16:18:38Z",
+	"releases": [
+		{
+			"tag": "v2.0.0",
+			"published": "2026-10-18T02:35:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 652252490,
+					"name": "travelers-journal-2.0.0.jar",
+					"url": "https://github.com/gbti-network/minecraft-mod-travelers-journal/releases/download/v2.0.0/travelers-journal-2.0.0.jar",
+					"size": 855598,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "66d05f27f64dba24900b497d5ccf9bc032f28d0022fbf71242b7c33d967ec738",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "travelers-journal",
+							"version": "2.0.0",
+							"name": "Traveler's Journal",
+							"description": "A Minecraft mod that adds a server-wide journal, perfect for server lore, rules, or information sharing.",
+							"minecraft": ">=1.20 <1.20.2- || >=1.20.2 <1.20.5- || >=1.21 <1.21.2- || >=1.21.2 <1.21.5- || >=1.21.5 <1.21.6- || >=1.21.6 <1.21.11- || 1.21.11 || >=26.1 <26.3- || >=26.3 <26.4-",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"travelers-journal-mc"
+							],
+							"provides": [
+								"travelers-journal-mc",
+								"travelers-journal-mc",
+								"travelers-journal-mc",
+								"travelers-journal-mc",
+								"travelers-journal-mc",
+								"travelers-journal-mc",
+								"travelers-journal-mc",
+								"travelers-journal-mc",
+								"travelers-journal-mc"
+							]
+						}
+					],
+					"icon": "b87ea378c2442d544dcedbc6555ed2de39c9e79e68d1e3ecee47eb3ffdc6de5f.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 135,
+						"jars": [
+							"META-INF/jars/travelers-journal-2.0.0+mc1.20-1.20.1.jar",
+							"META-INF/jars/travelers-journal-2.0.0+mc1.20.2-1.20.4.jar",
+							"META-INF/jars/travelers-journal-2.0.0+mc1.21-1.21.1.jar",
+							"META-INF/jars/travelers-journal-2.0.0+mc1.21.2-1.21.4.jar",
+							"META-INF/jars/travelers-journal-2.0.0+mc1.21.5.jar",
+							"META-INF/jars/travelers-journal-2.0.0+mc1.21.6-1.21.10.jar",
+							"META-INF/jars/travelers-journal-2.0.0+mc1.21.11.jar",
+							"META-INF/jars/travelers-journal-2.0.0+mc26.1-26.2.jar",
+							"META-INF/jars/travelers-journal-2.0.0+mc26.3.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"github.com": [
+								"META-INF/jars/travelers-journal-2.0.0+mc1.20-1.20.1.jar!com/gbti/JournalCommands.class",
+								"META-INF/jars/travelers-journal-2.0.0+mc1.20.2-1.20.4.jar!com/gbti/JournalCommands.class",
+								"META-INF/jars/travelers-journal-2.0.0+mc1.21-1.21.1.jar!com/gbti/JournalCommands.class",
+								"META-INF/jars/travelers-journal-2.0.0+mc1.21.2-1.21.4.jar!com/gbti/JournalCommands.class",
+								"META-INF/jars/travelers-journal-2.0.0+mc1.21.5.jar!com/gbti/JournalCommands.class",
+								"META-INF/jars/travelers-journal-2.0.0+mc1.21.6-1.21.10.jar!com/gbti/JournalCommands.class",
+								"META-INF/jars/travelers-journal-2.0.0+mc1.21.11.jar!com/gbti/JournalCommands.class",
+								"META-INF/jars/travelers-journal-2.0.0+mc26.1-26.2.jar!com/gbti/JournalCommands.class",
+								"META-INF/jars/travelers-journal-2.0.0+mc26.3.jar!com/gbti/JournalCommands.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Runs on Minecraft 1.20 to 1.20.4 and every version from 1.21 to 26.3, from one jar. It carries a build for each range of versions, and Fabric loads the one that matches the server, so moving a server to another supported version keeps the same jar.\n- The journal is built directly as a book instead of through a /give command, so its text works on Minecraft 1.21.5 and later and no longer breaks on a backslash in the journal file.\n- Quotes and apostrophes appear exactly as typed in the journal file; they are no longer turned into curly quotes.\n- Using the journal from the offhand refreshes it there, and no longer replaces the item in the selected hotbar slot.\n- Using a journal after its text changed opens the new text straight away. Earlier releases showed the old text once more and the new text only the second time.\n- A journal title longer than 32 characters, Minecraft's limit for book titles, is shortened instead of stopping the book from being given.\n- Several named journals. The journal you have becomes `default`, read from the same files; others live in `config/travelers-journal/journals/<id>/`, and each can go to every new player once or be given only by command.\n- An in-game journal manager on Minecraft 1.21.6 and later: `/journals` opens a list of every journal, and the editor sets each one's title, author, first-join rule and text, with a preview of its pages laid out as the book shows them. The editor, preview and delete screens show the journal's book as an icon, its tooltip giving the title and author. On older versions the journals are edited as files, as before.\n- New commands: `/journals list`, `create <id>`, `delete <journal>` (the folder moves to a backup, and copies players carry stay as signed books), `edit [journal]`, and `give <players> [journal]`.\n- `/journals` works as a shorter name for `/travelers_journal`. Typed on its own, either name opens the manager in game or lists the commands, instead of failing as an incomplete command.\n- Typed without what it needs, `/journals create`, `give` or `delete` shows its usage with an example, instead of failing as an incomplete command.\n- The help says what a journal's id is: a short name such as `rules`, used by the commands and as its folder's name. On 1.20 to 1.21.5, where there is no manager, the help and `/journals create` link to the README's guide to managing journals by file.\n- New journals, and the default journal on a fresh install, start with a bold title. The markup has never read `#` as a heading, so those lines showed the `#` as typed. Existing files are left as they are.\n- `operator_level` in `config.txt` sets who may use the commands and the manager (level 2 by default), and `/journals reload` applies a change. `give_on_join` in `config.txt` switches the default journal on or off for new players.\n- Minecraft 1.20 to 1.20.4 are supported for the first time, on Java 17 or newer. Journals there are edited as files. A world moved from one of them to a later Minecraft keeps its journals: each copy still belongs to its journal and refreshes when used.\n- Reloading no longer reads the join list in a second time.\n- Pages break where the book wraps them, so a long line no longer pushes text off the bottom of a page, where the book hid it. A journal whose pages already fit is unchanged.\n- The mod's metadata names its GPL-3.0 licence and links the project page and source code.\n- Needs Fabric Loader 0.16.10 or newer, the oldest that current Fabric API runs on.\n- The web preview that earlier READMEs described is gone. No release ever installed it, and on 1.21.6 and later the in-game manager previews the pages instead.\n- Players who join during a server's first start after installing now get the journal. Earlier versions wrote their default files without reading them back, so those players were marked as served and given nothing.\n\n..."
+		},
+		{
+			"tag": "v1.2.12",
+			"published": "2026-10-18T02:34:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 652251883,
+					"name": "travelers-journal-1.2.12.jar",
+					"url": "https://github.com/gbti-network/minecraft-mod-travelers-journal/releases/download/v1.2.12/travelers-journal-1.2.12.jar",
+					"size": 137891,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "0373affc0fbd81caa33d8e87cd77b4b6ff52230ba458166028b2acb216993277",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "travelers-journal",
+							"version": "1.2.12",
+							"name": "Traveler's Journal",
+							"description": "A Minecraft mod that adds a server-wide journal, perfect for server lore, rules, or information sharing.",
+							"minecraft": ">=1.21 <1.21.2",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 5,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Declares the Minecraft versions this build really runs on: 1.21 and 1.21.1.\n\nVersion 1.2.11 declared every 1.21.x release, but it crashes at startup on 1.21.2 and later. On those versions Fabric now refuses this jar with a clear message instead of a crash. 1.21 is newly supported: tested and working.\n\nSame compiled code as 1.2.11; only the mod's metadata changed. Traveler's Journal 2.0.0, released the same day, runs on Minecraft 1.20 to 1.20.4 and 1.21 to 26.3."
+		},
+		{
+			"tag": "v1.2.11",
+			"published": "2025-01-11T23:52:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 219735648,
+					"name": "travelers-journal-1.2.11.jar",
+					"url": "https://github.com/gbti-network/minecraft-mod-travelers-journal/releases/download/v1.2.11/travelers-journal-1.2.11.jar",
+					"size": 138223,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "510b8b804394fd8fbe0c3a6ed99b039cc96ab79be04e9c57d25fad2e5875baa6",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "travelers-journal",
+							"version": "1.2.11",
+							"name": "Traveler's Journal",
+							"description": "A Minecraft mod that adds a server-wide journal, perfect for server lore, rules, or information sharing.",
+							"minecraft": "~1.21.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 5,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Cleaning up dev files and folders"
+		},
+		{
+			"tag": "v1.2.10",
+			"published": "2025-01-10T03:07:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 219318032,
+					"name": "travelers-journal-1.2.10.jar",
+					"url": "https://github.com/gbti-network/minecraft-mod-travelers-journal/releases/download/v1.2.10/travelers-journal-1.2.10.jar",
+					"size": 138223,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "85cec04ed3b24f5c9cfde09305d35c8b92991b1e7270a9f8148f19fd7992bc8b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "travelers-journal",
+							"version": "1.2.10",
+							"name": "Traveler's Journal",
+							"description": "A Minecraft mod that adds a server-wide journal, perfect for server lore, rules, or information sharing.",
+							"minecraft": "~1.21.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 5,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Cleaning up dev files and folders"
+		},
+		{
+			"tag": "v1.2.5",
+			"published": "2024-12-31T02:44:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 216877456,
+					"name": "travelers-journal-1.2.5.jar",
+					"url": "https://github.com/gbti-network/minecraft-mod-travelers-journal/releases/download/v1.2.5/travelers-journal-1.2.5.jar",
+					"size": 32962,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "412becc38eb838dc6e61209845daa569c64337d3a2ba91715505248736c35b56",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "travelers-journal",
+							"version": "1.2.5",
+							"name": "Traveler's Journal",
+							"description": "A Minecraft mod that adds a server-wide journal, perfect for server lore, rules, or information sharing.",
+							"minecraft": "~1.21.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 5,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Added support for legacy book titles\n- Added debugging logging system that can be enabled/disabled\n- Initial release with basic journal functionality\n- Added configuration support for customizing journal title and author\n- Implemented give-at-first-join functionality\n- Syncronizes journal content with markdown resource file."
+		}
+	],
+	"readme": "README.MD",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [
+		".product/screenshots/screenshot-1.png",
+		".product/screenshots/screenshot-2.png",
+		".product/screenshots/screenshot-3.png"
+	],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

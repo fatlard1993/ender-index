@@ -1,0 +1,123 @@
+{
+	"repo": "Arilas/urbex",
+	"host": "github",
+	"description": "Procedural abandoned-city worldgen for Minecraft (Fabric)",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-08-02T18:31:25Z",
+	"pushed": "2026-09-15T13:05:33Z",
+	"releases": [
+		{
+			"tag": "v0.2.0",
+			"published": "2026-08-12T10:22:52Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 511412936,
+					"name": "urbex-fabric-26.2-0.2.0.jar",
+					"url": "https://github.com/Arilas/urbex/releases/download/v0.2.0/urbex-fabric-26.2-0.2.0.jar",
+					"size": 1345727,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "f856c8889f316019b9770de93099d8b623b01cc420e4a87561a888e8ecd89ee8",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "urbex",
+							"version": "26.2-0.2.0",
+							"name": "Urbex",
+							"description": "Procedural abandoned-city worldgen. A fork of Lost Cities by McJty.",
+							"minecraft": "26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "d5da739962131c7b3423acab2ff9cef9b40eaebf470a7e9129b58161cdfaa12e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 310,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Urbex** is procedural abandoned-city worldgen for Fabric — a hard fork of [Lost Cities](https://github.com/McJtyMods/LostCities) by McJty (MIT).\n\n**Minecraft 26.2 · Fabric Loader 0.19.3+ · Fabric API 0.155.2+ · Java 25**\n\n> **Beta.** 245 commits since the 0.1.0 alpha. The mod is in much better shape — cities have street hierarchy, everything it generates comes out of datapacks you can edit, and a fixed-seed digest check guards worldgen on every commit. It is still pre-1.0: **worlds made with 0.2.0 are not guaranteed to generate identically on a later version**, and 0.1.0 worlds will not continue as they were.\n\n## Cities have streets now\n\n0.1.0 decided street-or-park with a per-chunk coin flip, so a city was a blob of buildings with pavement scattered through it. 0.2.0 plans the road network first: **primary roads** on a coarse grid with their own density, **secondary roads** filling the blocks between them, **tertiary stubs** reaching into the remainder. Building lots are what is left over, not what won a toss.\n\nRiding on that: primary roads **bridge water** on planned spans rather than stopping at the shoreline, and minor roads **slope** between city levels instead of stepping.\n\n## Everything is a datapack\n\nThe old `UrbexProfile` / `Configuration` / TOML machinery is gone. Worldgen tuning is now a **preset** — a datapack registry entry with a real codec — and so is every building, part, palette, city style and decoration. Thirteen registries, all following one set of rules:\n\n- **`extends` everywhere.** Any asset can build on another, field by field, root first. A file only has to state what it changes.\n- **Every reference names its namespace.** `urbex:street_straight`, never `street_straight`. No asset reference has a code-side default, so a chain that never says which part a T-junction places refuses the world instead of quietly placing Urbex's.\n- **Broken packs fail at load, naming the file.** Missing required wiring, an `extends` cycle, a mis-sized slice row, a palette marker that is not one character — all of it is a refusal while the world loads, not an exception from a worldgen worker halfway through a chunk.\n- **[`docs/datapacks.md`](https://github.com/Arilas/urbex/blob/main/docs/datapacks.md)** is the authoring guide for all thirteen, and its JSON examples and quoted error messages are checked against the codecs by the test suite, so it cannot rot.\n\n## Picking a preset\n\nThe world-creation screen has a **Cities** tab. **Disabled** is the default and leaves the world completely alone. Pick a preset, or **Customize this preset…** to edit a copy — the edited version is stored **in the world**, not in your config, so a save carries its own worldgen settings and re-creating a world keeps them.\n\nServer owners: `dimensionsWithPresets` in `config/urbex/urbex.json`, as `minecraft:overworld=urbex:default` (or `…=urbex:default@urbex:standard` to also name a world style). Ids must name their namespace.\n\n## Also in this release\n\n- **`/urbex savepreset`** dumps the dimension's live, fully-resolved preset — after inheritance and after your customizations — as JSON you can ship as a datapack.\n- **Worldgen is verified on every commit.** A headless fixed-seed server generates a chunk square and hashes what the block driver wrote; CI fails if it moves. It has caught real determinism regressions during this cycle, and it is what makes \"this change does not move worldgen\" a checked claim rather than a hope.\n- **Decoration reaches the spawn area.** Assets used to load on the first server tick, after the spawn chunks had already generated undecorated.\n- **Cross-chunk reads are gone**, and with them the errors they logged.\n- **A mod icon**, so Mod Menu no longer shows a blank tile.\n\n## Breaking — read before upgrading\n\n\n..."
+		},
+		{
+			"tag": "v0.1.0",
+			"published": "2026-08-03T00:56:01Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 499434696,
+					"name": "urbex-fabric-26.2-26.2-0.1.0.jar",
+					"url": "https://github.com/Arilas/urbex/releases/download/v0.1.0/urbex-fabric-26.2-26.2-0.1.0.jar",
+					"size": 1241549,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "9a38ff9b676fc92019ab9ec7ab7753b007b5aa994af15bc56ce25e7ff05d9c4c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "urbex",
+							"version": "26.2-0.1.0",
+							"name": "Urbex",
+							"description": "Procedural abandoned-city worldgen. A fork of Lost Cities by McJty.",
+							"minecraft": "26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"forgeconfigapiport",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"dimension",
+							"loot_table",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 234,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First preview of **Urbex**, a Fabric-only hard fork of [Lost Cities](https://github.com/McJtyMods/LostCities) by McJty (MIT).\n\n**Minecraft 26.2 · Fabric Loader 0.19.3+ · Fabric API · Forge Config API Port · Java 25**\n\n> **Alpha.** It generates and it runs. This release exists to get it in front of people, not because it is finished. Worlds made with 0.1.0 are not guaranteed to generate identically on a later version.\n\n## Why this fork exists\n\nLost Cities' worldgen was not reproducible from the world seed — in three separate ways:\n\n- One `RandomSource` was shared across every chunk in a dimension and reseeded *after* city generation had already drawn from it, so ruins and part selection consumed the previous chunk's leftover state.\n- Rubble and leaf placement ran off a `static int` no world seed ever touched.\n- **City placement ignored the seed entirely.** Every world on a given profile put its cities in identical chunks at identical radii. Changing the seed did not move a single city.\n\nAll three are fixed. Randomness is now *addressed* — a stream is a pure function of the seed, a coordinate and a named purpose — so generation order cannot influence output.\n\n## Also here\n\n- **Parallel worldgen restored.** The per-dimension generation lock is gone, along with the shared mutable state that required it.\n- **World height.** Six sites assumed a 0–255 world; they now read the level's real bounds.\n- **Profiles are editable.** Previously the mod rewrote every profile JSON on launch and *then* read the directory, so your edits were overwritten before they were seen.\n- **Startup.** An unknown `selectedProfile` fails at server start with the valid names listed, instead of an NPE during world init.\n\n## Getting started\n\nCities generate in the `urbex:city` dimension by default. To get them in a normal overworld, use the **Cities** button on the world-creation screen. `/urbex` (or `/ubx`) has the commands.\n\n## Not compatible with Lost Cities\n\nDifferent mod id, namespace, saved-data ids and dimension. Lost Cities worlds, datapacks and configs will not load, and a Lost Cities seed will not reproduce here. That is deliberate.\n\n## Known limitations\n\nTracked openly rather than hidden — #18 (a small residual order-dependence), #19, #20, #29 (an upstream highway-symmetry bug, not introduced here), and #21–#28, #30.\n\nFull detail in [CHANGELOG.md](https://github.com/Arilas/urbex/blob/main/CHANGELOG.md)."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

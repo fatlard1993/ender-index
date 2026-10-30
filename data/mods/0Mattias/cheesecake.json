@@ -1,0 +1,468 @@
+{
+	"repo": "0Mattias/cheesecake",
+	"host": "github",
+	"description": "baritone re-port experiment",
+	"stars": 3,
+	"archived": false,
+	"license": "LGPL-3.0",
+	"created": "2026-03-09T06:05:42Z",
+	"pushed": "2026-10-26T03:29:35Z",
+	"releases": [
+		{
+			"tag": "v0.6.0",
+			"published": "2026-09-12T20:44:31Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 559927061,
+					"name": "cheesecake-0.6.0.jar",
+					"url": "https://github.com/0Mattias/cheesecake/releases/download/v0.6.0/cheesecake-0.6.0.jar",
+					"size": 928467,
+					"downloads": 9,
+					"inspection": 2,
+					"sha256": "18d4bfbcc5222398f88a147d88e5f23553548319885bcd8df0073f13ebb4bfbc",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cheesecake",
+							"version": "0.6.0",
+							"name": "Cheesecake",
+							"description": "Google Maps for Blockgame. A fork of Baritone (cabaletta/baritone) for Fabric.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "8db105e308e95c7ba8527fc4c23d68ce56aa9b2def9eb052be8982324c2efc2a.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 502,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"cheesecake/agent/AgentApi$Client.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close"
+								]
+							},
+							"exec": {
+								"cheesecake/api/utils/NotificationHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"cheesecake/api/utils/Helper.class",
+								"cheesecake/cache/WorldProvider.class"
+							],
+							"www.dominos.com": [
+								"cheesecake/command/ExampleCheesecakeControl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What changed\n\n- **The Nether pathfinder is Java.** babbaj's [nether-pathfinder](https://github.com/babbaj/nether-pathfinder) — the terrain generator, the raytracer, the A* search, the chunk cache and the reader for Baritone's own region files — is ported to plain Java under `cheesecake.process.elytra.pathfinder`, one class per C++ file. The native library upstream bundles for each platform is gone, along with the JNI call, `Unsafe`, and the off-heap memory that could be freed under a thread still reading it. Nothing is loaded at startup, so no system is unsupported.\n- The port reproduces the library's recorded answers to the bit. Its tests hold the generator and the raytracer to a few hundred generated chunks and a few thousand rays captured from the native build, and the search to the same paths; it runs at the same speed.\n- The port was written for [babbaj/nether-pathfinder#31](https://github.com/babbaj/nether-pathfinder/issues/31), which asks for one, and is offered to Baritone as [cabaletta/baritone#5117](https://github.com/cabaletta/baritone/pull/5117). This tag carries babbaj's review of it.\n\n## Fixes that came with it\n\nFive bugs in the native library were found while the flights were being made reliable, all fixed upstream in babbaj/nether-pathfinder and all answered by the port as well:\n\n| Issue | What it did |\n| --- | --- |\n| [#23](https://github.com/babbaj/nether-pathfinder/issues/23) | a ray ending exactly on a voxel corner called `exit(696969)` — the game vanished with status 137, which reads as an OOM kill |\n| [#24](https://github.com/babbaj/nether-pathfinder/issues/24) | a worker thread started before the flag that stops it existed, hanging the first path calculation for good |\n| [#25](https://github.com/babbaj/nether-pathfinder/issues/25) | a non-generating search mutated the chunk table outside its mutex, racing concurrent lookups |\n| [#29](https://github.com/babbaj/nether-pathfinder/issues/29) | a worker held the mutex while doing its work |\n| [#30](https://github.com/babbaj/nether-pathfinder/issues/30) | `cancel` tested a file-scope flag rather than the context's, so it did nothing |\n\n- Rays of zero length are answered without asking the pathfinder, rays with a coordinate that is not a finite number are answered as not visible, and a ray that ends exactly on a voxel boundary is asked about with its end moved a millionth of a block towards its start. With the native library the first two ended the game.\n- The elytra process keeps its pathfinder context between flights and rebuilds it only when the world or the settings it was built for change, so the chunks packed for one flight are there for the next. A calculation that has not answered in thirty seconds is reported and its context rebuilt, as a safety net.\n- The landing-spot check runs on a worker thread holding the read lock instead of on the game thread with no lock, and the cached chunk the solver's block lookups share is one immutable pair rather than three fields, since two solvers overlap for a moment whenever a flight is re-planned.\n- When there is nowhere to land below the path, the surface is searched instead of the flight simply ending, and a spent search is kept rather than repeated.\n- \"Near the end of the path\" is measured across the ground, so a path that ends far below no longer counts as arrived.\n- A player waiting for their path is no longer counted as failing to take off, the process has its path before the player is dropped, and `#elytra`'s status reports the path's length.\n\n## Removed\n\n- `elytraCustomAllocator`. It only ever chose the native library's allocator, and there is no native library any more. A settings file that still names it logs one `Unable to parse line` with a stack trace and then loads everything else, so nothing is lost but the noise; delete the line to be rid of it.\n\n## Upgrading\n\nDrop-in. The cached region files, the settings and the commands are unchanged.\n\n\n..."
+		},
+		{
+			"tag": "v0.5.2",
+			"published": "2026-09-11T01:13:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 556199337,
+					"name": "cheesecake-0.5.2.jar",
+					"url": "https://github.com/0Mattias/cheesecake/releases/download/v0.5.2/cheesecake-0.5.2.jar",
+					"size": 5129974,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "f2c720eebe73287abd5361b034f077d94013351acbc74ce73bfeb98ae587a41f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cheesecake",
+							"version": "0.5.2",
+							"name": "Cheesecake",
+							"description": "Google Maps for Blockgame. A fork of Baritone (cabaletta/baritone) for Fabric.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"dev_babbaj_nether-pathfinder"
+							]
+						}
+					],
+					"icon": "8db105e308e95c7ba8527fc4c23d68ce56aa9b2def9eb052be8982324c2efc2a.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 555,
+						"jars": [
+							"META-INF/jars/nether-pathfinder-1.6.jar"
+						],
+						"capabilities": {
+							"network": {
+								"cheesecake/agent/AgentApi$Client.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close"
+								],
+								"cheesecake/utils/autotest/SocketStage.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close",
+									"java/net/Socket.<init>"
+								]
+							},
+							"exec": {
+								"cheesecake/api/utils/NotificationHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"unsafe": {
+								"cheesecake/process/elytra/NetherPathfinderContext.class": [
+									"sun/misc/Unsafe.setMemory"
+								],
+								"META-INF/jars/nether-pathfinder-1.6.jar!dev/babbaj/pathfinder/Octree.class": [
+									"sun/misc/Unsafe.getByte",
+									"sun/misc/Unsafe.getShort",
+									"sun/misc/Unsafe.putByte"
+								]
+							},
+							"native": {
+								"META-INF/jars/nether-pathfinder-1.6.jar!dev/babbaj/pathfinder/NetherPathfinder.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"cheesecake/api/utils/Helper.class",
+								"cheesecake/cache/WorldProvider.class"
+							],
+							"www.dominos.com": [
+								"cheesecake/command/ExampleCheesecakeControl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What changed\n\n- **Nothing in the mod.** Outside `cheesecake.utils.autotest` and the documentation the tree is identical to 0.5.1, so there is no reason to update if 0.5.1 works for you. What this tag buys is a jar built from a tree the twenty-stage run has passed.\n- The in-world test CI runs on every push went from thirteen stages to twenty, and every process under `cheesecake.process` now has one.\n\n## The stages that were added\n\n| Stage | What the bot has to do |\n| --- | --- |\n| `build` | fill a selection with `#sel set` and stop when the box matches |\n| `follow` | hold a goal on a moving animal rather than on a block |\n| `farm` | find ripe wheat, break it, pick up what it drops and replant |\n| `explore` | pick an uncached chunk, make a goal for it and set off |\n| `goto-block` | find a block itself, with no goal given, and stand next to it |\n| `backfill` | mine through a plugged tunnel and close it again afterwards |\n| `inventory-pause` | come to a halt so a buried pickaxe can reach the hotbar, then carry on |\n\nEach builds its own scenario with server commands, so only the first walk depends on the terrain the seed generates.\n\n## Fixes\n\n- The control-socket stage checked where the player was standing when it *noticed* the `AT_GOAL` message, not when the event fired. That flag is set on the socket's reader thread while the check runs on the game thread a few ticks later, and arriving carries the player far enough to leave a `GoalXZ` behind. It now records the position from the path event itself.\n\nRequires Minecraft 26.2, Fabric Loader 0.19.5 or newer and Java 25. Copy the jar into the `mods` folder of a Fabric profile.\n\nSHA-256 of `cheesecake-0.5.2.jar`: `f2c720eebe73287abd5361b034f077d94013351acbc74ce73bfeb98ae587a41f`"
+		},
+		{
+			"tag": "v0.5.1",
+			"published": "2026-09-10T23:16:56Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 556005944,
+					"name": "cheesecake-0.5.1.jar",
+					"url": "https://github.com/0Mattias/cheesecake/releases/download/v0.5.1/cheesecake-0.5.1.jar",
+					"size": 5111133,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "0432c086d65a2bf94a27df6faa0e98713de52be6c5494a81b2737bb0b5d0aa04",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cheesecake",
+							"version": "0.5.1",
+							"name": "Cheesecake",
+							"description": "Google Maps for Blockgame. A fork of Baritone (cabaletta/baritone) for Fabric.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"dev_babbaj_nether-pathfinder"
+							]
+						}
+					],
+					"icon": "8db105e308e95c7ba8527fc4c23d68ce56aa9b2def9eb052be8982324c2efc2a.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 548,
+						"jars": [
+							"META-INF/jars/nether-pathfinder-1.6.jar"
+						],
+						"capabilities": {
+							"network": {
+								"cheesecake/agent/AgentApi$Client.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close"
+								],
+								"cheesecake/utils/autotest/SocketStage.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close",
+									"java/net/Socket.<init>"
+								]
+							},
+							"exec": {
+								"cheesecake/api/utils/NotificationHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"unsafe": {
+								"cheesecake/process/elytra/NetherPathfinderContext.class": [
+									"sun/misc/Unsafe.setMemory"
+								],
+								"META-INF/jars/nether-pathfinder-1.6.jar!dev/babbaj/pathfinder/Octree.class": [
+									"sun/misc/Unsafe.getByte",
+									"sun/misc/Unsafe.getShort",
+									"sun/misc/Unsafe.putByte"
+								]
+							},
+							"native": {
+								"META-INF/jars/nether-pathfinder-1.6.jar!dev/babbaj/pathfinder/NetherPathfinder.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"cheesecake/api/utils/Helper.class",
+								"cheesecake/cache/WorldProvider.class"
+							],
+							"www.dominos.com": [
+								"cheesecake/command/ExampleCheesecakeControl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What changed\n\n- Nothing in the mod itself. 0.5.1 and 0.5.0 build the same pathing, building, mining and elytra code, so there is no reason to update if 0.5.0 works for you.\n- The in-world CI test's Nether flight below the roof now picks its landing site by scanning from the roof downwards for the highest column with a floor at y 56 or above, instead of taking the first site above the lava sea. The two Nether trips also run with fire resistance.\n\n## Why it is a release\n\nThe v0.5.0 tag run failed on that stage the first time and needed a rerun: the flight skimmed the lava sea on the software-rendered runner and the player died. The fix landed after the tag was cut, so no published jar contained it. This tag puts the tested tree and the released jar back in step.\n\nRequires Minecraft 26.2, Fabric Loader 0.19.5 or newer and Java 25. Copy the jar into the `mods` folder of a Fabric profile.\n\nSHA-256 of `cheesecake-0.5.1.jar`: `0432c086d65a2bf94a27df6faa0e98713de52be6c5494a81b2737bb0b5d0aa04`"
+		},
+		{
+			"tag": "v0.5.0",
+			"published": "2026-09-10T22:40:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 555959608,
+					"name": "cheesecake-0.5.0.jar",
+					"url": "https://github.com/0Mattias/cheesecake/releases/download/v0.5.0/cheesecake-0.5.0.jar",
+					"size": 5110950,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "d5e17147a9db18f807e5008246a5095c0b9533d7a71d588970324dacb2bada5b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cheesecake",
+							"version": "0.5.0",
+							"name": "Cheesecake",
+							"description": "Google Maps for Blockgame. A fork of Baritone (cabaletta/baritone) for Fabric.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"dev_babbaj_nether-pathfinder"
+							]
+						}
+					],
+					"icon": "8db105e308e95c7ba8527fc4c23d68ce56aa9b2def9eb052be8982324c2efc2a.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 548,
+						"jars": [
+							"META-INF/jars/nether-pathfinder-1.6.jar"
+						],
+						"capabilities": {
+							"network": {
+								"cheesecake/agent/AgentApi$Client.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close"
+								],
+								"cheesecake/utils/autotest/SocketStage.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close",
+									"java/net/Socket.<init>"
+								]
+							},
+							"exec": {
+								"cheesecake/api/utils/NotificationHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"unsafe": {
+								"cheesecake/process/elytra/NetherPathfinderContext.class": [
+									"sun/misc/Unsafe.setMemory"
+								],
+								"META-INF/jars/nether-pathfinder-1.6.jar!dev/babbaj/pathfinder/Octree.class": [
+									"sun/misc/Unsafe.getByte",
+									"sun/misc/Unsafe.getShort",
+									"sun/misc/Unsafe.putByte"
+								]
+							},
+							"native": {
+								"META-INF/jars/nether-pathfinder-1.6.jar!dev/babbaj/pathfinder/NetherPathfinder.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"cheesecake/api/utils/Helper.class",
+								"cheesecake/cache/WorldProvider.class"
+							],
+							"www.dominos.com": [
+								"cheesecake/command/ExampleCheesecakeControl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Minecraft 26.2\n\n- Built for Minecraft 26.2 with Fabric Loader 0.19.5 or newer and Java 25. Version 0.4.0 remains the last release for 1.21.11.\n- Minecraft ships with Mojang's names since 26.1, so the code now uses the same names as Baritone; upstream's 26.2 branch is applied in full.\n- The worker threads are daemon threads, so quitting the game no longer produces a crash report from the client's shutdown watchdog.\n\n## Fixes\n\n- Arriving at a `#goto` goal reports the `AT_GOAL` path event instead of `CANCELED`, as the control socket protocol documents.\n- The elytra landing search treats cave air as air, so flights ending in carved Nether caves land instead of circling.\n\n## Testing\n\n- The in-world CI test now covers the control socket, climbing free-hanging, twisting and weeping vines, `#mine` item counts, and four elytra flights: above the build limit, with the automatic takeoff, through the Nether below the roof, and over the roof. The screenshot of the goal beacon beam is uploaded with every run.\n\nRequires Minecraft 26.2, Fabric Loader 0.19.5 or newer and Java 25. Copy the jar into the `mods` folder of a Fabric profile.\n\nSHA-256 of `cheesecake-0.5.0.jar`: `d5e17147a9db18f807e5008246a5095c0b9533d7a71d588970324dacb2bada5b`"
+		},
+		{
+			"tag": "v0.4.0",
+			"published": "2026-09-10T19:05:50Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 555634904,
+					"name": "cheesecake-0.4.0.jar",
+					"url": "https://github.com/0Mattias/cheesecake/releases/download/v0.4.0/cheesecake-0.4.0.jar",
+					"size": 5074850,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "9021541819f05cb5c979e741e4c5ee2aa2bf036ec960a9645e7fce92ed24c4a3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cheesecake",
+							"version": "0.4.0",
+							"name": "Cheesecake",
+							"description": "Google Maps for Blockgame. A fork of Baritone (cabaletta/baritone) for Fabric.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft"
+							],
+							"provides": [
+								"dev_babbaj_nether-pathfinder"
+							]
+						}
+					],
+					"icon": "8db105e308e95c7ba8527fc4c23d68ce56aa9b2def9eb052be8982324c2efc2a.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 534,
+						"jars": [
+							"META-INF/jars/nether-pathfinder-1.6.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/nether-pathfinder-1.6.jar!dev/babbaj/pathfinder/NetherPathfinder.class": [
+									"java/lang/System.load"
+								]
+							},
+							"unsafe": {
+								"META-INF/jars/nether-pathfinder-1.6.jar!dev/babbaj/pathfinder/Octree.class": [
+									"sun/misc/Unsafe.getByte",
+									"sun/misc/Unsafe.getShort",
+									"sun/misc/Unsafe.putByte"
+								],
+								"cheesecake/process/elytra/NetherPathfinderContext.class": [
+									"sun/misc/Unsafe.setMemory"
+								]
+							},
+							"network": {
+								"cheesecake/agent/AgentApi$Client.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close"
+								]
+							},
+							"exec": {
+								"cheesecake/api/utils/NotificationHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"cheesecake/api/utils/Helper.class",
+								"cheesecake/cache/WorldProvider.class"
+							],
+							"www.dominos.com": [
+								"cheesecake/command/ExampleCheesecakeControl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Cheesecake 0.4.0 brings back the beacon beam for X/Z goals and has the in-game test cover it.\n\n## Added\n\n- The `renderGoalXZBeacon` setting works again. With it on, an X/Z goal such as `#goto 1000 1000` is drawn as the vanilla beacon beam, an opaque rotating core inside a translucent glow reaching from the bottom of the world to the top, in place of the full-height goal box. `renderGoalIgnoreDepth` applies to the beam as it does to the box.\n\n## Project\n\n- The in-game test switches the goal rendering from the box to the beacon beam halfway through its walk, so every change is checked against both.\n- CLAUDE.md holds the working notes for changing the code: build, mappings lookup, upstream layout, CI, releasing and the things that cost time once.\n\nRequires Minecraft 1.21.11, Fabric Loader and Java 21. Copy the jar into the `mods` folder of a Fabric profile.\n\nSHA-256 of `cheesecake-0.4.0.jar`: `9021541819f05cb5c979e741e4c5ee2aa2bf036ec960a9645e7fce92ed24c4a3`"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [
+		"LICENSE-Part-2.jpg"
+	],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

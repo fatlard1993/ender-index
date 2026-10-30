@@ -1,0 +1,333 @@
+{
+	"repo": "Lopesnextgen/IssuesFix",
+	"host": "github",
+	"description": "IssuesFix is a clean client-side Fabric mod for Minecraft 1.21.11 that repairs unstable player nametags without turning them into ESP. It replaces only player nicknames, keeps normal Minecraft visibility rules, and rebuilds the visible name using the server-provided scoreboard/team information.",
+	"stars": 1,
+	"archived": false,
+	"license": "CC0-1.0",
+	"created": "2026-06-11T20:23:27Z",
+	"pushed": "2026-08-01T03:21:43Z",
+	"releases": [
+		{
+			"tag": "v1.6.0",
+			"published": "2026-08-01T03:28:49Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 497490460,
+					"name": "issuesfix-1.6.0.jar",
+					"url": "https://github.com/Lopesnextgen/IssuesFix/releases/download/v1.6.0/issuesfix-1.6.0.jar",
+					"size": 84887,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "c10d32eed0dc3a6073756e2d75cdf67bebcfd3b526998170f7f6028a4e1b614e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "issuesfix",
+							"version": "1.6.0",
+							"name": "IssuesFix",
+							"description": "Client-side player nametag repair for Minecraft 1.21.11.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 44,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker$Snapshot.class",
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker.class"
+							],
+							"api.github.com": [
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# IssuesFix v1.6.0\n\n## Performance Improvements\n\n- Dropped item labels are detected with a bounded AABB spatial query instead of scanning loaded entities\n- Item drop labels skip the entire player-matching heuristic chain, cutting per-frame work near item piles\n- Item nametags are approved by entity type at submit time, before any label text analysis runs\n- Nametag render gate is now a depth counter, removing redundant thread-local writes on nested submissions\n\n## New Features\n\n- Dropped items and blocks keep their server-side stack count labels while player nametag cleaning stays active\n- Text Display holograms anchored above a dropped item are recognized and preserved\n- `clearAllNametags` mode now exempts item drop labels instead of suppressing every floating text\n- Item label exemption is evaluated before all suppression rules, so it cannot be overridden by heuristics\n\n## Bug Fixes\n\n- Fixed stack count labels being cleared from dropped items and blocks\n- Fixed short server labels within 64 blocks being misread as player nametags by the proximity heuristic\n- Fixed item holograms disappearing whenever the local player stood within 6 blocks of the drop\n- Fixed the nametag render gate restoring a stale allow state when submissions were nested\n\n## Example Nametag\n\n`LOPESLATENCIAA 20❤ [*LTC]`\n\n## Requirements\n\n- Minecraft `1.21.11`\n- Fabric Loader `0.19.2` or newer\n- Java `21` or newer\n\n## Installation\n\n1. Download `issuesfix-1.6.0.jar`.\n2. Remove older IssuesFix versions.\n3. Place the new JAR inside your Fabric mods folder.\n4. Start Minecraft."
+		},
+		{
+			"tag": "v1.5.0",
+			"published": "2026-07-20T00:43:49Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 482874448,
+					"name": "issuesfix-1.5.0.jar",
+					"url": "https://github.com/Lopesnextgen/IssuesFix/releases/download/v1.5.0/issuesfix-1.5.0.jar",
+					"size": 82406,
+					"downloads": 33,
+					"inspection": 2,
+					"sha256": "72c9fdcb4fb4f40e47db4cdc61bca9d38860689d5e98505aefcda8855dc93980",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "issuesfix",
+							"version": "1.5.0",
+							"name": "IssuesFix",
+							"description": "Client-side player nametag repair for Minecraft 1.21.11.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 42,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker$Snapshot.class",
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker.class"
+							],
+							"api.github.com": [
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# IssuesFix v1.5.0\n\n## Performance Improvements\n\n- Removed all diagnostic and per-frame debug logging from the render path\n- Stopped synchronous trace file writes during gameplay\n- Tightened player-label matching around head proximity and vehicle chains\n- Avoided redundant Storage.add work when clearAllNametags is enabled\n\n## New Features\n\n- Only IssuesFix custom nametags remain; vanilla, Lunar, and server labels are suppressed\n- Aggressive Text Display nametag removal via name match, vehicle chain, and head proximity\n- clearAllNametags mode treats any floating text on a player head as a server nametag\n- Local player nametag is restored in third person / F5\n- Fog removal is Iris-safe: Sodium NONE sentinel is never used under Iris\n- Finite far fog distances replace MAX/-MAX values that caused shader static with Iris\n\n## Bug Fixes\n\n- Fixed full-screen render static when using Sodium + Iris with removeFog\n- Fixed duplicate nicks from Text Display entities on Factions servers\n- Fixed Lunar nametag layers leaking alongside IssuesFix labels\n\n## Example Nametag\n\n`LOPESLATENCIAA 20❤ [*LTC]`\n\n## Requirements\n\n- Minecraft `1.21.11`\n- Fabric Loader `0.19.2` or newer\n- Java `21` or newer\n\n## Installation\n\n1. Download `issuesfix-1.5.0.jar`.\n2. Remove older IssuesFix versions.\n3. Place the new JAR inside your Fabric mods folder.\n4. Start Minecraft."
+		},
+		{
+			"tag": "v1.4.0",
+			"published": "2026-06-27T20:22:24Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 459712231,
+					"name": "issuesfix-1.4.0.jar",
+					"url": "https://github.com/Lopesnextgen/IssuesFix/releases/download/v1.4.0/issuesfix-1.4.0.jar",
+					"size": 79817,
+					"downloads": 19,
+					"inspection": 2,
+					"sha256": "5919723e9edf2d17e8c97a7ba7229505434689a256b9b22f74ab1e2d4e7fc22a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "issuesfix",
+							"version": "1.4.0",
+							"name": "IssuesFix",
+							"description": "Client-side player nametag repair for Minecraft 1.21.11.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 42,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker$Snapshot.class",
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker.class"
+							],
+							"api.github.com": [
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# IssuesFix v1.4.0\n\n## Performance Improvements\n\n- Health lookups are now cached for one tick instead of one second\n- Text Display entity metadata is captured on the server packet itself, no polling\n- Removed diagnostic logging during normal gameplay\n- Removed synchronous file writes from the rendering loop\n- Optimized player matching for server nametags\n- Reduced repeated regex processing and player scans\n- Improved performance in areas with many players\n- Reduced CPU usage and FPS impact\n\n## New Features\n\n- Player HP on the nametag now updates in real time\n- Added support for `[VID]`, `[HP]`, `VIDA`, `HEALTH` HP formats from Text Display entities\n- Added pure-text player identification for Text Display entities (no proximity required)\n- Added heuristic duplicate-nametag detection for labels the text matcher would miss\n- Text Display entities now feed the nametag pipeline from any render distance\n\n## Example Nametag\n\n`LOPESLATENCIAA 20❤ [*LTC]`\n\n## Requirements\n\n- Minecraft `1.21.11`\n- Fabric Loader `0.19.2` or newer\n- Java `21` or newer\n\n## Installation\n\n1. Download `issuesfix-1.4.0.jar`.\n2. Remove older IssuesFix versions.\n3. Place the new JAR inside your Fabric mods folder.\n4. Start Minecraft."
+		},
+		{
+			"tag": "v1.3.0",
+			"published": "2026-06-13T17:35:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 446700894,
+					"name": "issuesfix-1.3.0.jar",
+					"url": "https://github.com/Lopesnextgen/IssuesFix/releases/download/v1.3.0/issuesfix-1.3.0.jar",
+					"size": 84440,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "32cc5af922a837fcf9b2a2f28df7fde10e70ff75fee448a89d7635b7a44dafc4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "issuesfix",
+							"version": "1.3.0",
+							"name": "IssuesFix",
+							"description": "Client-side player nametag repair for Minecraft 1.21.11.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 42,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker$Snapshot.class",
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker.class"
+							],
+							"api.github.com": [
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# IssuesFix v1.3.0\n\n## Performance Improvements\n\n- Disabled diagnostic logging during normal gameplay\n- Removed synchronous file writes from the rendering loop\n- Added caching for scoreboard health lookups\n- Optimized player matching for server nametags\n- Reduced repeated regex processing and player scans\n- Improved performance in areas with many players\n- Reduced CPU usage and FPS impact\n\n## New Features\n\n- Added automatic removal of large TNT explosion particles\n- Added the `removeTntExplosionParticles` configuration option\n- Existing configurations are automatically migrated\n- TNT sounds, damage and knockback remain unchanged\n\n## Existing Features\n\n- Server-synchronized player health\n- Dynamic health colors with a red heart indicator\n- Faction tags and role symbols\n- Friendly and enemy name colors\n- Duplicate nametag removal\n- Fog removal for Minecraft, Sodium and Iris\n- Player outline fixes\n- GitHub update checker\n\n## Example Nametag\n\n`LOPESLATENCIA 20❤ [*LTC]`\n\n## Requirements\n\n- Minecraft `1.21.11`\n- Fabric Loader `0.19.2` or newer\n- Java `21` or newer\n\n## Installation\n\n1. Download `issuesfix-1.3.0.jar`.\n2. Remove older IssuesFix versions.\n3. Place the new JAR inside your Fabric mods folder.\n4. Restart Minecraft."
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-06-13T01:10:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 446209158,
+					"name": "issuesfix-1.2.0.jar",
+					"url": "https://github.com/Lopesnextgen/IssuesFix/releases/download/v1.2.0/issuesfix-1.2.0.jar",
+					"size": 79907,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "258736c15e7d336db7b3eea3f0fce5a2bc24dbd58646a6845388eefea15fe979",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "issuesfix",
+							"version": "1.2.0",
+							"name": "IssuesFix",
+							"description": "Client-side player nametag repair for Minecraft 1.21.11.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 39,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker$Snapshot.class",
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker.class"
+							],
+							"api.github.com": [
+								"davi/lopes/issuesfix/update/IssuesFixUpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# IssuesFix v1.2.0\n\n## What's New\n\n- Added server-synchronized player health to nametags\n- New format: `PlayerName 20❤ [Faction]`\n- Dynamic health number colors based on current HP\n- Heart symbol always displayed in red\n- Improved server Text Display detection\n- Improved player matching and health caching\n- Preserved faction tags and role symbols\n- Improved nametag reliability and diagnostics\n\n## Example\n\n`LOPESLATENCIA 20❤ [*LTC]`\n\n## Requirements\n\n- Minecraft `1.21.11`\n- Fabric Loader `0.19.2` or newer\n- Java `21` or newer\n\n## Installation\n\n1. Download `issuesfix-1.2.0.jar`.\n2. Place it inside your Fabric mods folder.\n3. Restart Minecraft."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

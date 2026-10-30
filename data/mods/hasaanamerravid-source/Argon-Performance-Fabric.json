@@ -1,0 +1,66 @@
+{
+	"repo": "hasaanamerravid-source/Argon-Performance-Fabric",
+	"host": "github",
+	"description": "Lite jigsaw layout and frame cadence for Minecraft 26.3. Speeds up jigsaw structure layout and paces frames when Max Framerate is below 260. Does not change vanilla structure size or seeds.",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-07-31T15:27:16Z",
+	"pushed": "2026-10-02T12:21:38Z",
+	"releases": [
+		{
+			"tag": "Update",
+			"published": "2026-10-02T12:22:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 605554442,
+					"name": "argon-0.2.4.jar",
+					"url": "https://github.com/hasaanamerravid-source/Argon-Performance-Fabric/releases/download/Update/argon-0.2.4.jar",
+					"size": 49885,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "1484f673b152a54fbb1afdbcaff9a22c44a01e7f0fb7484d8a3a154a0f60b98a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "argon",
+							"version": "0.2.4",
+							"name": "Argon",
+							"description": "Lite jigsaw layout and frame cadence for Minecraft 26.3 on Fabric and Quilt. Speeds up jigsaw structure layout and paces frames when Max Framerate is below 260. Does not change vanilla structure size or seeds.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "6747d613bae0837501082705166a88724dc899f61607b39411304bd981463f69.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 16,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.2.4\n\nEvery layout change in this entry was checked against the vanilla source of `JigsawPlacement`, `JigsawBlock`, `BooleanOp`, and `Shapes`, and the octree is verified candidate-for-candidate against vanilla's own free-space algebra.\n\n- `JigsawBlock.canAttach` now keeps vanilla's `target.name() == null` guard. A null child name means the connector matches anything. Vanilla templates never produce one because `JigsawBlockInfo.parse` defaults the name, but a mod that builds a `JigsawBlockInfo` directly does, and the name-first matcher used to reject those.\n- Removed the rigid-child skip. It skipped a child when the parent connector faced outside the structure box or into a placed piece, on the claim that vanilla would reject it. The connector is only recorded when it sits inside the parent piece, and the parent piece is already in the octree, so the guard was true for every recorded connector and it dropped rigid children that vanilla places. Those candidates run vanilla now.\n- Removed the tried-element identity list. In 26.3 the wrapped `Lists.newArrayList` is the candidate piece list, which is iterated but never `contains`-checked, so the identity map was written on every add and read never. Deduplicating it was rejected because dropping a repeated candidate changes which pieces are tried and therefore the random sequence.\n- The octree query is named for the answer it gives. `hasRoomFor` is the accept case, and the overlap wrap stands in for the reject side of `joinIsNotEmpty`, so both agree with vanilla's `!joinIsNotEmpty(free, deflated, ONLY_SECOND)`.\n- `JigsawPlacement$Placer.tryPlacingChildren` takes `PoolElementStructurePiece`, `MutableObject`, depth, the rigid flag, `LevelHeightAccessor`, `RandomState`, `PoolAliasLookup`, and `LiquidSettings`. The overlap and piece-recording wraps target that descriptor and capture the candidate piece `BoundingBox` as a local.\n- A child attached inside its own parent piece runs against vanilla's per-piece `sourceFree` shape, which the octree does not model. Those calls are left alone, and pieces placed that way are always inside the parent box, which is in the octree, so the carrier path stays correct without them.\n\n### Layout\n\n- Piece overlap uses a box octree. A candidate is tested against nearby pieces on the 0.25-deflated box, and the accept or reject answer matches vanilla AABB checks.\n- Piece bounds are six doubles in one flat array per leaf, not `AABB` objects, so a scan walks contiguous memory and never dereferences a box. The duplicate check compares those doubles instead of boxing them through `AABB.equals`.\n- An octant is only created once some piece reaches it. Empty octants cost no object and no boundary test per query, which is the common case when pieces are small against a large structure box.\n- Inserting a piece and testing one allocate nothing. The `AABB.of` copy and the 0.25 deflate are computed straight off the piece `BoundingBox`.\n- Octree nodes do not split when a half-extent is under 2 blocks.\n- Accepted pieces are recorded on `Shapes.joinUnoptimized` (`require = 1`), the 26.3 accept path, and the carrier is returned so the octree keeps the same contents the `VoxelShape` would have carried.\n- `JigsawBlock.canAttach` uses Argon's name-first matcher. Vanilla reads the front and the top out of two properties per block; both live in `ORIENTATION`, so one lookup per block yields both.\n- Layout counters are `LongAdder`, not `AtomicLong`, because they are bumped once per candidate piece and worldgen runs that loop across chunk threads.\n\n### Frame Cadence\n\n- The interval is cached until Max Framerate changes, and the clock advances to the target time so the cap does not drift. A cap change or a stall longer than one frame resets it.\n- Caps of 260 and above, and non-positive caps, stay on vanilla `FramerateLimiter`.\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

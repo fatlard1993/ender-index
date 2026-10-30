@@ -1,0 +1,67 @@
+{
+	"repo": "miaotiao-lin/minecraft-multicore-mod",
+	"host": "github",
+	"stars": 30,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-09-24T14:31:24Z",
+	"pushed": "2026-09-24T14:34:00Z",
+	"releases": [
+		{
+			"tag": "v1.6.0",
+			"published": "2026-09-24T14:34:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 586143809,
+					"name": "minecraft-multicore-mod-1.6.0.jar",
+					"url": "https://github.com/miaotiao-lin/minecraft-multicore-mod/releases/download/v1.6.0/minecraft-multicore-mod-1.6.0.jar",
+					"size": 25053,
+					"downloads": 120,
+					"inspection": 2,
+					"sha256": "85b93c085f7bf902b7220ea2867dcccd7dd8b94188389d529268887ee6348708",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dimparallel",
+							"version": "1.6.0",
+							"name": "Minecraft Multi-Core Mod",
+							"description": "Ticks non-overworld dimensions concurrently on their own CPU threads, keeping overworld timing vanilla-exact.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 12,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.6.0\n\n> **第一个公开版本,谨慎使用。**\n\n面向 Minecraft 26.2 + Fabric 的服务端性能 Mod:把下界、末地等维度拆到独立线程并行 tick,主世界保持原版时序。请先在测试存档中验证,若出现异常请在 Issues 反馈。\n\n## 变更\n- 主世界固定在主线程 tick,时序与 vanilla 逐字节一致\n- 只有下界 / 末地 / 额外维度并行执行\n- 修复并行模式下主世界 TNT 机器周期性卡顿\n\n## 安装\n1. 服务端与单人存档都需安装\n2. 把本 jar 放入 `mods/` 目录\n3. 依赖:Fabric Loader >= 0.19.3、Fabric API、Java 25\n\n## 配置\n首次启动生成 `config/dimparallel.properties`,常用项:\n- `enabled`:总开关,`false` 完全回退 vanilla 串行循环\n- `maxChainedNeighborUpdates`:连锁邻居更新上限(默认 1000000,与 vanilla 一致)\n\n使用问题请到 Issues 反馈。"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "一个面向 Minecraft 26.2 + Fabric 的服务端性能 Mod。原版服务端是\"一个线程按顺序 tick 所有维度\",下界、末地的工作会和主世界抢同一颗核心。本 Mod 把下界、末地(以及数据包新增的额外维度)拆到独立工作线程并行执行,主世界始终留在主线程上、第一个 tick,红石/方块更新/实体逻辑一行都不改。",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

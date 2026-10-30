@@ -1,0 +1,577 @@
+{
+	"repo": "AAAlod/digital-storage-cloud",
+	"host": "github",
+	"description": "High-performance Minecraft 1.20.1 Fabric storage backend for Tom's Simple Storage.",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-08-23T05:12:01Z",
+	"pushed": "2026-10-05T06:28:47Z",
+	"releases": [
+		{
+			"tag": "v1.2.2",
+			"published": "2026-10-05T06:36:05Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 611732085,
+					"name": "digital-storage-cloud-fabric-1.2.2.jar",
+					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.2/digital-storage-cloud-fabric-1.2.2.jar",
+					"size": 1165188,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "eb3c16d298f70cc484e1483d4ff3455ec4196110c7ad8d46cffd1b4228e07f0b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "digitalstorage",
+							"version": "1.2.2",
+							"name": "Digital Storage Cloud",
+							"description": "Player-owned storage volumes exposed through lightweight, linkable accessors.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java",
+								"toms_storage"
+							],
+							"provides": []
+						}
+					],
+					"icon": "9dae24b93926f7739e4df014d9c561303470f0ed1ffe06f31d0b467459a89675.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Digital Storage Cloud"
+							],
+							"block": [
+								"Advanced Inventory Hopper",
+								"Digital Storage Accessor"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 484,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/kehai/digitalstorage/internal/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 611731910,
+					"name": "digital-storage-cloud-forge-1.2.2.jar",
+					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.2/digital-storage-cloud-forge-1.2.2.jar",
+					"size": 1330271,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2b1e4f1c8a2ceb2f0e63b946e5acf1c812bb3b5f1af2e8717eb1b6720b99fc74",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "digitalstorage",
+							"version": "1.2.2",
+							"name": "汤姆的简易存储：云上加仓",
+							"description": "Player-owned storage volumes exposed through lightweight, linkable accessors.",
+							"minecraft": "[1.20.1,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"toms_storage"
+							]
+						}
+					],
+					"icon": "9dae24b93926f7739e4df014d9c561303470f0ed1ffe06f31d0b467459a89675.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Digital Storage Cloud"
+							],
+							"block": [
+								"Advanced Inventory Hopper",
+								"Digital Storage Accessor"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 552,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/kehai/digitalstorage/internal/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.2.2 — 双向批量物品转移\n\n这次更新补上了从数字存储卷移出物品的入口。可以先预览、选择物品和数量，再将物品在当前存储卷与网络实体容器之间批量转移。\n\n## 物品转移\n\n- 支持从网络实体容器移入当前卷，以及从卷移出到同一网络的实体容器。迁出遵循网络过滤规则，接收不了的余量留在卷内。\n- 增加独立的不可堆叠物品清理入口；关闭不可堆叠物品接收后，仍可移出卷内已有的工具和装备，清理不会修改接收开关。\n- 预览支持搜索、全选、清空和逐项数量编辑。附魔、耐久或其他数据不同的物品分别显示、分别选择。\n- 支持按数量升降序排序：移入默认从多到少，移出默认从少到多；排序覆盖整个预览，再进行分页，切换排序保留选量。\n- 显示实际搬运量，支持停止任务；结束后自动刷新预览并清空旧选择。网络失效或玩家离线等情况会停止后续搬运并提供反馈。\n\n## 界面与修复\n\n- 转移页固定显示卷图标与名称、方向箭头、网络实体容器，点击箭头切换方向；长卷名省略显示，悬停可查看全名。\n- 不可堆叠显示筛选与数量排序放在预览左下角，紧凑分页放在右下角。显示筛选与“允许接收不可堆叠物品”的设置分开。\n- 网络详情恢复已有性能评分，标明仅供参考；整理容器与漏斗信息，移除重复的物品转移入口。\n- 减少短请求造成的按钮闪灰，物品数量绘制在图标上层。\n- 已绑定时可从“…”打开“我的存储卷”，管理自己的其他卷；当前卷和非空卷仍受删除保护。\n- 修复 Fabric 双箱重扫、线缆连接器周期重连后，有效预览被误判为变化、无法移入的问题。\n- Forge 不确定交付会停止继续搬运并保留恢复记录，避免盲目重试。\n\n**本版提供手动发起的一次批量转移。** 持续自动迁出、指定容器路由、长期筛选规则和卷间转移留待后续版本。GUI 布局与交互仍在迭代，后续会继续根据使用反馈调整。"
+		},
+		{
+			"tag": "v1.2.1",
+			"published": "2026-10-04T14:50:13Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 610022041,
+					"name": "digital-storage-cloud-fabric-1.2.1.jar",
+					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.1/digital-storage-cloud-fabric-1.2.1.jar",
+					"size": 1092468,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "6632c6d10dfbefc022841ff3e7b0e449f7f7a1f36e2150f044cdf29a66c787af",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "digitalstorage",
+							"version": "1.2.1",
+							"name": "Digital Storage Cloud",
+							"description": "Player-owned storage volumes exposed through lightweight, linkable accessors.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java",
+								"toms_storage"
+							],
+							"provides": []
+						}
+					],
+					"icon": "9dae24b93926f7739e4df014d9c561303470f0ed1ffe06f31d0b467459a89675.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Digital Storage Cloud"
+							],
+							"block": [
+								"Advanced Inventory Hopper",
+								"Digital Storage Accessor"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 460,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/kehai/digitalstorage/internal/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 610022147,
+					"name": "digital-storage-cloud-forge-1.2.1.jar",
+					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.1/digital-storage-cloud-forge-1.2.1.jar",
+					"size": 1254270,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a429ab3b54d197a4ade65025e3088ff983fd9a0bb90aee25880167f27638850a",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "digitalstorage",
+							"version": "1.2.1",
+							"name": "汤姆的简易存储：云上加仓",
+							"description": "Player-owned storage volumes exposed through lightweight, linkable accessors.",
+							"minecraft": "[1.20.1,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"toms_storage"
+							]
+						}
+					],
+					"icon": "9dae24b93926f7739e4df014d9c561303470f0ed1ffe06f31d0b467459a89675.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Digital Storage Cloud"
+							],
+							"block": [
+								"Advanced Inventory Hopper",
+								"Digital Storage Accessor"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 524,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/kehai/digitalstorage/internal/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.2.1 — 访问器界面重构\n\n这次更新重新组织了数字存储访问器的界面，让当前存储卷、容量和管理操作更容易查看。\n\n**GUI 重构仍在迭代中。** 当前界面布局和交互方案尚未定稿，后续版本仍会根据使用反馈调整。本版主要完成 GUI 整理与问题修复；自动迁出等功能留待后续版本。\n\n- 主界面突出卷名、等级、种类容量与物品总数，升级和网络详情按需打开。\n- 存储卷列表支持滚动，创建和重命名使用独立输入界面。\n- 卷列表的操作菜单直接打开重命名、图标选择或删除确认；较多卷可按名称查找，清除绑定收纳到主视图菜单。\n- 子页顶部直接显示当前操作标题，菜单贴近触发按钮，卷图标与名称居中对齐；网络页收紧布局，建议与目标卷左右分区。\n- 删除空卷与清除访问器绑定增加对象和后果确认。\n- 不可堆叠物品设置使用滑动开关，不可用时可查看原因；提交设置时升级与清除绑定按钮保持外观稳定。\n- 去除内容面板内凹边框。卷图标可从背包或鼠标携带物品中选择，右键恢复箱子，不消耗物品，并随卷保存和同步。\n- 图标选择页绘制背包格子，提供六个无需持有物品的预置图标；修复设置时短暂出现提示和重新分析时移入按钮闪动。\n- 网络摘要区分需要处理的连接问题和可选移入机会；详情保留连接容器、已用格数、处理建议及预计腾出空间，不再展示启发式评分或扫描间隔。\n- 长名称提供完整悬停提示，多项升级材料可滚动查看；确认页使用图标、容量条与简短提示，窗口调整保留名称草稿。\n- 请求处理期间显示等待状态，避免物品数量刷新提前解除等待。\n- 图标页删除常驻说明，网络计数按需展开；操作反馈不跨页面串入，超时提供关闭并重新核对入口，不自动重发请求。\n- 升级页增加前后容量对比和材料图标，满级页减少空白；升级结果按玩家语言显示等级名称。\n- 使用接近原版容器的灰色像素边框，修复名称输入框被正文覆盖；删除大段与重复悬停说明，清除绑定从主界面直接进入确认。\n- 修复 Forge 未升级卷显示 1024 格的问题；升级后刷新 Tom 聚合槽位偏移，并保留容量降低时已有物品的提取。"
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-10-04T05:08:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 609170131,
+					"name": "digital-storage-cloud-fabric-1.2.0.jar",
+					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.0/digital-storage-cloud-fabric-1.2.0.jar",
+					"size": 1058904,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "cb69f452d60834215a3edb26a2fc6cf97663be85b440ea51ba405a2fab071a57",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "digitalstorage",
+							"version": "1.2.0",
+							"name": "Digital Storage Cloud",
+							"description": "Player-owned storage volumes exposed through lightweight, linkable accessors.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java",
+								"toms_storage"
+							],
+							"provides": []
+						}
+					],
+					"icon": "9dae24b93926f7739e4df014d9c561303470f0ed1ffe06f31d0b467459a89675.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Digital Storage Cloud"
+							],
+							"block": [
+								"Advanced Inventory Hopper",
+								"Digital Storage Accessor"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 453,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/kehai/digitalstorage/internal/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 609170292,
+					"name": "digital-storage-cloud-forge-1.2.0.jar",
+					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.0/digital-storage-cloud-forge-1.2.0.jar",
+					"size": 1217926,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "80efa6725d0cf8746073c57b5b043fcb803443cb7c21a23264ff5b1812d0ba48",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "digitalstorage",
+							"version": "1.2.0",
+							"name": "汤姆的简易存储：云上加仓",
+							"description": "Player-owned storage volumes exposed through lightweight, linkable accessors.",
+							"minecraft": "[1.20.1,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"toms_storage"
+							]
+						}
+					],
+					"icon": "9dae24b93926f7739e4df014d9c561303470f0ed1ffe06f31d0b467459a89675.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Digital Storage Cloud"
+							],
+							"block": [
+								"Advanced Inventory Hopper",
+								"Digital Storage Accessor"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 517,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/kehai/digitalstorage/internal/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## DSC 1.2.0 — Fabric解耦与Forge支持\n\n新增Minecraft 1.20.1的Forge版本，将存储、权限、持久化和迁移业务从加载器适配层分离。Fabric版本保留现有物品存储编码。\n### 更新内容\n- Forge支持数字存储访问器、玩家存储卷、绑定与权限、升级、网络分析、迁移及取消操作。\n- Forge普通和高级库存漏斗支持批量搬运、过滤、红石控制与扫描调度；旋转后清除缓存端点并重新发现源和目标。\n- 迁移停止时保留已结算进度；拒收、部分接受或中断时保留事务回滚或恢复保护。\n- Forge增加恢复记录查看与核对命令、诊断工具及隔离库存性能基准。\n- Fabric复用库存视图和事务适配器，减少重复物品键转换。\n- 构建文件名标注 `fabric` 或 `forge`。\n\n### 已知限制\n- 跨Fabric/Forge的世界转换尚未验证。\n- 部分迁移和重负载漏斗基准的CPU开销仍高于Fabric 1.1.14，后续补丁继续优化；本次不承诺整体CPU或TPS改善。"
+		},
+		{
+			"tag": "v1.1.14",
+			"published": "2026-09-11T12:11:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 557185006,
+					"name": "digital-storage-cloud-1.1.14.jar",
+					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.1.14/digital-storage-cloud-1.1.14.jar",
+					"size": 955389,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a76044378c958bbb9703040c7e4a1b84023cd43e1d4498d407d54859b395ed97",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "digitalstorage",
+							"version": "1.1.14",
+							"name": "Digital Storage Cloud",
+							"description": "Player-owned storage volumes exposed through lightweight, linkable accessors.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java",
+								"toms_storage"
+							],
+							"provides": []
+						}
+					],
+					"icon": "9dae24b93926f7739e4df014d9c561303470f0ed1ffe06f31d0b467459a89675.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Digital Storage Cloud"
+							],
+							"block": [
+								"Advanced Inventory Hopper",
+								"Digital Storage Accessor"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 392,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/kehai/digitalstorage/internal/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## DSC 1.1.14 — Fix Interrupted Bulk Migrations\n\nFixes an issue where bulk migration in large Tom's Simple Storage networks could stop before finishing, requiring repeated attempts even when the destination still had room. Networks with many empty slots were especially affected.\n\n### Fixes\n\n- Fixed normal Fabric sided-inventory wrapper replacement being mistaken for a network topology change during Tom's periodic rebuilds.\n- Compare the underlying inventory slots and access direction, and recognize equivalent transparent double-chest containers, while retaining conservative handling for unknown storage wrappers.\n- Keep migration source handles alive for the lifetime of the job so equivalent wrapper replacement does not interrupt an ongoing scan.\n- Preserve the default 128-view-per-tick scan budget, including empty slots, transactional rollback, and safety checks for actual endpoint changes and unloads.\n\n### Validation\n\n- Added migration regressions with 3,000, 10,000, and 20,001 slots using real Fabric sided-inventory wrappers and simulated periodic rebuilds.\n- The 20,001-slot case completed in 157 migration ticks across seven rebuilds, with item conservation and a maximum of 128 scanned views per tick.\n- Added coverage for changed access directions, exposed slot sets, endpoint additions/removals, double-chest replacement, and partial-insertion rollback; retained unload and duplicate-target regressions.\n- Passed the build, complete built-in self-test, integration diagnostics, and standalone server verification using the final release JAR, including normal shutdown saving. Client verification was confirmed by the maintainer."
+		},
+		{
+			"tag": "v1.1.13",
+			"published": "2026-09-07T04:52:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 548182196,
+					"name": "digital-storage-cloud-1.1.13.jar",
+					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.1.13/digital-storage-cloud-1.1.13.jar",
+					"size": 944029,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "a938558068d592c69c95ae07f74d9946623ac20edef95e4898d7bd237c4d7a86",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "digitalstorage",
+							"version": "1.1.13",
+							"name": "Digital Storage Cloud",
+							"description": "Player-owned storage volumes exposed through lightweight, linkable accessors.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java",
+								"toms_storage"
+							],
+							"provides": []
+						}
+					],
+					"icon": "9dae24b93926f7739e4df014d9c561303470f0ed1ffe06f31d0b467459a89675.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Digital Storage Cloud"
+							],
+							"block": [
+								"Advanced Inventory Hopper",
+								"Digital Storage Accessor"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 384,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/kehai/digitalstorage/internal/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## DSC 1.1.13 — Fix Incremental Persistence Crashes\n\nFixes a `ConcurrentModificationException` in 1.1.12 that could crash the server during incremental storage saves and cause shutdown saving to fail again.\n\n### Fixes\n- Fixed snapshot cursor invalidation after a provisional item variant is inserted and rolled back, including simulated insertions and failed hopper transfers.\n- Added structural version tracking separate from committed content versions, allowing snapshot cursors to restart before accessing an invalid iterator.\n- Added defensive recovery that discards partial snapshots after unexpected iterator failures.\n- Rebuild pending snapshots during final flush and shutdown instead of reusing previously retained cursors.\n\n### Validation\n- Reproduced the original crash with a regression test before applying the fix.\n- Added coverage for transaction commit/rollback, simulated insertion, nested hopper rollback, snapshot budgets, recovery, and persistence round trips.\n- Passed the complete built-in self-test, integration diagnostics, and standalone server verification using the final release JAR, including normal shutdown saving."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}

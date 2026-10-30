@@ -1,0 +1,248 @@
+{
+	"repo": "chenyuan233cy/kanhe",
+	"host": "github",
+	"description": "A Fabric mod that asks for a masked join password before connecting, verified server-side. | 进服密码 Mod：进服前弹窗输入掩码密码、服务端校验，管理员可随时重置。",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-09-30T18:51:11Z",
+	"pushed": "2026-10-18T04:25:09Z",
+	"releases": [
+		{
+			"tag": "v1.1.0+26.4-snapshot-4",
+			"published": "2026-10-18T04:25:11Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 652462160,
+					"name": "kanhe-fabric-1.1.0+26.4-snapshot-4.jar",
+					"url": "https://github.com/chenyuan233cy/kanhe/releases/download/v1.1.0%2B26.4-snapshot-4/kanhe-fabric-1.1.0%2B26.4-snapshot-4.jar",
+					"size": 36516,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "d85772abf3f57df22e2353315f9b51db9cf85278ffe1123f71174e044a401be2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "kanhe",
+							"version": "1.1.0+26.4-snapshot-4",
+							"name": "Kanhe",
+							"description": "Asks for a masked join password before connecting to a server; the password is verified server-side, and the admin can rotate it or change its format (digits / letters / mixed) and length at any time.",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 19,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "进服密码 Mod：进服前弹窗输入密码（掩码显示），服务端在握手阶段对合校验；没带密码的连接静默拒绝，服务器对外像不存在。\n\n### 本次更新 / What's new\n- 支持 **26.4-snapshot-4**（功能与 1.1.0 相同，仅为新游戏版本重新编译）\n- 已在真实 Fabric 26.4-snapshot-4 服务端上完整验证（见下）\n\n### 本次测试结果 / Tested on 26.4-snapshot-4\n- 不带 `_id` 的连接：静默拒绝（拿不到任何状态数据）\n- 带错误 `_id`：静默拒绝\n- 带正确 `_id`：正常返回服务器状态\n- `mode letters` 生成的密码全为小写字母，握手通过；`mode mixed` + `length 8` 生成 8 位字母数字，握手通过\n- `reset` 后旧密码立即失效、新密码通过\n- `set Pass-123`（含大写与连字符）握手通过；含空格或超过 64 字符被拒绝\n- `off` 后不带密码也能连（仅能获取状态）；`on` 后恢复拦截\n\n### 安装 / Install\n客户端与服务端**都要装** / Install on **both** client and server. Requires Fabric Loader 0.19.5 and Java 25.\n\n支持的游戏版本 / Supported game version: **26.4-snapshot-4**"
+		},
+		{
+			"tag": "v1.1.0+26.4-snapshot-3",
+			"published": "2026-10-09T00:05:28Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 623363929,
+					"name": "kanhe-fabric-1.1.0+26.4-snapshot-3.jar",
+					"url": "https://github.com/chenyuan233cy/kanhe/releases/download/v1.1.0%2B26.4-snapshot-3/kanhe-fabric-1.1.0%2B26.4-snapshot-3.jar",
+					"size": 36516,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "601db09615d740b8e78e72a21a68326923064be1eb1e1e8928e0777ec23c5e3d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "kanhe",
+							"version": "1.1.0+26.4-snapshot-3",
+							"name": "Kanhe",
+							"description": "Asks for a masked join password before connecting to a server; the password is verified server-side, and the admin can rotate it or change its format (digits / letters / mixed) and length at any time.",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 19,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "进服密码 Mod：进服前弹窗输入密码（掩码显示），服务端在握手阶段对合校验；没带密码的连接静默拒绝，服务器对外像不存在。\n\n### 本次更新 / What's new\n- 支持 **26.4-snapshot-3**（仅重新编译，功能与 1.1.0 完全相同）\n- 已核对：握手拦截点、指令注册点、进服弹窗、失败重弹、中英文注入点、`_id` 机制在 snapshot-3 里均未变化\n\n### 功能 / Features\n- 进服前弹窗、掩码输入 / Masked join-password prompt before connecting\n- 服务端握手阶段对合校验，不带密码的连接静默拒绝 / Verified server-side; connections without the password are dropped silently\n- `/kanhe`：查看 / 重置 / 手动指定 / 改位数 / 改形态 / 开关，`/kanhe help` 列出全部用法\n- 随机密码三种形态：数字 / 小写字母 / 小写字母+数字\n- 不依赖 Fabric API，无遥测 / No Fabric API required, no telemetry\n\n### 安装 / Install\n客户端与服务端**都要装** / Install on **both** client and server. Requires Fabric Loader 0.19.5 and Java 25.\n\n支持的游戏版本 / Supported game version: **26.4-snapshot-3**"
+		},
+		{
+			"tag": "v1.1.0+26.4-snapshot-1",
+			"published": "2026-10-01T18:08:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 604998455,
+					"name": "kanhe-fabric-1.1.0+26.4-snapshot-1.jar",
+					"url": "https://github.com/chenyuan233cy/kanhe/releases/download/v1.1.0%2B26.4-snapshot-1/kanhe-fabric-1.1.0%2B26.4-snapshot-1.jar",
+					"size": 36515,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "88fca6336dc616ef26cb1bd57b2c0e96b45047cb0fd8fba6be0ca9ab8ae0cc79",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "kanhe",
+							"version": "1.1.0+26.4-snapshot-1",
+							"name": "Kanhe",
+							"description": "Asks for a masked join password before connecting to a server; the password is verified server-side, and the admin can rotate it or change its format (digits / letters / mixed) and length at any time.",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 19,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "进服密码 Mod：进服前弹窗输入密码（掩码显示），服务端在握手阶段对合校验；没带密码的连接静默拒绝，服务器对外像不存在。\n\n### 1.1.0 更新 / What's new\n- 随机密码支持三种形态：`/kanhe mode digits|letters|mixed`（数字 / 字母 / 字母+数字），改完立刻生成新密码\n- 支持英文字母和符号：`/kanhe set <密码>` 可手动指定 1~64 个可见字符（不能含空格）\n- 长度只作用于随机密码：`set` 手动指定的密码不再受 `length` 限制\n- `show` 输出改为「当前密码 / 随机形态 / 随机位数 / 开关状态」，配置文件新增 `mode` 字段（旧配置自动迁移）\n\n### 安装 / Install\n客户端与服务端**都要装** / Install on **both** client and server. Requires Fabric Loader 0.19.5 and Java 25.\n\n支持的游戏版本 / Supported game version: **26.4-snapshot-1**\n\n> 与 `v1.1.0+26.4-snapshot-2` 功能完全相同，只是编译目标游戏版本不同。\n\n> 修订（2026-10-02）：随机字母密码改为**只用小写**（掩码输入时区分大小写容易打错）；/kanhe help 里三种形态分开写清楚。功能与 1.1.0 相同。"
+		},
+		{
+			"tag": "v1.1.0+26.4-snapshot-2",
+			"published": "2026-10-01T17:38:36Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 604998410,
+					"name": "kanhe-fabric-1.1.0+26.4-snapshot-2.jar",
+					"url": "https://github.com/chenyuan233cy/kanhe/releases/download/v1.1.0%2B26.4-snapshot-2/kanhe-fabric-1.1.0%2B26.4-snapshot-2.jar",
+					"size": 36515,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "f3eb12f080869a628876324937c25fa58f1c6ffd8ea78c12587f08bb6eeb8a8f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "kanhe",
+							"version": "1.1.0+26.4-snapshot-2",
+							"name": "Kanhe",
+							"description": "Asks for a masked join password before connecting to a server; the password is verified server-side, and the admin can rotate it or change its format (digits / letters / mixed) and length at any time.",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 19,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "进服密码 Mod：进服前弹窗输入密码（掩码显示），服务端在握手阶段对合校验；没带密码的连接静默拒绝，服务器对外像不存在。\n\n### 1.1.0 更新 / What's new\n- **随机密码支持三种形态**：`/kanhe mode digits|letters|mixed`（数字 / 字母 / 字母+数字），改完立刻生成新密码\n- **支持英文字母和符号**：`/kanhe set <密码>` 可手动指定 1~64 个可见字符（不能含空格）\n- **长度只作用于随机密码**：`set` 手动指定的密码不再受 `length` 限制\n- `show` 输出改为「当前密码 / 随机形态 / 随机位数 / 开关状态」，配置文件新增 `mode` 字段（旧配置自动迁移）\n\n### 功能 / Features\n- 进服前弹窗、掩码输入 / Masked join-password prompt before connecting\n- 服务端握手阶段对合校验，不带密码的连接静默拒绝 / Verified server-side; connections without the password are dropped silently\n- `/kanhe`：查看 / 重置 / 手动指定 / 改位数 / 改形态 / 开关，`/kanhe help` 列出全部用法\n- 局域网存档同样受保护（主机不受影响）/ LAN worlds are protected too (the host is unaffected)\n- 不依赖 Fabric API，无遥测 / No Fabric API required, no telemetry\n\n### 安装 / Install\n客户端与服务端**都要装** / Install on **both** client and server. Requires Fabric Loader 0.19.5 and Java 25.\n\n支持的游戏版本 / Supported game version: **26.4-snapshot-2**\n\n> 修订（2026-10-02）：随机字母密码改为**只用小写**（掩码输入时区分大小写容易打错）；/kanhe help 里三种形态分开写清楚。功能与 1.1.0 相同。"
+		},
+		{
+			"tag": "v1.0.0+26.4-snapshot-2",
+			"published": "2026-10-01T06:51:26Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 602641050,
+					"name": "kanhe-fabric-1.0.0+26.4-snapshot-2.jar",
+					"url": "https://github.com/chenyuan233cy/kanhe/releases/download/v1.0.0%2B26.4-snapshot-2/kanhe-fabric-1.0.0%2B26.4-snapshot-2.jar",
+					"size": 33355,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "30a6357948b5ce8536c711fc02d291aa50f0bc325331ddd647f0c5a2217d30b4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "kanhe",
+							"version": "1.0.0+26.4-snapshot-2",
+							"name": "Kanhe",
+							"description": "Asks for a masked join password before connecting to a server, and lets the server admin change or rotate the numeric code (length configurable) at any time.",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 18,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Kanhe 1.0.0 — Minecraft 26.4-snapshot-2\n\n进服密码 Mod：进服前弹窗输入密码（掩码显示），服务端对合校验。\n\n支持的游戏版本 / Supported game version: **26.4-snapshot-2**\n\n> 与 26.4-snapshot-1 版本功能完全相同，仅为新游戏版本重新编译。\n### 功能 / Features\n- 进服前弹窗、掩码输入 / Masked join-password prompt before connecting\n- 服务端在握手阶段对合校验，不带密码的连接静默拒绝（服务器对外像不存在）/ Verified server-side in the handshake; connections without the code are dropped silently\n- `/kanhe` 指令：查看 / 重置 / 指定密码 / 改位数（4~32，默认 6）/ `/kanhe` command: show, reset, set, length, on/off\n- 局域网存档同样受保护（主机不受影响）/ LAN worlds are protected too (the host is unaffected)\n- 不依赖 Fabric API，无遥测 / No Fabric API required, no telemetry\n\n### 安装 / Install\n客户端与服务端**都要装** / Install on **both** client and server. Requires Fabric Loader 0.19.5 and Java 25."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-30T12:12:39.453Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"history": 1
+}
