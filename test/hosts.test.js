@@ -393,6 +393,19 @@ describe("one host's rate limit", () => {
 	});
 });
 
+test("a gist pack is crawled under GitHub's rate limit", async () => {
+	const asked = [];
+	const outcome = await crawlEach(['gist:abc123', 'a/b'], {
+		crawlRepo: async line => {
+			asked.push(line);
+		},
+		deadline: Date.now() + 60_000,
+	});
+
+	expect(asked).toEqual(['gist:abc123', 'a/b']);
+	expect(outcome).toEqual({ failures: [], stopped: [] });
+});
+
 describe('a crawl held up', () => {
 	test('sets a repository aside that takes past its limit, and goes on to the rest', async () => {
 		setSystemTime();

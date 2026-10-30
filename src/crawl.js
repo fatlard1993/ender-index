@@ -562,6 +562,9 @@ const minutes = wait => `${Math.ceil(wait / 60_000)} ${Math.ceil(wait / 60_000) 
  */
 export const REPO_LIMIT = 15 * 60 * 1000;
 
+/** The host whose rate limit a line is read under: a gist pack is read from GitHub's API. */
+const limitedBy = line => (GIST_LINE.test(line) ? 'github' : parseLine(line).host);
+
 class TookTooLong extends Error {}
 
 const within = (work, limit) => {
@@ -588,7 +591,7 @@ export const crawlEach = async (
 	while (waiting.length > 0) {
 		const later = [];
 		const visit = async line => {
-			const { host } = parseLine(line);
+			const host = limitedBy(line);
 
 			if (Date.now() > deadline || limits.get(host)?.resetAt > Date.now()) {
 				later.push(line);
@@ -638,13 +641,13 @@ export const crawlEach = async (
 			break;
 		}
 
-		const hosts = [...new Set(later.map(line => parseLine(line).host))];
+		const hosts = [...new Set(later.map(limitedBy))];
 		const first = hosts.toSorted((a, b) => limits.get(a).resetAt - limits.get(b).resetAt)[0];
 		const wait = waitForReset(limits.get(first).resetAt, deadline);
 
 		if (wait === undefined) {
 			for (const host of hosts) {
-				const left = later.filter(line => parseLine(line).host === host).length;
+				const left = later.filter(line => limitedBy(line) === host).length;
 
 				stopped.push(
 					`${limits.get(host).message}, past the time budget; ${left} of ${HOST_NAMES[host]}'s repositories are crawled first next time`,
