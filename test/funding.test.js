@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { parseFunding, supportLinks } from '../src/funding';
+import { donationLinks, donationsByMod, parseFunding, supportLinks } from '../src/funding';
 
 describe('a FUNDING.yml', () => {
 	test("names each platform's page for its handles, and custom addresses as they are", () => {
@@ -62,5 +62,40 @@ describe("a jar's links", () => {
 			{ platform: 'custom', url: 'https://example.com/give' },
 			{ platform: 'custom', url: 'https://www.paypal.com/donate?id=1' },
 		]);
+	});
+});
+
+describe("a Modrinth project's donation links", () => {
+	test('are each a support link by the site they lead to, and any other web address is custom', () => {
+		expect(
+			donationLinks([
+				'https://ko-fi.com/a',
+				'https://www.patreon.com/a',
+				'https://example.com/tip',
+				'javascript:alert(1)',
+			]),
+		).toEqual([
+			{ platform: 'ko_fi', url: 'https://ko-fi.com/a' },
+			{ platform: 'patreon', url: 'https://www.patreon.com/a' },
+			{ platform: 'custom', url: 'https://example.com/tip' },
+		]);
+	});
+
+	test('are kept by the mod each project links as its source, named as the index names it', () => {
+		const links = [{ platform: 'ko_fi', url: 'https://ko-fi.com/a' }];
+
+		expect(
+			Object.fromEntries(
+				donationsByMod(
+					new Map([
+						['A/Mod', links],
+						['codeberg:b/mod', links],
+					]),
+				),
+			),
+		).toEqual({
+			'github:a/mod': links,
+			'codeberg:b/mod': links,
+		});
 	});
 });

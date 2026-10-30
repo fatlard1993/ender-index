@@ -13,6 +13,7 @@ import {
 } from './crawl';
 import * as codeberg from './codeberg';
 import { RateLimited } from './fetch';
+import { DONATIONS, donationsByMod } from './funding';
 import { searchCode, searchRepositories } from './github';
 import * as gitlab from './gitlab';
 import { modrinthSources } from './modrinth';
@@ -266,6 +267,7 @@ export const discover = async () => {
 
 		await Bun.write(join(DATA, 'sources.json'), asJson(mods.sources));
 		await Bun.write(join(DATA, 'modrinth-ids.json'), asJson(mods.ids));
+		await Bun.write(join(DATA, DONATIONS), asJson(donationsByMod(mods.donations)));
 		await writeList(
 			'modrinth-repos.txt',
 			sorted([...mods.sources.values()].filter(line => !own.has(repositoryKey(line)))),

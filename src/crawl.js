@@ -13,7 +13,7 @@ import * as gitlab from './gitlab';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
 import { GIST_LINE, buildPacks, crawlPack, packDemand, packPage } from './packs';
 import { buildSearch, latestAssets, themesOf } from './search';
-import { FUNDING_PATHS, parseFunding, supportLinks } from './funding';
+import { DONATIONS, FUNDING_PATHS, parseFunding, supportLinks } from './funding';
 import { rawUrl } from './raw';
 import { readmeSummary } from './summary';
 
@@ -745,7 +745,12 @@ export const recordFiles = async () =>
 export const writeLists = async () => {
 	const records = await Promise.all((await recordFiles()).map(file => Bun.file(file).json()));
 	const themes = themesOf(records);
-	const search = buildSearch(records, themes, await readJson(join(DATA, 'sources.json'), {}));
+	const search = buildSearch(
+		records,
+		themes,
+		await readJson(join(DATA, 'sources.json'), {}),
+		await readJson(join(DATA, DONATIONS), {}),
+	);
 	const packs = await readPacks();
 
 	await writeJsonLines(join(DATA, 'search.json'), search);

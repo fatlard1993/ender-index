@@ -1,6 +1,7 @@
 import { satisfies } from 'ender-launcher/range';
 import { authorOf, providerOf, requiredIds, sharing } from 'ender-launcher/rank';
 
+import { donationsOf } from './funding';
 import { informative, shorten } from './summary';
 import { coalesce, tagsOf } from './tags';
 
@@ -72,19 +73,23 @@ const summaryOf = record => {
 	return record.readmeSummary ? { text: record.readmeSummary, from: 'readme' } : undefined;
 };
 
-/** How its author takes support: their FUNDING.yml first, then what the listed release's jars link to, each once. */
-const fundingOf = (record, assets) => {
+/**
+ * How its author takes support: their FUNDING.yml first, then what the listed release's jars link to, then the
+ * donation links of its Modrinth project, each once.
+ */
+const fundingOf = (record, assets, donations) => {
 	const seen = new Set();
 	const links = [
 		...(record.funding ?? []).map(link => ({ ...link, from: 'repository' })),
 		...assets.flatMap(asset => asset.funding ?? []).map(link => ({ ...link, from: 'jar' })),
+		...donations.map(link => ({ ...link, from: 'modrinth' })),
 	].filter(({ url }) => !seen.has(url) && seen.add(url));
 
 	return links.length > 0 ? links : undefined;
 };
 
 /** One line of the search file: what a client needs to list a repository without fetching its record. */
-export const summarize = record => {
+export const summarize = (record, donations = []) => {
 	const latest = latestRelease(record);
 	const assets = latestAssets(record);
 
@@ -93,7 +98,7 @@ export const summarize = record => {
 		host: record.host,
 		description: record.description,
 		summary: summaryOf(record),
-		funding: fundingOf(record, assets),
+		funding: fundingOf(record, assets, donations),
 		stars: record.stars,
 		archived: record.archived,
 		license: record.license,
@@ -268,10 +273,10 @@ export const themesOf = records => {
 	);
 };
 
-export const buildSearch = (records, themes = themesOf(records), sources = {}) => {
+export const buildSearch = (records, themes = themesOf(records), sources = {}, donations = {}) => {
 	const listed = records.filter(record => record.gone === undefined);
 	const entries = listed
-		.map(summarize)
+		.map(record => summarize(record, donationsOf(donations, record)))
 		.filter(entry => entry.latest !== undefined)
 		.sort((a, b) => a.repo.localeCompare(b.repo));
 

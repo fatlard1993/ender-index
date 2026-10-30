@@ -1,4 +1,5 @@
 import { fetchSteady } from './fetch';
+import { donationLinks } from './funding';
 
 const API = 'https://api.modrinth.com/v2';
 
@@ -95,11 +96,13 @@ export const lineOf = url => {
 
 /**
  * Every Modrinth project of a type whose source is on a host the index crawls, by its slug and by its id, each to the
- * repos.txt line of its source, read page by page at the pace Modrinth allows. Takes about six minutes for its mods.
+ * repos.txt line of its source, and the donation links each line's project gives; read page by page at the pace
+ * Modrinth allows. Takes about six minutes for its mods.
  */
 export const modrinthSources = async ({ type = 'mod', pause = PAUSE, pages = Infinity } = {}) => {
 	const sources = new Map();
 	const ids = new Map();
+	const donations = new Map();
 	const facets = encodeURIComponent(JSON.stringify([[`project_type:${type}`]]));
 
 	for (let page = 0, total = Infinity; page * PAGE < total && page < pages; ++page) {
@@ -119,10 +122,14 @@ export const modrinthSources = async ({ type = 'mod', pause = PAUSE, pages = Inf
 
 			sources.set(project.slug, line);
 			ids.set(project.id, line);
+
+			const links = donationLinks((project.donation_urls ?? []).map(donation => donation.url));
+
+			if (links.length > 0) donations.set(line, links);
 		}
 
 		await Bun.sleep(pause);
 	}
 
-	return { sources, ids };
+	return { sources, ids, donations };
 };

@@ -89,6 +89,7 @@ module.exports = {
 		'unpack',
 		'unregister',
 		'unwrapped',
+		'urls',
 		'vnd',
 		'webfonts',
 		'webp',

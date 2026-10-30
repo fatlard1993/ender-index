@@ -1,6 +1,7 @@
 import { join } from 'node:path';
 
 import { DATA, readJson, recordPath, writeJson } from './crawl';
+import { DONATIONS, donationsOf } from './funding';
 import { summarize } from './search';
 import { answerOf } from './submit';
 
@@ -39,15 +40,14 @@ const guide = part => `${SITE}/#/authors/${part}`;
 export const KINDS = {
 	fund: {
 		asked: 'would pay its author',
-		settled: entry =>
-			entry.funding && `It already takes support: ${entry.funding.map(link => link.url).join(', ')}`,
+		settled: entry => entry.funding && `It already takes support: ${entry.funding.map(link => link.url).join(', ')}`,
 		notice: (title, count) => ({
 			title: `${count} players would like to support ${title}`,
 			body: `Hi! This is the [ender index](${SITE}/), which lists Minecraft mods from the repositories their authors keep, and installs them with the ender launcher.
 
-${count} players looking at ${title} on the index asked how they could pay you for it, and the index found no way to: no FUNDING.yml here or on your account, and no support link in the mod's metadata.
+${count} players looking at ${title} on the index asked how they could pay you for it, and the index found no way to: no FUNDING.yml here or on your account, no support link in the mod's metadata, and no donation link on a Modrinth project linking here.
 
-If you'd like to take support, either one is enough, and the index then shows it on the mod's page and in \`ender support\`: [how to add one](${guide('funding')}).
+If you'd like to take support, any one of those is enough, and the index then shows it on the mod's page and in \`ender support\`: [how to add one](${guide('funding')}).
 
 If you'd rather not, close this and nothing more is posted here; the index tells a repository this once.`,
 		}),
@@ -84,6 +84,7 @@ export const recordInterest = async ({
 	login,
 	now = new Date().toISOString(),
 	read = async mod => readJson(recordPath(mod)),
+	donations = {},
 	interest = {},
 	notices = {},
 }) => {
@@ -101,10 +102,11 @@ export const recordInterest = async ({
 
 	if (!record) return { counted: false, say: `The index lists no ${key}: ${pageOf(mod)} is not a page.` };
 
-	const entry = summarize(record);
+	const entry = summarize(record, donationsOf(donations, { host: mod.host, repo: record.repo ?? mod.name }));
 	const settled = KINDS[kind].settled(entry);
 
-	if (settled) return { counted: false, say: `${settled}, so there is nothing to ask its author for. Thanks for asking!` };
+	if (settled)
+		return { counted: false, say: `${settled}, so there is nothing to ask its author for. Thanks for asking!` };
 
 	const asking = new Set(interest[key]?.[kind] ?? []);
 
@@ -137,6 +139,7 @@ if (import.meta.main) {
 		login: process.env.INTEREST_LOGIN,
 		interest: await readJson(interestPath, {}),
 		notices: await readJson(noticesPath, {}),
+		donations: await readJson(join(DATA, DONATIONS), {}),
 	});
 
 	if (result.counted) {

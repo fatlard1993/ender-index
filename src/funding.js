@@ -104,6 +104,23 @@ const platformOf = ({ name, url }) => {
 	return SUPPORT_KEY.test(name) ? 'custom' : undefined;
 };
 
+/** Where discovery keeps the donation links of Modrinth projects, by the mod each links as its source. */
+export const DONATIONS = 'modrinth-funding.json';
+
+const modKey = line => (line.includes(':') ? line : `github:${line}`).toLowerCase();
+
+/** Donation links by repos.txt line, keyed as the index names a mod, `host:owner/repo`, in any case. */
+export const donationsByMod = byLine => new Map([...byLine].map(([line, links]) => [modKey(line), links]));
+
+/** The donation links Modrinth gives for a mod, by its host and repository. */
+export const donationsOf = (donations, { host, repo }) => donations[modKey(`${host}:${repo}`)] ?? [];
+
+/** A project's donation links, as Modrinth keeps them: each an http(s) address, by the site it leads to. */
+export const donationLinks = addresses =>
+	addresses
+		.filter(url => /^https?:\/\//i.test(url))
+		.map(url => ({ platform: platformOf({ name: 'donation', url }), url }));
+
 /**
  * Of the links a jar's mods give, those that ask for support, as FUNDING.yml's are: by the site they lead to, or a key
  * that says so.

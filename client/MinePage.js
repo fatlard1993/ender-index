@@ -9,7 +9,7 @@ import { Meta, Row, Stack, Title, Warning, authorsPath, avatar, count, date, sit
 /** What each lack costs a mod, said to its author, with the part of the guide that says how to mend it. */
 const LACKS = {
 	funding:
-		'Players have no way to pay you for it: no FUNDING.yml here or on your account, and no support link in its metadata.',
+		'Players have no way to pay you for it: no FUNDING.yml here or on your account, no support link in its metadata, and no donation link on its Modrinth project.',
 	releases: 'It has no release with a jar, so players have ender build it from source, which takes them minutes.',
 };
 

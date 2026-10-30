@@ -23,12 +23,28 @@ const released = {
 	],
 };
 
-const ask = (kind, login, { record = sourceOnly, interest = {}, notices = {}, mod = 'github:a/boats' } = {}) =>
-	recordInterest({ body: body(mod), kind, login, now: '2026-10-29T00:00:00Z', read: async () => record, interest, notices });
+const ask = (
+	kind,
+	login,
+	{ record = sourceOnly, interest = {}, notices = {}, donations = {}, mod = 'github:a/boats' } = {},
+) =>
+	recordInterest({
+		body: body(mod),
+		kind,
+		login,
+		now: '2026-10-29T00:00:00Z',
+		read: async () => record,
+		interest,
+		notices,
+		donations,
+	});
 
 describe('the mod a player names', () => {
 	test('is its page, a host and its name, or a GitHub repository', () => {
-		expect(modOf('https://fatlard1993.github.io/ender-index/#/mod/codeberg/a/b')).toEqual({ host: 'codeberg', name: 'a/b' });
+		expect(modOf('https://fatlard1993.github.io/ender-index/#/mod/codeberg/a/b')).toEqual({
+			host: 'codeberg',
+			name: 'a/b',
+		});
 		expect(modOf('gh:a/b')).toEqual({ host: 'github', name: 'a/b' });
 		expect(modOf('gitlab:g/sub/p')).toEqual({ host: 'gitlab', name: 'g/sub/p' });
 		expect(modOf('a/b')).toEqual({ host: 'github', name: 'a/b' });
@@ -71,15 +87,28 @@ describe('asking', () => {
 	});
 
 	test('is not counted for what the mod already has', async () => {
-		expect(await ask('release', 'ann', { record: released })).toMatchObject({ counted: false, say: expect.stringContaining('built release now') });
+		expect(await ask('release', 'ann', { record: released })).toMatchObject({
+			counted: false,
+			say: expect.stringContaining('built release now'),
+		});
 
 		const funded = { ...released, funding: [{ platform: 'ko_fi', url: 'https://ko-fi.com/a' }] };
 
 		expect((await ask('fund', 'ann', { record: funded })).say).toContain('https://ko-fi.com/a');
+
+		const donations = { 'github:a/boats': [{ platform: 'patreon', url: 'https://www.patreon.com/a' }] };
+
+		expect(await ask('fund', 'ann', { record: released, donations })).toMatchObject({
+			counted: false,
+			say: expect.stringContaining('https://www.patreon.com/a'),
+		});
 	});
 
 	test('is not counted for a mod the index does not list, and says so', async () => {
-		expect(await ask('fund', 'ann', { record: null })).toMatchObject({ counted: false, say: expect.stringContaining('lists no github:a/boats') });
+		expect(await ask('fund', 'ann', { record: null })).toMatchObject({
+			counted: false,
+			say: expect.stringContaining('lists no github:a/boats'),
+		});
 		expect((await ask('fund', 'ann', { mod: 'not a mod' })).counted).toBe(false);
 	});
 });

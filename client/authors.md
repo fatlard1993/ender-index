@@ -16,7 +16,7 @@ A mod on GitHub with no jar on its releases is listed by its source, when that b
 
 ## Funding
 
-When players install your mod through ender, the index shows them how to support you: on the mod's page, and in `ender support`, which lists who made an instance's mods and how each takes support. It looks in two places, and either is enough.
+When players install your mod through ender, the index shows them how to support you: on the mod's page, and in `ender support`, which lists who made an instance's mods and how each takes support. It looks in three places, and any one is enough.
 
 **A FUNDING.yml**, the file GitHub's Sponsor button reads: `.github/FUNDING.yml` in the repository, or on GitHub in a repository named `.github` on your account, which covers every repository you own.
 
@@ -37,7 +37,9 @@ custom: ['https://example.com/support']
 }
 ```
 
-A FUNDING.yml is read again weekly; a jar's links are read with the release.
+**Your Modrinth project's donation links**, when it links this repository as its source: the ones set under Links in the project's settings.
+
+A FUNDING.yml is read again weekly, a jar's links with the release, and Modrinth's donation links nightly.
 
 ## Being found
 

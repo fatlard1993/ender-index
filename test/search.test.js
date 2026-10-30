@@ -279,6 +279,30 @@ describe('discovery', () => {
 		).toBeUndefined();
 	});
 
+	test("lists its Modrinth project's donation links after its own, matched to it in any case", () => {
+		const donations = {
+			'github:a/mod': [
+				{ platform: 'github', url: 'https://github.com/sponsors/a' },
+				{ platform: 'custom', url: 'https://example.com/tip' },
+			],
+		};
+		const [entry] = buildSearch(
+			[
+				record('A/Mod', [{ tag: '1.0', prerelease: false, assets: [asset()] }], {
+					funding: [{ platform: 'github', url: 'https://github.com/sponsors/a' }],
+				}),
+			],
+			undefined,
+			{},
+			donations,
+		);
+
+		expect(entry.funding).toEqual([
+			{ platform: 'github', url: 'https://github.com/sponsors/a', from: 'repository' },
+			{ platform: 'custom', url: 'https://example.com/tip', from: 'modrinth' },
+		]);
+	});
+
 	test('a manifest under a test or example directory does not make a repository a mod', () => {
 		const items = [
 			{ path: 'src/main/resources/fabric.mod.json', repository: { full_name: 'a/mod' } },
