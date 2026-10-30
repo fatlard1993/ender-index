@@ -12,7 +12,12 @@ concurrency: interest
 
 jobs:
   count:
-    if: contains(github.event.issue.labels.*.name, 'interest') && github.event.issue.state == 'open'
+    # By label from the form; by title from ender, as GitHub drops the labels of an issue opened through its API by
+    # anyone who cannot triage this repository
+    if: >-
+      github.event.issue.state == 'open' && (contains(github.event.issue.labels.*.name, 'interest') ||
+      github.event.issue.title == 'I would pay this mod''s author' ||
+      github.event.issue.title == 'I want a built release of this mod')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -33,7 +38,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           INTEREST_BODY: ${{ github.event.issue.body }}
-          INTEREST_KIND: ${{ contains(github.event.issue.labels.*.name, 'fund') && 'fund' || 'release' }}
+          INTEREST_KIND: ${{ (contains(github.event.issue.labels.*.name, 'fund') || github.event.issue.title == 'I would pay this mod''s author') && 'fund' || 'release' }}
           INTEREST_LOGIN: ${{ github.event.issue.user.login }}
           INTEREST_ISSUE: ${{ github.event.issue.number }}
           INTEREST_SAY: ${{ runner.temp }}/say.md

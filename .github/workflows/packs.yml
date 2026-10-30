@@ -12,7 +12,11 @@ concurrency: packs
 
 jobs:
   list:
-    if: contains(github.event.issue.labels.*.name, 'pack') && github.event.issue.state == 'open'
+    # By label from the form; by title from ender, as GitHub drops the labels of an issue opened through its API by
+    # anyone who cannot triage this repository
+    if: >-
+      github.event.issue.state == 'open' && (contains(github.event.issue.labels.*.name, 'pack') ||
+      github.event.issue.title == 'List a pack')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
