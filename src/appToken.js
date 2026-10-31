@@ -19,10 +19,11 @@ export const appJwt = (appId, key, now = Date.now()) => {
 };
 
 /**
- * Tokens of a GitHub App's installation on a repository, each asked for when the last is near its expiry: an
- * installation token lasts an hour, and a crawl runs for four. Its rate limit is the App's, apart from any person's.
+ * Tokens of a GitHub App's installation on an account, each asked for when the last is near its expiry: an
+ * installation token lasts an hour, and a crawl runs for four. Its rate limit is the App's, apart from any person's,
+ * and it reads public repositories whichever of the account's repositories the installation was given.
  */
-export const appTokens = ({ appId, key, repository, fetcher = fetch, now = () => Date.now() }) => {
+export const appTokens = ({ appId, key, account, fetcher = fetch, now = () => Date.now() }) => {
 	let installation;
 	let current;
 
@@ -34,7 +35,7 @@ export const appTokens = ({ appId, key, repository, fetcher = fetch, now = () =>
 
 		if (!response.ok) {
 			throw new Error(
-				`GitHub App ${appId} could not get a token for ${repository}: ${path} answered ${response.status}; is it installed there?`,
+				`GitHub App ${appId} could not get a token on ${account}: ${path} answered ${response.status}; is it installed there?`,
 			);
 		}
 
@@ -44,7 +45,7 @@ export const appTokens = ({ appId, key, repository, fetcher = fetch, now = () =>
 	return async () => {
 		if (current && current.expires - now() > RENEW_BEFORE) return current.token;
 
-		installation ??= (await asked(`/repos/${repository}/installation`)).id;
+		installation ??= (await asked(`/users/${account}/installation`)).id;
 
 		const { token, expires_at: expires } = await asked(`/app/installations/${installation}/access_tokens`, 'POST');
 

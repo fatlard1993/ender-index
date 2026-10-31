@@ -31,7 +31,7 @@ describe("a GitHub App's tokens", () => {
 
 			return Response.json({ token: `t${asked.length}`, expires_at: new Date(clock + 60 * 60 * 1000).toISOString() });
 		};
-		const next = appTokens({ appId: 1, key, repository: 'o/index', fetcher, now: () => clock });
+		const next = appTokens({ appId: 1, key, account: 'o', fetcher, now: () => clock });
 
 		expect(await next()).toBe('t2');
 		clock += 50 * 60 * 1000;
@@ -39,22 +39,22 @@ describe("a GitHub App's tokens", () => {
 		clock += 6 * 60 * 1000;
 		expect(await next()).toBe('t3');
 		expect(asked).toEqual([
-			'GET /repos/o/index/installation',
+			'GET /users/o/installation',
 			'POST /app/installations/9/access_tokens',
 			'POST /app/installations/9/access_tokens',
 		]);
 	});
 
-	test('that cannot be had say which App, which repository, and what to check', async () => {
+	test('that cannot be had say which App, which account, and what to check', async () => {
 		const next = appTokens({
 			appId: 7,
 			key,
-			repository: 'o/index',
+			account: 'o',
 			fetcher: async () => new Response('', { status: 404 }),
 		});
 
 		await expect(next()).rejects.toThrow(
-			'GitHub App 7 could not get a token for o/index: /repos/o/index/installation answered 404; is it installed there?',
+			'GitHub App 7 could not get a token on o: /users/o/installation answered 404; is it installed there?',
 		);
 	});
 });

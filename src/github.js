@@ -22,7 +22,7 @@ let loading;
 let appToken;
 
 /**
- * A GitHub App's installation on the index first, when CRAWL_APP_ID and CRAWL_APP_KEY name one, so the crawl spends
+ * A GitHub App's installation on the index's owner first, when CRAWL_APP_ID and CRAWL_APP_KEY name one, so the crawl spends
  * the App's rate limit and no person's; else GITHUB_TOKEN, or on a workstation the `gh` CLI's. Code search refuses
  * to run without one.
  */
@@ -31,7 +31,7 @@ const token = async () => {
 		appToken ??= appTokens({
 			appId: process.env.CRAWL_APP_ID,
 			key: process.env.CRAWL_APP_KEY,
-			repository: 'fatlard1993/ender-index',
+			account: 'fatlard1993',
 		});
 
 		return appToken();
