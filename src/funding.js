@@ -94,6 +94,8 @@ const SUPPORT_SITES = {
 const SUPPORT_KEY = /donat|sponsor|patreon|kofi|ko-fi|paypal|coffee|funding|\btips?$/i;
 
 const platformOf = ({ name, url }) => {
+	if (!URL.canParse(url)) return undefined;
+
 	const { hostname, pathname } = new URL(url);
 	const host = hostname.replace(/^www\./, '');
 

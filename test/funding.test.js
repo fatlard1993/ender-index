@@ -130,6 +130,13 @@ describe("a readme's support links", () => {
 		]);
 	});
 
+	test('pass over an address that does not parse, as a readme shows a local server or a placeholder', () => {
+		const markdown = 'Open `http://localhost:8080`, or http://[your-ip]:25575, then https://ko-fi.com/patbox';
+
+		expect(readmeSupport(markdown)).toEqual([{ platform: 'ko_fi', url: 'https://ko-fi.com/patbox' }]);
+		expect(supportLinks([{ name: 'website', url: 'https://sillyland.xyz (currently a honeypot)' }])).toEqual([]);
+	});
+
 	test("are a person's own when the handle is their login, whatever its case or separators", () => {
 		const links = [
 			{ platform: 'patreon', url: 'https://www.patreon.com/c/Some_One' },
