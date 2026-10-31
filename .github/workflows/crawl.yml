@@ -1,12 +1,18 @@
 name: crawl
 
 on:
+  # Four crawls a day, six hours apart: the crawl spends the token's hourly limit, which refills each hour, so each
+  # run's four hours go as far as one night's did, and the hours between leave the token's owner all of it. Only the
+  # first discovers
   schedule:
     - cron: '17 4 * * *'
+    - cron: '17 10 * * *'
+    - cron: '17 16 * * *'
+    - cron: '17 22 * * *'
   workflow_dispatch:
     inputs:
       discover:
-        description: Search for new mod repositories before crawling, as each scheduled crawl does
+        description: Search for new mod repositories before crawling, as the first scheduled crawl of each day does
         type: boolean
         default: true
 
@@ -43,7 +49,7 @@ jobs:
           key: crawl-${{ github.run_id }}
           restore-keys: crawl-
       - name: discover
-        if: inputs.discover || github.event_name == 'schedule'
+        if: inputs.discover || github.event.schedule == '17 4 * * *'
         run: bun run discover
         working-directory: ender-index
         env:
