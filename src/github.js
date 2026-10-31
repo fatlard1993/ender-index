@@ -95,6 +95,8 @@ export const kindOf = path => {
 	if (/\/releases\?.*&page=/.test(path)) return 'history pages';
 	if (path.includes('/releases')) return 'releases';
 	if (path.endsWith('/readme')) return 'readmes';
+	if (path.includes('/contributors')) return 'contributors';
+	if (path.startsWith('/gists/')) return 'gists';
 
 	return 'repository';
 };

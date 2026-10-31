@@ -343,6 +343,8 @@ describe('the rate limit', () => {
 		expect(kindOf('/repos/a/b/releases?per_page=30&page=3')).toBe('history pages');
 		expect(kindOf('/search/code?q=x')).toBe('code search');
 		expect(kindOf('/repos/a/b/readme')).toBe('readmes');
+		expect(kindOf('/repos/a/b/contributors?per_page=100')).toBe('contributors');
+		expect(kindOf('/gists/abc')).toBe('gists');
 
 		expect(
 			spendingLine({
