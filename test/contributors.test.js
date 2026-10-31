@@ -82,8 +82,8 @@ describe('reading contributors in a crawl', () => {
 		};
 	};
 
-	test("asks each person's funding once a crawl, however many repositories they made", async () => {
-		const { queries, ask } = answering({ lead: { hasSponsorsListing: true }, helper: null });
+	test("asks each person's name and funding once a crawl, however many repositories they made", async () => {
+		const { queries, ask } = answering({ lead: { name: 'Lea D', hasSponsorsListing: true }, helper: null });
 		const people = new Map();
 		const list = async () => rankContributors(listed);
 
@@ -96,7 +96,12 @@ describe('reading contributors in a crawl', () => {
 				commits: 100,
 				more: 0,
 				people: [
-					{ login: 'lead', commits: 90, funding: [{ platform: 'github', url: 'https://github.com/sponsors/lead' }] },
+					{
+						login: 'lead',
+						name: 'Lea D',
+						commits: 90,
+						funding: [{ platform: 'github', url: 'https://github.com/sponsors/lead' }],
+					},
 					{ login: 'helper', commits: 10, funding: [] },
 				],
 			},

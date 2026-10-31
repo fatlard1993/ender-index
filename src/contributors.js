@@ -28,7 +28,7 @@ export const peopleQuery = logins =>
 	`query { ${logins
 		.map(
 			(login, at) =>
-				`u${at}: user(login: ${JSON.stringify(login)}) { hasSponsorsListing websiteUrl account: repository(name: ".github") { root: object(expression: "HEAD:FUNDING.yml") { ... on Blob { text } } nested: object(expression: "HEAD:.github/FUNDING.yml") { ... on Blob { text } } } }`,
+				`u${at}: user(login: ${JSON.stringify(login)}) { name hasSponsorsListing websiteUrl account: repository(name: ".github") { root: object(expression: "HEAD:FUNDING.yml") { ... on Blob { text } } nested: object(expression: "HEAD:.github/FUNDING.yml") { ... on Blob { text } } } }`,
 		)
 		.join(' ')} }`;
 
@@ -52,9 +52,9 @@ export const personFunding = (login, user) => {
 };
 
 /**
- * Who made a GitHub repository, from its contributors, each with how they take support: their account's, and the
- * repository's readme's links to their own pages. Read again weekly; a person's account is asked once a crawl, in
- * `people`, and an answer that fails keeps what was known.
+ * Who made a GitHub repository, from its contributors, each with the name their profile gives and how they take
+ * support: their account's, and the repository's readme's links to their own pages. Read again weekly; a person's
+ * account is asked once a crawl, in `people`, and an answer that fails keeps what was known.
  */
 export const contributorsOf = async ({
 	name,
@@ -89,7 +89,10 @@ export const contributorsOf = async ({
 		asking.forEach((login, at) =>
 			people.set(
 				login,
-				answer.then(data => personFunding(login, data[`u${at}`])),
+				answer.then(data => ({
+					name: data[`u${at}`]?.name || undefined,
+					funding: personFunding(login, data[`u${at}`]),
+				})),
 			),
 		);
 	}
@@ -102,10 +105,11 @@ export const contributorsOf = async ({
 				...ranked,
 				people: await Promise.all(
 					ranked.people.map(async person => {
-						const own = await people.get(person.login);
+						const { name: shown, funding: own } = await people.get(person.login);
 
 						return {
 							...person,
+							...(shown && shown !== person.login ? { name: shown } : {}),
 							funding: [
 								...own,
 								...linksOf(inReadme, person.login).filter(link => !own.some(({ url }) => url === link.url)),
