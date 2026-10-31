@@ -8,7 +8,9 @@ permissions:
   contents: write
   issues: write
 
-concurrency: mods
+# One group per issue: GitHub keeps one pending run per group and cancels the rest, which in a shared group would drop
+# an issue opened while two others waited. Runs for different issues meet at the push, which retries from the newest
+concurrency: mods-${{ github.event.issue.number }}
 
 jobs:
   list:
