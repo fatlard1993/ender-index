@@ -1,6 +1,6 @@
 # ender-index
 
-Minecraft mods found where their source lives, described by their own jars, and scanned every night; and the modpacks built from them, with where each of their mods really comes from.
+Minecraft mods found where their source lives, described by their own jars, and scanned four times a day; and the modpacks built from them, with where each of their mods really comes from.
 
 Search it at **[fatlard1993.github.io/ender-index](https://fatlard1993.github.io/ender-index/)**, or from a terminal with [ender](https://github.com/fatlard1993/ender-launcher)'s `ender search`. Both rank the same way.
 
@@ -125,8 +125,8 @@ A GitHub token is required, because code search refuses anonymous requests: `GIT
 
 ender is a sibling checkout (`../ender-launcher`), so the scanner is always the one the client runs.
 
-## Nightly
+## Crawling
 
-[`.github/workflows/crawl.yml`](.github/workflows/crawl.yml) crawls at 04:17 UTC, discovering before each crawl, and commits whatever changed. A crawl that failed for some repository still commits what it found, then fails the run so the failure is seen.
+[`.github/workflows/crawl.yml`](.github/workflows/crawl.yml) crawls at 04:17, 10:17, 16:17 and 22:17 UTC, discovering before the first, and commits whatever changed. Each crawl first asks GitHub over GraphQL for the newest release of every repository it has read, a hundred to a query, and crawls those with a release it has not read before the rest. A [List a mod](.github/ISSUE_TEMPLATE/mod.yml) issue crawls and lists one repository straight away. A crawl that failed for some repository still commits what it found, then fails the run so the failure is seen.
 
-Each crawl asks GitHub for a repository's details and releases conditionally, against responses kept in `.cache` between runs. An unchanged answer is a 304, which GitHub does not count against the rate limit, so a night's cost is the repositories that changed, not all of them. The Actions token allows 1000 requests an hour; when a crawl reaches the limit it stops, says when the limit resets, and the repositories it did not reach are crawled first the next night. A `CRAWL_TOKEN` secret (a fine-grained token with public read access, 5000 an hour) fills a large index sooner, and the workflow prefers it when present.
+Each crawl asks GitHub for a repository's details and releases conditionally, against responses kept in `.cache` between runs. An unchanged answer is a 304, which GitHub does not count against the rate limit, so a night's cost is the repositories that changed, not all of them. The Actions token allows 1000 requests an hour; when a crawl reaches the limit it stops, says when the limit resets, and the repositories it did not reach are crawled first the next run. A `CRAWL_TOKEN` secret (a fine-grained token with public read access, 5000 an hour) fills a large index sooner, and the workflow prefers it when present.
