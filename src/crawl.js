@@ -106,10 +106,11 @@ export const uniqueRepositories = lines => {
 };
 
 /**
- * The order a crawl takes repositories in: every one found on its own host before any known only from Modrinth, and
- * within each, the least recently fetched first, so a crawl cut short resumes where it stopped.
+ * The order a crawl takes repositories in: what packs use and was never read, then those with a release the index
+ * has not read, then every one found on its own host before any known only from Modrinth, and within each, the least
+ * recently fetched first, so a crawl cut short resumes where it stopped.
  */
-export const crawlOrder = (found, fromModrinth, ageOf, demand = new Map()) => {
+export const crawlOrder = (found, fromModrinth, ageOf, demand = new Map(), changed = new Set()) => {
 	const own = uniqueRepositories(found);
 	const ownKeys = new Set(own.map(repositoryKey));
 	const oldestFirst = lines => [...lines].sort((a, b) => ageOf(a) - ageOf(b));
@@ -118,9 +119,10 @@ export const crawlOrder = (found, fromModrinth, ageOf, demand = new Map()) => {
 		...oldestFirst(uniqueRepositories(fromModrinth).filter(line => !ownKeys.has(repositoryKey(line)))),
 	];
 	const wanted = listed.filter(line => demand.has(line) && !ageOf(line)).sort((a, b) => demand.get(b) - demand.get(a));
-	const first = new Set(wanted);
+	const updated = listed.filter(line => changed.has(line) && !wanted.includes(line));
+	const first = new Set([...wanted, ...updated]);
 
-	return [...wanted, ...listed.filter(line => !first.has(line))];
+	return [...wanted, ...updated, ...listed.filter(line => !first.has(line))];
 };
 
 const HOSTS = { github, codeberg, gitlab };
@@ -624,6 +626,75 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, peo
 	return result.events;
 };
 
+/** Repositories asked about in one GraphQL query; a hundred with their newest release costs one point. */
+export const RELEASE_BATCH = 100;
+
+/** Queries asked at once: each takes seconds, and tens of thousands of repositories make hundreds of them. */
+const RELEASE_QUERIES = 4;
+
+export const newestReleasesQuery = names =>
+	`query { ${names
+		.map((name, at) => {
+			const [owner, repository] = name.split('/');
+
+			return `r${at}: repository(owner: ${JSON.stringify(owner)}, name: ${JSON.stringify(repository)}) { releases(first: 1, orderBy: { field: CREATED_AT, direction: DESC }) { nodes { tagName } } }`;
+		})
+		.join(' ')} }`;
+
+/**
+ * Of the GitHub repositories the crawl has read releases of, those whose newest release it has not: asked a hundred at
+ * a time over GraphQL, so a new version is crawled in the next run rather than when its repository's turn comes. A
+ * query that fails leaves its repositories to their turn.
+ */
+export const withNewReleases = async ({
+	lines,
+	knownTags = github.cachedReleaseTags,
+	ask = github.graphql,
+	log = console.log,
+}) => {
+	const known = [];
+
+	for (const line of lines) {
+		if (line.includes(':')) continue;
+
+		const tags = await knownTags(line);
+
+		if (tags) known.push({ line, tags: new Set(tags) });
+	}
+
+	log(`Asking GitHub for the newest release of ${known.length} repositories, ${RELEASE_BATCH} to a query`);
+
+	const changed = new Set();
+	const batches = [];
+	let limited = false;
+
+	for (let at = 0; at < known.length; at += RELEASE_BATCH) batches.push(known.slice(at, at + RELEASE_BATCH));
+
+	const work = async () => {
+		for (let batch = batches.shift(); batch && !limited; batch = batches.shift()) {
+			try {
+				const data = await ask(newestReleasesQuery(batch.map(({ line }) => line)));
+
+				batch.forEach(({ line, tags }, index) => {
+					const newest = data[`r${index}`]?.releases.nodes[0]?.tagName;
+
+					if (newest !== undefined && !tags.has(newest)) changed.add(line);
+				});
+			} catch (error) {
+				log(`Left ${batch.length} repositories to their turn: ${error.message}`);
+
+				if (error instanceof RateLimited) limited = true;
+			}
+		}
+	};
+
+	await Promise.all(Array.from({ length: RELEASE_QUERIES }, work));
+
+	log(`${changed.size} have a release the index has not read; they are crawled first`);
+
+	return changed;
+};
+
 /** How long to wait for the rate limit to reset, or undefined when the reset comes too late to crawl on. */
 export const waitForReset = (resetAt, deadline, now = Date.now()) =>
 	resetAt + 5000 < deadline ? Math.max(resetAt + 5000 - now, 0) : undefined;
@@ -878,7 +949,8 @@ export const crawl = async ({ only } = {}) => {
 	);
 	const modrinthIds = await readJson(join(DATA, 'modrinth-ids.json'), {});
 	const demand = packDemand(await readPacks(), modrinthIds);
-	const repos = crawlOrder(found, fromModrinth, line => ages.get(line), demand);
+	const changed = only ? new Set() : await withNewReleases({ lines: [...found, ...fromModrinth] });
+	const repos = crawlOrder(found, fromModrinth, line => ages.get(line), demand, changed);
 	const knownBad = new Map(
 		(await readJson(join(DATA, 'known-bad.json'), [])).map(entry => [entry.sha256, entry.reason]),
 	);

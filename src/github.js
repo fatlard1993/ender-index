@@ -59,6 +59,10 @@ export const saveCache = async () => {
 /** When a cached response for this path was last fetched or confirmed, or 0 for never. */
 export const lastFetched = async path => (await cache())[path]?.fetched ?? 0;
 
+/** The tags of a repository's releases as the crawl last read them, newest first, or undefined when it never has. */
+export const cachedReleaseTags = async fullName =>
+	(await cache())[`/repos/${fullName}/releases?per_page=30`]?.body?.map(release => release.tag_name);
+
 /** What a path costs is filed under: deep history pages are read once, the rest on every crawl. */
 export const kindOf = path => {
 	if (path.startsWith('/search/code')) return 'code search';

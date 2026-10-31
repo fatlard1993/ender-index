@@ -5,6 +5,7 @@ import { afterEach, describe, expect, setSystemTime, test } from 'bun:test';
 
 import {
 	DATA,
+	RELEASE_BATCH,
 	crawlEach,
 	crawlOrder,
 	parseLine,
@@ -12,6 +13,7 @@ import {
 	recordPath,
 	spendingLine,
 	waitForReset,
+	withNewReleases,
 	writeJsonLines,
 } from '../src/crawl';
 import { RateLimited } from '../src/fetch';
@@ -499,6 +501,20 @@ describe('the order a crawl takes repositories in', () => {
 		]);
 	});
 
+	test('then those with a release the index has not read, before the least recently fetched', () => {
+		const ages = { 'a/old': 10, 'a/new-release': 50, 'm/released': 60, 'm/quiet': 1 };
+
+		expect(
+			crawlOrder(
+				['a/old', 'a/new-release'],
+				['m/quiet', 'm/released'],
+				line => ages[line],
+				new Map(),
+				new Set(['a/new-release', 'm/released']),
+			),
+		).toEqual(['a/new-release', 'm/released', 'a/old', 'm/quiet']);
+	});
+
 	test('takes lines differing only in case as one repository, as its host does', () => {
 		expect(crawlOrder(['A/Mod', 'a/mod', 'b/x'], ['b/X', 'c/y', 'C/Y'], () => 0)).toEqual(['A/Mod', 'b/x', 'c/y']);
 	});
@@ -594,5 +610,54 @@ describe("a personal token's allowance", () => {
 			if (token === undefined) delete process.env.GITHUB_TOKEN;
 			delete process.env.CRAWL_RESERVE;
 		}
+	});
+});
+
+describe('a release the index has not read', () => {
+	const tags = { 'a/same': ['1.0'], 'a/newer': ['1.0'], 'a/gone': ['1.0'] };
+	const answering = newest => async query =>
+		Object.fromEntries(
+			[...query.matchAll(/(r\d+): repository\(owner: "([^"]+)", name: "([^"]+)"\)/g)].map(([, alias, owner, name]) => [
+				alias,
+				newest[`${owner}/${name}`] === null ? null : { releases: { nodes: [{ tagName: newest[`${owner}/${name}`] }] } },
+			]),
+		);
+
+	test("is a repository whose newest release on GitHub is not among those the crawl read; others' hosts are not asked", async () => {
+		const asked = [];
+		const changed = await withNewReleases({
+			lines: ['a/same', 'a/newer', 'a/gone', 'a/never-read', 'codeberg:b/c'],
+			knownTags: async line => tags[line],
+			ask: async query => {
+				asked.push(query);
+
+				return answering({ 'a/same': '1.0', 'a/newer': '2.0', 'a/gone': null })(query);
+			},
+			log: () => {},
+		});
+
+		expect([...changed]).toEqual(['a/newer']);
+		expect(asked).toHaveLength(1);
+		expect(asked[0]).not.toContain('never-read');
+	});
+
+	test('is left to its turn when GitHub fails, and the rest are asked no more once the limit is reached', async () => {
+		const lines = Array.from({ length: RELEASE_BATCH * 12 }, (_, at) => `a/r${at}`);
+		let asked = 0;
+		const logged = [];
+		const changed = await withNewReleases({
+			lines,
+			knownTags: async () => ['1.0'],
+			ask: async () => {
+				asked += 1;
+
+				throw asked === 1 ? new Error('GitHub GraphQL answered 502') : new RateLimited('limited', Date.now());
+			},
+			log: line => logged.push(line),
+		});
+
+		expect(changed.size).toBe(0);
+		expect(asked).toBeLessThan(12);
+		expect(logged.filter(line => line.startsWith('Left'))).toHaveLength(asked);
 	});
 });
