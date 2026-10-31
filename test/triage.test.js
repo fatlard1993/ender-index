@@ -95,6 +95,22 @@ describe('the triage', () => {
 		expect(logged.at(-1)).toBe('Not looked at, left for next time: a/repo100 and 0 more: GitHub GraphQL answered 502');
 	});
 
+	test('stops at its deadline, keeping what it knew and saying how many are left', async () => {
+		const logged = [];
+		const kept = await triage({
+			lines: Array.from({ length: BATCH * 2 }, (_, at) => `a/repo${at}`),
+			noJars: { 'old/one': '2026-10-20' },
+			now: NOW,
+			ask: answering({}),
+			indexed: async () => false,
+			deadline: Date.now() - 1,
+			log: line => logged.push(line),
+		});
+
+		expect(kept).toEqual({ 'old/one': '2026-10-20' });
+		expect(logged).toContain(`Out of time with ${BATCH * 2} left for next time`);
+	});
+
 	test('leaves a repository with no jar alone for thirty days, then looks again', () => {
 		expect(restingOn('2026-10-01', NOW)).toBe(true);
 		expect(restingOn('2026-09-27', NOW)).toBe(false);

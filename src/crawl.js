@@ -67,7 +67,7 @@ export const readLines = async file =>
 /** The repositories found on their own hosts: by code search, by topic, or listed by hand. */
 export const readRepos = () => readLines('repos.txt');
 
-/** The Modrinth-only repositories found with no jar in their newest releases, each by the day it was looked at. */
+/** The repositories with no record found with no jar in their newest releases, each by the day it was looked at. */
 export const NO_JARS = 'modrinth-no-jars.json';
 
 /** How long a repository found with no jar is left before it is looked at again: an author can start attaching them. */
@@ -938,7 +938,7 @@ export const writeLists = async () => {
 export const crawl = async ({ only } = {}) => {
 	const now = new Date().toISOString();
 	const found = only ?? (await readRepos());
-	const fromModrinth = only ? [] : await readModrinthRepos();
+	const fromModrinth = only ? [] : await readModrinthRepos({ resting: true });
 	const ages = new Map(
 		await Promise.all(
 			[...found, ...fromModrinth].map(async line => [
@@ -950,7 +950,15 @@ export const crawl = async ({ only } = {}) => {
 	const modrinthIds = await readJson(join(DATA, 'modrinth-ids.json'), {});
 	const demand = packDemand(await readPacks(), modrinthIds);
 	const changed = only ? new Set() : await withNewReleases({ lines: [...found, ...fromModrinth] });
-	const repos = crawlOrder(found, fromModrinth, line => ages.get(line), demand, changed);
+	const noJars = only ? {} : await readNoJars();
+	const notResting = line => !restingOn(noJars[line]) || changed.has(line);
+	const repos = crawlOrder(
+		found.filter(notResting),
+		fromModrinth.filter(notResting),
+		line => ages.get(line),
+		demand,
+		changed,
+	);
 	const knownBad = new Map(
 		(await readJson(join(DATA, 'known-bad.json'), [])).map(entry => [entry.sha256, entry.reason]),
 	);

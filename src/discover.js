@@ -4,7 +4,6 @@ import {
 	DATA,
 	readJson,
 	readLines,
-	readModrinthRepos,
 	readNoJars,
 	readPacks,
 	readRenames,
@@ -20,7 +19,7 @@ import { searchCode, searchRepositories } from './github';
 import * as gitlab from './gitlab';
 import { modrinthSources, renamedSources } from './modrinth';
 import { releasedByPacks } from './packs';
-import { triage, writeNoJars } from './triage';
+import { triage, triageLines, writeNoJars } from './triage';
 
 /** Where each loader keeps its metadata in a source tree. Finding one is how a repository says it is a mod. */
 export const MANIFESTS = [
@@ -290,7 +289,7 @@ export const discover = async () => {
 	}
 
 	try {
-		await writeNoJars(await triage({ lines: await readModrinthRepos({ resting: true }), noJars: await readNoJars() }));
+		await writeNoJars(await triage({ lines: await triageLines(), noJars: await readNoJars() }));
 	} catch (error) {
 		console.error(`Triage :: ${error.message}; the crawl reads every Modrinth-only repository until it runs`);
 	}

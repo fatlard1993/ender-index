@@ -7,6 +7,7 @@ import {
 	parseLine,
 	readModrinthRepos,
 	readNoJars,
+	readRepos,
 	recordPath,
 	restingOn,
 } from './crawl.js';
@@ -41,10 +42,11 @@ export const jarsIn = (data, names) =>
 	);
 
 /**
- * Look at every Modrinth-only GitHub repository the index has no record of, and not looked at lately, for a jar in its
- * newest releases, asking about fifty at once over GraphQL. Those with none are set aside for RECHECK_DAYS, so the
- * crawl, which spends REST requests on each repository it reads, spends none on them; most Modrinth projects attach
- * their jars on Modrinth alone. A batch GitHub will not answer is left for next time, and said so.
+ * Look at every GitHub repository the index has no record of, and not looked at lately, for a jar in its newest
+ * releases, asking about fifty at once over GraphQL. Those with none are set aside for RECHECK_DAYS, so the crawl,
+ * which spends REST requests on each repository it reads, spends none on them: most Modrinth projects attach their
+ * jars on Modrinth alone, and most repositories code search finds keep a mod's source with no release. A batch GitHub
+ * will not answer is left for next time, and said so.
  */
 export const triage = async ({
 	lines,
@@ -71,14 +73,14 @@ export const triage = async ({
 
 	for (let at = 0; at < todo.length; at += BATCH) batches.push(todo.slice(at, at + BATCH));
 
-	log(`Looking at ${todo.length} Modrinth-only repositories for jars, ${BATCH} to a GraphQL query`);
+	log(`Looking at ${todo.length} repositories the index has no record of for jars, ${BATCH} to a GraphQL query`);
 
 	const counts = { jars: 0, none: 0, failed: 0 };
 	const left = [];
 	let next = 0;
 
 	const work = async () => {
-		while (next < batches.length) {
+		while (next < batches.length && Date.now() < deadline) {
 			const names = batches[next++];
 
 			for (;;) {
@@ -108,6 +110,8 @@ export const triage = async ({
 
 	await Promise.all(Array.from({ length: parallel }, work));
 
+	if (next < batches.length) log(`Out of time with ${todo.length - next * BATCH} left for next time`);
+
 	log(
 		`${counts.jars} have jars to crawl, ${counts.none} have none and are set aside for ${RECHECK_DAYS} days, ${counts.failed} went unanswered`,
 	);
@@ -122,6 +126,13 @@ export const writeNoJars = async noJars =>
 		`${JSON.stringify(Object.fromEntries(Object.entries(noJars).sort(([a], [b]) => a.localeCompare(b))), null, '\t')}\n`,
 	);
 
+/** Every line a triage looks through: those found on their hosts, and those known only from Modrinth. */
+export const triageLines = async () => [...(await readRepos()), ...(await readModrinthRepos({ resting: true }))];
+
 if (import.meta.main) {
-	await writeNoJars(await triage({ lines: await readModrinthRepos({ resting: true }), noJars: await readNoJars() }));
+	const minutes = Number(process.env.TRIAGE_MINUTES ?? Infinity);
+
+	await writeNoJars(
+		await triage({ lines: await triageLines(), noJars: await readNoJars(), deadline: Date.now() + minutes * 60_000 }),
+	);
 }

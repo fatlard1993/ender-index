@@ -54,6 +54,17 @@ jobs:
         working-directory: ender-index
         env:
           GITHUB_TOKEN: ${{ secrets.CRAWL_TOKEN || secrets.GITHUB_TOKEN }}
+      # Every repository with no record looked at for a jar over GraphQL, so the crawl spends no REST request on those
+      # with none; discovery does this itself
+      - name: triage
+        if: ${{ !(inputs.discover || github.event.schedule == '17 4 * * *') }}
+        run: bun src/triage.js
+        working-directory: ender-index
+        continue-on-error: true
+        timeout-minutes: 25
+        env:
+          GITHUB_TOKEN: ${{ secrets.CRAWL_TOKEN || secrets.GITHUB_TOKEN }}
+          TRIAGE_MINUTES: 20
       # The repositories found with no release, looked at for a source that builds; each is due weekly or monthly
       - name: sources
         run: bun run sources
