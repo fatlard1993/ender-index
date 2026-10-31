@@ -959,6 +959,8 @@ export const crawl = async ({ only } = {}) => {
 		demand,
 		changed,
 	);
+
+	github.planRepositories(repos.filter(line => !line.includes(':')));
 	const knownBad = new Map(
 		(await readJson(join(DATA, 'known-bad.json'), [])).map(entry => [entry.sha256, entry.reason]),
 	);
@@ -1023,6 +1025,10 @@ export const crawl = async ({ only } = {}) => {
 	for (const line of [...outcome.stopped, ...packOutcome.stopped]) console.log(line);
 
 	console.log(spendingLine(github.spent()));
+
+	const { asked, failed } = github.batchesAsked();
+
+	if (asked > 0) console.log(`GraphQL answered ${asked - failed} of ${asked} batches of repositories; the rest went to REST`);
 
 	if (renames.size > 0) {
 		const known = { ...(await readRenames()), ...Object.fromEntries(renames) };

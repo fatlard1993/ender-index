@@ -2,6 +2,7 @@ import { mkdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
 import { fetchSteady, RateLimited } from './fetch';
+import { fromGraphql, repositoriesQuery } from './graphqlRepos';
 import { notesOf } from './record';
 
 const API = 'https://api.github.com';
@@ -49,6 +50,12 @@ const cache = () => {
 	return loading;
 };
 
+/** Drop the cache read so far, so the next ask reads the file again. */
+export const forgetCache = () => {
+	responses = undefined;
+	loading = undefined;
+};
+
 export const saveCache = async () => {
 	if (responses === undefined) return;
 
@@ -61,7 +68,7 @@ export const lastFetched = async path => (await cache())[path]?.fetched ?? 0;
 
 /** The tags of a repository's releases as the crawl last read them, newest first, or undefined when it never has. */
 export const cachedReleaseTags = async fullName =>
-	(await cache())[`/repos/${fullName}/releases?per_page=30`]?.body?.map(release => release.tag_name);
+	(await cache())[releasesPath(fullName)]?.body?.map(release => release.tag_name);
 
 /** What a path costs is filed under: deep history pages are read once, the rest on every crawl. */
 export const kindOf = path => {
@@ -191,13 +198,123 @@ const releaseFields = list =>
 
 export const repositoryPath = fullName => `/repos/${fullName}`;
 
-export const repository = fullName => request(repositoryPath(fullName), repositoryFields, kept => !('fork' in kept));
+const releasesPath = fullName => `/repos/${fullName}/releases?per_page=30`;
+
+/**
+ * Repositories asked about in one GraphQL query, with thirty releases and their assets each. GitHub refuses a query
+ * whose download counts take too long to gather, as ten of the most downloaded mods' do, and such a batch is asked
+ * again in halves.
+ */
+export const REPOSITORY_BATCH = 10;
+
+/** Batches asked for ahead of the one the crawl is reading, so the next is there when it gets to it. */
+const AHEAD = 3;
+
+let planned = { batches: [], batchOf: new Map(), loads: [], ask: undefined, keep: undefined };
+
+const batched = { asked: 0, failed: 0 };
+
+/** How many GraphQL batches the crawl asked for, and how many of those fell back to REST. */
+export const batchesAsked = () => ({ ...batched });
+
+/**
+ * Read these repositories' details and first page of releases over GraphQL, REPOSITORY_BATCH to a query, as the
+ * crawl comes to them in this order: GraphQL's limit is counted apart from REST's, and one query answers for many
+ * repositories. Each answer is kept as the REST requests would keep it, so the crawl's order by when each was read
+ * holds, and a batch GitHub will not answer leaves its repositories to REST.
+ */
+/** A repository's answers kept as its REST requests would keep them, as read now. */
+const keepAnswers = async (name, repo, listed) => {
+	const kept = await cache();
+	const now = Date.now();
+
+	kept[repositoryPath(name)] = { ...kept[repositoryPath(name)], fetched: now, body: repo };
+	kept[releasesPath(name)] = { ...kept[releasesPath(name)], fetched: now, body: listed };
+};
+
+export const planRepositories = (names, { ask = graphql, keep = keepAnswers } = {}) => {
+	const batches = [];
+
+	for (let at = 0; at < names.length; at += REPOSITORY_BATCH) batches.push(names.slice(at, at + REPOSITORY_BATCH));
+
+	planned = {
+		batches,
+		batchOf: new Map(batches.flatMap((batch, at) => batch.map(name => [name.toLowerCase(), at]))),
+		loads: [],
+		ask,
+		keep,
+	};
+};
+
+const TOO_HEAVY = /Resource limits for this query exceeded/;
+
+/** One batch's answer, each repository by its place in it, asked again in halves for as long as GitHub finds it too heavy. */
+const askInHalves = async names => {
+	try {
+		return await planned.ask(repositoriesQuery(names, 30));
+	} catch (error) {
+		if (!TOO_HEAVY.test(error.message) || names.length === 1) throw error;
+
+		const half = Math.ceil(names.length / 2);
+		const [first, second] = await Promise.all([askInHalves(names.slice(0, half)), askInHalves(names.slice(half))]);
+
+		return {
+			...first,
+			...Object.fromEntries(Object.entries(second).map(([alias, node]) => [`r${Number(alias.slice(1)) + half}`, node])),
+		};
+	}
+};
+
+const loadBatch = async at => {
+	const names = planned.batches[at];
+
+	++batched.asked;
+
+	try {
+		const data = await askInHalves(names);
+		const found = new Map();
+
+		for (const [index, name] of names.entries()) {
+			const node = data[`r${index}`];
+
+			if (!node) continue;
+
+			const { repo, releases: listed } = fromGraphql(node, notesOf);
+
+			found.set(name.toLowerCase(), { repo, releases: listed });
+			await planned.keep(name, repo, listed);
+		}
+
+		return found;
+	} catch (error) {
+		++batched.failed;
+		console.error(`GraphQL batch of ${names[0]} and ${names.length - 1} more :: ${error.message}; read over REST`);
+
+		return new Map();
+	}
+};
+
+/** What a planned batch read of a repository, or undefined when it is not planned, GraphQL failed, or found none. */
+const prefetched = async fullName => {
+	const at = planned.batchOf.get(fullName.toLowerCase());
+
+	if (at === undefined) return undefined;
+
+	for (let next = at; next <= at + AHEAD && next < planned.batches.length; ++next)
+		planned.loads[next] ??= loadBatch(next);
+
+	return (await planned.loads[at]).get(fullName.toLowerCase());
+};
+
+export const repository = async fullName =>
+	(await prefetched(fullName))?.repo ?? request(repositoryPath(fullName), repositoryFields, kept => !('fork' in kept));
 
 /** The first page is kept and asked about conditionally each crawl; a deeper page is read once, so it is not kept. */
-export const releases = async (fullName, page = 1) =>
-	page === 1
-		? request(`/repos/${fullName}/releases?per_page=30`, releaseFields)
-		: releaseFields(await request(`/repos/${fullName}/releases?per_page=30&page=${page}`));
+export const releases = async (fullName, page = 1) => {
+	if (page !== 1) return releaseFields(await request(`/repos/${fullName}/releases?per_page=30&page=${page}`));
+
+	return (await prefetched(fullName))?.releases ?? request(releasesPath(fullName), releaseFields);
+};
 
 /** The path of the readme GitHub shows for a repository, or null when it has none. */
 export const readme = async fullName => {
