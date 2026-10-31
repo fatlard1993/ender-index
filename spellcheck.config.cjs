@@ -1,5 +1,6 @@
 module.exports = {
 	skipWords: [
+		'alg',
 		'biome',
 		'biomes',
 		'boosty',
@@ -29,9 +30,11 @@ module.exports = {
 		'graphql',
 		'hasher',
 		'homebrew',
+		'iat',
 		'ies',
 		'iex',
 		'irm',
+		'iss',
 		'issuehunt',
 		'jar',
 		'jars',
@@ -83,6 +86,7 @@ module.exports = {
 		'submodules',
 		'tidelift',
 		'toml',
+		'typ',
 		'uint',
 		'uint8',
 		'unix',

@@ -1,6 +1,7 @@
 import { mkdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
+import { appTokens } from './appToken';
 import { fetchSteady, RateLimited } from './fetch';
 import { fromGraphql, repositoriesQuery } from './graphqlRepos';
 import { notesOf } from './record';
@@ -18,8 +19,24 @@ let cachedToken;
 let responses;
 let loading;
 
-/** Actions provides GITHUB_TOKEN; on a workstation the `gh` CLI has one. Code search refuses to run without either. */
+let appToken;
+
+/**
+ * A GitHub App's installation on the index first, when CRAWL_APP_ID and CRAWL_APP_KEY name one, so the crawl spends
+ * the App's rate limit and no person's; else GITHUB_TOKEN, or on a workstation the `gh` CLI's. Code search refuses
+ * to run without one.
+ */
 const token = async () => {
+	if (process.env.CRAWL_APP_ID && process.env.CRAWL_APP_KEY) {
+		appToken ??= appTokens({
+			appId: process.env.CRAWL_APP_ID,
+			key: process.env.CRAWL_APP_KEY,
+			repository: 'fatlard1993/ender-index',
+		});
+
+		return appToken();
+	}
+
 	if (process.env.GITHUB_TOKEN) return process.env.GITHUB_TOKEN;
 	if (cachedToken !== undefined) return cachedToken;
 
