@@ -1,0 +1,67 @@
+name: mods
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency: mods
+
+jobs:
+  list:
+    # By label from the form; by title from ender, as GitHub drops the labels of an issue opened through its API by
+    # anyone who cannot triage this repository
+    if: >-
+      github.event.issue.state == 'open' && (contains(github.event.issue.labels.*.name, 'mod') || github.event.issue.title == 'List a mod')
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ender-index
+      - uses: actions/checkout@v4
+        with:
+          repository: fatlard1993/ender-launcher
+          path: ender-launcher
+      # By its download address: asked for by version, setup-bun asks GitHub's API where it is, which a crawl running
+      # alongside may have spent the repository's hour of
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-download-url: https://github.com/oven-sh/bun/releases/download/bun-v1.4.0/bun-linux-x64.zip
+      - run: bun install
+        working-directory: ender-index
+      - name: list
+        working-directory: ender-index
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          MOD_BODY: ${{ github.event.issue.body }}
+          MOD_ISSUE: ${{ github.event.issue.number }}
+          SUBMIT_SAY: ${{ runner.temp }}/say.md
+        run: |
+          git config user.name 'ender-index'
+          git config user.email 'ender-index@users.noreply.github.com'
+          # From the newest data each time: a crawl pushing alongside rebuilt the same lists
+          for attempt in 1 2 3; do
+            git fetch -q origin main && git reset -q --hard origin/main
+            code=0
+            bun src/submit.js || code=$?
+            [ "$code" = 0 ] || break
+            git add data
+            git diff --cached --quiet && break
+            git commit -qm "Mods: listed from #$MOD_ISSUE"
+            git push -q && break
+            code=1
+          done
+          if [ "$code" = 1 ] || [ ! -s "$SUBMIT_SAY" ]; then
+            gh issue comment "$MOD_ISSUE" --body 'The index could not list this just now; it is looked into from the failed run.'
+            exit 1
+          fi
+          gh issue comment "$MOD_ISSUE" --body-file "$SUBMIT_SAY"
+          [ "$code" = 0 ] && gh issue close "$MOD_ISSUE" --reason completed
+          exit 0

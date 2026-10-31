@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { answerOf, packLineOf, submitPack } from '../src/submit';
+import { answerOf, modLineOf, packLineOf, submitMod, submitPack } from '../src/submit';
 
 const form = pack => `### Pack\n\n${pack}\n`;
 
@@ -56,5 +56,56 @@ describe('a submitted pack', () => {
 
 		expect(empty.listed).toBe(false);
 		expect(empty.say).toStartWith('p/empty holds no pack');
+	});
+});
+
+describe('a submitted mod', () => {
+	const form = answer => `### Mod\n\n${answer}\n`;
+
+	test('is named by its link on a host the index crawls, or owner/repo for GitHub', () => {
+		expect(modLineOf('https://github.com/you/your-mod/tree/main')).toBe('you/your-mod');
+		expect(modLineOf('https://codeberg.org/you/mod')).toBe('codeberg:you/mod');
+		expect(modLineOf('https://gitlab.com/group/sub/mod/-/releases')).toBe('gitlab:group/sub/mod');
+		expect(modLineOf(' gh:you/mod.git ')).toBe('you/mod');
+		expect(modLineOf('you/mod')).toBe('you/mod');
+		expect(modLineOf('https://example.com/you/mod')).toBeUndefined();
+		expect(modLineOf('you/..')).toBeUndefined();
+		expect(modLineOf('just a name')).toBeUndefined();
+	});
+
+	test('is crawled, listed, and kept for every crawl after', async () => {
+		const kept = [];
+		const crawled = [];
+		const result = await submitMod(form('https://github.com/You/Mod'), {
+			crawlOne: async line => {
+				crawled.push(line);
+
+				return 0;
+			},
+			listed: async () => ({ host: 'github', repo: 'You/Mod' }),
+			keep: async line => kept.push(line),
+		});
+
+		expect(result.listed).toBe(true);
+		expect(result.say).toStartWith('Listed: https://fatlard1993.github.io/ender-index/#/mod/github/You/Mod');
+		expect(crawled).toEqual(['You/Mod']);
+		expect(kept).toEqual(['You/Mod']);
+	});
+
+	test('that has no jar is told why and not kept; one whose crawl failed says so', async () => {
+		const kept = [];
+		const bare = await submitMod(form('you/bare'), {
+			crawlOne: async () => 0,
+			listed: async () => undefined,
+			keep: async line => kept.push(line),
+		});
+		const failed = await submitMod(form('you/mod'), { crawlOne: async () => 1, listed: async () => undefined });
+		const unread = await submitMod(form('not a repo'), { crawlOne: async () => 0 });
+
+		expect(bare).toMatchObject({ listed: false });
+		expect(bare.say).toStartWith('you/bare has no release with a mod jar');
+		expect(kept).toEqual([]);
+		expect(failed).toMatchObject({ listed: false, failed: true });
+		expect(unread.say).toStartWith('`not a repo` is not');
 	});
 });
