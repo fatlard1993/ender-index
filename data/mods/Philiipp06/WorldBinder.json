@@ -1,0 +1,516 @@
+{
+	"repo": "Philiipp06/WorldBinder",
+	"host": "github",
+	"description": "Client-side Fabric tool for permitted world capture, HUD customization, recovery, target-version export and optional movement assistance",
+	"stars": 1,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-05-23T10:05:36Z",
+	"pushed": "2026-10-31T09:51:28Z",
+	"releases": [
+		{
+			"tag": "26.3-V7",
+			"published": "2026-10-28T17:55:52Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 685851578,
+					"name": "worldbinder-1.7.0+mc26.1-26.3-fabric.jar",
+					"url": "https://github.com/Philiipp06/WorldBinder/releases/download/26.3-V7/worldbinder-1.7.0%2Bmc26.1-26.3-fabric.jar",
+					"size": 1340603,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "6382f420d75e33a7127ac4b5c804930918dd285f2c13a6c1c26835785d224d50",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "worldbinder",
+							"version": "1.7.0",
+							"name": "WorldBinder",
+							"description": "WorldBinder 1.7.0: dauerhafte Weltprojekte aus empfangenen Clientdaten, begrenzte Bereichsaufnahme, optionaler Container-Scanner, Live-Karten und Chunkrahmen, gefilterte Welt- und Sponge-v3-Exporte, Datenprüfung und Bewegungswerkzeuge.\n\nWorldBinder 1.7.0: persistent world projects from client-received data, bounded area capture, optional container scanner, live maps and chunk frames, filtered world and Sponge v3 exports, data checks and movement tools.",
+							"minecraft": ">=26.1 <=26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "77f93293c6d1ab569ceb1a91211345c7f2525aa62d3aa462363bec8bdd6dd373.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 346,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"net/worldbinder/util/PathOpener.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"net/worldbinder/ui/WorldBinderScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 685851281,
+					"name": "worldbinder-1.7.0+mc26.3-neoforge.jar",
+					"url": "https://github.com/Philiipp06/WorldBinder/releases/download/26.3-V7/worldbinder-1.7.0%2Bmc26.3-neoforge.jar",
+					"size": 1333294,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "5da631e18b962f642652ca7f76a17c48f18e125958e565f1c4845e712f78c230",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "worldbinder",
+							"version": "1.7.0",
+							"name": "WorldBinder",
+							"description": "WorldBinder 1.7.0: dauerhafte Weltprojekte aus empfangenen Clientdaten, begrenzte Bereichsaufnahme, optionaler Container-Scanner, Live-Karten und Chunkrahmen, gefilterte Welt- und Sponge-v3-Exporte, Datenprüfung und Bewegungswerkzeuge.\n\nWorldBinder 1.7.0: persistent world projects from client-received data, bounded area capture, optional container scanner, live maps and chunk frames, filtered world and Sponge v3 exports, data checks and movement tools.",
+							"minecraft": "[26.3,26.4)",
+							"environment": "client",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 345,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"net/worldbinder/util/PathOpener.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"net/worldbinder/ui/WorldBinderScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# WorldBinder 1.7.0 — Keep the project. Continue tomorrow.\n\nCompared with 1.6.3, WorldBinder 1.7.0 adds persistent World Projects, multi-dimension and proxy workflows, container capture controls and in-world container highlights, live filters, a version-aware game-rule editor, French, replay playback capture and a separate NeoForge build. Return to the same world, capture new areas, deliberately update recorded chunks and export again with different version or filter choices. Your project keeps its received data and previous saved revisions.\n\n## World Projects, dimensions and networks\n\n- Reopen finished archives and continue recording after a complete Minecraft restart. Updates include removed blocks; unknown data does not erase previously confirmed information.\n- Keep related Overworld, Nether, End and supported custom dimensions in one project, with a dimension selector in the 2D and 3D maps. Related dimensions export into one vanilla world.\n- Manage independent backend worlds behind one server address as separate projects. When a network change cannot be identified safely, WorldBinder saves Recovery and pauses for you to assign the destination.\n- Optionally start capture when joining a server. Auto capture is off by default, supports per-server profiles and can resume an explicitly assigned project. Replay playback does not trigger it.\n- Recovery uses a permanent project identity, so equally named projects cannot overwrite or clean up each other's recovery data. Failed saves preserve the previous complete revision.\n\n## Better container and capture control\n\n- An optional sequential scanner opens supported containers within normal interaction range, waits for a complete server response, saves it and moves on. It handles double chests, verified empty containers and supported container entities, with timeouts and interruptions on manual input or world changes.\n- The container overlay offers **Keep**, **Overwrite confirmed slots** and **Fill missing slots**. Known empty slots remain distinct from unknown slots. Choose manually or save a project default; WorldBinder never moves items or performs inventory clicks.\n- Optional live filters skip new dropped-item, XP-orb, armor-stand, hostile-mob or custom entity-ID records before they enter WorldBinder's cache. Existing records remain intact, and Minecraft continues processing its normal network traffic.\n- Preserve received map images and Map-Art, section biomes, block light, sky light and available server resource packs. **Include my player state** optionally exports received inventory, equipment, XP, health, food, position, ender-chest contents, statistics and advancements.\n\n## Game rules, containers and languages\n\n- A **version-aware game-rule editor** knows 60 rules with their exact availability, vanilla defaults and 26.x registry keys for every export target. Rules are grouped into seven categories with counters, a \"Changed only\" filter, per-rule reset, sliders or steps for numbers and tooltips explaining each rule. Rules a target does not have are neither shown nor exported.\n- **Unopened containers** are outlined directly in the world: amber for unopened, blue for partly known and optionally green for verified, including double chests and container entities, with slot labels and an HUD counter.\n- Exports can include a **player list** (`worldbinder/players.csv`, opt-in recording of the tab list and visible players) and a **dimension tree** (`worldbinder/dimensions.txt`).\n- A new **Capture** settings tab groups container highlights, the world overlay and player lists.\n- **French** is now a full interface language next to English and German; menus, status messages and reports follow Minecraft's language.\n\n## Capture from replay playback\n\nWith a compatible **ReplayMod** or **Flashback** installed on Fabric, play a recording and start a normal WorldBinder capture. Use the same projects, maps, Recovery and export workflow without reconnecting to the original server.\n\n\n..."
+		},
+		{
+			"tag": "26.3-V6",
+			"published": "2026-10-22T17:18:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 666538782,
+					"name": "worldbinder-1.6.3+mc26.1-26.3.jar",
+					"url": "https://github.com/Philiipp06/WorldBinder/releases/download/26.3-V6/worldbinder-1.6.3%2Bmc26.1-26.3.jar",
+					"size": 878183,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "0988b75f00587037b5777c99a95997ccbf84611cae99f075a801c197aaf158e3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "worldbinder",
+							"version": "1.6.3",
+							"name": "WorldBinder",
+							"description": "WorldBinder 1.6.3 is a client-side Fabric tool for permitted world capture, a texture-based live map, 24 movement tools, a themeable animated interface, archive recovery, validation and target-version world export.",
+							"minecraft": ">=26.1 <=26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "77f93293c6d1ab569ceb1a91211345c7f2525aa62d3aa462363bec8bdd6dd373.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 243,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"net/worldbinder/util/PathOpener.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"net/worldbinder/ui/WorldBinderScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# WorldBinder 1.6.3\n\nWorldBinder 1.6.3 is a hotfix release. World exports for Minecraft 26.3 opened without blocks, without the server resource pack and with an \"experimental settings\" warning; only entities were present. This affected every export with 26.3 as target version – from 26.3 servers as well as from older servers joined through ViaFabric/ViaVersion. The same Fabric jar still runs on Minecraft 26.1 through 26.3.\n\n## Fixes\n\n- **Blocks are exported again for 26.3.** Minecraft 26.3 changed how block states are stored in chunk palettes: `id` and `properties` (or a plain block id for default states) instead of `Name` and `Properties`. Because the export used the 26.3 data version, Minecraft did not upgrade the old format and replaced every block with air. Exports now write the format that matches the target version; targets up to 26.2 keep the previous format.\n- **The server resource pack is offered again.** Minecraft 26.x loads a bundled world pack from `resourcepacks/resources.zip` inside the world folder. Exports now store the pack there (older targets keep `resources.zip` in the world root), so Minecraft asks to load it when you open the world. Packs made for older Minecraft versions may be marked as incompatible and can still be loaded.\n- **No more \"Worlds using experimental settings are not supported\" warning.** The world generation settings now contain the complete vanilla dimension set (Overworld, Nether and End) and use the correct `generate_structures` key; a missing Nether/End made Minecraft treat the world as experimental. `stopwatches.dat` is now written as a map, which removes the \"Failed to parse saved data\" error.\n\n## Map fixes\n\n- **Grass no longer shows up as gray stone.** Since 1.6.2, blocks without a vanilla map color – barriers, light blocks, glass, panes, iron bars – were drawn in a gray fallback color. A server with a barrier layer above the ground therefore showed gray \"stone\" on the radar, the F10 map and in 3D. The map now looks through these blocks like a vanilla map and shows the terrain below.\n- **New toggle: Layers > Invisible blocks.** Shows barriers (red), light blocks (yellow) and structure voids (purple) on the 2D map, the radar and in 3D. Hidden by default. Chunks that were captured before the update show the change after their next scan.\n\n## Repair existing exports: Export again\n\nExports from 1.6.0–1.6.2 still contain their full WorldBinder archive in the `worldbinder/` folder. Select such an export in the archive list (F9) and click **Export again**: WorldBinder builds a new save folder from the archive with the fixed exporter and keeps the original folder. Opening a broken export in Minecraft overwrites its chunks with empty ones, so use **Export again** rather than repairing the old folder.\n\n## Safeguards\n\n- The automated client test now decodes exported chunk palettes with the block state codec of the running Minecraft version, checks the dimension set and saved data formats, and exports an archive again. A future change of the chunk format will fail the test instead of producing empty worlds.\n\n## Compatibility and limits\n\n- Minecraft 26.1, 26.1.1, 26.1.2, 26.2 or 26.3; Fabric Loader 0.19.5+; Java 25.\n- Install Fabric API for the selected Minecraft version. Mod Menu is optional.\n- Existing configurations load unchanged.\n- Artifact: `worldbinder-1.6.3+mc26.1-26.3.jar`.\n\nWorldBinder can archive only data received by the client. Movement Tools are intended for singleplayer, local test worlds and servers that expressly allow them. Save only content you own or have permission to archive.\n\n## Verification\n\n\n..."
+		},
+		{
+			"tag": "26.3-V5",
+			"published": "2026-10-22T15:05:56Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 666199148,
+					"name": "worldbinder-1.6.2+mc26.1-26.3.jar",
+					"url": "https://github.com/Philiipp06/WorldBinder/releases/download/26.3-V5/worldbinder-1.6.2%2Bmc26.1-26.3.jar",
+					"size": 873611,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a0c048eff77bcdd68446c78138cc831aec6957fa16cfc73c6d70ee3585ac2a38",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "worldbinder",
+							"version": "1.6.2",
+							"name": "WorldBinder",
+							"description": "WorldBinder 1.6.2 is a client-side Fabric tool for permitted world capture, a texture-based live map, 24 movement tools, a themeable animated interface, archive recovery, validation and target-version world export.",
+							"minecraft": ">=26.1 <=26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "77f93293c6d1ab569ceb1a91211345c7f2525aa62d3aa462363bec8bdd6dd373.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 243,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"net/worldbinder/util/PathOpener.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"net/worldbinder/ui/WorldBinderScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# WorldBinder 1.6.2\n\nWorldBinder 1.6.2 extends the F10 live map: a rotatable 3D view, 3D exports, map colors for custom resource-pack blocks and waypoints. The project documents were reworked and an accessibility statement was added. The same Fabric jar still runs on Minecraft 26.1 through 26.3.\n\n## 3D live map\n\n- Press **V** (or the new **3D** button) and the map tilts smoothly from 2D into a 3D landscape (and back). Right-drag rotates and tilts, left-drag moves, the mouse wheel zooms.\n- Real vertical structure: loaded chunks are sampled with up to six solid block spans per column, so the air under bridges, roller coasters, tree crowns and overhangs stays visible instead of turning into walls. Other known chunks use the height map.\n- Lighting by face orientation, sun shadows cast by spans, block-grid shading and highlighted edges.\n- Your marker now lies on the ground at your feet (it no longer looks like it is flying) and turns into an outline with a small beacon when terrain covers it; entities are drawn at body height with ground shadows.\n- Buttons at the bottom right rotate by 45°, tilt, cycle the height scale (50–300 %) and reset the view. Keyboard: `,` / `.` rotate, Page Up / Page Down tilt.\n- Players, mobs, animals, items and waypoints are drawn in place with small stems and ground shadows, so positions stay readable in 3D. Hover details, chunk selection and rescans work in 3D as well.\n- Rendering runs on a background thread: half resolution while you move the camera, full resolution as soon as it rests, and only when the camera or the map data changes – the game keeps its frame rate.\n\n## 3D export\n\n- **Export > 3D model (GLB/OBJ)** writes the known surface as a colored block mesh with real overhangs and bottom faces: `map_3d.glb` (glTF 2.0 – Blender, Windows 3D Viewer, web viewers) and, for smaller areas, `map_3d.obj` with vertex colors. Flat areas are merged into large faces; very large areas are merged into 2×2, 4×4 … block cells.\n- **Export > 3D render (PNG)** saves the current 3D view in up to 6144 px, 2×2 supersampled (anti-aliased), as `map_3d.png` (transparent) and `map_3d_sky.png` (sky background).\n- **2D PNG exports** of small and medium areas now use up to 4 pixels per block with a subtle block relief.\n- Both run in the background and open the export folder when done.\n\n## Legal notice in every export\n\n- World exports (`README.md`, `worldbinder/EXPORT_VALIDATION.txt`) and all map exports (`map_info.txt`) now contain a legal and responsible-use notice: rights of creators and server owners, permission requirement, personal data of other players, the \"not an official Minecraft product\" notice and the scope of the WorldBinder license. GLB/OBJ files carry a short copyright line.\n\n## Fixes\n\n- Explore mode, the radar minimap and the 3D map sampled the surface one block too low (for example dirt instead of grass). Explored chunks are now sampled at the real top block.\n\n## Custom blocks from resource packs\n\n- New **Layers > Colors** option: *Auto* (default), *Vanilla* or *Textures*.\n- In *Auto*, blocks that a resource pack changes – for example custom server blocks made from note block instrument states, mushroom blocks or replaced vanilla blocks – are drawn in the color of their actual texture instead of the vanilla map color.\n- Colors are resolved like the game does it: blockstate variant or multipart → model (with parents) → top texture, from the active resource packs including server packs. Results are cached and refreshed when the pack list changes.\n\n## Waypoints\n\n- Place a waypoint at the cursor with **P**, Shift+right click or middle click; right click a waypoint to remove it.\n- Waypoints are shown in 2D and 3D with labels, and as edge markers when they are off-screen. Hover one to see coordinates and distance.\n- Your **last death** point is added automatically. Waypoints are saved per world/server and dimension.\n\n## Community documents\n\n\n..."
+		},
+		{
+			"tag": "26.3-V4",
+			"published": "2026-10-18T10:22:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 653184747,
+					"name": "worldbinder-1.6.1+mc26.1-26.3.jar",
+					"url": "https://github.com/Philiipp06/WorldBinder/releases/download/26.3-V4/worldbinder-1.6.1%2Bmc26.1-26.3.jar",
+					"size": 801227,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a4c711ab0c3f96337ea26b0c57a21cb6a0e8af41ddabd5efa8e8c475da4ada04",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "worldbinder",
+							"version": "1.6.1",
+							"name": "WorldBinder",
+							"description": "WorldBinder 1.6.1 is a client-side Fabric tool for permitted world capture, a texture-based live map, 24 movement tools, a themeable animated interface, archive recovery, validation and target-version world export.",
+							"minecraft": ">=26.1 <=26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "77f93293c6d1ab569ceb1a91211345c7f2525aa62d3aa462363bec8bdd6dd373.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 222,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"net/worldbinder/util/PathOpener.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"net/worldbinder/ui/WorldBinderScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Title: WorldBinder 1.6.1\n\nTag: v1.6.1\n\nRepository: https://github.com/Philiipp06/WorldBinder\n\n# WorldBinder 1.6.1\n\nWorldBinder 1.6.1 polishes the two HUD widgets you see while capturing: the chunk radar and the capture status bar. Everything else from 1.6.0 stays unchanged, and the same Fabric jar still runs on Minecraft 26.1 through 26.3.\n\n## Chunk radar\n\n- The radar map now fills the whole widget width instead of sitting as a small square inside a wide panel. Its range in chunks stays the same; the map is simply drawn larger.\n- The title bar above the map was removed. Below the map there is now one tidy info strip with the current chunk, the capture coverage of the radar area in percent and a slim coverage bar that turns amber and green as the area fills.\n- Coordinates are now optional and off by default. When enabled in the Widget Editor (Extras), they appear as one compact, automatically scaled line with the facing direction, so large coordinates are no longer cut off.\n- The Widget Editor preview uses the same new layout.\n\n## Capture status bar\n\n- \"WorldBinder\" (or the current operation title) is now centered and shown with the real WorldBinder logo instead of a pixel icon.\n- The status line (\"World download running\" / \"Paused\") is centered as well, with a pulsing state dot and the ETA as a dimmed suffix. Storage and detail messages use the same centered line.\n- The percentage moved into a small pill on the right; the operation type is shown as a subtle icon on the left.\n\n## Compatibility and limits\n\n- Minecraft 26.1, 26.1.1, 26.1.2, 26.2 or 26.3; Fabric Loader 0.19.5+; Java 25.\n- Install Fabric API for the selected Minecraft version. Mod Menu is optional.\n- Existing configurations load unchanged; if you had radar coordinates enabled they stay enabled and use the new compact line.\n- Artifact: `worldbinder-1.6.1+mc26.1-26.3.jar`.\n\nWorldBinder can archive only data received by the client. Movement Tools are intended for singleplayer, local test worlds and servers that expressly allow them. Save only content you own or have permission to archive.\n\n## Verification\n\nThe automated client test (settings, UI, movement, live map, explore mode, map export and the capture/cache/recovery/export roundtrip) passes on Minecraft 26.3 with the 1.6.1 build; its radar screenshot was checked for the new layout. Manual in-game acceptance on different GUI scales and the 26.1–26.2 compatibility runs should be repeated before publishing.\n\nRepository: https://github.com/Philiipp06/WorldBinder\nIssues: https://github.com/Philiipp06/WorldBinder/issues\nDiscord: https://discord.com/invite/V7h3vaXxDZ"
+		},
+		{
+			"tag": "26.3-V3",
+			"published": "2026-10-16T16:53:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 647970158,
+					"name": "worldbinder-1.6.0+mc26.1-26.3.jar",
+					"url": "https://github.com/Philiipp06/WorldBinder/releases/download/26.3-V3/worldbinder-1.6.0%2Bmc26.1-26.3.jar",
+					"size": 800200,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "adbf4efe3531d2a838888a9bb4006e965423ab2b99176d92c74a36dda44558f3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "worldbinder",
+							"version": "1.6.0",
+							"name": "WorldBinder",
+							"description": "WorldBinder 1.6.0 is a client-side Fabric tool for permitted world capture, a texture-based live map, 24 movement tools, a themeable animated interface, archive recovery, validation and target-version world export.",
+							"minecraft": ">=26.1 <=26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "77f93293c6d1ab569ceb1a91211345c7f2525aa62d3aa462363bec8bdd6dd373.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 222,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"net/worldbinder/util/PathOpener.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"net/worldbinder/ui/WorldBinderScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# WorldBinder 1.6.0\n\nWorldBinder 1.6.0 is the Interface, Movement & Live Map update. Every menu was rebuilt on a new design system, the Movement Tools grew from 14 to 24 with profiles and hotkeys, and the F10 live map was rewritten from scratch for speed and readability. Capture, cache, recovery, validation and export keep their established workflow, and the same Fabric jar still runs on Minecraft 26.1 through 26.3.\n\n## New interface\n\n- New design system for every WorldBinder screen: rounded panels with soft shadows and gradients, refined cards and section headers, pixel icons in navigation, buttons and headers, animated toggle switches, sliders with a value bubble while dragging, and keycap hints.\n- Smooth motion: short zoom/fade when a WorldBinder screen opens from the game, soft cross-fades when switching F9 sections or Settings pages, press ripples and eased hover states. Everything respects Reduce motion.\n- Theme accents: Aqua, Violet, Emerald, Amber, Rose, Crimson, Mono or any custom color from the color picker. Menus, HUD widgets and the live map follow the accent; the Settings screen previews it instantly.\n- New Settings > Interface tab: background dim (20–100%), animation speed (0.5–2.0x), screen transitions, icons, high contrast, reduce motion, interface sounds, hover ticks, notification sounds, sound volume (0–200%) with a test button, tooltip toggle, shortcut hints and tooltip delay.\n- Interface sounds for clicks, toggles, tabs, dropdowns, slider steps and notifications (info, success, warning, error), all routed through one configurable volume.\n- Settings now show an \"Unsaved changes\" indicator, ask once before discarding changes, offer \"Reset page\" with a two-click confirmation and save with Ctrl+S without closing.\n- F9 sidebar sections have icons, a recovery counter and quick buttons for Interface and Movement settings; Settings tabs show icons and the number of active movement tools.\n- Toast notifications were restyled with status icons, a tinted card and a slimmer countdown bar.\n- The capture status bar was redesigned with an icon header, percentage, animated progress bar and mini meters.\n- F9 scrolls smoothly, and opening the preset dropdown in Capture automatically scrolls until the whole dropdown is visible. The archive name field shows a live preview of the resulting folder.\n- The Settings header no longer truncates its breadcrumb; movement tool cards got a new NEW badge and no longer place text under the switch.\n\n## Target version picker\n\n- Versions are grouped by their official update or game drop (Update Aquatic, Village & Pillage, Buzzy Bees, Nether Update, Caves & Cliffs I/II, The Wild Update, Trails & Tales, Tricky Trials, Bundles of Bravery, The Garden Awakens, Spring to Life, Chase the Skies, Game Drops 2026) with color, emblem and release year.\n- A detail card shows DataVersion, generation profile, which file formats the target uses (item components, entity files, POI files, dimension folders, game rules file) and whether the export is native or a downgrade, with a downgrade note.\n- Search by version, update name or year; one click uses the version, \"Use 26.3\" jumps to the newest target.\n\n## F6 capture setup\n\n- Redesigned dialog with world/server and dimension pill, archive name with live folder preview, \"use world name\" and \"reset\" buttons and a warning when characters are adjusted.\n- Quick setup cards for target version, preset, radius and entities; Enter starts the download. Compact layout for small windows.\n\n## Widget Editor 2.0 and chunk radar\n\n- Widgets snap to screen edges, the center and other widgets with guide lines (Shift places freely); 3x3 anchor presets; size and position readout.\n- Keyboard: arrows nudge (Shift = 10 px), Ctrl+Tab selects the next widget, Delete shows/hides, Ctrl+Z/Ctrl+Y undo/redo, H preview mode, Enter applies.\n\n..."
+		},
+		{
+			"tag": "26.2-V2",
+			"published": "2026-07-28T15:57:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 492900776,
+					"name": "worldbinder-1.3.0+mc26.2.jar",
+					"url": "https://github.com/Philiipp06/WorldBinder/releases/download/26.2-V2/worldbinder-1.3.0%2Bmc26.2.jar",
+					"size": 520599,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "f6711e1444e3e6dd5692efe0b197736fa2f16e9f05662dc0722a6f58e52869ad",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "worldbinder",
+							"version": "1.3.0",
+							"name": "WorldBinder",
+							"description": "WorldBinder 1.3.0 is a client-side Fabric tool for permitted world capture, visual HUD customization, chunk mapping, archive recovery, validation and target-version world export.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "77f93293c6d1ab569ceb1a91211345c7f2525aa62d3aa462363bec8bdd6dd373.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 152,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"net/worldbinder/util/PathOpener.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "WorldBinder 1.3.0 is the HUD customization, settings and notification refinement release for Minecraft 26.2 on Fabric.\n\nThis release focuses on the interface elements used throughout every capture session. A new compact visual Widget Editor provides direct control over HUD placement, proportional sizing and styling, a full color picker supports visual selection and exact HEX/ARGB input, Settings alignment has been corrected, and WorldBinder is available from both Minecraft's main menu and pause menu.\n\n## Highlights\n\n- Added a visual HUD Widget Editor for the status overlay, chunk radar and notifications\n- Added free drag positioning and stable relative placement across resolutions\n- Added true proportional size sliders, direct resize handles and per-widget visibility controls\n- Added a collapsible editor panel for an unobstructed positioning canvas\n- Added a visual color picker with exact HEX/ARGB input and background opacity\n- Kept status details, radar framing and notification contents together at every custom scale\n- Moved the default notification position to the lower-right corner\n- Reworked detailed chat feedback into a clean, consistent WorldBinder style\n- Corrected field, label and selection alignment inside Settings cards\n- Substantially modernized WorldBinder settings screens\n- Improved the appearance and usability of dropdowns\n- Refined shared menus and controls for a more consistent interface\n- Added a WorldBinder icon button to Minecraft's main menu\n- Added a WorldBinder icon button to Minecraft's pause menu\n- Updated English and German version text\n- Updated README, HOW_TO_USE and release metadata for 1.3.0\n- Continued support for Minecraft 26.2 on Fabric\n\n## Visual HUD Widget Editor\n\nOpen **Settings > HUD & Map > HUD Widget Editor** to edit WorldBinder overlays in a live in-game preview.\n\nThe export status, chunk radar and notification widgets can each be selected from the compact panel or clicked directly. The panel can be collapsed when positioning widgets on the left side. Widgets support free drag positioning, fully proportional slider and handle resizing, visibility toggles, a visual HEX/ARGB color picker, opacity and per-widget reset. Positions are stored relative to the screen so layouts remain stable when the window or GUI scale changes.\n\n## Refined custom toasts\n\nWorldBinder uses custom toast notifications for important feedback such as capture actions, export progress, warnings and errors.\n\nIn 1.3.0, notifications scale as complete widgets including their frame, icon, text and progress line. Longer messages can wrap across more lines, exact custom colors are available in the Widget Editor, and notifications default to the lower-right corner.\n\n## Modernized settings, dropdowns and menus\n\nThe WorldBinder settings experience has received a substantial visual and usability pass.\n\nSettings screens, dropdowns and shared menu components now use a more polished and consistent design. Corrected card insets keep labels, fields and selection controls aligned, while HUD placement and styling have moved into the dedicated visual editor.\n\n## Direct menu access\n\nWorldBinder can now be opened without first using a keybind:\n\n- Select the WorldBinder icon button in Minecraft's main menu before joining a world.\n- Select the WorldBinder icon button in Minecraft's pause menu while a world is open.\n- The existing F9 Control Center keybind remains available.\n\nThis makes the mod easier to discover and faster to reach while preserving the established keyboard workflow.\n\n## Established capture foundation\n\nWorldBinder 1.3.0 retains the capture, recovery and export capabilities from previous releases:\n\n- HotCache-first client-side chunk capture\n- Durable chunk block cache for large captures\n- Vanilla world folder export\n- Target output version selection\n- Block, block entity and entity export where available\n- Server resource pack export as `resources.zip`\n- Recovery and autosave tools\n- Recovery cache reuse after crashes\n\n..."
+		},
+		{
+			"tag": "26.1.2-V1",
+			"published": "2026-06-13T15:10:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 446634430,
+					"name": "worldbinder-1.0.0.jar",
+					"url": "https://github.com/Philiipp06/WorldBinder/releases/download/26.1.2-V1/worldbinder-1.0.0.jar",
+					"size": 430785,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "5eccee1ac5493dcc6749eda136b021935ef9db05b1050a6d9caa0ed38c8b1037",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "worldbinder",
+							"version": "1.0.0",
+							"name": "WorldBinder",
+							"description": "WorldBinder 1.0.0 is a client-side Fabric tool for permitted world capture, chunk mapping, archive management, recovery, validation and target-version world export.",
+							"minecraft": "~26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "77f93293c6d1ab569ceb1a91211345c7f2525aa62d3aa462363bec8bdd6dd373.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 123,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"net/worldbinder/util/PathOpener.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"net/worldbinder/ui/WorldBinderScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# WorldBinder 1.0.0\n\nWorldBinder 1.0.0 is the first stable public release of WorldBinder.\n\nThis release builds on the Beta 1 foundation and the Beta 2 reliability work, with a major focus on large captures, durable chunk caching, recovery stability, save handling and server resource pack export.\n\nThe biggest improvement is the new durable chunk cache system. WorldBinder can now keep captured chunk block data safely on disk during large sessions, making exports with thousands of chunks far more reliable and preventing the missing or empty chunk issues found during Beta testing.\n\n## Highlights\n\n- First stable public WorldBinder release\n- Added durable chunk block cache for large captures\n- Fixed missing, empty and broken chunks in large exports\n- Improved capture reliability for thousands of chunks\n- Added cache-backed recovery reuse after crashes\n- Automatically cleans temporary cache data after successful exports\n- Fixed save buttons not responding in finish/progress flows\n- Restored visible disconnect autosave progress\n- Improved export preparation and cache writing performance\n- Fixed F10 map tooltip chunk coordinates\n- Added Ctrl+C support for copying selected chunk center coordinates\n- Improved active server resource pack detection and export\n- Improved handling for already-downloaded server resource packs\n- Improved 26.x saved-data placeholder structures\n- Moved remaining runtime text into the language system\n- Kept WorldBinder as a native Fabric client-side mod for Minecraft 26.1.2\n\n## Durable chunk cache\n\nWorldBinder 1.0.0 includes a durable chunk cache system for large captures.\n\nInstead of relying only on RAM during bigger captures, WorldBinder can store completed chunk block data in a temporary cache under:\n\n```text\nsaves/WorldBinder/.cache/\n```\n\nEach captured chunk can be stored as its own compact cache file and later reused during export or recovery.\n\nThis significantly improves reliability when capturing large worlds, especially during long flying sessions, high render distances or captures with many thousands of chunks.\n\n## Large capture fixes\n\nDuring Beta testing, large captures could sometimes export chunks as empty or incomplete even though the F10 map showed them as captured.\n\nWorldBinder 1.0.0 fixes this by making captured block data more durable before export.\n\nLarge captures should now export much more reliably, including sessions with thousands of chunks.\n\n## Recovery improvements\n\nRecovery now keeps track of the matching chunk cache folder.\n\nIf Minecraft crashes during a capture, WorldBinder can continue using the original cache instead of creating a new unrelated one. After a successful export or recovery deletion, the linked cache is cleaned up automatically.\n\nThis prevents old cache folders from staying behind unnecessarily while still preserving recovery data when it matters.\n\n## Save and disconnect flow fixes\n\nWorldBinder 1.0.0 fixes a regression where some save actions could stop responding after entering the finish flow.\n\nThe following actions should now work correctly:\n\n- Save Now\n- Finish Export\n- Existing world overwrite confirmation\n- Disconnect autosave\n- Progress screens during save preparation\n- Recovery finalization\n\nWorldBinder now opens the storage progress screen as soon as export preparation begins, so it is clearer when the mod is actively saving.\n\n## F10 map improvements\n\nThe F10 map now shows more useful chunk coordinates.\n\nInstead of only showing chunk ranges, WorldBinder can show the center coordinate of a selected chunk, making it much easier to teleport to or inspect a captured location.\n\nYou can also copy the selected chunk center coordinate with Ctrl+C.\n\n## Resource pack export improvements\n\nWorldBinder now tries harder to detect the currently active server resource pack.\n\nThis helps with servers that switch packs during gameplay or reuse already-downloaded resource packs from Minecraft's downloads folder.\n\nWhen available, the active server pack is exported as:\n\n```text\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 27,
+		"more": 0,
+		"people": [
+			{
+				"login": "Philiipp06",
+				"commits": 27,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

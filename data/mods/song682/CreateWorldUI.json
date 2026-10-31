@@ -1,0 +1,311 @@
+{
+	"repo": "song682/CreateWorldUI",
+	"host": "github",
+	"description": "A UI backport mod to backport modern \"Create new world\" UI",
+	"stars": 6,
+	"archived": false,
+	"license": "MIT",
+	"created": "2025-07-24T08:53:04Z",
+	"pushed": "2026-10-31T02:42:05Z",
+	"releases": [
+		{
+			"tag": "v7.4.1",
+			"published": "2026-10-31T02:42:05Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 694148737,
+					"name": "ModernCreateWorldUI-7.4.1-deobf.jar",
+					"url": "https://github.com/song682/CreateWorldUI/releases/download/v7.4.1/ModernCreateWorldUI-7.4.1-deobf.jar",
+					"size": 128158,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "8e15e3f5f21f5629a75bc2c5a120a0305c9a35f9aa7020faf170ebe7bde47470",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 58,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 694148738,
+					"name": "ModernCreateWorldUI-7.4.1.jar",
+					"url": "https://github.com/song682/CreateWorldUI/releases/download/v7.4.1/ModernCreateWorldUI-7.4.1.jar",
+					"size": 126559,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "d1b99bedb4625b37fa24b37a6d474684291fcdfe068d96c697f9957b83aa7143",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 58,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CreateWorldUI - 7.4.1\n\n## What is changed?\nChange version number from previous to `7.4.1`\n\n### ➕Add:\n    - No new features\n\n### 🔧Fix:\n    - refactor and fix somethings\n\n### ❗❗❗Deprecated:\n    - No deprecations\n\n\n## Notes\nFull Changelog: https://github.com/song682/CreateWorldUI/commits/v7.4.1"
+		},
+		{
+			"tag": "v7.4.0",
+			"published": "2026-10-29T12:40:54Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 688527068,
+					"name": "ModernCreateWorldUI-7.4.0-deobf.jar",
+					"url": "https://github.com/song682/CreateWorldUI/releases/download/v7.4.0/ModernCreateWorldUI-7.4.0-deobf.jar",
+					"size": 126698,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "3fc9a6eb2e4416792298cde41ae9a5be82ea8a5c8dc9d530290f038ccf579b51",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 57,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 688527065,
+					"name": "ModernCreateWorldUI-7.4.0.jar",
+					"url": "https://github.com/song682/CreateWorldUI/releases/download/v7.4.0/ModernCreateWorldUI-7.4.0.jar",
+					"size": 125262,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "540efcfe1c7a80c5f40fd81f4044bb7dfdae35353b64ee88045c0d0bf74e5e2f",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 57,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CreateWorldUI - 7.4.0\n\n## What is changed?\nChange version number from previous to `7.4.0`\n\n### ➕Add:\n    - Rebuild TabRegistry (external mod tab registration API) removed during the HeaderFooterLayout refactor, adapted to the current CatFrame component-based tab design. New api/tab/TabRegistry.java: factories are now Function<GuiCreateWorld, Tab> receiving the host screen (matching built-in tab constructors); legacy int tabId replaced by a unique String key for duplicate detection; priority semantics preserved with built-in anchors Game=100/World=101/More=102 and DEFAULT_PRIORITY=103 (after all built-ins). buildTabList() freezes the registry, instantiates external factories per GUI rebuild, logs and skips failing factories, and stable-merges by priority. MixinModernCreateWorld.onInitGuiTail now builds the nav bar from the merged ordered tab list instead of the hardcoded three built-ins.\n- Add localizations about the experimental and config rearrage\n- Add built-in example experiment demonstrating the IExperimentScreenUsage enum-registration API. New ExampleExperiment enum (one no-op toggle, id createworldui:example_toggle, default disabled) is registered in init only when the new config option enableExampleExperiment (default true, UI Management category, en/zh lang keys) is on.\n- Persist experiment selections per-save via WorldSavedData. ExperimentState now layers pending UI choices over an active ExperimentData (data/createworldui_experiments.dat), with persisted>pending>default precedence. New ExperimentData (WorldSavedData, only explicit overrides, registry-filtered read) and ExperimentApplier (WorldEvent.Load commits pending and attaches, Unload detaches; overworld-only, mapStorage-backed). Registered on the Forge bus in init.\n- Implement the experiment screen and its developer API. Rewrite IExperimentScreenUsage to follow GTNH Mixins' IMixins idiom: the enum constant is the registration unit (getID/getTitle/getDescription/defaultEnabled), with static getExperimentalThings(Class) expanding constants via getEnumConstants() and an explicit register(Class) facade backed by a nested Store holder (removed the non-compiling empty static stub, apply() and the id-parameter variants). Add ExperimentState as a session-scoped enabled/disabled map exposing isEnabled/setEnabled/snapshot/restore so CreateWorldUI only records state and author mods gate/persist their own features. Implement ExperimentScreen on CatFrame (ObjectSelectionList of on/off CyclingButton rows, red info line, Done/Cancel footer) mirroring the high-version ExperimentsScreen, with Cancel reverting to the entry snapshot. Wire the MoreTab experiments button to open it, and add selectWorld.experiments.info / createworldui.experiments.empty lang keys (en/zh) plus drop the placeholder hover text.\n\n### 🔧Fix:\n    - fix some details\n- Fix raw type usage in CreateWorldConfigUI.ConfigUI: parameterize the three ConfigElement instantiations as ConfigElement<Object> since ConfigElement<T> is generic in FML/Forge 1.7.10, and add a scoped SuppressWarnings(rawtypes) on getConfigElements because GuiConfig takes List<IConfigElement> with a raw type argument and a parameterized List<IConfigElement<?>> is not assignment-compatible (generics are invariant). Verified with gradlew compileJava.\n- Fix double button-press sound on Create/Cancel footer buttons: the vanilla mouseClicked dispatch (buttons stay in buttonList) already plays gui.button.press before the TAIL injection feeds GuiButtonAdapter, whose own playSound caused an audible double press. Add SilentButtonAdapter subclass in MixinModernCreateWorld that keeps delegate hit-state sync but suppresses the redundant sound; instantiate it for both footer adapters.\n\n..."
+		},
+		{
+			"tag": "v7.3.0",
+			"published": "2026-10-11T15:41:19Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 631121695,
+					"name": "ModernCreateWorldUI-7.3.0-deobf.jar",
+					"url": "https://github.com/song682/CreateWorldUI/releases/download/v7.3.0/ModernCreateWorldUI-7.3.0-deobf.jar",
+					"size": 105513,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "65aec04a9a32a5841dce70d7c3ebea74d670031c1763abb576f73bc67e5b75f9",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 44,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 631121696,
+					"name": "ModernCreateWorldUI-7.3.0.jar",
+					"url": "https://github.com/song682/CreateWorldUI/releases/download/v7.3.0/ModernCreateWorldUI-7.3.0.jar",
+					"size": 104225,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "4e2694e970e57165a9d26810353e8205d29bb532374a3b8f088a016151959bba",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 44,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CreateWorldUI - 7.3.0\n\n## What is changed?\nChange version number from previous to `7.3.0`\n\n### ➕Add:\n    - add the datapack compatibility, and the some code reconstruct directly use it instead of reflecting and some offset deletion\n\n### 🔧Fix:\n    - No fixes\n\n### ❗❗❗Deprecated:\n    - No deprecations\n\n\n## Notes\nFull Changelog: https://github.com/song682/CreateWorldUI/commits/v7.3.0"
+		},
+		{
+			"tag": "v7.2.0",
+			"published": "2026-10-04T04:07:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 609091079,
+					"name": "ModernCreateWorldUI-7.2.0-deobf.jar",
+					"url": "https://github.com/song682/CreateWorldUI/releases/download/v7.2.0/ModernCreateWorldUI-7.2.0-deobf.jar",
+					"size": 90551,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "3abde1476d5bca299392f62e560ecb3eeb07206724c7dac58a570e947bef508c",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 36,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 609091075,
+					"name": "ModernCreateWorldUI-7.2.0.jar",
+					"url": "https://github.com/song682/CreateWorldUI/releases/download/v7.2.0/ModernCreateWorldUI-7.2.0.jar",
+					"size": 89976,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "08280721de72cd4111813c5394899f7e757c426f36d0493b935f696dc08e957d",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 36,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CreateWorldUI - 7.2.0\n\n## What is changed?\nChange version number from previous to `7.2.0`\n\n### ➕Add:\n    - Migrate tab system to CatFrame 0.10 component architecture. Add TabScreenRoot container and CreateWorldTab base (prepareFrame hook, initial focus, per-tab vertical alignment); rebuild the whole tab stack (TabManager + TabNavigationBar + tabs) from initGui on every pass, mirroring high-version CreateWorldScreen.init; convert GameTab/WorldTab/MoreTab to constructor-built widgets with onTextChanged accessor sync; add CatFrameInputScreen.getEventRoot bridge plus mouse release/drag/scroll dispatch through the component root; remove legacy TabBar wiring and CreateWorldUITabBar.\n\n### 🔧Fix:\n    - No fixes\n\n### ❗❗❗Deprecated:\n    - No deprecations\n\n\n## Notes\nFull Changelog: https://github.com/song682/CreateWorldUI/commits/v7.2.0"
+		},
+		{
+			"tag": "v7.1.1",
+			"published": "2026-09-28T06:50:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 594731751,
+					"name": "ModernCreateWorldUI-7.1.1-deobf.jar",
+					"url": "https://github.com/song682/CreateWorldUI/releases/download/v7.1.1/ModernCreateWorldUI-7.1.1-deobf.jar",
+					"size": 88191,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "4b6636476b7621dc34a587e933b5cc5bc1520ef9a4df6d15961a9a1d2736a6eb",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 32,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 594731752,
+					"name": "ModernCreateWorldUI-7.1.1.jar",
+					"url": "https://github.com/song682/CreateWorldUI/releases/download/v7.1.1/ModernCreateWorldUI-7.1.1.jar",
+					"size": 87572,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "d1b905f00bed331060d7ea4a9bcacdcc563afbe974c9ea4535ea7f93cda505ca",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 32,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CreateWorldUI - 7.1.1\n\n## What is changed?\nChange version number from previous to `7.1.1`\n\n### ➕Add:\n    - No new features\n\n### 🔧Fix:\n    - Fix world creation ignoring UI-edited name/seed: vanilla reads its own worldNameField/seedField, so sync tab-UI values back before creation and rerun save-dir recalculation (func_146314_g); narrow ensureFieldsNotNull default fill to null-only. Add field_146333_g/field_146335_h accessors and func_146314_g invoker to IGuiCreateWorldAccess.\n\n### ❗❗❗Deprecated:\n    - No deprecations\n\n\n## Notes\nFull Changelog: https://github.com/song682/CreateWorldUI/commits/v7.1.1"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 333,
+		"more": 0,
+		"people": [
+			{
+				"login": "song682",
+				"commits": 333,
+				"name": "dfdvdsf",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

@@ -1,0 +1,68 @@
+{
+	"repo": "maruohon/worldutils",
+	"host": "github",
+	"description": "A Minecraft mod to manipulate the world in certain ways or fix some issues",
+	"stars": 7,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2016-10-24T12:48:18Z",
+	"pushed": "2021-03-22T16:13:44Z",
+	"releases": [
+		{
+			"tag": "v0.0.0-dev.2016.10.31.20.48.58",
+			"published": "2016-10-31T19:37:53Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 2563436,
+					"name": "worldtools-1.10.2-0.0.0-dev.2016.10.31.20.48.58.jar",
+					"url": "https://github.com/maruohon/worldutils/releases/download/v0.0.0-dev.2016.10.31.20.48.58/worldtools-1.10.2-0.0.0-dev.2016.10.31.20.48.58.jar",
+					"size": 100458,
+					"downloads": 49,
+					"inspection": 2,
+					"sha256": "97e26c483f88f5d423058dc783a0ba6bd093224304d0dcaa9f3f9f4aaf1da7cc",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"!!! WARNING !!! Admin-only tool!|lf DO NOT USE UNLESS YOU HAVE A WORLD BACKUP|lf- Allows changing entire chunks between alternate versions|lf  or importing the biomes to chunks from alternate versions|lf- Left/right click to set area corners|lf- Ctrl + scroll: Change mode|lf- Alt + scroll: Change target world|lf- (Alt +) Shift + scroll: Move area corners|lf- Alt + toggle: Add current selection to \"stored\" selection|lf- Shift + toggle: Remove current selection from \"stored\" selection|lf- Ctrl + Alt + toggle: Clear \"stored\" selection|lf- Ctrl + Shift + Alt + toggle: Clear the changed chunks exporter data|lf- Toggle key alone: Execute the selected action",
+								"Chunk Wand"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 54,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "This is the first publicly available (and not yet recommended!) test build.\nIt has the following features:\n- Chunk Wand - can swap selected chunks to alternate versions, or import biomes from alternate versions\n- '/wt entities' command, which is currently able to list all entities, list duplicate entities (by UUID) and remove duplicate entities (by UUID)\n\nProbably the most useful feature for end users at the moment is the ability to remove duplicated entities, since this in Mineraft 1.9 and later causes constant spamming of warning messages in the server console `([WARN] Keeping entity <type> that already exists with UUID <uuid>`).\n\nTo do this, fist of all **MAKE A BACKUP OF YOUR WORLD!!!**.\n\nNext, you should make a separate copy of the **level.dat** file somewhere. You'll want to restore it after you have ran the command. (Not strictly required, but sort of recommended. This is because World Tools adds the Chunk Wand item, so when you remove the mod later [if you remove it] the server would complain about the missing item and create a backup of the world as a zip. Restoring the original level.dat gets around this issue. Also, you will be moving the world spawn for this command (for now, in this test build it is needed if there are duplicate entities in the spawn chunks) so restoring the old level.dat easily restores the original spawn afterwards too.)\n\nAfter you made both of those backups, move the world spawn somewhere where there is no generated terrain at the moment. This is because all the chunks that will get pruned of duplicated entities currently need to be unloaded when the command runs. I recommend picking a location at the center of a region file, so you can then remove just that one region file afterwards to clean up that, if you even care about that at all. An example of such a location is 10496, 256 (if that is far enough so that there isn't anything there previously). That location will be contained in the region file 'r.20.0.mca' inside the region/ directory. So if that file doesn't currently exist, that location will be suitable and you are good to go. First switch yourself to creative mode (for flying/no fall damage), then teleport yourself there by `/tp playername 10496 140 256`. Then set the world spawn there by running `/setworldspawn`.\n\nNext you want to stop and start the server again (or save & quit to main menu and load the world again in single player), so that the old spawn unloads and the new spawn takes effect. Make sure you are the only player on the server and that you teleported yourself to the new temporary spawn.\n\nNow you can first examine the entities in your world, try to check if the list of duplicates you get seems reasonable and makes sense. To examine the entity list, first run the command `/wt entities read-all`. This will read all the entities from the entire world into a \"dummified\" list (ie. not actual entity objects, just some information about each) in memory. After you have this list in memory, you can use the `list, list-duplicates-only and list-duplicates-all` sub-commands to dump the list of all entities, or the duplicates. The two duplicate lists are what you really are interested in, the difference between them is that the duplicates-only list omits the first one of each UUID, so essentially those entities in that duplicates-only list will get removed by the remove command. Note that it is not EXACTLY those entities that will be removed (if you look at the exact locations or something), the entity per UUID that will be preserved is sort of random, it depends on the order the chunks get processed. All of the entity list dumps will be written to a file inside the `config/worldtools/` directory.\n\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 122,
+		"more": 0,
+		"people": [
+			{
+				"login": "maruohon",
+				"commits": 122,
+				"name": "Matti Ruohonen",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

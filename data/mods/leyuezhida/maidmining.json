@@ -1,0 +1,173 @@
+{
+	"repo": "leyuezhida/maidmining",
+	"host": "github",
+	"description": "矿透女仆是车万女仆的一个扩展模组，为女仆新增\"挖矿\"行为模式。女仆会自动搜索周围 3×3 区块内的矿石，挖掘隧道前往并采集。将原矿放入女仆副手可指定只挖对应类型的矿石，需要镐子作为工具。模组兼容 Forge 矿石标签，可识别多种模组矿石。",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-08-12T07:22:52Z",
+	"pushed": "2026-10-04T06:11:27Z",
+	"releases": [
+		{
+			"tag": "v1.0.2",
+			"published": "2026-10-04T05:46:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 609221053,
+					"name": "maidmining-1.0.2.jar",
+					"url": "https://github.com/leyuezhida/maidmining/releases/download/v1.0.2/maidmining-1.0.2.jar",
+					"size": 118439,
+					"downloads": 14,
+					"inspection": 2,
+					"sha256": "4ee6eb85cc449330b9f91f80af22da732bc7c8ed6a867a84b893515053c933f3",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "maidmining",
+							"version": "1.0.2",
+							"name": "Maid Mining",
+							"description": "Maid Mining - A Touhou Little Maid extension that adds autonomous mining task.||女仆挖矿扩展，为车万女仆添加自动挖矿任务。",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"touhou_little_maid"
+							]
+						}
+					],
+					"icon": "25345f99cf4e632d280c16343fc50a51b6763b8880e93df5ec3c91879a129ae5.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "本次更新的两个重点是**镐子附魔生效**与**代码结构重构**。\n\n\n## 修复\n\n### 镐子附魔（本次重点）\n\n- **时运（Fortune）生效** —— 掉落现在按女仆手中那把镐的实际附魔计算。旧版产出恒定，时运 III 也只有 1 个。\n- **精准采集（Silk Touch）生效** —— 挖矿石直接得到矿石方块（如钻石矿石方块）而不是原矿粒，可再生、还能当建材。旧版永远拿不到方块。\n- **挖矿不再消耗镐子耐久** —— 女仆应当能长期连续挖矿，不该把主人的镐子耗光。旧版每挖一个方块扣 1 点耐久，是本模组自己额外加的消耗（车万女仆本身不扣）。如需按玩家规则消耗，可在配置里打开 `dig.damageTool`。\n- **会挑最好的镐子用** —— 旧版拿「背包里第一个镐子」就换手，完全不看等级与附魔：背包里同时有木镐和钻石镐时可能一直用木镐挖不动钻石矿。现在按「挖矿相关附魔 → 基础等级 → 剩余耐久」评分择优，精准采集 > 时运 > 效率 > 耐久修补。\n\n### 物品与玩家资产\n\n- **不再吃掉贵重方块垫脚** —— 垫脚建材改为白名单制（圆石、泥土、下界岩等廉价方块），矿石、钻石块、金块、容器一律拒绝。旧版取「第一个有碰撞体积的方块」，会消耗主人背包里的钻石块。\n- **背包展示位（第 5 格）受保护** —— 该格是女仆展示给主人看的背包外观，旧版可能被垫脚消耗或被换镐覆盖。现在所有背包读写路径都显式排除它。\n- **背包写入统一走车万女仆的入库校验** —— 旧版直接写槽位，绕过了女仆「能否装入」的判断（包括背包黑名单）。现在一律经官方接口写入，尊重全部既有语义。\n\n## 新增\n\n- **完整配置（35 项）** —— 此前全部参数都是硬编码常量，玩家**一个都改不了**。现在分为搜索 / 移动 / 挖掘 / 物品 / 安全 / 观测 / 兼容七组，配置文件在 `世界/serverconfig/maidmining-server.toml`。默认值取保守策略：不进岩浆、不挖玩家方块、垫脚只用廉价方块。\n- **搜索不再强制加载区块** —— 旧版扫描时若碰到未加载区块会**同步加载甚至生成**它，在低模拟距离服务器上每轮扫描都可能强制生成几十个区块。现在只扫已加载的部分，跳过未加载区域。\n- **扫描性能** —— 先按区块段跳过全空气段、再用调色板预过滤；搜索热路径不再每格分配对象（旧版一轮约 49 万次分配）。挖不到矿时冷却逐次翻倍，不再每 6 秒空转一轮全量扫描。\n- **可选的「领地保护兼容模式」** —— 默认关闭。开启后女仆改用假玩家走玩家破坏路径，绝大多数领地/保护模组即可正常拦截（默认模式下它们只能通过另一类事件否决）。适合服务器管理员按需启用。\n- **任务启用条件** —— 女仆界面现在会显示「需要镐子」，并可判断是否满足。\n- **自动化测试扩充到 24 项** —— 新增附魔适配、物品守恒、展示位保护，以及精准采集的场景覆盖（深板岩变体、下界合金镐、与时运并存时的优先级、从背包换手、非矿石方块）。\n\n## 调整\n\n- **代码结构重构** —— 核心行为类从 954 行拆分为专职组件（破坏执行、垂直移动、垫脚、工具管理、背包读写、会话状态），职责清晰、易维护。**行为语义保持等价**，状态机、失败分类、上行策略均未改变。\n- **日志分级** —— 挖到矿这类高频事件降为可选详细日志，默认只输出需要注意的事，避免刷屏。\n- **标签重载后缓存自动失效** —— 装了新模组后 `/reload` 即可识别其矿石，不必重启游戏。\n- **读取配置更稳健** —— 配置尚未加载时回退到默认值而非崩溃。\n\n## 设计取舍（非缺陷）\n\n以下是**有意为之的设计决定**，不是待修复的缺陷：\n\n- **破坏瞬时完成，不模拟挖掘时间** —— 因此效率附魔不产生实际效果（已在选镐评分中预留位置，若将来引入时间模型即可生效）。这让女仆的挖矿节奏保持稳定，也避免\"挖到一半被打断\"的复杂状态。\n- **不实现耐久修补的配套链路** —— 既然默认不消耗耐久，经验修补自然没有意义。喜欢磨损感的服务器管理员可打开 `dig.damageTool`。\n- **目标黑名单不随存档持久化** —— 它是**会话级**的短期记忆，作用是\"这次别再撞同一面墙了\"。重载后清空是合理的：世界已经变了，旧的失败记录未必还有效。\n- **遇到不可破坏的方块直接放弃目标，不做绕墙寻路** —— 这是明确的取舍：与其让女仆在深处闷头挖几十格后失败，不如立刻换一个目标。基岩旁的矿默认也会跳过（见上方「调整」）。\n\n---\n\n## English\n\nTwo focuses: **pickaxe enchantments finally work**, and a **code structure refactor**. The enchantment fix required tracing the root cause: Touhou Little Maid hardcodes an *empty tool stack* when computing block drops, so on 1.0.x and 1.01 **Fortune and Silk Touch had no effect at all** — enchant a maid's pickaxe and nothing changed.\n\n### Fixed\n\n- **Fortune applies.** Drops are now computed with the pickaxe actually in hand. Previously yield was constant and Fortune III still gave a single item.\n- **Silk Touch applies.** Mining ores yields the block itself (e.g. diamond ore) instead of raw diamonds — renewable, and usable as building material.\n- **Mining no longer consumes pickaxe durability.** The maid is meant to mine continuously without wearing out the player's tools. Durability was an extra cost this mod added on top of TLM's own behaviour. Set `dig.damageTool` to restore player-like wear.\n- **The best pickaxe is chosen.** The old code equipped the *first* pickaxe it found, ignoring tier and enchantments — so a maid could keep using a wooden pickaxe while a diamond one sat in her inventory. Tools are now scored by mining enchantments, then tier, then remaining durability.\n- **Valuable blocks are no longer consumed for scaffolding.** Scaffolding uses an allowlist (cobblestone, dirt, netherrack, …); ores, diamond/gold/iron blocks and containers are refused.\n- **The display slot (slot 5) is protected.** It is the bag appearance shown to the player and could previously be consumed or overwritten.\n- **Inventory writes go through TLM's own validation**, respecting its backpack blacklist and `canInsertItem` rules.\n\n### Added\n\n- **35 configuration options** in seven groups, written to `world/serverconfig/maidmining-server.toml`. Previously every parameter was a hardcoded constant that players could not change at all.\n- **Scanning never force-loads chunks** — previously it could synchronously load or generate them, potentially generating dozens of chunks per pass on low-simulation-distance servers.\n\n..."
+		},
+		{
+			"tag": "v1.0.1",
+			"published": "2026-09-20T11:39:40Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 576713173,
+					"name": "maidmining-1.0.1.jar",
+					"url": "https://github.com/leyuezhida/maidmining/releases/download/v1.0.1/maidmining-1.0.1.jar",
+					"size": 66539,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "9a30e0a75f085b0ce646835fd0676aa2c5c4285b8538171f70e7ac82e3c56e00",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "maidmining",
+							"version": "1.0.1",
+							"name": "Maid Mining",
+							"description": "Maid Mining - A Touhou Little Maid extension that adds autonomous mining task.||女仆挖矿扩展，为车万女仆添加自动挖矿任务。",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"touhou_little_maid"
+							]
+						}
+					],
+					"icon": "25345f99cf4e632d280c16343fc50a51b6763b8880e93df5ec3c91879a129ae5.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "本次更新围绕**「女仆在地下挖矿会卡住」**做了一次系统性修复，并补上矿石定向与模组矿石支持。\n\n### 修复\n\n**卡住相关（本次重点）**\n\n- **不再被基岩卡住** —— 破坏结果现在会分类（永不可破 / 流体 / 被保护 / 暂时失败）。旧版把四种情况混成一个 `false`，于是对着基岩空转约 6 秒，再叠加错误的恢复动作（向上传送并清零卡住计数），最终形成「贴着基岩无限上爬」的死循环。现在遇到不可破坏的方块会**立即放弃该目标**并换下一个。\n- **矿道不再过高** —— 隧道净高改为按女仆碰撞箱推导（**1×2**，与玩家身高一致）。旧版固定挖 3 格高，比需要多挖约 1/3。上台阶处会在头顶局部多挖 1 格作为起跳空间——因为 2 格高的巷道里跳跃会被天花板截断，1 格台阶在物理上迈不上去。\n- **修复上坡「原地蹦跶不向前」** —— 上行不再依赖原版寻路（它在 1 格宽隧道里给不出路径，走位目标会被 `MoveToTargetSink` 直接抹掉），改为**逐 tick 直接驱动移动**；跳跃优先，传送仅作兜底，且兜底前会校验落点、兜底后清除累计落差。\n- **修复上坡时「空中放方块把自己挡住」** —— 垫脚方块不再于空中放置，也不会放进女仆自身所在的两格身体柱；只有确实需要抬升（高度差 ≥ 2）时才搭台阶，1 格高差直接用「伸手挖」。\n- **修复「突然停住」** —— 新增发呆检测：位置连续 20 tick 不变即接管为直接驱动，解决「代码以为在正常掘进、女仆却一步没动」。\n- **修复物品复制** —— 收集溢出掉落物时，「只装下一部分」的情况会正确回写剩余数量。旧版不回写，导致背包放不下时物品**同时存在于背包与地面**。\n- **修复镐子破损无音效/动画** —— 耐久耗尽时广播破坏事件。\n- **修复副手定向过滤失效** —— 见下方「矿石定向」。\n\n**专用服务器安全**\n\n- 任务定义不再引用任何客户端类（旧版在 `MiningTask` 里调用 `net.minecraft.client.*` 来取翻译文本，这在专用服务器上会 `NoClassDefFoundError`，而旧代码只 `catch (Exception)` 捕不到 `Error`）。现在改用 TLM 的默认实现：任务名与描述由 UID 自动生成 i18n key，交给 GUI 翻译。\n\n### 新增\n\n- **模组矿石自动支持** —— 矿石识别改为标签驱动：`#minecraft:ores` / `#forge:ores` / `#c:ores`，以及**任意 `<命名空间>:ores/<材料>` 子标签**。因此镍、铝、铅、锡等遵循 Forge 约定的模组矿石**自动可被搜寻，也自动支持副手定向**，无需为任何模组单独适配。\n- **远古残骸支持** —— 按 Forge 的 `forge:ores/netherite_scrap` 约定，副手放 `netherite_scrap` 或远古残骸方块都能定向。\n- **副手定向过滤重做** —— 解析顺序：命名模式（`raw_iron` / `raw_iron_block` / `iron_ore` / `deepslate_iron_ore` / `iron_ingot` / `iron_dust` …）→ **物品标签**（`forge:raw_materials/nickel`、`forge:ingots/aluminum` …，覆盖命名不按套路的模组材料）→ 别名表（`lapis_lazuli→lapis`、`quartz→nether_quartz` …）→ 物品名本身；每个候选都与「世界里真实存在的矿石材料」核对。**识别不了时会给出 WARN 提示**，不再静默变成「挖全部」。旧版只认 `raw_*` 和 `*_ore`，放钻石/煤/红石等会静默失效。\n- **镐子识别放宽** —— `#minecraft:pickaxes` → `forge/c:tools/pickaxes` → `ToolActions.PICKAXE_DIG`（模组镐主力）→ **「能正确开采石头」兜底**。带镐标签或行为上就是镐的工具都能用。\n- **卡住快照日志** —— 无进展时每 5 秒输出一行 `Stuck state=… target=… feet=… dy=… dist=…`，便于定位问题。\n- **无进展看门狗** —— 与目标距离连续 20 秒没有缩短即放弃该目标。\n- **自动化测试** —— 建立 GameTest 基础设施，落地 13 个用例（破坏分类语义、副手解析 11 种物品、镐子识别 12 项、矿石材料覆盖等），`./gradlew runGameTestServer` 即可跑，无需客户端。\n- **全新封面与图标** —— 封面主角为车万女仆的「酒狐」；另附 CurseForge / Modrinth 用的大图与头像（`publish/`）。\n\n### 调整\n\n- **「基岩邻近的矿跳过」重新默认开启** —— 该规则曾一度移除（改为遇到基岩立即放弃）。实测发现深层（y ≤ -60）会出现「连续锁定 → 撞同一面基岩墙 → 放弃」的碎裂循环，女仆表现为站着反复搜索，故按实测反馈重新启用。\n- **构建** —— 开启编译期 `-Xlint:deprecation -Xlint:unchecked`，清理 5 处已弃用 API，构建输出零警告。\n\n### 已知问题\n\n- 破坏仍是瞬时完成，未模拟挖掘时间；时运/精准采集暂不生效（计划 1.0.2）。"
+		},
+		{
+			"tag": "v1",
+			"published": "2026-08-12T07:39:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 511249392,
+					"name": "maidmining-1.0.0.jar",
+					"url": "https://github.com/leyuezhida/maidmining/releases/download/v1/maidmining-1.0.0.jar",
+					"size": 23291,
+					"downloads": 29,
+					"inspection": 2,
+					"sha256": "1ac73551f31862235558530d67a85e10f35f8e39560a79d88f8a4a71ddffc75d",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "maidmining",
+							"version": "1.0.0",
+							"name": "Maid Mining",
+							"description": "Maid Mining - A Touhou Little Maid extension that adds autonomous mining task.||女仆挖矿扩展，为车万女仆添加自动挖矿任务。",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"touhou_little_maid"
+							]
+						}
+					],
+					"icon": "2c85308b7347fc02b599646e6cea3f89c62a1ec263916a28a7ed85968145a07c.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 9,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "[](url)"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [
+		"cover.png"
+	],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 9,
+		"more": 0,
+		"people": [
+			{
+				"login": "leyuezhida",
+				"commits": 9,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

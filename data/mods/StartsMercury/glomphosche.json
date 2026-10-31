@@ -1,0 +1,197 @@
+{
+	"repo": "StartsMercury/glomphosche",
+	"host": "github",
+	"description": "Composite glyph mod for Minecraft.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2025-11-08T04:49:34Z",
+	"pushed": "2025-11-30T12:38:32Z",
+	"releases": [
+		{
+			"tag": "0.2.1+mc1.21.10",
+			"published": "2025-11-13T07:31:36Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 315863287,
+					"name": "glomphosche-0.2.1+mc1.21.10.jar",
+					"url": "https://github.com/StartsMercury/glomphosche/releases/download/0.2.1%2Bmc1.21.10/glomphosche-0.2.1%2Bmc1.21.10.jar",
+					"size": 162342,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "d0b2098b5a2fa46b90bd02e131656918f3442c10a0777534d2b797b1fb7eca45",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "glomphosche",
+							"version": "0.2.1+mc1.21.10",
+							"name": "Glomphosche",
+							"description": "Combined glyphs can you believe it?!",
+							"minecraft": "*",
+							"environment": "client",
+							"depends": [
+								"fabric-resource-loader-v0",
+								"fabricloader",
+								"java",
+								"minecraft"
+							],
+							"provides": [
+								"fabric-resource-loader-v0"
+							],
+							"suggests": [
+								"minecraft"
+							]
+						}
+					],
+					"icon": "594a8717e015ea12d0487589715951f273b077d389af4ca99efda6959c2d5ff2.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 81,
+						"jars": [
+							"META-INF/jars/fabric-resource-loader-v0-3.3.1+d4d4122a6f.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Hanuno'o and Fixes\n- Hanuno'o Unicode Block support with custom font textures. This should bring the shared dandas: ᜵ and ᜶\n- Delete (reversed backspace) will now delete the glyph/composed codepoints instead of deleting the first and leaving the deconstructed chars\n- Fix glomphosche not properly working in some places such as non-editable texts and multiline fields found in stuff like editing Books\n\n![](.github/hano_ambahan.png)"
+		},
+		{
+			"tag": "0.2.0+mc1.21.10",
+			"published": "2025-11-08T14:18:41Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 314079251,
+					"name": "glomphosche-0.2.0+mc1.21.10.jar",
+					"url": "https://github.com/StartsMercury/glomphosche/releases/download/0.2.0%2Bmc1.21.10/glomphosche-0.2.0%2Bmc1.21.10.jar",
+					"size": 142701,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "4c9c9fb44fece9f4dd35e2d2dbcfdcf4e1e471f9fb60facf777027a8eec20065",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "glomphosche",
+							"version": "0.2.0+mc1.21.10",
+							"name": "Glomphosche",
+							"description": "Combined glyphs can you believe it?!",
+							"minecraft": "*",
+							"environment": "client",
+							"depends": [
+								"fabric-resource-loader-v0",
+								"fabricloader",
+								"java",
+								"minecraft"
+							],
+							"provides": [
+								"fabric-resource-loader-v0"
+							],
+							"suggests": [
+								"minecraft"
+							]
+						}
+					],
+					"icon": "594a8717e015ea12d0487589715951f273b077d389af4ca99efda6959c2d5ff2.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 73,
+						"jars": [
+							"META-INF/jars/fabric-resource-loader-v0-3.2.3+3388a3b26f.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Modern Hangul Jamo Composed Syllables\nSupport for composing modern Hangul Jamo into Hangul syllables.\nThis only supports modern jamo and follows the composition calculation to map\nproper jamo sequences to pre-composed Unicode characters. \n\nAlso now includes `fabric-resource-loader-v0` just in case so textures will for sure show. Would have silently needed Fabric API.\n\n## Technicals (updated)\n\nThe internals are still being polished. You can check the first few lines of\nthe `GlomphoscheImpl` class and even the mentioned `Node` classes there that you\nmay find of interest.\n\n```java\nimport io.github.startsmercury.glomphosche.impl.client.GlomphoscheImpl;\nimport net.minecraft.network.chat.FontDescription;\n\nclass Example\n{\n\nvoid initialize()\n{\n// register modern Hangul Jamo handler, or your own handler\n// for a different use, if you implemented one\nGlomphoscheImpl.ROOT\n    .inner()\n    .add(new ComposableHangulJamoNode());\n\n// the letter 'f'\nNode node1 = GlomphoscheImpl.LOOKUP\n    .computeDiscreteIfAbsent('f');\n// the theoretical glyph 'fi'\nNode node2 = node1.getOrCreate('i');\n// register the font that retextures 'f' as the glyph representing 'fi'\nnode2.register(FontDescription.DEFAULT); // replace with your own\n\n// This one is for 'ffi' by retexturing 'f'\nGlomphoscheImpl.ROOT\n    .getOrCreate('f')\n    .getOrCreate('f')\n    .getOrCreate('i')\n    // replace with your own\n    .register(FontDescription.DEFAULT);\n}\n\n}\n```\n## Acknowledgements\nGreat help from https://steve-p.org/korean/. Explained the concepts and had the formula to calculate the precomposed syllables!"
+		},
+		{
+			"tag": "0.1.0+mc1.21.10",
+			"published": "2025-11-08T05:38:29Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 314003903,
+					"name": "glomphosche-0.1.0+mc1.21.10.jar",
+					"url": "https://github.com/StartsMercury/glomphosche/releases/download/0.1.0%2Bmc1.21.10/glomphosche-0.1.0%2Bmc1.21.10.jar",
+					"size": 30344,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "ed565e08b302c8d74cc6112e56eb269a41acd7fb12aff6579e386bbdaa57c187",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "glomphosche",
+							"version": "0.1.0+mc1.21.10",
+							"name": "Glomphosche",
+							"description": "Combined glyphs can you believe it?!",
+							"minecraft": "*",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"java",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": "594a8717e015ea12d0487589715951f273b077d389af4ca99efda6959c2d5ff2.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 12,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Initial Alpha Release of Glomphosche\n\nA mod that *'hacks'* in composed glyphs since `char`s weren't enough.\n\n## Alpha Usage\n\nThis mod is currently in Alpha testing. The vital feature is realized, that is\na system that could somehow combine characters or codepoints into a singular\nglyph.\n\nCurrently, only Baybayin, also known as the Tagalog script in Unicode, is\npre-included and there currently is no convenient way to register additional\nsequences aside from creating a helper mod. You also need to somehow have the\ncapability to enter Tagalog/Baybayin characters, either using a keyboard mapper\nor simply find one that can convert Latin strings into Tagalog/Baybayin.\n\nYou may register the first level characters with Minecraft's default font or\nyour own if it'll work better for what you are achieving. Do note that you want\nto retexture the <u>first</u> character and likely use separate textures. You\nare required to already know how to manage fonts through vanilla Minecraft\\\nresource packs.\n\n```java\n// the letter 'f'\nvar node1 = GlomphoscheImpl.ROOT.getOrCreate('f');\n// the theoretical glyph 'fi'\nvar node2 = node1.getOrCreate('i');\n// register the font that retextures 'f' as the glyph representing 'fi'\nnode2.register(/* FontDescription.Source here */);\n\n// This one is for 'ffi' by retexturing 'f'\nGlomphoscheImpl.ROOT\n    .getOrCreate('f')\n    .getOrCreate('f')\n    .getOrCreate('i')\n    .register(/* FontDescription.Source here */);\n```\n\nThe shortest path to test with an editable text box is through the *Add Server*\nscreen found in `Title Screen > Multiplayer > Add Server`.\n\n![](.github/tglg.png)\n![](.github/tglg_ii.png)\n![](.github/tglg_uo.png)\n![](.github/tglg_krus.png)\n![](.github/tglg_pamudpod.png)"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [
+		".github/hano_ambahan.png",
+		".github/tglg.png",
+		".github/tglg_ii.png",
+		".github/tglg_krus.png",
+		".github/tglg_pamudpod.png",
+		".github/tglg_uo.png"
+	],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 21,
+		"more": 0,
+		"people": [
+			{
+				"login": "StartsMercury",
+				"commits": 21,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

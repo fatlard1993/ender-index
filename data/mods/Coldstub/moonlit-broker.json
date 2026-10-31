@@ -1,0 +1,499 @@
+{
+	"repo": "Coldstub/moonlit-broker",
+	"host": "github",
+	"description": "An experimental RPG progression mod. My first project as a student developer—expect rough edges and strict logic.",
+	"stars": 0,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-02-17T12:12:37Z",
+	"pushed": "2026-07-16T23:50:38Z",
+	"releases": [
+		{
+			"tag": "v1.0.4",
+			"published": "2026-02-24T05:25:18Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 361256353,
+					"name": "xqanzd_moonlit_broker-github-1.0.4.jar",
+					"url": "https://github.com/Coldstub/moonlit-broker/releases/download/v1.0.4/xqanzd_moonlit_broker-github-1.0.4.jar",
+					"size": 1737715,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "56921686c8210d606a84187e517aa07edeaa45eb098f152999b6196f851b15e7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "xqanzd_moonlit_broker",
+							"version": "1.0.0",
+							"name": "Moonlit Broker（月光掮客）",
+							"description": "Mysterious Merchant with Katana weapons",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Acer",
+								"Arcane Ledger",
+								"Arid Moonlit Broker Spawn Egg",
+								"Blood Pact Chestplate",
+								"Boundary Walker",
+								"Bounty Contract",
+								"Cargo Pants",
+								"Cast Iron Sallet",
+								"Clear Ledger Gait",
+								"Cold Moonlit Broker Spawn Egg",
+								"Cushion Hiking Boots",
+								"Debug Random Moonlit Broker Spawn Egg",
+								"Eclipse Blade",
+								"Exile's Mask",
+								"Exotic Moonlit Broker Spawn Egg",
+								"Fatalis",
+								"Ghost God Chestplate",
+								"Ghost Step",
+								"Gossamer Boots",
+								"Graze Guard",
+								"Guide Scroll",
+								"Marching Boots",
+								"Merchant Mark",
+								"Merchant's Windbreaker",
+								"Moonlight",
+								"Moonlit Broker Spawn Egg",
+								"Mysterious Anvil",
+								"Mysterious Coin",
+								"Nmap",
+								"Oblivion Edge",
+								"Old Market Chestplate",
+								"Patchwork Coat",
+								"Penitent Boots",
+								"Reactive Bug Plate",
+								"Reinforced Greaves",
+								"Relic Circlet",
+								"Retracer's Ornament",
+								"Ritual Robe",
+								"Sacrifice",
+								"Sanctified Hood",
+								"Scavenger's Goggles",
+								"Sealed Ledger",
+								"Sentinel's Last Watch",
+								"Sigil",
+								"Silent Oath",
+								"Silver Note",
+								"Smuggler's Pouch",
+								"Smuggler's Shin",
+								"Standard Iron Boots",
+								"Stealth Shin",
+								"Trade Scroll",
+								"Trauma",
+								"Untraceable Treads",
+								"Velox",
+								"Void Devourer",
+								"Wet Moonlit Broker Spawn Egg",
+								"Wrapped Leggings"
+							],
+							"entity": [
+								"Moonlit Broker"
+							],
+							"block": [
+								"Mysterious Anvil"
+							],
+							"group": [
+								"Moonlit Broker"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 189,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## **1.0.4 — Bounty System Overhaul: From “Farm What You Kill” to a True Contract Loop**\n\nThis update reshapes the Bounty system into a smoother, more immersive contract loop — designed for modpacks and exploration-heavy playthroughs.\nLess backtracking, less UI spam, more meaningful targets — without breaking the coin economy. ⚖️🌙\n\n---\n\n## 🎯 Core Goal\n\nMake bounties feel natural inside exploration flow:\n\n* Reduce unnecessary merchant trips\n* Reduce spammy feedback\n* Increase target variety\n* Preserve coin rarity and economic balance\n\n---\n\n# 1️⃣ Settlement Rework — Instant Base Reward, Safe Deferred Delivery\n\n### ✅ Automatic Base Settlement\n\nWhen a contract is completed (after the kill callback):\n\n* Automatically attempts to grant:\n\n  * 📜 Trade Scroll ×1\n  * 🪙 Silver Note ×3\n* Never drops on the ground (safe from lava/void/water loss).\n* If inventory is full:\n\n  * Contract is NOT consumed.\n  * No coin roll is triggered.\n  * A rate-limited message informs the player:\n\n    > “Inventory full — settlement deferred.”\n\nAfter clearing space, triggering any valid kill callback will automatically finalize the settlement.\nNo need to return to the merchant. 🚶‍♂️❌\n\n---\n\n### 🛡 Defensive Hardening (Extremely Rare Path)\n\n* Added full diagnostic logging for any “partial insertion” scenario.\n* Introduced `BountyAutoSettleAttempted` poison pill to prevent chain exploits (e.g., scroll duplication).\n* Even poisoned contracts can still be submitted face-to-face to the merchant — there is always a recovery path.\n\n---\n\n# 2️⃣ Coin Reward Unification — Stored First, Redeemed Later\n\n### 🎲 Unified Coin Roll Logic\n\nCoin roll is now handled by a shared helper:\n\n* Auto-settlement and manual submission use the same probability, cooldown, and first-time guarantee logic.\n* Eliminates inconsistent “feel” between the two paths.\n\n---\n\n### 🪙 `pendingCoinReward` — Solving Backtracking Fatigue\n\nIf a coin roll succeeds:\n\n* It is NOT dropped immediately.\n* Instead, it is stored in player progression (`pendingCoinReward`).\n\nNext time the player interacts with any Moonlit Broker:\n\n* Coin is automatically delivered **before** the trade UI opens.\n* If inventory is full → remains stored (never drops on ground).\n\nSafeguards:\n\n* Soft cap: 64 coins\n* Load-time sanitize to prevent corrupted/excessive values\n\n---\n\n### ⏳ Cooldown Transparency\n\nIf the coin roll is on cooldown:\n\n* A rate-limited actionbar message explains it.\n* Both auto and manual submission paths are covered.\n* Reduces confusion:\n\n  > “Did it trigger? Or not?” 🤔\n\n---\n\n# 3️⃣ Target System Upgrade — True Contract Drawing 🎴\n\n### 🔄 No More “Kill What You Farm”\n\nPreviously:\n\n* Farming zombies → almost always zombie contracts.\n\nNow:\n\n* Only mobs in `bounty_targets` can drop contracts.\n* BUT the contract target is drawn randomly from the full pool.\n* Creates a real “commission” feeling.\n\n---\n\n### 🧱 Tiered Weighted Draw (Configurable)\n\nDefault weight distribution:\n\n* ⭐ Rare — 2%\n* 🔥 Elite — 10%\n* ⚔ Common — Remaining %\n\nDrop message displays tier clearly, with distinct colors and wording.\n\n---\n\n### 📊 Tier-Based Required Counts (Triangular Distribution)\n\n* **Common**: 10–25 (mode = 17)\n* **Elite**: 5–15 (mode = 10, density capped)\n* **Rare**: 8–18 (mode = 12)\n\nDesign Philosophy:\n\n* Rare/Elite → Short but intense\n* Common → Stable long-term contracts\n\n---\n\n### ⚖ Neutral Target Consistency\n\nFor neutral mobs (e.g., Enderman, Piglin, Zombified Piglin):\n\n* Only counts if the mob is actively hostile toward the player.\n* Prevents passive farming loopholes.\n\n---\n\n# 4️⃣ Cross-Dimension Friendliness 🌍\n\n### 🌎 Overworld Soft Reroll (One-Time)\n\nIf the player is in the Overworld and rolls:\n\n* Nether-only\n* End-only\n* Ocean-only\n\nThe system rerolls once from the same pool excluding cross-dimension targets.\n\nIf the filtered pool is empty:\n\n* Falls back to common/allList\n* Still generates a contract\n* Provides a hint message\n\nNo dead-end rolls. No silent failures.\n\n---\n\n### 📍 Location Hints (Rate-Limited)\n\n\n..."
+		},
+		{
+			"tag": "v1.0.3",
+			"published": "2026-02-20T07:39:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 359041672,
+					"name": "xqanzd_moonlit_broker-github-1.0.3.jar",
+					"url": "https://github.com/Coldstub/moonlit-broker/releases/download/v1.0.3/xqanzd_moonlit_broker-github-1.0.3.jar",
+					"size": 1723378,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "f4f26d464bf60c47b42133cd83e2f4dc5d6e725cbf0f52d22d9577872653adca",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "xqanzd_moonlit_broker",
+							"version": "1.0.0",
+							"name": "Moonlit Broker（月光掮客）",
+							"description": "Mysterious Merchant with Katana weapons",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Acer",
+								"Arcane Ledger",
+								"Arid Moonlit Broker Spawn Egg",
+								"Blood Pact Chestplate",
+								"Boundary Walker",
+								"Bounty Contract",
+								"Cargo Pants",
+								"Cast Iron Sallet",
+								"Clear Ledger Gait",
+								"Cold Moonlit Broker Spawn Egg",
+								"Cushion Hiking Boots",
+								"Debug Random Moonlit Broker Spawn Egg",
+								"Eclipse Blade",
+								"Exile's Mask",
+								"Exotic Moonlit Broker Spawn Egg",
+								"Fatalis",
+								"Ghost God Chestplate",
+								"Ghost Step",
+								"Gossamer Boots",
+								"Graze Guard",
+								"Guide Scroll",
+								"Marching Boots",
+								"Merchant Mark",
+								"Merchant's Windbreaker",
+								"Moonlight",
+								"Moonlit Broker Spawn Egg",
+								"Mysterious Anvil",
+								"Mysterious Coin",
+								"Nmap",
+								"Oblivion Edge",
+								"Old Market Chestplate",
+								"Patchwork Coat",
+								"Penitent Boots",
+								"Reactive Bug Plate",
+								"Reinforced Greaves",
+								"Relic Circlet",
+								"Retracer's Ornament",
+								"Ritual Robe",
+								"Sacrifice",
+								"Sanctified Hood",
+								"Scavenger's Goggles",
+								"Sealed Ledger",
+								"Sentinel's Last Watch",
+								"Sigil",
+								"Silent Oath",
+								"Silver Note",
+								"Smuggler's Pouch",
+								"Smuggler's Shin",
+								"Standard Iron Boots",
+								"Stealth Shin",
+								"Trade Scroll",
+								"Trauma",
+								"Untraceable Treads",
+								"Velox",
+								"Void Devourer",
+								"Wet Moonlit Broker Spawn Egg",
+								"Wrapped Leggings"
+							],
+							"entity": [
+								"Moonlit Broker"
+							],
+							"block": [
+								"Mysterious Anvil"
+							],
+							"group": [
+								"Moonlit Broker"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 187,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "* **fix(katana):** `sanitizeKatanaOffersForPlayer` no longer removes the **owned** standard Katana offer.\n  It now **only de-dupes same-type offers**, prefers the **coin route** when available, and keeps the **sold-out visual state** intact ✅\n\n* **fix(katana):** `tryCreateReclaimOffer` now has stricter visibility gating.\n  Reclaim visibility is decided using **`activeInstanceId` + equipment slot scan** (main inventory / offhand / armor) to determine whether Reclaim should appear 🧠\n\n* **fix(katana):** Forced **legacy → instance migration** during the delivery chain:\n  if the delivered stack has **no `instanceId`**, it will be injected, and `activeInstanceId` will be pointed to that delivered instance 🔧\n\n* **fix(katana):** Added a **contract consistency assertion log** (`expected instanceId` / `activeInstanceId` / `stack instanceId`) to help diagnose partial-write / half-commit anomalies 🧾\n\n* **fix(katana):** `commitPending` mismatch no longer accidentally deletes unrelated pending entries.\n  Added `clearPendingIfMatches` for precise pending cleanup 🎯\n\n* **fix(katana):** Added **ownership fallback** for `TradeOutputSlotMixin` commit-miss / result-mismatch cases.\n  Fallback is **strictly based on `katanaId` extracted from the trade result** (and requires `isSecretKatana`) — no more loose inference 🛡️\n\n* **chore(logging):** Commit-miss **ERROR logs are now rate-limited per player + per Katana**, reducing noisy spam in edge-case scenarios 🔇\n\n* **fix(ui):** `MoonlitMerchantScreen` trade-row selection now uses a **single send point**:\n  `SelectMerchantTradeC2SPacket(absIndex)`; duplicate send paths removed 📡\n\n* **fix(ui):** Trade-row clicks are now intercepted in `mouseClicked` and **consumed (`return true`)**, and `mouseReleased` is also consumed — preventing a single click from triggering multiple selection requests 🖱️\n\n* **fix(ui):** Removed the row-button `onPress` selection path to avoid incorrect indexing caused by mixed `localRow/offset` usage ❌\n\n* **chore(debug):** Added `TradeConfig.TRADE_DEBUG` logs at the single send point for easier debugging:\n  `localRow / indexStartOffset / absIndex / offersTotal / page` 🧪\n\n* **fix(sync):** Empty offers now also sync to the client, preventing stale lists from lingering and creating “ghost UI” states 👻\n\n---"
+		},
+		{
+			"tag": "v1.0.1",
+			"published": "2026-02-19T07:39:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 358436226,
+					"name": "xqanzd_moonlit_broker-github-1.0.1.jar",
+					"url": "https://github.com/Coldstub/moonlit-broker/releases/download/v1.0.1/xqanzd_moonlit_broker-github-1.0.1.jar",
+					"size": 1714239,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "78a1bb5333e1921bd87a52870045bbc0f33de600afef5bcd13ab542850340b26",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "xqanzd_moonlit_broker",
+							"version": "1.0.0",
+							"name": "Moonlit Broker（月光掮客）",
+							"description": "Mysterious Merchant with Katana weapons",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Acer",
+								"Arcane Ledger",
+								"Arid Moonlit Broker Spawn Egg",
+								"Blood Pact Chestplate",
+								"Boundary Walker",
+								"Bounty Contract",
+								"Cargo Pants",
+								"Cast Iron Sallet",
+								"Clear Ledger Gait",
+								"Cold Moonlit Broker Spawn Egg",
+								"Cushion Hiking Boots",
+								"Debug Random Moonlit Broker Spawn Egg",
+								"Eclipse Blade",
+								"Exile's Mask",
+								"Exotic Moonlit Broker Spawn Egg",
+								"Fatalis",
+								"Ghost God Chestplate",
+								"Ghost Step",
+								"Gossamer Boots",
+								"Graze Guard",
+								"Guide Scroll",
+								"Marching Boots",
+								"Merchant Mark",
+								"Merchant's Windbreaker",
+								"Moonlight",
+								"Moonlit Broker Spawn Egg",
+								"Mysterious Anvil",
+								"Mysterious Coin",
+								"Nmap",
+								"Oblivion Edge",
+								"Old Market Chestplate",
+								"Patchwork Coat",
+								"Penitent Boots",
+								"Reactive Bug Plate",
+								"Reinforced Greaves",
+								"Relic Circlet",
+								"Retracer's Ornament",
+								"Ritual Robe",
+								"Sacrifice",
+								"Sanctified Hood",
+								"Scavenger's Goggles",
+								"Sealed Ledger",
+								"Sentinel's Last Watch",
+								"Sigil",
+								"Silent Oath",
+								"Silver Note",
+								"Smuggler's Pouch",
+								"Smuggler's Shin",
+								"Standard Iron Boots",
+								"Stealth Shin",
+								"Trade Scroll",
+								"Trauma",
+								"Untraceable Treads",
+								"Velox",
+								"Void Devourer",
+								"Wet Moonlit Broker Spawn Egg",
+								"Wrapped Leggings"
+							],
+							"entity": [
+								"Moonlit Broker"
+							],
+							"block": [
+								"Mysterious Anvil"
+							],
+							"group": [
+								"Moonlit Broker"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 186,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "v1.0.1 — MarkBound (historical validation) + Bounty tiering/cooldown/refund + behavior cleanup + message disambiguation\n\nThis release upgrades the Bounty trigger from “inventory possession check” to “historical registration validation (MarkBound)”, and delivers: common-mob drops, tier writing, drop cooldown, expired contract refund, tag subset validation, and removal of leftover Wandering Trader behaviors.\nIt also disambiguates + rate-limits Katana contract gate hints to avoid confusion with Bounty Contracts.\n\nA) MerchantUnlockState / Progress (Persistent fields + migration)\n\nNew/maintained persistent fields (PersistentState, anchored to Overworld)\n\nMerchantUnlockState.Progress persistent fields (implemented + backward compatible)\n\nmarkBoundVersion (int)\n\nmarkBoundTick (long) — Overworld tick; legacy migration uses 0 sentinel\n\nmarkBoundMerchantUuid (UUID, nullable)\n\nlastContractDropTick (long) — per-player drop cooldown timestamp\n\nNBT Keys\n\nMarkBoundVer\n\nMarkBoundTick\n\nMarkBoundMerchant\n\nLastContractDropTick\n\nLegacy compat (auto-upgrade old saves)\n\nIf an old save has bountyEligible=true or firstMeetGuideGiven=true\n→ auto-upgrade to markBoundVersion=1, and write markBoundTick=0 (legacy sentinel).\n\nUnified time source (strict audit)\n\nAdded helpers and centralized all time reads to Overworld:\n\nrequireOverworld(...)\n\ngetOverworldTick(...)\n\nEnsured the following logic uses Overworld tick consistently:\n\ncanDropContract(...)\n\nupdateLastContractDropTick(...)\n\nrecordContractDrop(...)\n\n(and MarkBound binding time writes)\n\nAlso:\n\nresetMarkBound() now clears lastContractDropTick as well (so resets aren’t still blocked by cooldown).\n\nB) MarkBound binding logic (Interact = register + one-time hint)\n\nIn MysteriousMerchantEntity.interactMob:\n\nUses MerchantUnlockState.bindMarkOnInteract(...) for an atomic write of:\n\nbountyEligible (if kept)\n\nmarkBoundVersion / tick / merchantUuid\n\nOn first bind, sends a one-time actionbar:\n\nactionbar.xqanzd_moonlit_broker.mark.bound\n\nC) BountyDropHandler (Full gate-chain rewrite + tier writing + cooldown + debug gating)\nEvent registration\n\nServerLivingEntityEvents.AFTER_DEATH.register(BountyDropHandler::onMobDeath)\n\nIncludes a double-registration guard (prevents duplicate hooks).\n\nGate chain (in order)\n\nattacker must be ServerPlayerEntity\n\nworld must be ServerWorld\n\nBOUNTY_TARGETS tag gate\n\nNeutral gate: uses BOUNTY_NEUTRAL_TARGETS, requires the mob to be angered/hostile toward the player\n\nCreative exemption: player.isCreative() → skip\n\nMarkBound gate: isBountyEligible/markBound (historical validation; no inventory Mark check)\n\nHas-contract gate: if player already has a contract, do not drop\n\nCooldown gate:\nisDropCooldownActive(world, uuid, TradeConfig.BOUNTY_DROP_COOLDOWN_TICKS)\n\nOn drop success, recordContractDrop(world, uuid) writes cooldown only when dropStack succeeds\n\nRoll: looting bonus + cap; elite bonus multiplier (keeps previous rule)\n\nTier determination (rare > elite > common)\n\nrare: BOUNTY_RARE_TARGETS\n\nelite: BOUNTY_ELITE_TARGETS\n\ncommon: everything else in BOUNTY_TARGETS\n\nTier is written via BountyContractItem.initializeWithTier(...):\n\nBountyTier = common/elite/rare\n\nBountySchema = 1\n\nDebug force-drop (kept out of releases)\n\nTriple gate:\n\nMASTER_DEBUG && TRADE_DEBUG && FORCE_BOUNTY_DROP\nOnly then force chance = 1.0f. Default: FORCE_BOUNTY_DROP=false.\n\nNot-registered hint (rate-limited)\n\nWhen blocked by MarkBound gate:\n\nSends a gray actionbar hint to register\n\n30s rate limit per player (no spam)\n\nNew lang keys:\n\nen_us: Find a Moonlit Broker to begin receiving bounty contracts\n\nzh_cn: 找到月下掮客完成登记后，才能获得悬赏契约\n\nD) BountyContractItem (Idempotent init + schema/tier + target validity)\n\nNew/strengthened:\n\ninitialize() is idempotent: if NBT already has target/required, skip (prevents overwrites)\n\ninitializeWithTier(stack, target, required, tier):\n\nwrites BountyTier\n\nwrites BountySchema=1\n\nvalidateTarget(stack): returns null if valid, otherwise a reason string\n\nisTargetStillValid(stack): boolean convenience\n\n\n..."
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-02-17T13:18:23Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 357403753,
+					"name": "moonlit-broker-1.0.0-sharedengine.jar",
+					"url": "https://github.com/Coldstub/moonlit-broker/releases/download/v1.0.0/moonlit-broker-1.0.0-sharedengine.jar",
+					"size": 1699681,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "8f02ee75d7e430b0e1afbfcc376d7427b2bcd38a33b2de18081e53792526ba44",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "xqanzd_moonlit_broker",
+							"version": "1.0.0",
+							"name": "Moonlit Broker（月光掮客）",
+							"description": "Mysterious Merchant with Katana weapons",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Acer",
+								"Arcane Ledger",
+								"Arid Moonlit Broker Spawn Egg",
+								"Blood Pact Chestplate",
+								"Boundary Walker",
+								"Bounty Contract",
+								"Cargo Pants",
+								"Cast Iron Sallet",
+								"Clear Ledger Gait",
+								"Cold Moonlit Broker Spawn Egg",
+								"Cushion Hiking Boots",
+								"Debug Random Moonlit Broker Spawn Egg",
+								"Eclipse Blade",
+								"Exile's Mask",
+								"Exotic Moonlit Broker Spawn Egg",
+								"Fatalis",
+								"Ghost God Chestplate",
+								"Ghost Step",
+								"Gossamer Boots",
+								"Graze Guard",
+								"Guide Scroll",
+								"Marching Boots",
+								"Merchant Mark",
+								"Merchant's Windbreaker",
+								"Moonlight",
+								"Moonlit Broker Spawn Egg",
+								"Mysterious Anvil",
+								"Mysterious Coin",
+								"Nmap",
+								"Oblivion Edge",
+								"Old Market Chestplate",
+								"Patchwork Coat",
+								"Penitent Boots",
+								"Reactive Bug Plate",
+								"Reinforced Greaves",
+								"Relic Circlet",
+								"Retracer's Ornament",
+								"Ritual Robe",
+								"Sacrifice",
+								"Sanctified Hood",
+								"Scavenger's Goggles",
+								"Sealed Ledger",
+								"Sentinel's Last Watch",
+								"Sigil",
+								"Silent Oath",
+								"Silver Note",
+								"Smuggler's Pouch",
+								"Smuggler's Shin",
+								"Standard Iron Boots",
+								"Stealth Shin",
+								"Trade Scroll",
+								"Trauma",
+								"Untraceable Treads",
+								"Velox",
+								"Void Devourer",
+								"Wet Moonlit Broker Spawn Egg",
+								"Wrapped Leggings"
+							],
+							"entity": [
+								"Moonlit Broker"
+							],
+							"block": [
+								"Mysterious Anvil"
+							],
+							"group": [
+								"Moonlit Broker"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 185,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Initial release of Moonlit Broker (月下掮客).\n\n> **⚠️ Asset Notice / 素材说明**\n> This release contains placeholder textures only. The mod uses licensed art assets\n> that cannot be redistributed in open-source form.\n> **For the full visual experience, download from CurseForge. (link)**\n>\n> 此版本仅含占位贴图。本模组使用了受版权保护的美术素材，无法在开源版本中附带。\n> **如需完整视觉体验，请前往 modrinth下载完整版。https://modrinth.com/mod/moonlit-broker/version/GbrLuzZC**\n\n## Features\n- 5 legendary contract-bound katanas with unique combat effects\n- Moonlit Broker NPC with tiered trading system (Top / Shelf / Spark)\n- Bounty hunting system with milestone progress feedback\n- 4-tier currency chain: Silver Notes, Trade Scrolls, Bounty Contracts, Mysterious Coins\n- Multiplayer-friendly farewell mechanic\n\n## Requirements\n- Minecraft 1.21.1\n- Fabric Loader 0.15.11\n- Fabric API 0.116.8+1.21.1\n- Java 21\n\n## Installation\nPlace `xqanzd_moonlit_broker-1.0.0.jar` and Fabric API into `.minecraft/mods/`\n\n## Notes\nFirst mod project. Expect rough edges — feedback welcome via Issues."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 94,
+		"more": 0,
+		"people": [
+			{
+				"login": "Coldstub",
+				"commits": 94,
+				"name": "cstub",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

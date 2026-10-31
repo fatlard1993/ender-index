@@ -1,0 +1,215 @@
+{
+	"repo": "MuXolotl/Selas",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-07-09T09:33:48Z",
+	"pushed": "2026-08-30T20:20:46Z",
+	"releases": [
+		{
+			"tag": "v0.1.3",
+			"published": "2026-08-30T19:07:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 536957822,
+					"name": "selas-0.1.3.jar",
+					"url": "https://github.com/MuXolotl/Selas/releases/download/v0.1.3/selas-0.1.3.jar",
+					"size": 303363,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "f6f0bf2acafc1bd7c078d8fc94787168609a93096b6a69163f029d056bc214ec",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "selas",
+							"version": "0.1.3",
+							"name": "Selas",
+							"description": "Client-side lightmap changes for darker nights, caves, rain, and thunder. Includes configurable day/night timing, moon brightness, weather darkening, brightness floors, starlight floor, block light preservation, low-light color controls, Nether/End ambient lighting, and optional shader-pack auto-disable.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 9,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Selas v0.1.2 | 1.21.1 NeoForge\n\n---\n\n### Added\n\n- Full-moon nights now carry a faint, warm glow, so a full moon feels a little warmer than the plain cool starlight of a new moon. Adjustable, and can be turned off.\n\n### Changed\n\n- Rebalanced the default night look for stronger realism:\n  - moonless nights are a touch darker while full-moon nights are brighter,\n  - open skies keep a clearer starlight glow, and caves sit a little deeper in the dark,\n  - night now reads as a cooler blue-gray rather than just losing its reds.\n- Night colors now fade toward gray only deep in the night, so dusk and dawn keep more of their color.\n- Nights hold their full darkness slightly longer before dawn begins.\n- Removed the brightness-slider (gamma) option. It was off by default and worked inconsistently; Selas now always keeps its own darkness targets.\n\n### Performance\n\n- Reduced per-frame overhead by reading configuration values once per frame instead of once per lightmap pixel.\n\n---\n\n### Notes\n\n- Client-side visual changes only.\n- Does not change mob spawning, day length, server time, block light propagation, fog, or dynamic lights.\n- By default Selas disables itself while an Iris/Oculus shader pack is active, since shader packs usually replace or override vanilla lightmap lighting.\n- Existing configs keep their current values. If you want the recalibrated 0.1.2 defaults, regenerate `config/selas-client.toml` manually.\n\n---\n\n**Full Changelog**: https://github.com/MuXolotl/Selas/compare/v0.1.2...v0.1.3"
+		},
+		{
+			"tag": "v0.1.2",
+			"published": "2026-07-11T23:50:39Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 473897321,
+					"name": "selas-0.1.2.jar",
+					"url": "https://github.com/MuXolotl/Selas/releases/download/v0.1.2/selas-0.1.2.jar",
+					"size": 301552,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "519dd3bead274fc3c50ee80243480f7de28551ec9fccec500fec8b0df152c154",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "selas",
+							"version": "0.1.2",
+							"name": "Selas",
+							"description": "Client-side lightmap changes for darker nights, caves, rain, and thunder. Includes configurable day/night timing, moon brightness, weather darkening, brightness floors, starlight floor, block light preservation, low-light color controls, Nether/End ambient lighting, and optional shader-pack auto-disable.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 8,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Selas v0.1.2 | 1.21.1 NeoForge\n\nSelas changes the vanilla lightmap to make nights, caves, rain, and thunder darker. The goal is natural, readable darkness rather than pure black voids. This release continues the 0.1.x calibration work and improves shader-pack behavior.\n\n---\n\n### Added\n\n- Open-sky starlight luminance floor (`starlight_luminance_floor`).\n- Auto-disable while an Iris/Oculus shader pack is active (`disable_with_shaders`, enabled by default).\n\n### Changed\n\n- Recalibrated default natural darkness toward more physically grounded lighting:\n  - higher new-moon and full-moon sky factors\n  - clearer separation between near-black cave darkness and open-sky starlight\n  - cave floor raised slightly to reduce black crush without adding visible ambient light\n  - slightly softer darkness curve and night color grading\n  - slightly brighter Nether / End ambient defaults\n- When `respect_gamma` is enabled, the brightness slider now lifts Selas target luminance only.\n- Nether, End, and other skyless dimensions use ambient base light only.\n\n### Fixed\n\n- Double gamma application when `respect_gamma` was enabled.\n- Redundant skyless floor calculation.\n- Nether / End dimension routing now uses value equality for dimension keys.\n\n### Notes\n\n- Client-side visual changes only.\n- Does not change mob spawning, day length, server time, block light propagation, fog, or dynamic lights.\n- By default Selas disables itself while an Iris/Oculus shader pack is active, since shader packs usually replace or override vanilla lightmap lighting.\n- Existing configs keep their current values. If you want the recalibrated 0.1.2 defaults, regenerate `config/selas-client.toml` manually.\n\n---\n\n**Full Changelog**: https://github.com/MuXolotl/Selas/compare/v0.1.1...v0.1.2"
+		},
+		{
+			"tag": "v0.1.1",
+			"published": "2026-07-10T17:18:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 472707462,
+					"name": "selas-0.1.1.jar",
+					"url": "https://github.com/MuXolotl/Selas/releases/download/v0.1.1/selas-0.1.1.jar",
+					"size": 298639,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "51fbdbf11aefe1562f54a364d0e0d09b4ad16a9013c23beafa850ec3749f28a0",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "selas",
+							"version": "0.1.1",
+							"name": "Selas",
+							"description": "Client-side lightmap changes for darker nights, caves, rain, and thunder. Includes configurable day/night timing, moon brightness, weather darkening, brightness floors, block light preservation, and low-light color controls.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Selas 0.1.1\n\nSelas changes the vanilla lightmap to make nights, caves, rain, and thunder darker. This release does not add blocks, items, mobs, dimensions, dynamic lights, fog changes, or server-side time changes.\n\n---\n\n### Added\n\n- Configurable moon phase response curve for tuning brightness between new and full moon.\n- Separate Nether and End lighting so they are no longer pitch black: a warm Nether ambient and a cool End starlight tint, both configurable.\n- Optional brightness-slider (gamma) handling so the slider can still brighten the world while Selas is active.\n\n### Changed\n\n- Increased natural sky brightness during lunar phases, especially during full moon and intermediate phases.\n- Improved sky and block light composition.\n- Nether and End no longer use the generic skyless profile.\n- Slightly raised the default minimum brightness so nights read as moonlit rather than cave-dark.\n\n### Fixed\n\n- Rain and thunder now darken the natural sky during daytime.\n- Weather transitions now use the current render partial tick.\n- Rain and thunder darkening no longer stacks.\n- Invalid twilight schedules now fall back to the default values.\n\n---\n\n> [!Note]\n>\n> - This is a client-side visual mod.\n> - Mob spawning, world time, server time, and block light propagation are not changed.\n> - Shader packs may change or override the final lighting result.\n> - Minecraft's vanilla lightmap and 16 light levels can show visible texture grain during dusk and dawn. Selas can make this easier to notice because the night is darker.\n\n---\n\n## Installation\n\n1. Install NeoForge for Minecraft 1.21.1.\n2. Place `selas-0.1.1.jar` into the client `mods` folder.\n3. Start the game.\n\nThe client config is generated at:\n\n```text\nconfig/selas-client.toml\n```\n\n---\n\n**Full Changelog**: https://github.com/MuXolotl/Selas/compare/v0.1...v0.1.1"
+		},
+		{
+			"tag": "v0.1",
+			"published": "2026-07-09T20:13:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 471705104,
+					"name": "selas-0.1.0.jar",
+					"url": "https://github.com/MuXolotl/Selas/releases/download/v0.1/selas-0.1.0.jar",
+					"size": 294644,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "bc0b8a5a45957345bf4ce82278b9125b45b949b0cfc10ad8416a69c60ab519a8",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "selas",
+							"version": "0.1.0",
+							"name": "Selas",
+							"description": "Client-side lightmap changes for darker nights, caves, rain, and thunder. Includes configurable day/night timing, moon brightness, weather darkening, brightness floors, block light preservation, and low-light color controls.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 6,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Selas 0.1.0\n\nInitial client-side darkness module for Minecraft 1.21.1 on NeoForge.\n\nSelas changes the vanilla lightmap to make nights, caves, rain, and thunder darker. This release does not add blocks, items, mobs, dimensions, dynamic lights, fog changes, or server-side time changes.\n\n## Added\n\n- Lightmap-based night and cave darkening.\n- Configurable dusk, full-night, and dawn timings.\n- Moon phase brightness settings.\n- Rain and thunder darkening settings.\n- Dimension toggles for Overworld, custom skylit dimensions, and skyless dimensions.\n- Minimum brightness floor settings.\n- Block light preservation setting.\n- Low-light desaturation and cool tint settings.\n- Night Vision, Conduit Power vision, and lightning flash compatibility toggles.\n- English and Russian config translations.\n- Grouped client config layout.\n- Mod icon and NeoForge metadata.\n\n## Notes\n\n- This is a client-side visual mod.\n- Mob spawning, world time, server time, and block light propagation are not changed.\n- Shader packs may change or override the final lighting result.\n- Minecraft's vanilla lightmap and 16 light levels can show visible texture grain during dusk and dawn. Selas can make this easier to notice because the night is darker.\n\n## Installation\n\n1. Install NeoForge for Minecraft 1.21.1.\n2. Place `selas-0.1.0.jar` into the client `mods` folder.\n3. Start the game.\n\nThe client config is generated at:\n\n```text\nconfig/selas-client.toml\n```"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "Selas is a client-side NeoForge mod for Minecraft 1.21.1.",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 30,
+		"more": 0,
+		"people": [
+			{
+				"login": "Politrees",
+				"commits": 30,
+				"name": "Artyom Bebroy",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

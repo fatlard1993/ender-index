@@ -1,0 +1,246 @@
+{
+	"repo": "Team-Arcadia/mods-mc-customperm",
+	"host": "github",
+	"description": "Granular permission system for NeoForge — grant vanilla and custom commands to non-op players",
+	"stars": 2,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-05-05T01:23:27Z",
+	"pushed": "2026-10-03T16:57:22Z",
+	"releases": [
+		{
+			"tag": "v1.0.2",
+			"published": "2026-05-22T18:57:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 427303436,
+					"name": "customperm-1.0.2.jar",
+					"url": "https://github.com/Team-Arcadia/mods-mc-customperm/releases/download/v1.0.2/customperm-1.0.2.jar",
+					"size": 50934,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "00f5e517f75551ddbc5b22a349c6baa77ef3c18c590678ac496b2f0b51522f65",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "customperm",
+							"version": "1.0.2",
+							"name": "CustomPerm",
+							"description": "Granular permission system for vanilla commands, with optional LuckPerms bridge.",
+							"minecraft": "[1.21.1, 1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"luckperms"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 19,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## CustomPerm 1.0.2\n\nPatch release focused on alias execution reliability.\n\n### Fixed\n\n- Fixed aliases failing when their internal steps targeted commands wrapped by CustomPerm.\n- Alias steps now use the original command node when the target command has been wrapped by CustomPerm.\n- Players no longer need both the alias permission and the internal command permission.\n  - Example: a player with `customperm.alias.up` can use `/up` even if they do not have `customperm.command.tp`.\n- Alias steps now run with the expected elevated command source.\n- Alias steps now accept an optional leading slash.\n  - Both `say ping` and `/say ping` are valid alias steps.\n- Failed alias steps are now reported and logged more clearly.\n- If one alias step fails, following steps continue to run."
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-05-18T16:04:23Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 423423034,
+					"name": "customperm-1.0.0.jar",
+					"url": "https://github.com/Team-Arcadia/mods-mc-customperm/releases/download/v1.0.0/customperm-1.0.0.jar",
+					"size": 49745,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "3fbe3e4b0980efdf97817d3753ef2870c88146892ba5ba14c462abd2018dac47",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "customperm",
+							"version": "1.0.0",
+							"name": "CustomPerm",
+							"description": "Granular permission system for vanilla commands, with optional LuckPerms bridge.",
+							"minecraft": "[1.21.1, 1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"luckperms"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 19,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CustomPerm 1.0.0\n\nFirst stable public release of CustomPerm.\n\nCustomPerm is a NeoForge mod for Minecraft 1.21.1 that lets server owners manage command permissions, internal grades, command aliases, and controlled command exposure, with optional LuckPerms integration.\n\n## Highlights\n\n- Permission checks through either LuckPerms or the internal JSON backend.\n- LuckPerms `5.4.150+` support.\n- Configurable LuckPerms fallback behavior through `settings.json`.\n- Secure default fallback mode: `luckPermsFallbackMode: \"deny\"`.\n- Server configuration stored in `config/arcadia/customperm/`.\n- Non-destructive migration from the old `config/customperm/` directory.\n- Exposed commands configured through `commands.json`.\n- Per-command `preserveOriginalRequires` option for sensitive commands.\n- Internal grades with permissions, explicit denies, and wildcard nodes.\n- Multi-step command aliases.\n- Atomic hot-reload through `/customperm reload`.\n- Automatic configuration backups.\n- Diagnostics through `/customperm status`, `/customperm debug`, and `/customperm test`.\n\n## Security Notes\n\nThis release adds two important safeguards for public servers:\n\n- If LuckPerms is present but unavailable, CustomPerm fails closed by default instead of accidentally granting access.\n- Sensitive commands can keep their original Brigadier `requires` predicate with `preserveOriginalRequires: true`.\n\nRecommended `settings.json`:\n\n```json\n{\n  \"luckPermsFallbackMode\": \"deny\"\n}"
+		},
+		{
+			"tag": "v0.9.0",
+			"published": "2026-05-14T15:51:37Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 420275466,
+					"name": "customperm-0.9.0.jar",
+					"url": "https://github.com/Team-Arcadia/mods-mc-customperm/releases/download/v0.9.0/customperm-0.9.0.jar",
+					"size": 44942,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "1432b3e0b27b0d164f18e5dad32e6d7315af0e5dfed1abc97fb3acd89ea4058d",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "customperm",
+							"version": "0.9.0",
+							"name": "CustomPerm",
+							"description": "Granular permission system for vanilla commands, with optional LuckPerms bridge.",
+							"minecraft": "[1.21.1, 1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"luckperms"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 17,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CustomPerm 0.9.0\n\nFinalization release.\n\nThis version brings together the final implementation work for the mod: planned features, review-driven fixes, tests, documentation, benchmarks, manual validation procedure, and release preparation.\n\n## Added\n\n- Automatic creation of `config/customperm/grades.json`, `aliases.json`, and `commands.json`.\n- Atomic `ConfigManager` snapshot using `AtomicReference`.\n- Transactional `/customperm reload`: invalid JSON keeps the previous active configuration.\n- Timestamped configuration backups with rotation of the latest 3 backups.\n- Normalization of missing files, `{}` files, unknown fields, and explicit `null` collections.\n- Internal Java permission resolver with multi-grade support.\n- Explicit `DENY` priority over `ALLOW`.\n- Wildcards: `*`, `customperm.command.*`, and `customperm.alias.*`.\n- Deny-by-default permission model.\n- Grade management commands.\n- Command exposure through `/customperm command add/remove/list`.\n- Brigadier command wrapping through `CommandTreeRewriter`.\n- Client command-tree resync after configuration changes.\n- Command aliases and multi-step macros.\n- LuckPerms detection and backend selection.\n- LuckPerms minimum version gate: `5.4.150+`.\n- Diagnostics through `/customperm status`, `/customperm test`, `/customperm debug`, and `/customperm scan`.\n- JUnit 5 test suite and NeoForge GameTests.\n- JMH benchmarks and performance baseline documentation.\n- Dark manual test procedure with JSON/Markdown export.\n- GitHub Actions CI for GameTests, Gradle build, and jar metadata verification.\n- English and French README documentation.\n\n## Fixed\n\n- Added config normalization to prevent NPEs with explicit JSON `null` values.\n- Preserved stack traces for dispatcher wrapping failures.\n- Unknown Brigadier child nodes are now ignored with a warning instead of being grafted into the cloned tree.\n- Exposed commands no longer bypass CustomPerm when the original Brigadier predicate is always true.\n- Improved LuckPerms fallback and subscription failure logs.\n- Added final guard if backend selection results in `permissions == null`.\n- Explicit skip for invalid GameTest methods.\n- Sanitized `/customperm scan` output when no result is found.\n- Reserved `customperm` alias name is rejected.\n- Separator-only aliases are covered by regression tests.\n- CI verifies required jar metadata.\n\n## Changed\n\n- `gradle.properties` now sets `mod_version=0.9.0`.\n- README files now point users to GitHub Releases instead of generated artifacts.\n- `.gitignore` now excludes local tooling artifacts, test exports, logs, builds, and unreferenced local media.\n- `CHANGELOG.md` now separates the initial base version (`0.1.0`) from the finalized version (`0.9.0`).\n\n## Validation\n\n- `./gradlew clean build --no-daemon`: passed\n- `./gradlew runGameTestServer --no-daemon`: 26/26 required GameTests passed\n- Generated jar: `customperm-0.9.0.jar`\n- Jar metadata verified: `META-INF/MANIFEST.MF` and `META-INF/neoforge.mods.toml`\n- GitHub tag `v0.9.0` created and pushed\n\n## Compatibility\n\n- Minecraft: `1.21.1`\n- NeoForge: `21.1.221+`\n- Java: `21`\n- LuckPerms: `5.4.150+` optional"
+		},
+		{
+			"tag": "v0.1.0",
+			"published": "2026-05-10T17:47:01Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 416795631,
+					"name": "customperm-0.1.0.jar",
+					"url": "https://github.com/Team-Arcadia/mods-mc-customperm/releases/download/v0.1.0/customperm-0.1.0.jar",
+					"size": 40263,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "83c5231eac0bdbcb1c7693e35e254ac0a2a247774dd6f1c1f3adba54b517d472",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "customperm",
+							"version": "0.1.0",
+							"name": "CustomPerm",
+							"description": "Granular permission system for vanilla commands, with optional LuckPerms bridge.",
+							"minecraft": "[1.21.1, 1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"luckperms"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 14,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CustomPerm 0.1.0\n\nInitial base release.\n\nThis version represents the project foundation before the full feature and validation work delivered later.\n\n## Included\n\n- NeoForge/Gradle project structure.\n- CustomPerm mod declaration.\n- First configuration, permission, command, and alias classes.\n- Initial implementation of granular permission concepts for Minecraft commands.\n- Initial README, license, and project files.\n\n## Known Limitations\n\n- Feature set incomplete compared to later releases.\n- Test coverage incomplete.\n- No benchmarks or performance baseline.\n- Release jar CI checks incomplete.\n- Functional documentation and manual test procedure not finalized.\n\n## Compatibility\n\n- Minecraft: `1.21.1`\n- NeoForge: `21.1.x`\n- Java: `21`"
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "custom",
+			"url": "https://buy.stripe.com/3cI3co6X97Vy4IK50QfIs00",
+			"from": "owner-repositories"
+		}
+	],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 247,
+		"more": 0,
+		"people": [
+			{
+				"login": "THEFricadelle",
+				"commits": 245,
+				"funding": []
+			},
+			{
+				"login": "Blushister",
+				"commits": 2,
+				"name": "curveo",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

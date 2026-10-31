@@ -1,0 +1,135 @@
+{
+	"repo": "modclaim/quickcast-pvp",
+	"host": "github",
+	"description": "Instantly switch to, cast/use/place, and restore Ender Pearls, Wind Charges, and End Crystals from your hotbar with cooldowns and in-game config.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-09-19T05:56:06Z",
+	"pushed": "2026-10-24T18:30:57Z",
+	"releases": [
+		{
+			"tag": "v1.0.2",
+			"published": "2026-09-29T09:10:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 597776532,
+					"name": "quickcastpvp-1.0.2.jar",
+					"url": "https://github.com/modclaim/quickcast-pvp/releases/download/v1.0.2/quickcastpvp-1.0.2.jar",
+					"size": 290575,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "bcbc79f59ca675c3008ceb5efd20bc01fd0459c3564941d51a5d2199d9c4c2e4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "quickcastpvp",
+							"version": "1.0.2",
+							"name": "QuickCast PvP",
+							"description": "Instantly switch to, cast/use/place, and restore Ender Pearls, Wind Charges, and End Crystals from your hotbar with cooldowns and in-game config.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api",
+								"yet_another_config_lib_v3"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "5c23553c88fa00a5a2a0bb56541582a41fb798c9c70a1b31fc3e261dbb5a5387.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Optimized inventory adapter logic to eliminate micro-stutters. Fixed heavy GC allocations happening 20 times a second."
+		},
+		{
+			"tag": "v1.0.1",
+			"published": "2026-09-19T05:57:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 574260633,
+					"name": "quickcastpvp-1.0.1.jar",
+					"url": "https://github.com/modclaim/quickcast-pvp/releases/download/v1.0.1/quickcastpvp-1.0.1.jar",
+					"size": 290463,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "9925e2caa7ce42f106706decf064526cc4e45e0d336918dad55f35a8cf7b3856",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "quickcastpvp",
+							"version": "1.0.1",
+							"name": "QuickCast PvP",
+							"description": "Instantly switch to, cast/use/place, and restore Ender Pearls, Wind Charges, and End Crystals from your hotbar with cooldowns and in-game config.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api",
+								"yet_another_config_lib_v3"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "5c23553c88fa00a5a2a0bb56541582a41fb798c9c70a1b31fc3e261dbb5a5387.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n- **Config Schema v2 & Automatic Migration**:\n  - Incremented schema version to `configVersion: 2`.\n  - Automatic, backward-compatible migration from v1.0.0 configurations (`showChatFeedback` boolean smoothly migrates to `feedbackStyle: ACTION_BAR` / `NONE`).\n  - Corrupt JSON recovery with automatic `.corrupt.<timestamp>.bak` backup generation.\n- **Keybind Conflict Detection**:\n  - Generic conflict scanner across all vanilla and modded `KeyMapping` entries against QuickCast keys.\n  - Startup logger warnings identifying conflicting keybindings.\n  - In-game one-time action bar notice on first press when bound to a conflicting key.\n  - Dynamic warning banners in the YACL config screen with direct conflict alerts.\n- **Latency-Aware Safety Guard**:\n  - `highPingGuardMs` option (default 250 ms, range 0..1000 ms, 0 = disabled) leveraging `PlayerInfo.getLatency()`.\n  - Skips slot switch and casting when network latency is too high, preventing slot desynchronization during lag spikes.\n  - Automatically bypassed in singleplayer and LAN worlds.\n- **Customizable Feedback Styles & Low-Stock Alerts**:\n  - `feedbackStyle` enum option: `NONE`, `ACTION_BAR`, `TITLE`, `SOUND`, or `ALL`.\n  - `lowStockWarningThreshold` option (default 1 item, range 0..8, 0 = disabled) alerting players when hotbar supply is low after casting.\n- **Per-Action Cooldown Overrides**:\n  - Added `cooldownOverrideMs` (-1 = inherit global, range -1..2000 ms) for Pearl, Wind Charge, and End Crystal actions.\n- **Per-Action Trigger Modes**:\n  - Added `triggerMode` (`PRESS` vs `HOLD_AND_RELEASE`) per action.\n  - Hold-and-release primes on keydown and casts on keyup, with a 3-second maximum hold window and cancel on manual slot switch.\n- **Configuration Profile System**:\n  - Multi-profile management storing profiles in `.minecraft/config/quickcastpvp/profiles/<name>.json`.\n  - Client commands `/quickcastpvp profile save <name>`, `/quickcastpvp profile load <name>`, and `/quickcastpvp profile list`.\n  - In-game YACL profile management controls allowing instant profile creation and loading.\n\n### Changed\n- Refactored `QuickCastEngine` and `QuickCastKeybinds` to decouple event handling, supporting press and release triggers cleanly.\n- Updated `ru_ru.json` and `en_us.json` with comprehensive localization for all new options and banners."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 5,
+		"more": 0,
+		"people": [
+			{
+				"login": "modclaim",
+				"commits": 5,
+				"name": "Mod Clain - Minecraft mods",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

@@ -1,0 +1,80 @@
+{
+	"repo": "pero-sk/serpentine",
+	"host": "github",
+	"description": "Serpentine is a light weight config library mod based on providing fast configuration to any mod needing it",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2025-11-18T17:01:37Z",
+	"pushed": "2026-01-01T14:53:32Z",
+	"releases": [
+		{
+			"tag": "fabric-1.21.1-2.0.0",
+			"published": "2025-11-28T14:46:19Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 321896457,
+					"name": "serpentine-2.0.0.jar",
+					"url": "https://github.com/pero-sk/serpentine/releases/download/fabric-1.21.1-2.0.0/serpentine-2.0.0.jar",
+					"size": 53186,
+					"downloads": 10,
+					"inspection": 2,
+					"sha256": "09ed66950c9b3c00226fa3cac2b4f347ad27cbaf185dea42a1f29ee291cf336c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "serpentine",
+							"version": "2.0.0",
+							"name": "serpentine",
+							"description": "lightweight config mod, used by some of my other projects",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "d0ce2500d1f6dab379dc71763a666e187a877e906d12167126f37f9521ac51c3.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: https://github.com/programming-artist-py/serpentine/commits/fabric-1.21.1-2.0.0\n\n# For everyone\n\nYou can now easily download the jar below instead of needing to build it manually!\n\n# For Developers\n\n## Features:\n\n- Unified client-server config handling\n- - SERVER_ONLY and SYNCED values sync automatically between server and client.\n- - CLIENT_ONLY values display locally while protecting server-controlled values.\n- - getDisplayValues() combines server and client values for UI use.\n- Improved ConfigScreen UI\n- - Read-only highlighting for server-synced values.\n- - Boolean buttons now indicate current value.\n- - Sliders respect read-only states and update pending edits.\n- - Text fields indicate inactive state for server-controlled values.\n- Robust networking\n- - Updated S2C and C2S payloads for config sync.\n- - Detects OP status and singleplayer automatically.\n- - Null-safe sync prevents “Invalid Player Data” crashes.\n- - Server sync runs on client main thread.\n- Full singleplayer compatibility\n- - Integrated singleplayer server safely syncs configs to client.\n- - Prevents NullPointerException when configs are missing on client.\n\n## Bug Fixes:\n- Boolean buttons no longer appear inactive incorrectly.\n- Server-only configs sync correctly in singleplayer.\n- Fixed NullPointerException when client joins without a registered config.\n- Fixed text field rendering for server-controlled values.\n- Fixed sliders failing to update pendingEdits for integer and float configs.\n\n## Major Changes:\n\nModInitialisers must now have a S2C sync ServerPlayConnectionEvents.JOIN.register after all config registrations, [look at the serpentine mod initialiser for it](https://raw.githubusercontent.com/programming-artist-py/serpentine/refs/heads/master/src/main/java/penguin/serpentine/Serpentine.java).\n\nexpect() now has 3 inputs:\n\nKey - (string) the entry's key [was already in 1.7.0]\nDefaultValue - (Object) the fallback value if it is unable to find it [was already in 1.7.0]\nSide - (SyncSide) which type of entry should it be [new in 2.0.0]\n\nSyncSide is a new protected struct inside of the Config class, is has:\nSERVER_ONLY - the expect entry will only be editable on a server by an opped user.\nCLIENT_ONLY - the expect entry will only be seen by the user, no server can touch it.\nSYNCED - the expect entry will be read-only, even to opped users. Can only be edited on the host machine's scnf file.\n\n## Upgrade Instructions:\n\n- Mark server-only fields as SyncSide.SERVER_ONLY and client-only fields as SyncSide.CLIENT_ONLY.\n- Add applyServerEdit method, [example here](https://raw.githubusercontent.com/programming-artist-py/serpentine/refs/heads/master/src/main/java/penguin/serpentine/core/example/ExampleConfig.java)\n\n# For regular users\n\nDownload the 2.0.0 jar file from below"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 10,
+		"more": 0,
+		"people": [
+			{
+				"login": "pero-sk",
+				"commits": 10,
+				"name": "penguin",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

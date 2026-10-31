@@ -6,8 +6,66 @@
 	"archived": false,
 	"license": "Apache-2.0",
 	"created": "2025-09-18T23:03:57Z",
-	"pushed": "2026-10-31T10:07:39Z",
+	"pushed": "2026-10-31T18:39:34Z",
 	"releases": [
+		{
+			"tag": "v26.2.2-pre1",
+			"published": "2026-10-31T18:08:57Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 696167741,
+					"name": "stash-hunter-26.2.2-pre1.jar",
+					"url": "https://github.com/omtoi101/Stash-Hunter/releases/download/v26.2.2-pre1/stash-hunter-26.2.2-pre1.jar",
+					"size": 284532,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "f6ca159c7f415cf8ccb19ea47e51e66ef1b5a90c60726f1c137297b01793ffa1",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "stash-hunter",
+							"version": "26.2.2-pre1",
+							"name": "StashHunter",
+							"description": "A Meteor client addon for finding stashes on anarchy servers.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor",
+								"xaerominimap"
+							]
+						}
+					],
+					"icon": "4b3730241efa0539e98b7c6e8f58f976600d6c7304d814d8ee694b3bb6f6bb6e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 92,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/stashhunter/stashhunter/utils/DiscordWebhook.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "> [!WARNING]\n> **This is a test build.** It contains everything since v26.2.1: a reworked stash scan, more reliable flight and repairs, and several new modules. It builds and passes all unit tests, but **it has not been tested in-game yet**. Please try it on a test account or a test server first, and report anything odd.\n\n## Install\n\nDownload `stash-hunter-26.2.2-pre1.jar` below and put it in your `mods` folder.\n\n- Minecraft 26.2, Meteor Client 26.2, Java 25\n- **Fabric API is no longer needed**\n- Optional: Baritone 26.2 (elytra pathing), Xaero's Minimap 26.2 (stash waypoints)\n\n## Finding stashes more reliably\n\n- **Stashes below you are found.** The scan now covers the full world height. Before, at the default flight altitude it only saw containers above y≈96.\n- **Stashes on the border between two flight strips are found.** Blocks from earlier passes are remembered. A stash first seen only in part gets a \"Stash Updated\" report and a corrected waypoint.\n- **Chunks that load late are scanned when they arrive.** If chunks never arrive, the chat warns you: the server is too slow for your flight speed, or `scan-radius` is bigger than its view distance.\n- **Big bases and stashes next to natural structures are no longer dropped as \"natural\".** A cluster that is too big or too sparse is split up, and its dense core is reported.\n- **Each stash is reported once**, also after reconnecting (saved per server). The 10-minute re-report bug is gone.\n- **Stash waypoints are created in the right dimension.** Before, Nether and End stashes got an Overworld waypoint.\n- Fixed a possible disconnect (\"Network Protocol Error\") when flying over bases with redstone or pistons.\n\n## More reliable flight\n\n- **The bot stays on its strip** when chunks ahead load slowly. Before, it swerved sideways and sometimes skipped most of a strip.\n- **Baritone takes off from flat ground**, and ElytraFly no longer fights Baritone over the player.\n- **No more getting stuck in the elytra pose on the ground** after Baritone lands. The bot takes off again by itself, or pauses so you can continue with `.stashhunter resume`.\n- **Elytra repairs during a Baritone flight work.** The flight pauses, the player hovers, the elytra is repaired and the flight continues. A spare elytra from your inventory is put on first.\n- **When rockets run low**, Baritone lands on a safe spot and the trip is saved. Refill, then `.stashhunter resume`.\n- One saved trip per flight instead of one per pause; `.stashhunter list` keeps the last 20.\n\n## New modules (all off by default)\n\n- **`chest-index`**: records what your chests, barrels and shulkers hold, including shulkers inside them. Search it with `.chest-index search <item>`. With `auto-open` it opens the containers in reach by itself. *Anti-cheat behaviour is untested, so start with a higher `delay`.*\n- **`stacked-minecarts`**: finds hidden stacks of chest or hopper minecarts.\n- **`activated-spawner-detector`**: spawners a player has been near, with the structure type. It can also keep structure loot out of stash reports and set structure waypoints.\n- **`auto-firework`**: uses a rocket when your elytra speed drops.\n- **`old-chunk-notifier`**: tells you when you fly into old chunks.\n- **`online-player-activity`**: joins and leaves on the whole server.\n- **`player-alarms`**: plays a sound while a player is nearby (for AFK runs).\n- **`auto-logout`** ⚠️: disconnects when a player comes close or your health is low. Some servers treat this as combat logging.\n- **`slime-chunks`**: slime chunk overlay. In multiplayer it needs the world seed.\n\n## New in `stash-hunter`\n\n- **Stash ESP**: outlines the stashes found this session, with an optional box and tracer.\n- `.stashhunter spiral`: a spiral search that starts at you and works outward.\n- `.stashhunter altitude <y>`: changes the flight height mid-flight.\n- `save-to-xaero`: stash waypoints in Xaero's Minimap and World Map.\n- `land-after-completion`: Baritone lands when the area is done.\n\n..."
+		},
 		{
 			"tag": "v26.2.1",
 			"published": "2026-10-29T20:56:14Z",
@@ -18,7 +76,7 @@
 					"name": "stash-hunter-26.2.1.jar",
 					"url": "https://github.com/omtoi101/Stash-Hunter/releases/download/v26.2.1/stash-hunter-26.2.1.jar",
 					"size": 117781,
-					"downloads": 17,
+					"downloads": 22,
 					"inspection": 2,
 					"sha256": "c0ad77cc60279153ee07d6942c79e1e42c8fb7c42ce03e6a22f1b7b11719708c",
 					"mods": [
@@ -75,7 +133,7 @@
 					"name": "stash-hunter-0.26.2.jar",
 					"url": "https://github.com/omtoi101/Stash-Hunter/releases/download/v2.0/stash-hunter-0.26.2.jar",
 					"size": 111163,
-					"downloads": 6,
+					"downloads": 7,
 					"inspection": 2,
 					"sha256": "58c653d95274c697ffa3b800a7c326f89a42f6bb7b79d58c2e325544f63d705c",
 					"mods": [
@@ -177,6 +235,57 @@
 						"hosts": {},
 						"unreadable": []
 					}
+				},
+				{
+					"id": 696103880,
+					"name": "stash-hunter-0.26.2.jar",
+					"url": "https://github.com/omtoi101/Stash-Hunter/releases/download/snapshot/stash-hunter-0.26.2.jar",
+					"size": 111000,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "4f118c25d407ba3ca622d1106c7afd8bda920b68cdd0cc32d640d422cde5e37b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "stash-hunter",
+							"version": "0.26.2",
+							"name": "StashHunter",
+							"description": "A Meteor client addon for finding stashes on anarchy servers.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client",
+								"fabric-networking-api-v1",
+								"fabric-api-base"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f3a000dcf4bd58e9b2f331f8440c2e01e3ce97932a550fc03d9b1d5032ca4a76.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 34,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/stashhunter/stashhunter/utils/DiscordWebhook.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
 				}
 			]
 		},
@@ -190,7 +299,7 @@
 					"name": "stash-hunter-0.1.5.jar",
 					"url": "https://github.com/omtoi101/Stash-Hunter/releases/download/built5/stash-hunter-0.1.5.jar",
 					"size": 107673,
-					"downloads": 2341,
+					"downloads": 2342,
 					"inspection": 2,
 					"sha256": "035094b882602f5de49c1b4faab5cce8dcf4e16a9ba6b8956b54875b60739ed9",
 					"mods": [

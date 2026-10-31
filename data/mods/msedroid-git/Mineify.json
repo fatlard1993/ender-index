@@ -1,0 +1,358 @@
+{
+	"repo": "msedroid-git/Mineify",
+	"host": "github",
+	"description": "Minecraft music player using youtube api",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-01-29T13:36:26Z",
+	"pushed": "2026-02-20T11:01:15Z",
+	"releases": [
+		{
+			"tag": "v1.3.1",
+			"published": "2026-02-20T10:46:12Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 359118311,
+					"name": "mineify-1.3.1.jar",
+					"url": "https://github.com/msedroid-git/Mineify/releases/download/v1.3.1/mineify-1.3.1.jar",
+					"size": 65409,
+					"downloads": 11,
+					"inspection": 2,
+					"sha256": "be9e7e6d875fb0ffe35dc9403246abce65ce351f43ae7d05dd61c25a33242eca",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineify",
+							"version": "1.3.1",
+							"name": "Mineify",
+							"description": "Server-wide music player for Minecraft using YouTube",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 26,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/mineify/server/AudioDownloadService.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start",
+									"java/lang/ProcessBuilder.redirectErrorStream"
+								]
+							},
+							"network": {
+								"com/mineify/server/YouTubeService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/mineify/server/AudioDownloadService.class"
+							],
+							"ffmpeg.org": [
+								"com/mineify/server/AudioDownloadService.class"
+							],
+							"www.youtube.com": [
+								"com/mineify/server/AudioDownloadService.class",
+								"com/mineify/server/YouTubeService.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Pause-and-Resume Late-Join Sync\n\nWhen a new player joins mid-song, the server now **pauses all existing clients**, transfers audio to the late-joiner, waits for a ready signal, then **resumes everyone at the exact same position**. This eliminates audio drift from wall-clock offset estimation.\n\n### What's new\n- **PausePacket** (S2C) — tells all clients to pause at a specific position\n- **ResumePacket** (S2C) — tells all clients to seek and resume together\n- **ReadyPacket** (C2S) — late-joiner signals it has audio buffered and ready\n- 10-second safety timeout if a client never responds\n- Graceful handling of disconnects during sync\n\n### Bug fixes\n- Fixed late-joiner playing from the beginning instead of the correct position\n- Fixed race condition where chunk delivery could complete before the pause signal was processed (using startOffsetMs sentinel)"
+		},
+		{
+			"tag": "v1.3.0",
+			"published": "2026-02-20T10:46:07Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 359118236,
+					"name": "mineify-1.3.0.jar",
+					"url": "https://github.com/msedroid-git/Mineify/releases/download/v1.3.0/mineify-1.3.0.jar",
+					"size": 57586,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "6de375a3e993469358f751866dd9136f522e0b6175df332e259d259a15fe3619",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineify",
+							"version": "1.3.0",
+							"name": "Mineify",
+							"description": "Server-wide music player for Minecraft using YouTube",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 23,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/mineify/server/AudioDownloadService.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start",
+									"java/lang/ProcessBuilder.redirectErrorStream"
+								]
+							},
+							"network": {
+								"com/mineify/server/YouTubeService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/mineify/server/AudioDownloadService.class"
+							],
+							"ffmpeg.org": [
+								"com/mineify/server/AudioDownloadService.class"
+							],
+							"www.youtube.com": [
+								"com/mineify/server/AudioDownloadService.class",
+								"com/mineify/server/YouTubeService.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's new in 1.3.0\n\n- **No extra ports required** — audio is now delivered directly over the Minecraft connection using chunked packets. No firewall changes or port forwarding needed.\n- **YouTube search & download built-in** — no companion service. yt-dlp and ffmpeg on the server is all that's needed.\n- **Late-join sync** — players who join mid-song automatically seek to the correct position.\n- **Stop on remove** — removing the currently playing song stops playback for all players immediately.\n\n## Installation\n\n### Server\n1. Install Fabric Loader for Minecraft 1.21.11\n2. Install yt-dlp and ffmpeg on the server (see README for instructions)\n3. Place Fabric API and `mineify-1.3.0.jar` in the server's `mods/` folder\n\n### Client\n1. Install Fabric Loader for Minecraft 1.21.11\n2. Place Fabric API and `mineify-1.3.0.jar` in `.minecraft/mods/`\n\n> Both server and clients must use 1.3.0 — this release is not compatible with earlier versions."
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-02-20T10:46:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 359118202,
+					"name": "mineify-1.2.0.jar",
+					"url": "https://github.com/msedroid-git/Mineify/releases/download/v1.2.0/mineify-1.2.0.jar",
+					"size": 49169,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "d56c4e7623fda69db125454e949913fbfe04c1f090016c285845033ffbd83ca2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineify",
+							"version": "1.2.0",
+							"name": "Mineify",
+							"description": "Server-wide music player for Minecraft using YouTube",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/mineify/server/CompanionClient.class": [
+									"java/net/http/HttpClient.newHttpClient",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"localhost": [
+								"com/mineify/MineifyConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's New\n\n### Download Cleanup\n- Added DELETE endpoint (`DELETE /api/download/:videoId`) to remove downloaded audio files\n- Downloads are automatically cleaned up when songs are removed from the playlist\n- Downloads are automatically cleaned up after playback finishes\n\n### Playlist State Caching\n- Playlist state now persists when the GUI is closed and reopened\n- Now playing status and progress are also cached\n\n### UI Improvements\n- Improved panel styling with better contrast and borders\n- Auto-switches to playlist tab when adding a song to prevent accidental double-clicks\n- Auto-switches to search tab when performing a search\n\n## Full Changelog\nhttps://github.com/msedroid-git/Mineify/compare/v1.1.1...v1.2.0"
+		},
+		{
+			"tag": "v1.1.1",
+			"published": "2026-02-20T10:46:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 359118145,
+					"name": "mineify-1.1.1.jar",
+					"url": "https://github.com/msedroid-git/Mineify/releases/download/v1.1.1/mineify-1.1.1.jar",
+					"size": 48310,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a1af1f474e521d2bef048058c481e88182c6960cc45fc41a72e97bb212653781",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineify",
+							"version": "1.1.1",
+							"name": "Mineify",
+							"description": "Server-wide music player for Minecraft using YouTube",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/mineify/server/CompanionClient.class": [
+									"java/net/http/HttpClient.newHttpClient",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"localhost": [
+								"com/mineify/MineifyConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changes\n- Volume slider now appears as a separate element below the main GUI panel\n- Better visual separation between controls and content\n\n## Installation\n1. Download `mineify-1.1.1.jar` below\n2. Place in your `mods` folder\n3. Run the companion service (`cd companion-service && npm start`)\n4. Press M+N in-game to open the music player"
+		},
+		{
+			"tag": "v1.1.0",
+			"published": "2026-02-20T10:45:55Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 359118084,
+					"name": "mineify-1.1.0.jar",
+					"url": "https://github.com/msedroid-git/Mineify/releases/download/v1.1.0/mineify-1.1.0.jar",
+					"size": 48310,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "280dd892ad4a724a4892b8d5669c54eb99ef44fbe488df67a5faeceb9a8309db",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineify",
+							"version": "1.1.0",
+							"name": "Mineify",
+							"description": "Server-wide music player for Minecraft using YouTube",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/mineify/server/CompanionClient.class": [
+									"java/net/http/HttpClient.newHttpClient",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"localhost": [
+								"com/mineify/MineifyConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changes\n- Volume slider moved to bottom of the GUI panel\n- Better UI layout with controls at the bottom\n\n## Installation\n1. Download `mineify-1.1.0.jar` below\n2. Place in your `mods` folder\n3. Run the companion service (`cd companion-service && npm start`)\n4. Press M+N in-game to open the music player"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 29,
+		"more": 0,
+		"people": [
+			{
+				"login": "msedroid-git",
+				"commits": 29,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

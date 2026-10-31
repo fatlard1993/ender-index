@@ -412,6 +412,161 @@
 				}
 			],
 			"notes": "**Test build for Minecraft 26.3. Back up important worlds before trying it.** Also available for [Minecraft 1.21.11](https://github.com/zinngar/Savelogic/releases/tag/v2.0.0-beta.8%2B1.21.11).\n\nRequires Minecraft **26.3**, Fabric Loader 0.19.5+, Fabric API for 26.3 and Java 25. **Remove the previous SaveLogic jar from your mods folder** when adding this one.\n\n### New in beta 8\n* **Check for Mod Updates** (☁ > Mods & configs): looks up every mod in your `mods` folder on Modrinth and lists the updates available for your Minecraft version, ticked by default. Libraries an update needs are added automatically. Updates are downloaded, checked against Modrinth's fingerprint, and installed **when you close Minecraft**, after your current mods are backed up to `savelogic-backups`.\n* Mods that are up to date, have no build for your Minecraft version yet, or aren't on Modrinth (for example CurseForge-only mods) are listed too, so you can see what couldn't be checked.\n* Works without the GitHub settings. To give your other computer the same updates, use *Upload My Mods & Configs* afterwards.\n* The Settings and Back buttons on the cloud menu are now side by side.\n\n## SaveLogic 2.0.0\n\n* **Updated to Minecraft 26.3** (Fabric Loader 0.19.5+, Java 25). The same version is also available for Minecraft 1.21.11.\n* **Cloud saves actually upload now.** Fixed a crash when uploading (OkHttp's Kotlin dependency was missing from the jar) and tokens that were never decrypted after loading the config.\n* **Big worlds:** each world is stored as its own GitHub release, named after the world, and split into 1 GB parts instead of committed to the repo, which was capped at 100 MB and grew forever.\n* **Downloads over 1 MB work**, and they unzip into their own world folder instead of spilling into `saves/`.\n* **Progress bar for uploads and downloads** at the top of the menus (percent, MB, speed, time left), with the result shown when they finish.\n* **Cloud Saves is a ☁ button next to Singleplayer**, so it is always on screen at any GUI scale.\n* **Test Connection** now checks what you typed, and warns if the token can't write or the repository is public.\n* **Check for Mod Updates:** finds newer versions of your mods on Modrinth for your Minecraft version (plus any libraries they need) and installs them after Minecraft closes, with a backup.\n* **Fast saves:** after a world's first upload, only the files that changed are uploaded, and computers that are in step download only the changes.\n* **One question for old copies:** opening an unsynced world that has the same name as a cloud world asks which copy to use, showing when each was last played; prompts everywhere now show last-played times.\n* **Version history and safe syncing between computers:** each world keeps its last versions (5 by default) with the computer and time each was saved, and any version can be restored. Uploads ask before overwriting newer progress from another computer, opening a world warns if it's open elsewhere or there's a newer version, and synced worlds upload automatically when you leave them.\n* **Sync your mods and configs:** upload your mods and config folders and install them on another computer; the swap happens after Minecraft closes, with a backup of what was there before.\n* Fixed local auto-backups zipping the wrong folder.\n* Removed Google Drive support. Existing users need to paste their GitHub token into Settings again."
+		},
+		{
+			"tag": "v2.0.0-beta.8+1.21.11",
+			"published": "2026-10-24T10:20:53Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 671949120,
+					"name": "savelogic-2.0.0-beta.8+1.21.11.jar",
+					"url": "https://github.com/zinngar/Savelogic/releases/download/v2.0.0-beta.8%2B1.21.11/savelogic-2.0.0-beta.8%2B1.21.11.jar",
+					"size": 173157,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "caeceee7618b34fccbf6702d86a389a1da56a101497b5f3b36f437dce5c7c878",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "savelogic",
+							"version": "2.0.0-beta.8+1.21.11",
+							"name": "SaveLogic",
+							"description": "Save and load your singleplayer worlds to a private GitHub repository.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 59,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/zinngar/savelogic/GitHubStorageProvider.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/zinngar/savelogic/mods/ModrinthClient.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							},
+							"exec": {
+								"com/zinngar/savelogic/client/SetupSync.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"com/zinngar/savelogic/GitHubStorageProvider.class"
+							],
+							"uploads.github.com": [
+								"com/zinngar/savelogic/GitHubStorageProvider.class"
+							],
+							"github.com": [
+								"com/zinngar/savelogic/client/screen/SettingsScreen.class"
+							],
+							"api.modrinth.com": [
+								"com/zinngar/savelogic/mods/ModrinthClient.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Test build for Minecraft 1.21.11. Back up important worlds before trying it.** Also available for [Minecraft 26.3](https://github.com/zinngar/Savelogic/releases/tag/v2.0.0-beta.8%2B26.3).\n\nRequires Minecraft **1.21.11**, Fabric Loader 0.19.5+, Fabric API for 1.21.11 and Java 21. **Remove the previous SaveLogic jar from your mods folder** when adding this one.\n\n### New in beta 8\n* **Check for Mod Updates** (☁ > Mods & configs): looks up every mod in your `mods` folder on Modrinth and lists the updates available for your Minecraft version, ticked by default. Libraries an update needs are added automatically. Updates are downloaded, checked against Modrinth's fingerprint, and installed **when you close Minecraft**, after your current mods are backed up to `savelogic-backups`.\n* Mods that are up to date, have no build for your Minecraft version yet, or aren't on Modrinth (for example CurseForge-only mods) are listed too, so you can see what couldn't be checked.\n* Works without the GitHub settings. To give your other computer the same updates, use *Upload My Mods & Configs* afterwards.\n* The Settings and Back buttons on the cloud menu are now side by side.\n\n## SaveLogic 2.0.0\n\n* **Updated to Minecraft 1.21.11** (Fabric Loader 0.19.5+, Java 21). The same version is also available for Minecraft 26.3.\n* **Cloud saves actually upload now.** Fixed a crash when uploading (OkHttp's Kotlin dependency was missing from the jar) and tokens that were never decrypted after loading the config.\n* **Big worlds:** each world is stored as its own GitHub release, named after the world, and split into 1 GB parts instead of committed to the repo, which was capped at 100 MB and grew forever.\n* **Downloads over 1 MB work**, and they unzip into their own world folder instead of spilling into `saves/`.\n* **Progress bar for uploads and downloads** at the top of the menus (percent, MB, speed, time left), with the result shown when they finish.\n* **Cloud Saves is a ☁ button next to Singleplayer**, so it is always on screen at any GUI scale.\n* **Test Connection** now checks what you typed, and warns if the token can't write or the repository is public.\n* **Check for Mod Updates:** finds newer versions of your mods on Modrinth for your Minecraft version (plus any libraries they need) and installs them after Minecraft closes, with a backup.\n* **Fast saves:** after a world's first upload, only the files that changed are uploaded, and computers that are in step download only the changes.\n* **One question for old copies:** opening an unsynced world that has the same name as a cloud world asks which copy to use, showing when each was last played; prompts everywhere now show last-played times.\n* **Version history and safe syncing between computers:** each world keeps its last versions (5 by default) with the computer and time each was saved, and any version can be restored. Uploads ask before overwriting newer progress from another computer, opening a world warns if it's open elsewhere or there's a newer version, and synced worlds upload automatically when you leave them.\n* **Sync your mods and configs:** upload your mods and config folders and install them on another computer; the swap happens after Minecraft closes, with a backup of what was there before.\n* Fixed local auto-backups zipping the wrong folder.\n* Removed Google Drive support. Existing users need to paste their GitHub token into Settings again."
+		},
+		{
+			"tag": "v2.0.0-beta.7+26.3",
+			"published": "2026-10-24T07:10:27Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 671558129,
+					"name": "savelogic-2.0.0-beta.7+26.3.jar",
+					"url": "https://github.com/zinngar/Savelogic/releases/download/v2.0.0-beta.7%2B26.3/savelogic-2.0.0-beta.7%2B26.3.jar",
+					"size": 138426,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "0deb781bd11d34e75cde3015f27d960921d63bbeac71648b1f645bad1af456de",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "savelogic",
+							"version": "2.0.0-beta.7+26.3",
+							"name": "SaveLogic",
+							"description": "Save and load your singleplayer worlds to a private GitHub repository.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 47,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/zinngar/savelogic/GitHubStorageProvider.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							},
+							"exec": {
+								"com/zinngar/savelogic/client/SetupSync.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"com/zinngar/savelogic/GitHubStorageProvider.class"
+							],
+							"uploads.github.com": [
+								"com/zinngar/savelogic/GitHubStorageProvider.class"
+							],
+							"github.com": [
+								"com/zinngar/savelogic/client/screen/SettingsScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Test build for Minecraft 26.3. Back up important worlds before trying it.** Also available for [Minecraft 1.21.11](https://github.com/zinngar/Savelogic/releases/tag/v2.0.0-beta.7%2B1.21.11).\n\nRequires Minecraft **26.3**, Fabric Loader 0.19.5+, Fabric API for 26.3 and Java 25. **Remove the previous SaveLogic jar from your mods folder** when adding this one.\n\n### New in beta 7\n* **Much faster saving to the cloud.** After a world's first upload, leaving the world uploads only the files that changed (usually a few MB) instead of the whole world. A computer whose copy is already up to date downloads only the newer changes.\n* **One question for old copies.** If you open a world that isn't synced yet but the cloud has a world with the same name, SaveLogic asks once which copy to use (cloud copy, your copy, or keep them separate) and shows when each was last played. This fixes ending up with an old \"(1)\" copy.\n* Every prompt now shows when each copy was last played, so it's clear which is newer.\n* Opening a synced world checks the cloud faster, and worlds that aren't in the cloud open without a check.\n\n**Update both computers.** Older betas ignore the new \"changes\" uploads, so a computer still on beta 6 or earlier would only see the last full copy.\n\nThe first save of each world after updating is a full upload; after that only changes are sent.\n\n## SaveLogic 2.0.0\n\n* **Updated to Minecraft 26.3** (Fabric Loader 0.19.5+, Java 25). The same version is also available for Minecraft 1.21.11.\n* **Cloud saves actually upload now.** Fixed a crash when uploading (OkHttp's Kotlin dependency was missing from the jar) and tokens that were never decrypted after loading the config.\n* **Big worlds:** each world is stored as its own GitHub release, named after the world, and split into 1 GB parts instead of committed to the repo, which was capped at 100 MB and grew forever.\n* **Downloads over 1 MB work**, and they unzip into their own world folder instead of spilling into `saves/`.\n* **Progress bar for uploads and downloads** at the top of the menus (percent, MB, speed, time left), with the result shown when they finish.\n* **Cloud Saves is a ☁ button next to Singleplayer**, so it is always on screen at any GUI scale.\n* **Test Connection** now checks what you typed, and warns if the token can't write or the repository is public.\n* **Fast saves:** after a world's first upload, only the files that changed are uploaded, and computers that are in step download only the changes.\n* **One question for old copies:** opening an unsynced world that has the same name as a cloud world asks which copy to use, showing when each was last played; prompts everywhere now show last-played times.\n* **Version history and safe syncing between computers:** each world keeps its last versions (5 by default) with the computer and time each was saved, and any version can be restored. Uploads ask before overwriting newer progress from another computer, opening a world warns if it's open elsewhere or there's a newer version, and synced worlds upload automatically when you leave them.\n* **Sync your mods and configs:** upload your mods and config folders and install them on another computer; the swap happens after Minecraft closes, with a backup of what was there before.\n* Fixed local auto-backups zipping the wrong folder.\n* Removed Google Drive support. Existing users need to paste their GitHub token into Settings again."
 		}
 	],
 	"readme": "README.md",

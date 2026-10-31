@@ -1,0 +1,446 @@
+{
+	"repo": "SkyDreamLG/cwhitelist",
+	"host": "github",
+	"description": "修复Minecraft离线服务器的白名单失效问题",
+	"stars": 11,
+	"archived": false,
+	"license": "LGPL-3.0",
+	"created": "2025-02-11T10:12:24Z",
+	"pushed": "2026-10-02T01:56:20Z",
+	"releases": [
+		{
+			"tag": "3.1",
+			"published": "2026-07-23T08:59:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 487255674,
+					"name": "cwhitelist-3.1-1.21.1-1.21.10-NeoForge.jar",
+					"url": "https://github.com/SkyDreamLG/cwhitelist/releases/download/3.1/cwhitelist-3.1-1.21.1-1.21.10-NeoForge.jar",
+					"size": 54325,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "c1c9bfd4237fff5457a15c896e2082241b24092653ec989c9f5852238dae03c6",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cwhitelist",
+							"version": "3.1-1.21.1-1.21.10-NeoForge",
+							"name": "cwhitelist",
+							"description": "",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 12,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"org/skydream/cwhitelist/ApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"127.0.0.1": [
+								"org/skydream/cwhitelist/Config.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 488002451,
+					"name": "cwhitelist-3.1-1.21.11+-NeoForge.jar",
+					"url": "https://github.com/SkyDreamLG/cwhitelist/releases/download/3.1/cwhitelist-3.1-1.21.11%2B-NeoForge.jar",
+					"size": 56631,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "0e7b7555c188b016b9d9e204f93d4cb25d49e0d70af859d8a7ebb12aeada33d9",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cwhitelist",
+							"version": "3.1-1.21.11+-NeoForge",
+							"name": "cwhitelist",
+							"description": "",
+							"minecraft": "[1.21.11,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 12,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"org/skydream/cwhitelist/ApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"127.0.0.1": [
+								"org/skydream/cwhitelist/Config.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 604574579,
+					"name": "cwhitelist-3.1-26.1+-NeoForge.jar",
+					"url": "https://github.com/SkyDreamLG/cwhitelist/releases/download/3.1/cwhitelist-3.1-26.1%2B-NeoForge.jar",
+					"size": 56496,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "c48b020d04bf768403a92cce674d1ea302d83fb3160e20535ada55af00e456bf",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cwhitelist",
+							"version": "3.1-26.1+-NeoForge",
+							"name": "cwhitelist",
+							"description": "",
+							"minecraft": "[26.1,)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 12,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"org/skydream/cwhitelist/ApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"127.0.0.1": [
+								"org/skydream/cwhitelist/Config.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 2026-07-23\n\n### Added\n- **心跳系统**：API 启用后自动启动心跳，每 30s 调用 `/health` 检查连通性；失败时自动切换为 5s 快速重试，恢复后切回 30s。心跳与 API 开关绑定，关闭 API 自动停止。\n- **玩家登出上报**：玩家离开游戏时调用 `POST /login/logout`，上报 `player_name`、`player_uuid`、`player_ip`、`server_id`，与登录事件共用 `logLoginEvents` 开关。\n- **server_id 全局传递**：所有 API 请求（`/health`、`/whitelist/sync`、`/whitelist/entries`、`/login/log`、`/login/logout`）强制携带 `server_id`。未配置时使用 `\"undefined\"` 作为回退值。\n- **server_id 未设置提醒**：API 模式启用但 `serverId` 为空时，控制台打印醒目警告，提示服主配置。\n- **单机 Host 玩家检测**：新增 `isHostPlayer()` 方法，单机存档主人自动放行并通过 `isSingleplayerOwner` API 检测，日志标记为 `[Host Login]`。\n- **服务端翻译预加载**：启动时预加载 `en_us` 和 `zh_cn` 翻译文件，踢出消息在服务端根据客户端语言完成翻译，客户端无需安装模组即可正确显示。\n\n### Changed\n- **移除 `sendServerId` 配置项**：`server_id` 不再需要开关控制，始终随请求发送。配置文件中的 `sendServerId` 已废弃。\n- **移除 `API_SEND_SERVER_ID` 配置项**：`Config.java` 中相关字段和构建代码已删除。\n\n### Fixed\n- **`isValidForWriting` 语义反转**：原返回 `!isActive || !canWrite || isExpired()`，修正为 `isActive && canWrite && !isExpired()`。\n- **`hasValidToken` 语义反转**：原返回 `!isTokenVerified.get() || tokenInfo == null`，修正为 `isTokenVerified.get() && tokenInfo != null`。\n- **权限检查条件反转**：`syncWhitelist`、`addEntry`、`removeEntry`、`logLoginEvent` 中的 Token 权限判断从 `hasValidToken() || tokenInfo.isValidForXxx()` 修正为 `!hasValidToken() || !tokenInfo.isValidForXxx()`。\n- **`getTokenStatus` 逻辑反转**：`hasValidToken()` 条件从 `true` 修正为 `!false`。\n- **本地单机玩家被错误阻止**：`isAllowed()` 中初始 `allowed` 从 `false` 改为 `isHost`，单机主人不再被白名单拦截。\n- **`getPlayerIP` 安全性增强**：不再直接强转 `InetSocketAddress`，改用 `instanceof` 模式匹配，兼容 `LocalAddress`（单机/局域网返回 `<host>`），异常时返回 `\"unknown\"`。\n- **初始化阶段空白日志**：日志写入和 API 登录事件增加 `isLoaded` 守卫，仅在白名单加载完成后执行，避免模组初始化阶段产生空条目日志。\n\n### Important\n- 如需要使用 API 功能，请务必使用版本 2.1.0 及以上的后端。"
+		},
+		{
+			"tag": "3.0",
+			"published": "2026-01-18T02:10:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 379472463,
+					"name": "cwhitelist-3.0-1.21.1-1.21.10-NeoForge.jar",
+					"url": "https://github.com/SkyDreamLG/cwhitelist/releases/download/3.0/cwhitelist-3.0-1.21.1-1.21.10-NeoForge.jar",
+					"size": 48506,
+					"downloads": 18,
+					"inspection": 2,
+					"sha256": "c04a0f71552b5c2e600535956a3ce53706a91ea8f5674eedb9c1961c3bf4a28c",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cwhitelist",
+							"version": "3.0-1.21.x-NeoForge",
+							"name": "cwhitelist",
+							"description": "",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"org/skydream/cwhitelist/ApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"127.0.0.1": [
+								"org/skydream/cwhitelist/Config.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 379472583,
+					"name": "cwhitelist-3.0-1.21.11+-NeoForge.jar",
+					"url": "https://github.com/SkyDreamLG/cwhitelist/releases/download/3.0/cwhitelist-3.0-1.21.11%2B-NeoForge.jar",
+					"size": 50814,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "8474132dba2ec52c238a76ef7977a676fc206cb4cecb80d28c26b8fd54621372",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cwhitelist",
+							"version": "3.0-1.21.11+-NeoForge",
+							"name": "cwhitelist",
+							"description": "",
+							"minecraft": "[1.21.11,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"org/skydream/cwhitelist/ApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"127.0.0.1": [
+								"org/skydream/cwhitelist/Config.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CWhitelist 更新日志\n\n## v3.0 - 2026-01-18\n\n### 修复内容\n\n#### 🐛 API 同步修复\n- 修复 `api sync` 命令使用缓存而不刷新的问题\n- 新增强制刷新机制，确保每次同步获取最新数据\n\n#### 🔤 翻译系统修复  \n- 修复翻译键显示为键名而非翻译内容的问题\n- 优化翻译文件路径和格式\n\n#### 🔧 版本兼容性修复\n- 修复在 Minecraft 1.21.10 等新版本上的兼容性问题\n- 确保命令系统在新版本中正常工作\n\n### 更新建议\n推荐所有用户升级此版本，特别是使用 API 集成功能的管理员。"
+		},
+		{
+			"tag": "2.1",
+			"published": "2026-01-17T12:58:01Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 341902380,
+					"name": "cwhitelist-2.1-1.21.x-NeoForge.jar",
+					"url": "https://github.com/SkyDreamLG/cwhitelist/releases/download/2.1/cwhitelist-2.1-1.21.x-NeoForge.jar",
+					"size": 40585,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "52deb2bc9512d03e1e8bb2b0ff0ccabf5661a2f3bc533f3a49def839646c36b3",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cwhitelist",
+							"version": "2.1-1.21.x-NeoForge",
+							"name": "cwhitelist",
+							"description": "",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 10,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"org/skydream/cwhitelist/ApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"127.0.0.1": [
+								"org/skydream/cwhitelist/Config.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CWhitelist 更新日志\n\n## v2.1 - 2026-01-17\n\n### 🔧 新增功能\n\n#### API 令牌认证系统\n- **完整令牌认证支持**：新增与 API 服务器的安全令牌认证机制\n- **双认证方式**：\n  - **Header 认证**：通过 `Authorization: Bearer <token>` 头进行认证（推荐）\n  - **查询参数认证**：通过 `?token=<token>` 查询参数进行认证\n- **权限验证**：自动验证令牌的读/写/删除/管理权限\n- **令牌过期检测**：实时检查令牌有效期，自动处理过期令牌\n\n#### 权限管理增强\n- **细粒度权限控制**：\n  - `can_read`：读取权限，用于同步白名单\n  - `can_write`：写入权限，用于添加条目和记录事件\n  - `can_delete`：删除权限，用于移除条目\n  - `can_manage`：管理权限，系统管理操作\n- **智能权限验证**：根据操作类型自动验证所需权限\n- **权限不足反馈**：清晰的权限错误提示信息\n\n#### 令牌状态管理\n- **令牌验证命令**：新增 `/cwhitelist api verify` 命令验证令牌有效性\n- **状态信息显示**：在 `/cwhitelist api status` 中显示详细的令牌信息\n- **自动验证**：服务器启动时自动验证令牌\n\n### ⚙️ 配置更新\n\n#### 新增配置选项\n```toml\n[api]\n# 基础认证配置\ntoken = \"your-api-token-here\"                      # API 认证令牌\nuseHeaderAuth = true                              # 认证方式 (true:头部/false:查询参数)\n\n# 可选配置\nserverId = \"\"                                     # 服务器标识符（可选）\nsendServerId = false                              # 是否在请求中包含服务器 ID\nincludeExpired = false                            # 是否包含过期条目\n```\n\n#### 配置变更说明\n- **向后兼容**：现有配置无需修改，新增选项有合理默认值\n- **安全建议**：强烈建议使用 Header 认证方式，更安全可靠\n\n### 🎮 命令扩展\n\n#### 新增 API 管理命令\n| 命令 | 描述 | 权限 |\n|------|------|------|\n| `/cwhitelist api verify` | 验证 API 令牌有效性 | OP (2) |\n| `/cwhitelist api status` | 显示详细的 API 和令牌状态 | OP (2) |\n\n#### 命令增强\n- **`/cwhitelist api health`**：增加网络错误处理和超时控制\n- **`/cwhitelist api sync`**：增强权限验证，仅允许具有读取权限的令牌\n- **所有 API 相关操作**：现在都需要有效的令牌认证\n\n### 🔒 安全性改进\n\n#### 认证安全\n- **令牌安全存储**：令牌仅存储在配置文件中，不在代码中硬编码\n- **安全的通信**：支持两种认证方式，满足不同安全需求\n- **权限隔离**：根据令牌权限限制操作范围\n\n#### 错误处理\n- **认证失败处理**：自动降级到本地模式，保证服务可用性\n- **清晰的错误信息**：提供详细的权限不足和认证失败提示\n- **日志记录**：记录所有认证尝试和权限检查\n\n### 📊 性能优化\n\n#### 智能缓存\n- **令牌验证缓存**：减少重复的令牌验证请求\n- **权限缓存**：缓存令牌权限信息，提高验证效率\n- **智能刷新**：令牌失效时自动重新验证\n\n#### 网络优化\n- **连接复用**：HTTP 客户端连接复用，减少连接建立开销\n- **超时控制**：可配置的超时设置，防止长时间阻塞\n- **队列管理**：请求队列优化，避免并发问题\n\n### 📋 变更摘要\n\n#### 核心变更\n1. **API 客户端重构**：重写 `ApiClient` 类以支持令牌认证\n2. **令牌信息模型**：新增 `TokenInfo` 类管理令牌数据和权限\n3. **认证头管理**：简化为单一令牌配置，取代复杂的头列表\n\n#### 配置简化\n- **移除**：`API_AUTH_HEADERS` 配置选项\n- **新增**：`API_TOKEN` 单一令牌配置\n- **优化**：认证方式选择更直观\n\n#### 用户体验\n- **状态显示**：更详细的令牌和权限信息显示\n- **错误提示**：更友好的权限不足提示\n- **操作反馈**：实时的认证状态反馈\n\n### 🐛 已知问题\n- 无 - 此版本为功能增强版本，不包含错误修复\n\n---\n\n**更新建议**：此版本强烈推荐给所有需要 API 集成的服务器管理员，提供了更安全、更灵活的认证机制。\n\n**技术支持**：如遇升级问题，请查阅文档或通过 GitHub Issues 寻求帮助。"
+		},
+		{
+			"tag": "1.3",
+			"published": "2025-04-15T02:53:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 246470174,
+					"name": "cwhitelist-1.3-1.21.x-NeoForge.jar",
+					"url": "https://github.com/SkyDreamLG/cwhitelist/releases/download/1.3/cwhitelist-1.3-1.21.x-NeoForge.jar",
+					"size": 19190,
+					"downloads": 146,
+					"inspection": 2,
+					"sha256": "3343d6c5cb5bec9a7c3f6b41a45b5c8a09f61d09021e8e7989c485c59bca374b",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cwhitelist",
+							"version": "1.3-1.21.x-NeoForge",
+							"name": "cwhitelist",
+							"description": "",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Increase module priority, while modifying whitelist data reading to asynchronous loading and adding whitelist data cache"
+		},
+		{
+			"tag": "1.2",
+			"published": "2025-02-13T08:58:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 228771490,
+					"name": "cwhitelist-1.2-1.21.x-NeoForge.jar",
+					"url": "https://github.com/SkyDreamLG/cwhitelist/releases/download/1.2/cwhitelist-1.2-1.21.x-NeoForge.jar",
+					"size": 18747,
+					"downloads": 10,
+					"inspection": 2,
+					"sha256": "d73a082cf5ec4f269cf255805236d93bf6d6e9a72f00e95607a09be0b18fbdf2",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cwhitelist",
+							"version": "1.2-1.21.x-NeoForge",
+							"name": "cwhitelist",
+							"description": "",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "新增多语言支持（目前仅支持英语和简体中文）\n新增白名单系统检查项目的开关功能（在配置文件中修改）\n修正了配置文件对日志系统的控制问题"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 47,
+		"more": 0,
+		"people": [
+			{
+				"login": "SkyDreamLG",
+				"commits": 45,
+				"funding": []
+			},
+			{
+				"login": "BoBkiNN",
+				"commits": 2,
+				"name": "BoBkiNN_",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

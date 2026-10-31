@@ -1,0 +1,310 @@
+{
+	"repo": "Pelemenguin/ClassJS",
+	"host": "github",
+	"stars": 3,
+	"archived": false,
+	"license": "MIT",
+	"created": "2025-09-27T08:57:27Z",
+	"pushed": "2025-12-27T12:31:03Z",
+	"releases": [
+		{
+			"tag": "v0.1-alpha.6",
+			"published": "2025-12-27T12:16:13Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 333445756,
+					"name": "classjs-1.20.1-0.1-alpha.6.jar",
+					"url": "https://github.com/Pelemenguin/ClassJS/releases/download/v0.1-alpha.6/classjs-1.20.1-0.1-alpha.6.jar",
+					"size": 212956,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "1a15607542685d7e120aeccbdcee7be42c1e15fab62899d252c55c3619c7107b",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "classjs",
+							"version": "0.1-alpha.6",
+							"name": "ClassJS",
+							"description": "A KubeJS addon to create Java classes",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"kubejs",
+								"rhino",
+								"architectury"
+							]
+						}
+					],
+					"icon": "fe74d3e3b0d47057dbd1467acd9d571f676108b3863c1184c9d7e6ddd02001f3.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 25,
+						"jars": [],
+						"capabilities": {
+							"classloading": {
+								"pelemenguin/classjs/util/ClassJSClassLoader.class": [
+									"java/lang/ClassLoader.defineClass",
+									"extends java/lang/ClassLoader"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# New Features\n\n- `annotated`\n  - Use `annotated` on `ClassCreator`, `MethodCreator`, or `FieldCreator` to add annotations on them.\n    \n    ```javascript\n    let test = ClassCreator.create(\"AnnotationTest\")\n    .toPublic()\n    .defaultConstructor()\n    .annotated(\"java.lang.Deprecated\")\n        .build()\n    .createField(\"testField\", \"int\")\n        .toPublic().toStatic()\n        .annotated(\"java.lang.Deprecated\")\n            .withString(\"since\", \"1230912-39\")\n            .build()\n        .build()\n    .createMethod(\"test\", [], \"void\")\n        .toPublic().toStatic()\n        .annotated(\"java.lang.Deprecated\")\n            .withBoolean(\"forRemoval\", true)\n            .build()\n        .annotated(\"dev.latvian.mods.kubejs.typings.Info\")\n            .withString(\"value\", \"method\")\n            .withAnnotationArray(\"params\", \"dev.latvian.mods.kubejs.typings.Param\", [\n                a => a.withString(\"value\", \"AAA\"),\n                a => a.withString(\"value\", \"BBB\"),\n            ])\n            .build()\n        .codeJS(() => console.info(\"TEST METHOD\"))\n    .defineClass();\n    \n    console.info(test.__javaObject__.getMethods()[0].getAnnotations());\n    // Output in startup.log:\n    // [@java.lang.Deprecated(forRemoval=true, since=\"\"), @dev.latvian.mods.kubejs.typings.Info(params={@dev.latvian.mods.kubejs.typings.Param(name=\"\", value=\"AAA\"), @dev.latvian.mods.kubejs.typings.Param(name=\"\", value=\"BBB\")}, value=\"method\")] [java.util.ArrayList]\n\n    console.info(test.__javaObject__.getFields()[0].getAnnotations());\n    // Output in startup.log:\n    // [@java.lang.Deprecated(forRemoval=false, since=\"1230912-39\")] [java.util.ArrayList]\n    ```\n\n- `ClassCreator.createAnnotationMethod`\n  - Add an anntation method to an `@interface` class.\n  - There is possibly some bug, so currently no example is provided.\n\n# Fixed Bug\n\n- Could not `invokeJS` when parameter list is empty."
+		},
+		{
+			"tag": "v0.1-alpha.5",
+			"published": "2025-10-20T07:53:02Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 306407230,
+					"name": "classjs-1.20.1-0.1-alpha.5.jar",
+					"url": "https://github.com/Pelemenguin/ClassJS/releases/download/v0.1-alpha.5/classjs-1.20.1-0.1-alpha.5.jar",
+					"size": 205133,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "8376ccd5113e97ad1f8fdbda130a520735c4bbf77f95b2d0be8cf557a80b7a43",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "classjs",
+							"version": "0.1-alpha.5",
+							"name": "ClassJS",
+							"description": "A KubeJS addon to create Java classes",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"kubejs",
+								"rhino",
+								"architectury"
+							]
+						}
+					],
+					"icon": "fe74d3e3b0d47057dbd1467acd9d571f676108b3863c1184c9d7e6ddd02001f3.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 24,
+						"jars": [],
+						"capabilities": {
+							"classloading": {
+								"pelemenguin/classjs/util/ClassJSClassLoader.class": [
+									"java/lang/ClassLoader.defineClass",
+									"extends java/lang/ClassLoader"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# New Features\n\n- `ClassCreator.createClassInitMethod`\n\n    - `createClassInitMethod` creates a `<clinit>` method, which is called to initialize the class.\n    \n        ```javascript\n        const ArrayList = Java.loadClass(\"java.util.ArrayList\")\n\n        let ExampleClass = ClassCreator.create(\"ExampleClass\")\n            .createField(\"listField\", ArrayList)\n                .toPublic().toStatic().toFinal()\n                .build()\n            .createClassInitMethod()\n                .code(method => {\n                    method\n                        // Creates a new ArrayList\n                        .newAndConstructObject(ArrayList)\n                        // Put the created ArrayList into the `listField` static field.\n                        .putStaticField(\n                            ClassJSUtils.getCustomClassName(\"ExampleClass\"),\n                            \"listField\",\n                            ArrayList\n                        )\n                        .returnVoid();\n                })\n            .defineClass();\n\n        console.info(ExampleClass.listField);\n        // Output in \"startup.log\":\n        // [] [java.util.ArrayList]\n        ```\n\n    - This is equivalent to the following Java code:\n\n        ```java\n        import java.util.ArrayList;\n\n        public class ExampleClass {\n            public static final ArrayList<Object> listField;\n            static {\n                listField = new ArrayList<>();\n            }\n        }\n        ```\n\n    - or:\n\n        ```java\n        import java.util.ArrayList;\n\n        public class ExampleClass {\n            public static final ArrayList<Object> listField = new ArrayList<>();\n        }\n        ```\n\n- `ClassCreator.createConstructor`\n\n    - `createClassInitMethod` creates a `<init>` method, that is, a constructor method.\n\n        ```javascript\n        let ExampleClass = ClassCreator.create(\"ExampleClass\")\n            .createField(\"value\", \"int\")\n                .toPublic().toFinal()\n                .build()\n            .createConstructor([\"int\"])\n                .toPublic()\n                .code(m => {\n                    // Standard way to call super constructor,\n                    // as Java expect every constructor of any class\n                    // to call a super constructor as the first operation.\n                    // (Should we add a new method to automate this process?)\n                    m.loadObject(\"this\")\n                        .duplicate()\n                        .invokeSpecial(\"java.lang.Object\", \"<init>\", [], \"void\")\n                    // Load the input integer\n                        .loadInt(\"arg0\")\n                    // Put it into the field 'value'\n                        .putField(ClassJSUtils.getCustomClassName(\"ExampleClass\"), \"value\", \"int\")\n                        .returnVoid();\n                })\n            .defineClass();\n\n        console.info(new ExampleClass(12345).value);\n        // Output in \"startup.log\":\n        // 12345.0\n\n        // (This is because KubeJS represents all numbers as doubles.)\n        ```\n\n    - This is equivalent to the following Java code:\n\n        ```java\n        public class ExampleClass {\n            public final int value;\n            \n            public ExampleClass(int arg0) {\n                this.value = arg0;\n            }\n        }\n        ```\n\n# Fixed Bug\n\n- JSDoc for `FieldCreator.defaultNumericValue` and `FieldCreator.defaultStringValue` said these methods were only for `static final` fields. However, they can be used in `static`, *non*-`final` fields."
+		},
+		{
+			"tag": "v0.1-alpha.4",
+			"published": "2025-10-17T12:25:06Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 305453458,
+					"name": "classjs-1.20.1-0.1-alpha.4.jar",
+					"url": "https://github.com/Pelemenguin/ClassJS/releases/download/v0.1-alpha.4/classjs-1.20.1-0.1-alpha.4.jar",
+					"size": 204777,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "78a434e6349cda7788368d7e70b505ee4513103a4b47851af1641c0f2b8b57ed",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "classjs",
+							"version": "0.1-alpha.4",
+							"name": "ClassJS",
+							"description": "A KubeJS addon to create Java classes",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"kubejs",
+								"rhino",
+								"architectury"
+							]
+						}
+					],
+					"icon": "fe74d3e3b0d47057dbd1467acd9d571f676108b3863c1184c9d7e6ddd02001f3.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 24,
+						"jars": [],
+						"capabilities": {
+							"classloading": {
+								"pelemenguin/classjs/util/ClassJSClassLoader.class": [
+									"java/lang/ClassLoader.defineClass",
+									"extends java/lang/ClassLoader"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# New Features\n\n- `ClassJSUtils.loadClass`\n    - Allows to load a class that was created by `ClassCreator`.\n\n    ```javascript\n    let TestClass = ClassCreator.create(\"TestClass\")\n        .toPublic()\n        .defaultConstructor()\n        .defineClass();\n\n    let loaded = ClassJSUtils.loadClass(\"TestClass\");\n    console.info(loaded === TestClass); // true\n    ```\n\n- `MethodCreator.codeJSWithThis`\n    - Allows to define a method where the first parameter is `this`.\n\n    ```javascript\n    let TestClass = ClassCreator.create(\"TestClass\")\n        .toPublic()\n        .defaultConstructor()\n        .createField(\"testField\", \"int\")\n            .toPublic()\n            .build()\n        .createMethod(\"testMethod\", [\"java.lang.String\", \"int\"], \"void\")\n            .toPublic()\n            .codeJSWithThis((thisObj, s, r) => {\n                // Now, `thisObj` represents the instance of TestClass\n                console.info(s + 's'.repeat(r));\n                thisObj.testField = r;\n            })\n        .defineClass();\n    ```\n\n# Fixed Bugs\n\n- Reloading methods written in `invokeJS` that are never used caused `NullPointerException`.\n- Specifying a method's parameter types or its return type as the currently defining class caused `TypeNotPresentException`."
+		},
+		{
+			"tag": "v0.1-alpha.3",
+			"published": "2025-10-16T15:12:39Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 305085443,
+					"name": "classjs-1.20.1-0.1-alpha.3.jar",
+					"url": "https://github.com/Pelemenguin/ClassJS/releases/download/v0.1-alpha.3/classjs-1.20.1-0.1-alpha.3.jar",
+					"size": 203633,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "adb55ecf0031deb6b5d171d18d85b691ede3f5beba33efb195fb44bbaaf2ffba",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "classjs",
+							"version": "0.1-alpha.3",
+							"name": "ClassJS",
+							"description": "A KubeJS addon to create Java classes",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"kubejs",
+								"rhino",
+								"architectury"
+							]
+						}
+					],
+					"icon": "fe74d3e3b0d47057dbd1467acd9d571f676108b3863c1184c9d7e6ddd02001f3.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 24,
+						"jars": [],
+						"capabilities": {
+							"classloading": {
+								"pelemenguin/classjs/util/ClassJSClassLoader.class": [
+									"java/lang/ClassLoader.defineClass",
+									"extends java/lang/ClassLoader"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changes\n\n- `code` method of `MethodCreator` can now accept a `Consumer<MethodCodeBuilder>` as argument. Previously `code()` method with no parameter can still be used, but is marked with `@deprecated`.\n- Every parameter that requires a full qualified name of a class can now also accept an already loaded class.\n\n## Before\n\n```javascript\nlet clazz = ClassCreator.create(\"TestClass\")\n    .toPublic()\n    .defaultConstructor()\n    .createMethod(\"testMethod\", [\"java.lang.String\", \"char\", \"char\"], \"java.lang.String\")\n        .toPublic()\n        .code()\n            .loadObject(\"arg0\")\n            .loadInt(\"arg1\")\n            .loadInt(\"arg2\")\n            .invokeVirtual(\"java.lang.String\", \"replace\", [\"char\", \"char\"], \"java.lang.String\")\n            .returnObject()\n            .build()\n    .defineClass();\n```\n\n## Now\n\n```javascript\n// You can load the needed class in advance\nconst $String = Java.loadClass(\"java.lang.String\");\n\nlet clazz = ClassCreator.create(\"TestClass\")\n    .toPublic()\n    .defaultConstructor()\n    // Use the loaded class instead of the long name of a class\n    .createMethod(\"testMethod\", [$String, \"char\", \"char\"], $String)\n        .toPublic()\n        .code(builder => builder\n            .loadObject(\"arg0\")\n            .loadInt(\"arg1\")\n            .loadInt(\"arg2\")\n            // Class names are still supported\n            .invokeVirtual($String, \"replace\", [\"char\", \"char\"], \"java.lang.String\")\n            .returnObject()\n        )\n    .defineClass();\n```"
+		},
+		{
+			"tag": "v0.1-alpha.2",
+			"published": "2025-10-14T14:51:17Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 304157939,
+					"name": "classjs-1.20.1-0.1-alpha.2.jar",
+					"url": "https://github.com/Pelemenguin/ClassJS/releases/download/v0.1-alpha.2/classjs-1.20.1-0.1-alpha.2.jar",
+					"size": 198715,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "d1ef9926376320f2195d6671e48a7973ded005b3b36d3f9bdad3d2771a63d7bd",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "classjs",
+							"version": "0.1-alpha.2",
+							"name": "ClassJS",
+							"description": "A KubeJS addon to create Java classes",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"kubejs",
+								"rhino",
+								"architectury"
+							]
+						}
+					],
+					"icon": "fe74d3e3b0d47057dbd1467acd9d571f676108b3863c1184c9d7e6ddd02001f3.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 21,
+						"jars": [],
+						"capabilities": {
+							"classloading": {
+								"pelemenguin/classjs/util/ClassJSClassLoader.class": [
+									"java/lang/ClassLoader.defineClass",
+									"extends java/lang/ClassLoader"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# ClassJS v0.1-alpha.2\n\n## Fixed Bugs\n\n- Did not handle `void` return when using `invokeJS`.\n- Used system class loader when creating `MethodType`s, causing `TypeNotPresentException`s.\n- dots were not replaced to slashes in custom classes' class names.\n- Function identifiers used in `invokeJS` with the same name but different descriptors cannot be seperated.\n- The class `ClassJSClassLoader` was not denied by the `ClassFilter`."
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "ClassJS is a mod to create Java classes in KubeJS.",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 68,
+		"more": 0,
+		"people": [
+			{
+				"login": "Pelemenguin",
+				"commits": 68,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

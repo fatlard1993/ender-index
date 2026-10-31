@@ -1,0 +1,126 @@
+{
+	"repo": "Sunsmilktea/ThaumicAllAspect",
+	"host": "github",
+	"stars": 2,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-03-16T05:32:52Z",
+	"pushed": "2026-10-15T10:41:51Z",
+	"releases": [
+		{
+			"tag": "v1.0.3",
+			"published": "2026-03-20T03:28:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 377675811,
+					"name": "ThaumicAllAspect-1.0.3.jar",
+					"url": "https://github.com/Sunsmilktea/ThaumicAllAspect/releases/download/v1.0.3/ThaumicAllAspect-1.0.3.jar",
+					"size": 4623491,
+					"downloads": 12,
+					"inspection": 2,
+					"sha256": "5e3b49be57c32b0240d464fa31fac272e7fcf8feef3e196edee3f7ae990b37fe",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 83,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.0.3 (Changelog)\n\n- Fixed the “0 aspects / fake aspects” issue: if an `AspectList` has `size > 0` but total amount is `0` (`total == 0`), it could be mistakenly treated as “already has aspects”, causing the mod to skip re-derivation (leading to HUD/machine readings showing `=0`, and potentially crashes). Now such lists are treated as “no aspects”, so the correct derive/backup logic runs.\n- Enforced cache/registration safety: before writing to Thaumcraft, `aspect-cache.cfg`, or logs, the code guarantees each aspect amount is at least `1` to prevent persisting `0`-value aspects.\n- Hardened recipe-first pipeline behavior: derivation checks are driven by “positive total aspect amount” rather than only `size > 0`, preventing early termination by fake-aspect states and improving multi-step chains (e.g., `A=B` then `A+B=C`).\n- UI visibility enhancement for small-piece items: for keyword hits like `nugget/粒/dust/shard`, a post-scan adjustment upgrades all-1 aspect sets to `2` (same aspect types).\n- Configuration-driven tuning: `maxRecipeDepth` and `recipeFirstMaxRounds` are read from config (default `recipeFirstMaxRounds = 6`) for better control in large modpacks.\n- NEI integration is additive: NEI recipes are merged/added with vanilla indices to avoid losing recipes when NEI coverage is incomplete.\n- Cache seed + incremental scan: when `aspect-cache.cfg` exists, it is used as an initial seed; the derive pipeline still runs to fill only targets that are still missing aspects, then the updated cache is written back.\n\n## v1.0.3（更新日志）\n\n- 修复“0 要素/假要素”：当 `AspectList` 满足 `size > 0` 但要素总量 `total == 0` 时，可能会被误判为“已拥有要素”，从而跳过重推导（导致 HUD/机器读数显示 `=0`，并可能引发崩溃）。现在把这种情况视为“无要素”，确保推导/兜底逻辑正常执行。\n- 强化写入安全性：向 Thaumcraft 注册、写入 `aspect-cache.cfg` 以及日志输出前，保证每个要素数量至少为 `1`，避免把 `0` 值要素落盘。\n- 加固配方优先（Recipe-first）流程：衍生判定改为依据“要素总量是否为正”，而不是仅看 `size > 0`，避免假要素导致过早终止，并提升链式配方覆盖。\n- 小件命中词 UI 可见性增强：对包含 `nugget/粒/dust/shard` 等关键词的命中项，扫描后若所有要素都恰好为 `1`，会自动提升为 `2`（要素类型不变），使显示更清晰。\n- 配置化调优：`maxRecipeDepth` 与 `recipeFirstMaxRounds` 从配置读取（默认配方优先轮数保持 `6`），便于大整合包做性能/覆盖平衡。\n- NEI 配方为“追加合并”：NEI 配方会与原版索引合并追加，避免 NEI 覆盖不全时丢失配方。\n- 缓存种子 + 增量扫描：当存在 `aspect-cache.cfg` 时先作为初始种子加载；随后仍会走推导管线，但只补全仍缺少要素的目标，最后重写更新后的缓存。"
+		},
+		{
+			"tag": "v1.0.2",
+			"published": "2026-03-19T08:09:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 377040070,
+					"name": "thaumicallaspect-1.0.2.jar",
+					"url": "https://github.com/Sunsmilktea/ThaumicAllAspect/releases/download/v1.0.2/thaumicallaspect-1.0.2.jar",
+					"size": 4622939,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "165889ccf6f39bbde1292a28192fd8b4779d9fddbb826ddd70c0b709e345b8f2",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 83,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "NEI 配方合并索引；6 轮配方优先推导；缓存种子+每次增量扫描补全。"
+		},
+		{
+			"tag": "1.0",
+			"published": "2026-03-16T06:47:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 374781455,
+					"name": "thaumicallaspect-1.0.1.jar",
+					"url": "https://github.com/Sunsmilktea/ThaumicAllAspect/releases/download/1.0/thaumicallaspect-1.0.1.jar",
+					"size": 176560,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "f104fefbd84669c99be5205393f0823fcb1ff58cdbaf3895799ff59d08247adf",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 78,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			]
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "An example mod for Minecraft 1.7.10 with Forge focussed on a stable, updatable setup.",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 19,
+		"more": 0,
+		"people": [
+			{
+				"login": "Sunsmilktea",
+				"commits": 19,
+				"name": "Milktea",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

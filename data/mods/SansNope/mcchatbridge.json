@@ -1,0 +1,140 @@
+{
+	"repo": "SansNope/mcchatbridge",
+	"host": "github",
+	"description": "Minectaft mod. Simple communication for players (and others) on the server via a web interface, with a variety of different features that I found useful.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-06-28T13:27:50Z",
+	"pushed": "2026-06-30T08:44:33Z",
+	"releases": [
+		{
+			"tag": "v1.0.2",
+			"published": "2026-06-30T08:25:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 461962910,
+					"name": "mcchatbridge-1.0.2.jar",
+					"url": "https://github.com/SansNope/mcchatbridge/releases/download/v1.0.2/mcchatbridge-1.0.2.jar",
+					"size": 323723,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "cd241d987de567a5356a403cf25479ca47a060bf5092b7fffe4028bb9d49ead7",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "mcchatbridge",
+							"version": "1.0.2",
+							"name": "Minecraft Chat Bridge",
+							"description": "Exposes game chat as a web application on port 8080.",
+							"environment": "*",
+							"depends": []
+						}
+					],
+					"icon": "517cd328c16254f178e89ab972308ba3d36cc387939655f31b49d3a9e445fb27.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 42,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"www.w3.org": [
+								"com/example/mcchatbridge/HttpWebServer.class"
+							],
+							"minotar.net": [
+								"com/example/mcchatbridge/HttpWebServer.class"
+							],
+							"fonts.googleapis.com": [
+								"com/example/mcchatbridge/HttpWebServer.class"
+							],
+							"fonts.gstatic.com": [
+								"com/example/mcchatbridge/HttpWebServer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Added**\n\n* **Account System:** Login and registration windows before accessing the chat.\n* **Sessions:** Login is remembered for 7 days (HttpOnly cookie), surviving server restarts—no re-login required.\n* **\"Logout\" button:** Added to the player panel.\n* **Brute-force protection:** Rate limiting on login (5 failed attempts per IP → 15-minute lockout).\n* **Emoji support:** The emoji panel is now functional.\n* **Image and GIF uploads:** The 📎 button is now working; images display in-game via ChatImage.\n* **Notification sound:** A harp sound plays for new global and private messages (built into the mod).\n* **Background switcher:** Personal button 🖼️ (desktop only); the background is stored in the user's browser.\n* **\"Scroll to bottom\" button:** Appears when scrolling up, returns instantly to the latest messages, 50% transparency, blinks yellow on new messages. Styled in a square, Minecraft-inspired design.\n* **New endpoints:** `/auth/register`, `/auth/login`, `/auth/logout`, `/auth/me`, `/notify.wav`.\n\n**Changed**\n\n* **Nickname binding:** Nicknames are now tied to accounts and cannot be edited manually (prevents impersonation).\n* **Smelting window:** Fully localized (EN/RU); previously, some labels were hardcoded in Russian.\n* **Interface language:** Applied on page load, rather than only after manual switching.\n* **Avatar delivery:** Detects actual file type (PNG/JPEG/GIF) and serves the correct Content-Type.\n\n**Fixed**\n\n* **Critical JS error:** Fixed the `Identifier 'activeClickerTab' has already been declared` error that caused the entire web interface to break.\n* **SSE connection drops:** Resolved constant disconnections and `ERR_INCOMPLETE_CHUNKED_ENCODING` errors; the connection now stays open until the client disconnects.\n* **Smelting item loss:** Fixed items disappearing from smelting slots during the process (server-side race condition—furnace access is now synchronized).\n* **\"Gave Air!\" message:** Fixed the issue where items were transferred as \"Air\"; the item name is now retrieved before adding it to the inventory.\n* **Hardcoded labels:** Removed hardcoded Russian labels that appeared in English mode (chat tabs/smelting/tooltips).\n\n**Security**\n\n* **Password hashing:** PBKDF2-HMAC-SHA256 (210,000 iterations) + individual salt. Passwords are never stored in plain text.\n* **Session identity binding:** Sending messages, PMs, reading PM history, and uploading avatars use the nickname from the session—users cannot write as others or read private messages that aren't theirs.\n* **Avatar upload validation:** Verified by file signature (magic bytes) + 2MB limit.\n* **Path traversal:** Eliminated a vulnerability in avatar nickname processing.\n\n**New Files (created automatically)**\n\n* `config/mcchatbridge_accounts.json` — accounts (salt + hash).\n* `config/mcchatbridge_sessions.json` — active sessions."
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-06-28T17:44:28Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 460388075,
+					"name": "mcchatbridge-1.0.0.jar",
+					"url": "https://github.com/SansNope/mcchatbridge/releases/download/v1.0.0/mcchatbridge-1.0.0.jar",
+					"size": 71262,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a08ea3923315b4789201eaf604cc917f2a357b9acc9665ec0f0b60cfc61f5ed6",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "mcchatbridge",
+							"version": "1.0.0",
+							"name": "Minecraft Chat Bridge",
+							"description": "Exposes game chat as a web application on port 8080.",
+							"environment": "*",
+							"depends": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 27,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"www.w3.org": [
+								"com/example/mcchatbridge/HttpWebServer.class"
+							],
+							"minotar.net": [
+								"com/example/mcchatbridge/HttpWebServer.class"
+							],
+							"fonts.googleapis.com": [
+								"com/example/mcchatbridge/HttpWebServer.class"
+							],
+							"fonts.gstatic.com": [
+								"com/example/mcchatbridge/HttpWebServer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			]
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 10,
+		"more": 0,
+		"people": [
+			{
+				"login": "SansNope",
+				"commits": 10,
+				"name": "Ivan Nikitenko",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

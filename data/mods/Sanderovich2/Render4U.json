@@ -6,8 +6,104 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-26T12:45:13Z",
-	"pushed": "2026-10-27T12:35:05Z",
+	"pushed": "2026-10-31T16:48:17Z",
 	"releases": [
+		{
+			"tag": "v1.3.1",
+			"published": "2026-10-31T16:48:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 695922985,
+					"name": "render4u-1.3.1.jar",
+					"url": "https://github.com/Sanderovich2/Render4U/releases/download/v1.3.1/render4u-1.3.1.jar",
+					"size": 20579975,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "71c1fdfe18f4e7cddee3843173d78e1d6011dac6c0b737970d41206fbac45023",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "render4u",
+							"version": "1.3.1",
+							"name": "Render4U",
+							"description": "High-performance modern rendering utility for Minecraft Fabric with Vulkan and OpenGL support.",
+							"minecraft": "26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 145,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Зависимости и платформа\n\n- Обновлен Fabric Loader до версии `0.20.1`\n- Обновлен Fabric API до актуальной версии `0.165.0+26.3`\n\n## Исправления и улучшения\n\n- Исправлено скругление полоски спектра оттенков (Hue) в колорпикере: устранены артефакты сегментации и выступающие углы\n- Устранены скачки положения курсора и квантование цвета при регулировке оттенка и насыщенности\n- Синхронизированы координаты клика и драга в панели настроек модуля\n\n## Оптимизация\n\n- Удален неиспользуемый тестовый набор и тестовые зависимости из `build.gradle`"
+		},
+		{
+			"tag": "v1.3.0",
+			"published": "2026-10-31T15:59:05Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 695807421,
+					"name": "render4u-1.3.0.jar",
+					"url": "https://github.com/Sanderovich2/Render4U/releases/download/v1.3.0/render4u-1.3.0.jar",
+					"size": 20579975,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "c47019160cda1c15084a0530c8ad877828173b4d8d3b850d8662120abf3a1380",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "render4u",
+							"version": "1.3.0",
+							"name": "Render4U",
+							"description": "High-performance modern rendering utility for Minecraft Fabric with Vulkan and OpenGL support.",
+							"minecraft": "26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 145,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## ClickGUI и интерфейс\n\n- Полноценный анимированный ClickGUI экран в стиле темной минималистичной панели (`ClickGuiScreen`)\n- Категории модулей (`Render`, `Movement`, `Combat`, `Player`, `Misc`, `Theme`) с плавной фильтрацией и поиском\n- Профиль игрока и всплывающее окно настроек (`ProfilePopupRender`): плавное масштабирование GUI (GUI Scale), выбор активной темы оформления и переключение языка интерфейса\n- Панель настроек модуля (`SettingsPanelRender`): поддержка скроллинга, анимации открытия и закрытия\n\n## Система настроек и модулей\n\n- Иерархия настроек с плавной анимацией и валидацией:\n  - `BooleanSetting` — анимированный переключатель\n  - `NumberSetting` — плавный слайдер с точной интерполяцией\n  - `ModeSetting` — селектор одиночного режима\n  - `MultiModeSetting` — выбор нескольких режимов\n  - `KeybindSetting` — привязка клавиш с удобным изменением бинда\n  - `StringSetting` — текстовое поле ввода\n  - `ColorSetting` — продвинутый колорпикер со сплошным спектром оттенков (Hue), альфа-каналом и SV-палитрой\n\n## Конструктор примитивов (DrawRect)\n\n- Декларативный билдер `DrawRect`:\n  - `DrawRect` — объединение геометрии, скругления, фона, блюра, тени и обводки в один объект\n  - `DrawOutline` — раздельная настройка толщины сторон обводки (Right, Left, Up, Down) и цвета\n  - `DrawRounding` — индивидуальные радиусы для всех четырёх углов (RightUp, LeftUp, LeftDown, RightDown)\n  - `DrawShadow` — направленные и мягкие тени\n  - Интеграция с фасадом `Draw`: `Draw.drawRect`, `Draw.drawShadow`, `Draw.drawElement`\n\n## Универсальный 3D рендер\n\n- Отказ от хардкода под сущности в пользу открытого координатного API:\n  - `Render3D.draw3DBox(x, y, z, box, color, filled, outline, thickness)` — быстрый рендер 3D боксов по координатам\n  - `Render3D.draw3DLine(x1, y1, z1, x2, y2, z2, color, thickness)` — отрисовка линий в трёхмерном пространстве\n  - `Render3D.draw2DLine(x, y, z, screenX, screenY, color, thickness)` — трассеры из 3D мира в экранные координаты\n  - `Render3D.draw2DElement(x, y, z, element, scaleX, scaleY)` — проецирование любых 2D элементов (`DrawElement`) в 3D пространстве\n\n## Система событий (Event Bus)\n\n- Новые события ввода и взаимодействия: `EventKey`, `EventMouseButton`, `EventMouseScroll`, `EventChar`, `EventInput`\n- События сетевого уровня и тиков: `EventPacket.Receive`, `EventPacket.Send`, `EventTick`\n\n## Конфигурация, темы и локализация\n\n- `ConfigManager` — сохранение и загрузка модулей, настроек и биндов в формате JSON (`config.json`)\n- `Theme` — система тем с кастомными акцентами и палитрами (`Dark`, `Midnight`, `Crimson`, `Emerald`, `Amethyst` и др.)\n- `Lang` — локализация интерфейса (`ru_ru`, `en_us`)"
+		},
 		{
 			"tag": "v1.2.0",
 			"published": "2026-10-27T12:29:14Z",
@@ -18,7 +114,7 @@
 					"name": "render4u-1.2.0.jar",
 					"url": "https://github.com/Sanderovich2/Render4U/releases/download/v1.2.0/render4u-1.2.0.jar",
 					"size": 1964930,
-					"downloads": 12,
+					"downloads": 13,
 					"inspection": 2,
 					"sha256": "4d8f2c42019bd28b11c7916033649a4132a6a8e60be504aa666b8ca2d5855b2c",
 					"mods": [
@@ -66,7 +162,7 @@
 					"name": "render4u-1.1.0.jar",
 					"url": "https://github.com/Sanderovich2/Render4U/releases/download/v1.1.0/render4u-1.1.0.jar",
 					"size": 384445,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "b2ae255adc843e4d58b82c0e574552b8155ed15e083d95f57cebec9fa3481adb",
 					"mods": [
@@ -114,7 +210,7 @@
 					"name": "render4u-1.0.0.jar",
 					"url": "https://github.com/Sanderovich2/Render4U/releases/download/v1.0.0/render4u-1.0.0.jar",
 					"size": 377864,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "5ddff324a16a32da710eba56816e76634ada221d779d9cd6dd2038592ec76af3",
 					"mods": [

@@ -1,0 +1,330 @@
+{
+	"repo": "Remilulz91/SkyblockCraft",
+	"host": "github",
+	"description": "A classic Skyblock mod with virtual coin economy and configurable Sky Merchant villagers. Generate your starter island with /island create, earn and trade coins, and buy items by right-clicking custom merchants. Fabric 1.21.1.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-05-14T15:36:12Z",
+	"pushed": "2026-09-11T14:36:13Z",
+	"releases": [
+		{
+			"tag": "v0.4.0-alpha.2",
+			"published": "2026-09-11T14:37:00Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 557416267,
+					"name": "skyblockcraft-0.4.0-alpha.2.jar",
+					"url": "https://github.com/Remilulz91/SkyblockCraft/releases/download/v0.4.0-alpha.2/skyblockcraft-0.4.0-alpha.2.jar",
+					"size": 88901,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "28ac0ad0d14f5d8af4d4c2e39eaadf91dffaee22aae374e6671210514dc3d988",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "skyblockcraft",
+							"version": "0.4.0-alpha.2",
+							"name": "SkyblockCraft",
+							"description": "A classic Skyblock mod with a virtual coin economy and custom Sky Merchant villagers. Generate your own island, earn coins, and trade with merchants.",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"cloth-config",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "0d2bb2731e89c23bf814390ba485c886dbfbb7379aa4d84d72a57734fde01fb9.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"entity": [
+								"Sky Merchant"
+							],
+							"block": [
+								"Advanced Coin Generator",
+								"Basic Coin Generator",
+								"Elite Coin Generator"
+							]
+						},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Fixed\n- **Coin generators are now easy to break and always drop their item.** In alpha.1 they had `requiresTool()` set with a hardness matching emerald/diamond blocks — so breaking them was obsidian-slow AND dropped nothing without the right pickaxe. Hardness is now stone-like (1.5–2.5) and `requiresTool()` is removed, so a bare hand works and the block drops normally."
+		},
+		{
+			"tag": "v0.4.0-alpha.1",
+			"published": "2026-09-11T14:15:39Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 557381729,
+					"name": "skyblockcraft-0.4.0-alpha.1.jar",
+					"url": "https://github.com/Remilulz91/SkyblockCraft/releases/download/v0.4.0-alpha.1/skyblockcraft-0.4.0-alpha.1.jar",
+					"size": 88935,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "b80b9d366d1d4053a6671a60eae89dbd3477f3fe40e04d0be7eb13cf3851ad81",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "skyblockcraft",
+							"version": "0.4.0-alpha.1",
+							"name": "SkyblockCraft",
+							"description": "A classic Skyblock mod with a virtual coin economy and custom Sky Merchant villagers. Generate your own island, earn coins, and trade with merchants.",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"cloth-config",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "0d2bb2731e89c23bf814390ba485c886dbfbb7379aa4d84d72a57734fde01fb9.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"entity": [
+								"Sky Merchant"
+							],
+							"block": [
+								"Advanced Coin Generator",
+								"Basic Coin Generator",
+								"Elite Coin Generator"
+							]
+						},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Coin generators — passive income blocks.\n\n### Added\n- **Three tiers of coin generator blocks**:\n  - **Basic** (emerald-textured) — 1 coin/min, sold for 500 coins\n  - **Advanced** (gold-textured) — 5 coins/min, sold for 3000 coins\n  - **Elite** (diamond-textured) — 15 coins/min, sold for 15000 coins\n- Each generator is a proper custom block with a block entity. When placed, it remembers the placer as its owner. Every production cycle, if the owner is online, it credits the owner's balance with the tier's coin amount. Offline owners' generators still tick but skip the payout (no infinite AFK farming).\n- **Placement restrictions**: generators can only be placed on your own island or on an island you're trusted on (enforced by the existing island protection). A per-island cap (default 5, configurable via `maxGeneratorsPerIsland`) prevents runaway inflation — extra placement attempts are rejected with an action-bar message.\n- **Merchant integration**: all three generators are added to the **General** merchant's default offers. Right-click any general merchant → BUY tab → click a generator icon.\n- Broken generators drop the block item (standard loot table), so relocation works normally.\n\n### Configuration\n- New field: `maxGeneratorsPerIsland` (default 5). Editable in Mod Menu.\n\n### Backward compatibility\n- Existing worlds keep working: no data structure changes to `IslandManager` or `EconomyManager`. Generator block entities appear only where players place them."
+		},
+		{
+			"tag": "v0.3.0-alpha.2",
+			"published": "2026-09-10T13:12:18Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 555047375,
+					"name": "skyblockcraft-0.3.0-alpha.2.jar",
+					"url": "https://github.com/Remilulz91/SkyblockCraft/releases/download/v0.3.0-alpha.2/skyblockcraft-0.3.0-alpha.2.jar",
+					"size": 72765,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "09d034329e395c75915e3f8c33a171c17bc6f93c0fad53dbd89953e7a4832c35",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "skyblockcraft",
+							"version": "0.3.0-alpha.2",
+							"name": "SkyblockCraft",
+							"description": "A classic Skyblock mod with a virtual coin economy and custom Sky Merchant villagers. Generate your own island, earn coins, and trade with merchants.",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"cloth-config",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "0d2bb2731e89c23bf814390ba485c886dbfbb7379aa4d84d72a57734fde01fb9.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"entity": [
+								"Sky Merchant"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 23,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Fixed\n- **`/island visit <self>` is now rejected** with a message pointing to `/island home` instead of silently teleporting to your own island."
+		},
+		{
+			"tag": "v0.3.0-alpha.1",
+			"published": "2026-09-10T12:58:43Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 555025500,
+					"name": "skyblockcraft-0.3.0-alpha.1.jar",
+					"url": "https://github.com/Remilulz91/SkyblockCraft/releases/download/v0.3.0-alpha.1/skyblockcraft-0.3.0-alpha.1.jar",
+					"size": 72708,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "537b7e0218c5ab206eb2a74d5fd56447b81d742c872c7ff69e1e291cb8270fd1",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "skyblockcraft",
+							"version": "0.3.0-alpha.1",
+							"name": "SkyblockCraft",
+							"description": "A classic Skyblock mod with a virtual coin economy and custom Sky Merchant villagers. Generate your own island, earn coins, and trade with merchants.",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"cloth-config",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "0d2bb2731e89c23bf814390ba485c886dbfbb7379aa4d84d72a57734fde01fb9.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"entity": [
+								"Sky Merchant"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 23,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Complete island system: protection, co-op trust, leveling, and leaderboard.\n\n### Added\n- **Island protection**: within a configurable protection radius (default 24 blocks around the island center — a 49×49 zone), only the owner and trusted players may break or place blocks. Other players see an action bar message and their action is cancelled. Interactions (chests, doors) remain unrestricted.\n- **Co-op trust**: `/island trust <player>`, `/island untrust <player>`, `/island trusted` (list). Trusted players have the same build/break rights as the owner on that island. Both players get chat feedback when a trust changes.\n- **Island level**: each block placed by an authorized player increments the island's `placedBlocks` counter; each block broken decrements it (clamped at 0). Level = `placedBlocks / blocksPerLevel` (default 100 blocks per level). Shown via `/island level`.\n- **Leaderboard**: `/island top` (or `/is top`) lists the top 10 islands by placed-block count with owner name (resolved via UserCache for offline players) and level.\n- **OP bypass**: config `opBypassIslandProtection` (default true) — permission-level-2+ players can build/break anywhere for admin convenience. Toggleable in Mod Menu.\n\n### Configuration\n- New fields: `protectionRadius` (default 24), `blocksPerLevel` (default 100), `opBypassIslandProtection` (default true). All editable in Mod Menu.\n\n### Backward compatibility\n- v0.1/v0.2 island records without `trustedPlayers` or `placedBlocks` fields load fine: trusted list starts empty, block counter starts at 0."
+		},
+		{
+			"tag": "v0.2.0-alpha.2",
+			"published": "2026-09-10T12:30:16Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 554975350,
+					"name": "skyblockcraft-0.2.0-alpha.2.jar",
+					"url": "https://github.com/Remilulz91/SkyblockCraft/releases/download/v0.2.0-alpha.2/skyblockcraft-0.2.0-alpha.2.jar",
+					"size": 64742,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "bbd7b4c1193a1d575b1091189d1ca45d53aa51212df1d5c49c5b0c63b3e6e948",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "skyblockcraft",
+							"version": "0.2.0-alpha.2",
+							"name": "SkyblockCraft",
+							"description": "A classic Skyblock mod with a virtual coin economy and custom Sky Merchant villagers. Generate your own island, earn coins, and trade with merchants.",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"cloth-config",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "0d2bb2731e89c23bf814390ba485c886dbfbb7379aa4d84d72a57734fde01fb9.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"entity": [
+								"Sky Merchant"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Fixed\n- **Sky Merchants are now truly invulnerable**. The previous `setInvulnerable(true)` on the villager entity was bypassed by creative-mode players and by damage sources tagged as bypassing invulnerability. Now handled via `ServerLivingEntityEvents.ALLOW_DAMAGE` which cancels all damage on any merchant entity, regardless of source.\n\n### Added\n- **`/skyblock remove merchant`** (OP): removes the closest Sky Merchant within a 20-block radius of the player. Needed because merchants can no longer be killed by attacking them."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 4,
+		"more": 0,
+		"people": [
+			{
+				"login": "Remilulz91",
+				"commits": 4,
+				"name": "Remilulz_91",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

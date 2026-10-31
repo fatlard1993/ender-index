@@ -1,0 +1,297 @@
+{
+	"repo": "SUKAI2355/DownedGunLock",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MPL-2.0",
+	"created": "2026-07-22T12:25:22Z",
+	"pushed": "2026-08-07T18:31:01Z",
+	"releases": [
+		{
+			"tag": "v1.3.0",
+			"published": "2026-08-07T18:31:01Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 505512236,
+					"name": "downedgunlock-1.3.0.jar",
+					"url": "https://github.com/SUKAI2355/DownedGunLock/releases/download/v1.3.0/downedgunlock-1.3.0.jar",
+					"size": 135848,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "4273b708d722ee79084008192231b4adf3b4ebaf4e9a98a4490faed7f18f2ea6",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "downedgunlock",
+							"version": "1.3.0",
+							"name": "Downed Gun Lock",
+							"description": "PlayerReviveでダウン中のプレイヤーによるVic's Point Blankの武器操作制限、指定エリア内での発砲禁止、スコアボードチームの全滅処理、全滅時・通常死亡時の自動リスポーンを追加する非公式互換MODです。",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"playerrevive",
+								"creativecore",
+								"pointblank",
+								"geckolib"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"No-Fire Region Selection Tool"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 56,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Downed Gun Lock 1.3.0\n\nMinecraft 1.20.1／Forge 47.4.10向けのアップデートです。\n\n1会場向けの試合管理機能を追加しました。コマンドブロックから試合の開始・一時停止・再開・終了を操作でき、制限時間やチーム別キル数をHUDへ表示できます。\n\n### 主な追加機能\n\n- コマンド実行と同時に試合を開始\n- 制限時間または経過時間を計測\n- 試合の一時停止・再開\n- スコアボードチーム別のキル集計\n- 全プレイヤー向けの右上HUD\n- 試合開始・一時停止・再開・終了のチャット通知\n- 試合終了時の中央タイトルと最終結果HUD\n- 時間切れまたは手動終了時に、設定したMinecraftコマンドを自動実行\n- 試合状態をワールドへ保存\n- サーバー再起動後は、試合を一時停止状態で安全に復元\n- 再接続・リスポーン後の試合復帰に対応\n\n### 試合コマンド\n\n設定：\n\n```text\n/gunlock match set name <試合名>\n/gunlock match set time <0 | 秒数s | 分数m | 時間数h>\n/gunlock match set end-command run <Minecraftコマンド>\n/gunlock match clear end-command\n/gunlock match team add <チーム名>\n/gunlock match team remove <チーム名>\n/gunlock match team list\n/gunlock match team clear\n/gunlock match info\n/gunlock match reset-settings\n```\n\n進行管理：\n\n```text\n/gunlock match start\n/gunlock match pause\n/gunlock match unpause\n/gunlock match end\n/gunlock match status\n```\n\nコマンドはOP権限レベル2以上、またはコマンドブロックから実行できます。\n\n### 試合時間\n\n```text\n90s = 90秒\n10m = 10分\n1h  = 1時間\n0   = 制限時間なし\n```\n\n制限時間を設定した場合は残り時間、`0`の場合は経過時間をHUDへ表示します。一時停止中も停止時点の時間とスコアを確認できます。\n\n### キル集計\n\nPlayerReviveによる完全死亡を基準に集計します。\n\n- 最後に有効なダメージを与えた敵チームへ1キル加算\n- 敵から攻撃された後の落下死・自滅・環境死も集計\n- リスポーン後に敵から攻撃されていない死亡は加算しない\n- 味方からの攻撃は記録しない\n- 蘇生、リスポーン、チーム退出・変更時にダメージ記録を消去\n- チーム全滅時の強制死亡も同じ規則で集計\n- 二重加算を防止\n\n全滅判定、自動リスポーン、ダウン中の武器操作制限は、試合状態にかかわらず常に有効です。\n\n### 試合終了処理\n\n時間切れまたは`/gunlock match end`で、以下の順番に処理します。\n\n1. 時間とキル集計を停止\n2. 終了時点の結果を確定\n3. チャット・中央タイトル・右上HUDへ結果を表示\n4. 設定済みの終了コマンドを1回実行\n\n終了コマンドはコマンドブロック相当の権限レベル2で実行します。\n\n既存の終了用コマンドブロックを起動する例：\n\n```text\n/gunlock match set end-command run setblock 100 64 -20 minecraft:redstone_block\n```\n\nリザルトは終了時点のチーム名・色・キル数を保存するため、その後にプレイヤーがチームから退出しても表示を維持します。\n\n### HUD・結果表示\n\n- 試合名\n- 残り時間または経過時間\n- 一時停止状態\n- チーム名とチームカラー\n- チーム別キル数\n- 終了時の順位と最終結果\n\n標準では、中央タイトルを5秒、右上の最終結果を30秒表示します。\n\n### 新しいコンフィグ\n\nワールド内の`serverconfig/downedgunlock-server.toml`から変更できます。\n\n```toml\n[match]\n    defaultName = \"Match\"\n    defaultTimeSeconds = 0\n    defaultTeams = []\n    defaultEndCommand = \"\"\n\n[matchDisplay]\n    endTitleDurationSeconds = 5\n    resultHudDurationSeconds = 30\n```\n\n`match`の値は、次のコマンドでゲーム内設定へ読み込めます。\n\n```text\n/gunlock match reset-settings\n```\n\n普段の試合設定はコマンドから変更できるため、変更のたびにサーバーを再起動する必要はありません。\n\n### セキュリティと安定性\n\n- 終了コマンドの権限をコマンドブロック相当のレベル2へ制限\n- 試合名、参加チーム数、終了コマンド長に上限を追加\n- コンフィグ、コマンド入力、保存データ、通信データを検証\n- 壊れた保存データを安全側へ補正\n- 異常な通信上のチーム数を拒否\n- Gradleを8.14.5へ更新\n- ForgeGradleを6.0.54へ固定\n- 前提MODとオンライン依存関係のSHA-256検証を追加\n- Windows、Intel Mac、Apple Silicon Macのビルドに対応\n\n### 対応環境\n\n- Minecraft 1.20.1\n- Forge 47.4.10\n- PlayerRevive 2.0.31\n- CreativeCore 2.12.39\n- Vic's Point Blank 1.11.1\n- GeckoLib 4.8.4\n\n記載したバージョン以外の依存MODでは起動しません。\n\n### 更新時の注意\n\n1.3.0はクライアントとサーバーの両方へ導入してください。\n\n試合HUD用の通信が追加されたため、1.2.x以前との通信互換性はありません。サーバーと全クライアントを同時に1.3.0へ更新してください。\n\n### 導入方法\n\n1. Forge 47.4.10を導入\n2. Downed Gun Lock 1.3.0と必要な4つの前提MODを`mods`フォルダへ配置\n3. サーバーとクライアントを起動\n4. バニラの`/team`で参加チームを作成\n5. `/gunlock match`コマンドで試合を設定\n\n既存の発砲禁止エリア、全滅判定、自動リスポーンの設定はそのまま引き継がれます。"
+		},
+		{
+			"tag": "v1.2.2",
+			"published": "2026-07-30T15:20:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 495517936,
+					"name": "downedgunlock-1.2.2.jar",
+					"url": "https://github.com/SUKAI2355/DownedGunLock/releases/download/v1.2.2/downedgunlock-1.2.2.jar",
+					"size": 91914,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "982f357c0b91e4beec10998db12764f8655ade21744a464f874b2f92fd01154e",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "downedgunlock",
+							"version": "1.2.2",
+							"name": "Downed Gun Lock",
+							"description": "PlayerReviveでダウン中のプレイヤーによるVic's Point Blankの武器操作制限、指定エリア内での発砲禁止、スコアボードチームの全滅処理、全滅時・通常死亡時の自動リスポーンを追加する非公式互換MODです。",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"playerrevive",
+								"creativecore",
+								"pointblank",
+								"geckolib"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"No-Fire Region Selection Tool"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 42,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Downed Gun Lock v1.2.2\n\nセキュリティ対策とチーム全滅処理の安定性を改善したアップデートです。\n\n## 変更内容\n\n- 改造クライアントから送信される未検証のエフェクト要求をサーバー側で拒否\n  - 発砲エフェクトなどの偽装送信を防止します\n- ダウン中のアタッチメント変更と関連画面の要求をサーバー側でも拒否\n- 複数チームの全滅確認が同時進行した際、チームを移動したプレイヤーのギブアップ制限や画面状態が誤って解除される問題を修正\n- 内部処理の安全性と状態管理を改善\n\n## 対応環境\n\n- Minecraft 1.20.1\n- Forge 47.4.10\n- PlayerRevive 2.0.31\n- CreativeCore 2.12.39\n- Vic's Point Blank 1.11.1\n- GeckoLib 4.8.4\n\n## 更新時の注意\n\nクライアントとサーバーの両方をv1.2.2へ更新してください。\n\n通信形式はv1.2.1と互換ですが、サーバー側の安全対策を確実に有効にするため、バージョンを混在させず全環境を更新することを推奨します。\n\n必要な依存MODはこのリリースへ同梱していません。それぞれの公式配布ページから入手してください。"
+		},
+		{
+			"tag": "v1.2.1",
+			"published": "2026-07-26T05:37:07Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 490082309,
+					"name": "downedgunlock-1.2.1.jar",
+					"url": "https://github.com/SUKAI2355/DownedGunLock/releases/download/v1.2.1/downedgunlock-1.2.1.jar",
+					"size": 89604,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "6c2f44337cd9244a86b42841f967e6f000748a1d27533c00197ea26d0ed77782",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "downedgunlock",
+							"version": "1.2.1",
+							"name": "Downed Gun Lock",
+							"description": "PlayerReviveでダウン中のプレイヤーによるVic's Point Blankの武器操作制限、指定エリア内での発砲禁止、スコアボードチームの全滅処理、全滅時・通常死亡時の自動リスポーンを追加する非公式互換MODです。",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"playerrevive",
+								"creativecore",
+								"pointblank",
+								"geckolib"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"No-Fire Region Selection Tool"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 40,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Downed Gun Lock v1.2.1\n\nダウンへ移行する瞬間のVic's Point Blank武器状態を見直し、特定条件で射撃や武器操作が継続する問題を修正しました。\n\n### 修正内容\n\n- ADSしながら射撃中にダウンすると、射撃が止まらず撃ち続けることがある問題を修正\n- ダウン中は入力キーの状態にかかわらず、銃の内部トリガーを継続的に停止\n- 射撃中、リロード中、投擲準備中などにダウンした場合、進行中の武器操作を即座に解除\n- グレネードなどを構えたままダウンすると、そのまま投擲される可能性がある問題を修正\n- ダウン直前に送信された以下の通信をサーバー側でも拒否\n  - 通常弾の射撃\n  - 実体弾の射撃\n  - 投擲\n  - ADS開始\n  - リロード\n  - 射撃モード変更\n- 射撃直後の武器持ち替えによって、サーバー側のダウン判定を回避できる可能性を修正\n- ADS解除通信は許可し、ほかのプレイヤーから見たADS状態が残らないよう調整\n\n### 導入時の注意\n\nクライアントとサーバーの両方をv1.2.1へ更新してください。\n\n通信形式はv1.2.0と互換性がありますが、サーバー側の射撃・投擲防止処理を有効にするため、サーバー側も必ず更新することを推奨します。\n\n### 対応環境\n\n- Minecraft 1.20.1\n- Forge 47.4.10\n- PlayerRevive 2.0.31\n- CreativeCore 2.12.39\n- Vic's Point Blank 1.11.1\n- GeckoLib 4.8.4"
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-07-25T08:50:10Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 489307345,
+					"name": "downedgunlock-1.2.0.jar",
+					"url": "https://github.com/SUKAI2355/DownedGunLock/releases/download/v1.2.0/downedgunlock-1.2.0.jar",
+					"size": 85428,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "db3dc99808e1d5df92b78ebf51b05a5a868b2fda5e9b35fb9433e1fa57a94c79",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "downedgunlock",
+							"version": "1.2.0",
+							"name": "Downed Gun Lock",
+							"description": "PlayerReviveでダウン中のプレイヤーによるVic's Point Blankの武器操作制限、指定エリア内での発砲禁止、スコアボードチームの全滅処理、全滅時・通常死亡時の自動リスポーンを追加する非公式互換MODです。",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"playerrevive",
+								"creativecore",
+								"pointblank",
+								"geckolib"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"No-Fire Region Selection Tool"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 37,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Downed Gun Lock 1.2.0\n\n発砲禁止エリア機能を追加しました。\n\n管理者がWorldEditのように2地点を選択し、その範囲内でVic's Point Blankの銃を発砲できないように設定できます。\n\n## 主な変更\n\n- 直方体の発砲禁止エリアを追加\n- 専用の金の斧による2地点選択に対応\n- 複数エリア・複数ディメンションに対応\n- エリア情報をワールドへ自動保存\n- 通常弾と実体弾の両方をサーバー側でも拒否\n- エリア内でのフルオート射撃を即座に停止\n- エリア境界のパーティクル表示に対応\n- 日本語を含むエリア名に対応\n\n発砲禁止エリア内では射撃だけが禁止されます。ADS、リロード、射撃モード変更、アタッチメント操作、グレネードなどの投擲は引き続き使用できます。\n\n## 管理コマンド\n\n```text\n/gunlock wand\n/gunlock pos1\n/gunlock pos2\n/gunlock create <エリア名>\n/gunlock redefine <エリア名>\n/gunlock delete <エリア名>\n/gunlock list\n/gunlock info <エリア名>\n/gunlock show <エリア名>\n/gunlock help\n```\n\n`/gunlock wand`で範囲選択ツールを入手できます。\n\n- 左クリック：地点1を選択\n- 右クリック：地点2を選択\n- `/gunlock create <エリア名>`：選択範囲を登録\n\n管理コマンドの使用にはOPレベル2以上が必要です。\n\n## 発砲禁止の判定\n\n- 発砲者の足元がエリア内にある場合に射撃を禁止\n- エリア内から外への射撃は禁止\n- エリア外から中への射撃は許可\n- スペクテイターは制限対象外\n- クリエイティブとOPも通常は制限対象\n\n## 対応環境\n\n- Minecraft 1.20.1\n- Forge 47.4.10\n- PlayerRevive 2.0.31\n- CreativeCore 2.12.39\n- Vic's Point Blank 1.11.1\n- GeckoLib 4.8.4\n\n## アップデート時の注意\n\n1.2.0はクライアントとサーバーの両方へ導入してください。\n\n1.1.xとは通信互換性がありません。異なるバージョンが混在している場合は接続を拒否します。\n\n依存MODはリリースファイルへ同梱されていないため、それぞれの公式配布ページから導入してください。"
+		},
+		{
+			"tag": "v1.1.1",
+			"published": "2026-07-23T20:29:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 487607398,
+					"name": "downedgunlock-1.1.1.jar",
+					"url": "https://github.com/SUKAI2355/DownedGunLock/releases/download/v1.1.1/downedgunlock-1.1.1.jar",
+					"size": 55103,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "a2c71478a8ad5b30901e23dffb27c7e19f4a66fac0b1d153de4a326abc070b94",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "downedgunlock",
+							"version": "1.1.1",
+							"name": "Downed Gun Lock",
+							"description": "PlayerReviveでダウン中のプレイヤーによるVic's Point Blankの射撃、ADS、リロード、射撃モード変更などを禁止し、スコアボードチームの全滅処理と、全滅時・通常死亡時の自動リスポーンを実行する非公式互換MODです。",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"playerrevive",
+								"creativecore",
+								"pointblank",
+								"geckolib"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 23,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Downed Gun Lock v1.1.1\n\n通常死亡時の自動リスポーンを追加し、全滅時と通常死亡時で表示・待機時間を個別に設定できるようになりました。\n\n## 主な変更\n\n- 通常死亡時にも `3 → 2 → 1` のカウントダウン後、自動でリスポーン\n- 通常死亡時のカウントダウンを画面中央に表示\n- 通常死亡時はバニラの死亡理由とスコア表示を維持\n- 全滅時の死亡画面を「チームが全滅しました」へ変更\n- 全滅チャット通知のチーム名に、スコアボードのチーム色を反映\n- 全滅時と通常死亡時のリスポーン待機時間を個別設定可能に変更\n- ログアウト・再接続時のカウントダウン同期を改善\n- 通信プロトコルを更新\n\n## 設定\n\nワールドの `serverconfig/downedgunlock-server.toml` から変更できます。\n\n```toml\n[teamWipe]\n    wipeConfirmationSeconds = 1\n    autoRespawnDelaySeconds = 3\n    broadcastTeamWipe = true\n\n[normalDeath]\n    autoRespawnDelaySeconds = 3\n```\n\n- `teamWipe.autoRespawnDelaySeconds`：全滅時の待機時間\n- `normalDeath.autoRespawnDelaySeconds`：通常死亡時の待機時間\n\nどちらもデフォルトは3秒です。\n\n## 更新時の注意\n\n通信内容が変更されているため、クライアントとサーバーの両方をv1.1.1へ更新してください。\n\nv1.1.0との混在接続には対応していません。\n\n## 対応環境・必要MOD\n\n- Minecraft 1.20.1\n- Forge 47.4.10\n- PlayerRevive 2.0.31\n- CreativeCore 2.12.39\n- Vic's Point Blank 1.11.1\n- GeckoLib 4.8.4\n\n必要MODはリリースJARに同梱されていません。各公式配布ページから導入してください。\n\n## ファイル\n\n`downedgunlock-1.1.1.jar`\n\nSHA-256:\n\n`A2C71478A8AD5B30901E23DFFB27C7E19F4A66FAC0B1D153DE4A326ABC070B94`"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "Downed Gun Lock は、Minecraft 1.20.1 / Forge 47.4.10 向けの非公式互換 MOD です。PlayerRevive でダウン中のプレイヤーによる Vic's Point Blank の武器操作制限、管理者が指定したエリア内での発砲禁止、スコアボードチームの全滅判定、全滅時・通常死亡時の自動リスポーンを追加します。",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 19,
+		"more": 0,
+		"people": [
+			{
+				"login": "SUKAI2355",
+				"commits": 19,
+				"name": "SUKAI",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

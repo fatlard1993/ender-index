@@ -1,0 +1,167 @@
+{
+	"repo": "SynderisDev/Ore-Renewal",
+	"host": "github",
+	"description": "Safely apply newly added ore generation to existing Minecraft 1.21.1 chunks",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-07-29T10:46:18Z",
+	"pushed": "2026-08-31T14:49:10Z",
+	"releases": [
+		{
+			"tag": "v1.0.2",
+			"published": "2026-07-29T13:25:49Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 494072108,
+					"name": "ore_renewal-1.0.2.jar",
+					"url": "https://github.com/SynderisDev/Ore-Renewal/releases/download/v1.0.2/ore_renewal-1.0.2.jar",
+					"size": 38573,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "d45483eda9b6c2b1ef24bebb829fa79f924ddfe2d589d04961f9136866f43cb5",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "ore_renewal",
+							"version": "1.0.2",
+							"name": "Ore Renewal",
+							"description": "Safely applies newly added underground ore features to existing chunks without forcing players to explore farther.",
+							"minecraft": "[1.21.1,1.21.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 13,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Ore Renewal 1.0.2 fixes queue starvation found while visually checking the End and Nether in the DTS S2 inspection world.\n\n### Fixed\n\n- `only_when_tick_has_time=true` can no longer defer the queue forever on a consistently busy server. After 20 deferred ticks, one chunk is attempted.\n- Newly loaded player neighborhoods are prioritized ahead of large startup backlogs created by chunk loaders.\n- Queue promotion remains deduplicated and is covered by regression tests.\n\n### DTS S2 validation\n\nThe original failure showed 6,345 queued chunks with zero processed. With 1.0.2, the same inspection save advanced past 2,900 processed chunks, 5,221 feature runs, and 2,314 successful placements with zero failures before the final queue tail drained.\n\nA direct region scan after a clean save found:\n\n- Nether: 138,058 Extreme Reactors Benitoite and 13,226 Draconic Evolution Nether Draconium blocks.\n- End: 15,187 Extreme Reactors Anglesite, 10,572 Draconic Evolution End Draconium, 56,353 Mekanism Extras End Naquadah, and 51,080 Oritech Endstone Platinum blocks.\n\nMystical Agriculture 8.0.27 itself registers Inferium and Prosperity only in `#is_overworld` biomes and only supplies stone/deepslate targets. Ore Renewal therefore correctly does not schedule those two placed features in the Nether or End for this installed version.\n\nSHA-256: `D45483EDA9B6C2B1EF24BEBB829FA79F924DDFE2D589D04961F9136866F43CB5`"
+		},
+		{
+			"tag": "v1.0.1",
+			"published": "2026-07-29T12:30:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 494020289,
+					"name": "ore_renewal-1.0.1.jar",
+					"url": "https://github.com/SynderisDev/Ore-Renewal/releases/download/v1.0.1/ore_renewal-1.0.1.jar",
+					"size": 36475,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "6af98fbcb7b4746eb14515317b97eec238e9d775d8632b2629ead662dded6bf4",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "ore_renewal",
+							"version": "1.0.1",
+							"name": "Ore Renewal",
+							"description": "Safely applies newly added underground ore features to existing chunks without forcing players to explore farther.",
+							"minecraft": "[1.21.1,1.21.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Ore Renewal 1.0.1 adds the established-world workflow requested for long-running modpacks with a mixed ore-mod history.\n\n### What is new\n\n- First install in an established world can conservatively recover already-installed non-vanilla ore features.\n- Historical features are skipped per chunk when their output ore is already present.\n- Mods added later remain straightforward: newly detected placed-feature IDs become an exact persisted revision automatically.\n- Ore discovery now requires an ore-tagged or ore-named output, preventing terrain features that reuse Minecraft's ore generator from being treated as ores.\n- Mekanism's custom resizable ore feature is explicitly supported.\n- `additional_safe_ore_features` allows exact opt-in for genuine resources without an ore tag/name.\n- `/ore_renewal apply-all-modded` and `/ore_renewal checkpoint` were added for operators.\n\n### Validation\n\nTested on Minecraft 1.21.1 / NeoForge 21.1.235 in a copy of the existing **DTS S2 CS-Finale 24** world.\n\n- Historical pass: 1,752 chunks, 11,545 feature runs, 9,385 successful placements, 22,439 already-present skips, 0 failures.\n- Mystical Agriculture was then added afterward: exactly Inferium and Prosperity were detected as the next revision; 4,864 chunks, 9,728 feature runs, 0 failures.\n- Direct region comparison against the untouched original found 196,451 Mystical ore blocks in 1,595 chunks that were already fully generated. Every one replaced an active ore-target block and none was outside its configured height margin.\n\nBack up important worlds before using any world-migration mod. Minecraft does not record whether an ordinary stone/deepslate block was player-placed, so no retrogen system can infer every historical edit perfectly.\n\nSHA-256: `6AF98FBCB7B4746EB14515317B97EEC238E9D775D8632B2629EAD662DDED6BF4`"
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-07-29T10:46:34Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 493927485,
+					"name": "ore_renewal-1.0.0.jar",
+					"url": "https://github.com/SynderisDev/Ore-Renewal/releases/download/v1.0.0/ore_renewal-1.0.0.jar",
+					"size": 29419,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "7bd8e27826a92b61ddd2e839e2b256b6a6e0f8468c98ef3b69e41e17b29553a7",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "ore_renewal",
+							"version": "1.0.0",
+							"name": "Ore Renewal",
+							"description": "Safely applies newly added underground ore features to existing chunks without forcing players to explore farther.",
+							"minecraft": "[1.21.1,1.21.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 10,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Initial public release for Minecraft 1.21.1 on NeoForge. Detects newly added ore features, applies them to existing chunks, preserves completed migration state, and includes tested compatibility with Mystical Agriculture and Mekanism. Back up worlds before any retrogen operation."
+		}
+	],
+	"readme": "README.md",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 4,
+		"more": 0,
+		"people": [
+			{
+				"login": "SynderisDev",
+				"commits": 4,
+				"name": "Synderis",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

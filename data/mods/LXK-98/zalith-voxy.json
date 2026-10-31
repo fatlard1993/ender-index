@@ -1,0 +1,83 @@
+{
+	"repo": "LXK-98/zalith-voxy",
+	"host": "github",
+	"description": "Run the Voxy LOD mod on Android — Minecraft: Java Edition with far render distances on Adreno phones and handhelds, via Zalith Launcher 2 (PojavLauncher family)",
+	"stars": 6,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-08-09T22:05:20Z",
+	"pushed": "2026-08-11T20:17:16Z",
+	"releases": [
+		{
+			"tag": "v0.1.0",
+			"published": "2026-08-11T19:38:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 510558744,
+					"name": "voxy-android-compat-0.2.0.jar",
+					"url": "https://github.com/LXK-98/zalith-voxy/releases/download/v0.1.0/voxy-android-compat-0.2.0.jar",
+					"size": 4956,
+					"downloads": 332,
+					"inspection": 2,
+					"sha256": "daf67aefbd8f3f608569c7668a6cc9745c90b61920a49aa75e22a0adc73e9208",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "voxy-android-compat",
+							"version": "0.2.0",
+							"name": "Voxy Android Compat",
+							"description": "Makes Voxy usable on Android: survives the missing libc.so.6, and defaults new worlds and servers to a storage backend that exists on this platform.",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"voxy"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 3,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Voxy — a level-of-detail renderer that needs desktop OpenGL 4.6 — running on Android under\nZalith Launcher 2.\n\n## Read this first\n\n**Tested on exactly one device:** AYN Odin 3, Snapdragon 8 Elite, **Adreno 830**, Android 15.\nEverything else is an educated guess. Reports either way are welcome — there is a\n**Device report** issue template, and successes are as useful as failures.\n\n- **Adreno 7xx/8xx and arm64 only.** The stack is Mesa Turnip, a Qualcomm Adreno driver. Mali and\n  PowerVR will not work.\n- **Frame rate has never been measured.** Everything here is verified correct, nothing is verified\n  fast. Two workarounds knowingly cost performance.\n- **Storage grows fast** — several GB per world, quicker still with Voxy World Gen V2.\n\n## What is in this release\n\n| File | Install as |\n|---|---|\n| `turnip-plugin.apk` | app — Vulkan driver plugin |\n| `kopper-zink26-plugin.apk` | app — desktop GL renderer plugin |\n| `rocksdb-native-plugin.apk` | app — RocksDB natives, so LODs persist to disk |\n| `voxy-android-compat-*.jar` | Minecraft mod, into the instance's `mods/` |\n| `zink-env-plugin.apk` | optional, debugging aid |\n\nVerify downloads against `SHA256SUMS`. The mod is also on Modrinth as\n[Voxy Android Compatibility](https://modrinth.com/project/voxy-android-compatibility); the APKs are\nonly here, since Modrinth cannot host them.\n\nNot included, install yourself: **Fabric API**, **Sodium 0.9.1+mc26.1.2** (Voxy pins this exactly),\n**Voxy 0.2.18-beta**, and optionally Iris 1.11.3+ and Lithium.\n\n## Setup in short\n\nInstall the three APKs, put the mod plus Voxy/Sodium/Fabric API in `mods/`, then set the instance's\n**Renderer** to Kopper Zink, **Driver** to Turnip, **Graphics API** to OpenGL.\n\n⚠️ **Global settings → \"Prefer system Vulkan driver\" must be OFF.** It is applied independently of\nthe renderer plugin, so it silently overrides everything else, and the proprietary driver's shader\ncompiler crashes on Voxy's shaders.\n\nFull instructions, verification steps and a symptom-to-cause troubleshooting table are in the\n[README](https://github.com/LXK-98/zalith-voxy#readme).\n\n## Reporting problems\n\nUse the launcher's **Share Logs** button on the crash screen — no adb needed. Please do not dig out\n`hs_err_pid*.log` files and attach them raw: they embed a **live Minecraft access token**.\n\n---\n\n\n**Full Changelog**: https://github.com/LXK-98/zalith-voxy/compare/prebuilt-libs...v0.1.0"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [
+		"docs/images/rocksdb-persistent-lod.png",
+		"docs/images/turnip-linear-world.png",
+		"docs/images/turnip-linear.png",
+		"docs/images/turnip-rd2-world.png",
+		"docs/images/voxy-lod-with-shaders.png"
+	],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 14,
+		"more": 0,
+		"people": [
+			{
+				"login": "LXK-98",
+				"commits": 14,
+				"name": "Alex",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

@@ -6,8 +6,792 @@
 	"archived": false,
 	"license": "NOASSERTION",
 	"created": "2026-06-25T11:05:43Z",
-	"pushed": "2026-10-30T11:48:00Z",
+	"pushed": "2026-10-31T17:03:36Z",
 	"releases": [
+		{
+			"tag": "1.2.2-NeoFML",
+			"published": "2026-10-31T17:03:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 695955999,
+					"name": "offlineskins-reloaded-1.21.1-NeoForge-1.2.2.jar",
+					"url": "https://github.com/VoreZ78/OfflineSkins-Reloaded/releases/download/1.2.2-NeoFML/offlineskins-reloaded-1.21.1-NeoForge-1.2.2.jar",
+					"size": 288499,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "ef30333fc8062bf030adc05fe89fb10a139b01972df4bcb22cb931e436e33b21",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "offlineskins_reloaded",
+							"version": "1.2.2",
+							"name": "OfflineSkins Reloaded",
+							"description": "OfflineSkins Reloaded for NeoForge.\nCaches player skins and capes for offline use.\n\nWith the user-friendly menu!",
+							"minecraft": "[1.21.1]",
+							"environment": "client",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": "81af7959f580240c68f405d7e00044c18d11281a249d62a9f6fcf105fbfd1ffb.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 63,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"vorez/lib/SimpleDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/MojangService$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/Utils/RangeUtils.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/network/SmartInternetCheck.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								],
+								"vorez/network/URLConnectionValidator.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"example.com": [
+								"vorez/mods/skins/impl/ConfigOptions.class"
+							],
+							"api.mojang.com": [
+								"vorez/mods/skins/impl/MojangService$1.class"
+							],
+							"raw.githubusercontent.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"discord.gg": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"github.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"www.curseforge.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"modrinth.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"skinsystem.ely.by": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"auth.tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class"
+							],
+							"crafatar.com": [
+								"vorez/mods/skins/providers/CrafatarCapeProvider.class",
+								"vorez/mods/skins/providers/CrafatarSkinProvider.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Added support for NeoForge and fix for 1.2.0 issue\nFixed 1.2.0  URLs saving process\n- 1.2.0\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```\n\n- 1.2.2\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerSkin = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```"
+		},
+		{
+			"tag": "1.2.2-FML",
+			"published": "2026-10-31T16:57:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 695943640,
+					"name": "offlineskins-reloaded-1.20.1-Forge-1.2.2.jar",
+					"url": "https://github.com/VoreZ78/OfflineSkins-Reloaded/releases/download/1.2.2-FML/offlineskins-reloaded-1.20.1-Forge-1.2.2.jar",
+					"size": 292950,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "7d065951158702663efbc625ad7db0004275d511c1bc72919c74b4047765bc4a",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "offlineskins_reloaded",
+							"version": "1.2.2",
+							"name": "OfflineSkins Reloaded",
+							"description": "OfflineSkins Reloaded for Forge.\nCaches player skins and capes for offline use.\n\nWith the user-friendly menu!",
+							"minecraft": "[1.20.1]",
+							"environment": "client",
+							"depends": [
+								"forge",
+								"minecraft",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": "81af7959f580240c68f405d7e00044c18d11281a249d62a9f6fcf105fbfd1ffb.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 65,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"vorez/lib/SimpleDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/MojangService$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/Utils/RangeUtils.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/network/SmartInternetCheck.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								],
+								"vorez/network/URLConnectionValidator.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"example.com": [
+								"vorez/mods/skins/impl/ConfigOptions.class"
+							],
+							"skinsystem.ely.by": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"auth.tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class"
+							],
+							"api.mojang.com": [
+								"vorez/mods/skins/impl/MojangService$1.class"
+							],
+							"raw.githubusercontent.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"discord.gg": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"github.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"www.curseforge.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"modrinth.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"crafatar.com": [
+								"vorez/mods/skins/providers/CrafatarCapeProvider.class",
+								"vorez/mods/skins/providers/CrafatarSkinProvider.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Added support for NeoForge and fix for 1.2.0 issue\nFixed 1.2.0  URLs saving process\n- 1.2.0\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```\n\n- 1.2.2\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerSkin = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```"
+		},
+		{
+			"tag": "1.2.2-Fabric-Main",
+			"published": "2026-10-31T16:53:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 695935016,
+					"name": "offlineskins-reloaded-26.3-Fabric-1.2.2.jar",
+					"url": "https://github.com/VoreZ78/OfflineSkins-Reloaded/releases/download/1.2.2-Fabric-Main/offlineskins-reloaded-26.3-Fabric-1.2.2.jar",
+					"size": 301337,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "7257383e49390a920ad460062415d3ce530383b4d30ed33559d3fb6bfa0e5541",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "offlineskins-reloaded",
+							"version": "1.2.2",
+							"name": "OfflineSkins Reloaded",
+							"description": "Cache your local skins and capes for offline play!\n\nOriginally created by zlainsama (LainMI).",
+							"minecraft": "26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"yet_another_config_lib_v3",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": "81af7959f580240c68f405d7e00044c18d11281a249d62a9f6fcf105fbfd1ffb.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 68,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"vorez/lib/SimpleDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/MojangService$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/Utils/RangeUtils.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/network/SmartInternetCheck.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								],
+								"vorez/network/URLConnectionValidator.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"example.com": [
+								"vorez/mods/skins/impl/ConfigOptions.class"
+							],
+							"api.mojang.com": [
+								"vorez/mods/skins/impl/MojangService$1.class"
+							],
+							"raw.githubusercontent.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"discord.gg": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"github.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"www.curseforge.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"modrinth.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"skinsystem.ely.by": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"auth.tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class"
+							],
+							"crafatar.com": [
+								"vorez/mods/skins/providers/CrafatarCapeProvider.class",
+								"vorez/mods/skins/providers/CrafatarSkinProvider.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Fixed 1.2.0  URLs saving process\n- 1.2.0\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```\n\n- 1.2.2\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerSkin = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```"
+		},
+		{
+			"tag": "1.2.2-Fabric-5",
+			"published": "2026-10-31T16:52:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 695931829,
+					"name": "offlineskins-reloaded-26.2-Fabric-1.2.2.jar",
+					"url": "https://github.com/VoreZ78/OfflineSkins-Reloaded/releases/download/1.2.2-Fabric-5/offlineskins-reloaded-26.2-Fabric-1.2.2.jar",
+					"size": 301445,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "8f6dc9eb18be9021e61462f05911f0ed248949d727978db8217fdb2627f00cc6",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "offlineskins-reloaded",
+							"version": "1.2.2",
+							"name": "OfflineSkins Reloaded",
+							"description": "Cache your local skins and capes for offline play!\n\nOriginally created by zlainsama (LainMI)",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"yet_another_config_lib_v3",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": "81af7959f580240c68f405d7e00044c18d11281a249d62a9f6fcf105fbfd1ffb.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 68,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"vorez/lib/SimpleDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/MojangService$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/Utils/RangeUtils.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/network/SmartInternetCheck.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								],
+								"vorez/network/URLConnectionValidator.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"example.com": [
+								"vorez/mods/skins/impl/ConfigOptions.class"
+							],
+							"api.mojang.com": [
+								"vorez/mods/skins/impl/MojangService$1.class"
+							],
+							"raw.githubusercontent.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"discord.gg": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"github.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"www.curseforge.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"modrinth.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"skinsystem.ely.by": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"auth.tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class"
+							],
+							"crafatar.com": [
+								"vorez/mods/skins/providers/CrafatarCapeProvider.class",
+								"vorez/mods/skins/providers/CrafatarSkinProvider.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Fixed 1.2.0  URLs saving process\n- 1.2.0\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```\n\n- 1.2.2\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerSkin = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```"
+		},
+		{
+			"tag": "1.2.2-Fabric-4",
+			"published": "2026-10-31T16:50:34Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 695927068,
+					"name": "offlineskins-reloaded-26.1-26.1.2-Fabric-1.2.2.jar",
+					"url": "https://github.com/VoreZ78/OfflineSkins-Reloaded/releases/download/1.2.2-Fabric-4/offlineskins-reloaded-26.1-26.1.2-Fabric-1.2.2.jar",
+					"size": 301382,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "50f01a4e76c16fb0f7d9b811c4c4ca6f74c69fd49aaecec4d3cfff9778e474db",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "offlineskins-reloaded",
+							"version": "1.2.2",
+							"name": "OfflineSkins Reloaded",
+							"description": "Cache your local skins and capes for offline play!\n\nOriginally created by zlainsama (LainMI)",
+							"minecraft": ">=26.1 <=26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"yet_another_config_lib_v3",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": "81af7959f580240c68f405d7e00044c18d11281a249d62a9f6fcf105fbfd1ffb.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 68,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"vorez/lib/SimpleDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/MojangService$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/Utils/RangeUtils.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/network/SmartInternetCheck.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								],
+								"vorez/network/URLConnectionValidator.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"example.com": [
+								"vorez/mods/skins/impl/ConfigOptions.class"
+							],
+							"api.mojang.com": [
+								"vorez/mods/skins/impl/MojangService$1.class"
+							],
+							"raw.githubusercontent.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"discord.gg": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"github.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"www.curseforge.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"modrinth.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"skinsystem.ely.by": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"auth.tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class"
+							],
+							"crafatar.com": [
+								"vorez/mods/skins/providers/CrafatarCapeProvider.class",
+								"vorez/mods/skins/providers/CrafatarSkinProvider.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Fixed 1.2.0  URLs saving process\n- 1.2.0\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```\n\n- 1.2.2\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerSkin = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```"
+		},
+		{
+			"tag": "1.2.2-Fabric-3",
+			"published": "2026-10-31T16:47:26Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 695921280,
+					"name": "offlineskins-reloaded-1.21.11-Fabric-1.2.2.jar",
+					"url": "https://github.com/VoreZ78/OfflineSkins-Reloaded/releases/download/1.2.2-Fabric-3/offlineskins-reloaded-1.21.11-Fabric-1.2.2.jar",
+					"size": 306929,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "9256747fb133234d95761e2ecea8fb7bb1a87c95bf74bc2744c6b28a385f7271",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "offlineskins-reloaded",
+							"version": "1.2.2",
+							"name": "OfflineSkins Reloaded",
+							"description": "Cache your local skins and capes for offline play!\n\nOriginally created by zlainsama (LainMI)",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"yet_another_config_lib_v3",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": "81af7959f580240c68f405d7e00044c18d11281a249d62a9f6fcf105fbfd1ffb.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 68,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"vorez/lib/SimpleDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/MojangService$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/Utils/RangeUtils.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/network/SmartInternetCheck.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								],
+								"vorez/network/URLConnectionValidator.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"example.com": [
+								"vorez/mods/skins/impl/ConfigOptions.class"
+							],
+							"skinsystem.ely.by": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"auth.tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class"
+							],
+							"api.mojang.com": [
+								"vorez/mods/skins/impl/MojangService$1.class"
+							],
+							"raw.githubusercontent.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"discord.gg": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"github.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"www.curseforge.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"modrinth.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"crafatar.com": [
+								"vorez/mods/skins/providers/CrafatarCapeProvider.class",
+								"vorez/mods/skins/providers/CrafatarSkinProvider.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Fixed 1.2.0  URLs saving process\n- 1.2.0\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```\n\n- 1.2.2\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerSkin = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```"
+		},
+		{
+			"tag": "1.2.2-Fabric-2",
+			"published": "2026-10-31T16:46:21Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 695918429,
+					"name": "offlineskins-reloaded-1.21.10-Fabric-1.2.2.jar",
+					"url": "https://github.com/VoreZ78/OfflineSkins-Reloaded/releases/download/1.2.2-Fabric-2/offlineskins-reloaded-1.21.10-Fabric-1.2.2.jar",
+					"size": 306983,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "5ab1a6744b4b70029483b19b97e2865361a9670f68b5e25e7e849ef97b4d8dea",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "offlineskins-reloaded",
+							"version": "1.2.2",
+							"name": "OfflineSkins Reloaded",
+							"description": "Cache your local skins and capes for offline play!\n\nOriginally created by zlainsama (LainMI)",
+							"minecraft": "1.21.10",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"yet_another_config_lib_v3",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": "81af7959f580240c68f405d7e00044c18d11281a249d62a9f6fcf105fbfd1ffb.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 68,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"vorez/lib/SimpleDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/MojangService$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/Utils/RangeUtils.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/network/SmartInternetCheck.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								],
+								"vorez/network/URLConnectionValidator.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"example.com": [
+								"vorez/mods/skins/impl/ConfigOptions.class"
+							],
+							"skinsystem.ely.by": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"auth.tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class"
+							],
+							"api.mojang.com": [
+								"vorez/mods/skins/impl/MojangService$1.class"
+							],
+							"raw.githubusercontent.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"discord.gg": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"github.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"www.curseforge.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"modrinth.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"crafatar.com": [
+								"vorez/mods/skins/providers/CrafatarCapeProvider.class",
+								"vorez/mods/skins/providers/CrafatarSkinProvider.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Fixed 1.2.0  URLs saving process\n- 1.2.0\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```\n\n- 1.2.2\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerSkin = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```"
+		},
 		{
 			"tag": "1.2.2-Fabric-1",
 			"published": "2026-10-30T11:48:00Z",
@@ -120,7 +904,7 @@
 					}
 				}
 			],
-			"notes": "Fixed 1.2.0  URLs save process\n- 1.2.0\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```\n\n- 1.2.2\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerSkin = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```"
+			"notes": "Fixed 1.2.0  URLs saving process\n- 1.2.0\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```\n\n- 1.2.2\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerSkin = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```"
 		},
 		{
 			"tag": "1.2.0-MAIN",

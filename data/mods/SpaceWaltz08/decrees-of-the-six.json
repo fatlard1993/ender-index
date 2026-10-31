@@ -1,0 +1,238 @@
+{
+	"repo": "SpaceWaltz08/decrees-of-the-six",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2025-12-09T10:13:48Z",
+	"pushed": "2025-12-11T20:22:20Z",
+	"releases": [
+		{
+			"tag": "v0.2.1",
+			"published": "2025-12-11T20:23:44Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 327527918,
+					"name": "decrees_of_the_six-1.21.1-0.2.1.jar",
+					"url": "https://github.com/SpaceWaltz08/decrees-of-the-six/releases/download/v0.2.1/decrees_of_the_six-1.21.1-0.2.1.jar",
+					"size": 2659949,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "f22ecd69edbae6f10ec2fae17f5cd2237383fa09a0361573b281c0d92e4f517e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "decrees_of_the_six",
+							"version": "0.2.1",
+							"name": "SpaceWaltz – Decrees of the Six",
+							"description": "A governance and economy framework: councils of six, decrees, reputation, and player-driven law.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 60,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [v0.2.1] – Guilds, Treasury & Hexarchate Panel\n\n### New: Player Guilds (Phase 2 foundations)\n- Added fully persistent **Guilds** as first-class entities:\n  - Unique guild ID, name, leader, members and 5 ranks: `Leader / Officer / Veteran / Member / Recruit`.\n  - Each guild has its own **Treasury account** in the economy system.\n- Core guild commands:\n  - `/guild create <name>` – found a new guild (one guild per player).\n  - `/guild invite <player>` / `/guild accept` / `/guild deny` – invite-based join flow.\n  - `/guild leave` – members can leave; leaders must transfer or disband.\n  - `/guild kick <player>` – Leader and Officers can remove lower-rank members.\n  - `/guild promote <player>` / `/guild demote <player>` – rank management within the 5-step ladder.\n- Guild settings & flavour:\n  - `/guild setmotd <text>` – set a guild description / MOTD.\n  - `/guild setopen <true|false>` – prepare for future open-join behaviour.\n  - `/guild setmax <number>` – optional member cap (stored now, enforced later).\n  - `/guild settitle <leader|officer|veteran|member|recruit> <title>` – **per-guild custom rank titles** (e.g. “Archon”, “First Blade”, etc.).\n\n### New: Guild Treasury + Economy Integration\n- Every guild now has a dedicated **SYSTEM Treasury account** created at guild creation.\n- Economy-backed commands:\n  - `/guild balance` – shows the guild Treasury balance (Gold / Silver / Copper).\n  - `/guild deposit <G> <S> <C>` – transfer from your personal account into the guild Treasury.\n  - `/guild withdraw <G> <S> <C>` – **Leader-only** withdrawal from Treasury back to their personal account.\n- All guild money flows use the existing Phase 1 economy backend (`EconomyStore`, `EconomyService`, `TransactionType`).\n\n### New: Vox Imperion Guild Tools\n- The **Vox Imperion** council seat (or server ops) gains admin-side guild controls:\n  - `/vox guild info <name>` – inspect any guild: leader, member breakdown, and Treasury balance.\n  - `/vox guild setleader <guild> <player>` – force-transfer guild leadership.\n  - `/vox guild disband <guild>` – forcibly disband a guild; remaining funds are redirected to the **Council Treasury**.\n  - `/vox guild rename <guild> <newName>` – emergency rename for trolling / violations.\n- Vox commands are bound to the **Vox Imperion** seat via the existing council permission system (plus fallback for ops).\n\n### New: Hexarchate Panel – Guild Tab (G-key UI)\n- The in-game **Hexarchate Panel** (opened with the G key) now has **two tabs**:\n  - **Ledger** – existing player economy overview.\n  - **Guild** – new tab for guild status.\n- Guild tab displays:\n  - Guild name and **your custom rank title**.\n  - Leader name (resolved from UUID when possible).\n  - Member counts by rank: total members + Officers / Veterans / Members / Recruits.\n  - Guild Treasury balance formatted as G/S/C.\n  - Pending invite count if you are not yet in a guild.\n- Guild tab actions:\n  - **Deposit** – opens chat prefilled with `/guild deposit ` to send funds to the Treasury.\n  - **Leave Guild** – sends `/guild leave` for quick exit.\n  - **Invites** – shows `Invites (X)` when you have pending invites and opens chat with `/guild accept`.\n\n### Networking & Persistence\n- Added guild snapshot networking for the UI:\n  - `GuildSnapshotRequestC2SPayload` (client → server) requests a fresh guild snapshot.\n  - `GuildSnapshotS2CPayload` (server → client) sends a compact summary of the player’s guild + Treasury.\n  - `GuildNetworking` (server) and `GuildClientNetworking` + `ClientGuildState` (client) mirror the existing economy snapshot pattern.\n- `GuildStore` is loaded on server start and saved on clean shutdown alongside `EconomyStore`, ensuring guilds and their treasuries persist between restarts.\n- Ensured a player can effectively be **in only one guild at a time**; helper logic keeps membership maps and the player→guild mapping consistent, even under Vox overrides.\n\n### Notes / Limitations (by design for 0.2.1)\n\n..."
+		},
+		{
+			"tag": "v0.2.0",
+			"published": "2025-12-11T16:16:07Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 327443768,
+					"name": "decrees_of_the_six-1.21.1-0.2.0.jar",
+					"url": "https://github.com/SpaceWaltz08/decrees-of-the-six/releases/download/v0.2.0/decrees_of_the_six-1.21.1-0.2.0.jar",
+					"size": 2616440,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "8dd7117ec4413d8704039c301b7f799f436ae730b70619d1d9bf437d1b8273fb",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "decrees_of_the_six",
+							"version": "0.2.0",
+							"name": "SpaceWaltz – Decrees of the Six",
+							"description": "A governance and economy framework: councils of six, decrees, reputation, and player-driven law.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 47,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [0.2.0] – Economy Foundations (Phase 1)\n\n### New – Core Currency & Accounts\n- Added a **server-side global currency system** with three denominations:\n  - Gold, Silver, Copper (backed by a single internal “copper” value).\n  - Currency **name is configurable** (e.g. “Scales”) while the G/S/C structure is fixed.\n- Introduced **persistent accounts**:\n  - Each player automatically gets an account on first join (balance starts at 0).\n  - Added a dedicated **Treasury account** for server-side operations.\n- All balances and transactions are saved as part of the mod’s economy data and are written on world save / clean shutdown.\n\n### New – Transaction & Ledger Model\n- Every movement of money is now stored as a **typed transaction**:\n  - `PLAYER_PAYMENT`, `ADMIN_GRANT`, `ADMIN_SEIZE`, plus Treasury operations.\n- Added helper rules:\n  - No negative balances allowed.\n  - Zero or negative transfer amounts are rejected with clear error messages.\n  - Transfers to offline players are supported (by UUID).\n  - Self-payments are blocked as invalid.\n- Introduced internal helpers to convert between **copper ↔ Gold/Silver/Copper** for both storage and display.\n\n### New – Player Commands\n- **`/money`**  \n  - `/money` or `/money balance` shows **your balance** in compact G/S/C format, e.g.  \n    `Balance: 1G 4S 50C Scales`.\n- **`/money pay <player> <amount>`**  \n  - Pays another player from your account.\n  - `<amount>` accepts:\n    - Plain copper: `150` (150C).\n    - Coin strings: `10g`, `5s`, `20c`, or combinations like `1g 4s 50c`.\n  - Command validates:\n    - Target exists.\n    - Amount is > 0.\n    - Sender has enough funds.\n  - Both sender and receiver get coloured chat messages showing **full G/S/C breakdown**.\n\n### New – Admin / Operator Commands\n> Replaces the old `/ledger` namespace to avoid conflicts with other mods.\n\n- **`/moneyadmin grant <player> <amount>`**  \n  - Mints currency directly into a player’s account.  \n  - Uses the same G/S/C amount syntax as `/money pay` (`1g 4s 50c`, `250`, etc.).\n  - Logged as an `ADMIN_GRANT` transaction.\n- **`/moneyadmin seize <player> <amount>`**  \n  - Removes money from a player’s account (to Treasury or burn, depending on config / rule).  \n  - Same G/S/C amount syntax.  \n  - Logged as `ADMIN_SEIZE`.\n- **`/moneyadmin treasury`**  \n  - Shows the **Treasury account balance** in G/S/C.\n- **`/moneyadmin log [count]`**  \n  - Shows the latest N transactions (default ~10–20), each line with:\n    - Timestamp.\n    - Amount in Gold/Silver/Copper (e.g. `+1G 4S 50C Scales`).\n    - From → To.\n    - Transaction type tag (payment / grant / seizure / treasury op).\n- **`/economy help`**  \n  - Lists all economy-related commands and basic usage.\n- **`/economy reload`**  \n  - Reloads the economy config (currency name, conversion rates, etc.) without restarting the server.\n\n### New – G-Key Economy Panel (Client UI)\n- Bound a new **G-key panel** (client-side) that talks to the server via Fabric networking:\n  - Opens/closes with **G**.\n  - **Header**:\n    - Player name (or seat label).\n    - Current balance in **G/S/C** with the configured currency name.\n  - **Ledger tab**:\n    - Title: “Recent Transactions”.\n    - Displays the last 5–10 transactions relevant to that player, each showing:\n      - Signed amount in G/S/C (e.g. `+1G 4S 50C`).\n      - Counterparty (“from System”, “to Treasury”, other player names, etc.).\n      - Transaction type in brackets (`(payment)`, `(grant)`, `(seizure)`).\n- Visuals:\n  - Removed the blurred world background; the panel now uses a **solid dark rect** for readability while still letting the world be faintly visible around it.\n  - All text colours are tuned so they remain readable even at dusk/night in-game.\n\n### Internal / Technical\n- Added dedicated **economy networking payloads** for snapshot requests:\n  - Client sends a “snapshot request” when the G-panel opens.\n  - Server responds with balance + recent transactions as a compact payload.\n- Centralised all economy logic into:\n\n..."
+		},
+		{
+			"tag": "v0.1.3",
+			"published": "2025-12-09T22:36:30Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 326584115,
+					"name": "decrees_of_the_six-1.21.1-0.1.3.jar",
+					"url": "https://github.com/SpaceWaltz08/decrees-of-the-six/releases/download/v0.1.3/decrees_of_the_six-1.21.1-0.1.3.jar",
+					"size": 2574489,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "71886910b99bf0cf271b92ce001c992e56d5cb8e8a0e399955cd8cc711b3ae61",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "decrees_of_the_six",
+							"version": "0.1.3",
+							"name": "SpaceWaltz – Decrees of the Six",
+							"description": "A governance and economy framework: councils of six, decrees, reputation, and player-driven law.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 28,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Added **configurable council ceremony sound** via `ceremonySound` in `council.json`.  \n  - Supports custom sound events like `decrees_of_the_six:council_chime` (e.g. ElevenLabs chime bundled as `council_chime.ogg`).\n  - Plays to all online players when the council is created or reconvened, without chat spam.\n- Standardized decree messaging through `Messenger` with a consistent `[Hexarchate]`-style prefix.\n- Added clickable vote hints when a decree enters voting:\n  - Council members now see `Cast your vote: [Yes] [No] [Abstain]` buttons, which prefill `/decrees decree vote <id> <yes/no/abstain>`.\n- Improved listing & browsing:\n  - `/decrees decree list status <draft|voting|enacted|rejected|cancelled> [page]` to filter by status.\n  - `/decrees decree list active [page]` and `/decrees decree list my [page]` now support pagination.\n- Updated `/decrees help` to reflect all current commands and subcommands."
+		},
+		{
+			"tag": "v0.1.2",
+			"published": "2025-12-09T19:33:18Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 326525626,
+					"name": "decrees_of_the_six-1.21.1-0.1.2.jar",
+					"url": "https://github.com/SpaceWaltz08/decrees-of-the-six/releases/download/v0.1.2/decrees_of_the_six-1.21.1-0.1.2.jar",
+					"size": 1752086,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "22ae3575b3d6ae5fef19357196cd2127b7c0f68fd6af581a9bc0500d6fca5be6",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "decrees_of_the_six",
+							"version": "0.1.2",
+							"name": "SpaceWaltz – Decrees of the Six",
+							"description": "A governance and economy framework: councils of six, decrees, reputation, and player-driven law.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 27,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 0.1.2\n\n- Added paginated decree list (`/decrees decree list [page]`).\n- Added paginated history view (`/decrees history [page]`).\n- Improved decree listing to a compact, color-coded one-line format with vote counts.\n- Minor UX polish for messages and status displays."
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "A Fabric server-side governance, voting, lightweight economy, and guild system designed for council-style roleplay servers.",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 7,
+		"more": 0,
+		"people": [
+			{
+				"login": "SpaceWaltz08",
+				"commits": 7,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

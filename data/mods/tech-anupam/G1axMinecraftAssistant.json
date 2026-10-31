@@ -1,0 +1,99 @@
+{
+	"repo": "tech-anupam/G1axMinecraftAssistant",
+	"host": "github",
+	"description": "An autonomous, tool-using AI agent client mod for Minecraft 1.21.x Fabric. G1axMinecraftAssistant brings advanced reasoning capability directly inside your client, enabling game state awareness, real recipe calculation, mod config editing, performance analysis, and automated optimization.",
+	"stars": 0,
+	"archived": false,
+	"license": "CC0-1.0",
+	"created": "2026-06-16T10:01:39Z",
+	"pushed": "2026-07-29T09:49:20Z",
+	"releases": [
+		{
+			"tag": "1.21.x",
+			"published": "2026-06-16T10:21:57Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 449087887,
+					"name": "g1axminecraftassitant-1.0.0.jar",
+					"url": "https://github.com/tech-anupam/G1axMinecraftAssistant/releases/download/1.21.x/g1axminecraftassitant-1.0.0.jar",
+					"size": 1833481,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "9a8d4412fa831a9900d2772209f6c7e66d64e9be700e5cda4a2262514d3beee9",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "g1axminecraftassitant",
+							"version": "1.0.0",
+							"name": "G1axMinecraftAssitant",
+							"description": "AI-powered Minecraft assistant with inventory awareness and crafting guidance",
+							"minecraft": "~1.21",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 32,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/g1ax/agent/llm/Http.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"generativelanguage.googleapis.com": [
+								"dev/g1ax/agent/llm/GeminiProvider.class"
+							],
+							"api.groq.com": [
+								"dev/g1ax/agent/llm/GroqProvider.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 🤖 G1axMinecraftAssistant\nAI-Powered ReAct Agent Mod for Minecraft 1.21 Fabric\n\n**G1axMinecraftAssistant** is a next-generation client-side Fabric mod that integrates an advanced tool-using AI assistant directly into your Minecraft chat. Powered by a dynamic **ReAct (Reasoning and Acting)** loop, this mod doesn't just chat — it observes your game state, calculates real crafting recipes, and modifies performance configs on the fly.\n\n---\n\n## 🎬 See It In Action\n\nThe agent narrates each tool call live (the `»` lines) as it works toward your answer.\n\n**You:** `/mcai how do I craft a hopper, and what am I missing?`\n```text\n» get_inventory\n» lookup_recipe: hopper\n» check_craftable: hopper\n[G1axAssistant] A hopper needs 5 iron ingots + 1 chest.\nYou have 2/5 iron ingots and 1 chest. Missing: 3 iron ingots.\n```\n\n**You:** `/mcai trust on` then `/mcai give me the iron I'm missing`\n```text\n» run_command: /give @s minecraft:iron_ingot 3\n[G1axAssistant] Done — gave you 3 iron ingots. Your hopper is craftable now.\n```\n\nOne prompt → a chain of tool calls → a grounded answer. The agent decides the chain itself.\n\n---\n\n## 🌟 Key Features\n\n### 🧠 Autonomous ReAct Loop\nG1axMinecraftAssistant thinks and acts. When you ask a question, the agent determines what information it needs, calls appropriate tools, reads the observations, and repeats this process until it has the perfect answer.\n\n### 🎒 Live Game & Inventory Awareness\nNever query recipes blindly. The assistant checks your inventory using actual game registries:\n- Compares required recipe ingredients against your live inventory (`get_inventory`).\n- Calculates exactly what's missing and gives mining tips, Y-levels, biome locations, and tool dependencies.\n\n### ⚙️ Performance Optimization & System Scanner\nSqueeze max FPS from your client:\n- Automatically scans hardware specs, render settings, and entities (`get_performance`).\n- Scans mod list and available configurations (`list_mods`, `list_configs`).\n- Edits config files directly (e.g. Sodium settings) with automatic backups.\n- Checks error/warn logs (`scan_logs`) and processes crash dumps (`scan_crashes`).\n\n### 🛡️ Safe Mode by Default\nSecurity first! Action-oriented tools (`run_command`, `send_chat`, `write_config`) are blocked in Safe Mode. The AI will preview what it wants to do and ask for permission. Enable Trust Mode (`/mcai trust on`) to unlock fully autonomous command execution and configuration adjustments.\n\n### 🔄 Multi-Provider Support & Failover\nSupports **Groq** and **Gemini** API integrations. Set keys for both, and the mod automatically fails over from Groq (Llama 3.3) to Gemini (Gemini 2.0 Flash) if rate limits or API issues occur. It even auto-retries on rate limits honoring the provider's suggested delay.\n\n---\n\n## 🛠️ Full Tool Suite (16 tools)\n\n**Observe:** `get_inventory` · `get_player_state` · `get_world_info` · `get_nearby_entities` · `look_at_block`\n**Knowledge (real recipe data):** `lookup_recipe` · `check_craftable`\n**System & Config:** `get_performance` · `list_mods` · `list_configs` · `read_config` · `write_config` · `scan_logs` · `scan_crashes`\n**Act (safe-by-default):** `run_command` · `send_chat`\n\n---\n\n## 💬 Command Directory\n\nAsk questions by prefixing public chat with `@ai <message>` or use client commands:\n\n```text\n/mcai <message>              - Query the agent\n@ai <message>                - Query directly inside public chat\n/mcai config                 - Opens the config GUI screen\n/mcai toggle                 - Enable/disable the AI listener\n/mcai reset                  - Clears the conversation memory context\n/mcai status                 - Shows active LLM provider, keys status, and trust mode\n/mcai trust <on|off>         - Allows or previews in-game actions\n/mcai key <groq|gemini> <key> - Configures API keys\n/mcai provider <auto|groq|gemini> - Pick provider preference\n/mcai analyze                - Triggers performance analysis\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "custom",
+			"url": "https://anupambuilds.store/donate",
+			"from": "owner-repositories"
+		}
+	],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 5,
+		"more": 0,
+		"people": [
+			{
+				"login": "tech-anupam",
+				"commits": 5,
+				"name": "Anupam Jha",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

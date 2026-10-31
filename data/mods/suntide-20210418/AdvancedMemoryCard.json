@@ -1,0 +1,294 @@
+{
+	"repo": "suntide-20210418/AdvancedMemoryCard",
+	"host": "github",
+	"description": "An Applied Energistics 2 (AE2) add-on mod that supercharges the AE2 Memory Card with two major features: bulk configuration copying and advanced P2P tunnel management.",
+	"stars": 8,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2026-02-03T08:49:28Z",
+	"pushed": "2026-10-31T01:35:00Z",
+	"releases": [
+		{
+			"tag": "1.2.1-1.21.1",
+			"published": "2026-10-31T01:30:07Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 693998153,
+					"name": "advanced_memory_card-1.2.1-1.21.1.jar",
+					"url": "https://github.com/suntide-20210418/AdvancedMemoryCard/releases/download/1.2.1-1.21.1/advanced_memory_card-1.2.1-1.21.1.jar",
+					"size": 233154,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "f3055e2b9bb48795d736f51c25510668befc03bcbe5faabee15669e74681665e",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "advanced_memory_card",
+							"version": "1.2.1-1.21.1",
+							"name": "Advanced Memory Card",
+							"description": "This is a simple mod for ae2",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"ae2"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Advanced Memory Card"
+							],
+							"group": [
+								"Advanced Memory Card"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 83,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- feat(p2p): 新增「设为输入端」切换通道输入侧，发布 1.2.1-1.21.1 (6fc032b)\n- feat(copy): 复制模式粘贴选项面板与 1.1.0-1.21.1 发布 (#40) (d1cbd05)"
+		},
+		{
+			"tag": "1.1.0-1.7.10-GTNH",
+			"published": "2026-10-31T00:32:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 693882288,
+					"name": "advanced_memory_card-1.1.0-1.7.10-GTNH-git+0ca60aa95e-dirty.jar",
+					"url": "https://github.com/suntide-20210418/AdvancedMemoryCard/releases/download/1.1.0-1.7.10-GTNH/advanced_memory_card-1.1.0-1.7.10-GTNH-git%2B0ca60aa95e-dirty.jar",
+					"size": 181363,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "a148192f108169eaf57baf4e5fcca344284dac43735926f2e9097f0efe942b40",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Advanced Memory Card"
+							],
+							"group": [
+								"Advanced Memory Card"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 85,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Advanced Memory Card 1.1.0 (1.7.10 / GTNH)\n\n支持 Minecraft 1.7.10 + Applied Energistics 2 (GTNH · rv3)。客户端与服务端都需要安装。\n\n## 新功能\n\n- **粘贴选项面板**：复制模式下新增 7 项可勾选的粘贴内容（设置、优先级、配置物品、样板、P2P 类型、P2P 频率、名称），以及「复制后自动弹出」开关。按 `G` 打开。\n- **选择性粘贴**：只把勾选的项写进目标，未勾选的项保持目标原值。此前是整包覆盖。\n- **潜行右键复制**：对 AE 方块、AE 部件、P2P 隧道都可用；复制成功后按设置自动弹出选项面板。\n- **P2P 高亮**：颜色改由客户端配置解析，服务端只下发「自身 / 输入端 / 输出端」语义，多人环境下不再使用服务端的颜色值。\n\n## 修复\n\n- 修复右键被 AE2 原生内存卡逻辑接管：AE 方块上的点击不会进入本模组代码，表现为「就是原版内存卡」。现在在 `PlayerInteractEvent` 层接管，客户端与服务端各走自己的包。\n- 修复潜行右键会清空整张卡：AE2 的 `ToolMemoryCard#onItemUse` 在潜行时执行 `setTagCompound(null)`，会把模式与粘贴选项一起抹掉，导致卡片悄悄退回默认模式。\n- 修复打开本模组 GUI 后右键方块导致服务端崩溃（`Cannot read field \"slotNumber\" because \"slot\" is null`）：容器补上屏幕外的玩家背包槽位。\n- 修复频段改名不生效：改名确认走了错误分支，请求根本没发出；同时为查找失败补了回退路径，并在改名后标记宿主保存。\n- 修复 P2P 树按频段排序时的 `NumberFormatException`（频段是 64 位，不能用 `Integer.parseInt`）。\n- 修复工具提示里 `\\n` 原样显示的问题。\n\n## 交互约定\n\n- 右键**方块**：复制模式打点 / 配置模式打开面板\n- 右键**空气**：粘贴\n- **V**：切换复制 / 配置模式\n- **G**：打开粘贴选项\n\n## 已知限制\n\n- 跨类型 P2P 换型在 AE2 rv3 上没有就地修改入口，需要拆件重建；不支持的组合会被跳过并在结果里提示跳过数量。"
+		},
+		{
+			"tag": "1.2.0-1.21.1",
+			"published": "2026-10-28T05:33:38Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 683953399,
+					"name": "advanced_memory_card-1.2.0-1.21.1.jar",
+					"url": "https://github.com/suntide-20210418/AdvancedMemoryCard/releases/download/1.2.0-1.21.1/advanced_memory_card-1.2.0-1.21.1.jar",
+					"size": 229628,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "f41e3f4f497e4e47326b8f570eb782a303878edc68774f86f0b5b62e6d850ab4",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "advanced_memory_card",
+							"version": "1.2.0-1.21.1",
+							"name": "Advanced Memory Card",
+							"description": "This is a simple mod for ae2",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"ae2"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Advanced Memory Card"
+							],
+							"group": [
+								"Advanced Memory Card"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 82,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Minecraft** 1.21.1 · **NeoForge** 21.1.219+ · **AE2** 1.21.1 line (developed against 19.2.17)\n\n> 完整日志见仓库 [CHANGELOG.md](https://github.com/suntide-20210418/AdvancedMemoryCard/blob/suntide/1.21.1/CHANGELOG.md)。\n\n**配置模式界面重做**：把「选设备 → 点选择 → 找频段 → 点绑定」这条跨视图、只存在于服务端字段里的链路，改成屏幕上看得见的配对流。\n\n### 新增\n\n- **配对条**：顶部常驻「源 → 目标」两槽。点选列表里的设备即成为源，点选频段行（或下拉）即成为目标，箭头在两者齐备时点亮。源槽的 × 把配对源退回打开界面时右键的那一台。\n- **频段下拉**：目标槽可点开频段列表（按频段号排序），底部是「新建频段…」。列表超长时可用滚轮滚动。\n- **状态行**：每次操作都有回执。「已绑定到 0A1B」/「没有源设备」/「0000 不是可绑定频段」/「网络未就绪」——以前这些都只有一个静默的 `return`，玩家只能靠重读界面猜。\n- **检查器状态 chip**：连接状态、输入/输出、频道占用放在面板最上面；属性表降到 6 行。\n- **就地改名**：改名时其余属性继续显示（以前一进编辑态整块信息消失），Esc 取消。\n- **跟随选中**：点选设备后列表自动展开到它并选中；已在可视区则不滚动。绑定后设备换组，也会跟到新位置。\n- **传送按钮**：检查器第 4 格新增「传送」，由服务端直接把玩家送到该 P2P 部件所在位置（支持跨维度，实心宿主块会落到顶面）。落位之后客户端会等坐标真正同步过来（跨维度还要等新维度加载完），再点亮这台设备并把视角转向它 —— 直接紧跟动作包发送时用的是旧坐标，跨维度时新维度的方块实体也还不存在；这里的转头刻意不受 `rotateHeadOnHighlight` 约束（那项只管高亮；传送是玩家主动发起的位移，落点贴着设备，不转头等于落地即迷路）。这是一项可选的越权能力，默认关闭：服务端配置 `allowTeleport = false` 时按钮整格隐藏，服务端也会拒绝伪造的传送包。频段节点没有自己的位置，因此不提供传送按钮。\n\n### 改变\n\n- **列表改为四列**：状态点 / 名称 / 频段 / 汇总。缩进从 2px/级 改为 10px/级，频段与汇总右对齐，超宽按像素截断并补省略号（以前被 scissor 硬裁且无省略号，剩余频道经常被切掉）。\n- **按钮不再漂移**：取消 3×2 六宫格，主操作固定为底部右下角的「绑定」，其余动作收进检查器的 2×2 次级按钮。以前同一个像素位在不同节点类型下含义完全不同（第 1 槽在设备上是「改名」，在类型上是「刷新」）。\n- **「选择」的副作用被拆开**：以前它改的是 `p2pTunnelPartBinding`，而那个字段同时是网络扫描的锚点 —— 换配对目标会顺带把整个界面切到另一张网络。现在配对目标独立存放，扫描锚点只在打开界面时确定。\n- **角色按钮语义修正**：「待绑定」实际执行的是「定位到待绑定设备」，已随旧按钮一并移除。\n- **「高亮」与「定位」合并**：点一次「高亮」现在依次做三件事 —— 在世界里点亮、关掉界面、把视角转向目标。顺序是刻意的：位置信息的动作包要在关界面之前发出（关界面会立刻发出容器关闭包，之后服务端不再受理这个 menu 的动作）；界面要在下一帧渲染前撤掉，否则会看到「界面还在、世界已经亮起」；转头放最后，因为它改的是玩家朝向，界面还开着时会被 GUI 的鼠标捕获抵消。转头仍受 `[client.highlight] rotateHeadOnHighlight` 控制，关掉它的玩家不会被强行掰头。\n- **按钮换位**：检查器第 2 格从「定位」改为「改名」（改名原先在第 4 格），第 4 格改为「传送」。频段行同样换位（第 2 格改名），但不提供传送 —— 频段本身没有位置，只剩三格内容；类型行第 1 格仍是「高亮」（退化为该类型第一台输入端设备），第 2 格仍是「初始化 P2P」，只在 ME P2P 下出现，第 4 格是「传送」（目标是该类型下第一台输入端设备）。\n- **聊天栏不再附带传送链接**：高亮只发位置信息。旧链接本质是 `/execute in <dim> run tp @p …` 命令，需要 OP 或开启作弊；现在传送由服务端 API 执行，是否允许完全由 `allowTeleport` 决定，与权限等级解耦。\n- **频段高亮列出两端**：以前点频段节点的高亮只把输入端写进聊天栏，玩家看不到频道最终流向哪几台设备。现在输入端与输出端分两段全部列出，每行带「输入」/「输出」标记。\n- **列表只在新数据到达时重建**：以前每 tick 重建一次（20 次/秒），现在跟随同步包（2 次/秒）。\n- **频道占用显示在设备行**：ME P2P 设备的汇总列显示频道占用，并带「入 / 出」前缀区分角色。输入端显示自己外部网络的已用/总数；输出端显示「本输出已用 / (输入端剩余 + 本输出已用)」——分母是这条频段还能分给它的份额度。非 ME 设备没有这个概念，仍显示输入/输出角色。频段行保持「台数 + 剩余频道」，非 ME 频段没有频道概念，只报台数（以前显示「余 0」等于把「没有这个概念」画成了「剩余为零」）。\n- **频道占用不再出现三元组**：详情面板删掉「已用/剩余/总数: a/b/c」那一行（频段节点与类型节点都有），统一成头部一枚 `已用/总数` chip + 底部一根进度条，且只对输出设备 / ME 频段显示。\n- **类型名改为部件译名**：树上与详情里的 `me_p2p_tunnel` / `item_p2p_tunnel` 这类资源路径，改为读对应部件的物品名（「ME P2P 隧道」「物品 P2P 隧道」…），搜索也支持按译名匹配。\n- **绑定后保留目标频段**：绑完一台设备目标槽不再被清空，可以接着选下一台绑到同一个频段。\n- **换配对源保留目标频段**：点选另一台设备时不再清空已选目标；只有目标频段与新设备的 **P2P 类型不同**时才清空。判断依据从「上一台源设备」改为「目标频段自身的类型」——源设备要等服务端回包才更新，连点时读到的是旧值，正是此前同类型切换也会被清空的原因。\n- **频段下拉按类型过滤**：目标槽的下拉列表只列「当前配对源所在类型」下的频段（判定看该频段里有没有同类型设备，兼容 AE2 允许的混装频段）。\n- **目标槽可开可合**：再点一次目标槽收起频段列表，点别处同样收起（此前浮层与槽口各管一半状态，点第二下会「先关再开」，等于永远展着）。\n- **改名后即时刷新**：设备改名与频段别名改名之后立刻重扫一次网络，树与检查器马上反映新名字。\n- **Ctrl 多选批量绑定**：按住 Ctrl 点选多台设备，源槽显示「已选 N 台」，回车或「绑定」一次绑完（服务端逐台绑定，第一台成为该频段输入端，其余成为输出端）。多选**只允许同类型** —— 点到不同类型的设备时，之前选中的全部取消；多选行的底色比单选浅一档并带绿色左边条，避免和单选混淆。\n- **Ctrl 拖动框选**：按住 Ctrl 从某一行按下左键往上或往下拖，覆盖到的设备会**改变选中状态**而不是一律加上：从一台未选中的设备起手是「扫过即选中」，从一台已选中的设备起手是「扫过即取消选中」，整段拖动只朝一个方向走。**从频段行起手时整条频段的两端一起算**（频段折叠着也能选，不必先展开）。每次拖动都从按下瞬间的快照重算，所以往回拖会把多出来或少掉的行还原；划过类型标题不会把整个类型选上；跨类型时只收同类型的设备，与 Ctrl 点选同一条规则。指针划出列表上下边界时会在最上 / 最下一行停住，不会顺手把滚出视野的设备也选进来（想多选就边拖边滚轮）。拖动过程中配对条的「已选 N 台」实时跟随，不用等下一次同步包。\n- **批量操作模式**：底部操作条在「绑定」左边新增「批量操作」按钮，点一下进入批量模式，按钮文字变为「退出批量操作」并点亮，再点一次才退出。模式里不用一直按着 Ctrl：单击设备就是加选 / 取消加选，按住左键拖动照样框选；**点或拖到频段行都会把该频段下所有设备收进多选**（整条已全选时再点一次整条退掉）。批量模式下频段行的展开 / 折叠改用**右键** —— 左键已经被「选中设备」占用，不能再兼职折叠。按住 Ctrl 点频段行或类型行也能直接进这个模式，类型行仍然只负责展开折叠、不选设备。退出模式不会清空已选设备 —— 批量选完正好接着挑目标频段去绑定。\n- **类型行不再提供高亮与传送**：P2P 类型行只是分组标题，高亮或传送都需要先挑一台具体设备，用「该类型第一台」代替等于替玩家猜，所以这两格直接去掉，类型行只保留「初始化 P2P」与「刷新」。\n\n### 修复\n\n\n..."
+		},
+		{
+			"tag": "1.1.0-1.12.2",
+			"published": "2026-10-27T12:19:54Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 681515594,
+					"name": "advanced_memory_card-1.1.0-1.12.2.jar",
+					"url": "https://github.com/suntide-20210418/AdvancedMemoryCard/releases/download/1.1.0-1.12.2/advanced_memory_card-1.1.0-1.12.2.jar",
+					"size": 176332,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "37e17ad493a9c2f575d01be50dcefc3c55cb49d26f3cfe566674cf9c84904d68",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Advanced Memory Card"
+							],
+							"group": [
+								"Advanced Memory Card"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 77,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Minecraft** 1.12.2 · **Forge** 14.23.5.2860 或更高 · **AE2** AE2 Extended Life（`570458:6302098`）\n\n把 1.20.1 / 1.21.1 线的两项核心能力回移到 1.12.2：**复制模式的选择性粘贴**与**完整的 P2P 频段仲裁**，并让两个界面改用与 1.21.1 相同的贴图与布局。\n\n### 新增\n\n- **复制模式：粘贴选项面板（7 项开关）**：复制到卡片之后、批量粘贴之前，可以逐项决定这一次要应用哪些配置。\n\n| 选项 | 作用 |\n| --- | --- |\n| 设置 | 输出面、模糊模式等通用配置（`IConfigManager`） |\n| 优先级 | 存储总线 / 接口等的优先级 |\n| 配置物品 | 过滤、标记等配置槽内容 |\n| 样板 | 接口的样板槽 |\n| P2P 类型 | P2P 隧道类型（换型时会拆掉重建，见下） |\n| P2P 频率 | P2P 频段 |\n| 名称 | 方块的自定义名 |\n\n- **`G` 键**：手持卡片且处于复制模式时打开面板，键位可在「控制 → 按键绑定 → 高级内存卡」中修改。\n- **复制后自动弹出**：默认在每次复制（Shift + 右键把设置复制进卡片）后自动弹出；目标不是 AE 方块或线缆部件时不会弹。\n- **选项按卡保存**：勾选结果与「自动弹出」开关都存在卡片根标签的 `copy_options` 下，切换模式、重新复制、退出存档都不会丢。\n- **P2P 换型**：卡片上的 P2P 类型与目标不同且勾选了「P2P 类型」时，按 AE2 自己的内存卡流程（`removeTunnel` → `removePart` → `addPart`）重建部件，并保留原来的输入/输出角色；频段按卡片决定。\n- **界面与 1.21.1 同版**：配置模式与粘贴选项两个界面都复用 1.21.1 的面板贴图与 `assets/ae2/screens/*.json` 里的坐标，不再手绘深色底。\n  - 粘贴选项：`copy_mode_menu.png` 176×181，标题 (10,10)，选项行 left 10 / width 150 / height 14 / 步进 19 / 首行 top 24；复选框用 `checkbox.png` 的四个 22×12 状态格（含悬停）。\n  - P2P 配置：`config_mode_menu.png` 352×282，标题 (7,7)、底部提示 (7,269)、搜索框 (7,25,120,12)、树 (15,53,152,200)、滚动条 (169,53)、详情 (184,53,152,210)。\n- **控件点击音效**：复选框、P2P 树节点、详情面板按钮统一走同一个音效入口。\n\n### 修复\n\n- **复制后不弹面板**：1.12.2 的复制发生在方块交互里（`AEBaseTileBlock#onBlockActivated`），方块交互吃掉右键后 `Item#onItemUse` 根本不会执行，原来挂在 `onItemUse` 里的 `openGui` 是死代码。现在由模组自己完成复制（方块 `downloadSettings`、部件 `onActivate`），成功后再按开关弹面板。\n- **复选框不显示、配置面板与控件错位**：1.12.2 的 `Gui#drawTexturedModalRect` 把 UV 写死成 1/256，只对 256×256 的贴图成立。64×64 的复选框因此采到透明区（整块看不见），512×512 的配置面板则 UV 越过 1.0 环绕（显示成另一块区域）。已改为按真实尺寸计算 UV。\n- **复选框整体发灰发暗**：贴图四边形不带顶点色，取的是固定管线的「当前颜色」；标题文字（`0x404040`）与悬停高亮（`0x22000000`）都会改掉它且不还原。现在画贴图前显式复位颜色。\n- **点击后界面要重开才刷新**：复制模式的容器是空容器（没有任何槽位），服务端改写卡片 NBT 后不会触发 `SPacketSetSlot`，客户端读到的永远是旧值。现在菜单持有权威选项并主动下发同步包。\n- **P2P 改名不落盘**：`setCustomName` 只改部件持有的 ItemStack 显示名，不会自己写存档；现在显式 `markForSave`。\n- **把设备绑到「未连接(0000)」等于静默解绑**：`0000` 是未绑定分组，现在直接拒绝，不再把设备写进 `freq=0` 的公共通道。\n- **绑定第二个设备时不再产生两个输入端**：角色仲裁现在对所有 P2P 类型统一执行（旧实现跳过了 ME P2P），目标频段已有其他输入端时，当前设备作为输出端。\n- **分配新频道的中断风险**：旧实现先把频段写成 `0` 再分配，两次写入之间被打断（区块卸载、退出存档）会留下「已绑定设备变成未绑定」。现在一次性换到新频段。\n- **粘贴不再走 `uploadSettings`**：该方法把「缺少键」当成「清空目标」（优先级缺键即 0、配置槽缺键即清空），且 `TileInterface#uploadSettings` 会把接口样板退还成空白样板、只有背包里有空白样板时才恢复样板。选择性粘贴需要「没勾选的项保持原值」，因此改为按项直接写目标字段。\n\n### 注意（行为变化）\n\n- **未配置过的卡片默认「全不选」**：粘贴不再改动任何可选项。第一次使用请按 `G` 勾选需要应用的内容；掩码为 0 时粘贴只给提示，不消耗选区。\n- **「升级」不在选项里**：AE2 1.12.2 的 `downloadSettings` 从不导出 `upgrades`（全仓没有对应的 `writeToNBT`），卡片里没有这段数据。与其放一个永远空转的开关，不如不提供。\n- **「名称」对方块有效，对部件无效**：部件侧的 `downloadSettings` 不写 `display` 段，卡片里没有这个数据；此时保持目标原名，不会清空。\n- **P2P 换型会拆掉原部件**：这是 AE2 自己的内存卡行为（`PartP2PTunnel#onPartActivate`），升级卡不会跟着走。\n\n### 文档\n\n- README 按 1.21.1 的结构重写，并修正了从 1.20.1 分支带过来的错误徽章与前置要求（此前写着 Minecraft 1.20.1 / Forge 47.4.10 / AE2 15.4.10）。\n- 新增本更新日志。\n\n---\n\n**Minecraft** 1.12.2 · **Forge** 14.23.5.2860+ · **AE2** AE2 Extended Life (`570458:6302098`)\n\nBackports the two core features of the 1.20.1 / 1.21.1 line to 1.12.2: **selective paste** in copy mode and **complete P2P frequency arbitration**. Both GUIs now use the same textures and layout as 1.21.1.\n\n### Added\n\n- **Copy mode: paste options panel (7 toggles)** — decide per paste which parts of the stored configuration are applied: settings, priority, config slots, patterns, P2P type, P2P frequency, custom name.\n- **`G` key** — opens the panel while holding the card in copy mode (rebindable).\n- **Auto-open after copy** — the panel opens after a Shift + right-click copy unless disabled in the panel.\n- **Options are stored on the card** (`copy_options`), so they survive mode switches, re-copies and world reloads.\n- **P2P type change** — when the card's tunnel type differs and the toggle is enabled, the part is rebuilt using AE2's own memory-card flow, keeping the previous input/output role.\n- **GUI parity with 1.21.1** — both screens reuse the 1.21.1 panel textures and the coordinates from `assets/ae2/screens/*.json`.\n- **Click sounds** for checkboxes, tree rows and detail-panel buttons.\n\n### Fixed\n\n\n\n..."
+		},
+		{
+			"tag": "1.2.0-1.20.1",
+			"published": "2026-10-26T06:32:36Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 677246082,
+					"name": "advanced_memory_card-1.2.0-1.20.1.jar",
+					"url": "https://github.com/suntide-20210418/AdvancedMemoryCard/releases/download/1.2.0-1.20.1/advanced_memory_card-1.2.0-1.20.1.jar",
+					"size": 189498,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "815ba10e21319dd7eea621b5727a7d6cf0cb9560d530397ed69c570a943a2210",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "advanced_memory_card",
+							"version": "1.2.0-1.20.1",
+							"name": "Advanced Memory Card",
+							"description": "This mod includes an advanced AE2 memory card.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"ae2"
+							],
+							"suggests": [
+								"mixinextras"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Advanced Memory Card"
+							],
+							"group": [
+								"Advanced Memory Card"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 62,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**适用版本** Minecraft 1.20.1 · Forge 47.4.10+ · AE2 15.4.10+\n**构建产物** `advanced_memory_card-1.2.0-1.20.1.jar`（client + server 两端都需安装）\n\n---\n\n## 1.2.0-1.20.1\n\n**Minecraft** 1.20.1 · **Forge** 47.4.10 或更高 · **AE2** 15.4.10 或更高\n\n本版把 1.21.1 分支的两项核心能力回移到 1.20.1：**复制模式的选择性粘贴**与**P2P 频段仲裁的完整实现**。\n\n### 新增\n\n- **复制模式：粘贴选项面板（8 项开关）**：复制到卡片之后、批量粘贴之前，可以逐项决定这一次要应用哪些配置。\n\n| 选项 | 作用 |\n| --- | --- |\n| 升级 | 升级卡 |\n| 设置 | 输出面、模糊模式等通用配置 |\n| 优先级 | 存储总线 / 接口等的优先级 |\n| 配置物品 | 过滤、标记等配置槽内容 |\n| 样板 | 样板供应器的样板 |\n| P2P 类型 | P2P 隧道类型 |\n| P2P 频率 | P2P 频段 |\n| 名称 | 设备/部件的自定义名称 |\n\n- **`G` 键**：手持卡片且处于复制模式时打开该面板，键位可在「选项 → 控制 → 按键绑定 → 高级内存卡」中修改。\n- **复制后自动弹出**：默认在每次复制（Shift + 右键把设置复制进卡片）时自动弹出面板；目标不是 AE 方块或线缆部件时不会弹。\n- **左侧工具栏开关**：面板左边缘的按钮切换自动弹出 —— 亮起 = 弹出，灰化 = 不弹，设置同样跟着卡片走。\n- **选项按卡保存**：勾选结果与开关状态都存在卡片上，切换模式、重新复制、退出存档都不会丢。\n- **新界面同样自带中文**：面板标题、8 个开关名称与开关按钮的悬停提示都有简体中文。\n\n### 修复\n\n- **P2P 重进存档后绑定丢失 / 角色被改**：网络重建期间的运行时映射尚未建全，旧逻辑把这个中间状态当成真实状态并写进存档。现在会先按部件自身持久化的频段补登缺失的 `inputs`/`outputs`，角色修正也只在外部网络就绪时进行。\n- **P2P 通道一直显示「未连接」**：把第二个 ME P2P 绑到同一频段时只登记了第二个输入端，`outputs` 永远为空，整条通道永久不通。现在所有 P2P 类型在绑定时统一仲裁输入/输出角色；旧存档里已经写坏的「多输入、零输出」通道会自愈一次（只在该频段确实没有输出端时动手）。\n- **绑定到「未连接(0000)」等于静默解绑**：`0000` 是未绑定分组，不是可绑定目标。服务端现在直接拒绝，界面点击时也会给出提示，不再把设备从存档里解绑。\n- **P2P 改名不生效**：改名后名称没有落盘，重进存档就没了，界面也无提示。现在改名只改名称本身（不再顺带改动升级卡/优先级/频段），并会立即存盘与刷新；失败会在日志里留下证据。\n- **副手持卡时对 P2P 部件粘贴无效**：批量粘贴此前固定按主手处理，副手持卡时部件会被静默跳过。现在按实际手持侧写入。\n- **分配新频道存在中断风险**：旧实现先把频段写成 `0` 再分配新频段，两次调用之间被打断（区块卸载、退出存档）会留下「已绑定设备变成未绑定」的存档。现在直接一次性换频段。\n- **专用服务器可能因高亮崩溃**：渲染逻辑原先挂在服务端类上（用 `DistExecutor` 包了一层客户端调用）。现已下沉到客户端，服务端只负责发聊天坐标与传送链接。\n- **mixin 静默不注入**：`mixins.json` 声明的 refmap 名与实际产物名不一致，Mixin 不会报错、只是不生效，直到运行时强转失败才暴露。已修正为 `advanced_memory_card.refmap.json`。\n\n### 注意（行为变化）\n\n- **未配置过的卡片默认「全不选」**：粘贴不再改动任何可选项。第一次使用请按 `G` 或在自动弹出的面板里勾选需要应用的内容，勾选结果会跟着卡片走。\n- **Shift + 右键空气改为切换模式**：粘贴请使用**非潜行**的右键空气。对着 AE 设备 Shift + 右键仍是「把设置复制进卡片」。\n- **复制界面不再是坐标输入框**：坐标仍然通过世界内两次右键标记，界面只负责选项。\n\n### 文档\n\n- 游戏内指南与 1.21.1 保持同一份内容：补齐粘贴选项面板、按键一览与选择框配色说明（红=起点、黄=终点、绿=准星、超范围变红）。\n- 两份 README 按 1.20.1 / Forge 环境重写（依赖表、键位、配置段、构建方式），并对齐 1.21.1 的章节结构。\n- 新增本更新日志；新增构建校验与发布工作流。\n\n---\n\n## 1.2.0 (English)\n\n**Minecraft** 1.20.1 · **Forge** 47.4.10 or higher · **AE2** 15.4.10 or higher\n\nThis release backports two core capabilities from the 1.21.1 branch: **selective pasting in Copy Mode** and **fully implemented P2P frequency arbitration**.\n\n### Added\n\n- **Copy Mode: paste-options panel (8 toggles)**: after copying a device's settings onto the card and before pasting, choose item by item what this paste should apply.\n\n| Option | Effect |\n| --- | --- |\n| Upgrades | Upgrade cards |\n| Settings | Generic settings such as output side and fuzzy mode |\n| Priority | Priority of storage buses / interfaces |\n| Config inventory | Filter and marker slots |\n| Patterns | Patterns of a pattern provider |\n| P2P type | P2P tunnel type |\n| P2P frequency | P2P frequency |\n| Name | Custom name of the block or part |\n\n- **`G` key**: opens the panel while holding the card in Copy Mode (rebindable in Options → Controls → Key Binds → Advanced Memory Card).\n- **Auto-open after copying**: by default the panel opens on every copy (Shift + Right-click to copy a device's settings onto the card); it does not open when the target is not an AE block or cable part.\n- **Left-toolbar toggle**: the button on the panel's left edge switches auto-open — highlighted = open, greyed out = do not open. The state is stored on the card.\n- **Options are saved per card**: both the selection and the toggle survive mode switching, re-copying and relogging.\n- **Localized**: panel title, all 8 toggles and the toggle's tooltip have Simplified Chinese.\n\n### Fixed\n\n- **P2P bindings lost / roles flipped after relogging**: the runtime mapping is incomplete while the grid is being rebuilt, and the old logic persisted that intermediate state. Missing `inputs`/`outputs` entries are now re-registered from each part's own persisted frequency, and role correction only happens once the external grid is ready.\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 39,
+		"more": 0,
+		"people": [
+			{
+				"login": "suntide-20210418",
+				"commits": 35,
+				"name": "XiYang",
+				"funding": []
+			},
+			{
+				"login": "mynamexiaopiao",
+				"commits": 3,
+				"name": "小飘",
+				"funding": []
+			},
+			{
+				"login": "Argonas24",
+				"commits": 1,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

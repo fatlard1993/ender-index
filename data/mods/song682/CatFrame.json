@@ -1,0 +1,421 @@
+{
+	"repo": "song682/CatFrame",
+	"host": "github",
+	"description": "All of my mods dependences",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2022-12-22T15:32:20Z",
+	"pushed": "2026-10-24T17:05:05Z",
+	"releases": [
+		{
+			"tag": "v0.10.10",
+			"published": "2026-10-24T17:05:06Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 672820898,
+					"name": "CatFrame-0.10.10-deobf.jar",
+					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.10/CatFrame-0.10.10-deobf.jar",
+					"size": 1515234,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e08d0e032c28d7254b887c9ed09dbd63393994972470f2b7645c670e783c5275",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Bingo Plushy",
+								"Bluey Plushy"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 651,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/resources/builtin/BuiltinResourcePack.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 672820895,
+					"name": "CatFrame-0.10.10.jar",
+					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.10/CatFrame-0.10.10.jar",
+					"size": 1535935,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "df16a99cbe368a82de7e06e27c04d3ab7cf2e5d92d9a2972dab8bd71c0698089",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Bingo Plushy",
+								"Bluey Plushy"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 651,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/resources/builtin/BuiltinResourcePack.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CatFrame - 0.10.10\n\n## What is changed?\nChange version number from previous to `0.10.10`\n\n### ➕Add:\n- Phase 4c: finish per-property meta byte-mapping migration. Add TableMetaProperty<V> (non-linear raw->value lookup table + fallback) for String-valued blocks. Restate remaining vanilla positional MetaCodec sites to distributed byte mapping: sand/wall (clamp), dirt/tallgrass/quartz_block (raw tables), yellow_flower (constant), and both comparators (facing+mode+powered bit fields). Decodes are byte-identical to the prior lambdas.\n- Stage 4 (parts A+B) of blockstate refactor: restate VanillaStateDefinitions using property-level metadata byte mapping, removing the internal positional MetaCodec lambdas. Part A: linear/bit-field/clamp blocks (base pillar/stairs/slab, logs, single-variant clamps, stone/wooden/double slabs, anvil, red_flower, double_plant, trapdoor, door, cauldron, redstone wire, repeaters, pistons, fence gate, pumpkins) now use MappedMetaProperty/BooleanFlagProperty/EnumMetaProperty<Direction.Axis> so each property decodes its own bit field (no .metaCodec). Part B: non-linear facing tables (torch/redstone_torch, lever, ladder, dispenser/dropper, button, furnace, hopper) migrated to EnumMetaProperty.withTable over Direction, plus a new TorchFacing enum for the ground-standing case; powered/open flags use BooleanFlagProperty. Coexists with the legacy positional codec (kept for the residual coupled/constant blocks) which still takes precedence.\n- Add GTNHLib-style meta-property foundation (Stage 1 of blockstate refactor): new StringRepresentable interface implemented by Direction/Axis; Property gains value<->name codec (getName(T)/getValueByName) with Boolean/Integer/Enum overrides; new MetaBlockProperty base plus BooleanFlagProperty, IntegerRangeProperty, MappedMetaProperty, EnumMetaProperty to push metadata byte-mapping down to each property. Purely additive, compileJava passes.\n\n### 🔧Fix:\n- Fix container data-slot sync in AbstractContainerMenu: override updateProgressBar to write S31PacketWindowProperty values back into ContainerData on the client; restore vanilla mode-1 guards in onQuickMove (slot -999 drop, negative index/button rejection, canTakeStack check) to prevent server-side OOB and slot-restriction bypass; push full data-slot state to newly attached ICrafting listeners in addCraftingToCrafters like vanilla ContainerFurnace.\n- Stage 3 of blockstate refactor: BlockStateInheritance.resolve now detects distributed byte mapping — when every static (non-dynamic) merged property is a MetaBlockProperty, inheritance becomes a plain property union with no whole-definition MetaCodec, so multi-fragment merging no longer requires positional codec splicing (each property decodes only its own bit field). The legacy positional mergeCodecs path and its missing-codec warning are preserved and still used when any static property is not a MetaBlockProperty, keeping un-restated vanilla definitions working until Stage 4.\n\n### ❗❗❗Deprecated:\n- Remove now-unused private helpers singleVariant(...) and clampCodec(...) from the vanilla state definitions; every block has been migrated to per-property meta byte mapping, so their only callers are gone.\n\n\n## Notes\nFull Changelog: https://github.com/song682/CatFrame/commits/v0.10.10"
+		},
+		{
+			"tag": "v0.10.9",
+			"published": "2026-10-19T17:05:32Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 656878440,
+					"name": "CatFrame-0.10.9-deobf.jar",
+					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.9/CatFrame-0.10.9-deobf.jar",
+					"size": 1502149,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "25be61772676204120226168a8036a1189f11067956af7a2f524fbc34ad27c7c",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Bingo Plushy",
+								"Bluey Plushy"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 643,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/resources/builtin/BuiltinResourcePack.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 656878446,
+					"name": "CatFrame-0.10.9.jar",
+					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.9/CatFrame-0.10.9.jar",
+					"size": 1522892,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "14ef9d511ba5db2554c691e6c59bb07ef8e36c97d9a26f77d26933663af91c49",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Bingo Plushy",
+								"Bluey Plushy"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 643,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/resources/builtin/BuiltinResourcePack.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CatFrame - 0.10.9\n\n## What is changed?\nChange version number from previous to `0.10.9`\n\n### ➕Add:\n    - /execute added\n- mcfuntion added\n- Rewrite AbstractSilderButton comments to English-only per the Java comment convention: drop all Chinese paragraphs from class/method JavaDoc and inline comments, keeping the porting notes (narration/cursor omitted, InputType focus approximation, sound-on-release) and implementation mapping details intact.\n- Complete bilingual JavaDoc coverage in AbstractSilderButton: add English counterpart paragraphs to every Chinese-only comment block (class porting notes, renderWidget, mouse/key handlers, setFocused, setValueFromMouse, setValue) per the English-comment convention.\n- Implement AbstractSilderButton slider logic ported from 26.1.2 AbstractSliderButton: nine-patch track/handle rendering via TextureStretching.drawAutoNinePatch driven by mcmeta, scrolling centered message with TEXT_MARGIN clamping, mouse click/drag/release value setting with press sound on release, keyboard stepping (Enter toggles canChangeValue, arrows step by 1/(width-8)), and focus-driven canChangeValue (InputType approximation on 1.7.10). Narration and cursor requests are not portable to 1.7.10 and are documented as omitted.\n\n### 🔧Fix:\n    - fix refmap names\n- fix some clean up\n- fix button tooltip sticking below widget after click\n- Rewrite the Data Pack row in README: describe the datapack pipeline (tiered discovery, pack.mcmeta metadata, enable/disable state, pluggable content loaders, apply-pass error reports, login/broadcast snapshot sync); fix the DataPackReposotry typo to DataPackRepository\n\n### ❗❗❗Deprecated:\n    - No deprecations\n\n\n## Notes\nFull Changelog: https://github.com/song682/CatFrame/commits/v0.10.9"
+		},
+		{
+			"tag": "v0.10.8",
+			"published": "2026-10-16T14:13:42Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 656875429,
+					"name": "CatFrame-0.10.8-deobf.jar",
+					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.8/CatFrame-0.10.8-deobf.jar",
+					"size": 1499560,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "9d4c2164644e8b53ac01d6f13ed0ea881e2ad601e49873e66e91d570fd0a3412",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Bingo Plushy",
+								"Bluey Plushy"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 643,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/resources/builtin/BuiltinResourcePack.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 656875428,
+					"name": "CatFrame-0.10.8.jar",
+					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.8/CatFrame-0.10.8.jar",
+					"size": 1520287,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "3cee19b32c65e152e8164223f15fa1aa57144f69425c3f485905c79aa4963248",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Bingo Plushy",
+								"Bluey Plushy"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 643,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/resources/builtin/BuiltinResourcePack.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CatFrame - 0.10.8\n\n## What is changed?\nChange version number from previous to `0.10.8`\n\n### ➕Add:\n    - /execute added\n- mcfuntion added\n- Rewrite AbstractSilderButton comments to English-only per the Java comment convention: drop all Chinese paragraphs from class/method JavaDoc and inline comments, keeping the porting notes (narration/cursor omitted, InputType focus approximation, sound-on-release) and implementation mapping details intact.\n- Complete bilingual JavaDoc coverage in AbstractSilderButton: add English counterpart paragraphs to every Chinese-only comment block (class porting notes, renderWidget, mouse/key handlers, setFocused, setValueFromMouse, setValue) per the English-comment convention.\n- Implement AbstractSilderButton slider logic ported from 26.1.2 AbstractSliderButton: nine-patch track/handle rendering via TextureStretching.drawAutoNinePatch driven by mcmeta, scrolling centered message with TEXT_MARGIN clamping, mouse click/drag/release value setting with press sound on release, keyboard stepping (Enter toggles canChangeValue, arrows step by 1/(width-8)), and focus-driven canChangeValue (InputType approximation on 1.7.10). Narration and cursor requests are not portable to 1.7.10 and are documented as omitted.\n\n### 🔧Fix:\n    - fix refmap names\n- fix some clean up\n- fix button tooltip sticking below widget after click\n- Rewrite the Data Pack row in README: describe the datapack pipeline (tiered discovery, pack.mcmeta metadata, enable/disable state, pluggable content loaders, apply-pass error reports, login/broadcast snapshot sync); fix the DataPackReposotry typo to DataPackRepository\n\n### ❗❗❗Deprecated:\n    - No deprecations\n\n\n## Notes\nFull Changelog: https://github.com/song682/CatFrame/commits/v0.10.8"
+		},
+		{
+			"tag": "v0.10.4",
+			"published": "2026-10-10T12:53:49Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 627975662,
+					"name": "CatFrame-0.10.4-deobf.jar",
+					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.4/CatFrame-0.10.4-deobf.jar",
+					"size": 1397831,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "8a955e5e578e9bdc0071df142661185cc4d4287b0cc027655323f12461b30ad1",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Bingo Plushy",
+								"Bluey Plushy"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 580,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/resources/builtin/BuiltinResourcePack.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 627975663,
+					"name": "CatFrame-0.10.4.jar",
+					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.4/CatFrame-0.10.4.jar",
+					"size": 1418985,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "b77eea9109e4ae6ba4ffafc1efc7cda610d82d6ee93c2b6c7db65712863b3ae7",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Bingo Plushy",
+								"Bluey Plushy"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 580,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/resources/builtin/BuiltinResourcePack.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CatFrame - 0.10.4\n\n## What is changed?\nChange version number from previous to `0.10.4`\n\n### ➕Add:\n    - No new features\n\n### 🔧Fix:\n    - fix the builtin packs didn't load\n\n### ❗❗❗Deprecated:\n    - No deprecations\n\n\n## Notes\nFull Changelog: https://github.com/song682/CatFrame/commits/v0.10.4"
+		},
+		{
+			"tag": "v0.10.3",
+			"published": "2026-10-09T13:01:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 624989554,
+					"name": "CatFrame-0.10.3-deobf.jar",
+					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.3/CatFrame-0.10.3-deobf.jar",
+					"size": 1397846,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b4af0a516d61e2646e0c00ebbe387bb0b472ae61b696dec49317c6af8b718776",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Bingo Plushy",
+								"Bluey Plushy"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 580,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/resources/builtin/BuiltinResourcePack.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 624989551,
+					"name": "CatFrame-0.10.3.jar",
+					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.3/CatFrame-0.10.3.jar",
+					"size": 1419006,
+					"downloads": 8,
+					"inspection": 2,
+					"sha256": "b92917c8b06703a8ab82f703478886e3bd469d7c7c48c5d1d8112125a2518313",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Bingo Plushy",
+								"Bluey Plushy"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 580,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/resources/builtin/BuiltinResourcePack.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CatFrame - 0.10.3\n\n## What is changed?\nChange version number from previous to `0.10.3`\n\n### ➕Add:\n- The localization add special things, some comments clean up\n\n### 🔧Fix:\n- Remove firstperson_lefthand placeholders in generated.json and BuiltinGeneratedModel to restore 26.1 fallback semantics (missing left-hand falls back to righthand before applyLeftHandFix)\n- Fix off-hand ItemBlock misjudged as head slot in resolveHeadSlotKind via head-slot stack ownership check; correct firstperson_lefthand rotation to [0,90,-25] in generated.json and BuiltinGeneratedModel; add thirdperson_lefthand display default fallback\n- Fix: shift side/inside UV v-range from [0,8] to [8,16] (= 16-to.y to\n\n### ❗❗❗Deprecated:\n- No deprecations\n\n## Notes\nFull Changelog: https://github.com/song682/CatFrame/commits/v0.10.3"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 480,
+		"more": 0,
+		"people": [
+			{
+				"login": "song682",
+				"commits": 480,
+				"name": "dfdvdsf",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

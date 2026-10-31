@@ -1,0 +1,122 @@
+{
+	"repo": "LMaxRouterCN/Log-Filter",
+	"host": "github",
+	"description": "按照可配置的规则拦截过滤日志系统输出条目",
+	"stars": 2,
+	"archived": false,
+	"license": "MPL-2.0",
+	"created": "2026-01-23T16:58:31Z",
+	"pushed": "2026-10-10T03:32:52Z",
+	"releases": [
+		{
+			"tag": "1.1.1+1.20.1",
+			"published": "2026-10-10T03:13:26Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 626867143,
+					"name": "logfilter-1.1.1+1.20.1-forge.jar",
+					"url": "https://github.com/LMaxRouterCN/Log-Filter/releases/download/1.1.1%2B1.20.1/logfilter-1.1.1%2B1.20.1-forge.jar",
+					"size": 56616,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2b066a8364520eefbe9d97f1b7463f76f58063553119d581858caa8fd64adae7",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "logfilter",
+							"version": "1.1.1+1.20.1-forge",
+							"name": "Log Filter",
+							"description": "A lightweight log filtering mod that intercepts and drops log lines by configurable rules (regex / exact match / logger name / log level / whitelist) before they reach the console and log files. Features an async output pipeline (Log4j2 AsyncAppender) and config hot-reload.\n轻量级日志过滤模组：按可配置规则（正则/完全匹配/Logger名称/日志等级/白名单）在日志到达控制台和文件之前拦截丢弃。内置异步输出管线（Log4j2 AsyncAppender）与配置热重载。",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Fixed\n- Config comments: replaced the overly specific example (`Terrain Diffusion (CUDA)`) with a generic one (`some (thing)`); the note claiming invalid regexes crash config loading was outdated (safe-skip since 1.1.0) and now describes the actual behavior.\n\n### 修复\n- 配置注释: 特殊性示例 (`Terrain Diffusion (CUDA)`) 换为通用示例 (`some (thing)`); 修正\"非法正则导致配置加载崩溃\"的过时描述（1.1.0 起实际行为为安全跳过并告警）。"
+		},
+		{
+			"tag": "1.1.0+1.20.1",
+			"published": "2026-10-08T18:38:20Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 622673686,
+					"name": "logfilter-1.1.0+1.20.1-forge.jar",
+					"url": "https://github.com/LMaxRouterCN/Log-Filter/releases/download/1.1.0%2B1.20.1/logfilter-1.1.0%2B1.20.1-forge.jar",
+					"size": 56628,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "864a00e672a8e2a9d5d839b5d37cceb36912fd8cfc22e4ff561fb07f68792a19",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "logfilter",
+							"version": "1.1.0+1.20.1-forge",
+							"name": "Log Filter",
+							"description": "A lightweight log filtering mod that intercepts and drops log lines by configurable rules (regex / exact match / logger name / log level / whitelist) before they reach the console and log files. Features an async output pipeline (Log4j2 AsyncAppender) and config hot-reload.\n轻量级日志过滤模组：按可配置规则（正则/完全匹配/Logger名称/日志等级/白名单）在日志到达控制台和文件之前拦截丢弃。内置异步输出管线（Log4j2 AsyncAppender）与配置热重载。",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Log Filter 1.1.0 for Minecraft 1.20.1 (Forge 47+)\n\n### Added\n- **Async output pipeline**: all root-logger appenders are wrapped into a Log4j2 `AsyncAppender` (enabled by default) — console/file I/O runs on a background thread, the logging thread only pays the enqueue cost. Queue size, overflow policy and shutdown timeout are fully configurable.\n\n### Fixed\n- A single invalid regex (e.g. unbalanced parentheses) used to crash config loading; it is now skipped safely — a WARN goes to the log and an in-game chat warning appears when you enter a world. All other rules keep working.\n\n### Existing features (baseline for future changelogs)\nLightweight log filtering: intercepts and drops log lines by configurable rules before they reach the console or log file — less spam, less disk usage.\n- Regex filtering (partial match), exact match, logger-name & log-level filtering\n- Whitelist exclusion to protect critical logs\n- Dedup cache for repeated log events\n- Config hot-reload — edit & save, no restart needed\n- Bilingual config comments documenting every regex/TOML escaping pitfall\n\n---\n\n### 新增\n- **异步输出管线**：root logger 全部 Appender 包装进 Log4j2 `AsyncAppender`（默认开启），打日志线程只付入队成本；队列容量、满载策略、关停超时全部可配置。\n\n### 修复\n- 单条非法正则（如括号不闭合）曾导致配置加载崩溃；现在安全跳过——日志 WARN + 进入世界时聊天框黄字警告，其余规则照常生效。\n\n### 既有功能（作为以后更新日志的基准）\n轻量级日志过滤：在日志到达控制台和文件之前按规则拦截丢弃，减少刷屏、节省硬盘。\n- 正则过滤（包含匹配）、完全匹配、Logger 名称、日志等级多维过滤\n- 白名单排除，保护关键日志\n- 重复日志去重缓存\n- 配置热重载——改完存盘即生效，无需重启\n- 双语配置注释，正则/TOML 转义的坑全部写在配置内"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 18,
+		"more": 0,
+		"people": [
+			{
+				"login": "LMaxRouterCN",
+				"commits": 18,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

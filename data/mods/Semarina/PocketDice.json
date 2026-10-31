@@ -1,0 +1,589 @@
+{
+	"repo": "Semarina/PocketDice",
+	"host": "github",
+	"description": "Lightweight proximity dice rolls for Paper/Purpur",
+	"stars": 0,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2025-11-10T06:11:04Z",
+	"pushed": "2026-10-12T18:49:49Z",
+	"releases": [
+		{
+			"tag": "v0.6.0",
+			"published": "2026-10-12T18:49:50Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 634666936,
+					"name": "PocketDice-0.6.0-Fabric.jar",
+					"url": "https://github.com/Semarina/PocketDice/releases/download/v0.6.0/PocketDice-0.6.0-Fabric.jar",
+					"size": 1289174,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "837b2b47a9f5a9509440b0242f3d24e608d4bb98a866c9483068267c3e633d4f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "pocketdice",
+							"version": "0.6.0",
+							"name": "PocketDice",
+							"description": "Lightweight proximity dice rolls",
+							"minecraft": ">=26.3 <26.4",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 908,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"me/sepehrhn/pocketdice/fabric/update/FabricUpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/kyori/adventure/resource/ResourcePackInfoImpl.class": [
+									"java/net/URL.openConnection"
+								],
+								"net/kyori/adventure/util/UTF8ResourceBundleControl.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"hub.spigotmc.org": [
+								"me/sepehrhn/pocketdice/fabric/FabricConfig.class"
+							],
+							"modrinth.com": [
+								"me/sepehrhn/pocketdice/fabric/PocketDiceFabric.class",
+								"me/sepehrhn/pocketdice/fabric/update/FabricUpdateChecker.class"
+							],
+							"api.modrinth.com": [
+								"me/sepehrhn/pocketdice/fabric/update/FabricUpdateChecker.class"
+							],
+							"docs.advntr.dev": [
+								"net/kyori/adventure/text/LegacyFormattingDetected.class",
+								"net/kyori/adventure/text/minimessage/internal/parser/TokenParser.class"
+							],
+							"yaml.org": [
+								"org/yaml/snakeyaml/DumperOptions.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 634667037,
+					"name": "PocketDice-0.6.0-Paper.jar",
+					"url": "https://github.com/Semarina/PocketDice/releases/download/v0.6.0/PocketDice-0.6.0-Paper.jar",
+					"size": 46459,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "b9284fc278915aff31cda07730de73f5e9d55d61bfcf27774a91ac16766e64e2",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"me/sepehrhn/pocketdice/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.modrinth.com": [
+								"me/sepehrhn/pocketdice/update/UpdateChecker.class"
+							],
+							"modrinth.com": [
+								"me/sepehrhn/pocketdice/update/UpdateChecker.class",
+								"me/sepehrhn/pocketdice/update/UpdateNotifyListener.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Highlights\n\n* Minecraft 26.3 support for Paper/Purpur/Folia and Fabric/Quilt.\n* Dedicated Paper and Fabric builds continue in this release.\n* Fabric/Quilt builds against Fabric API `0.161.0+26.3`.\n* Paper/Purpur/Folia builds against the stable Paper 26.3 API.\n* Includes the always-enabled dice shorthand introduced in `v0.5.0`.\n* Java 25 remains required.\n\n* * *\n\n### ⚠️ Platform & artifact selection (IMPORTANT)\n\n`v0.6.0` publishes two JARs for Minecraft 26.3:\n\n* `PocketDice-0.6.0-Paper.jar` — Use this for Paper / Purpur / Folia servers.\n* `PocketDice-0.6.0-Fabric.jar` — Use this for Fabric servers (also compatible with Quilt loader).\n\nNotes:\n\n* Do not use the Paper JAR on Fabric/Quilt or the Fabric JAR on Paper/Purpur/Folia.\n* Fabric requires Fabric Loader 0.19.5 or newer and Fabric API for Minecraft 26.3.\n* Spigot/plain Bukkit remains unsupported for `v0.2.0+`.\n\n* * *\n\n### ⚠️ Upgrade note from v0.5.0\n\n1. Stop the server and back up your PocketDice configuration.\n2. Update the server to Minecraft 26.3 and make sure Java 25 is available.\n3. On Fabric/Quilt, update Fabric API for Minecraft 26.3.\n4. Replace the old PocketDice JAR with the correct `v0.6.0` JAR for your platform.\n5. Start the server.\n\nConfig behavior:\n\n* No config reset is required.\n* No additional config schema change is introduced after `v0.5.0`.\n* Dice shorthand remains always enabled.\n* When upgrading directly from `v0.4.0`, Paper updates the config to version `7` and removes obsolete shorthand keys; Fabric stops reading and writing those settings.\n\n* * *\n\n### ✨ New\n\n* Minecraft 26.3 compatibility across both platform builds.\n* A dedicated `v0.6.0` release line for Minecraft 26.3, alongside `v0.5.0` for Minecraft 26.2.\n\n* * *\n\n### Improvements & internals\n\n* Paper/Purpur/Folia builds against Paper API `26.3.build.177-stable`.\n* Updated `fabric.mod.json` and `plugin.yml` metadata for Minecraft 26.3 and PocketDice `0.6.0`.\n* Separate Gradle profiles build both release lines without overwriting the other release's collected JARs.\n* GitHub Actions builds both Minecraft targets.\n* Updated README and release documentation for both versions.\n\n* * *\n\n### Summary for upgraders\n\n* Use Minecraft 26.3, Java 25, and the correct platform artifact.\n* Keep your existing PocketDice configuration and locale files.\n* `/roll d8`, `/groll d8`, and `/proll d8` remain available without a configuration toggle.\n* For Minecraft 26.2, stay on PocketDice `v0.5.0`."
+		},
+		{
+			"tag": "v0.5.0",
+			"published": "2026-10-12T18:48:55Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 634627212,
+					"name": "PocketDice-0.5.0-Fabric.jar",
+					"url": "https://github.com/Semarina/PocketDice/releases/download/v0.5.0/PocketDice-0.5.0-Fabric.jar",
+					"size": 1289173,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "613e2c7b400a3a740a14c2925761b80f49992399c0de1fe0484e749017af9708",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "pocketdice",
+							"version": "0.5.0",
+							"name": "PocketDice",
+							"description": "Lightweight proximity dice rolls",
+							"minecraft": ">=26.2 <26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 908,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"me/sepehrhn/pocketdice/fabric/update/FabricUpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/kyori/adventure/resource/ResourcePackInfoImpl.class": [
+									"java/net/URL.openConnection"
+								],
+								"net/kyori/adventure/util/UTF8ResourceBundleControl.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"hub.spigotmc.org": [
+								"me/sepehrhn/pocketdice/fabric/FabricConfig.class"
+							],
+							"modrinth.com": [
+								"me/sepehrhn/pocketdice/fabric/PocketDiceFabric.class",
+								"me/sepehrhn/pocketdice/fabric/update/FabricUpdateChecker.class"
+							],
+							"api.modrinth.com": [
+								"me/sepehrhn/pocketdice/fabric/update/FabricUpdateChecker.class"
+							],
+							"docs.advntr.dev": [
+								"net/kyori/adventure/text/LegacyFormattingDetected.class",
+								"net/kyori/adventure/text/minimessage/internal/parser/TokenParser.class"
+							],
+							"yaml.org": [
+								"org/yaml/snakeyaml/DumperOptions.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 634627105,
+					"name": "PocketDice-0.5.0-Paper.jar",
+					"url": "https://github.com/Semarina/PocketDice/releases/download/v0.5.0/PocketDice-0.5.0-Paper.jar",
+					"size": 46459,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c499423ab47a3aee6b5198c70c3843e007b4d25d292663d984f57e082debee4f",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"me/sepehrhn/pocketdice/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.modrinth.com": [
+								"me/sepehrhn/pocketdice/update/UpdateChecker.class"
+							],
+							"modrinth.com": [
+								"me/sepehrhn/pocketdice/update/UpdateChecker.class",
+								"me/sepehrhn/pocketdice/update/UpdateNotifyListener.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Highlights\n\n* Minecraft 26.2 support for Paper/Purpur/Folia and Fabric/Quilt.\n* Dedicated Paper and Fabric builds continue in this release.\n* Dice shorthand such as `/roll d8` is now always enabled.\n* Removed the `allow_shorthand` and legacy `allow_shorthand_d` configuration switches.\n* Java 25 remains required.\n\n* * *\n\n### ⚠️ Platform & artifact selection (IMPORTANT)\n\n`v0.5.0` publishes two JARs for Minecraft 26.2:\n\n* `PocketDice-0.5.0-Paper.jar` — Use this for Paper / Purpur / Folia servers.\n* `PocketDice-0.5.0-Fabric.jar` — Use this for Fabric servers (also compatible with Quilt loader).\n\nNotes:\n\n* Do not use the Paper JAR on Fabric/Quilt or the Fabric JAR on Paper/Purpur/Folia.\n* Fabric requires Fabric Loader 0.19.5 or newer and Fabric API for Minecraft 26.2.\n* Spigot/plain Bukkit remains unsupported for `v0.2.0+`.\n\n* * *\n\n### ⚠️ Upgrade note from v0.4.0\n\n1. Stop the server and back up your PocketDice configuration.\n2. Update the server to Minecraft 26.2 and make sure Java 25 is available.\n3. On Fabric/Quilt, update the loader and Fabric API for Minecraft 26.2.\n4. Replace the old PocketDice JAR with the correct `v0.5.0` JAR for your platform.\n5. Start the server.\n\nConfig behavior:\n\n* No config reset is required.\n* Paper updates `config-version` to `7` and removes both obsolete shorthand keys.\n* Fabric stops reading and writing the shorthand setting.\n* Shorthand is available even if it was previously disabled.\n* Existing locale files remain usable, including custom messages using `{or_d}`.\n\n* * *\n\n### ✨ New\n\n* Minecraft 26.2 compatibility across both platform builds.\n* Always-enabled shorthand for `/roll`, `/groll`, and `/proll`; `d8` means `1d8`.\n\n* * *\n\n### Improvements & internals\n\n* Fabric/Quilt builds against Fabric API `0.154.0+26.2`.\n* Paper/Purpur/Folia builds against Paper API `26.2.build.48-alpha`.\n* Updated invalid-notation messages to include shorthand examples.\n* Paper update checks filter out Fabric-only Modrinth releases.\n* Added a Minecraft 26.2 build profile that generates matching version and platform metadata.\n\n* * *\n\n### Summary for upgraders\n\n* Use Minecraft 26.2, Java 25, and the correct platform artifact.\n* Keep your existing PocketDice configuration and locale files.\n* Remove shorthand toggles from custom configuration templates; shorthand is always available.\n* For Minecraft 26.3, use PocketDice `v0.6.0`."
+		},
+		{
+			"tag": "v0.4.0",
+			"published": "2026-05-29T15:28:56Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 433133727,
+					"name": "PocketDice-0.4.0-Fabric.jar",
+					"url": "https://github.com/Semarina/PocketDice/releases/download/v0.4.0/PocketDice-0.4.0-Fabric.jar",
+					"size": 1289468,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "f7e6dc1e0d0ca4db717c5518d11374daccfeae6e5235e9559d4c65ca97c7a760",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "pocketdice",
+							"version": "0.4.0",
+							"name": "PocketDice",
+							"description": "Lightweight proximity dice rolls",
+							"minecraft": ">=26.1 <=26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 908,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"me/sepehrhn/pocketdice/fabric/update/FabricUpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/kyori/adventure/resource/ResourcePackInfoImpl.class": [
+									"java/net/URL.openConnection"
+								],
+								"net/kyori/adventure/util/UTF8ResourceBundleControl.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"hub.spigotmc.org": [
+								"me/sepehrhn/pocketdice/fabric/FabricConfig.class"
+							],
+							"modrinth.com": [
+								"me/sepehrhn/pocketdice/fabric/PocketDiceFabric.class",
+								"me/sepehrhn/pocketdice/fabric/update/FabricUpdateChecker.class"
+							],
+							"api.modrinth.com": [
+								"me/sepehrhn/pocketdice/fabric/update/FabricUpdateChecker.class"
+							],
+							"docs.advntr.dev": [
+								"net/kyori/adventure/text/LegacyFormattingDetected.class",
+								"net/kyori/adventure/text/minimessage/internal/parser/TokenParser.class"
+							],
+							"yaml.org": [
+								"org/yaml/snakeyaml/DumperOptions.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 433133731,
+					"name": "PocketDice-0.4.0-Paper.jar",
+					"url": "https://github.com/Semarina/PocketDice/releases/download/v0.4.0/PocketDice-0.4.0-Paper.jar",
+					"size": 46622,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "daf0d4535c53127166ff5e1e49aea74a0a5b80163ab92b75f267f77ae1fbed41",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"me/sepehrhn/pocketdice/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.modrinth.com": [
+								"me/sepehrhn/pocketdice/update/UpdateChecker.class"
+							],
+							"modrinth.com": [
+								"me/sepehrhn/pocketdice/update/UpdateChecker.class",
+								"me/sepehrhn/pocketdice/update/UpdateNotifyListener.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Highlights\n\n* Minecraft 26.1.x support: PocketDice now targets Minecraft 26.1, 26.1.1, and 26.1.2.\n* Multi-platform release continues with dedicated builds for Paper-family and Fabric/Quilt servers.\n* Fabric/Quilt build updated for Fabric Loader 0.19.2 and Fabric API 0.150.0+26.1.2.\n* Paper/Purpur/Folia build updated against Paper API 26.1.2 stable.\n* Java 25 is now required.\n\n* * *\n\n### ⚠️ Platform & artifact selection (IMPORTANT)\n\n`v0.4.0` publishes two JARs:\n\n* `PocketDice-0.4.0-Paper.jar`  \nUse this for Paper / Purpur / Folia servers.\n\n* `PocketDice-0.4.0-Fabric.jar`  \nUse this for Fabric servers (also compatible with Quilt loader).\n\nNotes:\n\n* Do not use the Paper JAR on Fabric/Quilt.\n* Do not use the Fabric JAR on Paper/Purpur/Folia.\n* Spigot/plain Bukkit remains unsupported for `v0.2.0+`.\n\n* * *\n\n### ⚠️ Upgrade note from v0.3.0\n\nUpgrading from v0.3.0 → v0.4.0 should be straightforward:\n\n1. Stop the server.\n2. Make sure your server is running Minecraft 26.1, 26.1.1, or 26.1.2.\n3. Make sure Java 25 is available.\n4. Replace the old PocketDice JAR with the correct `v0.4.0` JAR for your platform.\n5. Start the server.\n\nConfig behavior:\n\n* No config reset is required.\n* Existing config and locale files should continue to work.\n* Existing anti-spam, sound, locale, and update-check settings are preserved.\n\n* * *\n\n### ✨ New\n\n* Minecraft 26.1.x compatibility\n  * Added support for Minecraft 26.1.\n  * Added support for Minecraft 26.1.1.\n  * Added support for Minecraft 26.1.2.\n\n* Updated platform targets\n  * Fabric/Quilt now targets the 26.1.2 Fabric toolchain.\n  * Paper/Purpur/Folia now compiles against the 26.1.2 stable Paper API.\n  * Both release artifacts are prepared for the same 26.1.x Modrinth version set.\n\n* * *\n\n### Improvements & internals\n\n* Updated build configuration for the 26.1.x release line.\n* Migrated Fabric-side Minecraft API usage for the current 26.1.x server mappings.\n* Updated `fabric.mod.json` and `plugin.yml` metadata for the new supported game versions.\n* Updated GitHub Actions to build the release artifacts with Java 25.\n* Updated README, changelog, and release documentation for the new release.\n\n* * *\n\n### Summary for upgraders\n\n* Pick the correct platform artifact: Paper/Purpur/Folia vs Fabric/Quilt.\n* Use Minecraft 26.1, 26.1.1, or 26.1.2.\n* Use Java 25.\n* No config folder deletion or migration reset should be necessary when upgrading from v0.3.0."
+		},
+		{
+			"tag": "v0.3.0",
+			"published": "2026-03-08T10:47:56Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 369389872,
+					"name": "PocketDice-0.3.0-Fabric.jar",
+					"url": "https://github.com/Semarina/PocketDice/releases/download/v0.3.0/PocketDice-0.3.0-Fabric.jar",
+					"size": 957631,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "82b78f4d186506f945f0367dae5da382bef5d15930b1e4b966a60346017228a4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "pocketdice",
+							"version": "0.3.0",
+							"name": "PocketDice",
+							"description": "Lightweight proximity dice rolls",
+							"minecraft": ">=1.21 <=1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [
+								"net_kyori_adventure-api",
+								"net_kyori_adventure-key",
+								"net_kyori_adventure-text-minimessage",
+								"net_kyori_adventure-text-serializer-gson",
+								"net_kyori_adventure-text-serializer-json",
+								"net_kyori_examination-api",
+								"net_kyori_examination-string",
+								"net_kyori_option",
+								"org_yaml_snakeyaml"
+							],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 737,
+						"jars": [
+							"META-INF/jars/adventure-api-4.17.0.jar",
+							"META-INF/jars/adventure-key-4.17.0.jar",
+							"META-INF/jars/adventure-text-minimessage-4.17.0.jar",
+							"META-INF/jars/adventure-text-serializer-gson-4.17.0.jar",
+							"META-INF/jars/adventure-text-serializer-json-4.17.0.jar",
+							"META-INF/jars/examination-api-1.3.0.jar",
+							"META-INF/jars/examination-string-1.3.0.jar",
+							"META-INF/jars/option-1.0.0.jar",
+							"META-INF/jars/snakeyaml-2.2.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/adventure-api-4.17.0.jar!net/kyori/adventure/resource/ResourcePackInfoImpl.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/adventure-api-4.17.0.jar!net/kyori/adventure/util/UTF8ResourceBundleControl.class": [
+									"java/net/URL.openConnection"
+								],
+								"me/sepehrhn/pocketdice/fabric/update/FabricUpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"docs.advntr.dev": [
+								"META-INF/jars/adventure-api-4.17.0.jar!net/kyori/adventure/text/LegacyFormattingDetected.class",
+								"META-INF/jars/adventure-text-minimessage-4.17.0.jar!net/kyori/adventure/text/minimessage/internal/parser/TokenParser.class"
+							],
+							"yaml.org": [
+								"META-INF/jars/snakeyaml-2.2.jar!org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"hub.spigotmc.org": [
+								"me/sepehrhn/pocketdice/fabric/FabricConfig.class"
+							],
+							"modrinth.com": [
+								"me/sepehrhn/pocketdice/fabric/PocketDiceFabric.class",
+								"me/sepehrhn/pocketdice/fabric/update/FabricUpdateChecker.class"
+							],
+							"api.modrinth.com": [
+								"me/sepehrhn/pocketdice/fabric/update/FabricUpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 369389875,
+					"name": "PocketDice-0.3.0-Paper.jar",
+					"url": "https://github.com/Semarina/PocketDice/releases/download/v0.3.0/PocketDice-0.3.0-Paper.jar",
+					"size": 46606,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "7cafb47a187452db213e12aaf7e8fcd0f9052edc127626c94f55c1c15a2a567d",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"me/sepehrhn/pocketdice/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.modrinth.com": [
+								"me/sepehrhn/pocketdice/update/UpdateChecker.class"
+							],
+							"modrinth.com": [
+								"me/sepehrhn/pocketdice/update/UpdateChecker.class",
+								"me/sepehrhn/pocketdice/update/UpdateNotifyListener.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Highlights\n- 🚀 **Multi-platform release**: PocketDice now ships dedicated builds for **Paper-family** and **Fabric/Quilt** servers.\n- 🛡️ **New Anti-Spam Guard** with per-player cooldowns and sliding-window rate limits.\n- 🎲 New roll modes: **/groll** (global) and **/proll** (private), plus command aliases.\n- ⚙️ Config schema bumped to **config-version: 6** with automatic key injection for new anti-spam settings.\n\n---\n\n### ⚠️ Platform & artifact selection (IMPORTANT)\n\n`v0.3.0` publishes **two JARs**:\n\n- `PocketDice-0.3.0-Paper.jar`  \n  Use this for **Paper / Purpur / Folia** servers.\n- `PocketDice-0.3.0-Fabric.jar`  \n  Use this for **Fabric** servers (also compatible with **Quilt** loader).\n\nNotes:\n- **Do not** use the Paper JAR on Fabric/Quilt.\n- **Do not** use the Fabric JAR on Paper/Purpur/Folia.\n- Spigot/plain Bukkit remains unsupported for `v0.2.0+`.\n\n---\n\n### ⚠️ Upgrade note from v0.2.0\n\nUpgrading from **v0.2.0 → v0.3.0** should be straightforward:\n\n1. Stop the server.\n2. Replace the old PocketDice JAR with the correct `v0.3.0` JAR for your platform.\n3. Start the server.\n\nConfig behavior:\n- The updater moves config to **version 6**.\n- New anti-spam keys are added automatically when missing:\n  - `cooldowns.*`\n  - `rate_limit.*`\n- Existing values are preserved where possible.\n\nIf you want anti-spam disabled, set:\n- `cooldowns.enabled: false`\n- `rate_limit.enabled: false`\n\n---\n\n### ✨ New\n\n- **Anti-Spam Guard**\n  - Per-player cooldown (`cooldowns.seconds`, default `3`).\n  - Sliding-window rate limit (`rate_limit.window_seconds`, `rate_limit.max_rolls`, defaults `60s` / `12`).\n  - Localized feedback when blocked:\n    - `messages.roll.cooldown_active`\n    - `messages.roll.rate_limited`\n  - Bypass permissions for Paper:\n    - `pocketdice.cooldown.bypass`\n    - `pocketdice.ratelimit.bypass`\n  - On Fabric, operators bypass by default.\n\n- **Additional roll modes**\n  - `/groll [NdM]` for global broadcast.\n  - `/proll [NdM]` for private/self-only rolls.\n  - Aliases added:\n    - `/dice` for `/roll`\n    - `/gdice` for `/groll`\n    - `/pdice` for `/proll`\n    - `/pd` for `/pocketdice`\n\n- **Fabric/Quilt distribution**\n  - Dedicated Fabric build with locale, config, update-check, and anti-spam behavior aligned with Paper features.\n  - Update-check filtering includes Fabric + Quilt loader compatibility.\n\n---\n\n### 🛠 Improvements & internals\n\n- Introduced shared `core` logic used by platform modules.\n- Added robust anti-spam service and tests around parser/anti-spam logic.\n- Documentation updated to clarify platform support and command set.\n\n---\n\n### 🔄 Summary for upgraders\n\n- Pick the correct platform artifact (Paper vs Fabric/Quilt).\n- Review the new anti-spam settings in your config.\n- Existing localization/update-check behavior from `v0.2.0` remains in place."
+		},
+		{
+			"tag": "v0.2.0",
+			"published": "2025-11-25T10:30:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 320610128,
+					"name": "PocketDice-0.2.0.jar",
+					"url": "https://github.com/Semarina/PocketDice/releases/download/v0.2.0/PocketDice-0.2.0.jar",
+					"size": 41252,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "98f01d3d92bfee812dac5ff571595f111f527466430d0bd89f6a37d1b19eb501",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 18,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"me/sepehrhn/pocketdice/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.modrinth.com": [
+								"me/sepehrhn/pocketdice/update/UpdateChecker.class"
+							],
+							"modrinth.com": [
+								"me/sepehrhn/pocketdice/update/UpdateChecker.class",
+								"me/sepehrhn/pocketdice/update/UpdateNotifyListener.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Highlights\n- 🚫 **Dropped Spigot/Bukkit support** – PocketDice is now a dedicated **Paper / Purpur / Folia** plugin.\n- 🌐 New locale-based translation system with per-player language detection.\n- 🔔 Modrinth-powered update checker with localized console/admin notifications.\n- 🎲 Optional, configurable “dice rattle” roll sound.\n- ⚙️ New config & locale *framework* for future auto-updates (kicks in from versions after v0.2.0).\n- 🎨 MiniMessage-based rich styling for all messages.\n\n---\n\n### ⚠️ Platform support change (VERY IMPORTANT)\n\nStarting from **v0.2.0**, PocketDice:\n\n- **No longer supports Spigot / plain Bukkit.**\n- Is intended **only** for:\n  - **Paper**\n  - **Purpur**\n  - **Folia** (Paper’s regionized scheduler)\n\nWhat this means:\n\n- If you are running **Spigot/Bukkit** and update to **v0.2.0**, the plugin may:\n  - Fail to start,\n  - Or behave unpredictably due to missing APIs.\n- If you cannot move away from Spigot/Bukkit right now:\n  - **Stay on PocketDice v0.1.0**.\n- If you want to use **v0.2.0 and future versions**, you should:\n  - Migrate your server to **Paper, Purpur, or Folia** for full compatibility and support.\n\nHosting notes:\n\n- If your host only offers “Spigot” as an option, check if they support **Paper** or **Purpur** profiles.\n- PocketDice bug reports and support from **v0.2.0+** are only provided for **Paper-family** servers.\n\n---\n\n### ⚠️ Important upgrade note from v0.1.0\n\nPocketDice **v0.1.0 did not have**:\n- Any `locale` folder or translation files.\n- Any automatic `config.yml` / locale updater.\n\nBecause of this, updating from **v0.1.0 → v0.2.0** requires a **manual reset** of the plugin folder:\n\n1. **Stop your server.**\n2. Go to `plugins/PocketDice/`.\n3. **Back up your existing `config.yml`** somewhere safe if you changed anything in it.\n4. **Delete the entire `PocketDice` plugin directory** (for example: `rm -r plugins/PocketDice`).\n5. Replace the old PocketDice JAR with the new **v0.2.0** JAR.\n6. Start the server to let the plugin **regenerate `config.yml` and the new `locale` folder**.\n7. Re-apply your custom config changes to the newly generated `config.yml`.\n\nFrom v0.2.0 onward, the new config/locale update logic will make **future** upgrades smoother (v0.2.0 → later versions).\n\n---\n\n### ✨ New\n\n- **Locale-based translations**\n  - All user-facing messages have been moved into YAML locale files under `plugins/PocketDice/locale/`.\n  - A default `en_US.yml` is bundled in the JAR and copied/maintained in the `locale` folder.\n  - The plugin automatically picks each player’s Minecraft language (e.g. `tr_TR`) if a matching `<code>.yml` exists; otherwise it falls back to `en_US`.\n  - `/pocketdice reload` now reloads both config and locales so you can edit translation files without restarting the server.\n\n- **Modrinth update checker**\n  - New update checker that talks to the Modrinth API to see if a newer PocketDice version is available.\n  - Checks on startup and (optionally) every `check_interval_hours`, configured under the `updates` block in `config.yml`.\n  - Localized console messages and in-game admin notifications, using the new locale system.\n  - New permission: `pocketdice.update.notify` (default: op) to receive join-time update notifications in-game.\n  - Update checking can be completely disabled with `updates.enabled: false`.\n\n- **Roll sound**\n  - After a successful `/roll`, the roller can hear a subtle dice “rattle” sound.\n  - Fully configurable under `sounds.roll` in `config.yml`:\n    - `enabled` – toggle the feature on/off.\n    - `sound_key` – any valid namespaced sound key (e.g. `minecraft:block.amethyst_block.chime`).\n    - `volume` and `pitch` – fine-tune how the sound feels.\n  - Invalid sound keys are detected once per session and logged; the sound is then skipped so it won’t spam your console.\n\n---\n\n### 🛠 Improvements & internals\n\n- **Config update framework (for future versions)**\n  - Introduced a `ConfigUpdater` that:\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [
+		"PocketDice Logo.jpg",
+		"PocketDice Logo.png"
+	],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 22,
+		"more": 0,
+		"people": [
+			{
+				"login": "sepehrhn",
+				"commits": 22,
+				"name": "Sepehr",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

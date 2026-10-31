@@ -1,0 +1,95 @@
+{
+	"repo": "0xNull12/NoRecipeBook",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-07-06T04:49:42Z",
+	"pushed": "2026-07-10T02:27:12Z",
+	"releases": [
+		{
+			"tag": "1.1.0",
+			"published": "2026-07-08T02:42:12Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 469811611,
+					"name": "norecipebook-1.1.0.jar",
+					"url": "https://github.com/0xNull12/NoRecipeBook/releases/download/1.1.0/norecipebook-1.1.0.jar",
+					"size": 9991,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "83c0c9f37c073f44c5c1271a5577a8e02aaace7e9895dc712afb6ff2efb561b4",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1.1.0] - 2026-07-07\n\n### Renamed\n- The mod has been renamed from **RecipeRemover** to **NoRecipeBook**\n- Mod ID changed from `reciperemover` to `norecipebook`\n- All internal references, package names, and log messages have been updated to reflect the new name\n\n### Performance\n- **Reflection caching (Lazy Loading):** Reflection fields are now resolved only once during the first inventory open, instead of performing expensive field lookups every time. Subsequent accesses use cached references directly from memory, reducing per-frame overhead to near zero\n- **Early loop exit:** The button search loop now breaks immediately after finding the recipe book button (ID 10), avoiding unnecessary iteration through the rest of the GUI button list\n- **Single execution model:** The recipe book clearing logic now runs once when the player joins a world, rather than re-executing on every inventory open event. This eliminates redundant processing during gameplay\n\n### Added\n- **Server packet interception:** The mod now intercepts and blocks `SPacketRecipeBook` packets sent by the server.Previously, the server would refill the recipe book immediately after the mod cleared it, rendering the optimization ineffective. This is now fully handled\n- **Player recipe book cleanup on world join:** The mod now clears `EntityPlayer.getRecipeBook()` when the player enters a world, targeting the actual source of background recipe processing lag rather than only the GUI-level instance\n- **EntityJoinWorldEvent listener:** Automatically triggers recipe book cleanup when the client player joins or respawns in a world\n- **Client/Server proxy system:** Introduced `CommonProxy` and `ClientProxy` to ensure client-side code is properly isolated and never loaded on dedicated servers\n- **Manual event registration:** The event handler is now explicitly registered via `MinecraftForge.EVENT_BUS.register()` in `ClientProxy.init()` to guarantee reliable event delivery regardless of classloading order\n\n### Fixed\n- Fixed an issue where the recipe book clearing logic would fail silently because only the GUI-level recipe book was being cleared, while the player-level recipe book (the main source of lag) was left untouched\n- Fixed potential `NullPointerException` crashes when the logger was accessed before initialization\n- Fixed the recipe book button sometimes reappearing after server sync due to unhandled `SPacketRecipeBook` packets\n\n### Notes\n- This mod is **client-side only**. It does not need to be installed on servers.\n- Fully compatible with **JEI (Just Enough Items)** and other recipe viewer mods. The vanilla recipe book is removed, but JEI reads recipes directly from the game registry and is unaffected\n---\n\n### Bug Reports\n\nIf you encounter a bug or a performance issue related to this mod, please report it on the [GitHub Issues Tracker](https://github.com/Onyx-i7/NoRecipeBook/issues).\n\nWhen reporting, please include:\n- Your Minecraft and Forge version\n- A list of installed mods\n- The crash report or latest.log file\n- Steps to reproduce the issue"
+		},
+		{
+			"tag": "1.0.0",
+			"published": "2026-07-06T07:01:05Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 467816177,
+					"name": "reciperemover-1.0.0.jar",
+					"url": "https://github.com/0xNull12/NoRecipeBook/releases/download/1.0.0/reciperemover-1.0.0.jar",
+					"size": 4175,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "d3d4d6cf1b3ad169fc25ded3b09390bea4d1c05d13919fbb7eebe81ab8be836c",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 2,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First version, no changes since it's the first one\n\nIf you find a bug or a crash, please report it in the GitHub repository so we can fix it in a future update"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "A lightweight Minecraft mod that completely removes the vanilla recipe book interface and optimizes performance by preventing the game from processing thousands of modded recipes when opening...",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 35,
+		"more": 0,
+		"people": [
+			{
+				"login": "0xNull12",
+				"commits": 35,
+				"name": "0xNull",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

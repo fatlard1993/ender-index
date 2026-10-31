@@ -1,0 +1,199 @@
+{
+	"repo": "0xNull12/Better-Archery",
+	"host": "github",
+	"description": "A port of Better Archery by Zaggy1024",
+	"stars": 1,
+	"archived": true,
+	"license": "MIT",
+	"created": "2026-06-30T17:29:36Z",
+	"pushed": "2026-07-16T03:31:46Z",
+	"releases": [
+		{
+			"tag": "v1.2-beta1",
+			"published": "2026-07-09T17:01:35Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 471546991,
+					"name": "BetterArchery-1.12.2-1.2.jar",
+					"url": "https://github.com/0xNull12/Better-Archery/releases/download/v1.2-beta1/BetterArchery-1.12.2-1.2.jar",
+					"size": 280003,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c419b4d818a2d8c647996ead4c241b279393e2bb5c97af5b2859d4b7a0f719d8",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Broken Drill Arrow",
+								"Composite Bow",
+								"Drill Arrow",
+								"Ender Arrow",
+								"Fire Arrow",
+								"Impact Arrow",
+								"Long Bow",
+								"Quiver",
+								"Quiver with Arrows",
+								"Recurve Bow",
+								"Splitting Arrow",
+								"Torch Arrow",
+								"Yumi Bow"
+							],
+							"group": [
+								"Better Archery"
+							],
+							"entity": [
+								"Quiver Skeleton"
+							],
+							"block": [
+								"Gunpowder Barrel",
+								"Target"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 58,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 1.2-beta1\n### Changes\n- Backported Diana's block from 1.14\n- Removed potion arrows\n- Removed unused textures\n- Fixed the update notification that appeared even when there was no actual update\n- Added a gunpowder barrel block that explodes when hit by certain types of arrows\n\n### Known Bugs:\n1. The new blocks do not display their textures on their respective items\n2. Barrels do not trigger a splash explosion when one explodes nearby\n\n---\nIf you find a bug, error, or performance issue, please report it on the [GitHub Issues Tracker](https://github.com/Onyx-i7/Better-Archery/issues)"
+		},
+		{
+			"tag": "v1.1",
+			"published": "2026-07-03T02:46:09Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 464957174,
+					"name": "BetterArchery-1.12.2-1.1.jar",
+					"url": "https://github.com/0xNull12/Better-Archery/releases/download/v1.1/BetterArchery-1.12.2-1.1.jar",
+					"size": 272984,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "cfd943d5bdb9b162e5ad8a7d58aa89d565310c0dacffe37cb37e938a6955f0de",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Broken Drill Arrow",
+								"Composite Bow",
+								"Drill Arrow",
+								"Ender Arrow",
+								"Fire Arrow",
+								"Impact Arrow",
+								"Long Bow",
+								"Potion Arrow",
+								"Quiver",
+								"Quiver with Arrows",
+								"Recurve Bow",
+								"Splitting Arrow",
+								"Torch Arrow",
+								"Yumi Bow"
+							],
+							"group": [
+								"Better Archery"
+							],
+							"entity": [
+								"Quiver Skeleton"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 55,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Better Archery v1.1.0 Changelog\n\n## Changes\n\n- **Expanded Quiver Capacity**: The quiver now holds up to 128 arrows, doubling the previous limit\n\n- **Storage-Only Quiver**: The quiver has been redesigned to function purely as an arrow storage container. It no longer automatically feeds arrows to your bow this change was made to give you more control over your ammunition\n\n- **Baubles/Bubbles Integration**: The quiver can now be equipped in the body slot, keeping your inventory organized and your arrows always within reach\n\n- **BackTools Integration**: The quiver now renders properly on your back when using BackTools, with correct positioning that respects armor and sneaking animations\n\n- **CraftTweaker Support**: Full integration with CraftTweaker allows modpack creators to customize bow and arrow stats through scripts\n\n## Bugfixes\n\n- **Quiver Not Rendering on Back**\n  The quiver would sometimes fail to appear on the player's back. This has been fixed by improving the layer rendering logic and ensuring proper detection of quiver items in both regular inventory and Baubles slots\n\n- **Player Texture Glitch with Quiver**\n  When the quiver was rendered on the back, the player's own texture would sometimes bleed through or overlap incorrectly. The rendering pipeline has been adjusted to properly isolate the quiver model from the player model\n\n- **Missing Arrow Texture During Bow Animation**\n  The bow's drawing animation was missing the arrow texture, making it look incomplete. The animation now correctly displays the arrow being nocked and drawn\n\n- **Infinite Arrow Exploit**\n  A bug allowed players to extract arrows from the quiver without properly reducing the stored count. The extraction logic has been rewritten to ensure accurate count tracking\n\n- **Arrow Type Not Preserved**\n  The quiver was not correctly saving which type of arrow was stored inside. Arrow type is now properly saved to NBT data and restored when loading\n\n## Technical Changes\n\n- **EntityCustomArrow Base Class**: Created a new abstract base class for all custom arrows. This eliminates code duplication across the seven arrow types and makes the codebase significantly easier to maintain and extend\n\n- **Code Cleanup**: Removed redundant code throughout the arrow entities, particularly in the onUpdate() and onHit() methods. This improves performance and makes future optimizations simpler\n\n- **Improved NBT Handling**: The quiver's arrow storage system now uses more robust NBT serialization, ensuring data integrity across world saves and loads\n\n- **Modular Compatibility System**: Compatibility with optional mods (Baubles, BackTools, CraftTweaker) is now handled through dedicated compat classes, making it easier to add support for additional mods in the future\n\n---\n\nIf you encounter any bugs, please report them so we can continue improving the mod. Your feedback helps make Better Archery better for everyone\n\n**Full Changelog**: https://github.com/Onyx-i7/Better-Archery/compare/v1.0...v1.1"
+		},
+		{
+			"tag": "v1.0",
+			"published": "2026-07-01T22:27:20Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 463673558,
+					"name": "BetterArchery-1.12.2-1.0.jar",
+					"url": "https://github.com/0xNull12/Better-Archery/releases/download/v1.0/BetterArchery-1.12.2-1.0.jar",
+					"size": 265046,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "f17c22efc32dc659eca433dac71b784409f4bc2f99700ae55bdf603c526f1f48",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Broken Drill Arrow",
+								"Composite Bow",
+								"Drill Arrow",
+								"Ender Arrow",
+								"Fire Arrow",
+								"Impact Arrow",
+								"Long Bow",
+								"Potion Arrow",
+								"Quiver",
+								"Quiver with Arrows",
+								"Recurve Bow",
+								"Splitting Arrow",
+								"Torch Arrow",
+								"Yumi Bow"
+							],
+							"group": [
+								"Better Archery"
+							],
+							"entity": [
+								"Quiver Skeleton"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 50,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "This is the first version of the mod. If you find any bugs or anything you think might be an error, please report it on the GitHub Issues Tracker, as this helps me improve the mod"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 211,
+		"more": 0,
+		"people": [
+			{
+				"login": "0xNull12",
+				"commits": 211,
+				"name": "0xNull",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

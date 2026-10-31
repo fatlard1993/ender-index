@@ -1,0 +1,487 @@
+{
+	"repo": "Brassworks-smp/Create-Brassworks-Missions",
+	"host": "github",
+	"description": "A Create: Numismatics addon adding missions with a clean, Create-style UI, HUD tracking, and full data-driven customization.",
+	"stars": 5,
+	"archived": false,
+	"license": "MIT",
+	"created": "2025-09-17T20:48:07Z",
+	"pushed": "2026-09-30T03:58:13Z",
+	"releases": [
+		{
+			"tag": "2.1-hotfix",
+			"published": "2026-09-30T03:58:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 599983048,
+					"name": "brassworksmissions-2.1-hotfix.jar",
+					"url": "https://github.com/Brassworks-smp/Create-Brassworks-Missions/releases/download/2.1-hotfix/brassworksmissions-2.1-hotfix.jar",
+					"size": 606681,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "8b45bb27540aaf1cda052f1d1ac78289b02f6c5e778350112883456ef5f175f8",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "brassworksmissions",
+							"version": "2.1-hotfix",
+							"name": "Create Brassworks Missions",
+							"description": "Missions Mod For the Brassworks SMP by Swzo",
+							"minecraft": "[1.21,1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 122,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Fixed\n\n* Fixed [#11](https://github.com/Brassworks-smp/Create-Brassworks-Missions/issues/11#issue-5555907567)"
+		},
+		{
+			"tag": "2.1",
+			"published": "2026-08-02T13:22:40Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 498921385,
+					"name": "brassworksmissions-2.1.jar",
+					"url": "https://github.com/Brassworks-smp/Create-Brassworks-Missions/releases/download/2.1/brassworksmissions-2.1.jar",
+					"size": 606618,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c969adaba5fa760ce3d078bd622ce147f4497a24e0f633269e77c916ece174e2",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "brassworksmissions",
+							"version": "2.1",
+							"name": "Create Brassworks Missions",
+							"description": "Missions Mod For the Brassworks SMP by Swzo",
+							"minecraft": "[1.21,1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 122,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n\n* Added an optional second mission category with its own name, slot count and independent reset schedule.\n* Added per-mission category assignment through the new `category` property.\n* Added `/missions manage category <id> <1|2>` for moving mission templates between categories.\n* Added `/missions reassign category <1|2> [player]` for reassigning only one mission category.\n* Added configurable names for both mission categories.\n* Added mission availability requirements with a public registry for custom requirement types.\n* Added a built-in advancement requirement for locking missions behind completed or incomplete advancements.\n* Added `/missions manage diagnose` for asynchronously checking mission definitions, registry entries, recipes and advancement requirements.\n* Added automatic live reloading of `missions.json` when the file changes.\n* Added a configurable option for disabling automatic mission reloading.\n* Added an in-game migration workflow for legacy datapack missions.\n* Added commands for transferring, deleting or ignoring detected legacy mission files.\n* Added administrator notifications when legacy mission datapacks are detected.\n* Added configurable HUD size, horizontal and vertical offsets, left alignment and bottom alignment.\n\n### Changed\n\n* Mission definitions are now loaded from `config/brassworksmissions/missions.json`.\n* The bundled default missions are copied to the configuration directory when no mission file exists.\n* Existing `managed_missions.json` files are automatically renamed to `missions.json`.\n* Datapack mission definitions are now treated as legacy files and are no longer loaded directly.\n* The mission reward item is now configured through the NeoForge server config instead of `data/brassworksmissions/missions/mission_reward.json`.\n* Mission storage now keeps separate slot counts for both mission categories.\n* The previous single slot range of 1 to 32 was replaced with up to 12 configurable slots per category.\n* Mission resets can now affect one category without replacing missions from the other category.\n* Mission selection now filters templates according to each player's availability requirements.\n* Mission list and detail commands now display the assigned mission category.\n* Mission networking now uses direct NeoForge 1.21.1 payload registration with explicit clientbound, serverbound and bidirectional packet directions.\n* Removed the obsolete packet registration map and its unchecked raw-type casts.\n* Removed the unused reward reload manager and its duplicate mission resources.\n* Removed unused menu binding state, the unused delayed server work queue and other dead helper code.\n\n### Fixed\n\n* Fixed payloads being registered through `FMLCommonSetupEvent` instead of the modern NeoForge payload registration event.\n* Fixed serverbound and clientbound packets being registered as bidirectional when only one direction was required.\n* Fixed invalid mission configuration reloads replacing a previously working runtime mission pool.\n* Fixed category-specific resets affecting slots belonging to the other mission category.\n* Fixed the second mission category not being initialized for existing players after enabling it.\n* Fixed category reset timestamps not being preserved when player data is cloned.\n* Fixed unavailable or unknown mission requirements being able to enter the player's mission pool.\n* Fixed invalid advancement references, recipe IDs, item IDs, block targets and entity targets being difficult to identify.\n* Fixed obsolete reward configuration resources conflicting with the server-config reward system."
+		},
+		{
+			"tag": "2.0",
+			"published": "2026-07-29T09:15:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 493843389,
+					"name": "brassworksmissions-2.0.jar",
+					"url": "https://github.com/Brassworks-smp/Create-Brassworks-Missions/releases/download/2.0/brassworksmissions-2.0.jar",
+					"size": 570836,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "753c53946ff1ed58bf21bb2ae60f382f4a16bdda14b2bc390f98109974f4b025",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "brassworksmissions",
+							"version": "2.0",
+							"name": "Create Brassworks Missions",
+							"description": "Missions Mod For the Brassworks SMP by Swzo",
+							"minecraft": "[1.21,1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 111,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n\n\n\n* Added a complete in-game mission management system for server operators.\n* Missions can now be created, listed, viewed, enabled, disabled and deleted through commands.\n* Added automatic mission ID generation.\n* Added support for separate mission targets and display icons.\n* Added support for multiple randomly selected mission titles.\n* Added commands for changing mission icons, titles and reward modes.\n* Added random and progressive reward modes for individual missions.\n* Added persistent storage for completed but unclaimed rewards.\n* Added a configurable active mission count from 1 to 32.\n* Expanded the mod to 29 mission types, including block placing, item smelting and item collection missions.\n* Added `/missions manage types` to display available mission types and their creation syntax.\n* Added support for multiple mission templates using the same mission type.\n\n\n\n### Changed\n\n\n\n* Completed rewards stored during a mission reset can be collected later with Claim All.\n* Existing datapacks remain compatible with the expanded mission format.\n* Mission validation and loading now provide clearer errors for invalid definitions.\n\n\n\n### Fixed\n\n\n\n* Fixed a critical server crash caused by missing player or mission data during progress checks.\n* Fixed rewards being lost when the configured mission slot count was reduced.\n* Fixed the Fill Item mission type not being registered correctly.\n* Fixed several mission progress handlers failing with blocks or items from other mods.\n* Fixed invalid or incomplete mission definitions being able to crash mission loading.\n* Fixed reroll validation and reward delivery behavior.\n* Improved null safety across the mission system."
+		},
+		{
+			"tag": "1.13",
+			"published": "2026-04-11T22:21:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 394311920,
+					"name": "brassworksmissions-1.13.jar",
+					"url": "https://github.com/Brassworks-smp/Create-Brassworks-Missions/releases/download/1.13/brassworksmissions-1.13.jar",
+					"size": 524908,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "8a5b111671ebde2af4f152908a326011c528df4c55275808279575395a7b9e36",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "brassworksmissions",
+							"version": "1.13",
+							"name": "Create Brassworks Missions",
+							"description": "Missions Mod For the Brassworks SMP by Swzo",
+							"minecraft": "[1.21,1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 98,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Changed\n\n* Made the mission registry public and added custom mission events (Completed, RewardClaimed, Rerolled, Reset) for addon developers to subscribe to."
+		},
+		{
+			"tag": "1.12",
+			"published": "2026-03-20T01:18:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 377608460,
+					"name": "brassworksmissions-1.12.jar",
+					"url": "https://github.com/Brassworks-smp/Create-Brassworks-Missions/releases/download/1.12/brassworksmissions-1.12.jar",
+					"size": 521734,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2eea424589fb148d05b492c29d6edc45b4adf387cb3324722df25e859ddf0c37",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "brassworksmissions",
+							"version": "1.12",
+							"name": "Create Brassworks Missions",
+							"description": "Missions Mod For the Brassworks SMP by Swzo",
+							"minecraft": "[1.21,1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 94,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Changed\n\n* Made the first two mission rerolls be free, and updated translations accordingly."
+		},
+		{
+			"tag": "1.11",
+			"published": "2026-01-14T13:34:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 340447745,
+					"name": "brassworksmissions-1.11.jar",
+					"url": "https://github.com/Brassworks-smp/Create-Brassworks-Missions/releases/download/1.11/brassworksmissions-1.11.jar",
+					"size": 521599,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b19d3088986d932c41a5ec2621fba7eb1f2cd180b523d947c92331ee833187f5",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "brassworksmissions",
+							"version": "1.11",
+							"name": "Create Brassworks Missions",
+							"description": "Missions Mod For the Brassworks SMP by Swzo",
+							"minecraft": "[1.21,1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 94,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n\n* Add mission hud scale config option."
+		},
+		{
+			"tag": "1.10",
+			"published": "2025-12-18T18:32:20Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 330315686,
+					"name": "brassworksmissions-1.10.jar",
+					"url": "https://github.com/Brassworks-smp/Create-Brassworks-Missions/releases/download/1.10/brassworksmissions-1.10.jar",
+					"size": 520221,
+					"downloads": 13,
+					"inspection": 2,
+					"sha256": "ce8d72b85df10f3eb7b4faa27064165cc52aa9b2edb95f8c44f9cad2c86312e0",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "brassworksmissions",
+							"version": "1.10",
+							"name": "Create Brassworks Missions",
+							"description": "Missions Mod For the Brassworks SMP by Swzo",
+							"minecraft": "[1.21,1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 93,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n\n* Add config option to bottom align gui\n* Add button in modmenu to open the config screen"
+		},
+		{
+			"tag": "1.9",
+			"published": "2025-12-12T19:48:19Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 327966097,
+					"name": "brassworksmissions-1.9.jar",
+					"url": "https://github.com/Brassworks-smp/Create-Brassworks-Missions/releases/download/1.9/brassworksmissions-1.9.jar",
+					"size": 518365,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b196b53928cc69f2cc0bf684cd921019b3863d98e6bfadb1234188c65f3c3a9c",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "brassworksmissions",
+							"version": "1.9",
+							"name": "Create Brassworks Missions",
+							"description": "Missions Mod For the Brassworks SMP by Swzo",
+							"minecraft": "[1.21,1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 92,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Fixed\n\n* Mission tooltup having duplicate values on the latest create mod version"
+		},
+		{
+			"tag": "1.8",
+			"published": "2025-10-29T09:54:38Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 310057738,
+					"name": "brassworksmissions-1.8.jar",
+					"url": "https://github.com/Brassworks-smp/Create-Brassworks-Missions/releases/download/1.8/brassworksmissions-1.8.jar",
+					"size": 517554,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "6618f7f6d210c9f9f310a1198582c7963bba5748a4840971cd0ed5d84a2471ea",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "brassworksmissions",
+							"version": "1.8",
+							"name": "Create Brassworks Missions",
+							"description": "Missions Mod For the Brassworks SMP by Swzo",
+							"minecraft": "[1.21,1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 91,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Fixed\n\n* Fix #5"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 58,
+		"more": 0,
+		"people": [
+			{
+				"login": "salem-5",
+				"commits": 49,
+				"name": "salem",
+				"funding": []
+			},
+			{
+				"login": "VladisCrafter",
+				"commits": 4,
+				"funding": []
+			},
+			{
+				"login": "DerErneuerer",
+				"commits": 4,
+				"funding": []
+			},
+			{
+				"login": "Pipo1660",
+				"commits": 1,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

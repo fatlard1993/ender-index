@@ -1,0 +1,405 @@
+{
+	"repo": "otectus/irons-botany",
+	"host": "github",
+	"description": "Iron’s Botany is a compatibility mod that tightly merges Botania and Iron’s Spells ’n Spellbooks, letting Botania mana power spells while spells can also interact with Botania systems. New school, new spells, new armor.",
+	"stars": 1,
+	"archived": false,
+	"created": "2026-03-25T02:17:15Z",
+	"pushed": "2026-09-13T13:29:42Z",
+	"releases": [
+		{
+			"tag": "v1.9.0",
+			"published": "2026-07-01T23:21:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 463718436,
+					"name": "ironsbotany-1.9.0.jar",
+					"url": "https://github.com/otectus/irons-botany/releases/download/v1.9.0/ironsbotany-1.9.0.jar",
+					"size": 620528,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "ea9360a6c92dc67bbbc32a7cb2cb5411b03b9c727f849af9217c85ffaaec795c",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "ironsbotany",
+							"version": "1.9.0",
+							"name": "Iron's Botany",
+							"description": "A compatibility mod bridging Botania and Iron's Spells 'n Spellbooks",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"botania",
+								"irons_spellbooks",
+								"curios"
+							],
+							"suggests": [
+								"patchouli",
+								"ars_n_spells"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Iron's Botany"
+							],
+							"item": [
+								"(Rune Enhanced)",
+								"Arcane Codex",
+								"Botanical Crystal",
+								"Botanical Focus",
+								"Botanical Ring",
+								"Chronicle of the Green Mage",
+								"Daybloom Amulet",
+								"Dreamwood Scepter",
+								"Elementium Mage Boots",
+								"Elementium Mage Hood",
+								"Elementium Mage Leggings",
+								"Elementium Mage Robes",
+								"Elementium Scroll",
+								"Elementium Spell Sword",
+								"Elementium Wand",
+								"Gaia Mage Boots",
+								"Gaia Mage Hood",
+								"Gaia Mage Leggings",
+								"Gaia Mage Robes",
+								"Gaia Spell Sword",
+								"Gaia Wand",
+								"Gaia's Blessing",
+								"Greater Mana Ink",
+								"Livingwood Staff",
+								"Mana Reservoir Ring",
+								"Mana-Infused Essence",
+								"Manasteel Wand",
+								"Manasteel Wizard Boots",
+								"Manasteel Wizard Chestplate",
+								"Manasteel Wizard Helmet",
+								"Manasteel Wizard Leggings",
+								"Minor Mana Ink",
+								"Orb of Blood Power",
+								"Orb of Bursting",
+								"Orb of Eldritch Power",
+								"Orb of Ender Power",
+								"Orb of Fire Power",
+								"Orb of Flora",
+								"Orb of Frost Power",
+								"Orb of Holy Power",
+								"Orb of Lightning Power",
+								"Orb of Nature Power",
+								"Orb of Terran Might",
+								"Orb of the Pool",
+								"Prime Mana Ink",
+								"Spell Petal",
+								"Terrasteel Mage Boots",
+								"Terrasteel Mage Hood",
+								"Terrasteel Mage Leggings",
+								"Terrasteel Mage Robes",
+								"Terrasteel Spell Blade",
+								"Terrasteel Spellbook",
+								"Terrasteel Wand"
+							],
+							"block": [
+								"Arcane Mana Altar",
+								"Mana Conduit",
+								"Spell Reservoir"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 167,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Full-codebase audit pass. Two advertised features that never worked now do, the half-finished NATURE→BOTANY school migration is completed across every subsystem, and a batch of correctness / duplication / performance / stability bugs are fixed. **Item and registry IDs are unchanged — saves are not broken.** Targets **Iron's Spells 'n Spellbooks 3.16+**.\n\n## Behavior features that were inert\n- **BOTANIA_PRIMARY no longer double-charges** — the ISS debit is refunded for any cast Botania paid for.\n- **Elementium Scroll \"Botania pays, scroll retained\" now triggers** (flat `elementiumScrollManaCost` floor; scroll spells report 0 ISS cost).\n- **Casting-channel mana-cost modifiers** (Livingwood −10%, Dreamwood +10%, Terra Rod +30%) now actually apply.\n\n## School migration (NATURE → BOTANY) completed\nGaia Spell Trials Phase-2 vulnerability + counter, Corporea reagent mapping, spell-triggered mana-event typing, the Livingwood channel, and Alfheim dual-school crafting all now recognize the Botany school. The Botanical Focus now powers the Botany school. Alfheim scrolls persist both schools.\n\n## Correctness & exploits\n- **Livingwood Staff split mana store** unified on one NBT key (Spark deposits / HUD now visible to the staff).\n- **Rune Scroll Fusion duplication exploit** fixed (result clamped to 1); serializer `category` NPE guarded.\n- **Piercing Botanical Burst** projectiles now actually pierce (no early discard / double particles).\n- **Flower auras** can't register against `minecraft:air`; **Corporea reagent cache** keyed by spell+level and copied.\n- **Botania→ISS over-drain** and **reservoir/conduit free-mana underflow** fixed.\n- **Gaia's Blessing** drains once per cast-tick (was per level-query firing).\n\n## Stability & hardening\n- `resolveCost` wrapped defensively; **Ars 'n Spells** compat no longer self-disables after a mode switch.\n- **Daybloom Amulet** uses a transient modifier; `BotanySpellConfig` reads guarded pre-sync.\n- `SpellCastSyncPacket` no longer double-enqueues + explicit direction; `SparkSwarmEntity` lifetime no longer spams metadata; catalyst power math scales only each catalyst's contribution.\n\n## Config\nNew **\"Mana Network Capacities\"** group makes every mana-item cap + the Arcane Mana Altar cap configurable, plus `elementiumScrollManaCost`.\n\nSee `CHANGELOG.md` `[1.9.0]` for the complete list.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)"
+		},
+		{
+			"tag": "v1.3.2",
+			"published": "2026-04-07T22:22:28Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 391116128,
+					"name": "ironsbotany-1.3.2.jar",
+					"url": "https://github.com/otectus/irons-botany/releases/download/v1.3.2/ironsbotany-1.3.2.jar",
+					"size": 449259,
+					"downloads": 8,
+					"inspection": 2,
+					"sha256": "7077f15be529b4ff1eca77886bf954e329b9830720f28640c642be9a8b0458e3",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "ironsbotany",
+							"version": "1.3.2",
+							"name": "Iron's Botany",
+							"description": "A compatibility mod bridging Botania and Iron's Spells 'n Spellbooks",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"botania",
+								"irons_spellbooks",
+								"curios"
+							],
+							"suggests": [
+								"patchouli"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Iron's Botany"
+							],
+							"item": [
+								"(Rune Enhanced)",
+								"Botanical Crystal",
+								"Botanical Focus",
+								"Botanical Ring",
+								"Chronicle of the Green Mage",
+								"Dreamwood Scepter",
+								"Gaia Spirit Wand",
+								"Livingwood Staff",
+								"Mana-Infused Essence",
+								"Manasteel Wizard Boots",
+								"Manasteel Wizard Chestplate",
+								"Manasteel Wizard Helmet",
+								"Manasteel Wizard Leggings",
+								"Orb of Bursting",
+								"Orb of Flora",
+								"Orb of Terran Might",
+								"Orb of the Pool",
+								"Spell Petal",
+								"Terrasteel Spell Blade"
+							],
+							"block": [
+								"Mana Conduit",
+								"Spell Reservoir"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 114,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Iron's Botany v1.3.2 — Server Crash Fix, VFX Overhaul & Stability\n\n### Critical Fixes\n- **Dedicated server crash fixed** — `Level.addParticle()` was called in server-side code in two entity classes, crashing dedicated servers\n- **Memory leak in GaiaSpellTrials fixed** — Static trial data map was never cleaned up, causing unbounded growth on long-running servers\n- **Botanical Focus and Ring can now be equipped** — Missing Curios slot tags prevented equipping\n\n### Bug Fixes\n- Null safety added to all `FlowerAura.appliesTo()` implementations\n- `ManaSpreader.commitRedirection()` wrapped in try-catch for Botania API version safety\n- `SpellRegistry.getSpell()` results now null-checked against `SpellRegistry.none()`\n- SparkSwarm particle throttled to every other tick for better FPS with multiple swarms\n\n### Visual Overhaul\n- All 3 particle classes rewritten with distinct animations, color gradients, easing, and rotation\n- 12 custom particle textures (soft glows, star sparks, petal silhouettes) replacing vanilla sprites\n- Entity renderers upgraded with fullbright, dual-layer glow, pulsing animation, and orbital sparks\n- Projectile trail replaced with smooth interpolated chain with spiral offset\n- Vanilla particles replaced with custom types across all entities, spells, handlers, and channels\n\n### Improved\n- Event priority ordering documented between FlowerShield and ArmorSetBonus handlers\n- Orphaned `scroll_botanical` resources removed\n- Botania API typo in `getManaAccesories()` documented\n\n**Full changelog:** See CHANGELOG.md"
+		},
+		{
+			"tag": "v1.3.0",
+			"published": "2026-03-28T01:08:26Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 383256454,
+					"name": "ironsbotany-1.3.0.jar",
+					"url": "https://github.com/otectus/irons-botany/releases/download/v1.3.0/ironsbotany-1.3.0.jar",
+					"size": 436200,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "2761dee5b52c6911c116e5488da3b9e53306c4f13e8d3f0eb3427a99b66e90cd",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "ironsbotany",
+							"version": "1.3.0",
+							"name": "Iron's Botany",
+							"description": "A compatibility mod bridging Botania and Iron's Spells 'n Spellbooks",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"botania",
+								"irons_spellbooks",
+								"curios"
+							],
+							"suggests": [
+								"patchouli"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Iron's Botany"
+							],
+							"item": [
+								"(Rune Enhanced)",
+								"Botanical Crystal",
+								"Botanical Focus",
+								"Botanical Ring",
+								"Chronicle of the Green Mage",
+								"Dreamwood Scepter",
+								"Gaia Spirit Wand",
+								"Livingwood Staff",
+								"Mana-Infused Essence",
+								"Manasteel Wizard Boots",
+								"Manasteel Wizard Chestplate",
+								"Manasteel Wizard Helmet",
+								"Manasteel Wizard Leggings",
+								"Orb of Bursting",
+								"Orb of Flora",
+								"Orb of Terran Might",
+								"Orb of the Pool",
+								"Spell Petal",
+								"Terrasteel Spell Blade"
+							],
+							"block": [
+								"Mana Conduit",
+								"Spell Reservoir"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 114,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Critical fixes, integration wiring, and balance pass\n\nAddresses 32 issues from two comprehensive audit reports. **33 files changed, 772 insertions, 535 deletions.**\n\n### Highlights\n\n- **5 critical bug fixes:** mandatory dependency declarations, catalyst registration rewritten from reflection to registry lookups, Corporea reagent duplication eliminated, mana deletion in all conversion paths fixed, non-functional Stage 4 NBT writes removed\n- **12 integration fixes:** casting channels wired into spell execution, SpellContext effects applied, flower aura flags written for Gaia trials, mana payment unified with HUD, BotanicalFocus fully functional, projectile pierce implemented, spark swarm follows owner, recipe string matching replaced with item tags\n- **4 compatibility fixes:** Bellethorn aura typo, Alfheim redesigned around portal proximity, Patchouli guidebook opens on right-click, broken datagen target removed\n- **4 balance changes:** Gaia's Wrath particle density reduced ~85%, Flower Shield simplified to single axis (no Resistance stacking), Manasteel armor shield has 2s cooldown, TerrasteelSpellBlade naming corrected\n- **1.20.1 API fix:** Replaced all 36 uses of `ResourceLocation.fromNamespaceAndPath()` (1.21+ API) with `new ResourceLocation()` (correct 1.20.1 API)\n\n### Full Changelog\nSee [CHANGELOG.md](https://github.com/otectus/irons-botany/blob/main/CHANGELOG.md) for complete details.\n\n### Requirements\n- Minecraft 1.20.1\n- Forge 47.4.16+\n- Botania 1.20.1-450+\n- Iron's Spells 'n Spellbooks 1.20.1-3.15.2+\n- Curios API 5.14.0+\n- Patchouli 1.20.1-84+ (optional)"
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-03-26T06:24:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 381874670,
+					"name": "ironsbotany-1.2.0.jar",
+					"url": "https://github.com/otectus/irons-botany/releases/download/v1.2.0/ironsbotany-1.2.0.jar",
+					"size": 420004,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "105184c06bb3bfe6098cc589944dd69fa7ade9a6c8570b606e0778e6cc3769d3",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "ironsbotany",
+							"version": "1.2.0",
+							"name": "Iron's Botany",
+							"description": "A compatibility mod bridging Botania and Iron's Spells 'n Spellbooks",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"suggests": [
+								"botania",
+								"irons_spellbooks",
+								"curios",
+								"patchouli"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Iron's Botany"
+							],
+							"item": [
+								"Botanical Crystal",
+								"Botanical Focus",
+								"Botanical Ring",
+								"Chronicle of the Green Mage",
+								"Dreamwood Scepter",
+								"Gaia Spirit Wand",
+								"Livingwood Staff",
+								"Mana-Infused Essence",
+								"Manasteel Wizard Boots",
+								"Manasteel Wizard Chestplate",
+								"Manasteel Wizard Helmet",
+								"Manasteel Wizard Leggings",
+								"Orb of Bursting",
+								"Orb of Flora",
+								"Orb of Terran Might",
+								"Orb of the Pool",
+								"Spell Petal",
+								"Terrasteel Spell Blade"
+							],
+							"block": [
+								"Mana Conduit",
+								"Spell Reservoir"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 113,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Iron's Botany v1.2.0 — Major Bugfix, Balance, and i18n Release\n\n### Highlights\n- **5 critical bug fixes**: BotanicalRing now actually applies stats, FlowerShield HP truncation fixed, Stage 4 disabled (non-functional), reflection replaced with direct Botania API, dead ManaTransferPacket removed\n- **8 high-priority fixes**: SpellReservoir now accepts mana via right-click, Gaia's Wrath costs reduced, Living Root Grasp slowness capped, repair ingredients added, tooltips corrected\n- **Balance improvements**: Runic Infusion buff stacking capped (Strength V max), Mana Rebirth preserves beneficial effects, total damage multiplier capped at 5.0x\n- **Non-Player entities** can now cast botanical spells\n- **22 language translations**: af_za, ar_sa, bn_bd, de_de, en_gb, es_ar, es_es, es_mx, fr_fr, hi_in, it_it, ja_jp, ko_kr, nl_nl, pt_br, ru_ru, tr_tr, uk_ua, vi_vn, zh_cn, zh_hk, zh_tw\n- **Code quality**: New `DataKeys` constants class (32 NBT keys centralized), `BotaniaIntegration` utility (all reflection eliminated), `SpellContext.capDamageMultiplier()`\n\n### Requirements\n- Minecraft Forge 1.20.1 (47.3.0+)\n- Botania 1.20.1-441+\n- Iron's Spells 'n Spellbooks 1.20.1-3.0.0+\n- Curios API 5.0.0+\n\nSee [CHANGELOG.md](https://github.com/otectus/irons-botany/blob/main/CHANGELOG.md) for the full list of changes."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 38,
+		"more": 0,
+		"people": [
+			{
+				"login": "otectus",
+				"commits": 38,
+				"name": "Otectus",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

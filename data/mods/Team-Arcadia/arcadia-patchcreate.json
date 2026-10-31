@@ -1,0 +1,172 @@
+{
+	"repo": "Team-Arcadia/arcadia-patchcreate",
+	"host": "github",
+	"stars": 4,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-03-31T14:47:08Z",
+	"pushed": "2026-09-23T05:04:28Z",
+	"releases": [
+		{
+			"tag": "1.4.3",
+			"published": "2026-08-05T10:55:39Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 502510270,
+					"name": "arcadia-patch-create-1.4.3.jar",
+					"url": "https://github.com/Team-Arcadia/arcadia-patchcreate/releases/download/1.4.3/arcadia-patch-create-1.4.3.jar",
+					"size": 100830,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "abbafa79b6eb5c58386ce2c48ce15e7e1da314e2f29e9e23de1c958fa9f411c6",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "arcadia_patch_create",
+							"version": "1.4.3",
+							"name": "Arcadia Patch Create",
+							"description": "Validated Create performance patches and runtime controls maintained for Arcadia servers.",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"create"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 46,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Performance release targeting the hotspots measured on the production servers, plus a fix that made adaptive throttling inoperative.\n\nRequires **Create 6.0.10**. Every patch is validated against an exact bytecode fingerprint and disables itself on any other build.\n\n## Performance\n\n**CreateHeatJS metadata cache** — the addon rebuilt a recipe context on every basin heat check, and each context walked the entire recipe list to recover one identifier. This ran even with no custom heat provider configured.\n\nMeasured on server 1: `1.907 ms/tick` → `0.002 ms/tick`. Basin recipe handling dropped by 99%, mixers by 98%, presses by 89%. Only immutable recipe identifiers are cached; a fresh context is still built for every check, so predicates and custom heat levels are unaffected.\n\n**Mechanical Arm simulation reuse** — while searching for an item, an arm probes every slot of every input and simulates insertion against every output for each one. Identical stacks ran the identical simulation repeatedly. Results are now memoized for the duration of a single search pass. `simulateInsertion` mutates nothing, so this is strictly equivalent.\n\n**Item Drain lookup reuse** — Create resolved the same emptying recipe twice per processing call. The first positive result is reused for the simulation that immediately follows. Measured: `0.227` → `0.135 ms/tick`.\n\n**Fluid pipes** — the idle fast-path no longer inspects Create state reflectively, which cost up to `0.272 ms/tick` on its own. The connection map moved from an `IdentityHashMap` to an `EnumMap`: at most six entries, iterated four times per pipe per tick, and profiling attributed `0.218 ms/tick` to that iterator alone.\n\n**Belt fast-path anchor** — moved after Create's own housekeeping. Injected at HEAD it could leave a stale `lazyClientItem` behind or miss the synchronization of an inversion on an empty belt.\n\n## Fixes\n\n**Adaptive throttling never engaged.** The MSPT accessor was looked up under a single hardcoded name taken from the compile classpath, but the deployed server is remapped to official names. The lookup failed silently and the reading was always zero, so the 35 / 45 / 55 ms steps were never crossed — a server measured at 33.7 ms average and 42 ms at the 95th percentile stayed on interval 1.\n\n**Chute throttle removed.** It cancelled the input probe before re-reading the capability, delaying a valid transfer by one to four ticks, and never targeted the real hotspot. Removing it costs nothing: chute tick time is unchanged at `0.86 ms/tick`.\n\n## Administration\n\nThe panel moved to a six-row layout with modules grouped by family, and gained a health banner: current MSPT against the 50 ms budget, throttle mode and interval, and how many modules are effective versus how many had their target rejected. A patch disabled by a fingerprint mismatch was previously invisible without running a debug dump.\n\nEach module now reports **configured**, **available** and **effective** as three distinct states, across the panel, the commands and the debug dump.\n\nNew: `/arcadiapatchcreate arm status|enabled <bool>`.\n\nStill server-side only — vanilla menu type, no custom screen or packet, works the same in single player.\n\n## Notes\n\nMeasurements come from two 120-second Spark profiles taken four days apart on the same production server under comparable load. Observable was running during both captures, which inflates absolute values equally on each side; the comparisons hold.\n\nCreate's own block entity tick time dropped by `1.405 ms/tick` overall. Note that on the observed server this gain was offset by unrelated content growth over the same period.\n\nBuild verification: `./gradlew.bat clean build`, plus a dedicated server startup with and without CreateHeatJS installed."
+		},
+		{
+			"tag": "1.4.2",
+			"published": "2026-05-18T09:54:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 423177622,
+					"name": "arcadia-patch-create-1.4.2.jar",
+					"url": "https://github.com/Team-Arcadia/arcadia-patchcreate/releases/download/1.4.2/arcadia-patch-create-1.4.2.jar",
+					"size": 65204,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "a62c3f917da036f0f553770abc1b60f6cbd8e9123b68f793219baa7b5164fec0",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "arcadia_patch_create",
+							"version": "1.4.2",
+							"name": "Arcadia Patch Create",
+							"description": "Validated Create performance patches and runtime controls maintained for Arcadia servers.",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"create"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 26,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Conservative Create crash guards.\\n\\n- Guard invalid continuous OBB collision manifolds where Create can expose a null axis during contraption collision.\\n- Reject unreadable or corrupted contraption NBT before Create dereferences invalid state.\\n- Discard invalid contraption entities during load instead of crashing the server tick.\\n\\nBuild verification: ./gradlew.bat clean build."
+		},
+		{
+			"tag": "v1.4.1",
+			"published": "2026-04-21T19:58:48Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 401867978,
+					"name": "arcadia-patch-create-1.4.1.jar",
+					"url": "https://github.com/Team-Arcadia/arcadia-patchcreate/releases/download/v1.4.1/arcadia-patch-create-1.4.1.jar",
+					"size": 55686,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "68148694cab32c1d12fb3f9e40d53c50a67cc3b61c10960dbae486ba3fe1a99f",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "arcadia_patch_create",
+							"version": "1.4.1",
+							"name": "Arcadia Patch Create",
+							"description": "Validated Create performance patches and runtime controls maintained for Arcadia servers.",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"create"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Arcadia Patch Create 1.4.1\n\n### Correctifs\n\n- **Panel admin** — Les clics sur les catégories naviguent maintenant correctement vers les sous-pages (fix sync `server.execute`)\n- **Panel admin** — Les messages de navigation affichaient toujours \"Panel refreshed\" au lieu du nom de la page ouverte\n- **Panel admin** — Le clic droit sur le bouton délai drops dupliquait le toggle on/off du bouton principal, comportement clarifié\n\n### Nettoyage\n\n- `PatchRuntime` : suppression de la réflexion sur `getAverageTickTime()`, appel direct à `server.getAverageTickTime()`\n- `PatchRuntime` : 6 aliases factory gauge obsolètes supprimés, champs réorganisés\n- `isAdaptiveThrottleActive()` renommé en `isThrottleActive()` (le nom était trompeur : retournait `true` pour STATIC aussi)\n\n### Patches validés\n\n| Patch | Cible | Effet |\n|---|---|---|\n| Belt | `BeltInventory.tick()` | Skip si belt complètement vide |\n| Fluid | `FluidTransportBehaviour.tick()` | Fast-path idle si aucune pression/flow |\n| Factory Gauge | `FactoryPanelBehaviour.tickStorageMonitor()` | Throttle adaptatif si état stable |\n| Chute | `ChuteBlockEntity.handleInputFromAbove/Below()` | Throttle adaptatif si idle |\n| Create Drops | `ItemEntity` | Despawn anticipé des items Create |\n\n### Dépendances\n\n- Minecraft 1.21.1\n- NeoForge 21.1.221+\n- Create 6.0.9+\n- Côté serveur uniquement"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "arcadia-patch-create is a focused NeoForge performance patch mod for Arcadia's Minecraft 1.21.1 server stack.",
+	"funding": [
+		{
+			"platform": "custom",
+			"url": "https://buy.stripe.com/3cI3co6X97Vy4IK50QfIs00",
+			"from": "owner-repositories"
+		}
+	],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 41,
+		"more": 0,
+		"people": [
+			{
+				"login": "Blushister",
+				"commits": 41,
+				"name": "curveo",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

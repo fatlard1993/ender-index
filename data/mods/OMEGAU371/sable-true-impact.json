@@ -1,0 +1,277 @@
+{
+	"repo": "OMEGAU371/sable-true-impact",
+	"host": "github",
+	"stars": 16,
+	"archived": false,
+	"created": "2026-05-09T13:35:17Z",
+	"pushed": "2026-07-14T07:52:57Z",
+	"releases": [
+		{
+			"tag": "v0.5.6-delta",
+			"published": "2026-07-13T09:02:10Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 475293086,
+					"name": "true_impact-0.5.6-delta.jar",
+					"url": "https://github.com/OMEGAU371/sable-true-impact/releases/download/v0.5.6-delta/true_impact-0.5.6-delta.jar",
+					"size": 272358,
+					"downloads": 14,
+					"inspection": 2,
+					"sha256": "0f066e898ceb3c453877e363db9649dbe5aa9910b7b7d4df931d5d581907f6d7",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "true_impact",
+							"version": "0.5.6-delta",
+							"name": "True Impact",
+							"description": "True Impact — physics-based impact damage for Sable physical structures.\nThis is an unofficial add-on for Sable and is not affiliated with or endorsed by Sable's original author.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"sable"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 105,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			]
+		},
+		{
+			"tag": "v1.1.11-gamma-diag",
+			"published": "2026-05-28T06:11:08Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 431804472,
+					"name": "sabletrueimpact-1.1.11-gamma-diag.jar",
+					"url": "https://github.com/OMEGAU371/sable-true-impact/releases/download/v1.1.11-gamma-diag/sabletrueimpact-1.1.11-gamma-diag.jar",
+					"size": 236769,
+					"downloads": 45,
+					"inspection": 2,
+					"sha256": "411d0d47c591aa36dac6376cb965504a649b414f4016a90988a144d5004c1e28",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "sabletrueimpact",
+							"version": "1.1.11-gamma-diag",
+							"name": "True Impact",
+							"description": "Adds impact damage, cumulative cracking, entity impact damage, and structural fracture behavior to Sable physical structures.\n\nThis is an unofficial add-on for Sable and is not affiliated with or endorsed by Sable's original author.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"sable"
+							],
+							"suggests": [
+								"distanthorizons"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 94,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Resting-contact filter now uses RELATIVE velocity between sub-levels, not absolute velocity. Previously the 8 m/s floor only protected doors on slow aircraft; once the host vehicle accelerated past the floor, same-material contacts started chewing each other again because the aircraft's flight speed was being read as the contact velocity. The actual relative velocity at the contact between paired sub-levels is ~0, which is now what gets checked\n- Downstream KE calculations also use the relative speed (capped) so heavy-break and crack paths can't trigger via host velocity bleed-through\n- The old absolute-velocity floor (`similarMaterialContactVelocityFloor`) is kept as a fallback for the rare case where the other sub-level can't be queried"
+		},
+		{
+			"tag": "v1.1.10-gamma-diag",
+			"published": "2026-05-28T03:08:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 431669338,
+					"name": "sabletrueimpact-1.1.10-gamma-diag.jar",
+					"url": "https://github.com/OMEGAU371/sable-true-impact/releases/download/v1.1.10-gamma-diag/sabletrueimpact-1.1.10-gamma-diag.jar",
+					"size": 236437,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "82be6e08c19aaafb43f9c56470c525500669013a685edeaf4e6bb62ed4ae3b87",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "sabletrueimpact",
+							"version": "1.1.10-gamma-diag",
+							"name": "True Impact",
+							"description": "Adds impact damage, cumulative cracking, entity impact damage, and structural fracture behavior to Sable physical structures.\n\nThis is an unofficial add-on for Sable and is not affiliated with or endorsed by Sable's original author.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"sable"
+							],
+							"suggests": [
+								"distanthorizons"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 94,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Fixes same-material sub-level pairs (e.g. two closed doors on a flying aircraft) chewing each other up over time. The resting contact had no real relative velocity, but the aircraft's flight speed was being used as the impact velocity, and same-material contacts get no protection from the strong-material immunity check\n- New `[restingContact]` config section with `similarMaterialContactVelocityFloor` (default 8.0 m/s). When materials are similar AND impact velocity is below the floor, the per-contact damage path returns NONE. Real high-velocity slams still go through"
+		},
+		{
+			"tag": "v1.1.9-gamma-diag",
+			"published": "2026-05-28T02:45:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 431654475,
+					"name": "sabletrueimpact-1.1.9-gamma-diag.jar",
+					"url": "https://github.com/OMEGAU371/sable-true-impact/releases/download/v1.1.9-gamma-diag/sabletrueimpact-1.1.9-gamma-diag.jar",
+					"size": 235995,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "361767cdf8696228ea29c8f1b75006d2a9979f6b3887d590350e4cfa3ccdc4b2",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "sabletrueimpact",
+							"version": "1.1.9-gamma-diag",
+							"name": "True Impact",
+							"description": "Adds impact damage, cumulative cracking, entity impact damage, and structural fracture behavior to Sable physical structures.\n\nThis is an unofficial add-on for Sable and is not affiliated with or endorsed by Sable's original author.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"sable"
+							],
+							"suggests": [
+								"distanthorizons"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 94,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Strong-material immunity now actually works: a netherite block impacting grass no longer destroys itself alongside the grass. The previous implementation read from a cache that was always empty during the impact callback\n- Diagonal corner contacts (e.g. a meteor tip hitting the ground) now correctly identify the terrain target for immunity matchups\n- `terrainImpactMaxBlocks` default raised from 12 to 256 so high-energy meteor-style strikes can crater meaningfully. Light impacts stay bounded by contact-pressure normalization, not by this cap. Lower it in config if you want shallower craters"
+		},
+		{
+			"tag": "v1.1.8-diag",
+			"published": "2026-05-28T02:24:29Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 431639687,
+					"name": "sabletrueimpact-1.1.8-gamma-diag.jar",
+					"url": "https://github.com/OMEGAU371/sable-true-impact/releases/download/v1.1.8-diag/sabletrueimpact-1.1.8-gamma-diag.jar",
+					"size": 235430,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "b8fdd4a354e9bd05a3d91134a4fc663cc1308b21e47aaf8ff6ffac92726f840d",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "sabletrueimpact",
+							"version": "1.1.8-diag",
+							"name": "True Impact",
+							"description": "Adds impact damage, cumulative cracking, entity impact damage, and structural fracture behavior to Sable physical structures.\n\nThis is an unofficial add-on for Sable and is not affiliated with or endorsed by Sable's original author.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"sable"
+							],
+							"suggests": [
+								"distanthorizons"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 94,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Adds an item-drop policy for physics-broken blocks, addressing two Discord requests:\n\n- New global toggle `enablePhysicsBreakDrops` (default `true`). Set to `false` to make all impact-broken blocks stop dropping items — helps with lag from large structure crashes\n- New per-block blacklist `noDropBlocks`. Listed blocks never drop when broken by physics, even with the global toggle on. Defaults to `[minecraft:dirt, minecraft:cobblestone, minecraft:sand, minecraft:gravel, minecraft:netherrack]`\n\nBoth live under a new `[itemDrops]` config section. Propagation/chain-reaction breaks already never drop items, regardless of these settings."
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "Physics-based structural damage for Sable — damage thresholds derived from real block data, mutual structure-vs-structure damage, and energy-driven terrain penetration.",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 11,
+		"more": 0,
+		"people": [
+			{
+				"login": "OMEGAU371",
+				"commits": 11,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

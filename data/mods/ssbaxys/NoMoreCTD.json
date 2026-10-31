@@ -1,0 +1,76 @@
+{
+	"repo": "ssbaxys/NoMoreCTD",
+	"host": "github",
+	"description": "Prevents crash-to-desktop! Catches crashes, shows what went wrong, identifies the guilty mod, and lets you disable mods or return to menu - all without closing Minecraft.",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2025-12-18T04:59:53Z",
+	"pushed": "2025-12-19T08:02:00Z",
+	"releases": [
+		{
+			"tag": "v1.3.4",
+			"published": "2025-12-19T05:38:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 330530685,
+					"name": "nomorectd-1.3.4.jar",
+					"url": "https://github.com/ssbaxys/NoMoreCTD/releases/download/v1.3.4/nomorectd-1.3.4.jar",
+					"size": 227545,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "ceea91bfae05f156d1951fade5ab257773a72a2cc70619c531c6877121bd1073",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "nomorectd",
+							"version": "1.3.4",
+							"name": "NoMoreCTD",
+							"description": "Prevents crashes and provides dynamic mod management. v1.3.4: CRITICAL FIX - Completely rewritten statistics screen! HotSwap-only mod management (like Garry's Mod). No restart needed!",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 88,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🚨 CRITICAL FIXES\n\n### 1. **FIXED: EnhancedStatisticsScreen Crash** 🔥\n**Issue:** Game would crash immediately when opening \"Enhanced Statistics & Graphs\" - black screen, then forced quit.\n\n**Complete Solution:**\n- ✅ **Completely rewrote the entire statistics screen** from scratch\n- ✅ **Removed ALL external dependencies** (PerformanceMonitor, ErrorStatistics, FeatureManager)\n- ✅ **Direct data access** from Minecraft and Runtime - no middleman\n- ✅ **Triple-layer error handling:**\n  1. Try-catch around entire render method\n  2. Try-catch around each data section\n  3. Try-catch around individual property reads\n- ✅ **Fallback messages** for every possible failure point\n- ✅ **Safe data caching** to prevent repeated failures\n\n**Technical Changes:**\n```java\n// OLD (crashed):\nPerformanceMonitor.PerformanceData perf = FeatureManager.getPerformanceMonitor().getPerformanceData();\n// Could return null, causing NullPointerException\n\n// NEW (safe):\nMinecraft mc = Minecraft.getInstance();\nif (mc == null) return;\ncurrentFPS = mc.getFps(); // Direct access, cached\n```\n\n**Result:** **Statistics screen is now 100% crash-proof!** 🎉\n\n---\n\n## 🚀 HOTSWAP REVOLUTION\n\n### 2. **Simplified to HotSwap-Only Mode**\n\n**What Changed:**\n- ❌ **REMOVED:** Persistent mod toggle (required restart)\n- ✅ **KEPT:** HotSwap runtime toggle (NO restart!)\n- ✅ **Simplified UI:** Cleaner, faster, more intuitive\n\n**Why This Change:**\nUser feedback showed confusion between two toggle modes. HotSwap is superior:\n- 🔥 **Instant changes** - no waiting for restart\n- 🎮 **Like Garry's Mod / People Playground** - toggle mods on the fly\n- 🎯 **Single clear purpose** - no confusion\n\n**New ModListScreen Layout:**\n```\nRow 1: [HotSwap Toggle] [Refresh] [Enable All] [Disable All]\nRow 2:            [Done (centered)]\n```\n\n**Features:**\n- **Toggle individual mod:** Select + click \"Toggle\"\n- **Enable all mods:** One-click enable (skips protected mods)\n- **Disable all mods:** One-click disable (keeps NoMoreCTD active)\n- **Instant feedback:** \"HotSwap enabled/disabled X mods\" messages\n- **No restart message:** Now shows \"⚡ No restart required!\"\n\n---\n\n## 📊 Enhanced Statistics Screen (Rewrite)\n\n### What's New:\n- **Direct data access** - no dependencies\n- **Simplified display:**\n  - Real-time Performance (FPS, Memory, CPU estimate)\n  - Session Info (uptime)\n  - System Information (Java, OS, CPU cores, RAM)\n  - Mod Statistics (total count)\n- **Performance graphs** still work (FPS history, Memory history)\n- **Clean error messages** if anything fails\n\n### Removed (for stability):\n- Error statistics by mod (was causing crashes)\n- Crash rate calculations (unstable)\n- Most problematic mod listing (unreliable data source)\n\n**Result:** Stable, fast, informative display!\n\n---\n\n## 🎨 UI Improvements\n\n### ModListScreen Changes:\n1. **Subtitle:** Now shows \"🚀 REVOLUTIONARY: Enable/disable mods without restart!\"\n2. **Mod count:** \"Total mods: X - Toggle without restart!\"\n3. **Bottom message:** Green \"⚡ No restart required! Changes apply instantly!\"\n4. **Runtime status:** Shows \"⚡ Active/Inactive in Runtime\" for each mod\n5. **Cleaner button layout:** 4 buttons instead of 7\n\n### Benefits:\n- ✅ Less clutter\n- ✅ Clear messaging\n- ✅ Faster workflow\n- ✅ No confusion about restart requirements\n\n---\n\n## 🔧 Technical Details\n\n### EnhancedStatisticsScreen.java - Complete Rewrite\n**Before:**\n- 360 lines\n- Multiple external dependencies\n- Complex error stat tracking\n- Crash-prone\n\n**After:**\n- 380 lines (slightly longer due to safety code)\n- ZERO external dependencies\n- Triple-layer error handling\n- Crash-proof\n\n**Key Safety Patterns:**\n```java\ntry {\n    this.renderBackground(graphics);\n    // ... rendering code ...\n    super.render(graphics, mouseX, mouseY, partialTick);\n} catch (Exception e) {\n    graphics.drawCenteredString(this.font, \"§cError rendering statistics\", ...);\n}\n```\n\n### ModListScreen.java - Simplified\n**Removed:**\n- `toggleButton` (persistent toggle)\n- `toggleSelectedMod()` method\n\n..."
+		}
+	],
+	"readme": null,
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 2,
+		"more": 0,
+		"people": [
+			{
+				"login": "ssbaxys",
+				"commits": 2,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

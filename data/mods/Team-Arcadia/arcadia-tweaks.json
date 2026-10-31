@@ -1,0 +1,366 @@
+{
+	"repo": "Team-Arcadia/arcadia-tweaks",
+	"host": "github",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-04-25T15:11:25Z",
+	"pushed": "2026-10-26T15:07:08Z",
+	"releases": [
+		{
+			"tag": "v0.2.0",
+			"published": "2026-10-26T14:47:28Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 678466154,
+					"name": "arcadiatweaks-0.2.0.jar",
+					"url": "https://github.com/Team-Arcadia/arcadia-tweaks/releases/download/v0.2.0/arcadiatweaks-0.2.0.jar",
+					"size": 460572,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "445021a68867f1e383f378b22596d1d798f1ca79941d15a518ee473f6062d28d",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "arcadiatweaks",
+							"version": "0.2.0",
+							"name": "ArcadiaTweaks",
+							"description": "Umbrella mod-patch for the Arcadia modpack. Non-invasive, Mixin-based optimizations and fixes for BotanyPots, Refined Storage, Mekanism, Waystones and Simply Swords, plus server safety guards.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"botanypots",
+								"refinedstorage",
+								"mekanism",
+								"waystones",
+								"ftbteams",
+								"simplyswords",
+								"cosmeticweaponsmod",
+								"cosmeticarmoursmod",
+								"accessories"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 95,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## ArcadiaTweaks 0.2.0\n\nOne jar for every module: `arcadiatweaks-0.2.0.jar`. Each module stays dormant when its target mod is absent. Replace any previous ArcadiaTweaks jar (`0.1.1-all` or a single-patch jar) with this one.\n\n### Fixes\n- **Refined Storage:** activeness changes (power back, redstone mode) were applied up to ~19 s late with the 0.1.1 coalescing. They now land within 19 ticks of plain Refined Storage.\n- **Simply Swords:** the Runic Forge no longer creates 8 free Runic Tablets from a unique weapon without awakening data (Arcadia bug #321).\n- **Waystones:** \"Visible to Team\" waystones follow the owner's FTB Teams party instead of the vanilla scoreboard team.\n- **Server freeze guard:** an entity with a runaway velocity is stopped instead of freezing the server (dedicated servers).\n- `[modules] botany = false` now really turns every BotanyPots strategy off.\n\n### Performance (new, on by default)\n- **CosmeticWeapons / CosmeticArmours:** the advancement tick procedures no longer rescan the inventory, Curios and Accessories for every item; same answers, about 4x less time per player tick.\n- **Accessories:** `Inventory.contains` skips a scan that can never match, and the per-entity tick allocates about 45% less (pinned to Accessories 1.1.0-beta.54, switches itself off on any other build).\n- **Refined Storage:** autosave reuses the encoded form of unchanged disks (verified every 20 saves), single component lookup, two hot debug log lines removed.\n\n### Measured (in-server A/B bench, 8 alternating rounds)\n| Scenario | Tick time |\n|---|---|\n| All scenarios together | -33 % (23.5 to 15.8 ms) |\n| BotanyPots farm | -91 % |\n| CosmeticWeapons / Armours players | -64 % |\n| Accessories players and entities | -14 % |\n| Idle Mekanism networks | -29 % |\n| Refined Storage autosave (200 disks) | -60 % (116 to 46 ms) |\n| Refined Storage network tick | no measurable change |\n| Entity movement guard | no measurable cost |\n\nFull report with method and limits: `arcadiatweaks-0.2.0-performance.html` (attached).\n\n### Admin\n- In-game command renamed to `/arcadia_tweaks gui` (`admin` stays an alias): paged menu, one row per module with its switch, safety guards row, two-click \"Recommended defaults\".\n- Every optimization proven identical by the tests is on by default; everything stays configurable in `config/arcadiatweaks-common.toml`.\n\n### Install note\nMost patches are server-side. Install the jar on clients too if you want the Mekanism transporter rendering safety patch.\n\nTested: 83 JUnit tests, 39 GameTests, dev client in a world, and the 407-mod Arcadia serverpack booted with this exact jar."
+		},
+		{
+			"tag": "v0.1.1",
+			"published": "2026-05-18T09:58:29Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 423180246,
+					"name": "arcadiatweaks-0.1.1-all.jar",
+					"url": "https://github.com/Team-Arcadia/arcadia-tweaks/releases/download/v0.1.1/arcadiatweaks-0.1.1-all.jar",
+					"size": 355838,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "1757e89d5d653e2ef0b078282501a2bb5efe661a99a951eb9261f9f25c88eccf",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "arcadiatweaks",
+							"version": "0.1.1",
+							"name": "ArcadiaTweaks",
+							"description": "Umbrella mod-patch for the Arcadia modpack. Non-invasive, Mixin-based optimizations and tweaks for BotanyPots, Refined Storage and Mekanism.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"botanypots",
+								"refinedstorage",
+								"mekanism"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 48,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 423180249,
+					"name": "arcadiatweaks-0.1.1-botany.jar",
+					"url": "https://github.com/Team-Arcadia/arcadia-tweaks/releases/download/v0.1.1/arcadiatweaks-0.1.1-botany.jar",
+					"size": 323161,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "98411c0fa44d673634a45ae0172873beb3649450c9efd4bd53829a4de2ec2e80",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "arcadiatweaks",
+							"version": "0.1.1",
+							"name": "ArcadiaTweaks",
+							"description": "Umbrella mod-patch for the Arcadia modpack. Non-invasive, Mixin-based optimizations and tweaks for BotanyPots, Refined Storage and Mekanism.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"botanypots"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 28,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 423180247,
+					"name": "arcadiatweaks-0.1.1-mekanism.jar",
+					"url": "https://github.com/Team-Arcadia/arcadia-tweaks/releases/download/v0.1.1/arcadiatweaks-0.1.1-mekanism.jar",
+					"size": 336587,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "8004786689282a456d2c554a11f08e5765120abf98df97cd9f1305a7be4c49b9",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "arcadiatweaks",
+							"version": "0.1.1",
+							"name": "ArcadiaTweaks",
+							"description": "Umbrella mod-patch for the Arcadia modpack. Non-invasive, Mixin-based optimizations and tweaks for BotanyPots, Refined Storage and Mekanism.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"mekanism"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 38,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 423180248,
+					"name": "arcadiatweaks-0.1.1-refinedstorage.jar",
+					"url": "https://github.com/Team-Arcadia/arcadia-tweaks/releases/download/v0.1.1/arcadiatweaks-0.1.1-refinedstorage.jar",
+					"size": 319867,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "eb5ca412bdbcaa4ca38ea359bdaafe24202c86bb081b84ca1dcedecddae16045",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "arcadiatweaks",
+							"version": "0.1.1",
+							"name": "ArcadiaTweaks",
+							"description": "Umbrella mod-patch for the Arcadia modpack. Non-invasive, Mixin-based optimizations and tweaks for BotanyPots, Refined Storage and Mekanism.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"refinedstorage"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 28,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 423180250,
+					"name": "arcadiatweaks-0.1.1.jar",
+					"url": "https://github.com/Team-Arcadia/arcadia-tweaks/releases/download/v0.1.1/arcadiatweaks-0.1.1.jar",
+					"size": 355836,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "43c7349db4b94235f4587cd0464a63bd10e3b0959e273b76d409088ef8d11df3",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "arcadiatweaks",
+							"version": "0.1.1",
+							"name": "ArcadiaTweaks",
+							"description": "Umbrella mod-patch for the Arcadia modpack. Non-invasive, Mixin-based optimizations and tweaks for BotanyPots, Refined Storage and Mekanism.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"botanypots",
+								"refinedstorage",
+								"mekanism"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 48,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## ArcadiaTweaks 0.1.1\n\nAdds the Refined Storage and Mekanism patch modules alongside the existing BotanyPots optimizations.\n\n### Highlights\n- Variant jars: all, botany, refinedstorage, mekanism.\n- Admin GUI commands follow the selected jar variant.\n- Refined Storage activeness check coalescing.\n- Mekanism transmitter pull, network emit and logistical transporter idle path backoff.\n- Mekanism client M4 safe rendering for colored Logistical Transporters, including a model-cache guard for suspected client FPS/memory degradation.\n- Structural Mixin safety checks so changed targets skip instead of crashing the whole jar.\n- JUnit and GameTest coverage for patch helpers, compatibility guards and jar packaging.\n\n### Install note\nMost patches are server-side. Install the jar on clients too if you want the Mekanism M4 rendering safety patch."
+		},
+		{
+			"tag": "v0.1.0",
+			"published": "2026-04-25T22:20:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 405541123,
+					"name": "arcadiatweaks-0.1.0.jar",
+					"url": "https://github.com/Team-Arcadia/arcadia-tweaks/releases/download/v0.1.0/arcadiatweaks-0.1.0.jar",
+					"size": 19923,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "e22ff6cd2bc35ec23478519313909f649273533ab5708204fb646099d758aa6f",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "arcadiatweaks",
+							"version": "0.1.0",
+							"name": "ArcadiaTweaks",
+							"description": "Umbrella mod-patch for the Arcadia modpack. Non-invasive, server-side, Mixin-based optimizations and tweaks. First module: BotanyPots.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"botanypots"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First release. Adds the **botany** module — server-side hot-path optimizations for [BotanyPots](https://github.com/Darkhax-Minecraft/BotanyPots) on NeoForge **1.21.1** (build 21.1.221+).\n\n## What's in\n\nFive Mixin-based optimization strategies, each behind its own kill-switch in `config/arcadiatweaks-common.toml`:\n\n| ID | Strategy | Default | Microbench gain |\n|----|----------|---------|-----------------|\n| **S1** | `matches()` memoization on `getOrInvalidateSoil` / `getOrInvalidateCrop` | `true` | ~36% |\n| **S2** | tick coalescing — run `tickPot` once every N game ticks, amplify TickAccumulator deltas to keep growth speed identical | `true` (but `n=1`, no-op until opted in) | ~75-80% at N=4 |\n| **S3** | hopper export exponential backoff when downstream rejects insertion | `true` | ~80-92% on saturated hoppers |\n| **A1** | memoize `Helpers.getRequiredGrowthTicks` per BlockEntity | `true` | ~14-17% |\n| **A2** | downgrade `sendBlockUpdated` flags from 3 → 2 in `markUpdated()` to skip a redundant neighbor-update wave | `false` | workload-dependent |\n\n**Combined microbench upper bound** on a saturated hopper pot: -91.8% per `tickPot` call (12.18× speedup).\n\n**Real-world Spark profile** (Arcadia Test server, ~120s window, no active dense farm): -31.3% on BotanyPots-attributed CPU. The full 70-90% gain only materialises when there are saturated hoppers / many actively-growing pots — see README §Benchmark for the reference farm setup.\n\n## Design\n\n- **Mixin only.** No reflection patching, no class transformers, no ATs beyond what NeoForge already exposes.\n- **Non-invasive.** No public API change in BotanyPots, no recipe / datapack / registry mutation (KubeJS owns that side of the pack), no client-side rendering changes by default.\n- **Modular.** `botany` is the first module of an umbrella mod-patch. Each module disables independently.\n- **Per-strategy kill-switch.** Every Mixin path has a TOML toggle.\n- **Addon-friendly.** Mixins use default priority (1000) and target stable internal classes; no SPI / API surface consumed by BotanyTrees / KubeJS is touched.\n\n## Install\n\nDrop `arcadiatweaks-0.1.0.jar` into your server's `mods/` folder. BotanyPots is declared as an **optional** dependency: if BotanyPots is absent the botany Mixins fail soft (the config `botany.mixins.json` has `required: false`) and ArcadiaTweaks loads normally.\n\nThe config file is generated on first run at `<server>/config/arcadiatweaks-common.toml`. All five strategies are on by default (except A2 and S2 N=1).\n\n## Recommended config for an aggressive but invisible setup\n\n```toml\n[botany]\nmatches_cache_enabled = true\ntick_coalescing_enabled = true\ntick_coalescing_n = 8                  # S2 - +12% over N=4, still imperceptible\nhopper_backoff_enabled = true\nhopper_backoff_min_ticks = 16\nhopper_backoff_max_ticks = 128         # 6.4s max latency\nrequired_growth_ticks_cache_enabled = true\nlight_flag_downgrade_enabled = true    # A2 - on\nsafety_revalidate_period_ticks = 200\n```\n\n## Test coverage\n\nThe `test` branch carries 15/15 green NeoForge GameTests:\n\n- functional non-regression on S1 (cache invalidation on slot change, growth still advances, harvest cycle completes),\n- S3 backoff lifecycle (falls into deep backoff, recovers when downstream empties),\n- correctness check that S2 at N=4 produces *exactly* the same `growthTime` as N=1 over 800 ticks (`delta=0.00`),\n- per-strategy microbench with assertion thresholds catching regressions,\n- a 4-pot mixed-farm bench detecting any cross-BlockEntity state corruption.\n\n`./gradlew runGameTestServer` runs them all in ~1.3 s."
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "Umbrella mod-patch for the Arcadia modpack. Mostly server-side, non-invasive, Mixin-based optimizations and tweaks for NeoForge 1.21.1 (build 21.1.221+).",
+	"funding": [
+		{
+			"platform": "custom",
+			"url": "https://buy.stripe.com/3cI3co6X97Vy4IK50QfIs00",
+			"from": "owner-repositories"
+		}
+	],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 40,
+		"more": 0,
+		"people": [
+			{
+				"login": "laforetbrut",
+				"commits": 30,
+				"name": "vyrriox",
+				"funding": []
+			},
+			{
+				"login": "Blushister",
+				"commits": 10,
+				"name": "curveo",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

@@ -1,0 +1,116 @@
+{
+	"repo": "tech-anupam/G1axNameHistory",
+	"host": "github",
+	"description": "A lightweight, client-side Fabric mod for Minecraft 1.21+ that displays player name history and UUIDs in chat.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-01-16T16:04:07Z",
+	"pushed": "2026-01-16T16:15:14Z",
+	"releases": [
+		{
+			"tag": "v1.0.0",
+			"published": "2026-01-16T16:15:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 341528011,
+					"name": "g1axnamehistory-1.0.0.jar",
+					"url": "https://github.com/tech-anupam/G1axNameHistory/releases/download/v1.0.0/g1axnamehistory-1.0.0.jar",
+					"size": 32307,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "d11151bef8b136d037f1bf586bde5b773309d5fa9dacf75384cdca5c97d84482",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "g1axnamehistory",
+							"version": "1.0.0",
+							"name": "G1axNameHistory",
+							"description": "Display Minecraft players' name history and UUIDs",
+							"minecraft": ">=1.21",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "d59b45bc319b2598444423189b14722b0618395dc70e6c73999616a9a5570f90.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 15,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/g1ax/namehistory/api/CraftyGGApi.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/g1ax/namehistory/api/LabyGGApi.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/g1ax/namehistory/api/MojangApi.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/g1ax/namehistory/api/NameMCApi.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"api.crafty.gg": [
+								"com/g1ax/namehistory/api/CraftyGGApi.class"
+							],
+							"laby.net": [
+								"com/g1ax/namehistory/api/LabyGGApi.class"
+							],
+							"api.mojang.com": [
+								"com/g1ax/namehistory/api/MojangApi.class",
+								"com/g1ax/namehistory/api/NameMCApi.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "A lightweight, client-side Fabric mod for Minecraft 1.21+ that displays player name history and UUIDs in chat.\n\n## 🎮 Features\n\n- **Simple Commands**: Use `/igns <username>` or `/names <username>` to lookup any player\n- **Beautiful Output**: Gradient-colored chat messages with clickable UUIDs\n- **Smart Caching**: Reduces API calls with intelligent 1-hour cache system\n- **API Fallback**: Automatically switches between Crafty.gg and Mojang APIs\n- **Tab Completion**: Suggests online players when typing commands\n- **Client-Side**: Works on any server without requiring server-side installation\n- **Lightweight**: Minimal resource usage and dependencies\n\n## 📋 Requirements\n\n- Minecraft 1.21 or higher\n- Fabric Loader 0.15.0 or higher\n- Fabric API 0.102.0 or higher\n- Java 21\n\n## 🚀 Installation\n\n1. Install [Fabric Loader](https://fabricmc.net/use/)\n2. Download [Fabric API](https://modrinth.com/mod/fabric-api)\n3. Download G1axNameHistory from the releases page\n4. Place both JARs in your `.minecraft/mods` folder\n5. Launch Minecraft with Fabric profile\n\n## 📖 Usage\n\n```\n/igns <username>  - Display name history for a player\n/names <username> - Alternative command (same functionality)\n```\n\n**Example Output:**\n```\n─────────────────────────────────\nG1axNameHistory: Player Info\n─────────────────────────────────\nCurrent IGN: ExamplePlayer\nUUID: 12345678-1234-1234-1234-123456789012 [Click to copy]\n\nName History:\n  1. ExamplePlayer (Current)\n  2. OldName123 (Changed: Jan 15, 2024)\n  3. FirstName (Changed: Jun 3, 2023)\n─────────────────────────────────\nSource: crafty.gg | Cached: ✓\n```\n\n## 🏗️ Project Structure\n\n```\nG1axNameHistory/\n├── src/main/java/com/g1ax/namehistory/\n│   ├── G1axNameHistory.java          # Main mod initializer\n│   ├── commands/\n│   │   └── NameHistoryCommand.java   # Command registration & handling\n│   ├── api/\n│   │   ├── ApiManager.java           # Async API call manager\n│   │   ├── CraftyGGApi.java          # Crafty.gg API implementation\n│   │   ├── MojangApi.java            # Mojang API implementation\n│   │   └── ApiFallbackHandler.java   # Automatic API fallback\n│   ├── cache/\n│   │   └── DataCacheManager.java     # LRU cache with TTL\n│   ├── utils/\n│   │   ├── ColorUtils.java           # Gradient text generation\n│   │   ├── UUIDUtils.java            # UUID formatting utilities\n│   │   └── TextFormatter.java        # Chat output formatting\n│   └── data/\n│       └── PlayerData.java           # Player data model\n├── src/main/resources/\n│   └── fabric.mod.json               # Mod metadata\n├── build.gradle                      # Build configuration\n└── gradle.properties                 # Project properties\n```\n\n## 🔧 Building from Source\n\n```bash\ngit clone https://github.com/AkaTriggered/G1axNameHistory.git\ncd G1axNameHistory\n./gradlew build\n```\n\nThe compiled JAR will be in `build/libs/`\n\n## 📝 License\n\nThis project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.\n\n## 👤 Author\n\n**AkaTriggered** (Codename: G1ax)\n- GitHub: [@AkaTriggered](https://github.com/AkaTriggered)\n\n## 🤝 Contributing\n\nContributions, issues, and feature requests are welcome!\n\n## ⭐ Show your support\n\nGive a ⭐️ if this project helped you!\n\n## 📊 API Credits\n\n- [Crafty.gg](https://crafty.gg) - Primary API for player data\n- [Mojang API](https://wiki.vg/Mojang_API) - Fallback API\n\n---\n\n**Note**: This mod is client-side only and does not require installation on servers."
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "custom",
+			"url": "https://anupambuilds.store/donate",
+			"from": "owner-repositories"
+		}
+	],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 4,
+		"more": 0,
+		"people": [
+			{
+				"login": "tech-anupam",
+				"commits": 4,
+				"name": "Anupam Jha",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}

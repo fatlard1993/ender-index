@@ -1,0 +1,375 @@
+{
+	"repo": "LUOCHUNsemianimus/huhutalk",
+	"host": "github",
+	"description": "HuhuTalk｜车万女仆附属模组，虚拟手机私密聊天 UI，NeoForge 1.21.1",
+	"stars": 0,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-08-26T16:13:18Z",
+	"pushed": "2026-10-29T10:39:13Z",
+	"releases": [
+		{
+			"tag": "v1.1.1",
+			"published": "2026-10-29T10:40:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 688208436,
+					"name": "huhutalk-1.1.1.jar",
+					"url": "https://github.com/LUOCHUNsemianimus/huhutalk/releases/download/v1.1.1/huhutalk-1.1.1.jar",
+					"size": 2278699,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "9fd4ccdc121917c22017be45eeec6094032d72e0da7c348b9a70b1b89e7e0421",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "huhutalk",
+							"version": "1.1.1",
+							"name": "HUHUTALK",
+							"description": "狐狐Talk（huhutalk）是一款车万女仆（Touhou Little Maid）的附属模组。\n\n它为女仆补充了无法远程聊天的空缺，提供了专属于手机 UI 的聊天方式、新的消息接收路径、以及隐私模式的开关。\n你可以通过手机随时与女仆保持联系，还支持用自然语言指挥女仆前往指定坐标、驻留或回到身边（move to / come / stay）。\n\n本模组由罗春使用 AI 工作流协助开发。感谢下载与体验！",
+							"minecraft": "[1.21.1,]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"touhou_little_maid"
+							],
+							"suggests": [
+								"journeymap"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Example Mod Tab",
+								"HuhuTalk"
+							],
+							"block": [
+								"Example Block",
+								"WiFi Block"
+							],
+							"item": [
+								"Example Item",
+								"Phone Watch (Youth)",
+								"Smartphone (Pro)"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 376,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/huhutalk/core/vision/VisionService.class": [
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"qianfan.baidubce.com": [
+								"com/huhutalk/common/vision/VisionProviders.class"
+							],
+							"api.hunyuan.cloud.tencent.com": [
+								"com/huhutalk/common/vision/VisionProviders.class"
+							],
+							"api.stepfun.com": [
+								"com/huhutalk/common/vision/VisionProviders.class"
+							],
+							"api.deepseek.com": [
+								"com/huhutalk/core/vision/VisionService.class",
+								"com/huhutalk/core/vision/VisionSites.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# HuhuTalk 1.1.1\n\nMinecraft **1.21.1** · **NeoForge** · Java **21** · 需要 / Requires **Touhou Little Maid**\n\n## 中文\n\n本次更新加入服务端手机归档、只读存储页，以及手机历史检索与引用；同时修复救援叙述开关，并更新识图平台预设。归档范围是当前主人与当前女仆的手机历史，旧消息离开 TLM 当前对话上下文后仍可回看。\n\n### 新增与改进\n\n- **服务端手机归档**：长期保存当前主人与当前女仆的手机文字、图片及双向物品传输事件。图片按内容哈希存入世界目录；传输事件记录发送、领取与丢地结果，是只读审计，不会重发物品。\n- **手机存储页**：从女仆资料页进入只读聊天档案，分页浏览文字、图片和结构化传输事件，点击后按需查看归档图片。本页不合并本机聊天记录，不提供删除归档或领取物品的按钮。\n- **历史检索与引用**：在手机聊天中可让女仆检索当前主人与当前女仆的归档历史，并把找到的原话、图片或真实物品事件引用到回复。引用只挂在本次回复断句后的第一条气泡上，显示原作者、原消息预览与原发送时间；旧档时间未知时显示未知，不用当前时间补造。检索是原话/物品名/媒体标签的字面匹配，不是向量语义搜索；依赖模型支持工具调用，并非每次对话都会自动使用，已找到也不等于必须引用。\n- **物品同发上下文绑定**：玩家把物品与文字放在同一条手机消息中发送时，物品事件绑定到同一轮对话上下文，归档不再把事件与对应消息拆散；女仆发件的待领取事件也随当前回合归档。\n- **识图平台与预设**：豆包预设更新为 Seed 2.1 Pro / Lite / Turbo 与 Seed 2.0 Mini，并更新平台图标与名称显示；自定义模型仍走原输入通路。不同型号不统一称作 2.1。\n\n### 修复与调整\n\n- 修复**救援叙述开关**：开关状态会同步到服务端，关闭后只停止 AI 救援叙述，药水救援本身仍照常执行。\n- 提供**归档导出/导入基础**，兼容读取旧 schema1 记录和缺少引用字段的 schema2 记录；导入按 ID 幂等并保留冲突处理。\n\n### 升级与兼容\n\n- 本发布包仅适用于 **Minecraft 1.21.1 / NeoForge**；**Forge 1.20.1 分支暂未同步本轮功能**。需要 Java 21、NeoForge 21.1.243 或更高的 1.21.1 对应版本，以及车万女仆（元数据最低 1.5.0；开发验收使用 1.5.3）。\n- **网络协议已变化**（`huhutalk-phone-quote-v1`）：**多人服的客户端与服务端都必须升级到 1.1.1**，不能与旧版本混用。\n- 服务端归档**不等于车万女仆完整的 AI 工作上下文**，本轮未实现完整 provider；不承诺重建旧版本从未归档的数据，旧客户端历史和未接通入口也不会自动补档。归档覆盖为 `partial`，未匹配只表示当前归档里没有找到。\n- 本机聊天显示清理不等于删除服务端长期归档；本版本没有新增“忘记/删除归档”UI。\n- 归档导出/导入只是基础能力，**未集成 Maid File Manager（MFM）的 `.maid` provider**；引用图片或物品事件只显示摘要，不重放物品，也不对旧图片重新识图。女仆发图的引用结构已预留，但这不是“女仆现在会发图”的新功能。\n- 升级前请备份存档与配置。普通 TLM 面对面回调没有可验证 sender 时不开放归档访问。\n\n### 验证边界\n\n本轮交付以 49 项 JUnit（构建不跳过）、94 项原生链路检查、456 个自有双语键和六张上游检查截图为依据，对应本次功能的源码状态。原生检查不发起真实付费 LLM/TTS 请求，也未进行 Forge 运行实测；发布版本重新构建与资源审计由上游核对。\n\n## English\n\nThis update adds a server-side phone archive, a read-only storage page, and phone history search with quoting, along with a rescue narrative toggle fix and updated vision-provider presets. The archive covers the current owner and maid; messages remain readable after leaving TLM's current conversation context.\n\n### Added and improved\n\n- **Server-side phone archive**: retains phone text, images and two-way item-transfer events for the current owner and maid. Images are content-addressed in the world folder; transfer events record sent, claimed and dropped outcomes as a read-only audit and never re-send items.\n- **Phone storage page**: a read-only chat archive opened from the maid profile, paging through text, images and structured transfer events and loading archived images on demand. It does not merge local chat history or offer archive deletion or item claiming.\n- **History search and quotes**: in phone chat, ask the maid to search archived history for the current owner and maid and quote a found message, image or real item event. A quote appears only on the first bubble of the segmented reply and shows the original author, preview and send time; unknown legacy times are shown as unknown rather than filled with the current time. Search is literal matching of wording, item names and media tags, not vector semantic search. It depends on model tool-calling support, is not used automatically in every conversation, and a successful search does not require a quote.\n- **Item co-send context binding**: when a player sends an item together with text in one phone message, the item event is bound to the same conversation turn, so the archive no longer separates them. Queued maid-to-player transfers are archived in the current turn as well.\n- **Vision providers and presets**: the Doubao presets now list Seed 2.1 Pro / Lite / Turbo and Seed 2.0 Mini, with refreshed platform icons and names; custom models keep the existing input path. Not every model variant is called 2.1.\n\n### Fixed and adjusted\n\n- Fixed the **rescue narrative toggle**: its state now syncs to the server, and disabling it stops only AI rescue narration while potion rescue still runs normally.\n\n..."
+		},
+		{
+			"tag": "v1.1.0-forge1.20.1",
+			"published": "2026-10-27T06:50:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 680729684,
+					"name": "huhutalk-1.1.0-forge1.20.1.jar",
+					"url": "https://github.com/LUOCHUNsemianimus/huhutalk/releases/download/v1.1.0-forge1.20.1/huhutalk-1.1.0-forge1.20.1.jar",
+					"size": 2224115,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "eaa59c313e02172df838d959b4ddb728e5988149b91f6c62eebbbd9fb726906f",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "huhutalk",
+							"version": "1.1.0-forge1.20.1",
+							"name": "HUHUTALK",
+							"description": "狐狐Talk（huhutalk）是一款车万女仆（Touhou Little Maid）的附属模组。\n\n它为女仆补充了无法远程聊天的空缺，提供了专属于手机 UI 的聊天方式、新的消息接收路径、以及隐私模式的开关。\n你可以通过手机随时与女仆保持联系，还支持用自然语言指挥女仆前往指定坐标、驻留或回到身边（move to / come / stay）。\n\n本模组由罗春使用 AI 工作流协助开发。感谢下载与体验！",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"touhou_little_maid"
+							],
+							"suggests": [
+								"journeymap"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Example Mod Tab",
+								"HuhuTalk"
+							],
+							"block": [
+								"Example Block",
+								"WiFi Block"
+							],
+							"item": [
+								"Example Item",
+								"Phone Watch (Youth)",
+								"Smartphone (Pro)"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 404,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/huhutalk/core/vision/VisionService.class": [
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"qianfan.baidubce.com": [
+								"com/huhutalk/common/vision/VisionProviders.class"
+							],
+							"api.hunyuan.cloud.tencent.com": [
+								"com/huhutalk/common/vision/VisionProviders.class"
+							],
+							"api.stepfun.com": [
+								"com/huhutalk/common/vision/VisionProviders.class"
+							],
+							"api.deepseek.com": [
+								"com/huhutalk/core/vision/VisionService.class",
+								"com/huhutalk/core/vision/VisionSites.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# HuhuTalk 1.1.0 — Forge 1.20.1\n\nMinecraft **1.20.1** · Forge **47.4.16** · Java **17** · Touhou Little Maid **1.5.3+（Forge）**\n\n## 中文\n\nHuhuTalk 的 Forge 1.20.1 移植版本，已通过用户正常使用场景的功能逻辑验收。\n\n- 支持手机聊天、图片识别与发送、后摄及自拍、物品传输和移动等工具。\n- 保留服务端图文与传输档案、远程补给及死亡后的药水救援。\n- 适配 Forge 网络分片、Java 17、1.20.1 物品 NBT、渲染与配方资源。\n- JourneyMap 为可选依赖；未安装时路径点相关功能不可用。\n\n**补给与救援前提**：女仆必须在配饰栏佩戴 HuhuTalk 手机（建议 Pro），并保持加载、持有可用药水或食物。活人补给在生命值低于最大值 50% 或饱食度低于 6 时触发。死亡救援登记要求玩家携带 Pro 手机；死亡掉落手机不会取消已经登记的救援。符合条件时约 5 秒后在死亡点复活，随后才触发 LLM 叙事。\n\n本版本不包含 Maid File Manager 的迁移接口接入，也尚未实现女仆搜索聊天档案的工具。光影与第三方组合兼容性以实际测试为准。\n\n## English\n\nForge 1.20.1 port of HuhuTalk, accepted by the author after normal gameplay verification. Includes phone chat and photography, image recognition, item transfer, movement tools, server-side archives, remote supplies and potion rescue.\n\nRequires Java 17, Forge 47.4.16 and Touhou Little Maid 1.5.3+ for Forge. JourneyMap is optional. Equip the maid with a HuhuTalk phone in her bauble slot and keep her loaded with usable supplies. Death rescue requires a Pro phone on the player when the death is registered; dropping it on death does not cancel a scheduled rescue. Rescue occurs about five seconds later, before the LLM narration.\n\nMaid File Manager migration integration and the chat-archive search tool are not included. Shader and third-party combinations have limited verification coverage.\n\n## 验证 / Validation\n\nJava 17 build and reobfuscation; 8 independent behavior checks; resource audit; 3 native Forge GameTests; camera/UI client smoke; supply/rescue tests with a maid phone, death drops, and a no-phone negative control; user gameplay acceptance.\n\n下载对应 Forge 1.20.1 的 JAR；SHA256SUMS 提供文件校验值。模组网站由作者另行上传。授权范围见仓库 LICENSING.md 与 THIRD_PARTY_NOTICES.md。"
+		},
+		{
+			"tag": "v1.1.0",
+			"published": "2026-10-18T08:44:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 652970009,
+					"name": "huhutalk-1.1.0.jar",
+					"url": "https://github.com/LUOCHUNsemianimus/huhutalk/releases/download/v1.1.0/huhutalk-1.1.0.jar",
+					"size": 2024079,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "591880eebc7bdfa8dc1f0accb37c24037baac84fc50a02a7b9ff4ecc9b996e49",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "huhutalk",
+							"version": "1.1.0",
+							"name": "HUHUTALK",
+							"description": "狐狐Talk（huhutalk）是一款车万女仆（Touhou Little Maid）的附属模组。\n\n它为女仆补充了无法远程聊天的空缺，提供了专属于手机 UI 的聊天方式、新的消息接收路径、以及隐私模式的开关。\n你可以通过手机随时与女仆保持联系，还支持用自然语言指挥女仆前往指定坐标、驻留或回到身边（move to / come / stay）。\n\n本模组由罗春使用 AI 工作流协助开发。感谢下载与体验！",
+							"minecraft": "[1.21.1,]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"touhou_little_maid"
+							],
+							"suggests": [
+								"journeymap"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Example Mod Tab",
+								"HuhuTalk"
+							],
+							"block": [
+								"Example Block",
+								"WiFi Block"
+							],
+							"item": [
+								"Example Item",
+								"Phone Watch (Youth)",
+								"Smartphone (Pro)"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 309,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/huhutalk/core/vision/VisionService.class": [
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"qianfan.baidubce.com": [
+								"com/huhutalk/common/vision/VisionProviders.class"
+							],
+							"api.hunyuan.cloud.tencent.com": [
+								"com/huhutalk/common/vision/VisionProviders.class"
+							],
+							"api.stepfun.com": [
+								"com/huhutalk/common/vision/VisionProviders.class"
+							],
+							"api.deepseek.com": [
+								"com/huhutalk/core/vision/VisionService.class",
+								"com/huhutalk/core/vision/VisionSites.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# HuhuTalk 1.1.0\n\nMinecraft **1.21.1** · **NeoForge** · Java **21** · 需要 / Requires **Touhou Little Maid**\n\n## 中文\n\n本次更新带来实体手持手机与全新物品模型、自拍前摄、扩展的女仆识图配置，以及中英文界面和手册。\n\n- 自拍实时预览左右镜像，保存照片恢复正常方向；桌面相机直接保存，聊天相机保留确认与重拍。\n- 可选择识图平台与模型，并填写玩家、女仆的外貌描述以提供识别上下文。\n- 更新桌面图标和布局管理；设置图标可移动，不可删除。\n- 设置 App 新增「显示与渲染」，集中管理比例、大小、字体倍率和亮度；图标风格仍在 HuhuTalk 内部设置。\n- 「墨水屏」默认关闭：屏幕在光影处理后绘制。开启后参与光影效果，只改变渲染顺序，独立悬浮屏不受影响。\n- 优化 Iris 下的自拍开销和兼容性，改善 BSL 下默认屏幕绘制的重影/泛光。\n- O 键无需持有手机即可开启独立悬浮屏，以手机光标和确认键拖动状态栏；改善手持屏幕的生存 HUD 遮挡。\n- 更新新手礼包，修复手册物品配图并改善手册分段。\n\n升级前请备份存档和配置。需要 NeoForge 21.1.243 或更高的 1.21.1 对应版本，以及车万女仆（元数据最低 1.5.0；开发验收使用 1.5.3）。Iris 与光影包为可选项，不随模组分发；并非所有光影组合都已验证。模型服务可能收费，识图会把图片和相关提示交给所选服务。\n\n## English\n\nThis update brings a handheld phone experience and refreshed item models, selfie photography, expanded maid vision configuration, and a Chinese/English interface and manual.\n\n- Mirrored live selfie preview with normally oriented saved photos; immediate desktop camera saving and the existing chat confirmation/retake flow.\n- Select vision providers/models and describe player/maid appearances to provide identity context.\n- Refreshed desktop icons and layout management; the Settings icon can move but cannot be deleted.\n- New Display & Rendering page in the Settings app for aspect ratio, size, font scale and brightness. Icon style remains in HuhuTalk's internal settings.\n- E-ink Screen is off by default, drawing the screen after shader processing. Enable it to participate in shader effects. It changes render order only and does not affect the standalone floating screen.\n- Reduced Iris selfie overhead and improved compatibility; improved the default phone-screen path for BSL ghosting/bloom.\n- Open the standalone screen with O without holding a phone, then drag its status bar using the phone cursor and confirm key. Improved survival HUD clearance for the held screen.\n- Updated starter kit, corrected item illustrations and improved manual paragraph spacing.\n\nBack up worlds and configuration before upgrading. Requires NeoForge 21.1.243 or a newer build for 1.21.1 and Touhou Little Maid (metadata minimum 1.5.0; development verification uses 1.5.3). Iris and shader packs are optional and distributed separately; not every shader combination has been tested. Model services may charge fees; image recognition sends images and related prompts to the selected service.\n\n## 授权 / License\n\n代码采用 [Apache-2.0](https://github.com/LUOCHUNsemianimus/huhutalk/blob/v1.1.0/LICENSES/Apache-2.0.txt)；罗春制作的自有美术采用 [CC BY-NC-SA 4.0](https://github.com/LUOCHUNsemianimus/huhutalk/blob/v1.1.0/LICENSES/CC-BY-NC-SA-4.0.md)。第三方资源保留原许可：Pixabay 提示音为第三方例外，原下载记录缺失。详见[授权范围](https://github.com/LUOCHUNsemianimus/huhutalk/blob/v1.1.0/LICENSING.md)与[第三方资源声明](https://github.com/LUOCHUNsemianimus/huhutalk/blob/v1.1.0/THIRD_PARTY_NOTICES.md)。\n\nCode is licensed under [Apache-2.0](https://github.com/LUOCHUNsemianimus/huhutalk/blob/v1.1.0/LICENSES/Apache-2.0.txt); original artwork by 罗春 is licensed under [CC BY-NC-SA 4.0](https://github.com/LUOCHUNsemianimus/huhutalk/blob/v1.1.0/LICENSES/CC-BY-NC-SA-4.0.md). Third-party assets retain their own terms: Pixabay notification sounds are an exception, and their original download records are unavailable. See [licensing scope](https://github.com/LUOCHUNsemianimus/huhutalk/blob/v1.1.0/LICENSING.md) and [third-party notices](https://github.com/LUOCHUNsemianimus/huhutalk/blob/v1.1.0/THIRD_PARTY_NOTICES.md).\n\n[完整更新日志 / Full changelog](https://github.com/LUOCHUNsemianimus/huhutalk/blob/v1.1.0/CHANGELOG.md) · [中文 README](https://github.com/LUOCHUNsemianimus/huhutalk/blob/v1.1.0/README.md) · [English README](https://github.com/LUOCHUNsemianimus/huhutalk/blob/v1.1.0/README.en.md)"
+		},
+		{
+			"tag": "v1.0.0-beta",
+			"published": "2026-08-26T16:38:14Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 531036423,
+					"name": "huhutalk-1.0.0.jar",
+					"url": "https://github.com/LUOCHUNsemianimus/huhutalk/releases/download/v1.0.0-beta/huhutalk-1.0.0.jar",
+					"size": 438648,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "0ab6caf587f1d4a901e0567ced51fe78d2d1626aaecaff7d699dbbb4bfcb9c56",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "huhutalk",
+							"version": "1.0.0",
+							"name": "HUHUTALK",
+							"description": "狐狐Talk（huhutalk）是一款车万女仆（Touhou Little Maid）的附属模组。\n\n它为女仆补充了无法远程聊天的空缺，提供了专属于手机 UI 的聊天方式、新的消息接收路径、以及隐私模式的开关。\n你可以通过手机随时与女仆保持联系，还支持用自然语言指挥女仆前往指定坐标、驻留或回到身边（move to / come / stay）。\n\n本模组由罗春使用 AI 工作流协助开发。感谢下载与体验！",
+							"minecraft": "[1.21.1,]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"touhou_little_maid"
+							],
+							"suggests": [
+								"journeymap"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Example Mod Tab",
+								"HuhuTalk"
+							],
+							"block": [
+								"Example Block",
+								"WiFi Block"
+							],
+							"item": [
+								"Example Item",
+								"Phone Watch (Youth)",
+								"Smartphone (Pro)"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 143,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/huhutalk/core/vision/VisionService.class": [
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"api.deepseek.com": [
+								"com/huhutalk/core/vision/VisionService.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# HuhuTalk v1.0.0-beta\nMinecraft NeoForge 1.21.1 车万女仆扩展模组\n✨ 功能：\n- 仿手机私密聊天界面（消息不会刷屏公屏）\n- LLM表情包交互\n- 游戏内拍照识图\n- 语音输入（硅基流动ASR）\n- 女仆位置查询，支持JourneyMap联动\n- 全套UI动画、手机亮度调节\n\n📌 前置依赖：车万女仆(Touhou Maid)\n⚠️ Beta测试版本，可能存在bug\n\n## 安装\n1. 安装 NeoForge 1.21.1\n2. 安装车万女仆前置\n3. 将jar放入mods文件夹"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T17:49:55.189Z",
+	"pictures": [
+		"OGG/heart.png",
+		"OGG/huhutalk_symbol.png",
+		"OGG/huhutalk_symbol_legacy.png",
+		"OGG/huhutalk_wifi_block_texture.png",
+		"OGG/huhutalke_symbol2.png",
+		"phone_camera_2.png",
+		"phone_erased.png"
+	],
+	"picturesChecked": "2026-10-31T17:49:55.189Z",
+	"contributors": {
+		"commits": 224,
+		"more": 0,
+		"people": [
+			{
+				"login": "LUOCHUNsemianimus",
+				"commits": 224,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T17:49:55.189Z",
+	"history": 1
+}
