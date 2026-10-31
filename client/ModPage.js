@@ -15,7 +15,7 @@ import {
 } from '@vanilla-bean/components';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
-import { HOSTS, authorOf, sharing } from 'ender-launcher/rank';
+import { HOSTS, authorOf, ownerOf, sharing } from 'ender-launcher/rank';
 import { ownerName } from 'ender-launcher/support';
 
 import { collection } from './collection';
@@ -73,6 +73,7 @@ import {
 	Meta,
 	Row,
 	Stack,
+	Title,
 	Warning,
 	about,
 	avatar,
@@ -703,34 +704,86 @@ const originalSupport = entry => [
 	}),
 ];
 
-/** Who made a mod, the most commits first: each with their part of its commits, and how they take support. */
-const contributorsPanel = (entry, { commits, more, people }) => [
-	new Meta({
-		tag: 'p',
-		textContent:
-			'Who made its commits, as GitHub counts them on its default branch, and how each takes support: their own FUNDING.yml, GitHub Sponsors, or a support site their profile links.',
-	}),
-	...people.map(
-		person =>
-			new Row({
-				style: { flexWrap: 'nowrap', alignItems: 'center', gap: theme.space.md },
-				append: [
-					avatar(`https://github.com/${person.login}.png?size=64`, 32),
-					new Stack({
-						style: { flex: '1', minWidth: '0', gap: theme.space.xs },
-						append: [
-							new Row({
-								append: [
-									new Link({ href: `https://github.com/${person.login}`, target: '_blank', textContent: person.login }),
-									new Meta({
-										textContent: `${count(person.commits)} ${person.commits === 1 ? 'commit' : 'commits'} · ${shareOf(person.commits, commits)}`,
-									}),
-								],
+const ContributorGrid = styled.Component(
+	({ space }) => `
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+		gap: ${space.md};
+	`,
+);
+
+/** A contributor's part of the commits, drawn as a filled share of a track. */
+const ShareTrack = styled.Component(
+	({ colors }) => `
+		height: 6px;
+		border-radius: 3px;
+		background: ${colors.border};
+		overflow: hidden;
+
+		& > span {
+			display: block;
+			height: 100%;
+			background: ${colors.accent};
+		}
+	`,
+);
+
+const takesSupport = person => person.funding?.length > 0;
+
+/** One contributor: who they are, their part of the commits, their mods here, and how they take support. */
+const contributorCard = ({ entry, person, commits, listing }) => {
+	const login = person.login.toLowerCase();
+	const theirs = { host: 'github', repo: `${person.login}/_` };
+	const mods = listing.filter(other => ownerOf(other) === ownerOf(theirs)).length;
+	const share = commits > 0 ? (person.commits / commits) * 100 : 0;
+
+	return new Card(
+		{ style: { height: '100%' } },
+		new Stack({
+			style: { gap: theme.space.sm },
+			append: [
+				new Row({
+					style: { flexWrap: 'nowrap', alignItems: 'center', gap: theme.space.md },
+					append: [
+						avatar(`https://github.com/${person.login}.png?size=96`, 48),
+						new Stack({
+							style: { flex: '1', minWidth: '0', gap: '0' },
+							append: [
+								new Link({
+									href: `https://github.com/${person.login}`,
+									target: '_blank',
+									append: new Title({ textContent: person.name ?? person.login }),
+								}),
+								...(person.name ? [new Meta({ textContent: `@${person.login}` })] : []),
+							],
+						}),
+					],
+				}),
+				new Row({
+					append: [
+						...(entry.repo.split('/')[0].toLowerCase() === login ? [new Chip({ textContent: 'owner' })] : []),
+						...(takesSupport(person) ? [new Chip({ addClass: 'installed', textContent: 'takes support' })] : []),
+					],
+				}),
+				new ShareTrack({ append: new Component({ tag: 'span', style: { width: `${Math.max(share, 1)}%` } }) }),
+				new Meta({
+					textContent: `${count(person.commits)} ${person.commits === 1 ? 'commit' : 'commits'} · ${shareOf(person.commits, commits)} of them`,
+				}),
+				...(mods > 0
+					? [
+							new Link({
+								href: authorPath(theirs),
+								textContent: `${count(mods)} ${mods === 1 ? 'mod' : 'mods'} of theirs in the index`,
 							}),
+						]
+					: []),
+				...(takesSupport(person)
+					? [
 							new Row({
 								append: contributorSupportOf(person).map(
 									({ url, label }) =>
 										new Link({
+											variant: 'raised',
 											href: url,
 											target: '_blank',
 											attributes: { rel: 'noopener noreferrer' },
@@ -738,21 +791,63 @@ const contributorsPanel = (entry, { commits, more, people }) => [
 										}),
 								),
 							}),
-						],
-					}),
-				],
+						]
+					: []),
+			],
+		}),
+	);
+};
+
+/**
+ * Who made a mod, the most commits first, each on a card; with a choice of only those who take support when some do
+ * and some do not, which `onlySupported` makes from outside.
+ */
+const contributorsPanel = (entry, { commits, more, people }, listing) => {
+	const supported = people.filter(takesSupport);
+	const grid = new ContributorGrid();
+	const draw = only =>
+		grid.content((only ? supported : people).map(person => contributorCard({ entry, person, commits, listing })));
+	const filter =
+		supported.length > 0 && supported.length < people.length
+			? new Tabs({
+					variant: 'segmented',
+					tabs: [
+						{ id: 'everyone', label: 'Everyone', count: people.length + more },
+						{ id: 'supported', label: 'Take support', count: supported.length },
+					],
+					selected: 'everyone',
+					onChange: ({ value }) => draw(value === 'supported'),
+				})
+			: undefined;
+
+	draw(false);
+
+	return {
+		elements: [
+			new Meta({
+				tag: 'p',
+				textContent:
+					'Who made its commits, as GitHub counts them on its default branch, and how each takes support: their own FUNDING.yml, GitHub Sponsors, a support site their profile links, or the readme linking their page.',
 			}),
-	),
-	...(more > 0
-		? [
-				new Link({
-					href: `${repositoryUrl(entry)}/graphs/contributors`,
-					target: '_blank',
-					textContent: `and ${count(more)} more, on GitHub`,
-				}),
-			]
-		: []),
-];
+			...(filter ? [filter] : []),
+			grid,
+			...(more > 0
+				? [
+						new Link({
+							href: `${repositoryUrl(entry)}/graphs/contributors`,
+							target: '_blank',
+							textContent: `and ${count(more)} more, on GitHub`,
+						}),
+					]
+				: []),
+		],
+		onlySupported: () => {
+			if (filter) filter.options.selected = 'supported';
+
+			draw(true);
+		},
+	};
+};
 
 export default class ModPage extends View {
 	static schema = { host: {}, owner: {}, name: {} };
@@ -821,6 +916,9 @@ export default class ModPage extends View {
 		const owner = ownerName(entry);
 		const sources = readmeSources(entry, record.readme);
 		const pictures = (record.pictures ?? []).map(path => sources.raw(path, { root: true }));
+		const contributing = record.contributors
+			? contributorsPanel(entry, record.contributors, listing)
+			: { elements: [], onlySupported: () => {} };
 		const panels = {
 			readme,
 			gallery,
@@ -837,7 +935,7 @@ export default class ModPage extends View {
 			}),
 			related: new Stack({ append: related }),
 			packs: new Stack(),
-			contributors: new Stack({ append: record.contributors ? contributorsPanel(entry, record.contributors) : [] }),
+			contributors: new Stack({ append: contributing.elements }),
 			author: new Stack({
 				append: [
 					tiles(others, others.length),
@@ -845,8 +943,8 @@ export default class ModPage extends View {
 				],
 			}),
 		};
-		const funded = (record.contributors?.people ?? []).filter(person => person.funding?.length > 0);
-		const contributing = (record.contributors?.people.length ?? 0) + (record.contributors?.more ?? 0);
+		const funded = (record.contributors?.people ?? []).filter(takesSupport);
+		const contributorCount = (record.contributors?.people.length ?? 0) + (record.contributors?.more ?? 0);
 		const tabsFor = ({ shared, pictures: shots, packs = [] }) => [
 			{ id: 'readme', label: 'Readme' },
 			...(shots.length > 0 ? [{ id: 'gallery', label: 'Gallery', count: shots.length }] : []),
@@ -854,7 +952,7 @@ export default class ModPage extends View {
 			{ id: 'downloads', label: 'Downloads', count: downloads.count },
 			...(related.length > 0 ? [{ id: 'related', label: 'Related' }] : []),
 			...(packs.length > 0 ? [{ id: 'packs', label: 'Packs', count: packs.length }] : []),
-			...(contributing > 0 ? [{ id: 'contributors', label: 'Contributors', count: contributing }] : []),
+			...(contributorCount > 0 ? [{ id: 'contributors', label: 'Contributors', count: contributorCount }] : []),
 			...(others.length > 0 ? [{ id: 'author', label: `More from ${owner}`, count: others.length }] : []),
 		];
 		const tabs = new Tabs({
@@ -1024,6 +1122,7 @@ export default class ModPage extends View {
 												onPointerPress: event => {
 													event.preventDefault();
 													tabs.options.selected = 'contributors';
+													contributing.onlySupported();
 													tabs.elem.scrollIntoView({ behavior: 'smooth' });
 												},
 											}),
