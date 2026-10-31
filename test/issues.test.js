@@ -4,8 +4,8 @@ import { INDEX_ISSUES, issueBody } from 'ender-launcher/indexIssues';
 
 import { answerOf } from '../src/submit';
 
-const FORMS = { fund: 'fund.yml', release: 'release.yml', pack: 'pack.yml' };
-const WORKFLOWS = { fund: 'interest.yml', release: 'interest.yml', pack: 'packs.yml' };
+const FORMS = { fund: 'fund.yml', release: 'release.yml', pack: 'pack.yml', mod: 'mod.yml' };
+const WORKFLOWS = { fund: 'interest.yml', release: 'interest.yml', pack: 'packs.yml', mod: 'mods.yml' };
 
 /** The title as a workflow's expression writes it, a quote doubled. */
 const quoted = title => `'${title.replaceAll("'", "''")}'`;

@@ -280,6 +280,7 @@ export const local = {
 	/** Each files an issue on the index as that account, and answers its link. */
 	ask: (entry, kind) => call('POST', 'asks', { kind, mod: collectionKey(entry) }),
 	listPack: pack => call('POST', 'listings', { pack }),
+	listMod: mod => call('POST', 'listings', { mod }),
 	canStar: entry => state.stars !== undefined && (entry.host ?? 'github') === 'github',
 	isStarred: entry => state.stars?.has(starKey(entry)) ?? false,
 	star: async (entry, starring) => {

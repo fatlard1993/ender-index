@@ -1,4 +1,4 @@
-import { Card, Content, EmptyState, Link, View, theme } from '@vanilla-bean/components';
+import { Button, Card, Content, EmptyState, Input, Link, Notify, View, theme } from '@vanilla-bean/components';
 
 import { loadInterest, loadListing } from './data';
 import { local } from './local';
@@ -59,6 +59,49 @@ const modCard = ({ entry, needs }) =>
 			],
 		}),
 	);
+
+/** Ask the index to list a mod of the player's now, as the account ender signs in with; the issue says how it went. */
+const listMod = () => {
+	const result = new Meta({ tag: 'span' });
+	const field = new Input({
+		placeholder: 'gh:you/your-mod, or its link',
+		style: { flex: '1', minWidth: '14em', width: 'auto' },
+	});
+	const button = new Button({
+		icon: 'list',
+		textContent: 'List it now',
+		onPointerPress: async () => {
+			button.elem.disabled = true;
+
+			try {
+				const { url, before } = await local.listMod(field.elem.value);
+
+				result.content([
+					before ? 'Asked before: ' : 'Asked: it is crawled within a few minutes, and ',
+					new Link({ href: url, target: '_blank', textContent: before ? 'the issue' : 'the issue says how it went' }),
+				]);
+			} catch (error) {
+				new Notify({ intent: 'danger', content: `The index was not asked to list it: ${error.message}` });
+			} finally {
+				button.elem.disabled = false;
+			}
+		},
+	});
+
+	return new Stack({
+		style: { marginTop: theme.space.lg },
+		append: [
+			new Title({ textContent: 'A mod of yours missing?' }),
+			new Meta({
+				tag: 'p',
+				textContent:
+					'The index finds mods by their metadata and topics, which can take a few nights. Name one here and it is listed within minutes, once its newest release has a mod jar.',
+			}),
+			new Row({ append: [field, button] }),
+			result,
+		],
+	});
+};
 
 /**
  * The mods of the GitHub account ender signs in as, each with what the index cannot do for it and how many players
@@ -127,6 +170,7 @@ export default class MinePage extends View {
 			}),
 			new Link({ href: authorsPath(), textContent: 'What the index reads from your repositories' }),
 			...mods.map(modCard),
+			listMod(),
 		]);
 	}
 }
