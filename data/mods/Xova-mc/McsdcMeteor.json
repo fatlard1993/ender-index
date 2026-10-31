@@ -1,0 +1,309 @@
+{
+	"repo": "Xova-mc/McsdcMeteor",
+	"host": "github",
+	"description": "A meteor addon for the Mcsdc serverscanner",
+	"stars": 0,
+	"archived": false,
+	"license": "CC0-1.0",
+	"created": "2026-06-02T16:58:22Z",
+	"pushed": "2026-07-04T12:15:36Z",
+	"releases": [
+		{
+			"tag": "v0.9.1",
+			"published": "2026-07-04T12:16:40Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 466308422,
+					"name": "Mcsdc-0.9.1-26.1.2.jar",
+					"url": "https://github.com/Xova-mc/McsdcMeteor/releases/download/v0.9.1/Mcsdc-0.9.1-26.1.2.jar",
+					"size": 133317,
+					"downloads": 15,
+					"inspection": 2,
+					"sha256": "990e92d9fee9ee259a3a6647949fb6d4c91874a112d17c3a924a072b5483036b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mcsdc",
+							"version": "0.9.1-26.1.2",
+							"name": "Mcsdc",
+							"description": "Mcsdc server finder.",
+							"minecraft": "26.1.2",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": []
+						}
+					],
+					"icon": "34e54f40ebebbc1cc7119a066e80cd86828b7d032bcf3733debd83863099a36b.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 62,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/mcsdc/addon/FriendsApi.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"interact.mcsdc.online": [
+								"com/mcsdc/addon/FriendsApi.class",
+								"com/mcsdc/addon/Main.class",
+								"com/mcsdc/addon/McsdcHttp.class"
+							],
+							"codeberg.org": [
+								"com/mcsdc/addon/Main.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 0.9.1\ntldr; just some fixes so the game stops dying on bad api responses, plus we stopped doxxing your exact coords\n\n---\n\n**crash hardening (aka \"please stop crashing on weird api input\")**\n- `GuiAsync.run` now catches exceptions from the `ok` callback on the render thread and actually sends them to the error handler. so a malformed api response shows an error message instead of just yeeting the game into a crash.\n- `AddressQuery.load` parses responses in the background worker now, so if it chokes on bad json it goes through the normal error path instead of exploding.\n- `FriendsApi.errorFrom(String)` returns `\"Invalid response.\"` for non-json bodies instead of silently pretending everything's fine.\n\n**location privacy stuff**\n- exact `x/y/z` coordinates aren't sent anymore, just server address, name, uuid, and ping (literally the only things the friends feature displays anyway).\n- singleplayer worlds are never reported. before it was uploading your name/uuid/coords with an empty server field which was... yeah.\n- payload gets built on the game thread now, only the http send runs async. fixes the `mc.player` race that was probably causing subtle bugs.\n- new **\"Share Location with Friends: On/Off\"** toggle in the hub, saved to config (defaults to On, same as before). readme now actually mentions the reporting and the toggle.\n\n**correctness fixes**\n- `McsdcSystem.fromTag` stopped reversing the recent-servers order on reload. Recent screen sorts right after restart now, and eviction removes the oldest entry instead of the newest (lol).\n- `Main.getTicketID()` handles null `getServerData()` in singleplayer, `.ticketID` and `{ticketID}` Starscript placeholder don't NPE anymore.\n- tokens get trimmed in `setToken` and login flow, so a pasted trailing newline can't nuke the Authorization header.\n- `LoginScreen` uses `GuiAsync` now, network failures show `\"Login failed: …\"` instead of silently doing absolutely nothing. also reuses one status label instead of stacking them infinitely, and only switches screens if you're still actually on it.\n\n**dev / misc stuff**\n- `Main.mainEndpoint` and `friendsApiBase` are `final` now.\n- mixin info button field is `@Unique private Button mcsdc$infoButton` so it stops colliding with other mods.\n- \"Clear MCSDC Servers\" only removes entries named exactly `Mcsdc <ip>`, not any random user server starting with \"Mcsdc\".\n- CI installs JDK 25 to match the Gradle toolchain requirement (was installing 21 with no toolchain resolver lmao)."
+		},
+		{
+			"tag": "v0.9.0",
+			"published": "2026-06-27T12:44:55Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 459480132,
+					"name": "Mcsdc-0.9.0-26.1.2.jar",
+					"url": "https://github.com/Xova-mc/McsdcMeteor/releases/download/v0.9.0/Mcsdc-0.9.0-26.1.2.jar",
+					"size": 131916,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "675655c516c98a58011daa48300a7cd6350060081c57ca3bca79b7969d4ebb48",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mcsdc",
+							"version": "0.9.0-26.1.2",
+							"name": "Mcsdc",
+							"description": "Mcsdc server finder.",
+							"minecraft": "26.1.2",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": []
+						}
+					],
+					"icon": "34e54f40ebebbc1cc7119a066e80cd86828b7d032bcf3733debd83863099a36b.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 61,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/mcsdc/addon/FriendsApi.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"codeberg.org": [
+								"com/mcsdc/addon/Main.class"
+							],
+							"interact.mcsdc.online": [
+								"com/mcsdc/addon/Main.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v0.9.0\n\nSearch, login, and server info are back on the v1 API. v2 was pulling from a stale backup, so that’s gone for now.\n\nFriends and location still use api2, because v1 never had those.\n\n## please:\nLog out and log back in with your API token after updating/getting this new version."
+		},
+		{
+			"tag": "v0.8.0",
+			"published": "2026-06-17T11:11:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 450152861,
+					"name": "Mcsdc-0.8.0-26.1.2.jar",
+					"url": "https://github.com/Xova-mc/McsdcMeteor/releases/download/v0.8.0/Mcsdc-0.8.0-26.1.2.jar",
+					"size": 134182,
+					"downloads": 11,
+					"inspection": 2,
+					"sha256": "e67143049c4ea29eba00b8b82dafb5efe6f7b2776fdf35aa9e52d8020fa2abb0",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mcsdc",
+							"version": "0.8.0-26.1.2",
+							"name": "Mcsdc",
+							"description": "Mcsdc server finder.",
+							"minecraft": "26.1.2",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": []
+						}
+					],
+					"icon": "34e54f40ebebbc1cc7119a066e80cd86828b7d032bcf3733debd83863099a36b.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 62,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/mcsdc/addon/Api.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"codeberg.org": [
+								"com/mcsdc/addon/Main.class"
+							],
+							"interact.mcsdc.online": [
+								"com/mcsdc/addon/Main.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v0.8.0\n\n### Minecraft 26.1.2 Support\n* This is the release that fully supports Minecraft  26.1.2 \n\n### Major UI & Scaling Overhaul\n* **Auto GUI Scale Support**: Redesigned all screens to scale and fit perfectly on any resolution, window size, or zoom level, eliminating overlapping buttons and cut-off text.\n* **Dedicated Search Filters Screen**: Moved search filters to a dedicated, scrollable screen. This frees up the main browse screen for full-width search results.\n* **Responsive Layouts**: The main Hub and Search Filters screens now dynamically adjust to 1 or 2 columns depending on screen width.\n* **Cleaner Browse Screen**: Repositioned the server search count inline next to the Search button to maximize vertical space for results.\n\n### Under the Hood\n* Centralized layout math and button positioning across all screens.\n* Updated CI build workflows to use Node 24-compatible GitHub Actions."
+		},
+		{
+			"tag": "v0.7.0",
+			"published": "2026-06-11T22:40:01Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 445105077,
+					"name": "Mcsdc-0.7.0-26.1.2.jar",
+					"url": "https://github.com/Xova-mc/McsdcMeteor/releases/download/v0.7.0/Mcsdc-0.7.0-26.1.2.jar",
+					"size": 120312,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "f966f1177e390f890016c87158402f942e44d8d65c1eb7a621acc9c0ca3fe74a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mcsdc",
+							"version": "0.7.0-26.1.2",
+							"name": "Mcsdc",
+							"description": "Mcsdc server finder.",
+							"minecraft": "26.1.2",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": []
+						}
+					],
+					"icon": "34e54f40ebebbc1cc7119a066e80cd86828b7d032bcf3733debd83863099a36b.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 55,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/mcsdc/addon/Api.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"codeberg.org": [
+								"com/mcsdc/addon/Main.class"
+							],
+							"interact.mcsdc.online": [
+								"com/mcsdc/addon/Main.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			]
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 117,
+		"more": 0,
+		"people": [
+			{
+				"login": "Scripted-db",
+				"commits": 65,
+				"funding": []
+			},
+			{
+				"login": "cool12345",
+				"commits": 24,
+				"funding": []
+			},
+			{
+				"login": "Nxyi",
+				"commits": 22,
+				"funding": []
+			},
+			{
+				"login": "aab-on-act",
+				"commits": 3,
+				"funding": []
+			},
+			{
+				"login": "zxcv05",
+				"commits": 2,
+				"funding": []
+			},
+			{
+				"login": "Puyodead1",
+				"commits": 1,
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/Puyodead1"
+					}
+				]
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

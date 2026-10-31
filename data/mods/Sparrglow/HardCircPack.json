@@ -1,0 +1,100 @@
+{
+	"repo": "Sparrglow/HardCircPack",
+	"host": "github",
+	"description": "A tech mod supporting two-way linkage between real-world hardware and Minecraft",
+	"stars": 0,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2026-10-25T08:29:10Z",
+	"pushed": "2026-10-27T10:50:18Z",
+	"releases": [
+		{
+			"tag": "v0.1.0",
+			"published": "2026-10-27T10:50:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 681300856,
+					"name": "hardcirc_pack-0.1.0.jar",
+					"url": "https://github.com/Sparrglow/HardCircPack/releases/download/v0.1.0/hardcirc_pack-0.1.0.jar",
+					"size": 1015785,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "8d174ab29835630789456fa241db7519c277b48b8bfed345362f18c3edb2fb1e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hardcirc_pack",
+							"version": "0.1.0",
+							"name": "HardCircPack",
+							"description": "一个能用现实硬件与Minecraft双向联动的科技模组",
+							"minecraft": "~1.21.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [
+								"com_fazecast_jserialcomm"
+							]
+						}
+					],
+					"icon": "ef8c930e592f50fb615dff256d70c3492aee16fa68098c6b581d90d42b839e3e.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Control Hub",
+								"Transceiver"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 70,
+						"jars": [
+							"META-INF/jars/jSerialComm-2.11.0.jar"
+						],
+						"capabilities": {
+							"exec": {
+								"META-INF/jars/jSerialComm-2.11.0.jar!com/fazecast/jSerialComm/SerialPort.class": [
+									"java/lang/Runtime.exec"
+								]
+							},
+							"native": {
+								"META-INF/jars/jSerialComm-2.11.0.jar!com/fazecast/jSerialComm/SerialPort.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "版本 0.1.0：完成红石双向链路（C2S 输出 + S2C 输入）。\n\n- 输入侧：收发器 tick 采集「启用+输入+红石」端子弱信号（level.getSignal(pos.relative(face), face)），变化且 <=20Hz 时经 DataFrameCodec.encode()（S2C 0x02）下发\n- 新增 ServerTransportManager.sendFrame()：连接校验 + 20Hz 统一节流 + HardwareTransport.send() + SENT 方向日志\n- 修复：端子电平 terminalPower 未持久化，导致重进存档后相邻红石粉显示激活但重放即失效；补上 NBT（t_power）读写\n- 调试命令：/hardcirc transceiver capture、send、<n> direction input|output\n- lang：zh_cn / en_us 补充命令与日志翻译键\n\n运行环境：Minecraft 1.21.3 + Fabric Loader 0.19.5，依赖 Fabric API 0.114.1+1.21.3 与 owo-lib 0.12.16+1.21.2。"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 6,
+		"more": 0,
+		"people": [
+			{
+				"login": "Sparrglow",
+				"commits": 6,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

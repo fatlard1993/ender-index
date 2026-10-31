@@ -1,0 +1,312 @@
+{
+	"repo": "TAOSHOI/MultiCmd",
+	"host": "github",
+	"description": "Start",
+	"stars": 0,
+	"archived": false,
+	"license": "CC0-1.0",
+	"created": "2026-04-05T16:53:04Z",
+	"pushed": "2026-04-14T16:22:38Z",
+	"releases": [
+		{
+			"tag": "Release-1,5,0",
+			"published": "2026-04-08T09:48:36Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 391476232,
+					"name": "multicmd-1.5.0.jar",
+					"url": "https://github.com/TAOSHOI/MultiCmd/releases/download/Release-1%2C5%2C0/multicmd-1.5.0.jar",
+					"size": 1496804,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "58ea13134f0dd63efad1aa02160d87580075d0ce62d012d31ae2b5fc7625cf87",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "multicmd",
+							"version": "1.5.0",
+							"name": "MultiCmd",
+							"description": "Профессиональный клиентский инструмент для пакетной обработки команд и Lua-скриптов.",
+							"minecraft": ">=1.21 <1.22",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [
+								"org_luaj_luaj-jse"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 372,
+						"jars": [
+							"META-INF/jars/luaj-jse-3.0.1.jar"
+						],
+						"capabilities": {
+							"classloading": {
+								"META-INF/jars/luaj-jse-3.0.1.jar!luajc$LocalClassLoader.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/luajc/JavaLoader.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/server/LuajClassLoader.class": [
+									"java/lang/ClassLoader.defineClass",
+									"extends java/lang/ClassLoader"
+								]
+							},
+							"exec": {
+								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/lib/jse/JseIoLib.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/lib/jse/JseProcess.class": [
+									"java/lang/Runtime.exec"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/multicmd/start/client/MultiCmdClient.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## [1.5.0] - The Ultimate Lua Framework Update\n*Release Date: Current*\n\nVersion 1.5.0 focuses entirely on resolving thread-safety issues between the asynchronous Lua Engine and the synchronous Minecraft Client thread, transforming MultiCmd into a production-ready framework for developing autonomous bots.\n\n### Core Architecture (Engine)\n- **Thread-Safe Synchronization Bridge (`sync()`)**: Completely overhauled the `LuaApi.java` backend. Every API call that interacts with the Minecraft world (blocks, entities, player state) is now safely delegated to the main thread via `CompletableFuture.supplyAsync(...).join()`. This eliminates `ConcurrentModificationException` and guarantees stable 20 TPS daemon execution without client freezes.\n- **Daemon Reentrancy Lock**: Added an `isExecutingTick` lock inside `LuaEventManager.java`. If a heavy Lua script takes longer than 50ms (1 tick) to execute, the engine will safely skip the next tick trigger instead of stacking threads and causing a memory leak.\n\n### New Lua API Methods\n- **`api:lookAt(x, y, z)`**: Added an advanced trigonometric Aimbot calculator. Provide absolute coordinates, and the script will automatically calculate the optimal Yaw and Pitch, applying them to the player camera instantly.\n- **`api:getClosestEntity(radius)`**: Added a high-performance entity radar. Scans the specified radius, finds the closest living entity (ignoring spectators and dead entities), and returns a rich Lua table containing:\n  - `type` (\"ENTITY\" or \"MISS\")\n  - `name` (Entity name)\n  - `x`, `y`, `z` (Exact coordinates)\n  - `health` (Current HP)\n  - `distance` (Calculated distance to player)\n- **`api:findItemInHotbar(keyword)`**: Added inventory scanning. Pass a partial item name (e.g., `\"apple\"`), and it will return the exact hotbar slot (1-9) where the item is located, or `-1` if not found.\n- **`api:getBlock(x, y, z)`**: Added world block scanning. Returns the registry ID of the block (e.g., `\"minecraft:diamond_ore\"`) at the given coordinates, essential for Pathfinder scripts.\n- **`api:isUsingItem()`**: Added an action-state checker. Returns `true` if the player is currently consuming food, drinking a potion, or drawing a bow. Crucial for state-machine bots to avoid interrupting eating animations.\n\n### Input Simulation\n- **Overhauled `KeyMapper`**: Fixed a critical API breaking change introduced by Fabric 1.21.1 where `KeyBinding.onKeyPressed()` requires an `InputUtil.Key` object instead of an integer.\n- The `KeyMapper` now properly queries `InputUtil.fromTranslationKey` and supports full hold/release mechanics for `\"w\", \"a\", \"s\", \"d\", \"space\", \"shift\", \"m1\", \"m2\"`."
+		},
+		{
+			"tag": "Release-1,4,0",
+			"published": "2026-04-07T16:05:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 390912487,
+					"name": "multicmd-1.4.0.jar",
+					"url": "https://github.com/TAOSHOI/MultiCmd/releases/download/Release-1%2C4%2C0/multicmd-1.4.0.jar",
+					"size": 1496910,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "838ed7863ffb5bba5718002d6a1d8a94dc9aae10e4966a21c6a35f3555217074",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "multicmd",
+							"version": "1.4.0",
+							"name": "MultiCmd",
+							"description": "Профессиональный клиентский инструмент для пакетной обработки команд и Lua-скриптов.",
+							"minecraft": ">=1.21 <1.22",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [
+								"org_luaj_luaj-jse"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 372,
+						"jars": [
+							"META-INF/jars/luaj-jse-3.0.1.jar"
+						],
+						"capabilities": {
+							"classloading": {
+								"META-INF/jars/luaj-jse-3.0.1.jar!luajc$LocalClassLoader.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/luajc/JavaLoader.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/server/LuajClassLoader.class": [
+									"java/lang/ClassLoader.defineClass",
+									"extends java/lang/ClassLoader"
+								]
+							},
+							"exec": {
+								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/lib/jse/JseIoLib.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/lib/jse/JseProcess.class": [
+									"java/lang/Runtime.exec"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/multicmd/start/client/MultiCmdClient.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n## [1.4.0] - Keybinds & Instant Execution Update\n### Added\n- **Dynamic Keybinds System**: Added `/macro bind <key> <command>` and `/macro unbind <key>` to map actions directly to keyboard keys dynamically without game restarts.\n- **Instant Execution API**: Added `api:executeInstant(cmd)` to the Lua Engine. This bypasses the anti-spam queue entirely, injecting packets directly into the network stream for zero-delay operations.\n- **Silent Execution**: Added `api:executeSilent(cmd)` to execute batches without displaying progress on the HUD.\n- **KeyMapper Utility**: Lua scripts can now accurately simulate keyboard input (`W`, `A`, `S`, `D`, `SPACE`, `SHIFT`) and mouse clicks (`M1`, `M2`) using `api:click()` and `api:setKey()`.\n- **Camera Control**: Added `api:setYaw(yaw)` and `api:setPitch(pitch)` for precise crosshair manipulation.\n- **World Raycasting**: Added synchronous `api:raycast()` to detect blocks/entities the player is looking at.\n- **Entity Scanner**: Added `api:getEntitiesInRadius(radius)` to fetch nearby targets with their XYZ coordinates and HP.\n- **Inventory Control**: Added `api:getSlot()`, `api:setSlot(slot)`, and `api:getItemCount(id)` to allow scripts to swap items (e.g., auto-totem, auto-eat).\n\n### Changed\n- Re-architected `BatchExecutor` to be 100% thread-safe using `ConcurrentLinkedQueue` and `AtomicInteger`.\n- Overhauled Lua processing to run fully asynchronously via `CompletableFuture`, completely eliminating client thread freezes (Anti-Freeze).\n\n---\n\n## [1.3.0] - The Automation Update\n### Added\n- **Daemon Framework (Background Execution)**: Scripts can now act as background processes (Daemons) if they declare event listeners.\n- **Event Listeners**: Added `onTick()`, `onHealthDrop(hp)`, and `onChat(msg)` hooks to the Lua engine.\n- Added `/lua stopall` to safely terminate all background daemons.\n- **Advanced Parsers**: The parser now supports alphabetical ranges (e.g., `[a-z]` or `[A-Z]`).\n- **Security Mechanisms**: Implemented strict depth and combinatorial explosion shields to prevent `OutOfMemoryError` during complex Regex parsing."
+		},
+		{
+			"tag": "Release-1,2,0",
+			"published": "2026-04-06T18:42:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 390719287,
+					"name": "multicmd-1.2.0.jar",
+					"url": "https://github.com/TAOSHOI/MultiCmd/releases/download/Release-1%2C2%2C0/multicmd-1.2.0.jar",
+					"size": 1484995,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "63252ac9f5c7a76326a7679169726e4720e944d6b20da581cc1793093913c25d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "multicmd",
+							"version": "1.2.0",
+							"name": "MultiCmd",
+							"description": "Профессиональный клиентский инструмент для пакетной обработки команд и Lua-скриптов.",
+							"minecraft": ">=1.21 <1.22",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [
+								"org_luaj_luaj-jse"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 369,
+						"jars": [
+							"META-INF/jars/luaj-jse-3.0.1.jar"
+						],
+						"capabilities": {
+							"classloading": {
+								"META-INF/jars/luaj-jse-3.0.1.jar!luajc$LocalClassLoader.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/luajc/JavaLoader.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/server/LuajClassLoader.class": [
+									"java/lang/ClassLoader.defineClass",
+									"extends java/lang/ClassLoader"
+								]
+							},
+							"exec": {
+								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/lib/jse/JseIoLib.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/lib/jse/JseProcess.class": [
+									"java/lang/Runtime.exec"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## [1.2.0] - 2024\n### Added\n- **Lua Scripting Engine**: Added `org.luaj` integration for writing advanced automation scripts.\n- **Lua API**: Added `api:execute()`, `api:queue()`, `api:wait()`, `api:getX()`, `api:getY()`, `api:getZ()`, `api:getName()`.\n- **Smart Tab Completion**: Implemented `SuggestionProvider` for `/lua run`, `/macro remove`, and `/group remove`.\n- **Chat Alias Interceptor**: Added a configurable chat alias (default: `m`) that intercepts outgoing chat packets to seamlessly open the mod GUI.\n- **Delay Tokens**: Overhauled the `BatchExecutor` to support `[INTERNAL_DELAY:X]` tokens generated by Lua for thread-safe asynchronous delays.\n\n### Removed\n- Removed (M) from the chat screen to clean up the vanilla interface. Keybind `U` is still supported alongside the new Chat Alias."
+		},
+		{
+			"tag": "Fabric",
+			"published": "2026-04-06T15:42:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 390114451,
+					"name": "multicmd-1.0.0.jar",
+					"url": "https://github.com/TAOSHOI/MultiCmd/releases/download/Fabric/multicmd-1.0.0.jar",
+					"size": 1161096,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "1c5685feb8bf45919b0978c4b4c7168ddc407f4c7eb5a9d368bc894edbc65cc3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "multicmd",
+							"version": "1.0.0",
+							"name": "MultiCmd",
+							"description": "Производительный клиентский инструмент для пакетной обработки команд и макросов.",
+							"minecraft": "~1.21.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 16,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**\nI didnt know what to write"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 21,
+		"more": 0,
+		"people": [
+			{
+				"login": "TAOSHOI",
+				"commits": 21,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

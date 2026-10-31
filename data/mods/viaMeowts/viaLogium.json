@@ -1,0 +1,2532 @@
+{
+	"repo": "viaMeowts/viaLogium",
+	"host": "github",
+	"description": "Server-side world change logger for Fabric (MC 1.21.11). Based on Ledger by QuiltServerTools - hardened DB pipeline, viaPanel integration, piston logging.",
+	"stars": 0,
+	"archived": false,
+	"license": "LGPL-3.0",
+	"created": "2026-08-23T09:19:58Z",
+	"pushed": "2026-10-09T18:37:49Z",
+	"releases": [
+		{
+			"tag": "v1.0.0-vialogium",
+			"published": "2026-08-23T15:26:52Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 526355354,
+					"name": "vialogium-1.0.0.jar",
+					"url": "https://github.com/viaMeowts/viaLogium/releases/download/v1.0.0-vialogium/vialogium-1.0.0.jar",
+					"size": 29628883,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "19f71c344af1ff363b30d2f10d9b7b201f800e752e0e7247a2b4e8d92e515865",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "vialogium",
+							"version": "1.0.0",
+							"name": "viaLogium",
+							"description": "viaLogium logs world events and allows rollbacks with database-backed history",
+							"minecraft": "~26.2-",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-language-kotlin",
+								"minecraft",
+								"fabric-api",
+								"viapanel"
+							],
+							"provides": [
+								"com_zaxxer_hikaricp",
+								"com_github_ben-manes_caffeine_caffeine",
+								"org_checkerframework_checker-qual",
+								"org_apache_commons_commons-text",
+								"com_google_errorprone_error_prone_annotations",
+								"org_jetbrains_exposed_exposed-core",
+								"org_jetbrains_exposed_exposed-dao",
+								"org_jetbrains_exposed_exposed-java-time",
+								"org_jetbrains_exposed_exposed-jdbc",
+								"fabric-permissions-api-v0",
+								"com_h2database_h2",
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_datatype_jackson-datatype-jsr310",
+								"com_fasterxml_jackson_module_jackson-module-kotlin",
+								"org_javassist_javassist",
+								"org_slf4j_jcl-over-slf4j",
+								"com_uchuhimo_konf-core",
+								"com_uchuhimo_konf-toml",
+								"org_mariadb_jdbc_mariadb-java-client",
+								"com_mysql_mysql-connector-j",
+								"org_postgresql_postgresql",
+								"com_google_protobuf_protobuf-java",
+								"org_reflections_reflections",
+								"server_translations_api",
+								"org_xerial_sqlite-jdbc",
+								"com_moandjiezana_toml_toml4j",
+								"com_github_waffle_waffle-jna"
+							],
+							"breaks": [
+								"cardboard"
+							],
+							"breaksVersions": {
+								"cardboard": "*"
+							}
+						}
+					],
+					"icon": "e7681741df50ccd1fa3c35e7e4d1db63d7122f3356f2d79f86c09180b3369ec0.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 8142,
+						"jars": [
+							"META-INF/jars/HikariCP-5.1.0.jar",
+							"META-INF/jars/caffeine-2.9.3.jar",
+							"META-INF/jars/checker-qual-3.42.0.jar",
+							"META-INF/jars/commons-text-1.9.jar",
+							"META-INF/jars/error_prone_annotations-2.10.0.jar",
+							"META-INF/jars/exposed-core-1.0.0-rc-2.jar",
+							"META-INF/jars/exposed-dao-1.0.0-rc-2.jar",
+							"META-INF/jars/exposed-java-time-1.0.0-rc-2.jar",
+							"META-INF/jars/exposed-jdbc-1.0.0-rc-2.jar",
+							"META-INF/jars/fabric-permissions-api-0.7.0.jar",
+							"META-INF/jars/h2-2.2.224.jar",
+							"META-INF/jars/jackson-annotations-2.12.2.jar",
+							"META-INF/jars/jackson-core-2.12.2.jar",
+							"META-INF/jars/jackson-databind-2.12.2.jar",
+							"META-INF/jars/jackson-datatype-jsr310-2.12.2.jar",
+							"META-INF/jars/jackson-module-kotlin-2.12.2.jar",
+							"META-INF/jars/javassist-3.26.0-GA.jar",
+							"META-INF/jars/jcl-over-slf4j-2.0.7.jar",
+							"META-INF/jars/konf-core-1.1.2.jar",
+							"META-INF/jars/konf-toml-1.1.2.jar",
+							"META-INF/jars/mariadb-java-client-3.3.3.jar",
+							"META-INF/jars/mysql-connector-j-8.3.0.jar",
+							"META-INF/jars/postgresql-42.7.3.jar",
+							"META-INF/jars/protobuf-java-3.25.1.jar",
+							"META-INF/jars/reflections-0.9.12.jar",
+							"META-INF/jars/server-translations-api-3.1.0+26.2.jar",
+							"META-INF/jars/sqlite-jdbc-3.50.3.0.jar",
+							"META-INF/jars/toml4j-0.7.2.jar",
+							"META-INF/jars/waffle-jna-3.3.0.jar"
+						],
+						"capabilities": {
+							"unsafe": {
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/SCQHeader$HeadAndTailRef.class": [
+									"sun/misc/Unsafe.putOrderedObject",
+									"sun/misc/Unsafe.compareAndSwapObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/SingleConsumerQueue$Node.class": [
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putOrderedObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/SingleConsumerQueue.class": [
+									"sun/misc/Unsafe.getInt"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/base/UnsafeAccess.class": [
+									"sun/misc/Unsafe.objectFieldOffset"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/BBHeader$ReadAndWriteCounterRef.class": [
+									"sun/misc/Unsafe.putOrderedLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/BBHeader$ReadCounterRef.class": [
+									"sun/misc/Unsafe.putOrderedLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/BLCHeader$DrainStatusRef.class": [
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.putOrderedInt",
+									"sun/misc/Unsafe.compareAndSwapInt"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/BaseMpscLinkedArrayQueue.class": [
+									"sun/misc/Unsafe.getLongVolatile",
+									"sun/misc/Unsafe.putOrderedLong",
+									"sun/misc/Unsafe.compareAndSwapLong",
+									"sun/misc/Unsafe.objectFieldOffset"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FD.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putOrderedObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FS.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FW.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putOrderedObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PD.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putOrderedObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PS.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PW.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putOrderedObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/StripedBuffer.class": [
+									"sun/misc/Unsafe.compareAndSwapInt",
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.putInt"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/UnsafeAccess.class": [
+									"sun/misc/Unsafe.objectFieldOffset"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/UnsafeRefArrayAccess.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.putOrderedObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.getObjectVolatile",
+									"sun/misc/Unsafe.arrayIndexScale",
+									"sun/misc/Unsafe.arrayBaseOffset"
+								],
+								"META-INF/jars/protobuf-java-3.25.1.jar!com/google/protobuf/MessageSchema.class": [
+									"sun/misc/Unsafe.objectFieldOffset",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putInt",
+									"sun/misc/Unsafe.putLong"
+								],
+								"META-INF/jars/protobuf-java-3.25.1.jar!com/google/protobuf/UnsafeUtil$1.class": [
+									"sun/misc/Unsafe"
+								],
+								"META-INF/jars/protobuf-java-3.25.1.jar!com/google/protobuf/UnsafeUtil$JvmMemoryAccessor.class": [
+									"sun/misc/Unsafe.staticFieldBase",
+									"sun/misc/Unsafe.staticFieldOffset",
+									"sun/misc/Unsafe.getByte",
+									"sun/misc/Unsafe.putByte",
+									"sun/misc/Unsafe.getBoolean",
+									"sun/misc/Unsafe.putBoolean",
+									"sun/misc/Unsafe.getFloat",
+									"sun/misc/Unsafe.putFloat",
+									"sun/misc/Unsafe.getDouble",
+									"sun/misc/Unsafe.putDouble",
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.putInt",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.copyMemory"
+								],
+								"META-INF/jars/protobuf-java-3.25.1.jar!com/google/protobuf/UnsafeUtil$MemoryAccessor.class": [
+									"sun/misc/Unsafe.objectFieldOffset",
+									"sun/misc/Unsafe.arrayBaseOffset",
+									"sun/misc/Unsafe.arrayIndexScale",
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.putInt",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putObject"
+								],
+								"META-INF/jars/protobuf-java-3.25.1.jar!com/google/protobuf/UnsafeUtil.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								]
+							},
+							"network": {
+								"META-INF/jars/commons-text-1.9.jar!org/apache/commons/text/lookup/UrlStringLookup.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/h2-2.2.224.jar!META-INF/versions/10/org/h2/util/Utils10.class": [
+									"java/net/Socket.getOption",
+									"java/net/Socket.setOption"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/engine/SessionRemote.class": [
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/security/auth/H2AuthConfigXml.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/TcpServer.class": [
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/TcpServerThread.class": [
+									"java/net/Socket.getLocalAddress",
+									"java/net/Socket.getLocalPort",
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/pg/PgServer.class": [
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/pg/PgServerThread.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getLocalAddress",
+									"java/net/Socket.getLocalPort",
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort",
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/web/WebServer.class": [
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/web/WebThread.class": [
+									"java/net/Socket.close",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getLocalAddress",
+									"java/net/Socket.getLocalPort",
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/store/FileLock.class": [
+									"java/net/Socket.close",
+									"java/net/Socket.<init>"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/store/fs/disk/FilePathDisk.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/tools/Upgrade.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/NetUtils.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.connect",
+									"java/net/Socket.getInetAddress"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/value/Transfer.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close",
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort",
+									"java/net/Socket.isClosed"
+								],
+								"META-INF/jars/jackson-core-2.12.2.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.12.2.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/JarClassPath.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/URLClassPath.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/tools/rmi/ObjectImporter.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/tools/web/Viewer.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/tools/web/Webserver.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/konf-core-1.1.2.jar!com/uchuhimo/konf/source/Provider$DefaultImpls.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/socket/impl/NamedPipeSocket.class": [
+									"java/net/Socket.<init>"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/socket/impl/UnixDomainSocket.class": [
+									"java/net/Socket.<init>"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/impl/StandardClient.class": [
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getPort",
+									"java/net/Socket.close",
+									"java/net/Socket.shutdownOutput",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.getInetAddress"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/impl/ConnectionHelper.class": [
+									"java/net/Socket.isConnected",
+									"java/net/Socket.connect"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/SocketHelper.class": [
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setSoLinger",
+									"java/net/Socket.bind"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/plugin/tls/main/DefaultTlsSocketPlugin.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/plugin/TlsSocketPlugin.class": [
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!META-INF/versions/11/org/mariadb/jdbc/client/SocketHelper.class": [
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setSoLinger",
+									"java/net/Socket.setOption",
+									"java/net/Socket.bind"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/NativeSession.class": [
+									"java/net/Socket.getRemoteSocketAddress"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/ExportControlled$SslContextBuilder.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/ExportControlled.class": [
+									"java/net/Socket"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/NamedPipeSocketFactory$NamedPipeSocket.class": [
+									"java/net/Socket.<init>"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/NetworkResources.class": [
+									"java/net/Socket.isClosed",
+									"java/net/Socket.isInputShutdown",
+									"java/net/Socket.shutdownInput",
+									"java/net/Socket.isOutputShutdown",
+									"java/net/Socket.shutdownOutput",
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/SocksProxySocketFactory.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.bind",
+									"java/net/Socket.connect"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/StandardSocketFactory.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setReceiveBufferSize",
+									"java/net/Socket.setSendBufferSize",
+									"java/net/Socket.setTrafficClass",
+									"java/net/Socket.bind",
+									"java/net/Socket.connect",
+									"java/net/Socket.getSoTimeout",
+									"java/net/Socket.setSoTimeout"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/a/NativeProtocol.class": [
+									"java/net/Socket.close",
+									"java/net/Socket.getSoTimeout",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.shutdownInput",
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/a/NativeSocketConnection.class": [
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/Driver.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/core/PGStream.class": [
+									"java/net/Socket.getSendBufferSize",
+									"java/net/Socket.getReceiveBufferSize",
+									"java/net/Socket.getSoTimeout",
+									"java/net/Socket.getKeepAlive",
+									"java/net/Socket.getTcpNoDelay",
+									"java/net/Socket.setReceiveBufferSize",
+									"java/net/Socket.setSendBufferSize",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.bind",
+									"java/net/Socket.isConnected",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/core/QueryExecutorCloseAction.class": [
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/core/v3/ConnectionFactoryImpl.class": [
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setReceiveBufferSize",
+									"java/net/Socket.setSendBufferSize",
+									"java/net/Socket.getReceiveBufferSize",
+									"java/net/Socket.getSendBufferSize"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/core/v3/QueryExecutorImpl.class": [
+									"java/net/Socket.getSoTimeout",
+									"java/net/Socket.isClosed"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/core/v3/replication/V3ReplicationProtocol.class": [
+									"java/net/Socket.getSoTimeout",
+									"java/net/Socket.setSoTimeout"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/jdbcurlresolver/PgPassParser.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/jdbcurlresolver/PgServiceConfParser.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/ssl/LazyKeyManager.class": [
+									"java/net/Socket"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/ssl/PKCS12KeyManager.class": [
+									"java/net/Socket"
+								],
+								"META-INF/jars/reflections-0.9.12.jar!org/reflections/vfs/JarInputDir$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/reflections-0.9.12.jar!org/reflections/vfs/Vfs$DefaultUrlTypes$2.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/reflections-0.9.12.jar!org/reflections/vfs/Vfs$DefaultUrlTypes$4.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/SQLiteJDBCLoader.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/SQLiteConnection.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/SQLiteJDBCLoader$VersionHolder.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"exec": {
+								"META-INF/jars/h2-2.2.224.jar!org/h2/tools/Server.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/tools/Upgrade.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.inheritIO",
+									"java/lang/ProcessBuilder.start"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/Profiler.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/SourceCompiler.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.environment",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.start"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/admin/ServerController.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/util/OSInfo.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/util/ProcessRunner.class": [
+									"java/lang/Runtime.exec"
+								]
+							},
+							"classloading": {
+								"META-INF/jars/h2-2.2.224.jar!org/h2/tools/Upgrade$1.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/SourceCompiler$1.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/SourceCompiler$ClassFileManager$1.class": [
+									"java/security/SecureClassLoader.defineClass",
+									"extends java/security/SecureClassLoader"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/Loader$Simple.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/Loader.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/tools/web/Viewer.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/util/proxy/DefineClassHelper.class": [
+									"java/lang/invoke/MethodHandles$Lookup.defineClass"
+								],
+								"META-INF/jars/reflections-0.9.12.jar!org/reflections/util/ClasspathHelper.class": [
+									"java/net/URLClassLoader.getURLs"
+								]
+							},
+							"native": {
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/SQLiteJDBCLoader.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/core/NativeDB.class": [
+									"java/lang/System.loadLibrary"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/viameowts/vialogium/commands/subcommands/StatusCommand$status$1.class"
+							],
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/h2-2.2.224.jar!org/h2/jdbc/JdbcSQLXML.class",
+								"META-INF/jars/h2-2.2.224.jar!org/h2/security/auth/H2AuthConfigXml.class",
+								"META-INF/jars/jackson-databind-2.12.2.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/jdbc/MysqlSQLXML.class",
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/xml/DefaultPGXmlFactoryFactory.class",
+								"META-INF/jars/waffle-jna-3.3.0.jar!waffle/servlet/WaffleInfoServlet.class",
+								"META-INF/jars/waffle-jna-3.3.0.jar!waffle/util/WaffleInfo.class"
+							],
+							"apache.org": [
+								"META-INF/jars/h2-2.2.224.jar!org/h2/jdbc/JdbcSQLXML.class",
+								"META-INF/jars/h2-2.2.224.jar!org/h2/security/auth/H2AuthConfigXml.class",
+								"META-INF/jars/jackson-databind-2.12.2.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/jdbc/MysqlSQLXML.class",
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/xml/DefaultPGXmlFactoryFactory.class"
+							],
+							"xml.org": [
+								"META-INF/jars/h2-2.2.224.jar!org/h2/jdbc/JdbcSQLXML.class",
+								"META-INF/jars/h2-2.2.224.jar!org/h2/security/auth/H2AuthConfigXml.class",
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/jdbc/MysqlSQLXML.class",
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/xml/DefaultPGXmlFactoryFactory.class"
+							],
+							"h2database.com": [
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/web/WebApp.class",
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/Tool.class"
+							],
+							"repo1.maven.org": [
+								"META-INF/jars/h2-2.2.224.jar!org/h2/tools/Upgrade.class"
+							],
+							"www.slf4j.org": [
+								"META-INF/jars/jcl-over-slf4j-2.0.7.jar!org/apache/commons/logging/LogFactory.class",
+								"META-INF/jars/jcl-over-slf4j-2.0.7.jar!org/apache/commons/logging/impl/SLF4JLogFactory.class"
+							],
+							"mariadb.com": [
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/impl/StandardClient.class"
+							],
+							"jdbc.postgresql.org": [
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/util/PGJDBCMain.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## viaLogium 1.0.0 - Minecraft 26.2 port\n\nPort of the whole logging stack to the new MC line, following upstream Ledger ports (bf8192b, 8c6cfa4) adapted across our renamed tree: **41 files (+946/-579)**.\n\n### Toolchain\n- Minecraft **26.2**, official Mojang mappings (unobfuscated), Loom 1.17.x, Gradle 9.5.1\n- Fabric Loader 0.19.3, Fabric API 0.152.1+26.2, Kotlin 2.3.10 / fabric-language-kotlin 1.13.9\n- **Java 25** required\n\n### Adaptations\n- Mixin targets deobfuscated and re-verified via javap against the 26.2 merged jar (lambdas/method_ placeholders gone)\n- Renamed vanilla classes covered: LilyPad, Farmland, Speleothem, CauldronInteractions, ContainerInput clicks, sign WrapOperation signature, ShowItem ItemStackTemplate hovers, ServerLevelEvents / serverboundPlay renames\n- testmod fixed (broken even upstream): ClientCommandManager removal workaround\n- viapanel API dependency isolated at `lib/mc26/` - requires viapanel **3.0.0+**\n\n### Note\nMixin injection targets are compile-checked; a runtime smoke test on a real 26.2 server is recommended before production."
+		},
+		{
+			"tag": "v0.4.0-vialogium",
+			"published": "2026-08-23T10:24:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 526097022,
+					"name": "vialogium-0.4.0.jar",
+					"url": "https://github.com/viaMeowts/viaLogium/releases/download/v0.4.0-vialogium/vialogium-0.4.0.jar",
+					"size": 29654704,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "d62de248179427a4db789734e25c8302c6334dec7c67d4e3ac666920716f8f64",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "vialogium",
+							"version": "0.4.0",
+							"name": "viaLogium",
+							"description": "viaLogium logs world events and allows rollbacks with database-backed history",
+							"minecraft": ">=1.21.11",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"fabric-language-kotlin",
+								"minecraft",
+								"viapanel"
+							],
+							"provides": [
+								"com_zaxxer_hikaricp",
+								"com_github_ben-manes_caffeine_caffeine",
+								"org_checkerframework_checker-qual",
+								"org_apache_commons_commons-text",
+								"com_google_errorprone_error_prone_annotations",
+								"org_jetbrains_exposed_exposed-core",
+								"org_jetbrains_exposed_exposed-dao",
+								"org_jetbrains_exposed_exposed-java-time",
+								"org_jetbrains_exposed_exposed-jdbc",
+								"fabric-permissions-api-v0",
+								"com_h2database_h2",
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_datatype_jackson-datatype-jsr310",
+								"com_fasterxml_jackson_module_jackson-module-kotlin",
+								"org_javassist_javassist",
+								"org_slf4j_jcl-over-slf4j",
+								"com_uchuhimo_konf-core",
+								"com_uchuhimo_konf-toml",
+								"org_mariadb_jdbc_mariadb-java-client",
+								"com_mysql_mysql-connector-j",
+								"org_postgresql_postgresql",
+								"com_google_protobuf_protobuf-java",
+								"org_reflections_reflections",
+								"server_translations_api",
+								"org_xerial_sqlite-jdbc",
+								"com_moandjiezana_toml_toml4j",
+								"com_github_waffle_waffle-jna"
+							],
+							"breaks": [
+								"cardboard"
+							],
+							"breaksVersions": {
+								"cardboard": "*"
+							}
+						}
+					],
+					"icon": "e7681741df50ccd1fa3c35e7e4d1db63d7122f3356f2d79f86c09180b3369ec0.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 8156,
+						"jars": [
+							"META-INF/jars/HikariCP-5.1.0.jar",
+							"META-INF/jars/caffeine-2.9.3.jar",
+							"META-INF/jars/checker-qual-3.42.0.jar",
+							"META-INF/jars/commons-text-1.9.jar",
+							"META-INF/jars/error_prone_annotations-2.10.0.jar",
+							"META-INF/jars/exposed-core-1.0.0-rc-2.jar",
+							"META-INF/jars/exposed-dao-1.0.0-rc-2.jar",
+							"META-INF/jars/exposed-java-time-1.0.0-rc-2.jar",
+							"META-INF/jars/exposed-jdbc-1.0.0-rc-2.jar",
+							"META-INF/jars/fabric-permissions-api-0.6.0-patbox.jar",
+							"META-INF/jars/h2-2.2.224.jar",
+							"META-INF/jars/jackson-annotations-2.12.2.jar",
+							"META-INF/jars/jackson-core-2.12.2.jar",
+							"META-INF/jars/jackson-databind-2.12.2.jar",
+							"META-INF/jars/jackson-datatype-jsr310-2.12.2.jar",
+							"META-INF/jars/jackson-module-kotlin-2.12.2.jar",
+							"META-INF/jars/javassist-3.26.0-GA.jar",
+							"META-INF/jars/jcl-over-slf4j-2.0.7.jar",
+							"META-INF/jars/konf-core-1.1.2.jar",
+							"META-INF/jars/konf-toml-1.1.2.jar",
+							"META-INF/jars/mariadb-java-client-3.3.3.jar",
+							"META-INF/jars/mysql-connector-j-8.3.0.jar",
+							"META-INF/jars/postgresql-42.7.3.jar",
+							"META-INF/jars/protobuf-java-3.25.1.jar",
+							"META-INF/jars/reflections-0.9.12.jar",
+							"META-INF/jars/server-translations-api-2.5.2+1.21.9-pre3.jar",
+							"META-INF/jars/server-translations-api-2.5.2+1.21.9-pre3.jar!META-INF/jars/packet-tweaker-0.6.0-pre.1+1.21.2-pre3.jar",
+							"META-INF/jars/sqlite-jdbc-3.50.3.0.jar",
+							"META-INF/jars/toml4j-0.7.2.jar",
+							"META-INF/jars/waffle-jna-3.3.0.jar"
+						],
+						"capabilities": {
+							"unsafe": {
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/SCQHeader$HeadAndTailRef.class": [
+									"sun/misc/Unsafe.putOrderedObject",
+									"sun/misc/Unsafe.compareAndSwapObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/SingleConsumerQueue$Node.class": [
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putOrderedObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/SingleConsumerQueue.class": [
+									"sun/misc/Unsafe.getInt"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/base/UnsafeAccess.class": [
+									"sun/misc/Unsafe.objectFieldOffset"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/BBHeader$ReadAndWriteCounterRef.class": [
+									"sun/misc/Unsafe.putOrderedLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/BBHeader$ReadCounterRef.class": [
+									"sun/misc/Unsafe.putOrderedLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/BLCHeader$DrainStatusRef.class": [
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.putOrderedInt",
+									"sun/misc/Unsafe.compareAndSwapInt"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/BaseMpscLinkedArrayQueue.class": [
+									"sun/misc/Unsafe.getLongVolatile",
+									"sun/misc/Unsafe.putOrderedLong",
+									"sun/misc/Unsafe.compareAndSwapLong",
+									"sun/misc/Unsafe.objectFieldOffset"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FD.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putOrderedObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FS.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FW.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putOrderedObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PD.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putOrderedObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PS.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PW.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putOrderedObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/StripedBuffer.class": [
+									"sun/misc/Unsafe.compareAndSwapInt",
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.putInt"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/UnsafeAccess.class": [
+									"sun/misc/Unsafe.objectFieldOffset"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/UnsafeRefArrayAccess.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.putOrderedObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.getObjectVolatile",
+									"sun/misc/Unsafe.arrayIndexScale",
+									"sun/misc/Unsafe.arrayBaseOffset"
+								],
+								"META-INF/jars/protobuf-java-3.25.1.jar!com/google/protobuf/MessageSchema.class": [
+									"sun/misc/Unsafe.objectFieldOffset",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putInt",
+									"sun/misc/Unsafe.putLong"
+								],
+								"META-INF/jars/protobuf-java-3.25.1.jar!com/google/protobuf/UnsafeUtil$1.class": [
+									"sun/misc/Unsafe"
+								],
+								"META-INF/jars/protobuf-java-3.25.1.jar!com/google/protobuf/UnsafeUtil$JvmMemoryAccessor.class": [
+									"sun/misc/Unsafe.staticFieldBase",
+									"sun/misc/Unsafe.staticFieldOffset",
+									"sun/misc/Unsafe.getByte",
+									"sun/misc/Unsafe.putByte",
+									"sun/misc/Unsafe.getBoolean",
+									"sun/misc/Unsafe.putBoolean",
+									"sun/misc/Unsafe.getFloat",
+									"sun/misc/Unsafe.putFloat",
+									"sun/misc/Unsafe.getDouble",
+									"sun/misc/Unsafe.putDouble",
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.putInt",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.copyMemory"
+								],
+								"META-INF/jars/protobuf-java-3.25.1.jar!com/google/protobuf/UnsafeUtil$MemoryAccessor.class": [
+									"sun/misc/Unsafe.objectFieldOffset",
+									"sun/misc/Unsafe.arrayBaseOffset",
+									"sun/misc/Unsafe.arrayIndexScale",
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.putInt",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putObject"
+								],
+								"META-INF/jars/protobuf-java-3.25.1.jar!com/google/protobuf/UnsafeUtil.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								]
+							},
+							"network": {
+								"META-INF/jars/commons-text-1.9.jar!org/apache/commons/text/lookup/UrlStringLookup.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/h2-2.2.224.jar!META-INF/versions/10/org/h2/util/Utils10.class": [
+									"java/net/Socket.getOption",
+									"java/net/Socket.setOption"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/engine/SessionRemote.class": [
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/security/auth/H2AuthConfigXml.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/TcpServer.class": [
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/TcpServerThread.class": [
+									"java/net/Socket.getLocalAddress",
+									"java/net/Socket.getLocalPort",
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/pg/PgServer.class": [
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/pg/PgServerThread.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getLocalAddress",
+									"java/net/Socket.getLocalPort",
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort",
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/web/WebServer.class": [
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/web/WebThread.class": [
+									"java/net/Socket.close",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getLocalAddress",
+									"java/net/Socket.getLocalPort",
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/store/FileLock.class": [
+									"java/net/Socket.close",
+									"java/net/Socket.<init>"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/store/fs/disk/FilePathDisk.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/tools/Upgrade.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/NetUtils.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.connect",
+									"java/net/Socket.getInetAddress"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/value/Transfer.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close",
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort",
+									"java/net/Socket.isClosed"
+								],
+								"META-INF/jars/jackson-core-2.12.2.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.12.2.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/JarClassPath.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/URLClassPath.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/tools/rmi/ObjectImporter.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/tools/web/Viewer.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/tools/web/Webserver.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/konf-core-1.1.2.jar!com/uchuhimo/konf/source/Provider$DefaultImpls.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/socket/impl/NamedPipeSocket.class": [
+									"java/net/Socket.<init>"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/socket/impl/UnixDomainSocket.class": [
+									"java/net/Socket.<init>"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/impl/StandardClient.class": [
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getPort",
+									"java/net/Socket.close",
+									"java/net/Socket.shutdownOutput",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.getInetAddress"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/impl/ConnectionHelper.class": [
+									"java/net/Socket.isConnected",
+									"java/net/Socket.connect"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/SocketHelper.class": [
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setSoLinger",
+									"java/net/Socket.bind"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/plugin/tls/main/DefaultTlsSocketPlugin.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/plugin/TlsSocketPlugin.class": [
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!META-INF/versions/11/org/mariadb/jdbc/client/SocketHelper.class": [
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setSoLinger",
+									"java/net/Socket.setOption",
+									"java/net/Socket.bind"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/NativeSession.class": [
+									"java/net/Socket.getRemoteSocketAddress"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/ExportControlled$SslContextBuilder.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/ExportControlled.class": [
+									"java/net/Socket"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/NamedPipeSocketFactory$NamedPipeSocket.class": [
+									"java/net/Socket.<init>"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/NetworkResources.class": [
+									"java/net/Socket.isClosed",
+									"java/net/Socket.isInputShutdown",
+									"java/net/Socket.shutdownInput",
+									"java/net/Socket.isOutputShutdown",
+									"java/net/Socket.shutdownOutput",
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/SocksProxySocketFactory.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.bind",
+									"java/net/Socket.connect"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/StandardSocketFactory.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setReceiveBufferSize",
+									"java/net/Socket.setSendBufferSize",
+									"java/net/Socket.setTrafficClass",
+									"java/net/Socket.bind",
+									"java/net/Socket.connect",
+									"java/net/Socket.getSoTimeout",
+									"java/net/Socket.setSoTimeout"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/a/NativeProtocol.class": [
+									"java/net/Socket.close",
+									"java/net/Socket.getSoTimeout",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.shutdownInput",
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/a/NativeSocketConnection.class": [
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/Driver.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/core/PGStream.class": [
+									"java/net/Socket.getSendBufferSize",
+									"java/net/Socket.getReceiveBufferSize",
+									"java/net/Socket.getSoTimeout",
+									"java/net/Socket.getKeepAlive",
+									"java/net/Socket.getTcpNoDelay",
+									"java/net/Socket.setReceiveBufferSize",
+									"java/net/Socket.setSendBufferSize",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.bind",
+									"java/net/Socket.isConnected",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/core/QueryExecutorCloseAction.class": [
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/core/v3/ConnectionFactoryImpl.class": [
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setReceiveBufferSize",
+									"java/net/Socket.setSendBufferSize",
+									"java/net/Socket.getReceiveBufferSize",
+									"java/net/Socket.getSendBufferSize"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/core/v3/QueryExecutorImpl.class": [
+									"java/net/Socket.getSoTimeout",
+									"java/net/Socket.isClosed"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/core/v3/replication/V3ReplicationProtocol.class": [
+									"java/net/Socket.getSoTimeout",
+									"java/net/Socket.setSoTimeout"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/jdbcurlresolver/PgPassParser.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/jdbcurlresolver/PgServiceConfParser.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/ssl/LazyKeyManager.class": [
+									"java/net/Socket"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/ssl/PKCS12KeyManager.class": [
+									"java/net/Socket"
+								],
+								"META-INF/jars/reflections-0.9.12.jar!org/reflections/vfs/JarInputDir$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/reflections-0.9.12.jar!org/reflections/vfs/Vfs$DefaultUrlTypes$2.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/reflections-0.9.12.jar!org/reflections/vfs/Vfs$DefaultUrlTypes$4.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/SQLiteJDBCLoader.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/SQLiteConnection.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/SQLiteJDBCLoader$VersionHolder.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"exec": {
+								"META-INF/jars/h2-2.2.224.jar!org/h2/tools/Server.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/tools/Upgrade.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.inheritIO",
+									"java/lang/ProcessBuilder.start"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/Profiler.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/SourceCompiler.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.environment",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.start"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/admin/ServerController.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/util/OSInfo.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/util/ProcessRunner.class": [
+									"java/lang/Runtime.exec"
+								]
+							},
+							"classloading": {
+								"META-INF/jars/h2-2.2.224.jar!org/h2/tools/Upgrade$1.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/SourceCompiler$1.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/SourceCompiler$ClassFileManager$1.class": [
+									"java/security/SecureClassLoader.defineClass",
+									"extends java/security/SecureClassLoader"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/Loader$Simple.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/Loader.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/tools/web/Viewer.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/util/proxy/DefineClassHelper.class": [
+									"java/lang/invoke/MethodHandles$Lookup.defineClass"
+								],
+								"META-INF/jars/reflections-0.9.12.jar!org/reflections/util/ClasspathHelper.class": [
+									"java/net/URLClassLoader.getURLs"
+								]
+							},
+							"native": {
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/SQLiteJDBCLoader.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/core/NativeDB.class": [
+									"java/lang/System.loadLibrary"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/h2-2.2.224.jar!org/h2/jdbc/JdbcSQLXML.class",
+								"META-INF/jars/h2-2.2.224.jar!org/h2/security/auth/H2AuthConfigXml.class",
+								"META-INF/jars/jackson-databind-2.12.2.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/jdbc/MysqlSQLXML.class",
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/xml/DefaultPGXmlFactoryFactory.class",
+								"META-INF/jars/waffle-jna-3.3.0.jar!waffle/servlet/WaffleInfoServlet.class",
+								"META-INF/jars/waffle-jna-3.3.0.jar!waffle/util/WaffleInfo.class"
+							],
+							"apache.org": [
+								"META-INF/jars/h2-2.2.224.jar!org/h2/jdbc/JdbcSQLXML.class",
+								"META-INF/jars/h2-2.2.224.jar!org/h2/security/auth/H2AuthConfigXml.class",
+								"META-INF/jars/jackson-databind-2.12.2.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/jdbc/MysqlSQLXML.class",
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/xml/DefaultPGXmlFactoryFactory.class"
+							],
+							"xml.org": [
+								"META-INF/jars/h2-2.2.224.jar!org/h2/jdbc/JdbcSQLXML.class",
+								"META-INF/jars/h2-2.2.224.jar!org/h2/security/auth/H2AuthConfigXml.class",
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/jdbc/MysqlSQLXML.class",
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/xml/DefaultPGXmlFactoryFactory.class"
+							],
+							"h2database.com": [
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/web/WebApp.class",
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/Tool.class"
+							],
+							"repo1.maven.org": [
+								"META-INF/jars/h2-2.2.224.jar!org/h2/tools/Upgrade.class"
+							],
+							"www.slf4j.org": [
+								"META-INF/jars/jcl-over-slf4j-2.0.7.jar!org/apache/commons/logging/LogFactory.class",
+								"META-INF/jars/jcl-over-slf4j-2.0.7.jar!org/apache/commons/logging/impl/SLF4JLogFactory.class"
+							],
+							"mariadb.com": [
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/impl/StandardClient.class"
+							],
+							"jdbc.postgresql.org": [
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/util/PGJDBCMain.class"
+							],
+							"github.com": [
+								"com/viameowts/vialogium/commands/subcommands/StatusCommand$status$1.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## viaLogium 0.4.0 - upstream sync\n\nPorts the valuable fixes and features from upstream [Ledger](https://github.com/QuiltServerTools/Ledger) 1.3.19..1.3.23 (commits after our fork point), adapted to the viaLogium codebase.\n\n### Fixed\n- **MySQL**: action rows with `extra_data` exceeding the TEXT column limit are skipped with a warn instead of failing the entire batch (#371)\n- Search result click actions (page change, teleport) now run on the server thread via custom click events dispatched after `ensureRunningOnSameThread` (#372, #361)\n- Teleport click action no longer NPEs on unknown dimensions\n\n### Added\n- Declarative `actions(time)` + xyz indexes for fresh databases on all backends; legacy raw-exec migrations gated behind new `[database] updateSchema = false` option (#369, #375)\n- Player names resolved from the local DB cache instead of per-query Mojang lookups (#357)\n- Item insert/remove tracking for Chiseled Bookshelf (#368)\n\n### Skipped\n- Upstream #355 (@global range NPE) - already unreachable in viaLogium's search parameter handling.\n\n**Requires:** Minecraft 1.21.11, Fabric Loader, Fabric API, fabric-language-kotlin. Optional: viapanel 2.9.0+."
+		},
+		{
+			"tag": "v0.3.0-vialogium",
+			"published": "2026-08-23T09:21:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 526047847,
+					"name": "vialogium-0.3.0.jar",
+					"url": "https://github.com/viaMeowts/viaLogium/releases/download/v0.3.0-vialogium/vialogium-0.3.0.jar",
+					"size": 29647273,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "44511f0601cbf973cf9188e2a09bd855f82cd676de7ddce9a619bb17a68c8079",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "vialogium",
+							"version": "0.3.0",
+							"name": "viaLogium",
+							"description": "viaLogium logs world events and allows rollbacks with database-backed history",
+							"minecraft": ">=1.21.11",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"fabric-language-kotlin",
+								"minecraft",
+								"viapanel"
+							],
+							"provides": [
+								"com_zaxxer_hikaricp",
+								"com_github_ben-manes_caffeine_caffeine",
+								"org_checkerframework_checker-qual",
+								"org_apache_commons_commons-text",
+								"com_google_errorprone_error_prone_annotations",
+								"org_jetbrains_exposed_exposed-core",
+								"org_jetbrains_exposed_exposed-dao",
+								"org_jetbrains_exposed_exposed-java-time",
+								"org_jetbrains_exposed_exposed-jdbc",
+								"fabric-permissions-api-v0",
+								"com_h2database_h2",
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_datatype_jackson-datatype-jsr310",
+								"com_fasterxml_jackson_module_jackson-module-kotlin",
+								"org_javassist_javassist",
+								"org_slf4j_jcl-over-slf4j",
+								"com_uchuhimo_konf-core",
+								"com_uchuhimo_konf-toml",
+								"org_mariadb_jdbc_mariadb-java-client",
+								"com_mysql_mysql-connector-j",
+								"org_postgresql_postgresql",
+								"com_google_protobuf_protobuf-java",
+								"org_reflections_reflections",
+								"server_translations_api",
+								"org_xerial_sqlite-jdbc",
+								"com_moandjiezana_toml_toml4j",
+								"com_github_waffle_waffle-jna"
+							],
+							"breaks": [
+								"cardboard"
+							],
+							"breaksVersions": {
+								"cardboard": "*"
+							}
+						}
+					],
+					"icon": "e7681741df50ccd1fa3c35e7e4d1db63d7122f3356f2d79f86c09180b3369ec0.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 8153,
+						"jars": [
+							"META-INF/jars/HikariCP-5.1.0.jar",
+							"META-INF/jars/caffeine-2.9.3.jar",
+							"META-INF/jars/checker-qual-3.42.0.jar",
+							"META-INF/jars/commons-text-1.9.jar",
+							"META-INF/jars/error_prone_annotations-2.10.0.jar",
+							"META-INF/jars/exposed-core-1.0.0-rc-2.jar",
+							"META-INF/jars/exposed-dao-1.0.0-rc-2.jar",
+							"META-INF/jars/exposed-java-time-1.0.0-rc-2.jar",
+							"META-INF/jars/exposed-jdbc-1.0.0-rc-2.jar",
+							"META-INF/jars/fabric-permissions-api-0.6.0-patbox.jar",
+							"META-INF/jars/h2-2.2.224.jar",
+							"META-INF/jars/jackson-annotations-2.12.2.jar",
+							"META-INF/jars/jackson-core-2.12.2.jar",
+							"META-INF/jars/jackson-databind-2.12.2.jar",
+							"META-INF/jars/jackson-datatype-jsr310-2.12.2.jar",
+							"META-INF/jars/jackson-module-kotlin-2.12.2.jar",
+							"META-INF/jars/javassist-3.26.0-GA.jar",
+							"META-INF/jars/jcl-over-slf4j-2.0.7.jar",
+							"META-INF/jars/konf-core-1.1.2.jar",
+							"META-INF/jars/konf-toml-1.1.2.jar",
+							"META-INF/jars/mariadb-java-client-3.3.3.jar",
+							"META-INF/jars/mysql-connector-j-8.3.0.jar",
+							"META-INF/jars/postgresql-42.7.3.jar",
+							"META-INF/jars/protobuf-java-3.25.1.jar",
+							"META-INF/jars/reflections-0.9.12.jar",
+							"META-INF/jars/server-translations-api-2.5.2+1.21.9-pre3.jar",
+							"META-INF/jars/server-translations-api-2.5.2+1.21.9-pre3.jar!META-INF/jars/packet-tweaker-0.6.0-pre.1+1.21.2-pre3.jar",
+							"META-INF/jars/sqlite-jdbc-3.50.3.0.jar",
+							"META-INF/jars/toml4j-0.7.2.jar",
+							"META-INF/jars/waffle-jna-3.3.0.jar"
+						],
+						"capabilities": {
+							"unsafe": {
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/SCQHeader$HeadAndTailRef.class": [
+									"sun/misc/Unsafe.putOrderedObject",
+									"sun/misc/Unsafe.compareAndSwapObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/SingleConsumerQueue$Node.class": [
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putOrderedObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/SingleConsumerQueue.class": [
+									"sun/misc/Unsafe.getInt"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/base/UnsafeAccess.class": [
+									"sun/misc/Unsafe.objectFieldOffset"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/BBHeader$ReadAndWriteCounterRef.class": [
+									"sun/misc/Unsafe.putOrderedLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/BBHeader$ReadCounterRef.class": [
+									"sun/misc/Unsafe.putOrderedLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/BLCHeader$DrainStatusRef.class": [
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.putOrderedInt",
+									"sun/misc/Unsafe.compareAndSwapInt"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/BaseMpscLinkedArrayQueue.class": [
+									"sun/misc/Unsafe.getLongVolatile",
+									"sun/misc/Unsafe.putOrderedLong",
+									"sun/misc/Unsafe.compareAndSwapLong",
+									"sun/misc/Unsafe.objectFieldOffset"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FD.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putOrderedObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FDWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FS.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FSWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FW.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putOrderedObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/FWWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PD.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putOrderedObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PDWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PS.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PSWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PW.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putOrderedObject"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWA.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWAR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWAW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWAWR.class": [
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWR.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWW.class": [
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/PWWR.class": [
+									"sun/misc/Unsafe.compareAndSwapLong"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/StripedBuffer.class": [
+									"sun/misc/Unsafe.compareAndSwapInt",
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.putInt"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/UnsafeAccess.class": [
+									"sun/misc/Unsafe.objectFieldOffset"
+								],
+								"META-INF/jars/caffeine-2.9.3.jar!com/github/benmanes/caffeine/cache/UnsafeRefArrayAccess.class": [
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.putOrderedObject",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.getObjectVolatile",
+									"sun/misc/Unsafe.arrayIndexScale",
+									"sun/misc/Unsafe.arrayBaseOffset"
+								],
+								"META-INF/jars/protobuf-java-3.25.1.jar!com/google/protobuf/MessageSchema.class": [
+									"sun/misc/Unsafe.objectFieldOffset",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putObject",
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putInt",
+									"sun/misc/Unsafe.putLong"
+								],
+								"META-INF/jars/protobuf-java-3.25.1.jar!com/google/protobuf/UnsafeUtil$1.class": [
+									"sun/misc/Unsafe"
+								],
+								"META-INF/jars/protobuf-java-3.25.1.jar!com/google/protobuf/UnsafeUtil$JvmMemoryAccessor.class": [
+									"sun/misc/Unsafe.staticFieldBase",
+									"sun/misc/Unsafe.staticFieldOffset",
+									"sun/misc/Unsafe.getByte",
+									"sun/misc/Unsafe.putByte",
+									"sun/misc/Unsafe.getBoolean",
+									"sun/misc/Unsafe.putBoolean",
+									"sun/misc/Unsafe.getFloat",
+									"sun/misc/Unsafe.putFloat",
+									"sun/misc/Unsafe.getDouble",
+									"sun/misc/Unsafe.putDouble",
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.putInt",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.copyMemory"
+								],
+								"META-INF/jars/protobuf-java-3.25.1.jar!com/google/protobuf/UnsafeUtil$MemoryAccessor.class": [
+									"sun/misc/Unsafe.objectFieldOffset",
+									"sun/misc/Unsafe.arrayBaseOffset",
+									"sun/misc/Unsafe.arrayIndexScale",
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.putInt",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong",
+									"sun/misc/Unsafe.getObject",
+									"sun/misc/Unsafe.putObject"
+								],
+								"META-INF/jars/protobuf-java-3.25.1.jar!com/google/protobuf/UnsafeUtil.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								]
+							},
+							"network": {
+								"META-INF/jars/commons-text-1.9.jar!org/apache/commons/text/lookup/UrlStringLookup.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/h2-2.2.224.jar!META-INF/versions/10/org/h2/util/Utils10.class": [
+									"java/net/Socket.getOption",
+									"java/net/Socket.setOption"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/engine/SessionRemote.class": [
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/security/auth/H2AuthConfigXml.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/TcpServer.class": [
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/TcpServerThread.class": [
+									"java/net/Socket.getLocalAddress",
+									"java/net/Socket.getLocalPort",
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/pg/PgServer.class": [
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/pg/PgServerThread.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getLocalAddress",
+									"java/net/Socket.getLocalPort",
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort",
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/web/WebServer.class": [
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/web/WebThread.class": [
+									"java/net/Socket.close",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getLocalAddress",
+									"java/net/Socket.getLocalPort",
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/store/FileLock.class": [
+									"java/net/Socket.close",
+									"java/net/Socket.<init>"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/store/fs/disk/FilePathDisk.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/tools/Upgrade.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/NetUtils.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.connect",
+									"java/net/Socket.getInetAddress"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/value/Transfer.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close",
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort",
+									"java/net/Socket.isClosed"
+								],
+								"META-INF/jars/jackson-core-2.12.2.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.12.2.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/JarClassPath.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/URLClassPath.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/tools/rmi/ObjectImporter.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/tools/web/Viewer.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/tools/web/Webserver.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/konf-core-1.1.2.jar!com/uchuhimo/konf/source/Provider$DefaultImpls.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/socket/impl/NamedPipeSocket.class": [
+									"java/net/Socket.<init>"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/socket/impl/UnixDomainSocket.class": [
+									"java/net/Socket.<init>"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/impl/StandardClient.class": [
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getPort",
+									"java/net/Socket.close",
+									"java/net/Socket.shutdownOutput",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.getInetAddress"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/impl/ConnectionHelper.class": [
+									"java/net/Socket.isConnected",
+									"java/net/Socket.connect"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/SocketHelper.class": [
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setSoLinger",
+									"java/net/Socket.bind"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/plugin/tls/main/DefaultTlsSocketPlugin.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/plugin/TlsSocketPlugin.class": [
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.getPort"
+								],
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!META-INF/versions/11/org/mariadb/jdbc/client/SocketHelper.class": [
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setSoLinger",
+									"java/net/Socket.setOption",
+									"java/net/Socket.bind"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/NativeSession.class": [
+									"java/net/Socket.getRemoteSocketAddress"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/ExportControlled$SslContextBuilder.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/ExportControlled.class": [
+									"java/net/Socket"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/NamedPipeSocketFactory$NamedPipeSocket.class": [
+									"java/net/Socket.<init>"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/NetworkResources.class": [
+									"java/net/Socket.isClosed",
+									"java/net/Socket.isInputShutdown",
+									"java/net/Socket.shutdownInput",
+									"java/net/Socket.isOutputShutdown",
+									"java/net/Socket.shutdownOutput",
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/SocksProxySocketFactory.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.bind",
+									"java/net/Socket.connect"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/StandardSocketFactory.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setReceiveBufferSize",
+									"java/net/Socket.setSendBufferSize",
+									"java/net/Socket.setTrafficClass",
+									"java/net/Socket.bind",
+									"java/net/Socket.connect",
+									"java/net/Socket.getSoTimeout",
+									"java/net/Socket.setSoTimeout"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/a/NativeProtocol.class": [
+									"java/net/Socket.close",
+									"java/net/Socket.getSoTimeout",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.shutdownInput",
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/protocol/a/NativeSocketConnection.class": [
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/Driver.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/core/PGStream.class": [
+									"java/net/Socket.getSendBufferSize",
+									"java/net/Socket.getReceiveBufferSize",
+									"java/net/Socket.getSoTimeout",
+									"java/net/Socket.getKeepAlive",
+									"java/net/Socket.getTcpNoDelay",
+									"java/net/Socket.setReceiveBufferSize",
+									"java/net/Socket.setSendBufferSize",
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.bind",
+									"java/net/Socket.isConnected",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.isClosed"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/core/QueryExecutorCloseAction.class": [
+									"java/net/Socket.close"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/core/v3/ConnectionFactoryImpl.class": [
+									"java/net/Socket.setKeepAlive",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setReceiveBufferSize",
+									"java/net/Socket.setSendBufferSize",
+									"java/net/Socket.getReceiveBufferSize",
+									"java/net/Socket.getSendBufferSize"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/core/v3/QueryExecutorImpl.class": [
+									"java/net/Socket.getSoTimeout",
+									"java/net/Socket.isClosed"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/core/v3/replication/V3ReplicationProtocol.class": [
+									"java/net/Socket.getSoTimeout",
+									"java/net/Socket.setSoTimeout"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/jdbcurlresolver/PgPassParser.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/jdbcurlresolver/PgServiceConfParser.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/ssl/LazyKeyManager.class": [
+									"java/net/Socket"
+								],
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/ssl/PKCS12KeyManager.class": [
+									"java/net/Socket"
+								],
+								"META-INF/jars/reflections-0.9.12.jar!org/reflections/vfs/JarInputDir$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/reflections-0.9.12.jar!org/reflections/vfs/Vfs$DefaultUrlTypes$2.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/reflections-0.9.12.jar!org/reflections/vfs/Vfs$DefaultUrlTypes$4.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/SQLiteJDBCLoader.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/SQLiteConnection.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/SQLiteJDBCLoader$VersionHolder.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"exec": {
+								"META-INF/jars/h2-2.2.224.jar!org/h2/tools/Server.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/tools/Upgrade.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.inheritIO",
+									"java/lang/ProcessBuilder.start"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/Profiler.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/SourceCompiler.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.environment",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.start"
+								],
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/admin/ServerController.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/util/OSInfo.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/util/ProcessRunner.class": [
+									"java/lang/Runtime.exec"
+								]
+							},
+							"classloading": {
+								"META-INF/jars/h2-2.2.224.jar!org/h2/tools/Upgrade$1.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/SourceCompiler$1.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/SourceCompiler$ClassFileManager$1.class": [
+									"java/security/SecureClassLoader.defineClass",
+									"extends java/security/SecureClassLoader"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/Loader$Simple.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/Loader.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/tools/web/Viewer.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/javassist-3.26.0-GA.jar!javassist/util/proxy/DefineClassHelper.class": [
+									"java/lang/invoke/MethodHandles$Lookup.defineClass"
+								],
+								"META-INF/jars/reflections-0.9.12.jar!org/reflections/util/ClasspathHelper.class": [
+									"java/net/URLClassLoader.getURLs"
+								]
+							},
+							"native": {
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/SQLiteJDBCLoader.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.3.0.jar!org/sqlite/core/NativeDB.class": [
+									"java/lang/System.loadLibrary"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/h2-2.2.224.jar!org/h2/jdbc/JdbcSQLXML.class",
+								"META-INF/jars/h2-2.2.224.jar!org/h2/security/auth/H2AuthConfigXml.class",
+								"META-INF/jars/jackson-databind-2.12.2.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/jdbc/MysqlSQLXML.class",
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/xml/DefaultPGXmlFactoryFactory.class",
+								"META-INF/jars/waffle-jna-3.3.0.jar!waffle/servlet/WaffleInfoServlet.class",
+								"META-INF/jars/waffle-jna-3.3.0.jar!waffle/util/WaffleInfo.class"
+							],
+							"apache.org": [
+								"META-INF/jars/h2-2.2.224.jar!org/h2/jdbc/JdbcSQLXML.class",
+								"META-INF/jars/h2-2.2.224.jar!org/h2/security/auth/H2AuthConfigXml.class",
+								"META-INF/jars/jackson-databind-2.12.2.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/jdbc/MysqlSQLXML.class",
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/xml/DefaultPGXmlFactoryFactory.class"
+							],
+							"xml.org": [
+								"META-INF/jars/h2-2.2.224.jar!org/h2/jdbc/JdbcSQLXML.class",
+								"META-INF/jars/h2-2.2.224.jar!org/h2/security/auth/H2AuthConfigXml.class",
+								"META-INF/jars/mysql-connector-j-8.3.0.jar!com/mysql/cj/jdbc/MysqlSQLXML.class",
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/xml/DefaultPGXmlFactoryFactory.class"
+							],
+							"h2database.com": [
+								"META-INF/jars/h2-2.2.224.jar!org/h2/server/web/WebApp.class",
+								"META-INF/jars/h2-2.2.224.jar!org/h2/util/Tool.class"
+							],
+							"repo1.maven.org": [
+								"META-INF/jars/h2-2.2.224.jar!org/h2/tools/Upgrade.class"
+							],
+							"www.slf4j.org": [
+								"META-INF/jars/jcl-over-slf4j-2.0.7.jar!org/apache/commons/logging/LogFactory.class",
+								"META-INF/jars/jcl-over-slf4j-2.0.7.jar!org/apache/commons/logging/impl/SLF4JLogFactory.class"
+							],
+							"mariadb.com": [
+								"META-INF/jars/mariadb-java-client-3.3.3.jar!org/mariadb/jdbc/client/impl/StandardClient.class"
+							],
+							"jdbc.postgresql.org": [
+								"META-INF/jars/postgresql-42.7.3.jar!org/postgresql/util/PGJDBCMain.class"
+							],
+							"github.com": [
+								"com/viameowts/vialogium/commands/subcommands/StatusCommand$status$1.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## viaLogium 0.3.0\n\nServer-side world change logger for Fabric (Minecraft 1.21.11).\n**Based on [Ledger](https://github.com/QuiltServerTools/Ledger) 1.3.18 by QuiltServerTools** (LGPL-3.0 carried over).\n\n### Highlights of this fork\n\n- **Hardened DB pipeline**: a transient database failure no longer kills the flush coroutine silently - failed batches retry (x5, 5 s apart) and `/vl status` shows `Logging: OK / DEGRADED`; save-off pauses are now visible in the log.\n- **Opt-in piston movement logging**: `[actions] logPistons = false` by default; emits standard block actions with source `piston`, self-throttles under queue pressure.\n- **viaPanel integration**: edit the config in-game when viapanel 2.9.0+ is installed.\n- Rebranded to `vialogium` with `/vl` as the command root; Russian docs and Discord guides included.\n\n### Requirements\n\n- Minecraft 1.21.11, Fabric Loader\n- `fabric-language-kotlin` and Fabric API in `mods/`\n- Optional: `viapanel-2.9.0+` for panel UI\n- Storage: SQLite out of the box; H2 / MySQL / MariaDB / PostgreSQL supported\n\n### Install\n\nDrop the jar into `mods/`. Config is generated at `config/vialogium.toml` on first run.\n\n*Full upstream history is preserved in the git log below the fork baseline commit.*"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [
+		"docs/assets/search-example.png",
+		"docs/assets/status-example.png",
+		"media/Ledger-smol.png",
+		"media/Ledger.png"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 230,
+		"more": 21,
+		"people": [
+			{
+				"login": "PotatoPresident",
+				"commits": 123,
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/PotatoPresident"
+					}
+				]
+			},
+			{
+				"login": "Genau6502",
+				"commits": 29,
+				"funding": []
+			},
+			{
+				"login": "DrexHD",
+				"commits": 24,
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/DrexHD"
+					}
+				]
+			},
+			{
+				"login": "claude",
+				"commits": 9,
+				"funding": []
+			},
+			{
+				"login": "viaMeowts",
+				"commits": 9,
+				"funding": []
+			},
+			{
+				"login": "Tom-The-Geek",
+				"commits": 4,
+				"funding": []
+			},
+			{
+				"login": "Altirix",
+				"commits": 2,
+				"funding": []
+			},
+			{
+				"login": "TheDeathlyCow",
+				"commits": 2,
+				"funding": []
+			},
+			{
+				"login": "dirtTW",
+				"commits": 2,
+				"funding": []
+			},
+			{
+				"login": "unsigned-32-bit-integer",
+				"commits": 2,
+				"funding": []
+			},
+			{
+				"login": "vacla",
+				"commits": 2,
+				"funding": []
+			},
+			{
+				"login": "Acuadragon100",
+				"commits": 1,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

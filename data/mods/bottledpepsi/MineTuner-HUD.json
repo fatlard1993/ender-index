@@ -18,7 +18,7 @@
 					"name": "minetuner-1.4.3.jar",
 					"url": "https://github.com/bottledpepsi/MineTuner-HUD/releases/download/1.4.3/minetuner-1.4.3.jar",
 					"size": 326854,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "82cc04dbf389d4b575800d9a9df056f6623af448dd1a939331e4022e28bdeecd",
 					"mods": [
@@ -72,7 +72,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# MineTuner HUD 1.4.3\n\n## Improvements\n- **Lighter rendering:** the HUD does far less work per frame. Gradient colours are no longer rebuilt for every pixel column of every graph, number formatting and text measuring no longer allocate, and graph rows are cached instead of copying and re-smoothing up to 2,000 samples every frame.\n- **Fewer config saves:** editing in the HUD editor now writes `minetuner.json` at most once per second instead of on every click. Pending changes are always written when you close the editor, disconnect from a world, or quit the game.\n- **Real text editing:** the rename, template line and stat search boxes now support arrow keys, Home/End, selection, and Ctrl+A/C/X/V, with a blinking caret. Long text is clipped to its box instead of spilling out, and the § formatting code is rejected instead of being saved into names where it would corrupt the display.\n- **Clearer benchmark state:** the screen now tells you when a run stopped automatically after reaching its sample cap, and the start button reads **Restart** while a recording is live so you can't accidentally throw a run away.\n- **Easier stat reordering:** the reorder panel gains ◀ ▶ paging arrows, highlights the row under the cursor, and no longer jumps back to the top when you expand or collapse a category.\n- **Safer destructive actions:** the delete confirmation now names the list it is about to delete, deleting a template line asks for a quick two-step confirmation, and saving a theme over a built-in theme's name shows an error instead of failing silently.\n- **Unsaved text protection:** clicking outside the rename or template box with uncommitted changes now warns you first instead of silently discarding what you typed.\n- **Prefix hiding is translation-proof:** hiding a stat's prefix (in templates and with prefixes off) no longer depends on the \": \" inside translated strings. Stat labels are declared separately, so translated text can be reworded freely without breaking stripping.\n- **Command feedback:** `/minetuner` with no arguments now lists its subcommands, and `/minetuner benchmark start|stop|save` gives the same feedback as the keybinds.\n\n## Fixes\n- Fixed frametime thresholds. When the config loaded, custom warning and bad cut-offs were collapsed onto the good cut-off, leaving the yellow band unreachable. Defaults are now 16.7 ms and 33.3 ms, matching the built-in colour bands.\n- Fixed editor clicks going to the wrong panel when two popups could be open at once. Click handling now follows the same panel priority as rendering, and renaming or editing a template from inside another panel returns to that panel instead of the editor canvas.\n- Fixed right-click opening a context menu in the middle of dragging a list, and the dragged box now follows size changes while you drag.\n- Fixed clicks in the reorder panel landing on the wrong row while the list was still scrolling into place.\n- Fixed **+ Create new list** (from the empty-space menu) not placing the new list where you right-clicked.\n- Fixed Speed reading roughly 0 while riding a boat, minecart or horse.\n- Fixed distance from spawn in the Nether and the End showing a meaningless cross-dimension number; it now shows no value there.\n- Fixed the Threshold panel's direction subtitle drawing on top of the first row (\"Use Custom Thresholds\").\n- Fixed an empty rename clearing a list's name.\n- Fixed a small memory leak that kept animation state for deleted lists.\n- Fixed hardware sensor polling not stopping cleanly on config reload or when leaving a world, which could briefly report stale sensor values."
 		},
 		{
 			"tag": "1.4.2",
@@ -84,7 +85,7 @@
 					"name": "minetuner-1.4.2.jar",
 					"url": "https://github.com/bottledpepsi/MineTuner-HUD/releases/download/1.4.2/minetuner-1.4.2.jar",
 					"size": 310633,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "2f871c0f7d17a28b148ec4fdb7be9a937248a5dd7e12bf25fcc8de26f99fc1c4",
 					"mods": [
@@ -138,7 +139,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# MineTuner HUD 1.4.2\n\n## Improvements\n- **Lighter sampling:** stats are now sampled once per client tick instead of every rendered frame, and only while something needs them (shown in a list, used by a template token, or recorded by a running benchmark). Ping, CPU, GC and percentile-low readings update at most every 500 ms.\n- Graphs and benchmark CPU data now keep updating while the overlay is hidden, F3 is open or the editor is open.\n- **Benchmark:** results are now saved on a background thread, and the screen shows \"Saving…\" until the write finishes.\n- Benchmark CPU is now labelled **CPU (process)**. It is the game process's load, time-weighted over the run, so it will differ from Task Manager's whole-system figure.\n- Saved `summary.txt` files now show the run's actual start time instead of an estimate worked back from the save time.\n- Benchmark graphs are cached, so long runs (up to 432,000 samples) no longer cost anything extra per frame to draw.\n- 1% Low and 0.1% Low are calculated from a single sort of the samples, and give the same values as before.\n- New lists now start with TPS, MSPT and FPS enabled.\n- The config file is now checked on load. Hand-edited or corrupted values (nulls, unknown enum names, NaN, out-of-range numbers, duplicate list IDs) are repaired instead of causing problems. The threshold cut-offs in the editor and the Cloth Config screen are validated the same way, so the yellow band can't become unreachable. A file that can't be read is still backed up as `minetuner.json.bak-<timestamp>` before defaults are used.\n- Duplicating a list now copies every setting, including any added in future versions.\n- The tick-rate hook no longer crashes the game on launch if a future Minecraft update renames the method it attaches to. Tick-rate display is simply skipped in that case.\n- Docs: the README is shorter, with the detailed usage guide moved to the docs site, and there's a new \"How sampling works\" section.\n\n## Fixes\n- Fixed left and right click mapping in the HUD editor and the Benchmark screen on Minecraft 26.3.\n- Fixed the **Avg FPS** calculation. It now uses total frames divided by total time, rather than the mean of per-frame FPS, which overstated the average when frame times varied. This applies to both the benchmark and the session Avg FPS stat.\n- Fixed MSPT graph colours. Each sample is now coloured by its TPS equivalent instead of being compared against TPS thresholds as raw milliseconds.\n- Fixed extra space under the last row of a list, which made the box look bottom-heavy.\n- Fixed Backspace splitting emoji in the rename, template and search boxes. Text is now handled by code point, and the 32-character (names and search) and 200-character (template lines) limits count code points.\n- Fixed translation keys and stat names being built with the system locale, which could break the UI under locales such as Turkish.\n- Fixed the order of saved stat sets in `minetuner.json`, which could change between launches."
 		},
 		{
 			"tag": "1.4.1",
@@ -150,7 +152,7 @@
 					"name": "minetuner-1.4.1.jar",
 					"url": "https://github.com/bottledpepsi/MineTuner-HUD/releases/download/1.4.1/minetuner-1.4.1.jar",
 					"size": 286322,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "9711ac631b9b6f3cf4f84524b543ecacd9b2e52c6c16f277331688fc45729e3d",
 					"mods": [
@@ -204,7 +206,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Update to Minecraft 26.3"
 		},
 		{
 			"tag": "1.4.0",
@@ -216,7 +219,7 @@
 					"name": "minetuner-1.4.0.jar",
 					"url": "https://github.com/bottledpepsi/MineTuner-HUD/releases/download/1.4.0/minetuner-1.4.0.jar",
 					"size": 286275,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "5397f0254596be4652ae40fa54ac5d08eb4c84b240dbaff5a07f88cbe5456ac4",
 					"mods": [
@@ -270,7 +273,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# MineTuner HUD 1.4.0\n## New feature\n- **Benchmark Mode** open with `/minetuner benchmark` or the keybind\n## Fixes\n- Fixed scrolling in the re-order panel"
 		},
 		{
 			"tag": "1.3.0",
@@ -282,7 +286,7 @@
 					"name": "minetuner-1.3.0.jar",
 					"url": "https://github.com/bottledpepsi/MineTuner-HUD/releases/download/1.3.0/minetuner-1.3.0.jar",
 					"size": 263826,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "22ae16405f08c091ba3422a496c89d2cd6d78bde1656fa509a77416224dd39f6",
 					"mods": [
@@ -336,11 +340,26 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# MineTuner HUD 1.3.0\n## New stats\n- **Session Avg/Min/Max FPS** — `{fps_avg}`, `{fps_min}`, `{fps_max}` track running average, minimum, and maximum FPS since mod load or your last world join. Resets on join/disconnect, so numbers won't carry over between sessions.\n- **1% and 0.1% Low FPS** — new percentile low stats for spotting stutters.\n## Fixes\n- Fixed stat update jitter in the HUD renderer.\n- Average FPS now defaults to 0 decimal places (still configurable).\n- Broken links in the README fixed."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 122,
+		"more": 0,
+		"people": [
+			{
+				"login": "bottledpepsi",
+				"commits": 122,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
 	"history": 1
 }

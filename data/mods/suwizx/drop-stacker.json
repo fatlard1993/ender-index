@@ -1,0 +1,295 @@
+{
+	"repo": "suwizx/drop-stacker",
+	"host": "github",
+	"description": "Fabric mod for Minecraft that automatically merges dropped item entities on the ground into stacked entities — reducing item lag on servers and singleplayer worlds. Configurable stack size, scan radius, and scan interval. ",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-04-15T10:35:10Z",
+	"pushed": "2026-10-30T07:42:38Z",
+	"releases": [
+		{
+			"tag": "v1.3.0",
+			"published": "2026-10-30T07:42:39Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 691346060,
+					"name": "drop-stacker-1.3.0.jar",
+					"url": "https://github.com/suwizx/drop-stacker/releases/download/v1.3.0/drop-stacker-1.3.0.jar",
+					"size": 85623,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "a981d61852bdeb4db903f4f7d40c262db8e56ec6ae508893230df4816cde44d2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "drop-stacker",
+							"version": "1.3.0",
+							"name": "Drop Stacker",
+							"description": "Automatically merges dropped item entities on the ground into stacked entities, reducing item lag on servers and singleplayer worlds.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": "a22ee4e0c641604bea12146812c685721a44d5d1da6f0293f7683d365a2924ff.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 23,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Feature and fix release for **Minecraft 26.3**. It is still **server-side only**: install it on the server, and players need nothing.\n\n**Big thanks to [@Skyfay](https://github.com/Skyfay) (Manu), who wrote both pull requests below**, including the gametests that reproduce each bug. 🙏\n\n## Fixed ([#4](https://github.com/suwizx/drop-stacker/pull/4))\nPiles above an item's normal stack size reached vanilla code that never expects them. Each case below has a gametest that fails on the previous version.\n\n- **Items were deleted when something picked up a pile.** A hopper under 640 cobblestone kept 64 and deleted 576. Hopper minecarts, villagers, allays and piglins lost items the same way. Dolphins, pandas and raiders took a whole pile into a hand slot that cannot be saved above 99. Every pickup, players included, now takes one vanilla-sized stack at a time and the rest stays on the ground.\n- **Logging mods such as Ledger failed on piles** (`Value must be within range [1;99]`). Pickups now only see vanilla-sized stacks, and a freshly dropped item joins the pile around it instead of swallowing it, so the dropped entity still holds exactly what was dropped.\n- **Thrown items vanished into a pile mid-air.** An item you throw (Q, or a villager or piglin handing it over) now flies and lands first, and only then joins a pile.\n- **A single item could pull a whole pile across the ground.** The biggest pile in range now takes the others in, as vanilla does.\n- **Labels froze after a restart or chunk reload**, and those piles never merged again. The label is now recognised as the mod's own after loading.\n- **Drops reserved for one player** (`target`) no longer merge with public drops, or the other way round.\n\n## Added ([#5](https://github.com/suwizx/drop-stacker/pull/5))\nThe defaults render exactly the label you have today, so existing setups are unchanged.\n\n- **`labelFormat` / `timerFormat`:** build the label from placeholders (`{count}`, `{stacks}`, `{countColor}`, `{timer}`, `{time}`, `{timerColor}`) and `&` codes, including `&#RRGGBB`. A format without a timer no longer rebuilds the label every second, so it only sends an update when the count changes.\n- **`labelMode: OVERSIZED_ONLY`:** label a pile only once it holds more than one vanilla stack of its item (2 totems, 65 planks). Smaller piles look like vanilla drops.\n- **`labelThroughWalls`:** set to `false` to hide labels behind blocks. Clients using Entity Culling need `minecraft:item` in its `entityWhitelist`, see the README.\n\n## Also\n- A format with a signed hex colour such as `&#-1abcd` is now kept as plain text instead of being read as a colour.\n- 24 server gametests now run with every build, including a check that the hidden-label flag reaches the packets actually sent.\n\n## Upgrading\nReplace the jar; no config changes are needed. Pickups of a big pile now happen one stack per touch, so collecting a very large pile takes a few touches.\n\n## Requirements\nMinecraft 26.3, Fabric Loader 0.19.5+, Fabric API, Fabric Language Kotlin, and Java 25. These are unchanged from v1.2.1.\n\n**Full changelog:** https://github.com/suwizx/drop-stacker/compare/v1.2.1...v1.3.0"
+		},
+		{
+			"tag": "v1.2.1+1.21.1",
+			"published": "2026-09-19T14:37:19Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 574924027,
+					"name": "drop-stacker-1.2.1+1.21.1.jar",
+					"url": "https://github.com/suwizx/drop-stacker/releases/download/v1.2.1%2B1.21.1/drop-stacker-1.2.1%2B1.21.1.jar",
+					"size": 69216,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "e7fa49400355f9f58386fff3fb2977a472961a31ede7f298479acf678c4175f5",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "drop-stacker",
+							"version": "1.2.1+1.21.1",
+							"name": "Drop Stacker",
+							"description": "Automatically merges dropped item entities on the ground into stacked entities, reducing item lag on servers and singleplayer worlds.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": "a22ee4e0c641604bea12146812c685721a44d5d1da6f0293f7683d365a2924ff.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 16,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Drop Stacker backported to **Minecraft 1.21.1**, as requested in #1. It has the same features and fixes as [v1.2.1](https://github.com/suwizx/drop-stacker/releases/tag/v1.2.1) for 26.3.\n\nIt is still **server-side only**: install it on the server, and players need nothing. Vanilla clients see stack counts and despawn timers without the mod.\n\n## Requirements\n- Minecraft **1.21.1**\n- Fabric Loader 0.19.5+\n- [Fabric API](https://modrinth.com/mod/fabric-api) (tested with 0.116.17+1.21.1)\n- [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin)\n- Java 21+\n\n## Version numbering\nThe version is `1.2.1+1.21.1`: Drop Stacker 1.2.1, built for Minecraft 1.21.1. The 26.3 build stays `1.2.1`. The source for this line is on the [`1.21.1`](https://github.com/suwizx/drop-stacker/tree/1.21.1) branch.\n\n## What's included\nEverything from v1.2.1:\n- New drops merge into nearby piles the moment they spawn, and a periodic scan picks up piles that have moved.\n- Stack sizes up to 1000 by default (`maxStackSize`), with per-item and per-tag overrides.\n- Blacklist and whitelist by item id or tag (`#minecraft:logs`).\n- `[×count | m:ss]` labels showing pile size and despawn timer.\n- `/dropstacker reload | stats | resetstats | toggle | set <field> <value>` (permission level 2).\n- **Piles of more than 99 items survive saving and loading.** On 1.21.1 vanilla can't save a stack over 99 at all, so without this fix saving a big pile would fail.\n\n## Testing\n- Automated server gametests run on every build: saving and loading piles of 99, 110 and 1000 items, an edited count winning over the saved field, and merge-on-spawn.\n- This exact jar was also run on a real Fabric 1.21.1 server with Fabric API and Fabric Language Kotlin. It merged 40 + 40 + 30 diamonds into ×110. Big piles survived restarts and a trip to the Nether. There were no mixin errors or exceptions."
+		},
+		{
+			"tag": "v1.2.1",
+			"published": "2026-09-19T14:04:40Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 574874375,
+					"name": "drop-stacker-1.2.1.jar",
+					"url": "https://github.com/suwizx/drop-stacker/releases/download/v1.2.1/drop-stacker-1.2.1.jar",
+					"size": 68370,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "69b79403533a402f2f5ff38c228e397c8047f68d1ff0725855fc9c637753c4fd",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "drop-stacker",
+							"version": "1.2.1",
+							"name": "Drop Stacker",
+							"description": "Automatically merges dropped item entities on the ground into stacked entities, reducing item lag on servers and singleplayer worlds.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": "a22ee4e0c641604bea12146812c685721a44d5d1da6f0293f7683d365a2924ff.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 16,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Bug-fix release for **Minecraft 26.3**. **Anyone on v1.2.0 or v1.1.0 should update.**\n\nIt is still **server-side only**: install it on the server, and players need nothing.\n\n## Fixed\n**Piles of more than 99 items were deleted when the world saved and loaded again.** That covers server restarts, chunk unload/reload (walking away and coming back), `/data merge entity`, and item piles moving between dimensions.\n\nVanilla's save format only allows 1–99 items per stack, so larger piles failed to save and were thrown away. Drop Stacker now saves a vanilla-valid stack capped at 99, plus the true count in an extra `DropStackerCount` field, and restores the true count on load.\n\n- Vanilla clients are unaffected. The limit only exists in the save file, not in what the server sends to players.\n- If the mod is ever removed, those piles load as 99 items instead of disappearing completely.\n- Piles already lost under earlier versions can't be recovered, because they were saved with no item data.\n\nIf you had set `maxStackSize 99` as a workaround, you can raise it again.\n\n## Requirements\nMinecraft 26.3, Fabric Loader 0.19.5+, Fabric API, Fabric Language Kotlin, and Java 25. These are unchanged from v1.2.0.\n\n## Testing\nThis release adds automated server gametests that run on every build. They cover saving and loading piles of 99, 110 and 1000 items, an edited count winning over the saved field, and instant merging on spawn. The fix was also checked on a live 26.3 server across a restart and a teleport to the Nether."
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-09-19T13:38:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 574834448,
+					"name": "drop-stacker-1.2.0.jar",
+					"url": "https://github.com/suwizx/drop-stacker/releases/download/v1.2.0/drop-stacker-1.2.0.jar",
+					"size": 67652,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "4507179a9a4c964d7c553e851ca3369f7d18653750628e5d04c0e1489276c9d3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "drop-stacker",
+							"version": "1.2.0",
+							"name": "Drop Stacker",
+							"description": "Automatically merges dropped item entities on the ground into stacked entities, reducing item lag on servers and singleplayer worlds.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": "a22ee4e0c641604bea12146812c685721a44d5d1da6f0293f7683d365a2924ff.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 16,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Drop Stacker v1.2.0 targets **Minecraft 26.3**. Merging behaviour is unchanged from v1.1.0.\n\nIt is still **server-side only**: vanilla clients see stack counts and despawn timers without installing the mod.\n\n## Requirements\n\nMinecraft 26.3, Fabric Loader 0.19.5+, Fabric API, Fabric Language Kotlin, and Java 25.\nMinecraft 26.2 users should stay on [v1.1.0](https://github.com/suwizx/drop-stacker/releases/tag/v1.1.0). That version is kept on the [`26.2`](https://github.com/suwizx/drop-stacker/tree/26.2) branch.\n\n## Changes\n\n- Built against Minecraft 26.3, Fabric API 0.161.0+26.3, Fabric Loader 0.19.5 and Fabric Language Kotlin 1.14.1 (Kotlin 2.4.20).\n- No behaviour changes. Every hook the mod uses has the same signature in 26.3.\n\n## Testing\n\nTested on a 26.3 dedicated server and client. New drops merge as they spawn, different items stay separate, custom-named items are left alone, and `/dropstacker` works.\n\n## Known issue\n\n**Piles of more than 99 items are lost when their chunk is saved** (world save, server restart, or chunk unload). Vanilla's item save format only allows 1–99 items per stack, so larger piles fail to save and are deleted. v1.1.0 has the same bug. Until it is fixed, you can avoid it with `/dropstacker set maxStackSize 99`."
+		},
+		{
+			"tag": "v1.1.0",
+			"published": "2026-07-31T07:14:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 496375588,
+					"name": "drop-stacker-1.1.0.jar",
+					"url": "https://github.com/suwizx/drop-stacker/releases/download/v1.1.0/drop-stacker-1.1.0.jar",
+					"size": 67424,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "f9e5959dd229e437dc1c75f9c008a5a43c3e7c5a640c05a386d8f712bfe90bba",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "drop-stacker",
+							"version": "1.1.0",
+							"name": "Drop Stacker",
+							"description": "Automatically merges dropped item entities on the ground into stacked entities, reducing item lag on servers and singleplayer worlds.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": "a22ee4e0c641604bea12146812c685721a44d5d1da6f0293f7683d365a2924ff.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 16,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Drop Stacker v1.1.0 now targets **Minecraft 26.2**, merges drops instantly instead of on a scan interval, and cuts the cost of the neighbour scan considerably.\n\nStill **server-side only** — vanilla clients see stack counts and despawn timers with no mod installed.\n\n## Minecraft 26.2\n\nRequires Minecraft 26.2, Fabric Loader 0.19.3+, Fabric API, Fabric Language Kotlin, and Java 25.\nMinecraft 26.1.2 users stay on [v1.0.1](https://github.com/suwizx/drop-stacker/releases/tag/v1.0.1); that version is preserved on the [`26.1.2`](https://github.com/suwizx/drop-stacker/tree/26.1.2) branch.\n\n## Instant merging\n\nMerging is now push-based: a new drop is absorbed into a nearby pile in the tick it spawns, rather than waiting for the next scan. Each pass also drains every compatible neighbour instead of one per scan — collapsing a 100-item pile previously took roughly 500 ticks no matter how low `scanInterval` was set, and is now a single pass.\n\n## Performance\n\n- Blacklist, whitelist and overrides resolve to registry references once at load. The scan predicate previously allocated a string for every candidate of every scan, even with an empty blacklist.\n- Neighbour queries use a shared scratch list with a hard limit, instead of allocating a list of every match to then keep one.\n- Scans stagger per entity, so a mob's drops no longer all scan on the same tick.\n- Idle piles progressively back off to `maxScanInterval`, which is safe now that new drops push into piles on spawn.\n- Vanilla's own 40-tick merge scan is cancelled, so only one merge system runs.\n- The name-tag label is rebuilt only when its rendered text would actually change.\n\n## Fixes\n\n- **Merged counts never synced to clients.** Counts were mutated in place, but the entity data tracker compares by equality, so the change was never sent. Merging now builds a new stack and goes through `setItem`, as vanilla's own merge does.\n- Items could not merge for the first half-second after being dropped — the pickup-delay check was stricter than vanilla's.\n- Large stacks bypassed vanilla's infinite-lifetime and near-despawn guards; both are re-asserted.\n- Item entities with their own custom name are no longer relabelled or silently absorbed into a neighbouring pile.\n\n## New\n\n- `/dropstacker reload | stats | resetstats | toggle | set <field> <value>` (permission level 2) — tune and reload without a restart.\n- Item **tags** (`#minecraft:logs`) in `blacklist` and the new `whitelist`, plus per-item `maxStackSize` `overrides`.\n- New config: `enabled`, `mergeOnSpawn`, `maxScanInterval`, `maxMergePerPass`, `ageInheritance`, `labelMode`, and `radius`/`verticalRadius`. Existing `scanRadiusX/Y/Z` configs migrate automatically on first load.\n\n### Note on `ageInheritance`\n\nThe default `YOUNGEST` preserves 1.0.x behaviour: a pile inherits the longest remaining lifetime when it absorbs a drop, so a pile fed by a farm never despawns. Set `KEEP_RECEIVER` for vanilla despawn behaviour.\n\n## Testing\n\nVerified on a live 26.2 server: merge-on-spawn, stack cap and remainder handling, blacklist by id and by tag, per-item overrides, hot reload, pickup-delay and infinite-lifetime guards, and named-item exclusion.\n\nThe periodic tick scan and the adaptive backoff have had less coverage than the rest — a dev server with no player connected does not tick item entities, so those paths were exercised manually rather than systematically. Please open an issue if you see anything off."
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "ko_fi",
+			"url": "https://ko-fi.com/suwizx"
+		}
+	],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 27,
+		"more": 0,
+		"people": [
+			{
+				"login": "suwizx",
+				"commits": 21,
+				"funding": []
+			},
+			{
+				"login": "Skyfay",
+				"commits": 6,
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/Skyfay"
+					}
+				]
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

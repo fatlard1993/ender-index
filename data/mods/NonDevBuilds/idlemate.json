@@ -1,0 +1,128 @@
+{
+	"repo": "NonDevBuilds/idlemate",
+	"host": "github",
+	"description": "Single-bot AFK farm helper for Fabric servers (MC 26.1+) — polymer-compatible alternative to Carpet's /player spawn.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-05-03T07:09:56Z",
+	"pushed": "2026-05-11T21:16:41Z",
+	"releases": [
+		{
+			"tag": "v0.2.0",
+			"published": "2026-05-07T04:31:49Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 414102371,
+					"name": "idlemate-0.2.0.jar",
+					"url": "https://github.com/NonDevBuilds/idlemate/releases/download/v0.2.0/idlemate-0.2.0.jar",
+					"size": 24723,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "2aaaa9f58b0116cdfe4cc504914755bc10334c837f923020fdad53ab929d2be4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "idlemate",
+							"version": "0.2.0",
+							"name": "Idlemate",
+							"description": "Single-bot AFK farm helper for Fabric servers — polymer-compatible alternative to Carpet's /player spawn.",
+							"minecraft": ">=26.1 <27",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 15,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's new\n\nPersistence used to lock in the original spawn coords. If the bot drifted (knockback, /tp, water flow), a restart respawned at the wrong spot.\n\n### New\n- **`/fakeplayer save`** — capture the active fake player's current position into `idlemate.json`. Op-level-2 gated.\n- **Auto-save on graceful shutdown** — `SERVER_STOPPING` hook writes the current position before the server stops, so a normal restart preserves drift. Crashes don't fire the hook; for crash resilience run `/fakeplayer save` periodically.\n\n### Verified on the Bloc\n- v0.1.0 → v0.2.0 hot-swap on Fabric MC 26.1.2 + polymer-bundled 0.16.2+26.1.1\n- Auto-respawn picked up drifted coords (`3098.9 / 177.5 / 1025.8`) saved by the shutdown hook, not the original spawn position\n- /fakeplayer save round-trips name + coords + yaw + pitch\n\n### Compatibility\nSame requirements as v0.1.0: MC 26.1.x, Fabric Loader ≥ 0.18.6, Java 25, Fabric API. Drop-in replacement."
+		},
+		{
+			"tag": "v0.1.0",
+			"published": "2026-05-04T00:09:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 411407803,
+					"name": "idlemate-0.1.0.jar",
+					"url": "https://github.com/NonDevBuilds/idlemate/releases/download/v0.1.0/idlemate-0.1.0.jar",
+					"size": 24045,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "f3297be3b0f5ed8d98e5a9ed3034f7f60c6b71b424b0238e1e49552d21d11c24",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "idlemate",
+							"version": "0.1.0",
+							"name": "Idlemate",
+							"description": "Single-bot AFK farm helper for Fabric servers — polymer-compatible alternative to Carpet's /player spawn.",
+							"minecraft": ">=26.1 <27",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 15,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First public release.\n\n## What it does\n\nDrops one fake player at your location to keep AFK farms (creeper, iron, etc.) running while you're offline. Polymer-compatible — fixes the chunk-send NPE that crashes plain Carpet on Polymer servers.\n\n## Features\n\n- `/fakeplayer spawn [name]` — at caller's location, op-2 gated\n- `/fakeplayer spawn-at <x> <y> <z> [name]` — RCON/console-friendly\n- `/fakeplayer kill` — despawn + clear persistence\n- `/fakeplayer info` — name + coords + dimension\n- **Persists across server restarts** — auto-respawns on `SERVER_STARTED` from a JSON record next to the server jar\n- **Hidden from tab list and external SLP sample** — still shows in `/list`\n- **Single-bot cap** — keeps state simple, prevents resource abuse\n\n## Requirements\n\nMinecraft 26.1.x · Fabric Loader ≥ 0.18.6 · Java 25 · Fabric API · *optional* Polymer\n\n## Install\n\nDrop `idlemate-0.1.0.jar` into your server's `mods/` folder, restart.\n\nSee [README](https://github.com/itzmeelo/idlemate#readme) for full docs and the polymer-NPE backstory."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 14,
+		"more": 0,
+		"people": [
+			{
+				"login": "itzmeelo",
+				"commits": 14,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

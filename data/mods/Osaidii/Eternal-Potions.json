@@ -1,0 +1,162 @@
+{
+	"repo": "Osaidii/Eternal-Potions",
+	"host": "github",
+	"description": "A Minecraft Mod designed for and required to play in the Elyxyr SMP.",
+	"stars": 0,
+	"archived": false,
+	"license": "Apache-2.0",
+	"created": "2026-10-07T20:36:22Z",
+	"pushed": "2026-10-14T17:43:45Z",
+	"releases": [
+		{
+			"tag": "v1.1.0",
+			"published": "2026-10-14T17:43:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 641137457,
+					"name": "eternal-potions-1.1.0.jar",
+					"url": "https://github.com/Osaidii/Eternal-Potions/releases/download/v1.1.0/eternal-potions-1.1.0.jar",
+					"size": 123010,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "d6762781ab7aa0ff07bdf212379d377775274c7552cdba841de0230efa55e3fb",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "eternal-potions",
+							"version": "1.1.0",
+							"name": "Eternal Potions",
+							"description": "Eternal potions with Kings and effects.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "fa5ed56b428dbf6ac73ca4f0430bb09512c3eaef5f95e84292e380e1568cecc4.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Eternal Shard",
+								"The Eternal Potion"
+							],
+							"effect": [
+								"Eternal Regeneration",
+								"Eternal Resistance",
+								"Eternal Speed",
+								"Eternal Strength"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 36,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"modrinth.com": [
+								"osaidii/eternalpotions/EternalPotions.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Eternal Potions — Changelog\n\n## Version 1.1.0 — Waypoints & Commands Update\n\n### Added\n\n- **Locator bar waypoints** for every active Eternal brew — visible at any distance, in any dimension, no recovery compass required.\n- **Live brew timer** above each waypoint in `M:SS` format. Moves with the sprite as the player rotates. Hides when the sprite would fall off the visible bar.\n- **Version check** — clients with a mismatched mod version are disconnected during the play phase with a message telling them which version to install.\n- **`/eternal stand start <pos>`** — spawns a brewing stand at the position with blaze powder, a water bottle, and an Eternal Shard pre-loaded. Auto-starts the brew. First attempt in an unloaded chunk is refused; a second attempt at the same position force-loads the chunk.\n- **`/eternal item <player> <shard|potion> <quantity>`** — grants 1 to 64 of either Eternal item.\n\n### Changed\n\n- **Eternal Strength, Regeneration, and Resistance now match vanilla values exactly.**\n  - Eternal Strength — +3 / +6 / +9 attack damage.\n  - Eternal Regeneration — heal every 50 / 25 / 12 ticks.\n  - Eternal Resistance — 20% / 40% / 60% damage reduction.\n- **Eternal Speed rebalanced** to +15% / +25% / +40% movement. Lower than vanilla on purpose to keep the FOV swing readable at higher levels.\n- **Vanilla Speed, Strength, Regeneration, and Resistance are halved** while this mod is loaded:\n  - Vanilla Speed — +10% per level.\n  - Vanilla Strength — +1.5 damage per level.\n  - Vanilla Regeneration — heal every 100 / 50 / 25 ticks.\n  - Vanilla Resistance — 10% per level.\n- **`/eternal effect take`** now drops one level at a time: III → II → I → gone. Refuses on Kings and directs the operator to `/eternal king dethrone`. Refuses on players who don't have the effect.\n- **Command tree reorganised** into four subgroups: `stand`, `effect`, `king`, and `item`.\n- **Disconnect messages shortened** to a two-line format.\n\n### Removed\n\n- `/eternal king list` — the `/kings` menu supersedes it.\n- Flat commands `/eternal stop`, `/eternal give`, `/eternal take` — replaced by their nested equivalents.\n- Configuration-phase disconnect for version mismatch — this caused raw socket errors on the client. Version checks now run in the play phase and produce a clean Disconnect screen.\n\n### Fixed\n\n- **Welcome message no longer re-fires after a server restart.** The state file is force-flushed when a first-join welcome triggers.\n- **Brew waypoint icons now appear.** Fixed a registration order bug where the transmitter was tracked before the brew was marked active, causing the waypoint manager to skip it.\n- **Locator bar timer follows the sprite correctly.** The `int` argument in the locator bar's drawing callback is the bar's top Y, not the sprite's X. The X is recomputed from yaw in the mixin to match vanilla's own positioning.\n- **`/eternal stand stop` now clears the brew's waypoint** from every player's locator bar when the stand is destroyed.\n- **Eternal Shard and Eternal Potion are fireproof** — dying in lava no longer destroys them.\n- **A player with any Eternal effect now always drops an Eternal Shard on death** (was 50%).\n- **Brewing stand no longer discards potions** when the shard is added with multiple bottle slots filled.\n- **Shard cannot be inserted into a stand** unless a valid potion is present.\n- **KingsScreen font no longer doubles** and effect names are outlined for readability.\n\n### Commands (OP Required)\n\n- `/eternal stand stop <pos>` — stops a brew, drops contents, destroys the stand.\n- `/eternal stand start <pos>` — spawns a pre-loaded brewing stand and starts the brew.\n- `/eternal effect give <player> <effect>` — grants one level. Third grant crowns the player.\n- `/eternal effect take <player> <effect>` — drops one level at a time.\n- `/eternal king crown <player> <effect>` — force-crowns a player.\n- `/eternal king dethrone <effect>` — removes the current King.\n\n..."
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-10-14T06:32:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 639478777,
+					"name": "eternal-potions-1.0.0.jar",
+					"url": "https://github.com/Osaidii/Eternal-Potions/releases/download/v1.0.0/eternal-potions-1.0.0.jar",
+					"size": 118773,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "56524c291269d08a05521bc5f0f1cbe93f79e864a1f5d6a426da4f98848dcf3d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "eternal-potions",
+							"version": "1.0.0",
+							"name": "Eternal Potions",
+							"description": "Eternal potions with Kings and effects.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "fa5ed56b428dbf6ac73ca4f0430bb09512c3eaef5f95e84292e380e1568cecc4.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Eternal Shard",
+								"The Eternal Potion"
+							],
+							"effect": [
+								"Eternal Regeneration",
+								"Eternal Resistance",
+								"Eternal Speed",
+								"Eternal Strength"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 35,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"modrinth.com": [
+								"osaidii/eternalpotions/EternalPotions.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Eternal Potions — Changelog\n\n## Version 1.0.0 — Initial Release\n\n### Items\n\n- Added **Eternal Shard** — brewing ingredient, fireproof.\n- Added **The Eternal Potion** — consumable, fireproof, stacks to 1.\n- Both items added to creative tabs (Eternal Shard in Ingredients, Eternal Potion in Food & Drinks).\n\n### Effects\n\n- Added four custom effects, each with three levels:\n  - **Eternal Speed** — movement speed boost (I/II/III).\n  - **Eternal Strength** — attack damage boost (I/II/III).\n  - **Eternal Regeneration** — periodic healing (I/II/III).\n  - **Eternal Resistance** — damage reduction, capped at 80% total (I/II/III).\n- HUD icons show Roman numerals for every level, including Level I.\n- All effects are permanent until death.\n- Effects survive world reloads, dimension changes, and server restarts.\n\n### The King System\n\n- Four thrones — one per effect — held by the first player to reach Level III.\n- Only one King per effect at a time.\n- Kings receive a crown particle effect and are announced server-wide when crowned.\n- Kings keep their throne while offline.\n- Thrones persist across server restarts.\n- Dying as a King empties the throne and announces the fall.\n- Server-wide announcement when all four thrones are claimed.\n- Special announcement when a single player holds all four thrones.\n\n### Brewing\n\n- Brewing an Eternal Potion takes **10 minutes** (12000 ticks).\n- The brewing stand locks completely during a brew:\n  - No GUI interaction.\n  - No item insertion or extraction.\n  - No breaking the block.\n- Server-wide broadcast when a brew starts and when it stops.\n- All bottle slots consolidate to the center slot at brew start.\n- The Eternal Shard cannot be inserted unless a valid potion is present.\n- `/eternal stop <x> <y> <z>` command destroys a brew and drops its contents.\n\n### Protection\n\n- **Totem of Undying** preserves all Eternal effects and the throne on pop.\n- **Milk** does not remove Eternal effects.\n- **Vanilla Speed, Regeneration, Resistance, and Strength** are blocked while you have the corresponding Eternal effect. You are notified when a vanilla effect is blocked.\n- **Death drops an Eternal Shard 100% of the time** if the player had any Eternal effect.\n\n### Commands (OP Required)\n\n- `/eternal give <player> <effect>` — grants one level.\n- `/eternal take <player> <effect>` — removes an effect.\n- `/eternal king crown <player> <effect>` — force-crowns a player.\n- `/eternal king dethrone <effect>` — removes the current King.\n- `/eternal king list` — lists all current Kings.\n- `/eternal stop <x> <y> <z>` — stops a brew and destroys the stand.\n- `/kings` — client command, opens the Kings leaderboard menu.\n\n### Kings Menu (`/kings`)\n\n- Beveled vanilla-style panel with rounded corners.\n- Pixel-art gold crown next to the title.\n- Effect slots with colored tiles.\n- Effect names color-coded per effect with black outlines.\n- King names right-aligned to the panel edge.\n- \"Thrones Claimed: N/4\" footer.\n\n### Welcome Message\n\n- First-time players receive a 3-page chat message spread 3 seconds apart.\n- Page 1 — intro and goal.\n- Page 2 — brewing and hunting.\n- Page 3 — domains and victory.\n- Message fires only on first join; persists across server restarts.\n- Uses `%player%` placeholder for the player's name.\n\n### Server Gate\n\n- Clients without the mod are kicked during the configuration phase, before vanilla registry sync errors.\n- Kick message includes a clickable link to the Modrinth page.\n\n### Localization\n\n- English (US, UK variants, Pirate Speak, Shakespearean, Upside-Down).\n- German, Spanish, French, Italian, Japanese, Korean, Polish, Portuguese (Brazil), Russian, Swedish, Turkish, Urdu (Pakistan), Chinese (Simplified).\n\n### Recipes\n\n- **Eternal Shard** — shaped crafting recipe using Ominous Trial Key, Heart of the Sea, Ender Eye, Echo Shard, Totem of Undying, and Enchanted Golden Apple.\n- **Eternal Potion** — brewing recipe using an Eternal Shard as the ingredient.\n\n### Compatibility\n\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 33,
+		"more": 0,
+		"people": [
+			{
+				"login": "Osaidii",
+				"commits": 33,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

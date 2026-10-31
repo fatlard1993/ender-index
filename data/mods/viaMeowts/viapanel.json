@@ -1,0 +1,181 @@
+{
+	"repo": "viaMeowts/viapanel",
+	"host": "github",
+	"description": "Universal API mod for in-game other mods configuration",
+	"stars": 1,
+	"archived": false,
+	"created": "2026-03-26T06:23:15Z",
+	"pushed": "2026-10-09T18:37:46Z",
+	"releases": [
+		{
+			"tag": "v3.0.0",
+			"published": "2026-08-23T10:50:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 526117057,
+					"name": "viapanel-3.0.0+mc26.2-rc-2.jar",
+					"url": "https://github.com/viaMeowts/viapanel/releases/download/v3.0.0/viapanel-3.0.0%2Bmc26.2-rc-2.jar",
+					"size": 44590,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "99731d15768ff5f429e35081be74b9951f82c9b3ba7888f12c20965429e235de",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "viapanel",
+							"version": "3.0.0+mc26.2-rc-2",
+							"name": "viaPanel",
+							"description": "Shared per-mod chat configuration panel for via mods.",
+							"minecraft": "~26.2-",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 14,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## viaPanel 3.0.0 - Minecraft 26.2 port\n\nPort of the annotation-based panel API to the new Minecraft line.\n\n### Toolchain\n- Minecraft **26.2** (official Mojang mappings, Loom 1.17, Gradle 9.5.1)\n- Fabric Loader 0.19.3, Fabric API 0.152.1+26.2\n- **Java 25** required\n\n### API compatibility\nPublic `com.viameowts.viapanel.api` package: class/method names unchanged (`@ViaPanelField`, `ViaPanelProviders.builder`, `ViaPanelApi`). MC types in signatures now use Mojang mappings (`CommandSourceStack`, `Component`, ...) - consumers must be ported to the same target to compile against this jar.\n\nConsumers staying on MC 1.21.11 keep using viapanel `2.9.0`.\n\n### Internal adaptations\n- Permission system moved to `PermissionSet` / `Permission.HasCommandLevel`\n- Brigadier/Mojmap renames (`Commands`, `CommandSourceStack.sendFailure/sendSuccess`)\n- Click/Hover events remain record-style"
+		},
+		{
+			"tag": "v2.9.0",
+			"published": "2026-08-22T20:26:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 525419316,
+					"name": "viapanel-2.9.0+mc1.21.11.jar",
+					"url": "https://github.com/viaMeowts/viapanel/releases/download/v2.9.0/viapanel-2.9.0%2Bmc1.21.11.jar",
+					"size": 44960,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "e722b3f64ec7cda8e0191cc3ac3437182374e39c907e09882ad9fcad17d774e7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "viapanel",
+							"version": "2.9.0+mc1.21.11",
+							"name": "viaPanel",
+							"description": "Shared per-mod chat configuration panel for via mods.",
+							"minecraft": "~1.21.11",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 14,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## viaPanel API 2.9.0 - annotation-based configuration\n\n### Added\n- `@ViaPanelField` annotation for config fields: display names (EN/RU), hover descriptions, sections, inclusive numeric `min`/`max` validation, sort order, `secret` masking\n- Supported field types: `boolean`, `int`, `long`, `float`, `double`, `String`, `enum` (click cycles values)\n- `ViaPanelProviders.builder(modId, displayName, config)` factory with optional hooks: `permission`, `onFieldUpdated`, `languageHook`, `onReload`\n- Automatic reload: the core finds a no-arg `load()` method and copies annotated fields into the live instance - manual field copying is gone\n- Save failures are now reported in-game instead of being silently swallowed\n- Bilingual UI resolved from global language (`/viapanel lang ru|en`) via `valueRu` / `descRu`\n\n### Changed\n- Removed `defaultLanguage` hardcode from the command core - providers own their language reactions\n- Duplicate provider registration now logs a warning\n\n### Migration\n- Legacy `ViaPanelProvider` remains fully supported (HelperHelper, viaLogium keep using it)\n- Consumers must depend on the panel via `fileTree(dir: '../lib', include: 'viapanel-*.jar')` instead of pinned jar names\n- Full docs and migration checklist: [VIAPANEL_API.md](https://github.com/viaMeowts/viapanel/blob/main/VIAPANEL_API.md)\n\n**Requires:** Minecraft 1.21.11, Fabric Loader 0.18.4, Java 21"
+		},
+		{
+			"tag": "v2.7.2",
+			"published": "2026-06-28T11:30:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 460190906,
+					"name": "viapanel-2.7.2+mc1.21.11.jar",
+					"url": "https://github.com/viaMeowts/viapanel/releases/download/v2.7.2/viapanel-2.7.2%2Bmc1.21.11.jar",
+					"size": 24710,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "0191a9b494c5f1d0c94744172509ac7fc6d8801c88e03a7837c28481ba0c9196",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "viapanel",
+							"version": "2.7.2+mc1.21.11",
+							"name": "viaPanel",
+							"description": "Shared per-mod chat configuration panel for via mods.",
+							"minecraft": "~1.21.11",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [2.7.2] - 2026-06-27\n\n### Added\n- ViaPanelConfig -- TOML-based config loader/saver for viaPanel settings\n- ViaPanelPermissionHelper -- LuckPerms integration via reflection with OP level fallback\n- Global language switcher in main /viapanel menu with [EN] / [RU] clickable buttons\n- Permission-gated /viapanel lang command with configurable permission node\n- hasGlobalAdminPermission() helper to gate global language changes\n\n### Changed\n- Color palette migrated from viaStyle to viaPanel palette (accent #FFC64C, success #98FB98, error #FF5555, secondary #B0C4DE)\n- defaultLanguage field update now requires global admin permission\n- README fully rewritten; .gitignore expanded; version 2.6.8 -> 2.7.2\n\n### Removed\n- VIAPANEL_API.md (API docs now in README)\n\n### Security\n- /viapanel lang now enforces permission check before execution"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 10,
+		"more": 0,
+		"people": [
+			{
+				"login": "viaMeowts",
+				"commits": 8,
+				"funding": []
+			},
+			{
+				"login": "claude",
+				"commits": 2,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

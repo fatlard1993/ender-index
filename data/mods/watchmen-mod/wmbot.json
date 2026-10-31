@@ -1,0 +1,355 @@
+{
+	"repo": "watchmen-mod/wmbot",
+	"host": "github",
+	"description": "Meteor Client addon for the Watchmen 6b6t group, with stash, kitbot, inventory, portal, and plane-building automation.",
+	"stars": 4,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-06-23T16:34:52Z",
+	"pushed": "2026-07-29T21:03:37Z",
+	"releases": [
+		{
+			"tag": "v0.5.51-beta.4",
+			"published": "2026-06-28T21:47:18Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 460515445,
+					"name": "watchmenbot-0.5.51.jar",
+					"url": "https://github.com/watchmen-mod/wmbot/releases/download/v0.5.51-beta.4/watchmenbot-0.5.51.jar",
+					"size": 692311,
+					"downloads": 8,
+					"inspection": 2,
+					"sha256": "e792203170b920bab834fdf5b507554cf114d8b3be085efd6ebaebd4ba853591",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "watchmenbot",
+							"version": "0.5.51",
+							"name": "WMBot",
+							"description": "A Meteor Client addon for Minecraft 1.21.8.",
+							"minecraft": "1.21.8",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor",
+								"baritone"
+							]
+						}
+					],
+					"icon": "e23a3cdc934438f0b49a51cffde36170a8062aa8c64626d58d8271b0369daa7e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 408,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/watchmenbot/modules/stash/StashKitbotDiscordWebhook.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"discord.com": [
+								"com/watchmenbot/modules/stash/StashKitbotSettings.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's Changed\n\nThis release focuses on safer kitbot refill/delivery handling, better stuck-state recovery, and clearer status feedback across Plane Builder and Stash Kitbot.\n\n### Plane Builder\n- Improved kitbot refill handling to wait for real teleport prompts before accepting, reducing stale `/tpy` spam and pasted-log refill loops.\n- Added kitbot delivery whisper tracking for active, TPA requested, failed, and finished delivery states.\n- Fixed refill tracking so completed deliveries or local supply recovery allow another kitbot request later in the same run, while pending requests still do not duplicate.\n- Added watchdogs for service-hole opening and trash-edge movement so the bot can recover instead of staying stuck.\n- Improved melee threat preemption and bow defense cleanup.\n- Added Fullbright as a companion module while Plane Builder is active.\n- Tuned defaults for bow defense, auto-walk, elytra lookahead, pickaxe/weapon durability, and enderman look safety.\n\n### Stash Kitbot\n- Added TPA retry attempts during delivery with clearer retry and timeout messages.\n- Improved gather-start notifications, pathing failure handling, and source-selection logging.\n- Improved navigator capability checks so gathering fails cleanly when pathing is unavailable.\n\n### Docs and Tests\n- Updated the quickstart for Fullbright and simplified kitbot refill settings.\n- Expanded pure tests for teleport refill behavior, supply refill retries, TPA retries, module isolation, service-hole/trash-edge recovery, stash delivery planning, and queue/session state.\n\nBuild verified with `./gradlew --no-daemon build`."
+		},
+		{
+			"tag": "v0.5.49-beta.3",
+			"published": "2026-06-27T22:23:44Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 459769207,
+					"name": "watchmenbot-0.5.49.jar",
+					"url": "https://github.com/watchmen-mod/wmbot/releases/download/v0.5.49-beta.3/watchmenbot-0.5.49.jar",
+					"size": 681966,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "42297d77be6379379283a043180af49e34abccf398afb5cc97fc47da1c0b69a5",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "watchmenbot",
+							"version": "0.5.49",
+							"name": "WMBot",
+							"description": "A Meteor Client addon for Minecraft 1.21.8.",
+							"minecraft": "1.21.8",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor",
+								"baritone"
+							]
+						}
+					],
+					"icon": "e23a3cdc934438f0b49a51cffde36170a8062aa8c64626d58d8271b0369daa7e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 404,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/watchmenbot/modules/stash/StashKitbotDiscordWebhook.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"discord.com": [
+								"com/watchmenbot/modules/stash/StashKitbotSettings.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "This beta is another Plane Builder stability and reliability release, focused on safer pickup movement, more reliable bow defense, and better recovery during replenishment workflows.\n\n### Highlights\n\n- Improved Plane Builder dropped-item pickup safety so cleanup and shulker recovery targets are ignored when they are outside the build area, below the platform, too far away, or otherwise unsafe.\n- Improved Plane Builder pickup recovery when Baritone stalls by adding short forward nudges, stuck-jump detection, and safer repathing behavior.\n- Improved bow defense reliability with a clearer draw lifecycle, real use-tick confirmation, aim-settle checks, stalled-draw recovery, and safer release timing.\n- Improved bow defense target priority so witches, skeletons, and creepers are handled ahead of generic hostile mobs.\n- Added fallback bow firing behavior for stable targets when the shot simulator cannot produce a direct-hit prediction.\n- Added phase timeout and stalled-transfer recovery for ender chest shulker extraction during replenishment.\n- Added hotbar mutation guarding to reduce repeated swap loops while Plane Builder is managing tools and supplies.\n- Added optional Plane Builder companion support for safe NoRender performance settings.\n- Improved Auto Eat companion defaults while Plane Builder is active, including allowing golden apples and pausing auras/Baritone while eating.\n- Added Stash Kitbot return method options: `/kill`, configured home command, or a custom return command.\n- Added regression coverage for pickup safety, pickup nudge recovery, movement safety policy, hotbar mutation budgeting, shulker extraction budgeting, bow firing policy, threat priority, and kitbot return command formatting.\n\n### Notes\n\n- This release is primarily a reliability update for real server conditions rather than a large feature release.\n- Plane Builder pickup behavior is more conservative now and may skip dropped items that would require unsafe movement.\n- Bow defense now waits for a more reliable full draw and stable aim before releasing, which should reduce weak or misfired shots.\n- The new `performance-no-render` companion option is disabled by default and only applies selected safe NoRender performance toggles while Plane Builder is active.\n- Stash Kitbot still defaults to `/kill` for returning after delivery, but servers or setups that prefer `/home` or another command can now configure that directly.\n\n### Requirements\n\n- Minecraft 1.21.8\n- Java 21\n- Fabric Loader\n- Meteor Client\n- Baritone for Meteor or normal Baritone for Minecraft 1.21.8 when using pathing features\n\n### Beta Notice\n\nThis is still a beta release. The main goal of this update is making Plane Builder movement, pickup recovery, replenishment, and bow defense safer and more predictable under real server conditions."
+		},
+		{
+			"tag": "v0.5.48-beta.2",
+			"published": "2026-06-26T03:44:08Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 458272725,
+					"name": "watchmenbot-0.5.48.jar",
+					"url": "https://github.com/watchmen-mod/wmbot/releases/download/v0.5.48-beta.2/watchmenbot-0.5.48.jar",
+					"size": 651020,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "8f744935b0bdd8f9c1248e1c22b2486b82aa173e78c09b8da6dc51c088727b9e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "watchmenbot",
+							"version": "0.5.48",
+							"name": "WMBot",
+							"description": "A Meteor Client addon for Minecraft 1.21.8.",
+							"minecraft": "1.21.8",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor",
+								"baritone"
+							]
+						}
+					],
+					"icon": "e23a3cdc934438f0b49a51cffde36170a8062aa8c64626d58d8271b0369daa7e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 388,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/watchmenbot/modules/stash/StashKitbotDiscordWebhook.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"discord.com": [
+								"com/watchmenbot/modules/stash/StashKitbotSettings.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "This beta is a stability and tuning release focused mainly on Plane Builder behavior after the first public beta.\n\n### Highlights\n\n- Improved Plane Builder ender chest replenishment reliability.\n- Improved recovery when a managed ender chest shulker disappears, breaks, or needs to be picked back up during replenishment.\n- Reduced cases where Plane Builder could get stuck in a place/break or missing-supply loop.\n- Added a guard for a Meteor Nametags crash that could happen during world teardown while Plane Builder was active.\n- Improved Plane Builder bow defense aiming and target handling.\n- Improved dropped item pickup behavior during replenishment cleanup.\n- Added `use-available-safe-inventory-space`, allowing replenishment to target safe available inventory capacity instead of only the configured obsidian target.\n- Added a Plane Builder quickstart guide with setup, inventory, and troubleshooting notes.\n- Clarified Baritone setup: use exactly one compatible Baritone jar for Minecraft 1.21.8.\n- WMBot now accepts either Baritone for Meteor or normal Baritone for compatible pathing features.\n\n### Notes\n\n- Baritone is now treated as an optional/suggested dependency in mod metadata, but pathing-based features still require a compatible Baritone install.\n- Plane Builder still needs loose obsidian in inventory before starting.\n- If you previously hit crashes while leaving/saving with Meteor Nametags enabled, this build includes a WMBot-side mitigation.\n\n### Requirements\n\n- Minecraft 1.21.8\n- Java 21\n- Fabric Loader\n- Meteor Client\n- Baritone for Meteor or normal Baritone for Minecraft 1.21.8 when using pathing features\n\n### Beta Notice\n\nThis is still a beta release. The main goal of this update is making Plane Builder replenishment and recovery more reliable under real server conditions."
+		},
+		{
+			"tag": "v0.5.41-beta.1",
+			"published": "2026-06-23T16:41:40Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 455789678,
+					"name": "baritone-1.21.8-SNAPSHOT.jar",
+					"url": "https://github.com/watchmen-mod/wmbot/releases/download/v0.5.41-beta.1/baritone-1.21.8-SNAPSHOT.jar",
+					"size": 1612270,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "11fd79fa0c20ae8e1f747c75c708b260158aa97bf88010e893b01c5c8541d6d4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baritone-meteor",
+							"version": "1.21.8-SNAPSHOT",
+							"name": "Baritone",
+							"description": "Google Maps for Blockgame",
+							"minecraft": "1.21.6 || 1.21.7 || 1.21.8",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft"
+							],
+							"provides": [
+								"dev_babbaj_nether-pathfinder"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 523,
+						"jars": [
+							"META-INF/jars/nether-pathfinder-1.4.1.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/nether-pathfinder-1.4.1.jar!dev/babbaj/pathfinder/NetherPathfinder.class": [
+									"java/lang/System.load"
+								]
+							},
+							"unsafe": {
+								"META-INF/jars/nether-pathfinder-1.4.1.jar!dev/babbaj/pathfinder/Octree.class": [
+									"sun/misc/Unsafe.getByte",
+									"sun/misc/Unsafe.getShort",
+									"sun/misc/Unsafe.putByte"
+								],
+								"baritone/api/utils/BlockOptionalMeta$ServerLevelStub.class": [
+									"sun/misc/Unsafe.allocateInstance"
+								]
+							},
+							"exec": {
+								"baritone/api/utils/NotificationHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"baritone/api/utils/Helper.class",
+								"baritone/cache/WorldProvider.class"
+							],
+							"www.dominos.com": [
+								"baritone/command/ExampleBaritoneControl.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 455789696,
+					"name": "watchmenbot-0.5.41.jar",
+					"url": "https://github.com/watchmen-mod/wmbot/releases/download/v0.5.41-beta.1/watchmenbot-0.5.41.jar",
+					"size": 574734,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "ce7b516b4bcacdcdebec521a19c0de8cb74744dd96213cf0c200accf037347a0",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "watchmenbot",
+							"version": "0.5.41",
+							"name": "WMBot",
+							"description": "A Meteor Client addon for Minecraft 1.21.8.",
+							"minecraft": "1.21.8",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client",
+								"baritone-meteor"
+							],
+							"provides": []
+						}
+					],
+					"icon": "e23a3cdc934438f0b49a51cffde36170a8062aa8c64626d58d8271b0369daa7e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 328,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/watchmenbot/modules/stash/StashKitbotDiscordWebhook.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"discord.com": [
+								"com/watchmenbot/modules/stash/StashKitbotSettings.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## WMBot v0.5.41 Beta 1\n\nThis is the first beta release of WMBot, a client-side Meteor Client addon for Minecraft 1.21.8. WMBot adds automation and utility modules for 6b6t login flow, stash scanning, kit delivery, inventory management, and high-altitude plane building.\n\n### Highlights\n\n- Added 6b6t login automation with support for sending `/login <password>` after the server prompt.\n- Added 6b6t portal walking to automatically move through configured lobby portals after login.\n- Added stash scanning tools that read loaded stash containers and maintain a local inventory cache.\n- Added stash kitbot automation for allowlisted kit requests, queue handling, cooldowns, gathering, and delivery workflows.\n- Added Auto Eat stocker support to keep golden apples stocked in the hotbar.\n- Added inventory tools with quick `Take All` and `Put All` buttons on supported container screens.\n- Added Plane Builder, an automation module for building obsidian planes at Y 319 with supply replenishment, placement tracking, recovery behavior, and companion module support.\n- Added HUD elements for stash scanner stats, stash kitbot stats, and plane builder stats.\n- Added local persistent data storage under the Minecraft run directory in `watchmenbot/`.\n- Added regression test tasks for stash parser/planner logic, Plane Builder behavior, and inventory helpers.\n\n### Requirements\n\n- Minecraft 1.21.8\n- Java 21\n- Fabric Loader\n- Meteor Client\n- Baritone for Meteor\n\n### Beta Notice\n\nThis is the first beta release, so features are expected to work but may still need real-world testing and tuning."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [
+		"docs/plane_builder_inventory.png"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 20,
+		"more": 0,
+		"people": [
+			{
+				"login": "atdma",
+				"commits": 20,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

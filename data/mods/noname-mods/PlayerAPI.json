@@ -1,0 +1,356 @@
+{
+	"repo": "noname-mods/PlayerAPI",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "LGPL-3.0",
+	"created": "2026-05-03T13:35:44Z",
+	"pushed": "2026-08-29T21:49:10Z",
+	"releases": [
+		{
+			"tag": "v2.1.0+26.2",
+			"published": "2026-08-29T21:49:10Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 535744652,
+					"name": "playerapi-2.1.0.jar",
+					"url": "https://github.com/noname-mods/PlayerAPI/releases/download/v2.1.0%2B26.2/playerapi-2.1.0.jar",
+					"size": 1160325,
+					"downloads": 162,
+					"inspection": 2,
+					"sha256": "0c69a77ebee545d7b35941ffa5d23aa27b65d0124497bf9bda07ed8e2fccf71e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "playerapi",
+							"version": "2.1.0",
+							"name": "PlayerAPI",
+							"description": "Client-side player action and information API for Fabric mods.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 178,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/playerapi/Http.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/playerapi/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"com/playerapi/PlayerAPIMod.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1.2.3] - 2026-08-29\n\n### Changed\n- **Hypixel-only gate.** Poseidon now stays fully inert unless you're connected to Hypixel (detected from\n  the server address you connected to). It's a Hypixel SkyBlock tool, so it won't try to act on other\n  servers. Requires PlayerAPI 2.1.0.\n\n### Fixed\n- **Phantom sea creatures on non-SC catches.** Removed the old proximity fallback scan, which bound a\n  nearby mob as a sea creature after any catch that produced no sea-creature line (junk, normal fish, …).\n  Sea-creature tracking is now driven entirely by the catch chat line — a creature is tracked only when a\n  known catch line identifies it."
+		},
+		{
+			"tag": "v2.0.0+26.2",
+			"published": "2026-08-23T19:49:40Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 526547977,
+					"name": "playerapi-2.0.0.jar",
+					"url": "https://github.com/noname-mods/PlayerAPI/releases/download/v2.0.0%2B26.2/playerapi-2.0.0.jar",
+					"size": 1132684,
+					"downloads": 28,
+					"inspection": 2,
+					"sha256": "e1135208a492b86d5487bf67485b75137cd8e427ff8069d848ec601fef042970",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "playerapi",
+							"version": "2.0.0",
+							"name": "PlayerAPI",
+							"description": "Client-side player action and information API for Fabric mods.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 170,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/playerapi/Http.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/playerapi/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"com/playerapi/PlayerAPIMod.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [2.0.0] - 2026-08-23\n\nThe big one — PlayerAPI grows from \"the toolkit our own mods needed\" into a **general-purpose, public\nclient-interaction library**, gains its **own config-screen library**, and moves to **Minecraft 26.2**.\n\n### Added — new API surface\n- **Utilities** (`com.playerapi.util`): `MathUtil` (angles/distance/lerp/clamp, matching `LookActions`),\n  `TextUtil` (strip/colorize/prettify), `ColorUtil` (argb/rgb/hex/blend), `TimeUtil` (\"2m 36s\" ⇄ ticks),\n  `DataStore` (typed-JSON load/save under the config dir), `Cooldown` (ms/tick gate).\n- **World queries & collision** — `WorldInfo` raycast (`raycastBlock`), `isPassable`/`isSolid`/\n  `isSafeToStand`/`getTopY`, water/lava/hazard checks, `getBlockProperties`, and **sign-text reading**\n  (`getSignText`).\n- **Entities** — `EntityTracker` (nearest / hostiles / ofType / byId / byName / crosshair-cone) and a much\n  richer `EntitySnapshot` (velocity, facing, distance, category, hostile/baby/glowing/… flags).\n- **Player state** — `PlayerInfo` reach/`canReachBlock`, pose, vehicle, fall distance, and attribute reads\n  (`getAttribute`, movement speed / attack damage).\n- **Chat / commands / input** — `ChatBuilder` (fluent click/hover components), `Commands.register`\n  (client commands), `Keybinds.register`.\n- **GUI automation** — `ScreenInfo` (read an open container) + `ContainerActions` (click / shift-click /\n  by item name) for menu automation.\n- **Look / net** — `LookActions.smoothLookAt` (eased rotation) and async `Http` (get / postJson, callbacks\n  on the main thread).\n- **World rendering** — `LabelActions` (floating world text) and `WaypointActions` (beam + name + live\n  distance); an immediate-mode `HudDraw` surface + `HUD_RENDER` event for quick overlays.\n- **Navigation** — `Navigator` + `PathFinder`: A* pathing with natural turn-rate movement, jumps/gap-jumps,\n  swim, periodic re-path, and sneak/sprint/no-jump options.\n- **Events** — a large expansion (held-item / damage / food / xp / effects / dimension / entity spawn+despawn\n  / container open+close), plus the **mixin event pass**: `PARTICLE_SPAWNED`, `SOUND_PLAYED`, `KEY_INPUT`,\n  `MOUSE_BUTTON`, `PACKET_RECEIVED`, and **cancelable** `CHAT_FILTER` / `KEY_FILTER` / `MOUSE_FILTER`.\n- **UI helpers** — `Notify` (toast pop-ups) and `Dialogs` (confirm / text-prompt modals).\n- **Scripting** — `Sequence`, a fluent tick-driven action script (look → wait → use → walkTo → …).\n\n### Added — config library\n- **`com.playerapi.config`** — an annotation-driven config-screen library (`PlayerConfig.createScreen`):\n  a mod annotates its existing config class (`@ConfigCategory` / `@ConfigOption` + editors like `@Toggle`,\n  `@Slider`, `@ColorPicker`, `@Dropdown`, `@ConfigAccordion`, `@ConfigList`, …) and PlayerAPI builds the\n  screen. Includes a theming system. Used by PlayerAPI itself and all four dependent mods.\n\n### Changed\n- **Minecraft 26.2.** Ported off the removed `Minecraft.screen`/`setScreen` (→ `mc.gui.screen()` /\n  `mc.gui.setScreen`), the relocated title/overlay/toast/chat (→ `mc.gui.hud` / `mc.gui.toastManager`), and\n  other 26.2 API changes.\n- **Dropped the YACL dependency** — PlayerAPI's config screens now use the built-in config library above.\n\n### Fixed\n- `SoundEngine.play` sound-event mixin no longer NPEs on 26.2 when a sound instance isn't resolved yet\n  (fires on a started sound and reads volume/pitch defensively)."
+		},
+		{
+			"tag": "v1.19.0+26.1.2",
+			"published": "2026-08-14T20:35:01Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 514870152,
+					"name": "playerapi-1.19.0.jar",
+					"url": "https://github.com/noname-mods/PlayerAPI/releases/download/v1.19.0%2B26.1.2/playerapi-1.19.0.jar",
+					"size": 479465,
+					"downloads": 73,
+					"inspection": 2,
+					"sha256": "5f7e091377cd7ca13ac712fa454ec5c07bc60b8c9de37cd711408675b6e7c57b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "playerapi",
+							"version": "1.19.0",
+							"name": "PlayerAPI",
+							"description": "Client-side player action and information API for Fabric mods.",
+							"minecraft": "~26.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"yet_another_config_lib_v3"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 63,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/playerapi/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"com/playerapi/PlayerAPIMod.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1.19.0]\n\nRolls up every addition since 1.12.0 — the internal 1.13–1.19 steps were never released separately, so\nthey ship together here.\n\n### Added\n- **`LineActions`** — through-wall guide lines between world points (owner-namespaced), drawn always-on-top\n  via the `Gizmos` layer. For pointing at a target or waypoint. *(internal 1.13.0)*\n- **Shared HUD-editor framework** (`com.playerapi.hud`) — a reusable way for any mod to make HUD elements\n  movable/scalable: `HudElement` (the element a mod implements, rendered from local origin), `HudTransform`\n  (x/y + scale), `HudManager` (owner-namespaced registry + live render + `openEditor` + a save hook), and\n  `HudEditorScreen` (drag to move, scroll to scale, **Backspace** resets the hovered element, **Esc**/**Save\n  & Close** persist, **Cancel** reverts). PlayerAPI holds no mod-specific HUD content — each mod owns its\n  elements and their persistence. *(internal 1.14.0–1.15.0)*\n- **`BoxActions`** — through-wall outlined world-space boxes with an optional translucent fill\n  (owner-namespaced). The ESP-box complement to `EntityHighlightActions` (which is depth-tested and\n  hitbox-bound); takes caller-supplied `AABB`s so it fits reconstructed shapes. *(internal 1.16.0)*\n- **`BeaconActions`** — vertical \"beacon\" beams rising from world points (owner-namespaced, per-point\n  colour) — a locator column like a beacon / waypoint beam.\n- **`ScoreboardInfo`** — read-only sidebar scoreboard access: `getTitle()`, `getLines()` (top-to-bottom,\n  colour-stripped), `findLineContaining`. Reconstructs each line from the owning team's prefix/suffix (the\n  visible text isn't in the score-holder name). Companion to `TabListInfo`. *(internal 1.17.0)*\n- **`ItemSnapshot.skyblockId()`** — the Hypixel SkyBlock internal item id from the item's custom NBT\n  (`id` tag), e.g. `CACTUS_KNIFE`. Stable across display-name/reforge/tier changes — the going-forward way\n  to identify SkyBlock items. `hasSkyblockId()` convenience; `\"\"` for vanilla / no tag. *(internal 1.18.0)*\n- **`TabListInfo` indexed access** — `strAt(int)` and `regexAt(int, Pattern)` read the online-player list\n  **sorted by the vanilla tab-overlay ordering** (via a new `PlayerTabOverlayAccessor` mixin), so a fixed\n  index lines up with a server's tab-grid layout (e.g. Hypixel's dungeon tab). `regexAt` returns the\n  matcher only on a full match. *(internal 1.19.0)*"
+		},
+		{
+			"tag": "v1.12.0",
+			"published": "2026-06-17T23:03:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 450648227,
+					"name": "playerapi-1.12.0.jar",
+					"url": "https://github.com/noname-mods/PlayerAPI/releases/download/v1.12.0/playerapi-1.12.0.jar",
+					"size": 452431,
+					"downloads": 96,
+					"inspection": 2,
+					"sha256": "b1215f4a1fd984109a6475b795cc34b34283edb8700b4f265ac0cb4c6943cd22",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "playerapi",
+							"version": "1.12.0",
+							"name": "PlayerAPI",
+							"description": "Client-side player action and information API for Fabric mods.",
+							"minecraft": "~26.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"yet_another_config_lib_v3"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 48,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/playerapi/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"com/playerapi/PlayerAPIMod.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1.12.0]\n### Added\n- `UpdateChecker` — shared GitHub-release update checker for all PlayerAPI-based mods, so the logic lives in one place instead of being copy-pasted per mod. `UpdateChecker.check(modId, releasesApiUrl)` fetches the latest release, compares versions, and notifies in chat.\n  - **Minecraft-version aware:** release tags use `<modVersion>+<mcVersion>` (e.g. `1.2.0+26.1.2`). If a newer release targets a different MC version than the one running, the notice says so rather than implying it's installable. Tags without `+mcVersion` behave as before (version-agnostic).\n  - **Click to hide:** each notification ends with a `[Hide]` link that suppresses re-notification for that specific version (a genuinely newer version later still notifies). Dismissal state is stored per-mod in `PlayerAPIConfig`.\n- `/playerapi dismissupdate <modid>` client command (registered by PlayerAPI) that the `[Hide]` link runs; with an ALLOW_COMMAND fallback for servers that override the command tree.\n\n### Changed\n- PlayerAPI's own update check now routes through `UpdateChecker` (removed its duplicated checker code).\n\n---\n\n## [1.11.0]\n### Added\n- `BlockHighlightActions` — draws coloured boxes around world block positions (a \"block ESP\" / xray-style highlight). Drawn always-on-top via the `Gizmos` API, so the boxes are visible **through walls** — the complement to `EntityHighlightActions`, whose entity overlay is depth-tested / line-of-sight only. Namespaced by an `owner` string like the entity API.\n\n---\n\n## [1.10.0]\n### Added\n- `EntityHighlightActions` — draws a translucent, depth-tested colored box matching an entity's hitbox, built on Minecraft's `Gizmos` debug-draw API. Independent of the vanilla entity-outline render pass, so it isn't affected by how renderer mods (Sodium, etc.) implement that pass. Namespaced by an `owner` string so multiple consumer mods can highlight entities simultaneously without overwriting each other.\n\n---\n\n## [1.9.0]\n### Changed\n- Ported to Minecraft 26.1.2 (Fabric 0.149.1+26.1.2, Loader 0.19.2)\n- Migrated from Yarn mappings to Mojang mappings — no public API changes; consumer mods require recompilation only"
+		},
+		{
+			"tag": "v1.8.0",
+			"published": "2026-05-07T03:27:19Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 414063093,
+					"name": "playerapi-1.8.0.jar",
+					"url": "https://github.com/noname-mods/PlayerAPI/releases/download/v1.8.0/playerapi-1.8.0.jar",
+					"size": 440277,
+					"downloads": 9,
+					"inspection": 2,
+					"sha256": "f370c9c16b43b3b8f1f74b14831a91155d54ddd2ea90359cfa6c068946c55691",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "playerapi",
+							"version": "1.8.0",
+							"name": "PlayerAPI",
+							"description": "Client-side player action and information API for Fabric mods.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"yet_another_config_lib_v3"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 43,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/playerapi/PlayerAPIMod.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"com/playerapi/PlayerAPIMod.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Intial git release"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "A client-side Fabric library that exposes a clean, high-level API for player interaction, world querying, and human-like automation.",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 16,
+		"more": 0,
+		"people": [
+			{
+				"login": "noname-mods",
+				"commits": 16,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

@@ -1,0 +1,159 @@
+{
+	"repo": "sobiesie/Phase_Pulse",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-01-17T13:20:22Z",
+	"pushed": "2026-02-27T23:33:00Z",
+	"releases": [
+		{
+			"tag": "1.1",
+			"published": "2026-02-20T17:51:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 359299149,
+					"name": "phase-pulse-1.1.0.jar",
+					"url": "https://github.com/sobiesie/Phase_Pulse/releases/download/1.1/phase-pulse-1.1.0.jar",
+					"size": 103905,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "a02f7752aef331464785655d072d43a0613c8c7fafab5f3f056ebc4af7be0db5",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "phase-pulse",
+							"version": "1.1.0",
+							"name": "Phase Pulse",
+							"description": "PhasePal companion app",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cf0e5a3d4c023af62cc23fd9c253b117c90e02413218196adf2009d35489c8c0.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 62,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/phasepal/phasepulse/network/ConnectionHandler.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close",
+									"java/net/Socket.isConnected",
+									"java/net/Socket.isClosed"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "This release focuses on significantly improving the accuracy of event detection, fixing critical bugs in multiplayer environments, and expanding the mod's awareness to include trading, breeding, fishing, and more.\n\n### New Features & Event Tracking\n*   **Villager Trading:** New `villager_trade` event. Tracks the item received, quantity, and merchant experience gained.\n*   **Animal Breeding:** New `animal_bred` event. Detects when you successfully breed animals (cows, sheep, etc.) and identifies the species.\n*   **Dimension Tracking:** New `dimension_changed` event. Proactively tracks travel between the Overworld, Nether, and The End.\n*   **Fishing Detection:** New `fishing_catch` event. Sends data whenever you successfully reel in an item.\n*   **Totem Usage:** New `totem_used` event. Specifically detects the moment a Totem of Undying is consumed.\n*   **Potion Brewing:** New `potion_brewed` event. Tracks completed potions when the brewing stand interface is closed.\n\n### Bug Fixes & Improvements\n*   **Multiplayer \"Ghost\" Fix:** Fixed a major issue where actions by other players (sleeping, taming, placing blocks) would trigger events for you. All listeners now strictly verify the **Local Player**.\n*   **Smarter Combat State:**\n    *   Combat no longer ends prematurely if hostile mobs are still within 8 blocks.\n    *   Attacking now sustains the combat state (offense is now tracked alongside defense).\n    *   Attacking passive mobs (chickens, pigs, etc.) no longer triggers the \"Combat Start\" event.\n*   **Accurate Sleep Detection:** The `player_wake` event now uses **time wrap-around detection**. It only triggers if the world time actually advanced, preventing \"waking up\" messages when simply getting out of bed at night.\n*   **Command Discoverability:** Refactored the `/pal` command. It now explicitly suggests `chat` and `speak` sub-commands, making it much easier for new users to find.\n\n### Technical Changes\n*   **Mixin Stability:** Refactored `MerchantScreenHandler` and `ScreenHandler` mixins to resolve remapping failures with 1.21.1 Yarn mappings.\n*   **Performance:** Optimized `MobKilledListener` with thread-safe static tracking and reduced overhead.\n*   **Documentation:** Fully updated `EVENTS.md` with schemas and metadata for all new event types.\n\n---"
+		},
+		{
+			"tag": "1.0",
+			"published": "2026-02-14T13:33:24Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 355853151,
+					"name": "phase-pulse-1.0.0.jar",
+					"url": "https://github.com/sobiesie/Phase_Pulse/releases/download/1.0/phase-pulse-1.0.0.jar",
+					"size": 90330,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "119fc036878444c04081accbe7fb2f2f2371ae9696132595a85149c93f5a530b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "phase-pulse",
+							"version": "1.0.0",
+							"name": "Phase Pulse",
+							"description": "PhasePal companion app",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cf0e5a3d4c023af62cc23fd9c253b117c90e02413218196adf2009d35489c8c0.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 51,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/phasepal/phasepulse/network/ConnectionHandler.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close",
+									"java/net/Socket.isConnected",
+									"java/net/Socket.isClosed"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Phase Pulse v1.0 release to work in 1.21.11"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "A lightweight Fabric mod for Minecraft 1.21.11 that bridges in-game events to the Phase Pal desktop companion app.",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 27,
+		"more": 0,
+		"people": [
+			{
+				"login": "sobiesie",
+				"commits": 23,
+				"funding": []
+			},
+			{
+				"login": "claude",
+				"commits": 4,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

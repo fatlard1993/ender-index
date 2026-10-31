@@ -1,0 +1,98 @@
+{
+	"repo": "OscarMinjarez/zanate-nunchi",
+	"host": "github",
+	"stars": 11,
+	"archived": false,
+	"license": "CC0-1.0",
+	"created": "2026-03-13T06:28:11Z",
+	"pushed": "2026-03-17T23:10:43Z",
+	"releases": [
+		{
+			"tag": "v1.0.0",
+			"published": "2026-03-17T06:20:09Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 376047011,
+					"name": "zanatenunchi-1.0.0.jar",
+					"url": "https://github.com/OscarMinjarez/zanate-nunchi/releases/download/v1.0.0/zanatenunchi-1.0.0.jar",
+					"size": 196375,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b023b1d0334352ef359134d66150b7e5cc04cbf1f551407616887edd824feea7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "zanatenunchi",
+							"version": "1.0.0",
+							"name": "Zanate Nunchi",
+							"description": "Tu compañero IA que observa, analiza y reacciona al mundo de Minecraft usando Llama.",
+							"minecraft": ">=1.21.6",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": "e7681741df50ccd1fa3c35e7e4d1db63d7122f3356f2d79f86c09180b3369ec0.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 51,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/adenium/zanatenunchi/ai/OllamaClient.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/adenium/zanatenunchi/ai/OllamaHealthCheck.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"localhost": [
+								"com/adenium/zanatenunchi/config/ModConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 🤖 Zanate Nunchi v1.0.0 - The Intelligence Update\n\n¡El primer lanzamiento estable de Zanate Nunchi ya está aquí para revolucionar tu mundo de Minecraft 1.21.6! Atrás quedaron los días de jugar en soledad; a partir de ahora, cada jugador en el servidor tendrá su propio compañero de aventuras impulsado por IA Local (Ollama).\n\nEsta actualización principal (v1.0.0) trae características increíbles, soporte multi-lenguaje robusto y un sistema de personalidad verdaderamente orgánico.\n\n## ✨ Novedades Destacadas\n\n### 🎭 Personalidades Únicas y Persistentes\nEl bot ya no es un cascarón vacío. Tras su primer inicio de sesión, el mod forjará una \"alma\" (personalidad persistente) para tu compañero.\n* Nombres aleatorios, edades, géneros y rasgos psicológicos (ej. sarcástico, valiente, tímido).\n* Tu bot te hablará diferente según su personalidad.\n* **Sistema Dinámico de Saludos:** Tu bot recuerda tu nombre y te saludará basándose en su propia personalidad (amigable, hostil, chistoso) al volver a jugar.\n\n### 🌐 Dialectos Regionales Estrictos (Anti-Drift)\nEl mod ahora detecta automáticamente el idioma de tu configuración de Minecraft y adapta a la IA para hablar exactamente como lo harían en tu país, bloqueando que mezcle acentos.\n* Implementadas y perfeccionadas 17 variantes regionales a través de Proveedores dedicados (`MexicanSpanishProvider`, `SpanishSpainProvider`, `PortugueseBrazilProvider`, etc.).\n* Si usas Español de México, la IA usará \"wey/chido\"; si usas Argentino usará \"vos/che\"; si usas Colombia \"parce/chimba\".\n\n### 🧠 Arquitectura de Pizarra (Blackboard) y Observers\nZanate Nunchi está vivo y siempre observando tu partida de forma pasiva mediante nuestro sistema de Observadores:\n* **`CombatObserver`**: Narra el combate, reacciona a tus crits, muertes espectaculares o si matas muchos mobs seguidos.\n* **`PlayerStatusObserver`**: Cuidará de ti alertándote desesperadamente si tu vida o hambre están críticamente bajas. ¡Y celebrará si encuentras diamantes!\n* **`WorldObserver`**: Detecta amaneceres, atardeceres, viajes entre dimensiones y tormentas fuertes.\n\n### ⚡ Motor LLM Ultra-Optimizado (Guardrails)\nJugar con IA en tiempo real puede ser complicado, pero hemos integrado sistemas de optimización masiva:\n* **Límite Cero Latencia en Peligro:** Si estás rodeado de Creepers a 2 bloques de distancia con 3 corazones de vida, el LLM reducirá todos sus procesos y enviará una advertencia corta y concisa al instante (\"¡Ojo con esos creepers, te están rodeando!\").\n* **Anti-Spam Matemático:** Un sistema de Cooldowns (enfriamiento) jerárquico evita que la IA haga spam en el chat asegurando que solo interrumpa cuando sea necesario.\n* **Trimmer de Oraciones:** La IA ya NUNCA enviará oraciones cortadas a la mitad por quedarse sin tokens.\n\n## 🛠️ Correcciones de Errores (Bug Fixes)\n* **#001:** Corregido el infame \"Hola null\". Si eres un jugador que regresa pero la IA no sabe tu nombre, ya no asumirá valores nulos en el chat sino que preguntará quién eres de forma orgánica.\n* **#002:** Reparada una excepción `NullPointerException` en `DataManager` cuando el JSON no tenía jugadores registrados.\n* **#003:** Solucionado el bug en `PersonalityGenerator` sobre la comprobación de la longitud de los nombres.\n* **#004:** Corregida la extracción del nombre del jugador que provocaba el truncamiento de nombres con la primera letra (\"Oscar\" -> \"scar\").\n* **#005:** Añadida pluralidad dinámica a `getImmediateDangerReply` para evitar que la IA envíe ráfagas idénticas (spam del mismo mensaje) durante combates difíciles.\n\n## 📦 Instalación\n1. Descarga el `zanatenunchi-1.0.0.jar` de la sección Assets abajo.\n2. Colócalo en la carpeta `/mods/` de tu cliente o servidor de Minecraft Fabric 1.21.6.\n3. Asegúrate de tener:\n   * **Fabric API** instalada.\n   * **Ollama** funcionando en tu equipo local y el modelo descargado (`ollama pull llama3.2`).\n4. ¡Inicia tu mundo y saluda en el chat!\n\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "Un mod revolucionario para Minecraft Fabric 1.21.6 que introduce a un compañero de aventuras impulsado por Inteligencia Artificial Local (Ollama).",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 17,
+		"more": 0,
+		"people": [
+			{
+				"login": "OscarMinjarez",
+				"commits": 17,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

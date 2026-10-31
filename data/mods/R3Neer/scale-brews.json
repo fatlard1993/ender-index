@@ -1,0 +1,328 @@
+{
+	"repo": "R3Neer/scale-brews",
+	"host": "github",
+	"description": "Growth and Shrinking potions for Minecraft Fabric, with gradual scaling, size-based gameplay, tiny mounts, and configurable world rules.",
+	"stars": 0,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2026-09-05T14:27:40Z",
+	"pushed": "2026-10-13T22:27:08Z",
+	"releases": [
+		{
+			"tag": "v0.1.0-beta.9",
+			"published": "2026-09-16T08:41:20Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 567551824,
+					"name": "scalebrews-0.1.0-beta.9.jar",
+					"url": "https://github.com/R3Neer/scale-brews/releases/download/v0.1.0-beta.9/scalebrews-0.1.0-beta.9.jar",
+					"size": 714375,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "04053ac96bef4f45cb2ca7722e41860fd46dad7bf18d5b411be00ac13de0574c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "scalebrews",
+							"version": "0.1.0-beta.9",
+							"name": "Scale Brews",
+							"description": "Adds Growth and Shrinking potions to Minecraft.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "0a4a5f045bed66b3e62cc8bf98d565533c2a82d520b95b3bcd7212adcac3c30a.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Flower on a Stick"
+							],
+							"effect": [
+								"Growth",
+								"Shrinking"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 345,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Scale Brews 0.1.0-beta.9\n\nThis hotfix corrects Tiny Mount rendering across world, inventory and\nFirst-person Model contexts, and changes the tamed-wolf interaction grammar to\nmatch ordinary saddled mounts. It retains the Alchemical Leather compatibility\nwork already present on `main`.\n\n## Explore first\n\nThe [README](https://github.com/R3Neer/scale-brews#readme) gives a few things to\ntry, with real in-game screenshots. Exact recipes, balance, mounts and world rules\nlive in the spoiler-rich [player guide](https://github.com/R3Neer/scale-brews/blob/main/docs/GUIDE.md).\n\n## Changes since the previous prerelease\n\n### Tiny Mount visual hotfix\n\n- Resolve saddle surfaces from canonical rest geometry rather than the first\n  camera or GUI orientation, follow explicit group anchors into their geometry,\n  prefer torso geometry over same-level heads, manes, tails, legs and wings,\n  and invalidate cached chains when EMF replaces an equivalent model part.\n- Treat Fresh Animations `EMF_*rotation` parts as coordinate-conversion wrappers:\n  bake their authored rest chain into the seat instead of transmitting the\n  inverted animated basis to Chicken and Wolf saddles or riders.\n- Isolate world-frame attachment samples from inventory previews, guarantee\n  cleanup after failed render submission, and clear interpolation history across\n  resource reloads and world changes.\n- Replace abrupt large-angle rider rebasing with bounded quaternion interpolation.\n  This removes the visible snapping without reusing stale frame transforms.\n- Add an optional First-person Model 2.7 bridge that aligns the rendered body to\n  the camera's actual smoothed and collision-clipped mount displacement while\n  preserving the mod's temporary extraction offset and player scale.\n- Restore the mounted Bee inventory paperdoll in the exercised compatibility\n  stack and keep Bee, Chicken and Wolf saddles attached across animated frames.\n\n### Wolf interaction and inventory polish\n\n- Ordinary Use mounts a saddled tame wolf with an empty hand or spare saddle;\n  without a saddle it retains vanilla sit/stand. Crouch + Use opens equipment.\n- Preserve food, dye, repair and other native item interactions, wild-wolf\n  ride-taming, owner-protected BODY equipment and ordinary crouch dismounting.\n- Replace the wolf armor empty-slot sprite with the approved hand-authored 16x16\n  icon and keep its exact pixel source reproducible through `GenerateArt`.\n\n### Validation\n\n- Add synthetic regressions for GUI/world isolation, large-angle interpolation,\n  scaled First-person origins, same-shape model replacement, and oversized\n  accessory geometry below explicit body anchors.\n- Observe real submitted Bee, Chicken and Wolf frames with First-person Model\n  2.7.2, EMF 3.3.5, ETF 7.2, Fresh Animations 1.10.5, FA Details 2.3 and FA Player\n  1.1. The final local gate passed all 154 required server GameTests and all five\n  real-client GameTest entrypoints.\n\n## Release integrity\n\nThe prerelease publisher tags the exact validated source snapshot `b5e6253` and\nverifies that the uploaded regular JAR matches the locally built SHA-256 before\npublication completes.\n\n## Installation\n\nUse `scalebrews-0.1.0-beta.9.jar`, not the sources JAR. Requires Java 25,\nMinecraft 26.2, Fabric Loader 0.19.5+ and\nFabric API 0.159.0+26.2 or newer for Minecraft 26.2.\nInstall on both client and server. Back up worlds before updating.\n\n## Validation and limits\n\nThe exact source snapshot `b5e6253` passed build, all **154 required server GameTests**\nand the full real-client GameTest suite in this prerelease workflow on Ubuntu/Java 25.\nThe packaged regular JAR was also checked for the expected mod version and for leaked\nGameTest classes.\n\nGravity Changer remains optional and is not bundled in the base release lane. Six-frame\nTiny Mount behavior is covered by the gravity-frame regression fixtures; absence of a\ngravity provider retains vanilla-DOWN behavior.\n\n\n..."
+		},
+		{
+			"tag": "v0.1.0-beta.8",
+			"published": "2026-09-14T19:37:35Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 564082013,
+					"name": "scalebrews-0.1.0-beta.8.jar",
+					"url": "https://github.com/R3Neer/scale-brews/releases/download/v0.1.0-beta.8/scalebrews-0.1.0-beta.8.jar",
+					"size": 706874,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "3e695bf2a7b135e6b5655784b13fff51adfc19f4caaeee3dab52b5db6fe40ddb",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "scalebrews",
+							"version": "0.1.0-beta.8",
+							"name": "Scale Brews",
+							"description": "Adds Growth and Shrinking potions to Minecraft.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "0a4a5f045bed66b3e62cc8bf98d565533c2a82d520b95b3bcd7212adcac3c30a.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Flower on a Stick"
+							],
+							"effect": [
+								"Growth",
+								"Shrinking"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 343,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Scale Brews 0.1.0-beta.8\n\nThis prerelease replaces fixed Tiny Mount saddle anchors with a shared, data-driven visual attachment frame derived from the model actually rendered by the client. It targets the floating and desynchronized saddle/rider presentation visible on Bees, Chickens and Wolves, especially with Fresh Animations.\n\n## Explore first\n\nThe [README](https://github.com/R3Neer/scale-brews#readme) gives a few things to\ntry, with real in-game screenshots. Exact recipes, balance, mounts and world rules\nlive in the spoiler-rich [player guide](https://github.com/R3Neer/scale-brews/blob/main/docs/GUIDE.md).\n\n## Changes since the previous prerelease\n\n### Extensible visual attachments\n\n- Add a `SeatFrame` resolver that traverses the complete animated `ModelPart` hierarchy, selects a stable upper body surface and captures its current affine transform for the saddle, rider and translation-only camera correction.\n- Replace the persistent previous-frame entity cache with same-frame mount/rider submission ordering and a frame-scoped context. Missing or failed captures now fall back to vanilla rendering instead of reusing stale transforms.\n- Render one generic saddle mesh in the selected normalized right/up/front frame. Saddles inherit model scale and animation; riders inherit only translation and orthonormal rotation.\n- Add optional reloadable resource-pack profiles at `assets/<namespace>/scalebrews/tiny_mount_visual/<path>.json`, including explicit model paths, normalized anchor points, pixel offsets, rotations, saddle dimensions and texture overrides.\n- Permit minimal Tiny Mount definitions containing only `entity`, with safe defaults for family, movement, speed, size ratio, ability and enabled state. Legacy `saddle_visual` textures remain supported as compatibility hints.\n- Add a small client adapter registry for renderers that do not expose ordinary `LivingEntityRenderer` plus `ModelPart` models.\n\n### Compatibility and validation\n\n- Correct rotated torso axes such as the Chicken model so the saddle remains horizontal and centred rather than following the model's internal Y axis.\n- Rebase model reference transforms when EMF changes internal base poses, allowing Fresh Animations groups such as Bee body rotations to remain synchronized without deforming the player.\n- Cover nested/hidden model parts, explicit-path fallback, invalid profile data, stable same-frame ordering, stale-state clearing and native-mount exclusion.\n- Exercise and visually inspect mounted, unmounted and motion snapshots for Bee, Chicken and Wolf with Entity Model Features 3.3.5, Entity Texture Features 7.2 and Fresh Animations 1.10.5.\n\n## Release integrity\n\nThe prerelease publisher tags the exact validated source snapshot `7a9247d` and\nverifies that the uploaded regular JAR matches the locally built SHA-256 before\npublication completes.\n\n## Installation\n\nUse `scalebrews-0.1.0-beta.8.jar`, not the sources JAR. Requires Java 25,\nMinecraft 26.2, Fabric Loader 0.19.5+ and\nFabric API 0.159.0+26.2 or newer for Minecraft 26.2.\nInstall on both client and server. Back up worlds before updating.\n\n## Validation and limits\n\nThe exact source snapshot `7a9247d` passed build, all **154 required server GameTests**\nand the full real-client GameTest suite in this prerelease workflow on Ubuntu/Java 25.\nThe packaged regular JAR was also checked for the expected mod version and for leaked\nGameTest classes.\n\nGravity Changer remains optional and is not bundled in the base release lane. Six-frame\nTiny Mount behavior is covered by the gravity-frame regression fixtures; absence of a\ngravity provider retains vanilla-DOWN behavior.\n\n**All-direction anatomical collisions and the shared Clinging physics remain unfinished\nand disabled in normal gameplay.** Prototype code is included, but the existing\nupper-surface living-platform system remains the released behavior.\n\nRegular JAR SHA-256:\n`3e695bf2a7b135e6b5655784b13fff51adfc19f4caaeee3dab52b5db6fe40ddb`"
+		},
+		{
+			"tag": "v0.1.0-beta.7",
+			"published": "2026-09-14T08:26:43Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 562989774,
+					"name": "scalebrews-0.1.0-beta.7.jar",
+					"url": "https://github.com/R3Neer/scale-brews/releases/download/v0.1.0-beta.7/scalebrews-0.1.0-beta.7.jar",
+					"size": 674717,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "622f8778c78de1dffcfc3b35afed64bd6086e28a4317c4396a5cb4acc469671f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "scalebrews",
+							"version": "0.1.0-beta.7",
+							"name": "Scale Brews",
+							"description": "Adds Growth and Shrinking potions to Minecraft.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "0a4a5f045bed66b3e62cc8bf98d565533c2a82d520b95b3bcd7212adcac3c30a.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Flower on a Stick"
+							],
+							"effect": [
+								"Growth",
+								"Shrinking"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 330,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Scale Brews 0.1.0-beta.7\n\nThis prerelease makes Tiny Mount interaction and equipment data-driven through three vanilla-style behavior families, synchronizes saddles and riders with final animated mount models, and polishes wolf riding. It also adds size-scaled gait/footstep presentation and updates interaction-reach balance. The experimental all-direction anatomical collision system remains unfinished and disabled in normal gameplay.\n\n## Explore first\n\nThe [README](https://github.com/R3Neer/scale-brews#readme) gives a few things to\ntry, with real in-game screenshots. Exact recipes, balance, mounts and world rules\nlive in the spoiler-rich [player guide](https://github.com/R3Neer/scale-brews/blob/main/docs/GUIDE.md).\n\n## Changes since the previous prerelease\n\n### Tiny Mount behavior families\n\n- Replace independent `saddle` / `control` JSON switches with `family`: `direct`, `tameable_direct`, or `item_steered`. The codec rejects contradictory combinations while movement and abilities remain independent.\n- Chicken uses `direct`: it can carry a passenger unsaddled, needs a saddle for direct control, and exposes its mount equipment menu. Bee uses `item_steered`: it needs a saddle even to mount, needs Flower on a Stick to control, has no mount menu, and E opens the player's normal inventory. Wolf uses `tameable_direct`: native taming gates equipment/control and its menu exposes SADDLE plus configured BODY equipment.\n- Remove species-hardcoded inventory routing. Inventory-bearing families open their menus dynamically; `direct` mounts also support Crouch + Use from outside, while `tameable_direct` keeps Crouch + Use as the wolf mounting gesture and uses E for equipment while mounted.\n- Preserve vanilla equipment semantics: SADDLE/BODY are real equipment slots, shearability comes from each item's `Equippable` component, vanilla BODY-before-SADDLE shearing order remains intact, wolf owner-only shearing remains authoritative, and vanilla dispensers can saddle configured Tiny Mount species.\n- Custom Tiny Mount datapacks using the old `saddle` and `control` fields must migrate to `family`; `item_steered` definitions still require `steering_item`.\n\n### Wolf mount polish\n\n- Add a horse-style equipment menu backed by the wolf's native SADDLE and BODY slots, including configured Wolf Armor and owner protection for BODY management.\n- Set controlled wolf travel speed to 0.20 and make pounce charging progressively slow ground movement to 50% at full charge, preserving the established pounce travel envelope instead of turning the wolf into a better long-distance horse.\n- Add squash/stretch, a short FOV kick, damped camera impact feedback, gravity-aware landing dust and concise audiovisual landing feedback without changing server pounce physics.\n\n### Animated saddles and riders\n\n- Capture the mount model's final rendered attachment transform after vanilla `setupAnim` and optional model animation, then share that same transform with saddle and rider rendering. This removes separate pose reconstruction and covers Tiny Mounts plus native horse body animation.\n- Validate the path against the exact VanillaPlus stack of EMF 3.3.5, ETF 7.2 and Fresh Animations 1.10.5: Fresh Animations produces an active EMF bee model and the mounted rider receives a finite, non-identity final attachment transform. These remain optional dependencies.\n\n### Size-scaled gait and interaction reach\n\n- Scale ordinary footstep pitch with `clamp(1 / sqrt(scale), 0.5, 2.0)` and walk-animation time with `clamp(1 / scale, 0.25, 4.0)`, following effective physical scale while leaving vanilla cadence/amplitude ownership intact.\n- Growth block reach remains +20% per equivalent level (5.4 / 6.3 / 7.2 blocks), while entity reach is +30% per equivalent level (3.9 / 4.8 / 5.7) and continues the same curve beyond Growth III. Shrinking block/entity reach both decrease by 10% per equivalent level.\n\n### Validation\n\n\n..."
+		},
+		{
+			"tag": "v0.1.0-beta.6",
+			"published": "2026-09-11T19:23:42Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 558091234,
+					"name": "scalebrews-0.1.0-beta.6.jar",
+					"url": "https://github.com/R3Neer/scale-brews/releases/download/v0.1.0-beta.6/scalebrews-0.1.0-beta.6.jar",
+					"size": 640676,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "5ff5915750bf0a770f282320b3ca2f701a08fe88599fe58c36a43be37f14e7dd",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "scalebrews",
+							"version": "0.1.0-beta.6",
+							"name": "Scale Brews",
+							"description": "Adds Growth and Shrinking potions to Minecraft.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "0a4a5f045bed66b3e62cc8bf98d565533c2a82d520b95b3bcd7212adcac3c30a.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Flower on a Stick"
+							],
+							"effect": [
+								"Growth",
+								"Shrinking"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 308,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Scale Brews 0.1.0-beta.6\n\nThis prerelease adds optional effective-gravity support to Scale-owned Tiny Mount movement and moves the real-client GameTest into ordinary GitHub Actions validation. The all-direction anatomical collision system remains unfinished and disabled in normal gameplay.\n\n## Explore first\n\nThe [README](https://github.com/R3Neer/scale-brews#readme) gives a few things to\ntry, with real in-game screenshots. Exact recipes, balance, mounts and world rules\nlive in the spoiler-rich [player guide](https://github.com/R3Neer/scale-brews/blob/main/docs/GUIDE.md).\n\n## Changes since the previous prerelease\n\n### Tiny Mount effective gravity\n\n- Bee flight, controlled chicken glide and wolf pounce/landing now generate their Scale-owned movement in the root mount's effective gravity frame instead of assuming world-down. Existing world-space momentum is not reinterpreted when the frame changes.\n- Centralize effective gravity behind one Scale-side service with vanilla `DOWN` fallback. Gravity Changer is discovered reflectively when present and remains an optional dependency.\n- Cover all six cardinal frames, root-versus-rider ownership, frame changes between actions and preservation of pre-existing momentum with dedicated regressions.\n\n### Validation and release engineering\n\n- Run both server and real-client GameTests in ordinary GitHub Actions CI. Client assertions execute headlessly under Xvfb; screenshots/logs are retained as workflow artifacts for inspection.\n- Add a guarded prerelease workflow that validates the exact release tree, checks packaged metadata and test-class exclusion, calculates the regular-JAR SHA-256 and creates the GitHub prerelease only after all gates pass.\n- Maintenance refresh: migrate stable GameTests away from the deprecated `makeMockServerPlayerInLevel()` helper while preserving connected-player semantics, remove remaining direct Java deprecation warnings, reject future deprecation regressions in CI, and verify refreshed prerelease tags/assets against the exact validated commit and JAR SHA-256.\n\n### Development prototype - anatomical geometry (not active gameplay)\n\n- Retain and extend the internal anatomical/contact synchronization and gravity-frame preparation without enabling it in normal worlds. The existing upper-surface living-platform system remains the released behavior.\n\n## Maintenance refresh\n\nThis prerelease was rebuilt from `aeca64e` after migrating the stable GameTests from\nthe deprecated `GameTestHelper.makeMockServerPlayerInLevel()` helper to Minecraft\n26.2's explicit `makeMockServerPlayer(GameType)` API. CI now rejects any reintroduction\nof the deprecated helper before building. The prerelease publisher also verifies that\nthe moved tag and the uploaded regular JAR both match this exact validated source\nsnapshot.\n\n## Installation\n\nUse `scalebrews-0.1.0-beta.6.jar`, not the sources JAR. Requires Java 25,\nMinecraft 26.2, Fabric Loader 0.19.5+ and\nFabric API 0.159.0+26.2 or newer for Minecraft 26.2.\nInstall on both client and server. Back up worlds before updating.\n\n## Validation and limits\n\nThe exact source snapshot `aeca64e` passed build, all **144 required server GameTests**\nand the full real-client GameTest suite in this prerelease workflow on Ubuntu/Java 25.\nThe packaged regular JAR was also checked for the expected mod version and for leaked\nGameTest classes.\n\nGravity Changer remains optional and is not bundled in the base release lane. Six-frame\nTiny Mount behavior is covered by the gravity-frame regression fixtures; absence of a\ngravity provider retains vanilla-DOWN behavior.\n\n**All-direction anatomical collisions and the shared Clinging physics remain unfinished\nand disabled in normal gameplay.** Prototype code is included, but the existing\nupper-surface living-platform system remains the released behavior.\n\nRegular JAR SHA-256:\n`5ff5915750bf0a770f282320b3ca2f701a08fe88599fe58c36a43be37f14e7dd`"
+		},
+		{
+			"tag": "v0.1.0-beta.5",
+			"published": "2026-09-09T15:58:43Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 553091227,
+					"name": "scalebrews-0.1.0-beta.5.jar",
+					"url": "https://github.com/R3Neer/scale-brews/releases/download/v0.1.0-beta.5/scalebrews-0.1.0-beta.5.jar",
+					"size": 448595,
+					"downloads": 816,
+					"inspection": 2,
+					"sha256": "5cbee58b3da9628f53f267b35ab3a3d16d922c4d2af6dfbf5b31a4d126711fc7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "scalebrews",
+							"version": "0.1.0-beta.5",
+							"name": "Scale Brews",
+							"description": "Adds Growth and Shrinking potions to Minecraft.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "0a4a5f045bed66b3e62cc8bf98d565533c2a82d520b95b3bcd7212adcac3c30a.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Flower on a Stick"
+							],
+							"effect": [
+								"Growth",
+								"Shrinking"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 205,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Scale Brews 0.1.0-beta.5\n\nGrowth and Shrinking potions for Minecraft 26.2 / Fabric. This prerelease\nconsolidates the previous local betas and current gameplay fixes.\n\n## Explore first\n\nThe [README](https://github.com/R3Neer/scale-brews#readme) now gives a few things\nto try, with real in-game screenshots. Exact recipes, balance, mounts and world\nrules live in the spoiler-rich [player guide](https://github.com/R3Neer/scale-brews/blob/main/docs/GUIDE.md).\n\n## Changes since the previous local beta\n\n- Shrinking III fits beneath a half-block gap while standing.\n- Villager size fear compares the actual sizes of both entities.\n- Wild-wolf riding uses persistent, probabilistic trust rather than a fixed ride count.\n- Wolf commanded attacks expose native animation signals.\n- Configured tameables mount with Crouch + Use regardless of held item.\n- Growth landing waves follow nearby terrain rather than spreading through gaps.\n- Includes the earlier effective-size, material-loot, mount and living-platform features.\n\n## Installation\n\nUse `scalebrews-0.1.0-beta.5.jar`, not the sources JAR. Requires Java 25,\nMinecraft 26.2, Fabric Loader 0.19.5+ and Fabric API 0.159.0+26.2 or newer for 26.2.\nInstall on both client and server. Back up worlds before updating.\n\n## Validation and limits\n\nThe exact source snapshot passed build, all 122 required server tests and the\nfull base real-client suite. Source hashes were checked against the repository.\nOptional-mod coverage in the validation record is historical and version-bounded;\nthis does not certify every modpack or multiplayer latency scenario.\n\n**All-direction anatomical collisions and the new shared Clinging physics are\nunfinished and disabled in normal gameplay.** Prototype code is included but\nthe existing upper-surface platform system remains active. Do not enable the\nexperimental runtime in a production world.\n\nRegular JAR SHA-256:\n`5cbee58b3da9628f53f267b35ab3a3d16d922c4d2af6dfbf5b31a4d126711fc7`"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [
+		"docs/images/size-comparison.png",
+		"docs/images/tiny-mounts.png"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 170,
+		"more": 0,
+		"people": [
+			{
+				"login": "R3Neer",
+				"commits": 170,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

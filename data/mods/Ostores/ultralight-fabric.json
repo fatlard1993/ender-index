@@ -1,0 +1,113 @@
+{
+	"repo": "Ostores/ultralight-fabric",
+	"host": "github",
+	"description": "An api for implement html render in mc ",
+	"stars": 0,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-06-03T12:44:23Z",
+	"pushed": "2026-10-10T14:07:16Z",
+	"releases": [
+		{
+			"tag": "v2.0.0",
+			"published": "2026-09-13T23:06:18Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 562089855,
+					"name": "ultralight-2.0.0.jar",
+					"url": "https://github.com/Ostores/ultralight-fabric/releases/download/v2.0.0/ultralight-2.0.0.jar",
+					"size": 15449229,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "7b06288f36605b92c9eb56c5878c7f64e78d4ddb884028dd445c17971117a7bb",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "ultralight",
+							"version": "2.0.0",
+							"name": "Ultralight API",
+							"description": "Ultralight (WebKit) HTML/CSS/JS rendering engine for Fabric mods",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"com_ibm_icu_icu4j",
+								"io_github_ayydxn_luminescence"
+							]
+						}
+					],
+					"icon": "5420421a2f5efdbf72ef86c6d8ff4cc61e824314203b2c78a86d4ae5cbaed793.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1773,
+						"jars": [
+							"META-INF/jars/icu4j-78.3.jar",
+							"META-INF/jars/luminescence-2026.1.0.jar"
+						],
+						"capabilities": {
+							"native": {
+								"net/ostore/ultralight/UltralightNativeLoader.class": [
+									"java/lang/System.load"
+								],
+								"META-INF/jars/luminescence-2026.1.0.jar!me/ayydxn/luminescence/internal/UltralightNativeLoader.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								]
+							},
+							"network": {
+								"net/ostore/ultralight/UltralightNativeLoader.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"META-INF/jars/icu4j-78.3.jar!com/ibm/icu/impl/URLHandler$JarURLHandler.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"META-INF/jars/icu4j-78.3.jar!com/ibm/icu/impl/ClassLoaderUtil$BootstrapClassLoader.class": [
+									"extends java/lang/ClassLoader"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"net/ostore/ultralight/UltralightNativeLoader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Portage sur **Minecraft 26.2**, plus une nouvelle couche de mise en page qui règle le problème des\ninterfaces qui cassaient selon le ratio d'écran.\n\nVersion majeure assumée : la ligne Minecraft change et l'API bouge. Les mods écrits pour la 1.21.11\nne compilent pas tels quels.\n\n## Nouveau : `UltralightPanel`\n\nL'entrée recommandée. Le panneau possède la géométrie (taille de vue, `deviceScale`, rectangle de\ndessin, suivi de la fenêtre) et surtout la conversion « coordonnées logiques Minecraft → pixels\nCSS », que chaque mod consommateur réimplémentait et ratait.\n\n```java\npanel = UltralightPanel.builder()\n        .design(1280, 720)                        // viewport CSS visé par la page\n        .fit(UltralightPanel.Fit.FILL_CLAMPED)    // défaut\n        .build();\npanel.loadHTML(html);\n\n// Screen.extractRenderState :\npanel.render(graphics);\n// Screen.mouseClicked :\npanel.mouseClicked(click.x(), click.y(), click.button());\n```\n\nTrois politiques de mise en page :\n\n| Mode | Ce que la page reçoit | Quand le choisir |\n|---|---|---|\n| `FILL` | hauteur CSS = design, largeur libre | seulement si le CSS est réellement responsive |\n| `CONTAIN` | **exactement** la taille de design, toujours | ratio fixe ; marges transparentes, zéro risque |\n| `FILL_CLAMPED` *(défaut)* | largeur CSS bornée | le compromis : responsive dans une plage saine |\n\nL'ancienne recette fixait la hauteur CSS à 600 px mais laissait la largeur flotter de ~750 px en\n5:4 à ~1420 px en 21:9, ce qui casse toute mise en page pensée sur un seul ratio. Le panneau logge\nà chaque changement le viewport CSS réellement fourni à la page, et publie `--ul-vw`, `--ul-vh`,\n`--ul-aspect`, `data-ul-ratio` et un événement `ul:resize` côté CSS. `setPreviewAspect()` simule un\nratio sans toucher à la fenêtre, pour vérifier une interface en 21:9 sans changer de résolution.\n\n## Corrections de rendu\n\n**Ne rien écrire sur le GPU pendant la phase d'extraction de la GUI.** MC 26.x construit\nl'interface en deux temps, et écrire dans une texture GPU au milieu de l'extraction corrompt le lot\nde dessins de Minecraft : son fond de menu se mettait à échantillonner notre texture (page répétée\nen damier plein écran) et une vue de la largeur du framebuffer s'affichait en noir plein. Le moteur\npompe désormais depuis `LevelRenderEvents.START_MAIN`, par frame et antérieur à la GUI.\n\n**Garde-fou CPU corrigé** : les natifs WebKit 615 utilisent des instructions **AVX2**, pas\nseulement AVX. Un CPU avec AVX mais sans AVX2 passait le garde-fou et crashait quand même. Aussi\nrétroporté sur la ligne 1.21.11.\n\n**Upload par bande** : `CommandEncoder.writeToTexture` n'accepte plus de sous-rectangle source en\n26.x. L'upload de la zone sale est refait en bande pleine largeur, sans copie intermédiaire.\n\n## Performance\n\nMesuré en jeu, 1920×1080 :\n\n| Configuration | Temps de frame | Cycle moteur |\n|---|---|---|\n| Sans panneau (référence) | 6,75 ms | — |\n| Page statique, quart d'écran | 6,69 ms | 0,10 ms |\n| Page animée, quart d'écran | 7,03 ms | 0,37 ms |\n| Page animée, plein écran | 7,17 ms | 0,79 ms |\n\nUne page statique ne coûte rien. Le coût vient de la re-rastérisation et monte avec la surface, pas\navec la complexité. Aucun hoquet ajouté, le p95 est inchangé.\n\n## Sonde de diagnostic\n\n`UltralightPanelProbe`, opt-in et inerte sans drapeau (aucun écouteur n'est enregistré). Trois\nphases : géométrie avec captures d'écran, input (7 vérifications automatiques : mapping des\ncoordonnées, cible du clic, hit-test hors panneau, saisie clavier, focus, curseurs, molette), et\nperf. Détails dans `docs/API.md`.\n\n## Compatibilité\n\n- Minecraft **26.2**, Fabric Loader **0.19.5+**, Fabric API, **Java 25**\n- Natifs Ultralight 1.4 / WebKit 615 téléchargés au premier lancement\n- Windows x64, Linux x64, macOS arm64\n- CPU **AVX2** requis (sinon le rendu HTML se désactive au lieu de crasher)\n\n## Migration depuis 1.x\n\n1. `Screen.render(DrawContext…)` devient `extractRenderState(GuiGraphicsExtractor…)`, et\n   `drawTexture` devient `blit`.\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 32,
+		"more": 0,
+		"people": [
+			{
+				"login": "Ostores",
+				"commits": 32,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

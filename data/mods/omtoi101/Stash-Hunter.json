@@ -1,0 +1,319 @@
+{
+	"repo": "omtoi101/Stash-Hunter",
+	"host": "github",
+	"description": "Meteor add-on for finding stashes on Minecraft anarchy servers using elytra fly and block cluster detection",
+	"stars": 19,
+	"archived": false,
+	"license": "Apache-2.0",
+	"created": "2025-09-18T23:03:57Z",
+	"pushed": "2026-10-30T20:21:36Z",
+	"releases": [
+		{
+			"tag": "v26.2.1",
+			"published": "2026-10-29T20:56:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 689882739,
+					"name": "stash-hunter-26.2.1.jar",
+					"url": "https://github.com/omtoi101/Stash-Hunter/releases/download/v26.2.1/stash-hunter-26.2.1.jar",
+					"size": 117781,
+					"downloads": 11,
+					"inspection": 2,
+					"sha256": "c0ad77cc60279153ee07d6942c79e1e42c8fb7c42ce03e6a22f1b7b11719708c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "stash-hunter",
+							"version": "26.2.1",
+							"name": "StashHunter",
+							"description": "A Meteor client addon for finding stashes on anarchy servers.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f3a000dcf4bd58e9b2f331f8440c2e01e3ce97932a550fc03d9b1d5032ca4a76.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 33,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/stashhunter/stashhunter/utils/DiscordWebhook.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Stash-Hunter 26.2.1 — The Big Stability & Performance Update\n\nYour stash-hunting bot now flies faster, finds more stashes, and crashes less.\n\n## What's new\n\n### 🛡️ Stability — the bot stays alive\n- Death, dimension changes and leaving the server now cleanly reset the flight —\n  no more flying to stale coordinates after a respawn.\n- Elytra repair no longer aborts mid-flight or hangs for 300 s without XP.\n- The built-in controller and Baritone no longer fight each other.\n\n### ⚡ Performance — no more stutter\n- Chunk-packet work moved off the Netty connection thread (`mc.execute`).\n- File writes are batched; rendering no longer allocates per frame; the O(n³)\n  trail search is capped.\n- `scanForBlocks` is significantly faster (palette skipping, one distance check).\n\n### 🎯 Scan correctness — finds more stashes\n- **Biggest fix:** while flying, stashes *below* the bot were never found (the old\n  spherical radius). Scans are now a full-height cylinder — Nether roof, the End\n  and mountains included.\n- Containers are no longer double-counted; neighbouring stashes are no longer\n  merged; close stashes are no longer discarded.\n- The same stash is no longer re-reported every 10 minutes, and waypoints now\n  carry the correct dimension.\n\n### 🌐 Discord & config\n- Webhook now honours rate limits (429), retries with backoff, and bounds its queue.\n- `@everyone` is opt-in (`mention-everyone`, default off).\n- Config saves are debounced (no more dozens of writes per slider drag).\n\n### 🧹 Cleaned up & modernized\n- Fabric API is no longer required — Meteor's `GameLeftEvent` replaces the old\n  disconnect hook.\n- Dead code removed (WorldScanner, Logger, Utils, unused mixins).\n- Core logic extracted into tested classes: **17 unit tests**, Spotless, Dependabot.\n\n## New settings\n- `mention-everyone`, `max-cluster-size`, `report-dedupe-radius`\n\n## Requirements\n- Minecraft **26.2**, Fabric Loader **0.20.1**, Meteor Client **26.2**\n\n## ⚠️ Note\nThis release is not yet fully tested in-game — please verify on a test server."
+		},
+		{
+			"tag": "v2.0",
+			"published": "2026-10-29T18:25:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 689493684,
+					"name": "stash-hunter-0.26.2.jar",
+					"url": "https://github.com/omtoi101/Stash-Hunter/releases/download/v2.0/stash-hunter-0.26.2.jar",
+					"size": 111163,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "58c653d95274c697ffa3b800a7c326f89a42f6bb7b79d58c2e325544f63d705c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "stash-hunter",
+							"version": "0.26.2",
+							"name": "StashHunter",
+							"description": "A Meteor client addon for finding stashes on anarchy servers.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client",
+								"fabric-networking-api-v1",
+								"fabric-api-base"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f3a000dcf4bd58e9b2f331f8440c2e01e3ce97932a550fc03d9b1d5032ca4a76.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 34,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/stashhunter/stashhunter/utils/DiscordWebhook.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Requirements\n- Minecraft **26.2**\n- Fabric Loader **0.19.3** or newer, Fabric API **0.160.0+26.2**\n- Meteor Client **26.2**\n- Java **25**\n\n## New\n- Runs on Minecraft 26.2 with the latest Meteor Client.\n- **Auto Elytra Repair:** the `notify-repairs` setting now sends Discord messages when a repair starts, finishes or fails.\n\n## Fixes\n- **No more freezes from Discord notifications:** webhooks are now sent in the background with a timeout. Before, a slow or unreachable Discord could freeze the game.\n- **NewerNewChunks now detects chunks:** chunk detection never ran before, so trail following during flight had no data to work with.\n- **First waypoint no longer skipped:** the bot now flies the first strip properly instead of cutting across it diagonally.\n- **Auto Elytra Repair works with Stash Hunter again:** the two modules weren't talking to each other at all.\n- **Jumping works again while Stash Hunter is on:** the jump key was being released every tick. This also stopped the Altitude Loss Detector and Stuck Detector auto-fixes from working.\n- **Stuck Detector** now uses its own webhook URL and no longer changes the game from a background thread (a possible cause of crashes).\n- **Auto Elytra Repair:**\n  - Can no longer crash when a Meteor setting it reads is missing.\n  - Returning to flight after a repair no longer spams key presses.\n  - After a repair it climbs to your configured flight altitude instead of a fixed Y=200.\n- **No false alerts:** \"Bot Respawned\" is no longer sent every time the module is turned on, and seeing the same player again after they leave render distance no longer triggers a duplicate alert.\n- **Correct stash coordinates at extreme distances:** stashes very far out (millions of blocks) no longer get wrong coordinates.\n- **NewerNewChunks** no longer errors when turned on from the main menu.\n- Fixed a startup crash on 26.2.\n\n## Changed behaviour — please check\n- **Flight now reacts to new chunks:** because detection works now, the bot may avoid new chunks or follow chunk trails during flight. Turn off `dynamic-trail-detection` in NewerNewChunks if you don't want that.\n- **Lower climb height after repairs:** after a repair the bot climbs to your `flight-altitude` setting (default 160) instead of Y=200.\n\n## Credits\nlicensed under Apache-2.0. NewerNewChunks is based on etianl's port of BleachHack's NewChunks."
+		},
+		{
+			"tag": "snapshot",
+			"published": "2025-09-26T16:07:32Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 692539871,
+					"name": "stash-hunter-26.2.1.jar",
+					"url": "https://github.com/omtoi101/Stash-Hunter/releases/download/snapshot/stash-hunter-26.2.1.jar",
+					"size": 158624,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "4bf30dc1aa3cd476e06f4ad7ee4c8daef58a4dad9e2189caa2d69cfbfa50e727",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "stash-hunter",
+							"version": "26.2.1",
+							"name": "StashHunter",
+							"description": "A Meteor client addon for finding stashes on anarchy servers.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "4b3730241efa0539e98b7c6e8f58f976600d6c7304d814d8ee694b3bb6f6bb6e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 41,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/stashhunter/stashhunter/utils/DiscordWebhook.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			]
+		},
+		{
+			"tag": "built5",
+			"published": "2025-09-25T15:49:05Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 297209090,
+					"name": "stash-hunter-0.1.5.jar",
+					"url": "https://github.com/omtoi101/Stash-Hunter/releases/download/built5/stash-hunter-0.1.5.jar",
+					"size": 107673,
+					"downloads": 2340,
+					"inspection": 2,
+					"sha256": "035094b882602f5de49c1b4faab5cce8dcf4e16a9ba6b8956b54875b60739ed9",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "stash-hunter",
+							"version": "0.1.5",
+							"name": "Stash-Hunter",
+							"description": "A Meteor client addon for finding stashes on anarchy servers.",
+							"minecraft": "1.21.8 || 1.21.7 || 1.21.6",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client",
+								"fabric-networking-api-v1",
+								"fabric-api-base"
+							],
+							"provides": []
+						}
+					],
+					"icon": "f3a000dcf4bd58e9b2f331f8440c2e01e3ce97932a550fc03d9b1d5032ca4a76.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 31,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/stashhunter/stashhunter/utils/DiscordWebhook.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's Changed\n* Fix mixin crash and whole module lol by @omtoi101 in https://github.com/omtoi101/Stash-Hunter/pull/21\n* Update version and docs 0.1.5 by @omtoi101 in https://github.com/omtoi101/Stash-Hunter/pull/22\n* Update README.md by @omtoi101 in https://github.com/omtoi101/Stash-Hunter/pull/23\n\nNOW HAS AUTO REPAIR OF ELYTRA\n\n**Full Changelog**: https://github.com/omtoi101/Stash-Hunter/compare/built4...built5"
+		},
+		{
+			"tag": "built4",
+			"published": "2025-09-22T02:07:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 295820708,
+					"name": "stash-hunter-0.1.4.jar",
+					"url": "https://github.com/omtoi101/Stash-Hunter/releases/download/built4/stash-hunter-0.1.4.jar",
+					"size": 91352,
+					"downloads": 183,
+					"inspection": 2,
+					"sha256": "23e7128d32b47687459160e36ea48478b98e1c692f1df5ed1ba82c6a6c2b11d3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "stash-hunter",
+							"version": "0.1.4",
+							"name": "Stash-Hunter",
+							"description": "A Meteor client addon for finding stashes on anarchy servers.",
+							"minecraft": "1.21.8 || 1.21.7 || 1.21.6",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client",
+								"fabric-networking-api-v1",
+								"fabric-api-base"
+							],
+							"provides": []
+						}
+					],
+					"icon": "f3a000dcf4bd58e9b2f331f8440c2e01e3ce97932a550fc03d9b1d5032ca4a76.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 28,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/stashhunter/stashhunter/utils/DiscordWebhook.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's Changed\n* Feature/newer new chunks by @omtoi101 in https://github.com/omtoi101/Stash-Hunter/pull/18\n* feat: Update to version 0.1.4 and document new features by @omtoi101 in https://github.com/omtoi101/Stash-Hunter/pull/19\n\n\n**Full Changelog**: https://github.com/omtoi101/Stash-Hunter/compare/built3...built4"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 70,
+		"more": 0,
+		"people": [
+			{
+				"login": "omtoi101",
+				"commits": 59,
+				"funding": []
+			},
+			{
+				"login": "Papxx",
+				"commits": 11,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

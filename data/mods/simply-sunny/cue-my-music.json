@@ -1,0 +1,239 @@
+{
+	"repo": "simply-sunny/cue-my-music",
+	"host": "github",
+	"description": "A music player for Minecraft's own soundtrack, with a queue, pitch, speed, and an equalizer. Fabric and Quilt 26.3.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-10-26T00:30:24Z",
+	"pushed": "2026-10-27T23:23:35Z",
+	"releases": [
+		{
+			"tag": "v1.3.0",
+			"published": "2026-10-27T22:39:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 683095341,
+					"name": "cue-my-music-26.3-1.3.0.jar",
+					"url": "https://github.com/simply-sunny/cue-my-music/releases/download/v1.3.0/cue-my-music-26.3-1.3.0.jar",
+					"size": 261610,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "a133409d15a14f2e903c4b65556bcf7a8713d4d7918a5e102aa15265da02dbfa",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cuemymusic",
+							"version": "1.3.0",
+							"name": "Cue My Music",
+							"description": "A music player for the game's own soundtrack, with pitch, speed and an equalizer. Jukeboxes are left alone.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"modmenu"
+							],
+							"provides": []
+						}
+					],
+					"icon": "312a59d908a5d317a511d6a75be75d0ad5acf73e28462df02a691ea0675f6511.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 87,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"mix/cuemymusic/OutsideAudio.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n\n- Search: the magnifying glass next to Library, or Cmd/Ctrl+F. Finds songs by title, artist or album, and artists by name.\n- Automix for songs on add-on pages: matched loudness, silence trimmed, and a crossfade into the next song.\n- A **Mix** view for a list's songs, switched on by the Mix chip above the list once two songs next to each other can blend. Each page remembers whether it's shown as a mix. The page keeps its header and buttons; the game's own songs show dimmed, since they don't blend. It shows each song's tempo and key, and the transition between each pair. Open a transition to see both songs' waveforms with its volume and bass curves, preview it, pick a preset (Auto, Fade, Rise, Blend, Echo, Cut), or set its volume curve, bass swap, filter and echo one by one, plus when it starts and where the next song comes in. Length is a choice of 2, 4, 8 or 16 bars. Each song's beats show as ticks between the two, and scrolling sideways over either song moves it a beat at a time: the first moves where the transition starts, the next where it comes in.\n- A smarter **Auto** transition: it picks Blend, Rise, Fade or Echo from the two songs' tempos and keys, ends where the first song's music fades rather than in its quiet tail, and starts on a bar so both songs' bars line up. Songs are analysed again once for this.\n- Keep add-on songs out of recordings: they play from a separate process, so recorders of the game's own audio leave them out.\n- A **Drop** transition preset: the next song drops in at full volume as the first loses its bass, which then holds for half the transition and fades out in a straight line, over 16 bars. Its parts are also in the drop-downs: **Drop in, then fade** and **Bass swap at the start**. Length goes up to 40 seconds and shows in bars when the tempo is known.\n- Search in a playlist or any other page: the magnifier in its toolbar narrows the songs shown as you type.\n- Drag songs in a playlist to change their order, one at a time or a whole selection.\n- **Vanilla music** in Settings turns Cue My Music and its add-ons off, so the game plays its own music as if they weren't there. The player screen then only offers to turn them back on.\n- A short **Crossfade** between songs played through the player, 4 seconds by default: each song fades into the next one in a page or the queue, game songs too. Songs automix blends keep their own transition. **Crossfade** in Settings sets it from 1 to 12 seconds, or Off.\n- A volume slider in the bottom bar, next to pitch and speed. It's the game's Music volume; click the speaker to mute and unmute.\n- Music pauses while Minecraft is in the background, and resumes when you come back. **Pause in background** in Settings turns this off.\n\n### Changed\n\n- Tempo, key, loudness and waveforms of add-on songs are saved in `config/cuemymusic-analysis/` and read back next time instead of worked out again. Once the game has loaded, songs not worked out yet are done in the background, so the mix shows tempos and keys straight away.\n- The player does less work each frame: the song list, the game's songs and add-on pages are kept between frames instead of rebuilt.\n- The right-click menu looks like Spotify's: icons, dividers, and **Add to playlist** with a submenu you can search, instead of one row per playlist. It also has **Go to artist**.\n- Stats ignore songs heard for under 3 seconds, so clicking through songs doesn't fill them with plays and skips. A song that ends by itself is a play only if you heard at least half of it (or 30 seconds), so seeking to the end isn't one. Seeking, pausing, travelling and clicking the playing song again carry on the same play. Nothing is counted while music volume is at 0.\n\n### Fixed\n\n- With **Pause during travel** on, a song could start again for a moment while the new dimension was still loading. It now waits until the loading screen has gone, then fades in.\n\n..."
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-10-26T05:31:57Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 677134547,
+					"name": "cue-my-music-26.3-1.2.0.jar",
+					"url": "https://github.com/simply-sunny/cue-my-music/releases/download/v1.2.0/cue-my-music-26.3-1.2.0.jar",
+					"size": 175883,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "5f4fc0cd213254776d794d4351af21cd4f4ba4e815afa71e613eb2a91c41aef0",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cuemymusic",
+							"version": "1.2.0",
+							"name": "Cue My Music",
+							"description": "A music player for the game's own soundtrack, with pitch, speed and an equalizer. Jukeboxes are left alone.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"modmenu"
+							],
+							"provides": []
+						}
+					],
+					"icon": "312a59d908a5d317a511d6a75be75d0ad5acf73e28462df02a691ea0675f6511.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 60,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n\n- Select several songs with shift-click, shift-drag, Cmd/Ctrl-click, shift+↑/↓ or Cmd/Ctrl+A, then right-click to queue, like, dislike or add them all to a playlist, or press Delete to take them off a playlist, Liked Songs or Disliked Songs.\n- **Your Stats** page: time listened, plays, streaks, top songs and artists, a 24-hour listening clock, a calendar of every day you listened, time per dimension, how much you picked versus the game, and the song you skip most.\n- Add-ons can give their page a Delete action for selected songs.\n- Dragging a selection to the top or bottom of the list scrolls it.\n\n### Changed\n\n- Dislike is a thumbs down.\n\n### Fixed\n\n- Music sounded hollow with spatial audio on, such as Directional Audio with AirPods. Stereo songs now go straight to the left and right speakers."
+		},
+		{
+			"tag": "v1.1.0",
+			"published": "2026-10-26T04:38:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 677024861,
+					"name": "cue-my-music-26.3-1.1.0.jar",
+					"url": "https://github.com/simply-sunny/cue-my-music/releases/download/v1.1.0/cue-my-music-26.3-1.1.0.jar",
+					"size": 150175,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "1a122c3d46cbaafa9f82114f9c81257b7b6dc45046a2b8a064956032db36b31c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cuemymusic",
+							"version": "1.1.0",
+							"name": "Cue My Music",
+							"description": "A music player for the game's own soundtrack, with pitch, speed and an equalizer. Jukeboxes are left alone.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"modmenu"
+							],
+							"provides": []
+						}
+					],
+					"icon": "312a59d908a5d317a511d6a75be75d0ad5acf73e28462df02a691ea0675f6511.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 55,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n\n- Repeat: off, all, or one, from the button next to play or with `/cmm repeat`.\n- Playlists. **New playlist** in the library makes one; right-click any song to add it. Click a playlist's name to rename it.\n- Right-click menu on songs: add to queue, like, add to a playlist.\n- Resource packs can credit each song with `assets/<namespace>/cuemymusic.json`.\n- Pitch, speed, and EQ changes show a loading ring until they're heard.\n- Dislike: the ⊘ button on a song, right-click, or `/cmm dislike` and the game never picks it for its own music. It still plays when you pick it. Disliked songs get their own page.\n- The library is grouped into Artists, Packs, and Your playlists, with one-line rows. Click a heading to fold it. The library scrolls when it's long.\n- Add-ons can add their own page to the player's library (`mix.cuemymusic.api`).\n\n### Fixed\n\n- Songs a resource pack adds or removes show up after a reload without reopening the player.\n- Queue headings and album names no longer run past their columns in a small window."
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-10-26T01:34:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 676651056,
+					"name": "cue-my-music-26.3-1.0.0.jar",
+					"url": "https://github.com/simply-sunny/cue-my-music/releases/download/v1.0.0/cue-my-music-26.3-1.0.0.jar",
+					"size": 114345,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "d5928e66964181f2eb101a485393f31b50e3419be882b4b180eaf58f9ea96d43",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cuemymusic",
+							"version": "1.0.0",
+							"name": "Cue My Music",
+							"description": "A music player for the game's own soundtrack, with pitch, speed and an equalizer. Jukeboxes are left alone.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"modmenu"
+							],
+							"provides": []
+						}
+					],
+					"icon": "312a59d908a5d317a511d6a75be75d0ad5acf73e28462df02a691ea0675f6511.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 40,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First release.\n\n### Added\n\n- Player screen with a library, track list, now playing, and controls. Opens from a music button on the title screen and pause menu, from Mod Menu, or with a key.\n- Pages for all game music, Liked Songs, each artist, and each resource pack that adds music.\n- Play, pause, seek, next, and previous. A song plays the rest of its page after it.\n- Queue: add a song or a whole page, drag to reorder, × to remove.\n- The game's own music plays exactly as in vanilla, and the queue shows its next song and break.\n- Pitch (−12 to +12 semitones) and speed (0.5× to 2.0×), independent of each other.\n- 6-band equalizer with presets.\n- Sorting by title, album, or length.\n- Chat commands: `/cmm play`, `queue`, `next`, `prev`, and `pause`.\n- Keys for the player, effects, previous, play/pause, and next. F7–F9 by default on macOS.\n- **Pause during travel** setting.\n- Icon made from the game's own textures.\n- 34 headless regression checks."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 51,
+		"more": 0,
+		"people": [
+			{
+				"login": "simply-sunny",
+				"commits": 51,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

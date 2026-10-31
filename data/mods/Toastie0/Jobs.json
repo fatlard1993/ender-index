@@ -1,0 +1,91 @@
+{
+	"repo": "Toastie0/Jobs",
+	"host": "github",
+	"description": "A comprehensive jobs system for Minecraft 1.20.1 Fabric servers",
+	"stars": 0,
+	"archived": false,
+	"license": "CC0-1.0",
+	"created": "2026-01-14T07:06:42Z",
+	"pushed": "2026-01-16T00:42:31Z",
+	"releases": [
+		{
+			"tag": "v0.1.0",
+			"published": "2026-01-15T05:33:24Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 340854924,
+					"name": "JobsFabric-0.1-1.20.1.jar",
+					"url": "https://github.com/Toastie0/Jobs/releases/download/v0.1.0/JobsFabric-0.1-1.20.1.jar",
+					"size": 177976,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "5f0d7558c3ebbd73c9094147fda1b07bd8b5969fb9572a9c41297fe9232f4727",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "jobs",
+							"version": "0.1-1.20.1",
+							"name": "JobsFabric",
+							"description": "A comprehensive jobs system with progression, economy rewards, and customizable tasks for Fabric servers",
+							"minecraft": "~1.20.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"impactor"
+							],
+							"provides": [
+								"fabric-permissions-api-v0",
+								"sgui"
+							],
+							"suggests": [
+								"luckperms"
+							]
+						}
+					],
+					"icon": "cbcd2e638703fa2c44c7607b962f7d5474f91bc1f53ec5b2b935bdd744194661.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 78,
+						"jars": [
+							"META-INF/jars/fabric-permissions-api-0.2-SNAPSHOT.jar",
+							"META-INF/jars/sgui-1.2.2+1.20.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# JobsFabric - Minecraft Fabric Mod\n\nA comprehensive serverside jobs system with progression, economy rewards, and customizable tasks for Minecraft 1.20.1 Fabric servers.\n\n[![Minecraft](https://img.shields.io/badge/Minecraft-1.20.1-green.svg)](https://www.minecraft.net/)\n[![Fabric](https://img.shields.io/badge/Fabric-0.18.3+-blue.svg)](https://fabricmc.net/)\n[![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://www.oracle.com/java/)\n[![License](https://img.shields.io/badge/License-CC0--1.0-blue.svg)](LICENSE)\n\n## 🌟 Features\n\n- **Multiple Jobs System**: Players can have up to 3 active jobs simultaneously\n- **Progressive Leveling**: Custom formula-based progression system with configurable requirements\n- **Economy Integration**: Integrates with Impactor Economy for monetary rewards\n- **Anti-Exploit Protection**: Prevents farming player-placed blocks and bonemeal abuse\n- **Modded Content Support**: Fully compatible with modded blocks and items\n- **Auto-Detection**: Automatically detects all ores, crops, and blocks on server startup\n- **Optional XP Rewards**: Award vanilla Minecraft XP alongside economy rewards (disabled by default)\n- **Serverside Only**: No client-side mod required - works with vanilla clients\n- **Customizable Jobs**: JSON-based configuration for easy job creation and modification\n- **Interactive GUIs**: Server-side GUI menus for job management and progress tracking\n\n## 📋 Available Jobs\n\n### Phase 1 (Implemented)\n- **⛏️ Miner**: Break ores and stones to level up\n- **🌾 Farmer**: Harvest crops and plants\n- **🏗️ Builder**: Place blocks to earn progress\n\n### Phase 2 (Planned)\n17+ additional jobs including Fighter, Fisherman, Hunter, Tamer, and more!\n\n## 🔧 Dependencies\n\n### Required (Must Install Separately)\n- **Minecraft**: 1.20.1\n- **Fabric Loader**: 0.18.3 or higher\n- **Fabric API**: 0.92.6+1.20.1\n- **Java**: 21 or higher\n- **Impactor Economy**: 5.3.0+ (for economy rewards)\n\n### Bundled (Already Included in the Mod)\n- **SgUi**: 1.2.2+1.20 (for server-side GUIs) - *No separate installation needed*\n- **Fabric Permissions API**: 0.2-SNAPSHOT - *No separate installation needed*\n\n> **Note**: These libraries are bundled for convenience. If you experience conflicts with other mods using these libraries, please report the issue on GitHub.\n\n### Optional\n- **LuckPerms**: For permission-based features (planned)\n\n## 📥 Installation\n\n1. Download the latest release: `JobsFabric-0.1-1.20.1.jar`\n2. Place in your server's `mods/` folder\n3. Install required dependencies:\n   - Fabric API (0.92.6+1.20.1)\n   - Impactor Economy (5.3.0+)\n   - *(SgUi and Fabric Permissions API are already bundled inside the mod)*\n4. Start your server\n5. Configure jobs in `config/jobs/`\n\n## ⚙️ Configuration\n\nConfiguration files are located in `config/jobs/`:\n\n### Main Config (`config.json`)\n```json\n{\n  \"jobs\": {\n    \"maxActiveJobs\": 3,\n    \"leaveCooldownMinutes\": 15,\n    \"saveProgressOnLeave\": true\n  },\n  \"storage\": {\n    \"autoSaveIntervalSeconds\": 180\n  },\n  \"autoDetection\": {\n    \"enabled\": true,\n    \"defaultOreProgress\": 1.0,\n    \"defaultCropProgress\": 1.0,\n    \"defaultBlockProgress\": 1.0\n  }\n}\n```\n\n**Auto-Detection Settings:**\n- `enabled`: Automatically scan registry for ores/crops/blocks on startup\n- `defaultOreProgress`: Default progress value for auto-detected ores\n- `defaultCropProgress`: Default progress value for auto-detected crops  \n- `defaultBlockProgress`: Default progress value for auto-detected placeable blocks\n\n> **Note**: Manual config entries always override auto-detected values!\n\n### Job Definitions (`jobs/*.json`)\nEach job has its own JSON configuration file with:\n- **Progress Formula**: Custom mathematical expressions (e.g., `100 * (level^2)`)\n- **Action Types**: `break`, `harvest`, `place`, etc.\n- **Special Progress**: Material-specific multipliers\n- **Rewards**: Economy rewards per level\n- **GUI Configuration**: Custom icons and descriptions\n\nExample job structure:\n```json\n{\n  \"id\": \"miner\",\n  \"name\": \"&6&lMiner\",\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [
+		"Jobs.png"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 10,
+		"more": 0,
+		"people": [
+			{
+				"login": "Toastie0",
+				"commits": 10,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

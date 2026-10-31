@@ -1,0 +1,505 @@
+{
+	"repo": "WaltomAdaam2/WaveXinAddon",
+	"host": "github",
+	"description": "A Meteor Client addon designed for the 2b2t.xin server | 为2b2t.xin打造的实用彗星端扩展",
+	"stars": 7,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2026-06-20T05:32:19Z",
+	"pushed": "2026-09-21T10:44:26Z",
+	"releases": [
+		{
+			"tag": "v1.8.0",
+			"published": "2026-09-21T10:00:57Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 578644922,
+					"name": "wave-xin-addon-1.8.0+mc1.21.1.jar",
+					"url": "https://github.com/WaltomAdaam2/WaveXinAddon/releases/download/v1.8.0/wave-xin-addon-1.8.0%2Bmc1.21.1.jar",
+					"size": 1449996,
+					"downloads": 33,
+					"inspection": 2,
+					"sha256": "48ecaaf4efc267c25ce5672f1236f360f35ff812e47c9a02e06521ba4b51adc8",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "wave-xin-addon",
+							"version": "1.8.0+mc1.21.1",
+							"name": "WaveXinAddon",
+							"description": "Meteor Addon for 2b2t.xin.",
+							"minecraft": "1.21.1",
+							"environment": "client",
+							"depends": [
+								"java",
+								"fabricloader",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"litematica",
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 228,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"me/waltom/wavexin/core/UpdateChecker.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"me/waltom/wavexin/core/UpdateChecker.class"
+							],
+							"ghfast.top": [
+								"me/waltom/wavexin/core/UpdateChecker.class"
+							],
+							"gh-proxy.com": [
+								"me/waltom/wavexin/core/UpdateChecker.class"
+							],
+							"gh.3w.pm": [
+								"me/waltom/wavexin/core/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 578644927,
+					"name": "wave-xin-addon-1.8.0+mc1.21.11.jar",
+					"url": "https://github.com/WaltomAdaam2/WaveXinAddon/releases/download/v1.8.0/wave-xin-addon-1.8.0%2Bmc1.21.11.jar",
+					"size": 1462791,
+					"downloads": 54,
+					"inspection": 2,
+					"sha256": "84c92aa3864b6661e918558ab795747b3303a76149637e1ba540f0f9f0c64ae9",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "wave-xin-addon",
+							"version": "1.8.0+mc1.21.11",
+							"name": "WaveXinAddon",
+							"description": "Meteor Addon for 2b2t.xin.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"fabricloader",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"litematica",
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 232,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"me/waltom/wavexin/core/UpdateChecker.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"me/waltom/wavexin/core/UpdateChecker.class"
+							],
+							"ghfast.top": [
+								"me/waltom/wavexin/core/UpdateChecker.class"
+							],
+							"gh-proxy.com": [
+								"me/waltom/wavexin/core/UpdateChecker.class"
+							],
+							"gh.3w.pm": [
+								"me/waltom/wavexin/core/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# WaveXinAddon v1.8.0\n\n本版本说明仅记录 v1.7.2 正式版到 v1.8.0 正式版之间最终保留下来的变化。核心更新是 EndBaseFinder、独立 Container Recorder、KillAura+、后台分批计算、统一诊断、更新检查、语言覆盖与 Minecraft 1.21.1 同步。Meteor 指令前缀可由用户自行设置，以下示例使用默认的 `.`。\n\n## 新增与优化\n\n- 新增 EndBaseFinder：在末地根据世界种子本地预测返回折跃门，支持 1.12、1.20.4 或 Both 生成模式、四种路线、停留、自动移动、渲染和按种子保存的访问历史。\n- EndBaseFinder 使用 `.wavexin redeem <code>` 在本地兑换后注册，成功后立即显示但不会自动开启；兑换值不写入日志或明文保存，升级后不迁移旧许可证。\n- EndBaseFinder 从扫描中心向外处理 32×32 区块任务，使用单后台线程、重叠会话缓存和批量结果合并；发现首个可用目标即可开始移动，无需等待整个半径计算完成。\n- 新增 `Rolling Radius (Chunks)` 和 `Calculation Batch (Chunks)`：滚动半径默认 1000 区块，单批预算默认 300 万区块、范围 100 万至 1 亿；尚未到达的已计算目标不超过十个时自动预取下一批。\n- 新增可选固定扫描中心，可输入末地 X/Z；关闭时使用每次启用位置作为中心，并在距当前圆形范围边缘 100 格时向玩家位置推进，同时复用重叠计算结果。\n- EndBaseFinder 常驻 Toast 分别显示 Scanning、Queued、Next Area、Complete 或 Failed，以及已计算/总区块、已到达/已发现折跃门和百分比；启动时会计入当前范围内已有的历史访问记录。\n- 1.12 与 1.20.4 预测结果使用独立可调颜色；默认 1.12 为绿色、1.20.4 为红色、当前目标为橙色、已完成为蓝色。\n- Container Recorder 从 Base Finder 中剥离为可手动启用的独立模块，使用统一 `Scan Radius`，默认四区块；保留容器类型、阈值、记录文件、末影珍珠、Xaero、成就式 Toast 和挑战提示音。\n- Normal Scan、Spiral Scan 与 EndBaseFinder 分别提供默认开启的 `Start Container Recorder`；扫描真正开始后才请求记录器，并在最后一个扫描请求结束时自动关闭。\n- 首次升级时仅迁移 Base Finder 原有的容器记录设置，不复制其启用状态、按键或其他扫描配置；独立记录器已有配置时不会被覆盖。\n- 新增 KillAura+：适配 Alienv4 的目标/好友筛选、距离与隔墙限制、低护甲优先、冷却与 TPS 时序、渐进转向、FOV、挥手方式及目标渲染，支持剑、斧和三叉戟。\n- KillAura+ 同样使用 `.wavexin redeem <code>`，但与 EndBaseFinder 使用相互独立的本地加密许可证，不能互相解锁；每次启动都会重新验证。\n- Base Finder、Elytra Fly Path 与 EndBaseFinder 现在互斥；自动导航期间统一接管 WASD、跳跃和潜行，结束后恢复真实按键状态，防止多个模块同时控制移动。\n- Better Elytra Fly 与 Elytra Fly Path 新增“上升时禁止继续加速”；上升期间暂停速度累加，但保留已经达到的速度，包括已达到的最大速度。\n- Elytra Fly Path 的 Xaero 目标改用原生临时路径点；停用或断线时按创建对象和原坐标集清理，删除失败保留句柄重试，异常退出后不会在下次启动恢复为永久点位。\n- 新增统一诊断指令 `.wavexin debug <module> on|off`，支持 `autologin`、`basefinder`、`elytraflypath`、`container`、`printer` 和 `endbasefinder`；日志分别写入 `meteor-client/wavexin/debug`。\n- 诊断日志采用每模块独立的日期序号文件名、重复事件汇总和批量刷新，减少长时间调试产生的体积及写入开销；Container Recorder 与 Printer 不再使用 GUI Debug Mode 开关。\n- 新增异步版本检查，优先 GitHub，失败后依次尝试 README 列明的 `ghfast.top`、`gh-proxy.com` 与 `gh.3w.pm`；只读取公开版本信息，不自动下载安装，可用 `.wavexin check-update true|false` 永久控制。\n- 新增 `.wavexin lang Chinese|English`，只覆盖 WaveXinAddon 自身文本；补全模块、设置组、设置、枚举、状态、错误和坐标锁定提示，不修改 Minecraft、Meteor 或其他 Addon 的语言。\n- 设置变更改为每 20 tick 检查，并在界面切换、断线和正常退出时主动保存；写入失败会继续重试。容器扫描、实体名牌、飞行速度写入和候选选择也减少了重复查询及临时对象。\n- v1.8.0 同步提供 Minecraft 1.21.11 与 1.21.1 专用 JAR；1.21.1 已适配输入、鞘翅状态、NBT、Camera、注册表、Toast、攻击包和攻击冷却字段，两个版本分别构建与测试。\n\n## 修复内容\n\n- 改善 Container Recorder 经过容器或末影珍珠却未记录的情况：加强已加载区块复查、缓存失效和记录时序，同时保留原有阈值、筛选和记录格式。\n- 修复重新启动扫描后 Container Recorder 的 Xaero 点位可能消失的问题；记录器点位保持持久，临时鞘翅目标清理不再按名称删除其他已保存点位。\n- 修复 Base Finder 或 EndBaseFinder 停用后未正确释放联动记录器，以及多个扫描并行时其中一个结束便提前关闭记录器的问题。\n- 修复扫描自动开启 Container Recorder 时缺少 Toggle 提示，以及手动关闭再开启后丢失仍在运行的扫描请求归属的问题。\n- 修复大范围 EndBaseFinder 启动时必须等待完整计算、首个目标可能从远端开始的问题；任务现在按中心优先顺序分批产生目标。\n- 修复当前批次完成后错误显示 Complete、候选耗尽后模块停止继续扫描，以及第一批无结果时空等的问题；未完成整个范围时使用 Queued 并继续按需计算。\n- 修复新候选加入时反复重排当前有效目标、逐个输出 `#1/...` 造成聊天刷屏的问题；到达编号与下一目标合并为一条消息。\n- 修复到达编号在路线重建或缓存推进时重置的问题；每次启用持续递增，并以当前范围内的历史到达数量作为初始计数。\n- 修复 EndBaseFinder Toast 换行出现异常字符、状态词不准确、区块与折跃门计数不同步，以及历史到达数高于当前发现数时百分比超过 100% 的问题。\n- 修复无效折跃门候选未过滤的问题，并加入 1.12 / 1.20.4 / Both 选择以适应包含旧版本区块的服务器；实际准确率仍取决于服务器各区块首次生成版本。\n- 修复固定扫描中心运行期间仍能修改开关、坐标或重置值的问题；模块启用时保持设置可见但锁定修改，并提示先关闭模块。\n- 修复导航模块能够同时开启并互相覆盖移动的问题；已有导航模块运行时，另外两个拒绝启动并在聊天中显示冲突提示。\n- 修复鞘翅上升过程仍持续累加加速度的问题，同时保留 v1.7.2 的固定速度、渐进速度和拉回重置行为。\n- 修复 AutoLogin 停用期间切换服务器后可能沿用旧适用状态的问题；每次重新启用都会检查当前服务器。\n- 修复设置保存失败后被误认为已经保存，以及正常退出前最后一批设置可能未刷新的问题。\n- 改善鸡与嗅探兽名牌在常用范围内的实体查询与距离计算，并在模块停用时释放实体引用。\n- Printer 的诊断日志迁移到统一调试目录和指令开关；打印、补货、选区、方向方块和会话缓存等 v1.7.2 既有功能保持不变。\n- 移除 v1.7.2 正式版中的 Turtle Potion Thrower 模块。\n- 更新中英文 README、功能逻辑、环境要求、代理说明、指令列表和透明圆角预览图，并明确两个 Minecraft 版本必须使用对应 JAR。\n- Minecraft 1.21.11 与 1.21.1 均通过完整构建、每版 23 项任务、776/776 翻译键校验及分支 CI；尚未启动 Minecraft，真实服务器检测、混合版本区块预测、可选模组接口、战斗时序、Toast 和长期运行性能仍需实机验证。\n\n**Full Changelog**: https://github.com/WaltomAdaam2/WaveXinAddon/compare/v1.7.2...v1.8.0\n\n## 留言\n如果你们在使用途中有任何的问题或者建议可以直接在github新建issue或者加我qq: 2733741581 (WaltomAdaam) 反馈问题或者提出建议功能。感谢你们的支持呀😍❤️❤️❤️。\n两个神秘兑换码（使用方式看readme）：\n\n\n..."
+		},
+		{
+			"tag": "v1.7.2",
+			"published": "2026-09-13T12:37:20Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 561129584,
+					"name": "wave-xin-addon-1.7.2+mc1.21.1.jar",
+					"url": "https://github.com/WaltomAdaam2/WaveXinAddon/releases/download/v1.7.2/wave-xin-addon-1.7.2%2Bmc1.21.1.jar",
+					"size": 1325023,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "dc2d0ecf271bab659130fcafb3b8c5ee736e5530dbc4ec10aae7b8fcf317b077",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "wave-xin-addon",
+							"version": "1.7.2+mc1.21.1",
+							"name": "WaveXinAddon",
+							"description": "Meteor Addon for 2b2t.xin.",
+							"minecraft": "1.21.1",
+							"environment": "client",
+							"depends": [
+								"java",
+								"fabricloader",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"litematica",
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 181,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 561129585,
+					"name": "wave-xin-addon-1.7.2+mc1.21.11.jar",
+					"url": "https://github.com/WaltomAdaam2/WaveXinAddon/releases/download/v1.7.2/wave-xin-addon-1.7.2%2Bmc1.21.11.jar",
+					"size": 1337758,
+					"downloads": 11,
+					"inspection": 2,
+					"sha256": "41128d84b97ab23e0b29c551745961f801d4f1a06039ea7ad13cdcfd6921e042",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "wave-xin-addon",
+							"version": "1.7.2+mc1.21.11",
+							"name": "WaveXinAddon",
+							"description": "Meteor Addon for 2b2t.xin.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"fabricloader",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"litematica",
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 185,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# WaveXinAddon v1.7.2\n\n本次更新为鞘翅飞行加入可控的速度渐进（**max鞘翅速度绕过**）与 Xaero 目标路径点，并继续完善半自动投影打印机的重试可见性和跨版本兼容。\n\n## 新增与优化\n\n- Better Elytra Fly 与 Elytra Fly Path 新增独立的速度渐进设置：初始速度、每秒增量、最高速度和可选的拉回后冷却重置。\n- Elytra Fly Path 可在启用时创建临时 Xaero 目标路径点，支持随机或指定颜色，并在停用时按对象身份尝试清理。\n- Litematica Printer 新增可配置黄色重试高亮，与绿色下一批和红色手动修正状态区分显示。\n- 中英文 README 与功能逻辑说明同步更新，明确打印机、速度渐进和路径点行为。\n\n## 修复内容\n\n- 保留旧版飞行速度配置键，升级后不会因“初始速度”显示名称而丢失用户已保存的值。\n- Xaero 运行环境不支持路径点移除反射时，仍可正常创建路径点并只给出一次警告。\n- 修复 MC 1.21.1 的 Gradle 测试 API 与滑翔状态 API 差异，两个版本均完成独立构建验证。\n\n##留言\n-如果你们在使用途中有任何的问题或者建议可以直接在github新建issue或者加我qq: 2733741581 (WaltomAdaam) 反馈问题或者提出建议功能。感谢你们的支持呀😍❤️❤️❤️。\n\n**Full Changelog**: https://github.com/WaltomAdaam2/WaveXinAddon/compare/v1.7.1...v1.7.2"
+		},
+		{
+			"tag": "v1.7.1",
+			"published": "2026-08-31T13:35:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 537830335,
+					"name": "wave-xin-addon-1.7.1+mc1.21.1.jar",
+					"url": "https://github.com/WaltomAdaam2/WaveXinAddon/releases/download/v1.7.1/wave-xin-addon-1.7.1%2Bmc1.21.1.jar",
+					"size": 1315035,
+					"downloads": 25,
+					"inspection": 2,
+					"sha256": "eb42e3c0f2bcfa0d57c03f206475d20e3c1b7afe985a548e5afd32b46a0fc426",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "wave-xin-addon",
+							"version": "1.7.1+mc1.21.1",
+							"name": "WaveXinAddon",
+							"description": "Meteor Addon for 2b2t.xin.",
+							"minecraft": "1.21.1",
+							"environment": "client",
+							"depends": [
+								"java",
+								"fabricloader",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"litematica",
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 178,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 537830336,
+					"name": "wave-xin-addon-1.7.1+mc1.21.11.jar",
+					"url": "https://github.com/WaltomAdaam2/WaveXinAddon/releases/download/v1.7.1/wave-xin-addon-1.7.1%2Bmc1.21.11.jar",
+					"size": 1327755,
+					"downloads": 35,
+					"inspection": 2,
+					"sha256": "1c4eb0bbd79f6b991217d2f579fc57a42ba4e98c515d51f2cac2c879f6743c9c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "wave-xin-addon",
+							"version": "1.7.1+mc1.21.11",
+							"name": "WaveXinAddon",
+							"description": "Meteor Addon for 2b2t.xin.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"fabricloader",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"litematica",
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 182,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# WaveXinAddon v1.7.1\n\n本次更新为 Minecraft 1.21.11 与 1.21.1 同步加入半自动 Litematica 投影打印机，并完善鞘翅飞行默认值、方向方块放置、整组补货、会话缓存和调试能力。\n\n## 新增与优化\n\n- 新增投影打印机，玩家手动移动到施工位置后，可按 Litematica 投影批量放置可触及且拥有真实支撑的方块。\n- 新增统一 Batch Planner，使下一批绿色高亮、实际放置、快捷栏换入和补货需求使用同一份确定性计划。\n- 新增 `.sel`、`.sel 1`、`.sel 2` 补货区域选择和 `.sel c` 清除，并支持区域容器渲染与缓存。\n- 新增整组补货与背包容量规划，按当前范围需求、投影距离和材料数量确定拿取优先级。\n- 新增投影进度、已验证区块和容器物品摘要的世界会话缓存，模块重新启用后可继续施工。\n- 新增每个 Minecraft 进程一份的 Printer 独立调试日志，记录规划、支撑、放置、补货、缓存和审计结果。\n- 将投影体积默认上限提高到 10,000,000，允许的硬上限提高到 500,000,000。\n- 同步提供 Minecraft 1.21.11 与 Minecraft 1.21.1 两个构建，并保留各版本专属 API 适配。\n\n## 修复内容\n\n- 修复 Printer 放置容器或交互方块时误打开交互界面的问题，并避免临时服务端旋转影响本地视角和鞘翅飞行。\n- 修复漏斗等方向方块因点击面不正确而放置失败的问题，放置后会精确核对目标方块状态。\n- 修复大箱子两半未按朝向正确合并，以及临时单箱被提前记为完成的问题。\n- 修复达到单轮重试上限后遗漏方块、需要重新开关模块才能继续的问题。\n- 修复快捷栏仍有材料时反复从背包临时换取，以及背包材料选择顺序不稳定的问题。\n- 修复投影或补货区域部分未加载时可能错误判断完成或材料不足的问题。\n- 修复 Elytra Fly Path 启用时玩家移动输入干扰路径飞行的问题，并将默认到达距离调整为 2.0。\n\n**Full Changelog**: https://github.com/WaltomAdaam2/WaveXinAddon/compare/v1.7.0...v1.7.1"
+		},
+		{
+			"tag": "v1.7.0",
+			"published": "2026-08-01T05:36:28Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 497600328,
+					"name": "wave-xin-addon-1.7.0+mc1.21.1.jar",
+					"url": "https://github.com/WaltomAdaam2/WaveXinAddon/releases/download/v1.7.0/wave-xin-addon-1.7.0%2Bmc1.21.1.jar",
+					"size": 1107634,
+					"downloads": 44,
+					"inspection": 2,
+					"sha256": "65fb945284b453b33f15de3497cde974fc329314ae4b8fdf3f1acd5dd569ad6b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "wave-xin-addon",
+							"version": "1.7.0+mc1.21.1",
+							"name": "WaveXinAddon",
+							"description": "Meteor Addon for 2b2t.xin.",
+							"minecraft": "1.21.1",
+							"environment": "client",
+							"depends": [
+								"java",
+								"fabricloader",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 94,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 497600329,
+					"name": "wave-xin-addon-1.7.0+mc1.21.11.jar",
+					"url": "https://github.com/WaltomAdaam2/WaveXinAddon/releases/download/v1.7.0/wave-xin-addon-1.7.0%2Bmc1.21.11.jar",
+					"size": 1120244,
+					"downloads": 65,
+					"inspection": 2,
+					"sha256": "00385387c404a903a0e99a3d9373e119f391d323b701d1c72105f0e253590a7d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "wave-xin-addon",
+							"version": "1.7.0+mc1.21.11",
+							"name": "WaveXinAddon",
+							"description": "Meteor Addon for 2b2t.xin.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"fabricloader",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 98,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# WaveXinAddon v1.7.0\n\n本次更新新增可独立构建和发布的 Minecraft 1.21.1 版本，并优化主线 Base Finder、Xaero 集成、自动登录诊断与多版本 CI。\n\n## 新增与优化\n\n- 新增 Minecraft 1.21.1 独立版本，并保持与 1.21.11 主线并行维护。\n- 1.21.1 使用 Minecraft 1.21.1、Yarn 1.21.1+build.3、Fabric Loader 0.15.11 与 Meteor Client 0.5.8。\n- CI 同时验证 `1.21.11`、`1.21.1` 与 `SNAPSHOT`，发布 JAR 文件名包含 Minecraft 版本。\n- Base Finder 候选渲染列表改为仅在玩家区块、路线或相关设置变化时重建。\n- 已访问区块改用 primitive long key，并在完成 ring 后清理。\n- 返回断点、已访问、当前路径和目标区块使用稳定的颜色优先级。\n- Xaero 反射调用集中到缓存桥接层，未安装 Xaero 时保持可选兼容。\n- Base Finder Area Radius 默认值调整为 5，Waypoints per Area 默认值调整为 3。\n- Auto Login 异常诊断改为 30 秒限流 WARN，且不记录凭据。\n\n## 修复内容\n\n- 修复 1.21.1 聊天头像资源使用错误命名空间而无法加载的问题。\n- 修复 Xaero 0–15 颜色顺序错误及随机颜色在路径点与提示间不一致的问题。\n- 修复 1.21.1 下模块构造、模块搜索、模块卡片 UI、设置与 NBT API 不兼容的问题。\n- 修复 1.21.1 下鞘翅状态、快捷栏槽位、渲染矩阵与物品交互 API 差异导致的构建问题。\n- 修复 1.21.1 版本误包含仅适用于新版 Meteor GUI 的主题 mixin 和不兼容模块的问题。\n\n**Full Changelog**: https://github.com/WaltomAdaam2/WaveXinAddon/compare/v1.6.5...v1.7.0"
+		},
+		{
+			"tag": "v1.6.5",
+			"published": "2026-07-30T01:53:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 494761068,
+					"name": "wave-xin-addon-1.6.5.jar",
+					"url": "https://github.com/WaltomAdaam2/WaveXinAddon/releases/download/v1.6.5/wave-xin-addon-1.6.5.jar",
+					"size": 1102354,
+					"downloads": 14,
+					"inspection": 2,
+					"sha256": "d5d144f40d80d2bd81f8ce8a2853eb89d61996a35b8def690cb333cc8157026d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "wave-xin-addon",
+							"version": "1.6.5",
+							"name": "WaveXinAddon",
+							"description": "Meteor Addon for 2b2t.xin.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"fabricloader",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 88,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# WaveXinAddon v1.6.5\n\n本次更新完善聊天白名单、神龟药水快捷投掷和末影珍珠记录，并集中提升 Base Finder 的断点恢复、扫描移动、容器检测与大坐标计算可靠性。\n\n## 新增与优化\n\n- Chat Filter 新增相互独立的 MSG 私信白名单与 Public 公共消息白名单。\n- 默认显示自己发送的公共消息，并兼容账户名与去格式、去前缀后的显示名。\n- 新增 Turtle Potion Thrower，支持主副手、Quick Swap、原槽位恢复和 Notify。\n- Base Finder 新增被扔出的末影珍珠检测及不限区域数量的 Xaero 路径点。\n- Base Finder 返回断点时使用独立可调颜色高亮目标区块。\n- Mod Menu 新增 GitHub Website 与 Issues 按钮。\n\n## 修复内容\n\n- 修复死亡消息过滤依赖颜色组合而遗漏或误判多种历史格式的问题。\n- 修复公共消息匹配过宽而误隐藏命令帮助或服务器公告的问题。\n- 修复 Turtle Potion Thrower 的副手、交互结果与槽位恢复异常。\n- 修复 Base Finder 停用时 Restart 断点字段未及时刷新的问题。\n- 修复 Normal 与 Spiral 扫描的移动、冲刺、临时视角及转角延迟残留问题。\n- 修复负坐标区块检查与返回旧断点途中状态保存错误。\n- 修复容器缓存重复遍历或遗漏延迟加载方块实体的问题。\n- 修复 Spiral 断点计算受 10,000 段限制而无法支持远距离坐标的问题。\n- 修复 Xaero 路径点名称颜色与实际写入颜色不一致的问题。\n- 修复正常的维度安全高度提示被记录为 Minecraft `ERROR` 的问题。\n\n**Full Changelog**: https://github.com/WaltomAdaam2/WaveXinAddon/compare/v1.6.4...v1.6.5"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [
+		"assets/wavexin_readme_preview.png"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 192,
+		"more": 0,
+		"people": [
+			{
+				"login": "WaltomAdaam2",
+				"commits": 192,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

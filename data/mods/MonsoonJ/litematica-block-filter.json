@@ -1,0 +1,86 @@
+{
+	"repo": "MonsoonJ/litematica-block-filter",
+	"host": "github",
+	"description": "为投影（Litematica）增加「按物品种类」渲染范围：只渲染选中的那一（几）种方块/物品，支持快捷键循环切换、多选、仅实体/仅方块，轻松放置与投影打印同步遵守过滤。A block/item-type render filter for Litematica.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-10-09T12:32:27Z",
+	"pushed": "2026-10-09T12:36:53Z",
+	"releases": [
+		{
+			"tag": "v1.0.0",
+			"published": "2026-10-09T12:33:11Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 624923334,
+					"name": "litematica_block_filter-1.0.0.jar",
+					"url": "https://github.com/MonsoonJ/litematica-block-filter/releases/download/v1.0.0/litematica_block_filter-1.0.0.jar",
+					"size": 73508,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "72a9e206b8d7979cc6d1c4097803bae11ef1b57482cf1d37b3cbbdf89cde0393",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "litematica_block_filter",
+							"version": "1.0.0",
+							"name": "Litematica Block Filter",
+							"description": "为投影（Litematica）的渲染层增加“按物品种类”过滤：整个投影只渲染选中的那一种方块/物品，快捷键可在种类之间循环切换（排序支持按数量 / 按名称 / 自定义）。\nAdds a \"by block/item type\" render scope to Litematica's render layers: only the selected block type is rendered, with a hotkey to cycle to the next type (order by count / name / custom).",
+							"minecraft": ">=26.2 <26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"malilib",
+								"litematica"
+							],
+							"provides": []
+						}
+					],
+					"icon": "43ef47693d4899c53763e62d57a37664de72ff36af23367dbd64a12979726105.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 33,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Litematica Block Filter v1.0.0\n\n给投影（Litematica）的「渲染层」增加新的选择范围：**按物品种类**。\n选中后整个投影只渲染**一种或几种**方块/物品，快捷键即可在种类之间循环切换；\n还能只渲染实体 / 只渲染方块。施工类功能（轻松放置、投影打印）同样只处理「看得见」的方块。\n\n## 安装\n\n1. 下载本页附件 `litematica_block_filter-1.0.0.jar`，放进实例的 `mods/`\n2. 同目录需要 **Litematica 0.28.x** 与 **MaLiLib 0.29.x**（前置）\n3. 环境：Minecraft 26.2 / Java 25 / Fabric Loader 0.19.x（纯客户端模组，服务端不需要装）\n\n## 主要功能\n\n- **新的渲染范围**：模式按钮循环里插入「物品种类」，位置在上方所有与全部之间；按钮会显示当前状态\n  （如 `层级：观察者 · 556 个 · 第 3/27`）\n- **渲染层界面新增按钮**：`过滤`（打开种类列表）、`内容`（方块+实体 / 仅方块 / 仅实体）、`排序`\n- **物品种类列表**：点行选中/取消（**支持多选**）、按数量/名称/自定义排序、行内上移下移、搜索、重新统计\n- **快捷键（可在 malilib 快捷键界面改）**\n  | 默认按键 | 作用 |\n  | --- | --- |\n  | `左Alt + B` | 切换下一种 |\n  | `左Alt + Shift + B` | 切换上一种 |\n  | `左Alt + G` | 打开种类列表 |\n  | `左Alt + C` | 循环渲染内容（方块+实体 / 仅方块 / 仅实体） |\n- **缺面修复**：投影的面剔除是拿邻居方块做遮挡判断的，被隐藏的邻居会把可见方块的面挡掉；\n  现在邻居会被隐藏时按「不存在」处理（方块与流体两处都修）\n- **施工同步**：准星射线与放置判定都会跳过被隐藏的方块——前面那块看不见的方块不再挡住后面的目标；\n  被隐藏的种类不会被轻松放置/打印；需要支撑的方块站不住时（如火把、铁轨、红石线而支撑未放）不会凭空放下\n\n## 兼容性\n\n- **不修改投影/malilib 的 jar**，全部通过 Mixin 挂钩；投影自身的 Mixin 只针对原版类，无冲突\n- **未开启过滤时零影响**：渲染钩子第一件事就是读一个状态位，为 false 时立即返回\n- 与 Sodium / Lithium / Tweakeroo / MiniHUD / Carpet 等无已知冲突；用 `@WrapOperation` 而非 `@Redirect`\n- 投影打印机（litematica-printer）为可选依赖：装了才会挂钩，没装时相关混入自动跳过\n- 提示默认走动作栏（不挡视野），可在 `config/litematica_block_filter.json` 里改成 `toast` / `chat` / `off`\n\n## 源码\n\n构建方式、代码结构、内部 API 挂钩点、以及每个功能的实测记录都在仓库 README 与 `验证记录.md` 里。"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [
+		"docs/screenshots/block-type-list.png",
+		"docs/screenshots/filter-off.png",
+		"docs/screenshots/filter-on.png",
+		"docs/screenshots/layer-mode-label.png",
+		"docs/screenshots/render-layer-buttons.png"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 4,
+		"more": 0,
+		"people": [
+			{
+				"login": "MonsoonJ",
+				"commits": 4,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

@@ -1,0 +1,120 @@
+{
+	"repo": "RS-256/flashbackLosslessAudioExporter",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-07-12T07:23:59Z",
+	"pushed": "2026-07-14T13:59:21Z",
+	"releases": [
+		{
+			"tag": "v0.3.0",
+			"published": "2026-07-14T13:35:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 476738783,
+					"name": "flae-v0.3.0-mc1.21.11.jar",
+					"url": "https://github.com/RS-256/flashbackLosslessAudioExporter/releases/download/v0.3.0/flae-v0.3.0-mc1.21.11.jar",
+					"size": 27887,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2f65b8e6590ead92984e719b963681f6551e3e21a2b29fa0e512447c73f4c5b8",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "flae",
+							"version": "0.3.0",
+							"name": "FLAE",
+							"description": "Exports the audio of a Flashback export as a lossless 32bit float wav, alongside the video.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api",
+								"flashback"
+							],
+							"provides": []
+						}
+					],
+					"icon": "3befd79d419f7adadbaad44a40b46468da975a761bd814507d77009972aa3bca.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 12,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 476738797,
+					"name": "flae-v0.3.0-mc26.1.2.jar",
+					"url": "https://github.com/RS-256/flashbackLosslessAudioExporter/releases/download/v0.3.0/flae-v0.3.0-mc26.1.2.jar",
+					"size": 28257,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "ab45f0ed221d08cc95ee271ba3fd646b5bc6fd24daebb8c6ad73461d58c422b9",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "flae",
+							"version": "0.3.0",
+							"name": "FLAE",
+							"description": "Exports the audio of a Flashback export as a lossless 32bit float wav, alongside the video.",
+							"minecraft": "26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api",
+								"flashback"
+							],
+							"provides": []
+						}
+					],
+					"icon": "3befd79d419f7adadbaad44a40b46468da975a761bd814507d77009972aa3bca.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 12,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v0.3.0\n\n## WAV format & sample rate options\n\n- `WAV format [FLAE]` dropdown in the export dialog: 32-bit float (lossless, default) / 32-bit int / 24-bit int / 16-bit int / 8-bit unsigned PCM\n  - applies to the wav in both normal and audio-only exports\n  - integer formats quantize with plain rounding + clamp (no dither); PCM headers drop the fact chunk (44 bytes)\n- `WAV sample rate [FLAE]` dropdown (audio-only mode only): 44100 / 48000 (native) / 96000 Hz\n  - the OpenAL loopback device is reopened at the selected rate, so the game mixes natively at it — FLAE never resamples\n  - normal (video) exports always stay at Flashback's native 48000 Hz\n\n# v0.2.0\n\n## Audio-only export mode\n\n- Toggle in Flashback's export dialog: `Audio-only (lossless WAV) [FLAE]` checkbox below the audio codec dropdown (en_us / ja_jp localized, persisted in `config/flae.json`)\n- When enabled and `Record Audio` is on:\n  - the world render and the whole FFmpeg pipeline are skipped — only the lossless wav is produced\n  - the camera still tracks its keyframed/followed position, so distance attenuation and panning stay correct\n  - progress UI, ESC cancellation and the export-done window keep working\n  - no video file is produced: the empty temp placeholder is left for Flashback's own cleanup instead of being moved next to the wav\n- Export resolution still drives the (cheap) per-frame framebuffer readback that was left intact for safety — set a small resolution for maximum speed\n\n# v0.1.0\n\nInitial release.\n\n- Mirror Flashback's export audio (`AsyncFFmpegVideoWriter#encode` の `FloatBuffer`) into a lossless wav\n  - 32bit float PCM (`WAVE_FORMAT_IEEE_FLOAT`), interleaved, 48000Hz\n  - mono/stereo follows Flashback's `stereoAudio` export setting\n  - output path: same directory / base name as the video, extension swapped to `.wav`\n- Only active when `Record Audio` is enabled in the export screen\n- Wav failures are logged and never interrupt Flashback's own video export\n- Supported: mc1.21.11 (Flashback 0.39.5), mc26.1.2 (Flashback 0.40.0)"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "A client-side Fabric mod that exports the same deterministic audio as Flashback's video export in parallel as a lossless WAV (32-bit float PCM, 48 kHz) file.",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 11,
+		"more": 0,
+		"people": [
+			{
+				"login": "RS-256",
+				"commits": 11,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

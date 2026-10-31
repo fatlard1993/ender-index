@@ -1,0 +1,332 @@
+{
+	"repo": "ThoriaDevelopment/Iustitia",
+	"host": "github",
+	"description": "IUSTITIA - A Client Sided Anti-Cheat for Minecraft 1.21.11 Fabric",
+	"stars": 7,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-06-19T06:01:42Z",
+	"pushed": "2026-10-12T18:36:33Z",
+	"releases": [
+		{
+			"tag": "v1.4.0",
+			"published": "2026-09-17T01:29:11Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 569198174,
+					"name": "iustitia-1.4.0.jar",
+					"url": "https://github.com/ThoriaDevelopment/Iustitia/releases/download/v1.4.0/iustitia-1.4.0.jar",
+					"size": 1868474,
+					"downloads": 14,
+					"inspection": 2,
+					"sha256": "15a6735c99e567f5acf3df84f35ad5bc098a286826d632b81720a3266789307e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "iustitia",
+							"version": "1.4.0",
+							"name": "Iustitia",
+							"description": "Client-sided anticheat/inspector. Detects impossible world/combat interactions from other players by parsing incoming server packets. Local-only chat alerts.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api",
+								"fabric-language-kotlin",
+								"yet_another_config_lib_v3"
+							],
+							"provides": [],
+							"suggests": [
+								"viafabricplus"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 343,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Iustitia v1.4.0\n\nClips and replay reworked, starting with the save button. Clips will now include entire scenes, save instantly, and survive a teleport. Your own body shows up in your replays now, and the mod ships five ready-made profiles instead of one. Detection gets a pass that catches closer-range cheats, and ten documented false positives are gone.\n\n## 🎬 Clips & replay\n\n**No more freezing on clip save.** The world surrounding a `/ius clip` command was once collected in its entirety when the command was issued, freezing the client while it collected hundreds of chunks' snapshots. The new process is done in the background (16 chunks/tick, first-nearest priority), while the scene is still active, allowing `/ius clip` to return instantly. The only exception would be a time period during which the background process has no data to roll up yet, namely a brand new session, or the moment the toggle has just been enabled.\n\n**Segment per place.** A clip window containing a teleport used to record only the last place visited. It now records every single place, each with its own world snapshot, and the replay contains both.\n\n**Clips record everything in the scene.** Other mobs, animals, boats and minecarts are recorded within the clip and rendered using their vanilla entity models, so a clip of a fight will show exactly what the players were fighting. The capture is capped at 64 non-player entities per tick, which keeps a crowded scene cheap to record. All block placements/destructions made during the window are recorded as well.\n\n**You are in your own replays now.** The rolling buffer recorded everyone else, so a freecam replay of a fight showed all the other players and an empty patch of ground where you had been standing. Your own body is captured like any other one, drawn at its recorded position, and your live body is hidden for the duration so you appear once instead of twice, in freecam, pov, follow and free alike. No format bump for this: your body is stored as an ordinary player, so it survives the clip round trip untouched and works under both Modern and Legacy playclip. An older clip carries no body of yours, and there the live one stays visible exactly as it did before.\n\n**Format of a clip, v13.** World per segment, block edit delta, entity capture, yaw for body/head. Any old clip works here: v2 through v12, as well as SnapClip clips. The pre-v13 layouts are coded from the format's shape rather than tested against real files, since this repo has no old clips to check them with, so treat that path as best-effort. A file that does not match is refused outright, not half-loaded, and the reader reports a truncated or unrecognized clip instead of quietly showing you a partial one. Old version of Iustitia cannot parse a v13 clip, therefore you should re-export the clip if you have to open it in the old version.\n\n**New configuration options** in `/ius config`: Clips capture entities, Entity capture cap (default 64, the per-tick limit on non-player entities), Rolling world budget, and New-segment distance. Rolling world budget restricts the amount of memory used for live capture (default value is 24 000 sections, roughly 20 to 95 MB of captured world; a fully captured 17×17 segment is about 3 500 sections, or 14 MB, so about seven of them fit the default); you may reduce the value if you have not enough memory, or increase it if `/ius record` loses some initial part of the world.\n\n## ⚒ Detection\n\n**Ghost reach.** Reach suffered from a near-distance loophole in the form of client interpolation error during movement (roughly 0.8 blocks), making a 3.6-block hit from an almost static attacker appear as jitter. The test will now be based on the direct vanilla metric in case the attacker and victim have not moved, where the interpolation error is zero, with a 3.2 cap. Koid 3.6 and LiquidBounce 4.2 modules previously passed clean; all of them trigger now.\n\n\n..."
+		},
+		{
+			"tag": "v1.3.0",
+			"published": "2026-07-15T17:08:50Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 478174622,
+					"name": "iustitia-1.3.0.jar",
+					"url": "https://github.com/ThoriaDevelopment/Iustitia/releases/download/v1.3.0/iustitia-1.3.0.jar",
+					"size": 1743870,
+					"downloads": 9,
+					"inspection": 2,
+					"sha256": "7971ecdd2c2f69f9d7d59df33a8f7c5905bd84ee07823a4b4aa7f8ab772d9be4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "iustitia",
+							"version": "1.3.0",
+							"name": "Iustitia",
+							"description": "Client-sided anticheat/inspector. Detects impossible world/combat interactions from other players by parsing incoming server packets. Local-only chat alerts.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api",
+								"fabric-language-kotlin",
+								"yet_another_config_lib_v3"
+							],
+							"provides": [],
+							"suggests": [
+								"viafabricplus"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 311,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "v1.3.0 — the moderator workflow release.\n\nBiggest additions are /ius record and /ius chathist, plus a large replay/playclip overhaul.\n\nChat history\n- /ius chathist keeps a per-player chat log. It parses past rank, star, and suffix decoration on the servers people actually play (Hypixel, ArchMC, Minemen, and more) to recover the real sender and message.\n- Per-server and persistent. Search by player, by phrase, or both.\n- Side-panel view opens a transcript in a corner overlay while the game keeps running, with auto-open on the latest transcript and long messages wrapping to the next line.\n\nRecording and replay\n- /ius record for manual long recordings when the 60-second replay window is not enough.\n- /ius replay save <name> exports the active replay to a portable .iusclip.\n- Codec v8 renders held items and armor on playclip/replay ghosts.\n- Static GPU chunk mesh for MODERN /ius playclip, a meaningful FPS fix.\n- Clips now sync with the live view: hurt flash, health, totem counter, and a block-state fix.\n- Ghosts interpolate between recorded ticks for smooth slow-mo, with billboard nametags and hold-on-end instead of auto-exit across all three modes.\n- Freecam gains a velocity model with acceleration and drag plus per-frame tickDelta interpolation for spectator-smooth camera.\n- New replayToggle keybind (numpad *) with a configurable replayKeybindSeconds (default 30).\n\nChecks\n- Three 1.21+ PvP quick wins: strafe omnisprint, through-walls match-rate, packet-gap cadence.\n- Spear reach lag-comp, a no-damage burst exemption, and chunk-playclip entity suppression.\n- Checks now self-explain across hover, transcript, and snapshot.\n\nOther\n- SafeStringArgument silences the Brigadier \"Ambiguity between arguments\" warnings.\n\nRequirements unchanged: Fabric Loader, Fabric API, Fabric Language Kotlin, Minecraft 1.21.11. Run /ius help for the full command list."
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-07-07T23:23:11Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 469664708,
+					"name": "iustitia-1.2.0.jar",
+					"url": "https://github.com/ThoriaDevelopment/Iustitia/releases/download/v1.2.0/iustitia-1.2.0.jar",
+					"size": 1648839,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "4d3f407ce9b608a65d7c015de06db477cb46513aafb02fd35efd2ed0fcd864de",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "iustitia",
+							"version": "1.2.0",
+							"name": "Iustitia",
+							"description": "Client-sided anticheat/inspector. Detects impossible world/combat interactions from other players by parsing incoming server packets. Local-only chat alerts.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api",
+								"fabric-language-kotlin",
+								"yet_another_config_lib_v3"
+							],
+							"provides": [],
+							"suggests": [
+								"viafabricplus"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 291,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Iustitia v1.2.0 — Modern Checks, Global PlayClip, Presets and Config Saving.\n\nA read-only, client-sided moderator toolkit layered on top of the detection core.\n\n## What's new\n\n### 🧾 Presets — `/ius preset [debug|moderation|lenient|standart|strict|(custom)]` `/ius createpreset [name]`\nYou can now save your presets and scroll through which one to use. I've added 5 different in-built presets that should work well for general use. If the user wants to create their own preset, they can just do /ius createpreset. This was requested by multiple people, so there it is. You can still find first launch setups by doing /ius wizard . \n\n### 📦 Modern Clips: Freecam & Map Sync — `/ius clip`, `/ius playclip`, `/ius clips` `/ius delclip`\nI've updated clips into downloading the maps and putting the user into freecam whenever the user runs /ius playclip . To access this feature, go to /ius config and change the clip's config into Modern from the standart legacy. You can now delete clips without going into iustitia folder by doing /ius delclip [clipname].\n\n### 🚫 5 Different New Checks. — `/ius config`, \n5 Different 1.21.11 Checks added, that improves support to modern versions too. Iustitia can now be called a proper Hybrid Anti-Cheat; Which both goes in depth with 1.8.9 and 1.21.11 checks.\n\n### Other\n- Docs + website refreshed to v1.2.0 and their location changed to https://thoria.fyi/iustitia .\n\n## Install\nDrop `iustitia-1.2.0.jar` into your `mods/` folder alongside Fabric API, fabric-language-kotlin, and YACL. Requires Minecraft **1.21.11** + Fabric Loader 0.19.3+. Install ViaFabricPlus to also detect on 1.8-era servers.\n\n**Full changelog**: https://github.com/ThoriaDevelopment/Iustitia/commits/main"
+		},
+		{
+			"tag": "v1.1.0",
+			"published": "2026-06-24T23:18:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 457098129,
+					"name": "iustitia-1.1.0.jar",
+					"url": "https://github.com/ThoriaDevelopment/Iustitia/releases/download/v1.1.0/iustitia-1.1.0.jar",
+					"size": 1469283,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "f9b4a569ea51cbbbab353447c9bc690ef3beecbe3eb5a775457041f5340efa08",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "iustitia",
+							"version": "1.1.0",
+							"name": "Iustitia",
+							"description": "Client-sided anticheat/inspector. Detects impossible world/combat interactions from other players by parsing incoming server packets. Local-only chat alerts.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api",
+								"fabric-language-kotlin",
+								"yet_another_config_lib_v3"
+							],
+							"provides": [],
+							"suggests": [
+								"viafabricplus"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 231,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Iustitia v1.1.0 — moderator instant-replay suite\n\nA read-only, client-sided moderator toolkit layered on top of the detection core. Everything is still local-only — no outgoing packets, no telemetry, no enforcement.\n\n## What's new\n\n### 🎬 Instant replay — `/ius replay`\nRewind the last ≤60 seconds (from a rolling 60 s capture buffer) and replay it in-world as translucent **humanoid ghost models** of every tracked player at their buffered positions, colored by their cheat tier with a floating name and a facing nub. The named player is the highlighted focus (cyan + `▶`).\n\n- `<player>` arg is **optional and overloaded**: `/ius replay 60` (60 s, no focus), `/ius replay thoria 60 0.5` (focus + slow-mo), bare `/ius replay` (default 30 s).\n- **Playback controls**: `/ius replay pause|resume|seek <s>|step +|−|speed 1|0.5|0.25|cam free|follow|pov|off`.\n- **Four numpad keybinds**: numpad 5 = pause/resume, numpad +/− = seek ±5 s, numpad 0 = exit.\n- Live players hidden by default (\"rewind feel\"); live game + detection keep running underneath and snap back on stop. Needs **Replay capture buffer** on (default on).\n\n### 🔊 Sonar — `/ius sonar [on|off]`\nDirectional audio alert on every flushed batch: **pan = direction**, **pitch = distance** (closer = higher). Eyes-free alerting — keep fighting and just listen. Additive to chat, own volume, never a replacement.\n\n### 📦 Evidence clips — `/ius clip`, `/ius playclip`, `/ius clips`\nExport the last N seconds of positions + alerts to a portable `.iusclip` file under `%APPDATA%/.iustitia/clips`. Always writes (explicit export — independent of persistence). Play back later with `/ius playclip <name>` or browse/play/delete from the `/ius clips` manager screen.\n\n### 🚫 Player exemptions & clearing — `/ius exempt`, `/ius clear`\n- `/ius exempt <name> [on|off]` skips a player at the `Check.flag` chokepoint so they never flag. Persists to `exemptions.json` across sessions and world changes. Bare `/ius exempt` lists them.\n- `/ius clear <name|all>` wipes one player's (or everyone's) flags → nametag back to green. Exemptions untouched.\n\n### Other\n- **12 keybinds** now (8 original + 4 numpad replay controls), all in Controls → Miscellaneous with a conflict-highlighting hub (`/ius keybinds`).\n- New config slices: `replayCapture`, `replayHideLive`, `replayPlayerModels`, `sonarAlerts`, `sonarVolume`.\n- Docs + website refreshed to v1.1.0.\n\n## Install\nDrop `iustitia-1.1.0.jar` into your `mods/` folder alongside Fabric API, fabric-language-kotlin, and YACL. Requires Minecraft **1.21.11** + Fabric Loader 0.19.3+. Install ViaFabricPlus to also detect on 1.8-era servers.\n\n**Full changelog**: https://github.com/ThoriaDevelopment/Iustitia/commits/main"
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-06-24T03:50:54Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 456252547,
+					"name": "iustitia-1.0.0.jar",
+					"url": "https://github.com/ThoriaDevelopment/Iustitia/releases/download/v1.0.0/iustitia-1.0.0.jar",
+					"size": 1379787,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "7d85728ac6aa32f3e83136352184cc45eb9ea8026bcfdcdf50b6802d7b5f4f6c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "iustitia",
+							"version": "1.0.0",
+							"name": "Iustitia",
+							"description": "Client-sided anticheat/inspector. Detects impossible world/combat interactions from other players by parsing incoming server packets. Local-only chat alerts.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api",
+								"fabric-language-kotlin",
+								"yet_another_config_lib_v3"
+							],
+							"provides": [],
+							"suggests": [
+								"viafabricplus"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 206,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Iustitia v1.0.0 — first stable release\n\nA client-sided Fabric anticheat for Minecraft 1.21.11. Watches *other* players from your client — 32 read-only checks, lag-aware false-positive guards, a cheater-tier prefix on every nametag, and a full observer/moderation toolkit. No server install, no outgoing packets, no telemetry.\n\n## What's new in 1.0.0\n\n### Observer tooling\n- **Confidence score & burst pulse** — every flagged nametag shows a 0-99 score (e.g. `[X 87]`) and briefly pulses when a fresh red-capable alert lands.\n- **Evidence commands** — `/ius transcript`, `/ius evidence`, `/ius note`, `/ius session`, `/ius report` give you Discord-ready timelines, moderator notes, and full report cards.\n- **Keybind hub** — eight configurable binds (snapshot, transcript, session, notes, config, compact, watch, keybinds) with a screen that lists them and highlights conflicts.\n- **Alert presets, smart batching, audio cues, lag-soften** — quiet/normal/verbose severity presets, burst collapsing, note-block cues, and `[lag]`-prefixed alerts during server lag.\n- **First-launch wizard** — General / Moderation / Ranked presets.\n- **Optional persistence** to `%APPDATA%/.iustitia` — notes and tier/flag history survive restarts.\n\n### Phase B render overlays (all client-side, no wallhack)\n- Target-highlight wireframe, ghost-trail breadcrumbs, burst sparks.\n- **Watch follow-cam** — `/ius spectate [name]` or the F9 keybind; mouse-driven orbit, F1 + third-person, auto-exits on movement or being hit.\n- Nametag-hover tooltip, tab-list tier badges, offender-selfie screenshots.\n\n### False-positive reduction\nThree external-audit verification rounds: NoKnockback shield exemption + first-tick/stale-impulse gates, ThroughWalls fail-open, cross-thread collection fixes (MultiTarget/WTap/Triggerbot), negative-coordinate floor math, RayAABB interior-origin, PitchBound VL reset, Jump-Boost arms (StepHeight/LongJump), KillAura consume gate, JumpOnHurt session-reset, TimerRate teleport-streak clear, and locale-stable JSON output.\n\n## Install\nRequires **Fabric API** + **Fabric Language Kotlin** for Minecraft 1.21.11.\n1. Install Fabric for 1.21.11.\n2. Drop Fabric API, Fabric Language Kotlin, and `iustitia-1.0.0.jar` into `.minecraft/mods/`.\n3. Launch. The first-launch wizard appears once.\n\nRead-only. No outgoing packets. No telemetry.\n\n**Full check docs:** https://thoriadevelopment.github.io/Iustitia/"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [
+		"iustitia.png"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 140,
+		"more": 0,
+		"people": [
+			{
+				"login": "ThoriaDevelopment",
+				"commits": 123,
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/ThoriaDevelopment"
+					}
+				]
+			},
+			{
+				"login": "Verslabs",
+				"commits": 9,
+				"funding": []
+			},
+			{
+				"login": "Rgxaa",
+				"commits": 2,
+				"funding": []
+			},
+			{
+				"login": "KitKatsDevelopment",
+				"commits": 2,
+				"funding": []
+			},
+			{
+				"login": "parzival-000",
+				"commits": 2,
+				"funding": []
+			},
+			{
+				"login": "CollaredKittyCat",
+				"commits": 1,
+				"funding": []
+			},
+			{
+				"login": "kragent66-glitch",
+				"commits": 1,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

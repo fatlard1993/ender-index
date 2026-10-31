@@ -51,7 +51,7 @@
 						"unreadable": []
 					},
 					"icon": "f3a000dcf4bd58e9b2f331f8440c2e01e3ce97932a550fc03d9b1d5032ca4a76.png",
-					"downloads": 41,
+					"downloads": 46,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -98,7 +98,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 4
+					"downloads": 6
 				}
 			],
 			"notes": "## SchemaForge 0.1.0 — first release (beta)\n\nA Litematica printer for Meteor Client on Minecraft 26.2. It builds the placement you have\nloaded in Litematica, walks between work areas with Baritone, and restocks from your chests.\nIt breaks nothing unless you allow it.\n\n> **Beta.** 275 unit tests pass. Verified in-game: loading, `.sf doctor`, `.sf preview`,\n> printing with Baritone navigation, safety pauses. **Not yet tried in-game:** container\n> restock, `.sf undo`, fluids, rails, the FAST profile and accurate placement.\n> Please report what breaks.\n\n### What it does\n\n- **Prints Litematica placements** — sub-regions, rotation and mirroring included. Works in\n  small clusters, layer by layer, nearest-first, with up to three verify rounds.\n- **Additive-only by default.** Wrong blocks are left alone and reported as *mismatched*;\n  Baritone is not allowed to break anything during a run.\n- **Correct orientation** for stairs, slabs, logs, furnaces, glazed terracotta, trapdoors,\n  doors (hinge included), buttons, levers, torches, ladders, signs and rails.\n- **Packet pacing** through a per-tick budget, in three profiles:\n  - `VANILLA_LEGIT` (default) — one block per tick, real rotation\n  - `FAST` — four per tick, spoofed rotation, warns in chat\n  - `CUSTOM` — your own values\n- **Baritone navigation** to clusters out of reach. Without Baritone it builds what it can reach.\n- **Material restock.** Every chest, barrel, shulker and ender chest you open is remembered;\n  `.sf scan` visits the ones nearby. When the printer runs dry it fetches what the next\n  clusters need and comes back. Nothing is ever dropped. Shulkers from your inventory can be\n  used too (off by default).\n- **Safety pauses** on damage, low food, a player nearby, an unloaded chunk, or no material left.\n- **Resume after a disconnect** with `.sf resume`, plus a progress HUD with percent,\n  blocks per minute, ETA and missing items.\n- **`.sf undo <n>`** removes the last blocks SchemaForge placed — only where the block is\n  still exactly what it placed.\n\nOptional, off by default: temporary dirt supports under floating blocks (needs additive-only\noff), water and lava sources from a bucket, rail ordering (straight first, curves last), and\naccurate placement that puts orientation into the click instead of turning the player when the\nserver speaks EasyPlace protocol V2 (Carpet) or V3 (Servux).\n\n### Commands\n\n`.sf doctor` · `.sf preview` · `.sf start` · `.sf pause` · `.sf resume` · `.sf stop` ·\n`.sf status` · `.sf materials` · `.sf containers` · `.sf scan [radius]` · `.sf undo <n>`\n\nSee the [README](https://github.com/Papxx/schemaforge#readme) for every command and setting.\n\n### Requirements\n\n| | Version | |\n|---|---|---|\n| Minecraft | 26.2 | required |\n| Fabric Loader | 0.19.3+ | required |\n| Meteor Client | 26.2 snapshot | required |\n| Litematica / MaLiLib | 0.28.8 / 0.29.6 (needs Fabric API) | needed for printing |\n| Baritone (Meteor fork) | 26.2-SNAPSHOT | optional, for walking |\n\nSchemaForge starts without Litematica or Baritone and tells you what is missing.\n\n### Install\n\nDrop `schemaforge-0.1.0.jar` into `mods/` next to Meteor Client, Litematica, MaLiLib and\nFabric API — plus Baritone if you want navigation. Start the game and run `.sf doctor`.\n\n### Known limitations\n\n- Only the first of several placements sharing a name can be selected.\n- Blocks without a placement rule yet — redstone dust, repeaters, comparators, banners,\n  plants, pressure plates, hanging signs, double slabs, opened doors, switched-on levers —\n  are skipped and listed by `.sf preview`.\n- `.sf scan` only finds containers in loaded chunks; `.sf undo` only reaches blocks near you.\n- If a run stops mid-cluster, its temporary supports stay. They are logged, and `.sf undo`\n  can remove them.\n- Empty buckets are not refilled; every fluid source needs a full bucket.\n- The ETA turns pessimistic after a long pause.\n- Baritone may leave a harmless \"client shutdown\" crash report on quit. Your world saves normally.\n\n\n\n..."
@@ -109,5 +109,17 @@
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
 	"pictures": [],
 	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"contributors": {
+		"commits": 92,
+		"more": 0,
+		"people": [
+			{
+				"login": "Papxx",
+				"commits": 92,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
 	"history": 1
 }

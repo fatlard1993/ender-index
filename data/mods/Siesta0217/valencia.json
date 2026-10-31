@@ -1,0 +1,318 @@
+{
+	"repo": "Siesta0217/valencia",
+	"host": "github",
+	"description": "Fabric mod for Lunar Client 1.21 - NoFall / XRay / MaceAura / NoSlow",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-05-19T15:49:25Z",
+	"pushed": "2026-07-16T15:26:56Z",
+	"releases": [
+		{
+			"tag": "v2.0.0",
+			"published": "2026-07-16T15:26:56Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 479324527,
+					"name": "valencia-2.0.0.jar",
+					"url": "https://github.com/Siesta0217/valencia/releases/download/v2.0.0/valencia-2.0.0.jar",
+					"size": 315121,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "57bf519461654140a6c98fef7cb4165a451193f711ecd05e769c8c422180468c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "valencia",
+							"version": "2.0.0",
+							"name": "Valencia",
+							"description": "A configurable utility client for Fabric and Lunar Client.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 131,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v2.0.0 — HUD Editor, Profiles, AutoSprint / AutoArmor, release baseline\n\n## Added\n- **HUD editor** (`.nf hud`): drag, mouse-wheel scale, nine-point anchors, safe-area clamping, snapping guides, fake-data previews, per-element and global reset. TargetHUD / ArrayList / DimCoord are all editable.\n- **Profiles** (`.nf profile`): named, versioned config snapshots with server/single-player auto-matching rules, migration from pre-profile configs (with backup), import/export, and in-game management screen.\n- **AutoSprint**: keeps vanilla sprint engaged while moving forward; respects food, sneaking, riding, item use, and collisions.\n- **AutoArmor**: equips armor upgrades via vanilla menu clicks, scoring armor/toughness/enchantments; never touches a worn elytra and freezes while fall-flying.\n- **Diagnostics** (`.nf diagnose` + GUI screen): mod/MC/loader versions, per-mixin transformation state, recent errors. A Mixin error handler downgrades a broken Valencia mixin to a visible \"unavailable\" capability instead of crashing the client, and CompatibilityGuard auto-disables modules whose mixin failed.\n- JUnit test suite, CI artifact validation (`verifyModJar`), and a Lunar smoke-test checklist (SMOKE_TEST.md).\n\n## Changed\n- Module IDs and `.nf bind` are registry-driven (`.nf bind <module> NONE` unbinds).\n- Config writes are UTF-8 and atomically replaced, with corrupt-config backup.\n- Regular builds no longer auto-deploy; use `gradlew deploy` or the release script.\n- CI now runs tests + jar validation on JDK 21 and gates every release.\n\n## Fixed (post-review)\n- AutoArmor elytra guard (see Added).\n- Mixin capability lookups cached instead of rebuilt every client tick.\n- Release script no longer runs Gradle `test` locally (impossible on Gradle 8.12 + JDK 25); CI runs the tests and still gates the release."
+		},
+		{
+			"tag": "v1.7.55",
+			"published": "2026-07-06T16:08:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 468242101,
+					"name": "valencia-1.7.55.jar",
+					"url": "https://github.com/Siesta0217/valencia/releases/download/v1.7.55/valencia-1.7.55.jar",
+					"size": 226028,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "417eff10e2393bf15a37d508178d1447040ca66e03dfaec8f5f05cacc7c4ca29",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "valencia",
+							"version": "1.7.55",
+							"name": "Valencia",
+							"description": "Valencia client — NoFall / XRay / MaceAura / NoSlow for Lunar Client 1.21.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 93,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.7.55 — Performance pass\n\nBehavior-neutral optimizations (no combat code touched):\n\n- **Debounced config saving (biggest win)** — dragging a ClickGUI slider used to serialize + write the whole config file to disk on every mouse-pixel of movement (60+ writes/sec). Saves are now coalesced to at most once per second, with a forced flush on GUI close and a JVM shutdown hook so nothing is ever lost.\n- **Waifu background loads once** instead of re-reading the file, re-decoding, and re-registering the texture (with a leak) on every ClickGUI open.\n- **GuiSkin no longer re-allocated every frame** the GUI is open — cached and rebuilt only when the style or accent changes."
+		},
+		{
+			"tag": "v1.7.54",
+			"published": "2026-07-03T17:23:39Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 465626593,
+					"name": "valencia-1.7.54.jar",
+					"url": "https://github.com/Siesta0217/valencia/releases/download/v1.7.54/valencia-1.7.54.jar",
+					"size": 225295,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "729efc00377dacd2d60a5584d61f9abb0a2bdb050d6234ae5b6e4e7a91a17bd3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "valencia",
+							"version": "1.7.54",
+							"name": "Valencia",
+							"description": "Valencia client — NoFall / XRay / MaceAura / NoSlow for Lunar Client 1.21.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 93,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.7.54 — Liquid glass rewrite: SDF-baked textures, real anti-aliasing\n\nComplete technical-path change — `g.fill` stacks can't make glass. Every glass panel is now **baked into a texture at physical-pixel resolution** (signed-distance-field): smooth anti-aliased corners, soft drop shadows, an asymmetric bright-top rim, gamma-2 specular, inner shadow, and noise dithering against banding. Cached and drawn with a single blit — faster than the old dozens of fills.\n\n- Fixed a real compositing bug: the old frost panel blended to ~55% milky white (intended 19%), washing out the blur — the single biggest \"cheap acrylic\" tell.\n- **Backdrop blur now on for every ClickGUI layout** — blur is what makes translucency read as glass.\n- Frost = light glass + dark text (finally legible); Onyx/Liquid honour your accent color (no more hard-coded sky-blue wire).\n- HUD layer switches to the iOS \"reduced transparency\" strategy: 80% opaque plate + fine rim — no more noise showing through; the moving sheen is gone from HUDs.\n- TargetHUD Liquid: HP bar snaps on target switch, dim-red damage ghost, inset portrait well. ArrayList pills off the screen edge with row gaps. Perf: color-slider drags no longer re-bake textures per pixel."
+		},
+		{
+			"tag": "v1.7.53",
+			"published": "2026-07-02T11:11:11Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 464237015,
+					"name": "valencia-1.7.53.jar",
+					"url": "https://github.com/Siesta0217/valencia/releases/download/v1.7.53/valencia-1.7.53.jar",
+					"size": 217292,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "647a4f73b514a679115d4b2cef574ec39d0cdc0fc94070bd2fb6ad566b4f2b89",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "valencia",
+							"version": "1.7.53",
+							"name": "Valencia",
+							"description": "Valencia client — NoFall / XRay / MaceAura / NoSlow for Lunar Client 1.21.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 89,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.7.53 — More iOS liquid-glass GUI + HUD\n\n- **Two new ClickGUI skins**: **Frost** (bright clear acrylic, dark text) and **Onyx** (deep smoked glass with a bright rim + accent glow). GUI Style slider now 0–6 (Dark/Light/Glass/Tenacity/Liquid/Frost/Onyx). Best over the Glass layout's real backdrop blur.\n- **TargetHUD \"Liquid\" style (5)**: iOS glass panel + a live 3D portrait of your target + an HP bar that smoothly lerps toward the real value, leaving a bright damage-trail behind a hit + a sweeping reflection.\n- **ArrayList \"Liquid\" mode**: each row becomes a frosted glass pill with an accent left edge.\n- **DimCoord \"Liquid\" toggle**: the coordinate readout wrapped in a liquid-glass panel.\n\nAll new HUD looks are opt-in toggles — existing setups unchanged."
+		},
+		{
+			"tag": "v1.7.52",
+			"published": "2026-07-02T07:04:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 464048157,
+					"name": "valencia-1.7.52.jar",
+					"url": "https://github.com/Siesta0217/valencia/releases/download/v1.7.52/valencia-1.7.52.jar",
+					"size": 214773,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "4eb75393420b15db23b8705c8a667142bbfde621ebc0c847ab613f25ce4aa8a6",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "valencia",
+							"version": "1.7.52",
+							"name": "Valencia",
+							"description": "Valencia client — NoFall / XRay / MaceAura / NoSlow for Lunar Client 1.21.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 89,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.7.52 — One-shot release script\n\n`scripts/release.sh X.Y.Z` now runs the whole ship pipeline: version bump → `assemble` → deploy to Lunar → README version refs → commit → push → GitHub release. Prerequisite checks abort early (commit message, release notes, changelog entry), and a failed build reverts the bump. This release was shipped by the script itself."
+		},
+		{
+			"tag": "v1.7.10",
+			"published": "2026-05-29T13:10:50Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 433041031,
+					"name": "valencia-1.7.10.jar",
+					"url": "https://github.com/Siesta0217/valencia/releases/download/v1.7.10/valencia-1.7.10.jar",
+					"size": 126072,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "ec7b8352424625cdb4c73e19a8a93dd1f98ca082e79c29259f85b1b766194bf3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "valencia",
+							"version": "1.7.10",
+							"name": "Valencia",
+							"description": "Valencia client — NoFall / XRay / MaceAura / NoSlow for Lunar Client 1.21.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 55,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.7.10 — ESP box renders through walls\n\nFix: the ESP Hitbox box was being occluded by terrain. Since v1.7.6 the box is drawn through the vanilla Gizmos pipeline, which is depth-tested by default — so behind a wall you'd see the floating labels (2D HUD, always on top) but no box.\n\n`Gizmos.cuboid(...)` now chains `setAlwaysOnTop()`, disabling the depth test so the box draws over everything — standard see-through-walls ESP."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 138,
+		"more": 0,
+		"people": [
+			{
+				"login": "Siesta0217",
+				"commits": 138,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

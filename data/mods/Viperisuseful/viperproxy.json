@@ -1,0 +1,406 @@
+{
+	"repo": "Viperisuseful/viperproxy",
+	"host": "github",
+	"description": "Client-side forced proxy routing with strict fail-safe kill switch for Minecraft Fabric.",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-05-09T20:33:41Z",
+	"pushed": "2026-07-12T16:30:23Z",
+	"releases": [
+		{
+			"tag": "v0.6.4",
+			"published": "2026-07-12T16:30:25Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 474537014,
+					"name": "viperproxy-0.6.4.jar",
+					"url": "https://github.com/Viperisuseful/viperproxy/releases/download/v0.6.4/viperproxy-0.6.4.jar",
+					"size": 872057,
+					"downloads": 8,
+					"inspection": 2,
+					"sha256": "971a34d4de8e7aff2383fe19d7ee5b700e0996ad62f2ad14aa00942d9c35f88a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "viperproxy",
+							"version": "0.6.4",
+							"name": "Viper Proxy",
+							"description": "Client-side forced proxy routing with strict fail-safe kill switch.",
+							"minecraft": "=26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"io_netty_netty-codec-http",
+								"io_netty_netty-codec-socks",
+								"io_netty_netty-handler-proxy"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 564,
+						"jars": [
+							"META-INF/jars/netty-codec-http-4.2.7.Final.jar",
+							"META-INF/jars/netty-codec-socks-4.2.7.Final.jar",
+							"META-INF/jars/netty-handler-proxy-4.2.7.Final.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/viperproxy/proxy/ProxyTester.class": [
+									"java/net/URL.openConnection",
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {
+							"api.ipify.org": [
+								"com/viperproxy/proxy/ProxyTester.class"
+							],
+							"localhost": [
+								"META-INF/jars/netty-codec-http-4.2.7.Final.jar!io/netty/handler/codec/http/websocketx/WebSocketClientProtocolConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Fixes authenticated SOCKS5 routing for Minecraft server resource-pack downloads. Java's resource-pack HTTP downloader identifies SOCKS credential callbacks as SERVER requests; Viper Proxy now safely accepts that callback only when it matches the active proxy protocol, host, and port. Includes a real JDK SOCKS5 authentication regression test."
+		},
+		{
+			"tag": "v0.8.2",
+			"published": "2026-07-11T12:22:25Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 473481030,
+					"name": "viperproxy-0.8.2.jar",
+					"url": "https://github.com/Viperisuseful/viperproxy/releases/download/v0.8.2/viperproxy-0.8.2.jar",
+					"size": 857678,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "8db408725bc39dfebc755a9f31db93e3e855815164d355bef89d365da735dae2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "viperproxy",
+							"version": "0.8.2",
+							"name": "Viper Proxy",
+							"description": "Client-side forced proxy routing with strict fail-safe kill switch.",
+							"minecraft": "=26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"io_netty_netty-codec-http",
+								"io_netty_netty-codec-socks",
+								"io_netty_netty-handler-proxy"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 564,
+						"jars": [
+							"META-INF/jars/netty-codec-http-4.2.7.Final.jar",
+							"META-INF/jars/netty-codec-socks-4.2.7.Final.jar",
+							"META-INF/jars/netty-handler-proxy-4.2.7.Final.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/viperproxy/proxy/ProxyTester.class": [
+									"java/net/URL.openConnection",
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {
+							"api.ipify.org": [
+								"com/viperproxy/proxy/ProxyTester.class"
+							],
+							"localhost": [
+								"META-INF/jars/netty-codec-http-4.2.7.Final.jar!io/netty/handler/codec/http/websocketx/WebSocketClientProtocolConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Minecraft 26.2 UI and profile update.\n\n- Fixes the missing-texture magenta/black logo by rendering the standalone PNG as a raw texture instead of an atlas sprite.\n- Adds an editable active-profile name field and a dedicated SAVE NAME action.\n- Renaming persists without requiring valid proxy host/port and without reconnecting or changing proxy configuration.\n- Retains the critical Connection.configureSerialization Mixin hotfix from v0.8.1.\n- Verified by clean build, Mixin bytecode checks, profile-rename regression test, packaged-resource inspection, and Minecraft 26.2 startup smoke test.\n\nSupersedes v0.8.1. The Minecraft 26.2 code remains isolated on its dedicated release branch for the later UI overhaul."
+		},
+		{
+			"tag": "v0.6.3",
+			"published": "2026-07-11T12:22:22Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 473481015,
+					"name": "viperproxy-0.6.3.jar",
+					"url": "https://github.com/Viperisuseful/viperproxy/releases/download/v0.6.3/viperproxy-0.6.3.jar",
+					"size": 870981,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "972e936c3c4f3ff0379d74f68a88e3f6f4f7d00e74a200afcf72f4a7758b6786",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "viperproxy",
+							"version": "0.6.3",
+							"name": "Viper Proxy",
+							"description": "Client-side forced proxy routing with strict fail-safe kill switch.",
+							"minecraft": "=26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"io_netty_netty-codec-http",
+								"io_netty_netty-codec-socks",
+								"io_netty_netty-handler-proxy"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 564,
+						"jars": [
+							"META-INF/jars/netty-codec-http-4.2.7.Final.jar",
+							"META-INF/jars/netty-codec-socks-4.2.7.Final.jar",
+							"META-INF/jars/netty-handler-proxy-4.2.7.Final.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/viperproxy/proxy/ProxyTester.class": [
+									"java/net/URL.openConnection",
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {
+							"api.ipify.org": [
+								"com/viperproxy/proxy/ProxyTester.class"
+							],
+							"localhost": [
+								"META-INF/jars/netty-codec-http-4.2.7.Final.jar!io/netty/handler/codec/http/websocketx/WebSocketClientProtocolConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Minecraft 26.1.2 UI and profile update.\n\n- Fixes the missing-texture magenta/black logo by rendering the standalone PNG as a raw texture instead of an atlas sprite.\n- Adds an editable active-profile name field and a dedicated SAVE NAME action.\n- Renaming persists without requiring valid proxy host/port and without reconnecting or changing proxy configuration.\n- Retains the critical Connection.configureSerialization Mixin hotfix from v0.6.2.\n- Verified by clean build, Mixin bytecode checks, profile-rename regression test, packaged-resource inspection, and Minecraft 26.1.2 startup smoke test.\n\nSupersedes v0.6.2."
+		},
+		{
+			"tag": "v0.8.1",
+			"published": "2026-07-11T00:49:01Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 473061465,
+					"name": "viperproxy-0.8.1.jar",
+					"url": "https://github.com/Viperisuseful/viperproxy/releases/download/v0.8.1/viperproxy-0.8.1.jar",
+					"size": 857457,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c66af9a97be1793c89bea5748e935c28937b6873b8645565cd2486636478b339",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "viperproxy",
+							"version": "0.8.1",
+							"name": "Viper Proxy",
+							"description": "Client-side forced proxy routing with strict fail-safe kill switch.",
+							"minecraft": "=26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"io_netty_netty-codec-http",
+								"io_netty_netty-codec-socks",
+								"io_netty_netty-handler-proxy"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 564,
+						"jars": [
+							"META-INF/jars/netty-codec-http-4.2.7.Final.jar",
+							"META-INF/jars/netty-codec-socks-4.2.7.Final.jar",
+							"META-INF/jars/netty-handler-proxy-4.2.7.Final.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/viperproxy/proxy/ProxyTester.class": [
+									"java/net/URL.openConnection",
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {
+							"api.ipify.org": [
+								"com/viperproxy/proxy/ProxyTester.class"
+							],
+							"localhost": [
+								"META-INF/jars/netty-codec-http-4.2.7.Final.jar!io/netty/handler/codec/http/websocketx/WebSocketClientProtocolConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "> [!WARNING]\n> Superseded by [v0.8.2](https://github.com/Viperisuseful/viperproxy/releases/tag/v0.8.2), which fixes the broken logo and adds safe profile renaming for Minecraft 26.2.\n\nCritical startup hotfix for Minecraft 26.2.\n\n- Replaces stale Yarn-era `Connection.addHandlers(...)` Mixin selector with unobfuscated Mojang `Connection.configureSerialization(...)`.\n- Pins compatibility to Minecraft 26.2.\n- Adds build-time bytecode verification for every Mixin injection target.\n- Verified with a clean build, packaged-JAR inspection, and real Minecraft 26.2 client startup to the title screen.\n\nSupersedes broken v0.8.0. Remove v0.8.0 from Modrinth and upload this JAR."
+		},
+		{
+			"tag": "v0.7.1",
+			"published": "2026-07-11T00:48:58Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 473061436,
+					"name": "viperproxy-0.7.1.jar",
+					"url": "https://github.com/Viperisuseful/viperproxy/releases/download/v0.7.1/viperproxy-0.7.1.jar",
+					"size": 858974,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e1748a8dd9866115d098602a95e9d611d7ff5a802cb3f102f2109998df2a1405",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "viperproxy",
+							"version": "0.7.1",
+							"name": "Viper Proxy",
+							"description": "Client-side forced proxy routing with strict fail-safe kill switch.",
+							"minecraft": "=26.2-pre.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"io_netty_netty-codec-http",
+								"io_netty_netty-codec-socks",
+								"io_netty_netty-handler-proxy"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 564,
+						"jars": [
+							"META-INF/jars/netty-codec-http-4.2.7.Final.jar",
+							"META-INF/jars/netty-codec-socks-4.2.7.Final.jar",
+							"META-INF/jars/netty-handler-proxy-4.2.7.Final.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/viperproxy/proxy/ProxyTester.class": [
+									"java/net/URL.openConnection",
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {
+							"api.ipify.org": [
+								"com/viperproxy/proxy/ProxyTester.class"
+							],
+							"localhost": [
+								"META-INF/jars/netty-codec-http-4.2.7.Final.jar!io/netty/handler/codec/http/websocketx/WebSocketClientProtocolConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Critical startup hotfix for Minecraft 26.2-pre-2.\n\n- Replaces stale Yarn-era `Connection.addHandlers(...)` Mixin selector with unobfuscated Mojang `Connection.configureSerialization(...)`.\n- Fixes Fabric's normalized Minecraft version predicate (`26.2-pre.2`).\n- Adds build-time bytecode verification for every Mixin injection target.\n- Verified with a clean build, packaged-JAR inspection, and real Minecraft 26.2-pre-2 client startup to the title screen.\n\nSupersedes broken v0.7.0. Remove v0.7.0 from Modrinth and upload this JAR."
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "patreon",
+			"url": "https://patreon.com/Viperisuseful",
+			"from": "owner-repositories"
+		},
+		{
+			"platform": "ko_fi",
+			"url": "https://ko-fi.com/viperisuseful",
+			"from": "owner-repositories"
+		}
+	],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 6,
+		"more": 0,
+		"people": [
+			{
+				"login": "Viperisuseful",
+				"commits": 6,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

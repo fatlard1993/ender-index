@@ -1,0 +1,210 @@
+{
+	"repo": "RKTakami/mia-maps",
+	"host": "github",
+	"description": "MIA map display mod",
+	"stars": 1,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-07-06T00:31:00Z",
+	"pushed": "2026-08-27T02:14:00Z",
+	"releases": [
+		{
+			"tag": "v0.1.54-alpha",
+			"published": "2026-08-27T02:14:00Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 531620920,
+					"name": "mia-mappy-0.1.54-alpha.jar",
+					"url": "https://github.com/RKTakami/mia-maps/releases/download/v0.1.54-alpha/mia-mappy-0.1.54-alpha.jar",
+					"size": 3796651,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "77aace607be694727a4a6c9cfaafad475076dac684906340ba2a80389adadf9a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mia_aperture_mod",
+							"version": "0.1.54-alpha",
+							"name": "MIA Mappy",
+							"description": "3D orthographic map, waypoint routing, and cliff-descent guidance for the Mine in Abyss server. Requires the MIA modpack's Voxy Mine in Abyss Edition fork.",
+							"minecraft": ">=1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"voxy"
+							]
+						}
+					],
+					"icon": "09b44791d4a1bf97d322613d0066868e961677b4017347dc321c3b80e6b9c9da.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 161,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"com/mia/aperture/lod/LodNative.class": [
+									"java/lang/System.load"
+								],
+								"com/mia/aperture/map/MapNative.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "> # ⚠ ALPHA RELEASE\n> **This is an alpha.** Expect rough edges, behaviour that changes between builds, and settings that\n> may move or disappear. It is not feature-complete, and it is the map I use on my own client rather\n> than a finished thing. Known rough edges are listed at the bottom.\n\nClient-side map mod for the Mine in Abyss server. Minecraft **1.21.11**, Fabric. Keeps its own LOD store of what you have seen, and reads Voxy's data as well when Voxy is installed.\n\n## The 3D map no longer takes the game with it\n\nIf you run a renderer that replaces Minecraft's OpenGL backend — [mia-vulkan](https://github.com/RKTakami/mia-vulkan), for one — there is no OpenGL context in the process at all. The 3D map's GPU renderer asked for one anyway and **aborted the whole game**: no crash report, no stack in the log, nothing naming the mod. Just a dead client.\n\nThe map now asks whether an OpenGL context exists before touching it, and **falls back to its CPU renderer** when there isn't one, rather than refusing or crashing. The 3D view works; it says `CPU` instead of `GPU` in its readout. The 2D map and minimap were never affected — they go through Minecraft's own pipeline.\n\nIt asks *\"is there a GL context\"*, not *\"is that other mod installed\"*, so it stays correct under any Vulkan renderer rather than just the one I happen to run.\n\n## A native crash can no longer vanish\n\nUnderneath that crash was a worse problem: a panic in the mod's native code cannot unwind back into Java, so **any** native failure aborted the JVM with nothing written down anywhere. Every native entry point now catches its own failures and reports one line naming the entry point, instead of taking the game with it.\n\nThis applies to **Windows as well as macOS** — it is not specific to the renderer situation above, and it turns a class of silent aborts into something you can actually report.\n\n## The 3D view draws ~75% more frames\n\nIts worker and its renderer shared a single buffer, and the worker could not start a frame until the renderer had taken the last one — which it did ten times a second. So the view was pinned at **10 frames per second no matter how fast it could actually draw**, and roughly 45% of the frames it produced were discarded before reaching the screen.\n\nMeasured on my own client, orbiting: **9.5 → 16.6 frames per second**. It is now limited by how long a frame takes to draw, which is the thing that should limit it.\n\n## Also\n\n- The 3D view's readout now shows `raster <ms>  <Hz>  upload <ms>` — draw time, frames per second, and what a frame costs the render thread. Useful when reporting that something feels slow. It reads `0Hz` when the camera is still, because nothing is being redrawn; drag for a few seconds first.\n- Switching servers now logs that the 3D view reset, so a stale frame carrying over from the world you just left is diagnosable rather than mysterious.\n\n## Platforms\n\nShips native libraries for **macOS** (Intel + Apple Silicon) and **Windows**. **No Linux build** in this release.\n\n## Known rough edges\n\n- **Cave mode zoomed in close can look sparse.** The sampled band gets thinner than the cave slab, so there is little left to draw. Use relief or vanilla (`V`) there. Unchanged from the previous release; it is next on my list.\n- The widest 3D zooms allocate noticeably more memory than earlier builds. Comfortable on 16 GB; if you are on 8 GB with a heavy modpack, lower **3D Area** or **3D Quality**.\n- Under a Vulkan renderer the 3D view runs on the CPU. It is usable and, after this release, considerably smoother — but it is not the GPU path, and wide zooms cost more there."
+		},
+		{
+			"tag": "v0.1.49-alpha",
+			"published": "2026-08-11T23:05:41Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 510755805,
+					"name": "mia-mappy-0.1.49-alpha.jar",
+					"url": "https://github.com/RKTakami/mia-maps/releases/download/v0.1.49-alpha/mia-mappy-0.1.49-alpha.jar",
+					"size": 3784630,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "e16bf0249dcda891b2d0a36a6ddff27a699cd77460950be4fb9243b9a49717ea",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mia_aperture_mod",
+							"version": "0.1.49-alpha",
+							"name": "MIA Mappy",
+							"description": "3D orthographic map, waypoint routing, and cliff-descent guidance for the Mine in Abyss server. Requires the MIA modpack's Voxy Mine in Abyss Edition fork.",
+							"minecraft": ">=1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"voxy"
+							]
+						}
+					],
+					"icon": "09b44791d4a1bf97d322613d0066868e961677b4017347dc321c3b80e6b9c9da.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 158,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"com/mia/aperture/lod/LodNative.class": [
+									"java/lang/System.load"
+								],
+								"com/mia/aperture/map/MapNative.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "> # ⚠ ALPHA RELEASE\n> **This is an alpha.** Expect rough edges, behaviour that changes between builds, and settings that\n> may move or disappear. It is not feature-complete, and it is the map I use on my own client rather\n> than a finished thing. Known rough edges are listed at the bottom.\n\nClient-side map mod for the Mine in Abyss server. Minecraft **1.21.11**, Fabric. Reads Voxy's LOD data — **Voxy must be installed with its ingest enabled**, or the map is blank.\n\n## See into the caves\n\nThe 3D view used to draw the walls of the region it sampled — a floor under your feet, a lid overhead and four sides around you. None of that is terrain; it is an artefact of where sampling stopped, and it hid the thing you opened the map to look at. All six are gone, so cave mode now reads like an X-ray of the passage network rather than the outside of a box.\n\nCave mode is also **see-through by default** now. Previously it needed cutaway (`C`) to get inside at all, because its carve seals everything outside the slab into solid rock.\n\n## Height at a glance\n\nPassages and terrain **above** you are tinted red, **below** you blue, with your own level left alone. It works the same way in the 3D view, on cave maps, and — new in this release — on the ordinary 2D map, matching the colours already used for mob labels. One convention everywhere: red means above, whichever map you are looking at.\n\n## Cave mode switches itself on\n\nWalk under a low ceiling and the map moves to cave mode; come back out into the open and it returns to whatever mode you were using. Choosing a mode by hand always wins until you leave. Turn it off with **Auto Cave Mode** in map settings.\n\nSky visibility is not the trigger — in the Abyss you cannot see the sky anywhere, even standing in the open, so it would engage on entry and never let go. Ceiling distance is what actually separates a passage from a cavern floor.\n\n## Also\n\n- The 3D view samples **twice as wide** at every zoom, at the same level of detail\n- **Settings tidied**: diagnostics moved behind a **Test Settings** page, so the everyday controls are one list\n- New controls: **Cave See-Through** strength, **Cave slab** thickness (this one existed but had no slider at all), **3D Smooth Surfaces**\n- Fixed: the 3D map rendering entirely red — a diagnostic tint was being saved to the config and survived restarts\n\n## Platforms\n\nShips native libraries for **macOS** (Intel + Apple Silicon) and **Windows**. **No Linux build** in this release.\n\n## Known rough edges\n\n- **Cave mode zoomed in close can look sparse.** The sampled band gets thinner than the cave slab, so there is little left to draw. Use relief or vanilla (`V`) there.\n- The widest 3D zooms allocate noticeably more memory than previous builds. Comfortable on 16 GB; if you are on 8 GB with a heavy modpack, lower **3D Area** or **3D Quality**."
+		},
+		{
+			"tag": "v0.1.48-alpha",
+			"published": "2026-08-03T02:11:54Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 499494328,
+					"name": "mia-mappy-0.1.48-alpha.jar",
+					"url": "https://github.com/RKTakami/mia-maps/releases/download/v0.1.48-alpha/mia-mappy-0.1.48-alpha.jar",
+					"size": 3691617,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "3d35fd8bde01b4e2e7f521d551a1e83b03c78e9854dc584b2ce7b20e39d80710",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mia_aperture_mod",
+							"version": "0.1.48-alpha",
+							"name": "MIA Mappy",
+							"description": "3D orthographic map, waypoint routing, and cliff-descent guidance for the Mine in Abyss server. Requires the MIA modpack's Voxy Mine in Abyss Edition fork.",
+							"minecraft": ">=1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"voxy"
+							]
+						}
+					],
+					"icon": "09b44791d4a1bf97d322613d0066868e961677b4017347dc321c3b80e6b9c9da.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 147,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"com/mia/aperture/lod/LodNative.class": [
+									"java/lang/System.load"
+								],
+								"com/mia/aperture/map/MapNative.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Mappy does maps.\n\nThis release removes the distance-terrain rendering path from the mod and keeps the store it was built on, so the map keeps every source it had while the mod stops carrying a renderer it did not need.\n\n## Mappy renders maps, not world terrain\n\nThe in-world LOD terrain renderer, the distance probe, and the backend selector are gone — `LodWorldRenderer`, `LodSectionMesh`, `DistanceProbe`, and `LodBackend`, along with the `lodWorldRender`, `lodDistanceProbe`, and `lodBackend` settings. None of them fed the map. Distance terrain in the world is a separate concern and belongs in a separate mod.\n\n## The store is part of Mappy now\n\nThe LOD store was a separate crate the mod loaded by name. It is vendored into this repository as `lod-native` and built by the Gradle build, so a clone builds a working mod with no external checkout. 2,197 lines, 62 Rust tests.\n\nThe store directory is `.mia-lods`, and an existing `.mia-loddy` directory is still honoured where it is found — renaming would orphan everything already captured.\n\n## Sources\n\nThe map still reads from Voxy where Voxy is present, and from its own store where it is not. Nothing about that changed; the difference is that the store now ships with the mod instead of being a separate build.\n\n## Build\n\nThe jar carries all four natives. 313 Java tests and 62 Rust tests pass.\n\nPre-release: version numbering moves to `-alpha` while the store change settles."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 649,
+		"more": 0,
+		"people": [
+			{
+				"login": "crkt",
+				"commits": 649,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

@@ -1,0 +1,176 @@
+{
+	"repo": "AUNPP-CN/Dustbin-Mod",
+	"host": "github",
+	"description": "Fabric mod for Minecraft 26.2: turns vanilla item despawn into a retrievable shared dustbin.",
+	"stars": 0,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-09-10T12:47:41Z",
+	"pushed": "2026-09-27T06:32:57Z",
+	"releases": [
+		{
+			"tag": "26.2-Fabric-v1.1.0",
+			"published": "2026-09-13T14:47:58Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 561384906,
+					"name": "dustbin-fabric-1.1.0.jar",
+					"url": "https://github.com/AUNPP-CN/Dustbin-Mod/releases/download/26.2-Fabric-v1.1.0/dustbin-fabric-1.1.0.jar",
+					"size": 248633,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "c9b0b198479392ae9f905045961e5a99a1253e68d43901e6ac8d8af51307e6fc",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dustbin",
+							"version": "1.1.0",
+							"name": "Dustbin",
+							"description": "Dropped items that would despawn are instead collected into a shared per-dimension trash bin (54 slots). Each item type takes exactly one slot and is stored up to that item's own max stack size; any overflow is discarded. The bin is take-only - you can withdraw items but cannot put them in by hand. Operators can use /dustbin clear and /dustbin settime <minutes>.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "eca1cc2285e476dcf289bed92d6ab07fa6f75ddd6258d9356392b63c2c430049.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Equipment Bin",
+								"Kitchen Waste Bin",
+								"Mineral Bin",
+								"Other Bin"
+							],
+							"item": [
+								"Equipment Bin",
+								"Kitchen Waste Bin",
+								"Mineral Bin",
+								"Other Bin"
+							],
+							"group": [
+								"More Bins"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 20,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Dustbin 1.1.0\n\n**Minecraft 26.2 ・ Fabric ・ Java 25 ・ CC BY-NC-SA 4.0**\n\n> 掉落物不再无声消失 —— 它们会按类别滑进垃圾桶。\n> Dropped items no longer vanish silently — they sort themselves into a bin.\n\n垃圾桶从一种变成**四种**：厨余、装备、矿物，以及兜底的其他。\nThe bin becomes **four bins**: kitchen waste, equipment, minerals, and a catch-all.\n\n![垃圾桶的关闭与打开状态 / Closed and open states](https://raw.githubusercontent.com/AUNPP-CN/Dustbin-Mod/Fabric/docs/preview.png)\n\n*左：关盖 · 右：开盖（95°）。由方块模型离线渲染。*\n*Left: closed · Right: open at 95°. Rendered offline from the block model.*\n\n---\n\n## 概述 / Overview\n\n1.0.0 把所有掉落物收进同一个桶；1.1.0 让它们**各归其类** —— 骨头和食物进厨余桶，镐斧剑与护甲进装备桶，矿石和锭进矿物桶，其余照旧进其他桶。\n\nIn 1.0.0 every dropped item went into the same bin; 1.1.0 **sorts them** — bones and food into the Kitchen Bin, tools and armour into the Equipment Bin, ores and ingots into the Mineral Bin, and everything else into the Other Bin.\n\n分类规则**全部写在数据包标签里**，可以直接改标签、或用数据包覆盖，**不需要重新编译模组**。\nAll classification lives in **datapack tags**, so you can retune it by editing a tag or overriding it from a datapack — **no recompiling needed**.\n\n四种桶依然是**兜底机制，不是无限仓库** —— 对应种类的桶满了以后，物品回落到原版行为正常消失，**不会串到别的桶里**。\n\nEach bin is still a **safety net, not unlimited storage** — once the bin an item belongs to is full, the item falls back to vanilla despawn and is **never diverted into another bin**.\n\n---\n\n## 本版亮点 / What's in 1.1.0\n\n- **四类垃圾桶，各收各的**：判定顺序 **装备 → 厨余 → 矿物 → 其他**，第一个匹配的生效。\n  **Four bins, each with its own domain**: the order is **equipment → kitchen → minerals → everything else**, first match wins.\n- **厨余垃圾桶**：骨头、骨粉、各类种子、腐肉、蜘蛛眼、毒马铃薯、甜菜根、蛋糕，**以及任何带食物组件的物品** —— 所以模组加的食物无需逐个适配就会自动进来。「放下才能吃」的食物方块（寿司拼盘、各类整块派）与动物饲料（**马食**、狗粮）也在其列。\n  **Kitchen Bin**: bone, bone meal, seeds, rotten flesh, spider eye, poisonous potato, beetroot, cake, **plus anything carrying the food component** — so modded food is picked up with no per-mod work. Food blocks you must place before eating (sushi platters, whole pies) and animal feed (**horse feed**, dog food) are included too.\n- **装备垃圾桶**（1.0.0 里叫「工具垃圾桶」）：镐、锹、斧、锄、剑、矛、**盾牌与三叉戟**，以及四件套护甲；通用刀具标签让各类厨刀一并归入。剪子、打火石、刷子、钓鱼竿**不算**装备，仍进其他桶。\n  **Equipment Bin** (called the \"Tool Bin\" in 1.0.0): pickaxes, shovels, axes, hoes, swords, spears, **shields and tridents**, plus all four armour slots and knives from the shared tool tag. Shears, flint and steel, brushes and fishing rods are **not** equipment and stay in the Other Bin.\n- **矿物垃圾桶**：八类矿石（煤/铜/铁/金/钻石/绿宝石/青金石/红石）、下界石英矿石、原矿与粗矿块、煤炭与木炭、金属粒、铜块（含氧化与涂蜡变种）、各类锭（铁/金/铜/下界合金）、下界合金碎片、钻石、绿宝石、青金石、红石、下界石英、紫水晶碎片、远古残骸，以及矿物块。**不收加工品** —— 铜门、铜台阶、红石灯、石英楼梯这类建材仍进其他桶。\n  **Mineral Bin**: the eight ore types (coal / copper / iron / gold / diamond / emerald / lapis / redstone), nether quartz ore, raw ores and raw ore blocks, coal and charcoal, metal nuggets, copper blocks (including oxidised and waxed variants), every ingot (iron / gold / copper / netherite), netherite scrap, diamond, emerald, lapis lazuli, redstone, nether quartz, amethyst shards, ancient debris and the mineral blocks. **Crafted goods are excluded** — copper doors, copper stairs, redstone lamps and quartz stairs stay in the Other Bin.\n- **专属创造栏「更多的垃圾桶 / More Bins」**：四种桶集中在一处，不再散落在原版「建筑方块」栏。\n  **Dedicated creative tab, More Bins**: all four bins in one place instead of scattered through vanilla's Building Blocks tab.\n- **成就「回收再利用！/ Recycle!」**：首次合成任意一种垃圾桶时解锁（`goal` 级，有弹窗与聊天播报）。\n  **Advancement, Recycle!**: unlocked the first time you craft any bin (goal frame, with toast and chat announcement).\n- **老存档平滑升级**：1.0.0 存下的世界直接可用，**原普通桶里的物品一件不丢**。\n  **Smooth upgrade from old saves**: worlds saved by 1.0.0 keep working, and **nothing in the original bin is lost**.\n\n---\n\n## 四类垃圾桶 / The four bins\n\n| 垃圾桶 Bin | 收什么 What it collects | 中心材料 Core item |\n| --- | --- | --- |\n| **其他垃圾桶 / Other Bin** | 兜底 —— 其它三类都不匹配的物品。Anything left over. | 箱子 / Chest |\n| **厨余垃圾桶 / Kitchen Bin** | 食物与厨余。Food and kitchen scraps. | 骨头 / Bone |\n| **装备垃圾桶 / Equipment Bin** | 工具、武器、护甲。Tools, weapons and armour. | 铁镐 / Iron Pickaxe |\n\n..."
+		},
+		{
+			"tag": "26.2-Fabric-v1.0.0",
+			"published": "2026-09-10T14:20:24Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 559464854,
+					"name": "dustbin-fabric-1.0.0.jar",
+					"url": "https://github.com/AUNPP-CN/Dustbin-Mod/releases/download/26.2-Fabric-v1.0.0/dustbin-fabric-1.0.0.jar",
+					"size": 153691,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "14a4d63e4fce2b69831eae176f725f25f87a60275ebe329c57239968828ad24c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dustbin",
+							"version": "1.0.0",
+							"name": "Dustbin",
+							"description": "Dropped items that would despawn are instead collected into a shared per-dimension trash bin (54 slots). Each item type takes exactly one slot and is stored up to that item's own max stack size; any overflow is discarded. The bin is take-only - you can withdraw items but cannot put them in by hand. Operators can use /dustbin clear and /dustbin settime <minutes>.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "6132db6e7948ab6d3cd40022f82a7c88ab436b0daec555f6d3feb85dfd6c8914.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Trash Bin"
+							],
+							"item": [
+								"Trash Bin"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 17,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Dustbin 1.0.0\n\n**Minecraft 26.2 ・ Fabric ・ Java 25 ・ CC BY-NC-SA 4.0**\n\n> 掉落物不再无声消失 —— 它们会滑进一个共享的垃圾桶。\n> Dropped items no longer vanish silently — they slide into a shared trash bin.\n\n首个正式版本，功能集已稳定。 / First stable release; the feature set is frozen.\n\n![垃圾桶的关闭与打开状态 / Closed and open states](https://raw.githubusercontent.com/AUNPP-CN/Dustbin-Mod/Fabric/docs/preview.png)\n\n*左：关盖 · 右：开盖（95°）。由方块模型离线渲染。*\n*Left: closed · Right: open at 95°. Rendered offline from the block model.*\n\n---\n\n## 概述 / Overview\n\n原版中掉落物会在 5 分钟后直接消失，不留痕迹。本模组改写了这条逻辑：物品存活到设定阈值后**被收入垃圾桶**，你随时可以打开界面把东西取回来。\n\nIn vanilla, dropped items simply despawn after 5 minutes. This mod rewrites that path: once an item reaches the configured age it is **collected into a bin**, and you can open the GUI to take it back at any time.\n\n垃圾桶是**兜底机制，不是无限仓库** —— 满了以后，物品回落到原版行为正常消失。\n\nThe bin is a **safety net, not unlimited storage** — once full, items fall back to vanilla despawn.\n\n---\n\n## 本版亮点 / What's in 1.0.0\n\n- **取消原版 5 分钟消失**：收集阈值默认 **1 分钟**，可调范围 **1 ~ 1440 分钟**。\n  **Vanilla despawn is cancelled**: the collection threshold defaults to **1 minute**, adjustable from **1 to 1440 minutes**.\n- **可朝向的桶身**：放置时正面朝向你，盖子朝远离你的一侧翻起 —— 从哪边放，就从哪边打开。\n  **Directional bin**: the front faces you when placed and the lid tips away from you — whichever side you place it from is the side it opens towards.\n- **石镐及以上可挖**：木镐挖了不掉落；硬度与箱子同档，用镐片刻即掉。\n  **Stone pickaxe or better**: a wooden pickaxe yields nothing; hardness matches a chest's, so a pickaxe takes it down in moments.\n- **54 格共享存储**：同一维度内所有垃圾桶共用一份存储，不是每个方块各存一份。\n  **54 slots, shared per dimension**: every bin in a dimension reads the same storage, not one store per block.\n- **一种物品只占一格**：相同 id + 组件视为同种，绝不跨格堆放；每格上限等于该物品自身的堆叠上限（鸡蛋 16、石头 64、工具 1），超出部分直接丢弃。\n  **One item type per slot**: matching id + components count as one type and never span slots; the per-slot cap equals the item's own max stack size (eggs 16, stone 64, tools 1), and any overflow is discarded.\n- **只取不放的界面**：6×9 标准箱子布局，但所有格子都禁止放入（拖入、Shift 点击均无效）。想往桶里塞东西只有一条路 —— 丢在地上等它自己进去。\n  **Take-only GUI**: a standard 6×9 chest layout with placement blocked in every slot (drag and shift-click alike). The only way in is to drop the item on the ground.\n- **开盖动画**：打开界面时桶盖掀起，关闭时合上；由 BlockEntityRenderer 逐帧插值，不是瞬间切换。ESC、走远、死亡、切换维度都会触发合盖。\n  **Animated lid**: the lid lifts on GUI open and folds back on close, interpolated frame-by-frame by a BlockEntityRenderer — not an instant state swap. ESC, walking away, dying, or changing dimension all close it.\n- **管理指令**：`/dustbin clear` 清空并反馈清掉的物品组数；`/dustbin settime <minutes>` 设置收集阈值。\n  **Admin commands**: `/dustbin clear` empties the bin and reports how many stacks were cleared; `/dustbin settime <minutes>` sets the collection threshold.\n\n---\n\n## 合成 / Crafting\n\n8 个铁锭围 1 个箱子 / 8 iron ingots around 1 chest:\n\n```\nI I I\nI C I\nI I I\n```\n\n`I` = 铁锭 / Iron Ingot ・ `C` = 箱子 / Chest\n\n---\n\n## 指令 / Commands\n\n| 指令 Command | 作用 Description |\n| --- | --- |\n| `/dustbin clear` | 清空垃圾桶，反馈清掉的物品组数。Empty the bin; reports how many stacks were cleared. |\n| `/dustbin settime <minutes>` | 设置收集阈值，范围 1 ~ 1440 分钟。Set the collection threshold (1–1440 minutes). |\n\n单人世界的房主可直接使用；多人服务器需要管理员权限。\nSingleplayer hosts can use them directly; multiplayer servers require admin permission.\n\n---\n\n## 安装 / Installation\n\n1. 安装 **Fabric Loader ≥ 0.19.3** 与 **Fabric API**。\n   Install **Fabric Loader ≥ 0.19.3** and **Fabric API**.\n2. 把 `dustbin-fabric-1.0.0.jar` 放进 `mods/` 目录。\n   Put `dustbin-fabric-1.0.0.jar` into your `mods/` folder.\n3. 需要 **Java 25** 运行时。\n   Requires a **Java 25** runtime.\n\n模组身份标识（mod id）为 `dustbin`，**不随模组端变化**；只有产物文件名带模组端后缀。这样将来从 Fabric 构建切换到其他模组端时，存档里的垃圾桶与桶内物品可以原样保留。\n\nThe mod id is `dustbin` and **stays the same across loaders**; only the artifact filename carries a loader suffix. That way, moving a world to another loader keeps every trash bin and its contents intact.\n\n---\n\n## 兼容性 / Compatibility\n\n| 项目 Component | 要求 Requirement |\n| --- | --- |\n| Minecraft | 26.2 |\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [
+		"docs/bins-preview.png",
+		"docs/preview.png",
+		"docs/texture-layout.png",
+		"docsite/public/images/bins-preview.png",
+		"docsite/public/images/ghs.png",
+		"docsite/public/images/preview.png",
+		"docsite/public/images/texture-layout.png",
+		"贴图/2d9cab59588822b55be066fa99824601.png",
+		"贴图/9bc098054f9a2171a8330c20ffdc448c.png",
+		"贴图/a9ff20d239811aec50acbf82057f2384.png",
+		"贴图/d48e83f83bf21f9942d9456b39e82f2b.png",
+		"贴图/ee15ed15eec4e1131ef4557d96da4831.png"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 41,
+		"more": 0,
+		"people": [
+			{
+				"login": "MinCiallo",
+				"commits": 40,
+				"funding": []
+			},
+			{
+				"login": "XY845",
+				"commits": 1,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

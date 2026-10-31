@@ -2,12 +2,100 @@
 	"repo": "APonder-Dev/ECC-VMRBooklet",
 	"host": "github",
 	"description": "Client-side Fabric mod that tracks your progress through the VMR Booklet collection event (EcoCityCraft) - searchable item list, recipe lookups, and Google Sheets sync.",
-	"stars": 0,
+	"stars": 1,
 	"archived": false,
 	"license": "CC0-1.0",
 	"created": "2026-10-28T03:43:04Z",
-	"pushed": "2026-10-29T07:23:16Z",
+	"pushed": "2026-10-30T16:40:19Z",
 	"releases": [
+		{
+			"tag": "v1.0.2",
+			"published": "2026-10-30T16:41:27Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 692732410,
+					"name": "vmrbooklet-1.0.2.jar",
+					"url": "https://github.com/APonder-Dev/ECC-VMRBooklet/releases/download/v1.0.2/vmrbooklet-1.0.2.jar",
+					"size": 218911,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "7447621846a564a62fb2583d068b1ed94c9c2c14bc337c5e6b02f5b4b6d7505b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "vmrbooklet",
+							"version": "1.0.2",
+							"name": "VMR Booklet",
+							"description": "A client-side tracker for the VMR Booklet collection event. Browse every item's progress in a searchable list, synced from your Google Sheet. Works on any server; nothing installed server-side.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "e7681741df50ccd1fa3c35e7e4d1db63d7122f3356f2d79f86c09180b3369ec0.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 54,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/aponder/vmrbooklet/client/BookletPasteService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.close"
+								],
+								"dev/aponder/vmrbooklet/client/BookletSheetWriter.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.close",
+									"java/net/http/HttpClient.send"
+								],
+								"dev/aponder/vmrbooklet/client/BookletUpload.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.close"
+								],
+								"dev/aponder/vmrbooklet/client/GoogleServiceAccount.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.close"
+								]
+							}
+						},
+						"hosts": {
+							"api.mclo.gs": [
+								"dev/aponder/vmrbooklet/client/BookletPasteService.class"
+							],
+							"sheets.googleapis.com": [
+								"dev/aponder/vmrbooklet/client/BookletSheetWriter.class"
+							],
+							"docs.google.com": [
+								"dev/aponder/vmrbooklet/client/BookletUpload.class"
+							],
+							"oauth2.googleapis.com": [
+								"dev/aponder/vmrbooklet/client/GoogleServiceAccount.class"
+							],
+							"www.googleapis.com": [
+								"dev/aponder/vmrbooklet/client/GoogleServiceAccount.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n\n- A \"Category\" filter button, next to Show/Sort, that narrows the list to one of Minecraft's own creative-inventory groupings (Building Blocks, Natural Blocks, Redstone, Tools & Utilities, Combat, Food & Drinks, Ingredients, Spawn Eggs, etc.). Left-click cycles through them one at a time; right-click opens a dropdown to jump straight to any of them.\n- ~126 acquisition notes (all 87 spawn eggs, plus items like barrier, the command blocks, debug stick, spawner, trial spawner, structure/jigsaw/test blocks, vault, and several rare head/trim drops) now document VMR's rare crate as a real survival source, alongside each item's existing normal-mode explanation. Phantom Membrane's note also now explains the crate is the *only* real source, since phantom spawning is disabled on this server.\n\n### Changed\n\n- Pottery sherd acquisition notes now name each sherd's actual source structure and drop chance (desert pyramid, desert well, warm/cold ocean ruins, trail ruins, or trial chambers vault pots) instead of one generic \"could be any of these\" note shared by all 23.\n\n### Fixed\n\n- Colored shulker box acquisition notes said dyeing one takes 8 dye - it only takes 1.\n- Blue/brown egg acquisition notes wrongly attributed egg color to a chicken's \"feather color variant\" - it's actually determined by the biome a chicken spawned in (cold biomes lay blue, warm biomes lay brown), inherited from one parent on breeding.\n- Grass block, podzol, mycelium, and crimson/warped nylium notes didn't mention Silk Touch is required to pick them up as themselves (otherwise they drop dirt/netherrack).\n- All 18 ore block acquisition notes (surface and deepslate) now correctly explain Silk Touch keeps the ore block itself, the right pickaxe tier drops the raw resource instead, and a too-weak tool drops nothing at all.\n- All 14 leaf-type acquisition notes now correctly explain Silk Touch or shears are required to keep the leaves block itself - breaking them any other way only has a small chance at a sapling/stick/apple/propagule, never the leaves.\n- Chorus flower's note now covers its full drop behavior: Silk Touch, explosions, and the full list of projectiles that knock it loose.\n- Sculk's note now covers ancient city treasure chests, the hoe speed bonus, and that only Silk Touch keeps the block (anything else just gives experience).\n- The 7 infested stone/cobblestone/deepslate variants now correctly note they're VMR rare-crate exclusive, not naturally mineable on the server.\n- Copper oxidation notes (24 entries) now include the 4-block spacing tip for fastest oxidation.\n- The base Copper Golem Statue's note described the wrong oxidation stage (a copy-paste of the fully-oxidized one's wording).\n- Grammar: \"the copper bars oxidizes\" -> \"oxidize\", on all 3 oxidation-stage entries.\n- The B key could steal keystrokes from an unrelated open screen's own text field (the real Creative Inventory's search box, a sign, an anvil, chat) instead of only opening/closing the booklet.\n- Several hardening fixes to the new Category filter found during a follow-up deep QA pass: a possible UI freeze if creative-tab data wasn't ready yet, the category cache never clearing on disconnect/server-switch, and no protection against another mod's own creative-tab code throwing an exception.\n- Trial chamber vault loot notes (armor trims, banner patterns, music discs, the Heavy Core, Ominous Bottle) now correctly distinguish regular vaults from ominous vaults, with drop chances. Music Disc Relic was wrongly listed as ominous vault loot - it's actually from brushing suspicious gravel at trail ruins. Music Disc Creator (Music Box) was wrongly listed as vault loot - it's from breaking decorated pots.\n- Ominous Bottle now also notes it's a guaranteed drop from pillager raid captains, not just vault RNG.\n\n..."
+		},
 		{
 			"tag": "v1.0.1",
 			"published": "2026-10-29T07:24:24Z",
@@ -18,7 +106,7 @@
 					"name": "vmrbooklet-1.0.1.jar",
 					"url": "https://github.com/APonder-Dev/ECC-VMRBooklet/releases/download/v1.0.1/vmrbooklet-1.0.1.jar",
 					"size": 208937,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "bf6fbfe4fe2f5c32bfc91f23f5de2b9d8710666596d52d176c51501879f7678c",
 					"mods": [
@@ -106,7 +194,7 @@
 					"name": "vmrbooklet-1.0.0.jar",
 					"url": "https://github.com/APonder-Dev/ECC-VMRBooklet/releases/download/v1.0.0/vmrbooklet-1.0.0.jar",
 					"size": 206591,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "db2ebf157985177b670b5cc487e2c56739ea6170a8a1d88b7bd5219838e481ed",
 					"mods": [
@@ -192,5 +280,17 @@
 		"docs/images/recipe-pagination.png"
 	],
 	"picturesChecked": "2026-10-30T06:55:31.998Z",
+	"contributors": {
+		"commits": 5,
+		"more": 0,
+		"people": [
+			{
+				"login": "APonder-Dev",
+				"commits": 5,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
 	"history": 1
 }

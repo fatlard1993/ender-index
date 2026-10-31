@@ -1,0 +1,304 @@
+{
+	"repo": "Yunitrish006006/DeadRecall",
+	"host": "github",
+	"description": "DISCONTINUED (2026-08-25): No longer maintained. Existing releases remain available; use standalone Totem modules.",
+	"stars": 0,
+	"archived": false,
+	"license": "Apache-2.0",
+	"created": "2026-02-15T04:59:43Z",
+	"pushed": "2026-09-02T15:34:20Z",
+	"releases": [
+		{
+			"tag": "v2.4.22",
+			"published": "2026-09-02T15:34:20Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 541378830,
+					"name": "deadrecall-2.4.22-bundled.jar",
+					"url": "https://github.com/Yunitrish006006/DeadRecall/releases/download/v2.4.22/deadrecall-2.4.22-bundled.jar",
+					"size": 1628796,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "f09348abb0e968ff77d163829d8ec6a4b6805400c59ef63ed12ed533bef62167",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "deadrecall",
+							"version": "2.4.22",
+							"name": "DeadRecall",
+							"description": "Final Totem compatibility transition bundle. TotemCore owns retained DeadRecall item aliases; Villagers is no longer bundled or required.",
+							"minecraft": "26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"totem-core",
+								"totem-remnant",
+								"totem-discord-bridge",
+								"totem-automata",
+								"totem-alchemy",
+								"totem-enchanting",
+								"totem-excavation",
+								"totem-locksmith",
+								"totem-vanilla-tweaks",
+								"totem-nexus"
+							],
+							"provides": [
+								"totem-core",
+								"totem-remnant",
+								"totem-discord-bridge",
+								"totem-automata",
+								"totem-alchemy",
+								"totem-enchanting",
+								"totem-excavation",
+								"totem-locksmith",
+								"totem-vanilla-tweaks",
+								"totem-nexus"
+							]
+						}
+					],
+					"icon": "831a7b81fa23690f7b1cba6bce242874a61f993a449d8759894c14a9213a698c.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 745,
+						"jars": [
+							"META-INF/jars/totem-core-0.7.2.jar",
+							"META-INF/jars/totem-remnant-0.2.13.jar",
+							"META-INF/jars/totem-discord-bridge-0.1.8.jar",
+							"META-INF/jars/totem-automata-0.1.15.jar",
+							"META-INF/jars/totem-alchemy-0.1.26.jar",
+							"META-INF/jars/totem-enchanting-0.1.8.jar",
+							"META-INF/jars/totem-excavation-0.1.5.jar",
+							"META-INF/jars/totem-locksmith-0.1.4.jar",
+							"META-INF/jars/totem-vanilla-tweaks-0.1.10.jar",
+							"META-INF/jars/totem-nexus-0.3.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/totem-discord-bridge-0.1.8.jar!dev/totem/discord/domain/MojangVanillaLanguageDownloader$HttpFetcher.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"META-INF/jars/totem-discord-bridge-0.1.8.jar!dev/totem/discord/transport/DiscordTransportService.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/totem-automata-0.1.15.jar!dev/totem/automata/copper/LlmChatClient.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"your-worker.workers.dev": [
+								"META-INF/jars/totem-discord-bridge-0.1.8.jar!dev/totem/discord/client/DiscordConfigScreen.class"
+							],
+							"piston-meta.mojang.com": [
+								"META-INF/jars/totem-discord-bridge-0.1.8.jar!dev/totem/discord/domain/MojangVanillaLanguageDownloader.class"
+							],
+							"resources.download.minecraft.net": [
+								"META-INF/jars/totem-discord-bridge-0.1.8.jar!dev/totem/discord/domain/MojangVanillaLanguageDownloader.class"
+							],
+							"api.openai.com": [
+								"META-INF/jars/totem-automata-0.1.15.jar!dev/totem/automata/client/CopperGolemMenuScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# DeadRecall 2.4.22\n\nDeadRecall 2.4.22 is the final compatibility-transition bundle for moving an existing DeadRecall world to standalone Totem modules.\n\n## Migration safety\n\n- TotemCore 0.7.2 permanently owns the 14 retained `deadrecall:*` item aliases and seeds them as a Core registry invariant, independent of Fabric entrypoint ordering.\n- Old stacks therefore remain decode-safe after the DeadRecall host is removed, including stacks hidden in offline player data or unloaded containers.\n- Canonical conversion remains lazy and preserves the complete Data Component patch and item count.\n- If the owning feature module is temporarily absent, the legacy placeholder remains intact instead of being discarded; it can migrate once the feature module is installed again.\n\n## Bundle graph\n\nThis transition bundle contains 10 modules:\n\n- TotemCore 0.7.2\n- TotemRemnant 0.2.13\n- TotemDiscordBridge 0.1.8\n- TotemAutomata 0.1.15\n- TotemAlchemy 0.1.26\n- TotemEnchanting 0.1.8\n- TotemExcavation 0.1.5\n- TotemLocksmith 0.1.4\n- TotemVanillaTweaks 0.1.10\n- TotemNexus 0.3.0\n\n**TotemVillagers is intentionally not bundled and is no longer a DeadRecall dependency.** New worlds, or worlds that intentionally retire the Villagers systems, may omit it. Existing 2.4.21 worlds that used TotemVillagers should install standalone TotemVillagers 0.1.32 before the first 2.4.22 transition boot so its SavedData and runtime state continue to be owned by the same module during the checkpoint.\n\n## Recommended server transition\n\n1. Back up the world.\n2. Replace DeadRecall 2.4.21 with DeadRecall 2.4.22.\n3. If the world previously used TotemVillagers, also install standalone TotemVillagers 0.1.32 **before the first 2.4.22 boot**. Omit it only when you intentionally want to retire Villagers functionality.\n4. Start the server successfully once.\n5. Confirm the startup log reports that all 14 TotemCore-owned legacy aliases were verified.\n6. Stop the server normally.\n7. Remove the DeadRecall host when desired and install the selected standalone Totem modules. Keep TotemCore 0.7.2 or newer.\n8. Keep standalone TotemVillagers installed if you want the existing Villagers systems to continue; remove it only as an explicit feature-retirement decision.\n\nThe one-time 2.4.22 boot is a compatibility checkpoint, not a destructive whole-world rewrite. The important item-safety change is that TotemCore itself now retains the old identifiers, so unvisited legacy stacks remain readable. TotemVillagers SavedData is a separate feature-data boundary and should not be implicitly retired by the transition bundle."
+		},
+		{
+			"tag": "v2.4.5",
+			"published": "2026-07-30T23:03:10Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 495966068,
+					"name": "deadrecall-2.4.5-bundled.jar",
+					"url": "https://github.com/Yunitrish006006/DeadRecall/releases/download/v2.4.5/deadrecall-2.4.5-bundled.jar",
+					"size": 1948477,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e840c68a714c83b71242c039eb35710721dea4a8783a43d356ad831c3eab1c8e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "deadrecall",
+							"version": "2.4.5",
+							"name": "DeadRecall",
+							"description": "",
+							"minecraft": "26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"totem-core",
+								"totem-remnant",
+								"totem-discord-bridge",
+								"totem-automata",
+								"totem-alchemy",
+								"totem-enchanting",
+								"totem-vanilla-tweaks",
+								"totem-nexus"
+							],
+							"suggests": [
+								"trinkets_updated"
+							]
+						}
+					],
+					"icon": "69ed076908e68fb9f1668d52ddaec4002cf2d9c107ad2764dc6aa2ddbcde513f.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"DeadRecall"
+							],
+							"item": [
+								"Advanced Backpack",
+								"Basic Backpack",
+								"Bowl of Cocoa Powder",
+								"Cherry Brew",
+								"Copper Wrench",
+								"Death Backpack",
+								"Hot Cocoa",
+								"Netherite Backpack",
+								"Pig Manure",
+								"Saltpeter",
+								"Standard Backpack",
+								"Stone Bowl",
+								"Sulfur Bowl",
+								"Wood Ash"
+							],
+							"effect": [
+								"Cherry Bloom",
+								"Stinky"
+							],
+							"block": [
+								"Alchemy Cauldron",
+								"Manure Coarse Dirt",
+								"Manure Dirt",
+								"Manure Grass Block",
+								"Manure Mud",
+								"Manure Mycelium",
+								"Manure Podzol",
+								"Manure Rooted Dirt"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 873,
+						"jars": [
+							"META-INF/jars/totem-core-0.2.0.jar",
+							"META-INF/jars/totem-remnant-0.1.5.jar",
+							"META-INF/jars/totem-discord-bridge-0.1.2.jar",
+							"META-INF/jars/totem-automata-0.1.7.jar",
+							"META-INF/jars/totem-alchemy-0.1.5.jar",
+							"META-INF/jars/totem-enchanting-0.1.1.jar",
+							"META-INF/jars/totem-vanilla-tweaks-0.1.3.jar",
+							"META-INF/jars/totem-nexus-0.2.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/adaptor/deadrecall/DiscordBridge.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/adaptor/deadrecall/discord/DiscordTransientBridge.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/adaptor/deadrecall/item/copper/CopperGolemLlmClient.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/totem-discord-bridge-0.1.2.jar!dev/totem/discord/domain/DiscordTransientBridge.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/totem-discord-bridge-0.1.2.jar!dev/totem/discord/transport/DiscordTransportService.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/totem-automata-0.1.7.jar!dev/totem/automata/copper/LlmChatClient.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"api.openai.com": [
+								"com/adaptor/deadrecall/client/CopperWrenchBindingsScreen.class",
+								"META-INF/jars/totem-automata-0.1.7.jar!dev/totem/automata/client/CopperGolemMenuScreen.class"
+							],
+							"your-worker.workers.dev": [
+								"com/adaptor/deadrecall/client/DiscordConfigScreen.class",
+								"META-INF/jars/totem-discord-bridge-0.1.2.jar!dev/totem/discord/client/DiscordConfigScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "DeadRecall 2.4.5\n\n- Adds dyeing, mixing and water-cauldron washing for all four normal backpack tiers.\n- Introduces reversible canonical item IDs for Remnant backpacks, the Automata copper wrench and all Alchemy items.\n- Preserves the existing `deadrecall:*` IDs for old worlds and migrates items lazily without discarding Data Components.\n- Bundles the exact SHA-512-pinned eight-module graph:\n  - TotemCore 0.2.0\n  - TotemRemnant 0.1.5\n  - TotemDiscordBridge 0.1.2\n  - TotemAutomata 0.1.7\n  - TotemAlchemy 0.1.5\n  - TotemEnchanting 0.1.1\n  - TotemVanillaTweaks 0.1.3\n  - TotemNexus 0.2.0\n\nInstall only the bundled DeadRecall JAR and Fabric API. Do not install the nested Totem modules again as separate JARs.\n\nValidation includes module GameTests, Java 25 production builds, nested-JAR SHA-512 verification and isolated Dedicated Server startup."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [
+		".github/staging/modrinth-gallery/alchemy-creative-showcase.png",
+		".github/staging/modrinth-gallery/backpack-capacity-4-modules.png",
+		".github/staging/modrinth-gallery/backpack-upgrade-bay.png",
+		".github/staging/modrinth-gallery/deadrecall-integration-overview.png",
+		".github/staging/modrinth-gallery/inventory-backpack-side-panel.png",
+		".github/staging/modrinth-gallery/mangrove-village-aerial.png",
+		".github/staging/modrinth-gallery/nexus-material-diagnostics.png",
+		".github/staging/modrinth-gallery/totem-alchemy-feature-overview.png",
+		".github/staging/modrinth-gallery/totem-automata-feature-overview.png",
+		".github/staging/modrinth-gallery/totem-core-feature-overview.png",
+		".github/staging/modrinth-gallery/totem-discord-bridge-feature-overview.png",
+		".github/staging/modrinth-gallery/totem-enchanting-feature-overview.png",
+		".github/staging/modrinth-gallery/totem-excavation-feature-overview.png",
+		".github/staging/modrinth-gallery/totem-locksmith-feature-overview.png",
+		".github/staging/modrinth-gallery/totem-nexus-feature-overview.png",
+		".github/staging/modrinth-gallery/totem-remnant-feature-overview.png",
+		".github/staging/modrinth-gallery/totem-vanilla-tweaks-feature-overview.png",
+		".github/staging/modrinth-gallery/totem-villagers-feature-overview.png",
+		".github/staging/modrinth-standalone/icons/totem-alchemy.png",
+		".github/staging/modrinth-standalone/icons/totem-automata.png",
+		".github/staging/modrinth-standalone/icons/totem-core.png",
+		".github/staging/modrinth-standalone/icons/totem-discord-bridge.png",
+		".github/staging/modrinth-standalone/icons/totem-enchanting.png",
+		".github/staging/modrinth-standalone/icons/totem-excavation.png",
+		".github/staging/modrinth-standalone/icons/totem-locksmith.png",
+		".github/staging/modrinth-standalone/icons/totem-nexus.png",
+		".github/staging/modrinth-standalone/icons/totem-remnant.png",
+		".github/staging/modrinth-standalone/icons/totem-vanilla-tweaks.png",
+		".github/staging/modrinth-standalone/icons/totem-villagers.png"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 708,
+		"more": 0,
+		"people": [
+			{
+				"login": "Yunitrish006006",
+				"commits": 603,
+				"funding": []
+			},
+			{
+				"login": "chinper",
+				"commits": 105,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

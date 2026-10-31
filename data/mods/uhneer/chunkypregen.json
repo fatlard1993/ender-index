@@ -1,0 +1,202 @@
+{
+	"repo": "uhneer/chunkypregen",
+	"host": "github",
+	"description": "Fabric mod that automatically pre-generates chunks around players using Chunky. Spiral batches, movement triggers, mid-bundle resume, Voxy integration, TPS auto-pause",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-06-05T02:49:40Z",
+	"pushed": "2026-06-11T05:06:02Z",
+	"releases": [
+		{
+			"tag": "v2.2.0",
+			"published": "2026-06-11T05:06:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 444368116,
+					"name": "chunkypregen-fabric-1.21.11-2.2.0.jar",
+					"url": "https://github.com/uhneer/chunkypregen/releases/download/v2.2.0/chunkypregen-fabric-1.21.11-2.2.0.jar",
+					"size": 117685,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "1f9093a69fc3024eb2644672ecd9dec2df0963d42e46d709d25caa93ba86802a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "chunkypregen",
+							"version": "2.2.0",
+							"name": "Chunky Pregenerator",
+							"description": "Automatically pre-generates chunks around the player using Chunky, per dimension, with configurable deadzone triggering and native Sodium settings integration.",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"chunky"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium",
+								"voxy",
+								"chunky-offline",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "a368410130b079c1d0ca4467eefb11b6ac222d758cccdaae67c897d86b269496.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 21,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Pregeneration only. The extras prototyped in 2.1.0 (menu theming, profiles, minimap throttle) now live in their own standalone mods.\n\nChanges\n- Scoped back to pure chunk pre-generation: trigger zones, per-dimension radii, spiral ring generation, TPS auto-pause, HUD progress.\n- Master enabled toggle now also hides the HUD.\n- New auto-retrigger toggle (re-run generation when you cross into ungenerated territory).\n- Thread slider works correctly when auto-threads is off.\n- Defaults tuned for real-world use: radius 100, trigger distance 800, 6 threads, End enabled, HUD scale 0.7, ring step 10.\n\nRequires Chunky (Fabric) 1.21.11. Optional: chunky-offline."
+		},
+		{
+			"tag": "v2.1.0",
+			"published": "2026-06-06T00:56:20Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 439822385,
+					"name": "chunkypregen-fabric-1.21.11-2.1.0.jar",
+					"url": "https://github.com/uhneer/chunkypregen/releases/download/v2.1.0/chunkypregen-fabric-1.21.11-2.1.0.jar",
+					"size": 115636,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "c0e049e3f304aa72c9eb8dccbfb9706b3e185dbca1e874cb128a2aa71250e42a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "chunkypregen",
+							"version": "2.1.0",
+							"name": "Chunky Pregenerator",
+							"description": "Automatically pre-generates chunks around the player using Chunky, per dimension, with configurable deadzone triggering and native Sodium settings integration.",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"chunky"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium",
+								"voxy",
+								"chunky-offline",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "a368410130b079c1d0ca4467eefb11b6ac222d758cccdaae67c897d86b269496.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 20,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What changed since v1.0.0\n\n### Bug fix: thread count was never applied (closes #1)\n\nThe `chunkyThreads` config field has existed since launch but was silently ignored — Chunky has no `chunky threads` command, so the stored value was never sent anywhere. Chunky always used its own internal default regardless of what you set.\n\nThe fix reaches directly into Chunky's `TaskScheduler.executor` field via reflection and calls `setCorePoolSize` / `setMaximumPoolSize` on the underlying `ThreadPoolExecutor` before each bundle fires. Thread count configuration now actually works.\n\n### Circular HUD widget\n\nA compact circular widget sits in the top-left corner (configurable). It shows two progress arcs and a proximity indicator, all in one place with no screen clutter.\n\n- **Top arc (blue)** — current ring completion, live from Chunky's per-second output\n- **Bottom arc (green)** — how far through the full spiral bundle you are\n- **Inner circle** — your position relative to the last generation center, scaled so the green ring represents the deadzone. Dot turns yellow then red as you approach the trigger distance\n- Hides automatically on F1, F3, and ESC\n\n**Position** and **size** are adjustable in Sodium settings → HUD.\n\n### Settings reorganized\n\nFive pages instead of four, with everything in a logical place:\n\n- **General** — enable, shape, generation radius (deadzone auto-calculated), spiral settings, stop button\n- **Dimensions** — per-dim toggles, nether auto-scale, per-dim radius overrides, player filters\n- **Performance** — threads, TPS pause, join delay, check interval, LOD rebuild hold duration\n- **Voxy** — all Voxy integration options together\n- **HUD** — position, size, progress relay toggle, start/complete messages, debug logging\n\n### Deadzone is now automatic\n\nThe deadzone is always half the generation radius converted to blocks (radius / 2 × 16). There is no separate slider for it — the radius slider is the only control you need, and the tooltip explains what the resulting deadzone will be.\n\n### Thread count UI\n\nAutomatic mode (default, 25% of logical CPU threads) with an opt-in manual slider. The tooltip shows your exact CPU thread count and what the auto value resolves to on your machine.\n\n### HUD center persists between sessions\n\nThe last generation center is now restored from disk on world load, so the proximity indicator shows the correct position relative to your actual last bundle — not relative to spawn.\n\n### Default settings\n\nNew installs now default to:\n- Progress relay **on** (Chunky's per-second chat spam suppressed; HUD shows live progress instead)\n- Debug mode **off**\n- Chat notifications **on** (start and complete messages only)\n\n---\n\n**Requirements**\n- Fabric Loader 0.19.3+\n- Fabric API (any 1.21.11 build)\n- Chunky 1.4.55+\n- Sodium 0.8.12+ (client)\n- Minecraft 1.21.11\n\n**Recommended**\n- Voxy (render distance integration)\n- Chunky-Offline (keeps Chunky running between world loads in singleplayer)"
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-06-05T03:08:26Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 439531843,
+					"name": "chunkypregen-fabric-1.21.11-1.0.0.jar",
+					"url": "https://github.com/uhneer/chunkypregen/releases/download/v1.0.0/chunkypregen-fabric-1.21.11-1.0.0.jar",
+					"size": 103981,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "ed96869013308a1e3cd68ec6a83e2d9044ee05d7b942e7c62c6c3e02dd7fb912",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "chunkypregen",
+							"version": "1.0.0",
+							"name": "Chunky Pregenerator",
+							"description": "Automatically pre-generates chunks around the player using Chunky, per dimension, with configurable deadzone triggering and native Sodium settings integration.",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"chunky"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium",
+								"voxy",
+								"chunky-offline",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "a368410130b079c1d0ca4467eefb11b6ac222d758cccdaae67c897d86b269496.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 16,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First release.\n\n**Requirements**\n- Fabric Loader 0.19.3+\n- Fabric API (any 1.21.11 build)\n- [Chunky](https://modrinth.com/plugin/chunky) 1.4.55+\n- Minecraft 1.21.11\n\n**Recommended**\n- [Sodium](https://modrinth.com/mod/sodium) 0.8.12+ (in-game settings UI, required on client, not needed on dedicated servers)\n- [Voxy](https://modrinth.com/mod/voxy) (render distance integration)\n- [Chunky-Offline](https://modrinth.com/plugin/chunky-offline) (keeps Chunky running between world loads in singleplayer)\n\n**What it does**\n\nAutomatically pre-generates chunks around players in expanding spiral rings, re-centers when the player moves, resumes mid-spiral on rejoin, pauses generation when TPS drops, and forces a Voxy LOD rebuild at the start of each bundle. Full breakdown in the README."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [
+		"images/bg.png",
+		"images/screenshot1.png",
+		"images/screenshot2.png",
+		"images/screenshot3.png",
+		"images/screenshot4.png",
+		"images/screenshot5.png"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 13,
+		"more": 0,
+		"people": [
+			{
+				"login": "uhneer",
+				"commits": 13,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

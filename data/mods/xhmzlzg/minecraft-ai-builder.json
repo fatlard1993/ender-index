@@ -1,0 +1,380 @@
+{
+	"repo": "xhmzlzg/minecraft-ai-builder",
+	"host": "github",
+	"description": "这是一个java版Minecraft模组，可以接入AI大模型，在游戏内AI生成建筑。具体介绍见README.md",
+	"stars": 4,
+	"archived": false,
+	"created": "2026-08-18T15:02:36Z",
+	"pushed": "2026-10-03T10:35:25Z",
+	"releases": [
+		{
+			"tag": "v1.1.3",
+			"published": "2026-10-03T10:35:54Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 607626612,
+					"name": "minecraft-ai-1.1.3.jar",
+					"url": "https://github.com/xhmzlzg/minecraft-ai-builder/releases/download/v1.1.3/minecraft-ai-1.1.3.jar",
+					"size": 134734,
+					"downloads": 12,
+					"inspection": 2,
+					"sha256": "02f4d91a09db2cd6d49945372e2a31292c4be2b21e920db1abfc2698389e701f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "minecraft-ai",
+							"version": "1.1.3",
+							"name": "Minecraft AI 建造助手",
+							"description": "通过本地AI(Ollama)对话生成建筑方案，预览确认后在游戏中生成",
+							"minecraft": ">=26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 38,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/mcai/client/ai/AiClient.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							},
+							"exec": {
+								"com/mcai/client/ai/ImageAttach.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"127.0.0.1": [
+								"com/mcai/common/AiConfig.class"
+							],
+							"openrouter.ai": [
+								"com/mcai/common/AiConfig.class"
+							],
+							"api.deepseek.com": [
+								"com/mcai/client/gui/AiConfigScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.1.3\n- **兼容 Minecraft 26.3**（Fabric Loader 0.19.5 / Fabric API 0.161.0+26.3）\n- 26.3 API 适配：setScreenAndShow、gui.screen()、InputConstants\n- 依赖改为 minecraft >= 26.1.2，旧版 26.1.2 理论可加载\n- 新增 docs/PROJECT_MEMORY.md 项目记忆文档\n\n含 v1.1.2 功能：附图、Ctrl+V 粘贴参考图、方块上限 50 万\n含 v1.1.1 功能：流式超时、两阶段生成、对话式像素 UI\n\n**API Key 只存在本机 config，不在本仓库。**\n\n适用于 Minecraft 26.3 + Fabric。"
+		},
+		{
+			"tag": "v1.1.2",
+			"published": "2026-09-27T08:39:25Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 592506921,
+					"name": "minecraft-ai-1.1.2.jar",
+					"url": "https://github.com/xhmzlzg/minecraft-ai-builder/releases/download/v1.1.2/minecraft-ai-1.1.2.jar",
+					"size": 134829,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "d09d400eabfc86b3fb358e1b564ce8cf86fe49c1d249731fb718bec15f5fa613",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "minecraft-ai",
+							"version": "1.1.2",
+							"name": "Minecraft AI 建造助手",
+							"description": "通过本地AI(Ollama)对话生成建筑方案，预览确认后在游戏中生成",
+							"minecraft": "~26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 38,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/mcai/client/ai/AiClient.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							},
+							"exec": {
+								"com/mcai/client/ai/ImageAttach.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"127.0.0.1": [
+								"com/mcai/common/AiConfig.class"
+							],
+							"openrouter.ai": [
+								"com/mcai/common/AiConfig.class"
+							],
+							"api.deepseek.com": [
+								"com/mcai/client/gui/AiConfigScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.1.2\n- 附图：系统选图框，用现实建筑照片作参考（需多模态模型）\n- Ctrl+V /「粘贴」：截图或复制图片直接附图（系统剪贴板，兼容 PNG/DIB）\n- 方块上限 500000、单边 256（大建筑够用，仍防失控巨物）\n- 相对 v1.1.1 含流式超时、两阶段生成、对话式 UI 等全部改动\n\n**API Key 只存在本机 config/minecraft-ai.json，不在本仓库。**\n\n适用于 Minecraft 26.1.2 + Fabric。"
+		},
+		{
+			"tag": "v1.1.1",
+			"published": "2026-09-22T15:06:25Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 592490050,
+					"name": "minecraft-ai-1.1.1.jar",
+					"url": "https://github.com/xhmzlzg/minecraft-ai-builder/releases/download/v1.1.1/minecraft-ai-1.1.1.jar",
+					"size": 134830,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "36314d5797a2d1d41fe8de062d67849ae1a0c899ad634eca8241112f90944c6c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "minecraft-ai",
+							"version": "1.1.1",
+							"name": "Minecraft AI 建造助手",
+							"description": "通过本地AI(Ollama)对话生成建筑方案，预览确认后在游戏中生成",
+							"minecraft": "~26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 38,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/mcai/client/ai/AiClient.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							},
+							"exec": {
+								"com/mcai/client/ai/ImageAttach.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"127.0.0.1": [
+								"com/mcai/common/AiConfig.class"
+							],
+							"openrouter.ai": [
+								"com/mcai/common/AiConfig.class"
+							],
+							"api.deepseek.com": [
+								"com/mcai/client/gui/AiConfigScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.1.1\n- 流式 stream + 空闲/总超时/思考预算，修复 AI 无限卡死\n- 两阶段生成：设计要点 → 紧凑 freeform ops\n- 对话式 Minecraft 像素 UI：多会话、可折叠思考、消息内 3D 预览\n- 附图：系统选图框，按现实照片用 MC 材质设计\n- Ctrl+V /「粘贴」：截图或复制图片直接作参考图（系统剪贴板接口）\n- 方块上限 500000、单边 256（大建筑够用）\n- 取消/超时错误分类修正；关思考多 API 方言\n\n**API Key 只存在本机 config，不在本仓库。**\n\n适用于 Minecraft 26.1.2 + Fabric。"
+		},
+		{
+			"tag": "v1.1.0",
+			"published": "2026-09-12T07:44:06Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 558851435,
+					"name": "minecraft-ai-1.1.0.jar",
+					"url": "https://github.com/xhmzlzg/minecraft-ai-builder/releases/download/v1.1.0/minecraft-ai-1.1.0.jar",
+					"size": 130206,
+					"downloads": 11,
+					"inspection": 2,
+					"sha256": "8ecfff6dd4422367448ad135a710579e4320daa4bf69a1a1b17312f0e0f79866",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "minecraft-ai",
+							"version": "1.1.0",
+							"name": "Minecraft AI 建造助手",
+							"description": "通过本地AI(Ollama)对话生成建筑方案，预览确认后在游戏中生成",
+							"minecraft": "~26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 35,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/mcai/client/ai/AiClient.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"127.0.0.1": [
+								"com/mcai/common/AiConfig.class"
+							],
+							"openrouter.ai": [
+								"com/mcai/common/AiConfig.class"
+							],
+							"api.deepseek.com": [
+								"com/mcai/client/gui/AiConfigScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.1.0 — 底层换成设计规格契约 + 参数化构件库 + 方案体检\n\n### 主要变化\n\n- **AI 契约换血**：不再输出 8~24 格字符画蓝图，改为输出**设计规格 JSON**（原型/层数/层高/房间表/特征/材质/屋顶），细节不再被输出长度挤掉；旧契约仍兼容。\n- **参数化构件库**：房间、门窗、双跑楼梯、脚手架电梯井、阳台、女儿墙、屋面设备、家具全部由本地代码确定性生成。\n- **方案体检 + 自动修补**：悬空方块 / 楼板空洞 / 堵门 / 房间可达性，在预览与建造前自动检查修正。\n- **notes 落实**：AI 写进自由文字的要求（层数 / 阳台 / 电梯 / 楼梯 / 庭院 / 水池 / 坡屋顶 / 太阳能 / 水箱 / 外墙颜色 …）会真正生效，日志回报落实项。\n- **门策略**：建筑内**只生成木门**（手就能开），**不生成铁门、按钮、压力板**；门楣自动补墙，门口自动清障，门洞按 1~3 格墙厚对齐轴线。\n- **预览优化**：只画暴露面、剔除内部方块、粗格 LOD（不是随机抽稀）、跳过亚像素方块、打字时自动降档。\n- **错误处理**：HTTP 状态码分类（鉴权 / 额度 / 限流 / 服务端错误 …）+ 5xx / 429 / 超时自动重试 + thinking 参数被拒时自动降级。\n- **配置修复**：修复「打开设置再保存会把 API Key 截断成 32 字符」的 bug（EditBox 必须先 setMaxLength 再 setValue）。\n\n### 安装\n\nMinecraft 26.1.2 + Fabric Loader ≥0.19.0 + Fabric API 0.155.2+26.1.2 + Java ≥24。\n把本 Release 的 jar 与 fabric-api 一起放进 `mods` 目录即可。\n\n### 资产\n\n- `minecraft-ai-1.1.0.jar` —— 模组本体\n- `minecraft-ai-1.1.0-sources.jar` —— 源码\n\n游戏内按 **K** 打开面板；详细用法、规格字段说明、源码结构与离线自检见仓库 README 与 `docs/SPEC_v1.1.0.md`。"
+		},
+		{
+			"tag": "v1.0.2",
+			"published": "2026-09-07T14:48:54Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 548939232,
+					"name": "minecraft-ai-1.0.2.jar",
+					"url": "https://github.com/xhmzlzg/minecraft-ai-builder/releases/download/v1.0.2/minecraft-ai-1.0.2.jar",
+					"size": 66776,
+					"downloads": 11,
+					"inspection": 2,
+					"sha256": "011b06a3543f6528621c1e141b5f96a624d355b3cbc2fec29ebf9359fb38b241",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "minecraft-ai",
+							"version": "1.0.2",
+							"name": "Minecraft AI 建造助手",
+							"description": "通过本地AI(Ollama)对话生成建筑方案，预览确认后在游戏中生成",
+							"minecraft": "~26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 19,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/mcai/client/ai/AiClient.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"127.0.0.1": [
+								"com/mcai/common/AiConfig.class"
+							],
+							"openrouter.ai": [
+								"com/mcai/common/AiConfig.class"
+							],
+							"api.deepseek.com": [
+								"com/mcai/client/gui/AiConfigScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.0.2 更新内容`n`n### 新功能`n- **后台生成 + 悬浮球**：AI 生成期间可关闭界面继续游玩，右上角像素风悬浮球实时显示进度秒数，完成/失败变色提示；生成绝不会因误触关闭而中断，按 K 查看结果`n- **方案迭代调整**：新增「调整上次方案」按钮——载入上次方案与坐标，输入意见后「确认调整」，AI 在原方案基础上修改；建造后仍可调整，确认建造时自动替换旧建筑`n- **3D 预览交互**：滚轮缩放、右键拖拽无级旋转（水平/俯仰/斜向）、左键拖拽平移、双击复位；大型建筑整体缩放不再马赛克`n`n### 修复`n- 修复大型建筑 3D 预览溢出看不清的问题`n- AI 响应解析增强：兼容思考型模型（正文在 reasoning 字段），所有失败会记录日志便于排查`n- 状态文本支持 3 行显示 + 滚轮滚动`n- 配置界面输入框增加标签、放宽长度限制（超长 API Key 可完整输入）"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 9,
+		"more": 0,
+		"people": [
+			{
+				"login": "xhmzlzg",
+				"commits": 9,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

@@ -1,0 +1,275 @@
+{
+	"repo": "olilanz/memento-mc",
+	"host": "github",
+	"description": "Memento is a lightweight Fabric server-side mod for Minecraft 1.21.10+ that keeps worlds healthy by selectively regenerating unused or forgotten terrain while preserving areas that players actively care about. Players define “anchors” (places to preserve) and “forgetters” (places to renew), using simple vanilla items with custom NBT.",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2025-12-08T21:05:52Z",
+	"pushed": "2026-07-26T09:18:21Z",
+	"releases": [
+		{
+			"tag": "0.9.17",
+			"published": "2026-04-01T15:17:14Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 386354694,
+					"name": "memento-natural-renewal-0.9.17-SNAPSHOT.jar",
+					"url": "https://github.com/olilanz/memento-mc/releases/download/0.9.17/memento-natural-renewal-0.9.17-SNAPSHOT.jar",
+					"size": 2227178,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e0629ba8be9fad7c9ffa5aa5033a8ee8812da32b415c45c08b520c3902c48c1f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "memento",
+							"version": "0.9.17-SNAPSHOT",
+							"name": "Memento: Natural Renewal",
+							"description": "Automatic world renewal guided by simple player-defined memory anchors.",
+							"minecraft": "1.21.10",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-language-kotlin",
+								"fabric",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 312,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "This release stabilizes Natural Renewal and aligns the documentation with how the system actually behaves.\n\nIt completes the core algorithmic work. From here, the focus shifts to hardening and user experience.\n\n---\n\n### Natural Renewal — now stable and predictable\n\nRenewal decisions are now based on **fresh and consistent world data**.\n\n* World understanding is continuously updated without forcing chunk loads\n* Stale data is handled explicitly, without resetting or fabricating values\n* Renewal behavior converges naturally as the world is observed over time\n\nThis makes renewal feel intuitive and reliable.\n\n---\n\n### Safe execution — no unintended changes\n\nRenewal now follows a strict safety model:\n\n* Regions are checked before execution\n* They are checked again immediately before mutation\n* If a region is loaded, it is skipped\n\nThis guarantees that regeneration only happens when the world already allows it.\n\n---\n\n### Clear and explainable behavior\n\nThe system now behaves in a way that matches what you see:\n\n* Areas where players spend meaningful time are preserved\n* Areas outside those regions can be regenerated\n* Regeneration uses the current world generator\n\nCommands reflect this clearly:\n\n* `/memento do scan`\n* `/memento explain renewal`\n* `/memento do renew [N]`\n* `/memento accept`\n\n---\n\n### Documentation update\n\nDocumentation has been restructured and clarified:\n\n* Clear separation between user guide, model, pipeline, and architecture\n* More precise wording of how renewal actually works\n* Reduced ambiguity and duplication\n* Improved navigation between documents\n\n---\n\n### Development process\n\nRecent versions also introduced a **test-driven development approach**:\n\n* Behavior-level tests now validate key invariants\n* Safety and determinism are verified directly\n* This forms the foundation for moving toward GA\n\n---\n\n### Summary\n\n* Renewal is now **stable and safe**\n* Behavior is **predictable and explainable**\n* Documentation reflects **what the system actually does**\n\nThis marks the completion of the core Natural Renewal work."
+		},
+		{
+			"tag": "0.9.16",
+			"published": "2026-03-31T10:18:50Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 385451517,
+					"name": "memento-natural-renewal-0.9.16-SNAPSHOT.jar",
+					"url": "https://github.com/olilanz/memento-mc/releases/download/0.9.16/memento-natural-renewal-0.9.16-SNAPSHOT.jar",
+					"size": 2197930,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "41e7d60bac0cb333ee09900df8cab1410fd77be4043d42c95a27b8018c56883b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "memento",
+							"version": "0.9.16-SNAPSHOT",
+							"name": "Memento: Natural Renewal",
+							"description": "Automatic world renewal guided by simple player-defined memory anchors.",
+							"minecraft": "1.21.10",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-language-kotlin",
+								"fabric",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 304,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "This release introduces a major improvement to how Memento understands and protects your world.\n\nNatural Renewal is now driven by a new **memorability model** that better reflects how players actually use and inhabit their surroundings.\n\n### What’s improved\n\n* **More natural protection of your builds**\n\n  * Areas where you spend time now form stable “memories”\n  * Your bases are less likely to be accidentally renewed\n\n* **Exploration stays lightweight**\n\n  * Passing through an area no longer leaves behind unintended protection\n  * The world can recover more naturally over time\n\n* **Smoother transitions**\n\n  * Active areas now create a soft safety zone around them\n  * No more abrupt edges between protected and renewable regions\n\n* **Much faster performance**\n\n  * Large worlds now process renewal significantly faster\n  * Reduced load during scanning and projection\n\n* **Improved reliability**\n\n  * The system is now fully deterministic and tested\n  * Better consistency between scans, previews, and actual renewal\n\n---\n\n### What this means for you\n\n* Your main areas and bases are safer by default\n* Newly explored areas won’t get “stuck” as protected\n* Renewal behavior feels more intuitive and predictable\n\n---\n\n### Technical note (optional)\n\nThis update replaces the previous heuristic with a new **deterministic, local signal model** for memorability. While invisible to most players, it significantly improves both correctness and performance."
+		},
+		{
+			"tag": "0.9.15",
+			"published": "2026-03-15T11:15:59Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 374277101,
+					"name": "memento-natural-renewal-0.9.15-SNAPSHOT.jar",
+					"url": "https://github.com/olilanz/memento-mc/releases/download/0.9.15/memento-natural-renewal-0.9.15-SNAPSHOT.jar",
+					"size": 2183038,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "18e9db9d3080a752acca40d6118ca8fca880edd7afc351ea0a93322e6c18d8d4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "memento",
+							"version": "0.9.15-SNAPSHOT",
+							"name": "Memento: Natural Renewal",
+							"description": "Automatic world renewal guided by simple player-defined memory anchors.",
+							"minecraft": "1.21.10",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-language-kotlin",
+								"fabric",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 300,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "This release improves the reliability of Memento’s world analysis and introduces a regression test suite that protects the logic going forward.\n\nThe changes focus on making world analysis **correct and predictable on worlds of any size**, while strengthening the internal safety net for future development.\n\n---\n\n## Improved world analysis reliability\n\nPreviously, the system could infer that world analysis was complete purely from map counts. On larger worlds, discovery could sometimes populate the map before scanning had fully finished, which could make the world appear fully analyzed even though the scan had not yet completed.\n\nVersion **0.9.15** introduces a small lifecycle model for world analysis. The system now distinguishes between:\n\n* discovering the world\n* scanning the world\n* completing the analysis\n\nA world is now only considered fully analyzed once scanning has actually finished. This prevents premature “complete” reports and makes the analysis status more accurate, especially on large worlds.\n\n---\n\n## More robust command behavior\n\nThe following commands now use the improved lifecycle logic:\n\n* `explain world`\n* `scan`\n* `csv`\n\nThis ensures that commands report and operate on the correct world analysis state.\n\n---\n\n## New regression test suite\n\nThis version also introduces a deterministic regression test suite for the world analysis logic.\n\nThese tests ensure that:\n\n* world analysis cannot appear complete before scanning finishes\n* mismatched totals are never treated as complete\n* lifecycle state is evaluated consistently\n\nThis helps protect the behavior introduced in this release and reduces the risk of future regressions.\n\n---\n\n## Architectural note\n\nThis change does not alter the existing world map or renewal mechanics.\nIt improves the **evaluation and reporting of world analysis state** and strengthens the internal testing infrastructure.\n\n---\n\n## Summary\n\n**0.9.15 focuses on correctness and robustness:**\n\n* more accurate world analysis reporting\n* improved behavior on large worlds\n* a new regression test suite protecting the logic\n\nThese improvements make Memento more reliable as worlds grow and evolve over time."
+		},
+		{
+			"tag": "0.9.14",
+			"published": "2026-03-10T20:47:49Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 371059172,
+					"name": "memento-natural-renewal-0.9.14-SNAPSHOT.jar",
+					"url": "https://github.com/olilanz/memento-mc/releases/download/0.9.14/memento-natural-renewal-0.9.14-SNAPSHOT.jar",
+					"size": 2150751,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "7886868cb6d5732eb860014c7ca8cd786533c0d17ecf4c91471400bf7f9016c8",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "memento",
+							"version": "0.9.14-SNAPSHOT",
+							"name": "Memento: Natural Renewal",
+							"description": "Automatic world renewal guided by simple player-defined memory anchors.",
+							"minecraft": "1.21.10",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-language-kotlin",
+								"fabric",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 284,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "This release introduces **acceptance-gated ambient renewal** and restores the intended architectural model where **world observations are always derived from the world itself**.\n\nThe goal of this change is to keep the system predictable, explainable, and free from synchronization drift between the Minecraft world and Memento’s internal model.\n\n---\n\n## Ambient renewal (operator-controlled)\n\nMemento can now perform small, automated renewal steps during the nightly maintenance cycle.\n\nAutomation is **disabled by default** and must be explicitly enabled by the operator:\n\n```\n/memento accept\n```\n\nThis records the operator’s acceptance in the world folder and allows Memento to gradually renew abandoned terrain over time.\n\nAutomation remains conservative and uses the **same safety checks and execution pipeline** as manual commands.\n\n---\n\n## Nightly renewal cycle\n\nOnce ambient renewal is accepted, Memento participates in the nightly maintenance cycle (03:00 server time):\n\n1. If the world has not yet been scanned, Memento starts a scan.\n2. Once scanning is complete, Memento elects the next eligible region.\n3. One region prune step is executed.\n\nManual commands remain available and can be used to accelerate renewal if desired.\n\n---\n\n## World-map model restored\n\nThis release removes persistence of the internal world map.\n\nThe world map is now always **derived from scanning the actual region files** instead of being loaded from disk. This avoids potential synchronization issues if the world changes outside of Memento.\n\n---\n\n## Persistence model\n\nOnly operator intent is persisted:\n\n```\nmemento_stone_topology.json   (stone authority)\nmemento_config.json           (operator acceptance)\n```\n\nAll other state — including world observations and renewal projections — is rebuilt at runtime.\n\n---\n\n## Internal cleanup\n\n* Removed obsolete runtime persistence (`MementoState`)\n* Removed persisted world-map state\n* Centralized persistence file names in `MementoConstants`\n* Added ambient orchestration handler driven by the existing world clock\n\n---\n\n## Notes\n\nIf this is the first time running a version with ambient renewal:\n\n1. Start the server\n2. Run `/memento explain renew` to review the current situation\n3. Enable automation with `/memento accept` when comfortable\n\nManual commands (`scan`, `explain`, `do renew`) continue to work exactly as before.\n\n---\n\nFeedback and issues are always welcome on GitHub."
+		},
+		{
+			"tag": "0.9.13",
+			"published": "2026-03-01T08:03:53Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 364544094,
+					"name": "memento-natural-renewal-0.9.13-SNAPSHOT.jar",
+					"url": "https://github.com/olilanz/memento-mc/releases/download/0.9.13/memento-natural-renewal-0.9.13-SNAPSHOT.jar",
+					"size": 2133403,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "22f482dcf562d77986b81b2e10e6ff1b395188897b61d692b371f396fe3d0823",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "memento",
+							"version": "0.9.13-SNAPSHOT",
+							"name": "Memento: Natural Renewal",
+							"description": "Automatic world renewal guided by simple player-defined memory anchors.",
+							"minecraft": "1.21.10",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-language-kotlin",
+								"fabric",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 278,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Structural separation + single-pass scanning\n\n### Release Notes Content\n\nThis release refines the internal architecture of Memento while preserving existing operator workflows.\n\n## Highlights\n\n### Clear separation of renewal mechanisms\n\nMemento now operates with two structurally independent renewal paths:\n\n* **Natural Renewal** (region-level, forgettability-based)\n* **Stone-driven renewal** (explicit intent via Witherstones)\n\nThey no longer share arbitration logic.\nExplain commands show both side-by-side, but derivation remains independent.\n\n### Single-pass active scan\n\n`/memento do scan` now performs a single-pass file-primary scan.\n\n* No hidden second pass\n* Explicit unresolved reporting\n* Operator-controlled reconciliation via rerun\n\n### Improved internal clarity\n\n* Simplified election model\n* Cleaner scanner status reporting\n* Reduced duplicate code paths\n* Renamed provider to match behavior\n\n## What did not change\n\n* No automation added\n* Renewal is still fully operator-triggered\n* Protection dominance remains absolute\n* No forced chunk unloads\n\nThis release prepares the mod for deeper testing and fine-tuning ahead of GA."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 379,
+		"more": 0,
+		"people": [
+			{
+				"login": "olilanz",
+				"commits": 379,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

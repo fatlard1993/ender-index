@@ -6,8 +6,67 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-09-19T22:16:41Z",
-	"pushed": "2026-10-23T14:58:42Z",
+	"pushed": "2026-10-30T01:41:38Z",
 	"releases": [
+		{
+			"tag": "v1.7.1-26.3",
+			"published": "2026-10-30T01:41:39Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 690548728,
+					"name": "skysmapshapes-1.7.1+26.3.jar",
+					"url": "https://github.com/SkyStormer1/SkysMapShapes/releases/download/v1.7.1-26.3/skysmapshapes-1.7.1%2B26.3.jar",
+					"size": 594973,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "2894bbb6cbaf33f0e7f1512b06a7e1e389f2f89b112faa7d44610876c95ee5aa",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "skysmapshapes",
+							"version": "1.7.1+26.3",
+							"name": "Sky's Map Shapes",
+							"description": "Labelled circles, squares, rectangles, diamonds, octagons and ellipses on Xaero's World Map and Minimap, sized in blocks, and MiniHUD's shapes beside them. With MiniHUD: light levels only inside your shapes, and with Litematica, Easy Place spawn proofing. Beacon beams and the blocks in their way, too.",
+							"minecraft": "26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"fabric-language-kotlin",
+								"xaeroworldmap",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"xaerominimap",
+								"skysmapexposer",
+								"skysstructuremap",
+								"minihud",
+								"litematica"
+							]
+						}
+					],
+					"icon": "6ebc5a453fae3cae76f01979bf77a0c737c932e91b19cc6b893e9bab0cd75569.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 200,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**For Minecraft 26.3.** Download `skysmapshapes-1.7.1+26.3.jar` below and put it in your `mods` folder.\n\nNeeds Fabric Loader 0.19.5+ and Fabric API 0.162.0+26.3. Also needs Fabric Language Kotlin 1.14.1+ and Xaero's World Map or Minimap for 26.3.\n\n### Sharing is safer\n\n- A shared shape can no longer carry hidden MiniHUD sizes that are too big for the game: the finished\n  shape is measured before MiniHUD gets it, and a big but allowed one asks you to press again first.\n- Names, MiniHUD kinds and text values in a shared line are checked before anything is made, and\n  shared sizes are held to the same limits as typed ones.\n- A private share only goes to a real player name, and `privateShareCommand` must be a plain command.\n- Lines from 1.2.0 and earlier (`SMS1:` on the end) are no longer read: they skipped those checks.\n- The action bar is never read as chat.\n\n### Fixes\n\n- The full Edit screen no longer saves a shape that the add screen would refuse.\n- Presets are kept within the same limits as the settings screen.\n- One MiniHUD shape that cannot be read no longer stops the rest from showing.\n- A short click just after Easy Place swaps blocks is no longer ignored.\n- Without Xaero's Minimap, the log no longer warns about its hooks.\n\n### Faster\n\n- Shapes, outlines and the shapes list are worked out when they change, not every frame.\n- MiniHUD is read when it changes a shape (and every ten seconds besides), not twice a second.\n- Beacons are no longer looked for everywhere once a second: each chunk is read when it comes into\n  range or a block in it changes, a few at a time, and a beam is read only between From Y and To Y.\n- In cave mode, the minimap only looks at shapes it can actually show.\n- **Hide all** writes each file once, not once per shape.\n\n### Spawn proofing\n\n- **Setup help.** If something stops spawn proofing working, one chat line says what, with a\n  **[Fix it]** button. The light levels screen lists every check, with a **Fix** button each and\n  **Fix all**.\n- **Render layers no longer get in the way.** The spots are drawn, aimed at and Easy Placed whatever\n  Litematica's render layers are set to; the rest of the schematic still follows the layers.\n\n### Beacons\n\n- New defaults: **Distance** 12 chunks and **Up to** 200 beacons, which is quicker on big bases.\n  Settings you already saved are kept."
+		},
 		{
 			"tag": "v1.6.0-26.3",
 			"published": "2026-10-18T06:57:41Z",
@@ -56,7 +115,7 @@
 						"unreadable": []
 					},
 					"icon": "6ebc5a453fae3cae76f01979bf77a0c737c932e91b19cc6b893e9bab0cd75569.png",
-					"downloads": 5,
+					"downloads": 6,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -106,7 +165,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 5
+					"downloads": 6
 				}
 			],
 			"notes": "**For Minecraft 26.3.** Download `skysmapshapes-1.5.0+26.3.jar` below and put it in your `mods` folder.\n\nNeeds Fabric Loader 0.19.5+ and Fabric API 0.162.0+26.3. Also needs Fabric Language Kotlin 1.14.1+ and Xaero's World Map or Minimap for 26.3.\n\n### What's new\n- **Spawn proofing with Easy Place** (needs MiniHUD and Litematica, both still optional for the rest of the mod). Every dark spot MiniHUD's light level overlay marks, inside shapes set to spawn-proof (right-click a shape) or everywhere if you choose, becomes a spot Litematica's Easy Place fills.\n  - **Blocks…** picks which blocks count (slabs by default; trapdoors, buttons, carpets, pressure plates and rails too). Click and drag across the grid to pick many at once. Easy Place uses the one in your hand if it is picked, or else the one you carry most.\n  - Its own overlay colour, opacity and height, a distance slider, and MiniHUD's light level key switches it on and off.\n  - Easy Place still works normally everywhere else.\n- Light levels and spawn proofing settings have their own screen."
@@ -150,7 +209,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 3
+					"downloads": 4
 				}
 			],
 			"notes": "**For Minecraft 26.3.** Download `skysmapshapes-1.4.3+26.3.jar` below and put it in your `mods` folder. For 26.2, keep using 1.4.3.\n\nNeeds Fabric Loader 0.19.5+ and Fabric API 0.162.0+26.3. Also needs Fabric Language Kotlin 1.14.1+ and Xaero's World Map or Minimap for 26.3.\n\n### What's new\n- Runs on Minecraft 26.3.\n- Fixed since the 26.3 beta: the shapes panel, its right-click popup and the Add Shape window can be clicked again."
@@ -194,7 +253,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 1
+					"downloads": 2
 				}
 			],
 			"notes": "**Download:** `skysmapshapes-1.4.3+26.2.jar` below. Put it in your `mods` folder, replacing any older version.\n\nNeeds Fabric API, Fabric Language Kotlin and Xaero's World Map. MiniHUD is optional.\n\n### What's fixed\n- **Light levels fit MiniHUD's shapes exactly.** Light levels kept to a MiniHUD shape went a little past it in some places and stopped a little short in others:\n  - Spheres were reckoned half a block too high.\n  - Spawn spheres (despawn, can spawn and the rest) were treated as a sphere their margin bigger, where MiniHUD measures them differently; clipped spawn spheres ignored their trims.\n  - Cones and pyramids were a layer short and slightly off-centre, and octagons cut their corners too far.\n  - Rhombuses could lose a block right on the edge.\n\n  Every kind of MiniHUD shape, lying every way, was checked against MiniHUD's own idea of which blocks are inside: not one block differs now."
@@ -249,5 +308,17 @@
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
 	"pictures": [],
 	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"contributors": {
+		"commits": 62,
+		"more": 0,
+		"people": [
+			{
+				"login": "SkyStormer1",
+				"commits": 62,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
 	"history": 1
 }

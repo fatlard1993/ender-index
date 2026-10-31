@@ -1,0 +1,106 @@
+{
+	"repo": "tech-anupam/G1axFixer",
+	"host": "github",
+	"description": "G1axFixer is a client-side minecraft fabric mod designed to eliminate common crashes, lag spikes, and freezes caused by resource packs while providing powerful performance optimizations. It's essential for players using multiple resource packs, modpacks, or playing on servers with custom resources.",
+	"stars": 0,
+	"archived": false,
+	"license": "CC0-1.0",
+	"created": "2026-04-22T17:01:48Z",
+	"pushed": "2026-04-27T07:11:04Z",
+	"releases": [
+		{
+			"tag": "1.21.x",
+			"published": "2026-04-22T17:25:13Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 403121445,
+					"name": "g1axfixer-1.1.0.jar",
+					"url": "https://github.com/tech-anupam/G1axFixer/releases/download/1.21.x/g1axfixer-1.1.0.jar",
+					"size": 262554,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "afaf0f39082068820adeff0050a5d990bf33508d540443723ff48d8cf72d6fda",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "g1axfixer",
+							"version": "1.1.0",
+							"name": "G1axFixer",
+							"description": "Fixes resource pack crashes, optimizes rendering/ticking/memory, and shows live proof via HUD overlay. Developed by AkaTriggered & G1ax.",
+							"minecraft": "~1.21",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [
+								"mixinextras"
+							],
+							"suggests": [
+								"sodium",
+								"iris"
+							]
+						}
+					],
+					"icon": "f981a7ce5db963532bffa2272b5fd35ad670f14e736d3d7bae8605c26ea2ab1b.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 172,
+						"jars": [
+							"META-INF/jars/mixinextras-fabric-0.4.1.jar"
+						],
+						"capabilities": {
+							"unsafe": {
+								"META-INF/jars/mixinextras-fabric-0.4.1.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"discord.gg": [
+								"dev/g1ax/g1axfixer/G1axFixer.class"
+							],
+							"github.com": [
+								"dev/g1ax/g1axfixer/G1axFixer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# ⚡ G1axFixer\n\n**The all-in-one performance & stability mod for Minecraft 1.21.11 (Fabric)**\n\n[![Discord](https://img.shields.io/discord/XPYnrMd39C?color=7289da&label=Discord&logo=discord&logoColor=white)](https://discord.gg/XPYnrMd39C)\n[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)\n[![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11-brightgreen.svg)](https://fabricmc.net/)\n[![Fabric API](https://img.shields.io/badge/Fabric%20API-Required-orange.svg)](https://modrinth.com/mod/fabric-api)\n\n\n## 🤔 What Does G1axFixer Do?\n\nG1axFixer makes your Minecraft run **smoother, faster, and crash-free** by doing two things:\n\n1. **Fixes crashes** caused by broken resource packs, missing textures, corrupted sounds, and bad models — instead of crashing, the game just skips the broken stuff and keeps going.\n\n2. **Optimizes performance** by making your game smarter about what it processes — things far away from you don't need as much attention, so the game stops wasting power on them.\n\n\n## 🚀 What You'll Notice\n\n### Less Lag\n- **Smoother FPS** in areas with lots of entities (farms, mob grinders, villages)\n- **No more lag spikes** when lots of particles appear (explosions, fireworks, potions)\n- **Faster chunk loading** — the game spreads out chunk building so it doesn't freeze\n\n### Better Multiplayer\n- **Reduced network traffic** — the mod cuts out unnecessary data the server sends you\n- **Distant explosions, particles, and sound effects** that you can't even see are automatically ignored\n- **Less bandwidth usage** — your movement data is sent more efficiently\n\n### Zero Crashes\n- **Broken resource packs?** No crash — bad textures, sounds, and models are silently replaced\n- **Corrupted ZIP files?** Handled automatically\n- **Missing pack.mcmeta?** Auto-generated for you\n\n\n## 🧠 How It Works (Simple Version)\n\n### 🌐 Network Optimization\nWhen you're on a server, it sends you **thousands of packets every second** — particle effects, entity spawns, world events. G1axFixer filters out the ones you don't need:\n\n- An explosion happens 256 blocks away? **Ignored** — you can't see it anyway\n- The server sends 100 entity spawns in one second? **Throttled** to prevent lag\n- Your character is standing still? **Stops sending pointless position updates**\n\n### 🎮 Entity Optimization\nMinecraft normally updates every single entity at full speed, even ones hundreds of blocks away. G1axFixer adds **smart distance-based throttling**:\n\n- **Nearby entities** → Full speed, no change\n- **Medium distance** → Updated every other tick (you won't notice)\n- **Far away** → Updated every few ticks (completely invisible to you)\n- **Item frames, dropped items, armor stands** → Updated way less often (they barely move anyway)\n- **Players, bosses, projectiles** → Never throttled (these always matter)\n\n### 🖥️ Render Optimization\nYour GPU wastes tons of power rendering things you can barely see:\n\n- **Dropped items** more than 64 blocks away? **Not rendered**\n- **Item frames** more than 45 blocks away? **Skipped**\n- **Armor stands** more than 90 blocks away? **Hidden**\n- **Chests, signs, banners** far away? **Culled from rendering**\n- **Too many particles?** Capped at 1000 per tick (you won't notice the limit)\n\n### 💾 Memory Management\nOn lower-end PCs, G1axFixer watches your available memory:\n\n- When memory gets low, it **automatically increases culling** — rendering fewer distant things to free up resources\n- Prevents **out-of-memory crashes** before they happen\n\n### 🛡️ Crash Prevention\n8 different protection systems catch errors before they crash your game:\n\n- Broken ZIP resource packs → Skipped safely\n- Oversized textures → Handled without GPU crash\n- Missing textures → Replaced with fallback\n- Missing sounds → Silently cancelled\n- Broken models → Substituted\n- Bad language files → Skipped\n- Missing pack.mcmeta → Auto-generated\n- Stuck resource reload → Timeout protection\n\n\n## 📦 Installation\n\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "custom",
+			"url": "https://anupambuilds.store/donate",
+			"from": "owner-repositories"
+		}
+	],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 2,
+		"more": 0,
+		"people": [
+			{
+				"login": "tech-anupam",
+				"commits": 2,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

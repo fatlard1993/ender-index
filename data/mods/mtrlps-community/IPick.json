@@ -1,0 +1,166 @@
+{
+	"repo": "mtrlps-community/IPick",
+	"host": "github",
+	"description": "Automatically selects the fastest IP in the server to connect to",
+	"stars": 1,
+	"archived": false,
+	"license": "CC0-1.0",
+	"created": "2026-02-16T15:49:51Z",
+	"pushed": "2026-02-26T03:27:29Z",
+	"releases": [
+		{
+			"tag": "v1.1.0",
+			"published": "2026-02-26T03:29:27Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 362565028,
+					"name": "ipick-1.1.0.jar",
+					"url": "https://github.com/mtrlps-community/IPick/releases/download/v1.1.0/ipick-1.1.0.jar",
+					"size": 31259,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "8d3a06878627cdc888a3729ba7cd01163877f58811e98aec56194099602013ba",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "ipick",
+							"version": "1.1.0",
+							"name": "IPick",
+							"description": "Automatically selects the fastest IP in the server to connect to",
+							"minecraft": "~1.20.4",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": "e7681741df50ccd1fa3c35e7e4d1db63d7122f3356f2d79f86c09180b3369ec0.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 14,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/lnlfly/util/IpManager.class": [
+									"java/net/URL.openConnection",
+									"java/net/Socket.<init>",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.connect",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {
+							"gitea.dusays.com": [
+								"com/lnlfly/config/ModConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### ✨ 新功能\n\n- **IP 缓存系统** — 缓存已获取的 IP 列表，缓存为空时自动回退到远程获取\n- **异步延迟测试** — 延迟测试改为异步执行，不再阻塞主流程\n- **延迟 Tooltip** — 服务器列表中悬停可查看各 IP 延迟详情\n\n### 🔧 优化与改进\n\n- 修复线程安全问题与 ExecutorService 泄漏\n- 替换已弃用的 `new URL(String)` 为 `URI`\n- 服务器检测逻辑重构为独立工具类，提升可维护性\n\n### 📦 兼容性\n\n- Minecraft 1.20.4\n- Fabric Loader 0.15.7\n- Java 17+\n\n---\n\n**Full Changelog**: https://github.com/mtrlps-community/IPick/compare/v1.0.0...v1.1.0"
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-02-17T12:44:20Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 357325890,
+					"name": "ipick-1.0.0.jar",
+					"url": "https://github.com/mtrlps-community/IPick/releases/download/v1.0.0/ipick-1.0.0.jar",
+					"size": 27365,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "37c5e826b947f8a577bb8fd7755a3473a477c92e6b68363d48886bcf0a8b3dcc",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "ipick",
+							"version": "1.0.0",
+							"name": "IPick",
+							"description": "Automatically selects the fastest IP in the server to connect to",
+							"minecraft": "~1.20.4",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": "e7681741df50ccd1fa3c35e7e4d1db63d7122f3356f2d79f86c09180b3369ec0.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 12,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/lnlfly/util/IpManager.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.connect",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.close",
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"gitea.dusays.com": [
+								"com/lnlfly/config/ModConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### ✨ 新功能\n\n- 自动从远程地址拉取可用 IP 列表\n- 对候选节点执行真实握手延迟测试\n- 自动选择最低延迟节点作为连接目标\n- 多人游戏列表中实时显示测速状态与最优节点信息\n- 在“添加/编辑服务器”界面提供“进入时选择最优IP”开关\n- 支持目标服务器域名配置\n\n### 🔧 优化与改进\n\n- 优化测速状态显示逻辑，减少状态闪烁\n- 统一目标域名匹配逻辑，避免多处硬编码\n- 增强并发场景下的测速结果一致性\n- 支持将服务器列表 Ping 链路切换为优选 IP\n\n### 📦 兼容性\n\n- Minecraft: **1.20.4**\n- Fabric Loader: **0.15.7+**\n- Fabric API: **0.96.11+1.20.4**\n- Java: **17+**\n\n### ⚙️ 配置项\n\n配置文件：`.minecraft/config/ipick_mod.json`\n\n- `selectBestIpOnEnter`：是否开启进入时优选\n- `targetServerAddress`：目标服务器域名\n- `ipListUrl`：IP 列表来源地址\n\n---\n\n**Full Changelog**: https://github.com/mtrlps-community/IPick/commits/v1.0.0"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 35,
+		"more": 0,
+		"people": [
+			{
+				"login": "airtouch97",
+				"commits": 35,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

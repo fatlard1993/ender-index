@@ -1,0 +1,309 @@
+{
+	"repo": "MineYuanlu/SeedMapForXaero",
+	"host": "github",
+	"description": "Minecraft Fabric Mod",
+	"stars": 8,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-06-29T11:22:20Z",
+	"pushed": "2026-10-30T08:58:05Z",
+	"releases": [
+		{
+			"tag": "v0.7.3",
+			"published": "2026-10-29T16:30:11Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 689172912,
+					"name": "seed-map-for-xaero-0.7.3.jar",
+					"url": "https://github.com/MineYuanlu/SeedMapForXaero/releases/download/v0.7.3/seed-map-for-xaero-0.7.3.jar",
+					"size": 7768132,
+					"downloads": 15,
+					"inspection": 2,
+					"sha256": "e587f049a66ea4664764a4740dffc6d30ad7a5ead990fb249a4b2903a4af3e10",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "seed-map-for-xaero",
+							"version": "0.7.3",
+							"name": "Seed Map For Xaero",
+							"description": "Shows seed-based biome preview and structures on Xaero's World Map",
+							"minecraft": ">=26.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaeroworldmap"
+							],
+							"provides": []
+						}
+					],
+					"icon": "5f7b6ca9caf8c14673fff7f9e5eeb3782bdee30bc51e420e0330e697304cf8f1.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 157,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"bid/yuanlu/seedmap4xaero/client/nativeapi/Xsm.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**面向玩家 / For Players**\n\n- 大幅优化地图生成性能（#18 生成期卡顿）：瓦片缓存改为全局 LRU 预算（默认 128MB），同一种子/维度内重开世界地图不再整屏重新生成；新增统一生成调度器，可见瓦片优先于背景与预取任务；生成线程自动收紧至最多 4 个并降低线程优先级，游玩时不与游戏抢 CPU\n- 打开地图加载更平滑：视口先铺全屏粗层背景再逐级细化，视野外圈预取改为环形外扩；新增“后台预生成”选项（默认关闭），游玩中按设定半径预先生成粗层背景，后续打开地图更即时\n- 设置面板新增性能区：生成线程数（自动/手动）、瓦片缓存容量、视野外圈预取开关、后台预生成开关与半径、性能统计 HUD 开关；磁盘缓存标记为规划中暂不展示；滑条支持按住拖动（与图标/颜色滑条一致），松开即写入新的全局配置文件 `global/perf_config.json`\n- 性能统计 HUD（可在面板开启）：显示瓦片生成速率、平均耗时、生成队列、缓存占用与渲染帧耗时；刷新降为每 500ms 且帧耗时取窗口均值、数值等宽对齐，显示稳定不跳动\n- 修复 MC 26.2/26.3 上世界内结构高亮 HUD 图标位于相机前方时可能被误判在背后而隐藏的问题：前后判定改用相机朝向点积，不再依赖随驱动/深度约定变化的 NDC z 区间\n- 修复 MC 26.2/26.3 兼容：读取当前界面改经兼容门面（26.1 字段 / 26.2+ `gui.screen()`），后台预生成在上述版本上不再触发运行时错误\n\n- Major tile generation performance improvements (#18 open-map stutter): the tile cache is now a global-budget LRU (default 128MB), so reopening the world map within the same seed/dimension no longer regenerates the whole screen; a unified generation scheduler prioritizes visible tiles over background and prefetch work; the worker pool is automatically capped at 4 threads at below-normal priority to avoid starving the game\n- Smoother map loading: the viewport is first covered by a full-screen coarse background then progressively refined, and prefetch expands as a ring outside the view; a new \"background pregen\" option (default off) pre-generates coarse backgrounds within a configurable radius while playing\n- New Performance section in the settings panel: generation thread count (auto/manual), tile cache capacity, prefetch toggle, background pregen toggle + radius, and perf-stats HUD toggle; disk cache is marked planned and hidden for now; sliders are draggable while held (like the icon/color sliders) and settings persist on release to the new global config file `global/perf_config.json`\n- Performance Stats HUD (toggleable in the panel): shows tile generation rate, average time, generation queue, cache usage and render frame time; refresh throttled to every 500ms with window-averaged frame time and monospace-aligned numbers, so the readout no longer jitters\n- Fixed structure highlight HUD icons on MC 26.2/26.3 being wrongly hidden while in front of the camera: front/behind detection now uses the camera forward-vector dot product instead of NDC z ranges, which vary with driver/depth conventions\n- MC 26.2/26.3 compatibility fix: reading the current screen now goes through the compat facade (26.1 field / 26.2+ `gui.screen()`), so background pregen no longer triggers a runtime error on these versions\n\n<details>\n<summary>开发细节 / Developer Details</summary>\n\n- 新增全局配置 `global/perf_config.json`（`configs/perf/` 包）：JVM 级语义（不随服务器切换），无 legacy 前身；脏标记 + 60s 周期落盘 + 面板显式 flush；`PerfConfig` 门面带变更监听器，触发线程池重建与缓存预算调整\n- `GenScheduler` 统一调度瓦片与即时任务，优先级 VISIBLE < BACKGROUND < PREFETCH（粗 scale → 近相机 → FIFO，比较器为纯函数，`GenSchedulerPriorityTest` 守护语义，含预生成积压不饿死可见请求）；`CellCache` 由 100 帧 TTL 重写为 5 层 LOD 全局预算 LRU，pending 背压 512 条 + 每帧纹理上传限流 8 张，被驱逐 GPU 纹理延迟到 `endFrame` 关闭；`xsm$prefetchAround` 改为视口粗层背景链（×4 逐级铺满）+ 外扩半视口环；`BackgroundPregen` 游玩中按半径生成粗 3 层 {最大档, /4, /16}；线程池配置变更经代数机制优雅重建，并修复重建竞态丢工作项\n- 渲染管线：C `genCellImg` 由 RGB 改输出 RGBA 4B/px，Java 侧整块 `MemorySegment.copy` 进 `int[]`，去除 4096 次逐像素转换；C 单测求和改用 RGB 通道（alpha 恒 0xFF 会掩盖全零）；SuperScale fallback 升级为 ×4 起逐级上溯至 256 的多级回退\n- `CompatGui.currentScreen`：26.1 反射读 `Minecraft.screen` 字段，26.2+ 扫描 `Gui` 门面的 `screen()` 访问器，MethodHandle 首次解析后缓存，全部失效返回 null 降级；`HighlightHudRenderer` 前后判定抽为 `isBehind`（`Camera.forwardVector()` 水平点积 ≤ 0 判背后），`ndcToScreen` 只做坐标映射，新增/扩展 JVM 单测\n- 测试：`PerfConfigTest`（11 例，含越界钳制/落盘/监听器）、`GenSchedulerPriorityTest`；E2E 新增 perf_config.json 落盘断言、性能区展开截图与后台预生成 tick 覆盖，teardown 的 server Halt 移入 finally（断言失败不再死锁）；修复 `SeedMapClientGameTest` 在 develop/perf_opt 分支合并时 try/catch/finally 结构错乱导致 compileGametestJava 失败（gametest source set 不含于 `./gradlew build`，本地未拦截）\n- 文档：新增 `doc/perf.md`（内存模型/调度论证/预取 scale 选择/磁盘缓存规范），各层 AGENTS.md 同步\n\n..."
+		},
+		{
+			"tag": "v0.7.2",
+			"published": "2026-10-25T17:02:40Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 675608013,
+					"name": "seed-map-for-xaero-0.7.2.jar",
+					"url": "https://github.com/MineYuanlu/SeedMapForXaero/releases/download/v0.7.2/seed-map-for-xaero-0.7.2.jar",
+					"size": 7695553,
+					"downloads": 22,
+					"inspection": 2,
+					"sha256": "f094a8e98cf52c8466a461feb410b812662cdb9182b1487bb89964050cbf010d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "seed-map-for-xaero",
+							"version": "0.7.2",
+							"name": "Seed Map For Xaero",
+							"description": "Shows seed-based biome preview and structures on Xaero's World Map",
+							"minecraft": ">=26.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaeroworldmap"
+							],
+							"provides": []
+						}
+					],
+					"icon": "5f7b6ca9caf8c14673fff7f9e5eeb3782bdee30bc51e420e0330e697304cf8f1.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 151,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"bid/yuanlu/seedmap4xaero/client/nativeapi/Xsm.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**面向玩家 / For Players**\n\n- 修复 MC 26.3 上打开世界地图且生物群系层可见时必定崩溃的问题（#32）：崩溃由兼容层反射解析 `blitSprite` 时未区分同参数个数的两个重载（透明度 float 版与着色 int 版）导致；现按精确参数形状匹配重载，优先取透明度版本，仅有着色版本时降级为等价的 ARGB 着色调用\n- 附带修复同路径下的潜在显示异常：`blit`/`blitSprite` 匹配规则统一收紧为逐参数类型精确匹配，不再依赖方法枚举顺序\n\n- Fixed the guaranteed crash on MC 26.3 when opening the world map with the biome layer visible (#32): the compat layer's reflective lookup of `blitSprite` couldn't distinguish two overloads sharing the same parameter count (float alpha vs int color); it now matches overloads by exact parameter signature, prefers the alpha version, and falls back to an equivalent ARGB tint call if only the color version exists\n- Related rendering calls hardened: `blit`/`blitSprite` matching rules are unified to exact per-parameter-type matching, no longer relying on method enumeration order\n\n<details>\n<summary>开发细节 / Developer Details</summary>\n\n- 兼容层 `CompatGui.blitSprite` 改为\"方法名 + 逐位基本类型形状\"精确匹配重载：26.1/26.3 上 `GuiGraphicsExtractor` 同时存在 7 参 `(…, float alpha)` 与 `(…, int color)` 重载，`getMethods()` 顺序未定义，26.3 上宽松匹配先命中 int 版，`invoke(float)` 抛 `WrongMethodTypeException`；仅存 int 版时降级为 `alpha<<24 | 0xFFFFFF` ARGB tint（语义等价）；新增 JVM 单测 `CompatGuiMethodMatchTest` 模拟两种方法表排序及诱饵排除\n- 测试加固：E2E 新增面板生物群系区展开截图 + `blitSprite` 渲染路径断言（`CompatGui.blitSpriteCallCount` 计数增长 + 客户端未崩），universal-e2e 从此覆盖 #32 崩溃路径；E2E `runTest` 重构为失败立即落盘日志，避免 try-with-resources 死锁吞掉异常\n- CI 工具链固定机制：新增 `.github/toolchain-versions.json`（Windows msys2 编译链包版本 + Android NDK 版本，\"最后验证通过\"快照语义，非 pin）；新增每周二 `refresh-toolchain.yml` 用 `tools/resolve_toolchain.py` 算最新候选，在 `ci/toolchain-bump` 分支跑完整门禁，全绿才快进推 master（参考 #33）；runner label 钉死 windows-2025 / macos-15\n- CI 门禁扩展：`matrix-test.yml` / `build.yml` 新增可选 `ref` input，任意分支/提交可手动跑全量门禁（`gh workflow run <wf> --ref <branch> [-f ref=<SHA>]`），不必先 push 到 develop\n- CI 修复：toolchain JSON 改从 caller 提交恢复（历史 SHA 也能构建）；JSON 恢复步骤挪出 msys2 shell（其环境无 git，exit 127）\n- 工程杂项：新增 GitHub Issue（中英 bug/feature）与 PR 模板；新增 `scripts/download_e2e.sh`（下载 E2E CI 产物并按阶段拼接截图）；`versions.json` 自动刷新（26.3 行 fabricApi 0.162.0 → 0.163.0）\n\n- `CompatGui.blitSprite` now matches overloads by exact per-primitive-type signature (\"name + shape\"): on 26.1/26.3 `GuiGraphicsExtractor` exposes both 7-arg `(…, float alpha)` and `(…, int color)` overloads whose `getMethods()` order is undefined, so on 26.3 loose matching hit the int variant and `invoke(float)` threw `WrongMethodTypeException`; falls back to `alpha<<24 | 0xFFFFFF` ARGB tint when only the int variant exists; new JVM unit test `CompatGuiMethodMatchTest` simulates both method-table orderings and decoy exclusion\n- Test hardening: E2E now expands the panel's biome section, takes a dedicated screenshot and asserts the `blitSprite` render path (`CompatGui.blitSpriteCallCount` increments + client survives), so universal-e2e covers the #32 crash path; `runTest` refactored to flush logs immediately on failure instead of being swallowed by a try-with-resources deadlock\n- CI toolchain fixed-version mechanism: new `.github/toolchain-versions.json` (Windows msys2 build-chain package versions + Android NDK version; \"last verified good\" snapshot semantics, not pinning); new weekly Tuesday `refresh-toolchain.yml` using `tools/resolve_toolchain.py` to compute candidates and run the full gate on `ci/toolchain-bump`, fast-forwarding master only when green (#33); runner labels pinned to windows-2025 / macos-15\n- CI gate extension: `matrix-test.yml` / `build.yml` gain an optional `ref` input so any branch/commit can run the full gate manually (`gh workflow run <wf> --ref <branch> [-f ref=<SHA>]`) without pushing to develop first\n- CI fixes: toolchain JSON is restored from the caller's commit (historical SHAs can build again); the JSON restoration step moved out of the msys2 shell (which lacks git, exit 127)\n\n..."
+		},
+		{
+			"tag": "v0.7.1",
+			"published": "2026-10-19T04:10:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 655204457,
+					"name": "seed-map-for-xaero-0.7.1.jar",
+					"url": "https://github.com/MineYuanlu/SeedMapForXaero/releases/download/v0.7.1/seed-map-for-xaero-0.7.1.jar",
+					"size": 7698795,
+					"downloads": 47,
+					"inspection": 2,
+					"sha256": "a17be0c8443a576a3b04fd403beee22f6e8e28c5998b7a5be6b4ce337b9e9e1c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "seed-map-for-xaero",
+							"version": "0.7.1",
+							"name": "Seed Map For Xaero",
+							"description": "Shows seed-based biome preview and structures on Xaero's World Map",
+							"minecraft": ">=26.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaeroworldmap"
+							],
+							"provides": []
+						}
+					],
+					"icon": "5f7b6ca9caf8c14673fff7f9e5eeb3782bdee30bc51e420e0330e697304cf8f1.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 150,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"bid/yuanlu/seedmap4xaero/client/nativeapi/Xsm.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**面向玩家 / For Players**\n\n- 新增“世界出生点”图标：根据种子精确复现游戏出生点算法，直接在地图上标出世界出生点（主世界）；与其他结构一致，可在设置面板结构列表中开关，支持右键菜单转路标/高亮与分组，图标为床造型\n- 修复 MC 26.3 上战利品预览“详情”模式无法翻页的问题：翻页按钮点击不生效、穿透到地图触发拖动（#30）\n- 同一根因顺带修复 MC 26.3 上其他自定义点击/拖拽失灵：左键固定战利品悬浮框、结构右键菜单、服务器版本下拉与面板滑条拖动——26.3 更改了鼠标按键编号，旧版通用 jar 内联的按键常量集体失效，现改为运行时解析\n\n- New \"World Spawn\" icon: the world spawn point is reproduced exactly from the seed and marked on the map (overworld); like any structure it can be toggled in the settings list, grouped, waypointed/highlighted via the right-click menu, drawn as a bed icon\n- Fixed loot preview's detail mode pagination not working on MC 26.3: page button clicks fell through to map dragging (#30)\n- Same root cause also broke other custom mouse interactions on 26.3 — left-click pinning of the loot preview, structure right-click menus, the server version dropdown and panel slider drags; MC 26.3 renumbered mouse buttons and the universal jar's inlined constants went stale, so they are now resolved at runtime\n\n<details>\n<summary>开发细节 / Developer Details</summary>\n\n- native 新增 `querySpawn`：基于 cubiomes `getSpawn`（适应度/群系搜索 + 地表精修），仅主世界有效；`queryStrongholdsRange` 顺带改为复用已缓存的 Generator，省去每次重建\n- 新增 `SpawnCache`：出生点由种子唯一确定，首次渲染触发后台单次计算，volatile 快照发布，世界/维度切换作废\n- 新增 Java 侧伪结构类型 `WORLD_SPAWN`（id 26，无 cubiomes 结构配置，超出 native FEATURE_NUM），复用现有结构图标渲染管线；`FEATURE_NUM` 改取 max(native, 枚举最大 id+1)，旧持久化的 `StructureBitFlag` 数组自动补齐新长度以保证 equals/hashCode 稳定\n- 兼容层新增 `CompatInput`：运行时反射解析 `InputConstants.MOUSE_LEFT/RIGHT/MIDDLE`，替换各处硬编码按键编号——javac 会把编译期常量内联进 universal jar，26.1.2 的左键 0/右键 1 在 26.3（左 1/右 3）上失配；同时为 `StructureClickMixin` / `GuiMapVersionDropdownMixin` 的 `@Inject` 补 `cancellable = true`，避免消费点击时 `setReturnValue` 抛 `CancellationException`\n- 测试：C 单测 `querySpawn`（确定性、与 cubiomes 直算一致、非主世界返回 0）+ native 集成测试；E2E 新增 `assertLootPaging` 真实输入路径翻页回归（用 `CompatInput.MOUSE_LEFT` 保持跨版本）；结构图标表新增床 sprite（索引 26）与中英语言键\n\n- New native `querySpawn`: built on cubiomes `getSpawn` (fitness/biome search + surface refinement), overworld only; `queryStrongholdsRange` now reuses the cached Generator instead of rebuilding one per call\n- New `SpawnCache`: spawn is seed-determined, computed once in the background on first render, published as a volatile snapshot, invalidated on world/dimension switch\n- New Java-side pseudo structure type `WORLD_SPAWN` (id 26, no cubiomes config, beyond native FEATURE_NUM) reusing the existing structure icon pipeline; `FEATURE_NUM` is now max(native, max enum id + 1); legacy persisted `StructureBitFlag` arrays are auto-padded so equals/hashCode stay stable\n- New `CompatInput` in the compat layer: resolves `InputConstants.MOUSE_LEFT/RIGHT/MIDDLE` via runtime reflection, replacing hardcoded button codes — javac inlines compile-time constants into the universal jar, and 26.1.2's left=0/right=1 broke all comparisons on 26.3 (left=1/right=3); `@Inject` on `StructureClickMixin` / `GuiMapVersionDropdownMixin` also gains `cancellable = true` so consuming clicks no longer throws `CancellationException` from `setReturnValue`\n- Tests: C unit test for `querySpawn` (determinism, parity with direct cubiomes getSpawn, non-overworld returns 0) + native integration test; new E2E `assertLootPaging` regression driving real input (using `CompatInput.MOUSE_LEFT` for cross-version safety); bed sprite added at structure icon index 26 plus en/zh lang keys\n\n</details>\n\n**Full Changelog**: https://github.com/MineYuanlu/SeedMapForXaero/compare/v0.7.0...v0.7.1"
+		},
+		{
+			"tag": "v0.7.0",
+			"published": "2026-10-18T08:38:07Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 652956441,
+					"name": "seed-map-for-xaero-0.7.0.jar",
+					"url": "https://github.com/MineYuanlu/SeedMapForXaero/releases/download/v0.7.0/seed-map-for-xaero-0.7.0.jar",
+					"size": 7691881,
+					"downloads": 11,
+					"inspection": 2,
+					"sha256": "0a43569b22c24cb510fdf93a597311577ab4bc15ffaa0f7e2be18dc5aedf2ac1",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "seed-map-for-xaero",
+							"version": "0.7.0",
+							"name": "Seed Map For Xaero",
+							"description": "Shows seed-based biome preview and structures on Xaero's World Map",
+							"minecraft": ">=26.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaeroworldmap"
+							],
+							"provides": []
+						}
+					],
+					"icon": "5f7b6ca9caf8c14673fff7f9e5eeb3782bdee30bc51e420e0330e697304cf8f1.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 146,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"bid/yuanlu/seedmap4xaero/client/nativeapi/Xsm.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**面向玩家 / For Players**\n\n- 配置文件全面升级为可读的 JSON：首次启动自动从旧版二进制文件向上迁移，种子历史、结构标记、分组、隐藏群系/结构等设置全部保留；迁移后旧文件改名 `*.sm4x.legacy` 留存，可手动恢复\n- 修复 Android 启动崩溃：在 FCL/Pojav 等启动器下改用多重信号判定 Android，正确加载 bionic 版 native 库，不再误用 glibc 版本；native 加载失败时日志会带上 os/arch/android 上下文\n- 新增 60 秒周期自动保存：会话中的访问记录、标记与分组改动会定期落盘，意外崩溃时最多丢失约 1 分钟的标记/访问进度\n- 修复悬停崩溃：v0.6.2 引入的 tooltip 兼容层缺陷会让鼠标悬停结构图标、以及战利品预览的标题/物品 tooltip 时崩溃，现已修复\n- 标记数据更安全：标记按区块 region 分片存储，单个分片损坏不再导致全部标记丢失；删除某个种子的历史只清理该种子的标记目录\n\n- Config files are now readable JSON: on first launch your old binary files auto-upgrade, preserving seed history, structure marks, groups and hidden biome/structure settings; the old files are renamed `*.sm4x.legacy` and kept for manual recovery\n- Fixed an Android launch crash: on FCL/Pojav launchers, Android is now detected via multiple signals so the correct bionic native library loads instead of the glibc one; native load failures now log os/arch context\n- New 60-second periodic auto-save: visits, marks and group changes are flushed during a session, so a crash loses at most ~1 minute of mark/visit progress\n- Fixed a hover crash: a tooltip bug introduced in v0.6.2 crashed when hovering structure icons and loot preview title/item tooltips; fixed for both the 26.1 and 26.3 code paths\n- Safer mark data: marks are stored in per-region shards, so one corrupt file no longer loses all marks; deleting a seed's history removes only that seed's mark directory\n\n<details>\n<summary>开发细节 / Developer Details</summary>\n\n- 配置系统 v2：现行格式为纯 JSON 文本（pretty、无信封）；旧 `*.sm4x` 读出即迁移并改名 `.sm4x.legacy`；加载回退链 `.json` → `.json.old` → `.sm4x` → `.sm4x.old` → 默认值；`Sm4xCodec`/`Sm4xFile` 冻结为 legacy 读取与 golden 测试 fixture\n- 结构/生物群系持久化为稳定字符串 key（`minecraft:village` / `minecraft:plains`，自定义结构用完整 id 如 `terralith:xxx`），运行时仍用 int id；未注册 key 以 orphan 原样保留，数据包结构移除后数据不丢\n- marks 分片：`structure_settings.json` + `marks/<seedHex>/<mwId>/r.<x>.<z>.json`（64×64 区块/region），region 级脏标志，组改名/删组跨分片重写引用，`removeSeed` = 刷脏后删目录\n- 轮替契约：`rotate=true` 仅世界切换等生命周期保存；会话内与新增 `END_CLIENT_TICK` 60s 周期刷盘一律 `rotate=false`（`.old` 恒为上次生命周期检查点）\n- 迁移加固：解码失败继续回退链，落盘失败（磁盘满/只读）保内存数据且 legacy 不改名、下次启动重试；新增 147 项回归 + golden fixture + v0.6.1 真实采集字节 fixture + E2E 迁移链路\n- 顺手修复：`StructureBitFlag` variant=31 位移回卷污染整类位；脏标志 CAS 写失败恢复脏；`BiomeType` 无 native 时确定性占位名 + `keyToId` 重名防御\n- compat：`CompatGui.tooltip` 补 `GuiGraphicsExtractor` 接收者首参（26.1 六参 / 26.3 七参同修）；E2E 新增 `assertLootTitleTooltipNoCrash` 用真实渲染帧回归，`ChestLootWidget` 增 getX/getY\n- native：Android 检测叠加 os.name/os.version、`POJAV_*`/`FCL_*` 环境变量与 Android 路径；加载失败分创建/解压两阶段报错，`UnsatisfiedLinkError` 单独 catch，成功后 FFM 冒烟调用 `xsmGetStructFEATURE_NUM`（fixed #11 #20 #24）\n- E2E 改为反射读取当前 screen 以兼容 26.2/26.3；CI 版本矩阵刷新（Xaero 1.47.0 / minimap 26.6.0 / Fabric API 0.162.0+26.3）；AGENTS 文档更新\n\n- Config v2: current format is plain JSON (pretty, no envelope); old `*.sm4x` is migrated on read and renamed `.sm4x.legacy`; fallback chain `.json` → `.json.old` → `.sm4x` → `.sm4x.old` → defaults; `Sm4xCodec`/`Sm4xFile` frozen as legacy readers and golden test fixtures\n- Structures/biomes persist as stable string keys (`minecraft:village` / `minecraft:plains`, custom packs as full ids e.g. `terralith:xxx`), runtime still int-indexed; unregistered keys kept as orphans so data survives pack removal\n- Marks sharding: `structure_settings.json` + `marks/<seedHex>/<mwId>/r.<x>.<z>.json` (64×64 chunks per region), region-level dirty flags, group rename/delete rewrites refs across shards, `removeSeed` = flush then delete directory\n- Rotation contract: `rotate=true` only for lifecycle saves (world switch); in-session and new 60s periodic flush (`END_CLIENT_TICK`) use `rotate=false` (`.old` stays the last lifecycle checkpoint)\n- Migration hardening: decode failure falls through the chain; persist failure (disk full/read-only) keeps decoded data in memory and does not retire legacy (retry next launch); 147 new regressions + golden fixtures + real v0.6.1-collected bytes + E2E migration path\n\n..."
+		},
+		{
+			"tag": "v0.6.2",
+			"published": "2026-10-04T03:45:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 609064880,
+					"name": "seed-map-for-xaero-0.6.2.jar",
+					"url": "https://github.com/MineYuanlu/SeedMapForXaero/releases/download/v0.6.2/seed-map-for-xaero-0.6.2.jar",
+					"size": 7631250,
+					"downloads": 49,
+					"inspection": 2,
+					"sha256": "fd3da19ab73be71c6415c1df3e05f1fadba1ab96acf6caadd1eca7ffa2f666db",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "seed-map-for-xaero",
+							"version": "0.6.2",
+							"name": "Seed Map For Xaero",
+							"description": "Shows seed-based biome preview and structures on Xaero's World Map",
+							"minecraft": ">=26.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaeroworldmap"
+							],
+							"provides": []
+						}
+					],
+					"icon": "5f7b6ca9caf8c14673fff7f9e5eeb3782bdee30bc51e420e0330e697304cf8f1.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 129,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"bid/yuanlu/seedmap4xaero/client/nativeapi/Xsm.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**面向玩家 / For Players**\n\n- 新增对 Minecraft 26.3 的支持：仍是一个通用 jar，26.1 至 26.3 全版本通用，无需按版本选择下载；26.3 需搭配 Xaero's World Map 1.46.2+ 与 Fabric API 0.161.0+\n- 26.3 上世界生成与旧版本完全一致，结构图标、分组染色、战利品预览、生物群系配色等全部功能照常可用；旧版本（26.1 / 26.2）行为与外观无任何变化\n\n- Added support for Minecraft 26.3: still one universal JAR covering 26.1 through 26.3, no per-version download needed; 26.3 requires Xaero's World Map 1.46.2+ and Fabric API 0.161.0+\n- World generation on 26.3 matches older versions exactly — structure icons, group tints, loot preview, biome coloring and all other features work as before; versions 26.1 / 26.2 see no behavior or visual changes\n\n<details>\n<summary>开发细节 / Developer Details</summary>\n\n- 新增 `client/compat/` 跨版本兼容层（`CompatTextures` / `CompatGui` / `CompatPose` / `CompatNoise`）：26.3 将 blaze3d 渲染栈迁至 renderpearl，强类型调用在运行时描述符断裂；全部版本敏感 API 收编为运行时反射门面，业务代码零版本敏感 import，`tools/check_compat_imports.sh` 在 pr-check 中 grep 强制\n- `CompatNoise`：26.3 彻底移除 `PerlinSimplexNoise`（沼泽草色噪声），按 26.1.2 反编译逐位复刻；`CompatNoiseTest` 在仍有 vanilla 类的版本上做 4000+ 点逐位对照回归\n- C 侧 `render.cpp` `mcVersionMap` 增加 26.3 → MC_26_2 映射（worldgen 未变）；`Xsm.SUPPORTED_VERSIONS` 同步\n- README 重构为面向用户的支持版本表（含 26.3），新增单 jar 多版本兼容说明\n- CI：矩阵加入 26.3 线（5 MC × 新旧 Xaero）；按 MC 线覆盖 `xaeroMinimapVersion` 修复 26.3 依赖解析失败；`versions.json` 刷新（Xaero 1.46.4 / Fabric API 0.161.0）；e2e 无头改用 `SDL_VIDEODRIVER=offscreen` + libEGL 绕开 26.3 renderpearl 与 Xvfb GLX 不兼容，`doc/testing.md` 记录该要求\n\n- New `client/compat/` cross-version compat layer (`CompatTextures` / `CompatGui` / `CompatPose` / `CompatNoise`): MC 26.3 moved the blaze3d render stack to renderpearl, breaking binary descriptors of strongly-typed calls; all version-sensitive APIs now go through runtime-reflection facades with zero version-sensitive imports in business code, enforced by a grep script (`tools/check_compat_imports.sh`) in pr-check\n- `CompatNoise`: MC 26.3 removed `PerlinSimplexNoise` (used for swamp grass color noise); bit-exact replica re-implemented from 26.1.2 decompilation, with a 4000+ point bit-exact regression test on versions where the vanilla class still exists\n- Native side: `render.cpp` `mcVersionMap` adds 26.3 → MC_26_2 (worldgen unchanged); `Xsm.SUPPORTED_VERSIONS` updated accordingly\n- README restructured into a user-facing supported-versions table (incl. 26.3) plus single-JAR multi-version compat notes\n- CI: 26.3 line added to the matrix (5 MC × old/new Xaero); per-MC-line `xaeroMinimapVersion` override fixes 26.3 dependency resolution; `versions.json` refreshed (Xaero 1.46.4 / Fabric API 0.161.0); headless e2e now uses `SDL_VIDEODRIVER=offscreen` + libEGL to bypass the 26.3 renderpearl / Xvfb GLX incompatibility, documented in `doc/testing.md`\n\n## What's Changed\n* 支持 MC 26.3: 跨版本兼容层 + CI 适配 by @MineYuanlu in https://github.com/MineYuanlu/SeedMapForXaero/pull/22\n* fix(ci): 26.3 E2E 无头启动挂死 — SDL_VIDEODRIVER=offscreen + libEGL by @MineYuanlu in https://github.com/MineYuanlu/SeedMapForXaero/pull/23\n\n</details>\n\n**Full Changelog**: https://github.com/MineYuanlu/SeedMapForXaero/compare/v0.6.1...v0.6.2"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [
+		"assets/structures/end-island.png",
+		"assets/structures/igloo-basement.png",
+		"doc/hero.png"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 165,
+		"more": 0,
+		"people": [
+			{
+				"login": "MineYuanlu",
+				"commits": 165,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

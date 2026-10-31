@@ -1,0 +1,297 @@
+{
+	"repo": "WilyFoxM/DrawLess",
+	"host": "github",
+	"description": "Same scene. Less work.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-10-15T21:45:49Z",
+	"pushed": "2026-10-29T19:41:40Z",
+	"releases": [
+		{
+			"tag": "1.2.0",
+			"published": "2026-10-29T19:41:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 689695970,
+					"name": "drawless-1.2.0.jar",
+					"url": "https://github.com/WilyFoxM/DrawLess/releases/download/1.2.0/drawless-1.2.0.jar",
+					"size": 376964,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "ecae801cea57c2f0e7717ca521c98e419b1782f7c18b6f3f1cd6361ec79835be",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "drawless",
+							"version": "1.2.0",
+							"name": "DrawLess",
+							"description": "Client-side rendering optimizations for Item Display scenes and particles.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium"
+							]
+						}
+					],
+					"icon": "1880ff639f3c9e9984939b7d131865559b2a30a054339e65ab79b69f685a5d4d.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 163,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**DrawLess 1.2.0 — Player armor on the GPU.**\n\nDrawLess 1.2.0 starts optimizing player rendering. Player armor now stays on the\nGPU instead of being rebuilt every frame, and new player profiling shows where\nplayer rendering spends its CPU time.\n\n**Players**\n\n- New **Players** settings page with **GPU armor geometry**, **ON by default**.\n  A configuration that saved this option as OFF keeps it OFF.\n- Armor model parts keep their geometry on the GPU; each frame sends only part\n  poses, lighting and tint. Animation and the normal model traversal stay live.\n- Base armor textures share one texture atlas, so armor layers, trims and\n  enchantment glint draw in a few calls instead of one per armor texture.\n- Base layers, overlays, trims and glint of one armor piece always use the same\n  path, so glint and trims line up exactly. Glowing players, animated textures,\n  non-vanilla armor models and textures that cannot be packed use ordinary rendering.\n- Armor in the inventory and other menu previews always uses ordinary rendering.\n\n**Measurements**\n\n- Added `/drawless profile players <label> [control|stages|deep]`: a sampled\n  CPU profile of player extraction, layers, model preparation, name tags and\n  drawing, saved as a readable report and JSON.\n- Added the `player_armor` target for automated comparisons, for example\n  `/drawless benchmark 3 armor player_armor`.\n\n**Compatibility**\n\nGPU armor is disabled with Iris and with resource packs that replace the entity\nor glint shaders; existing ImmediatelyFast and Iris exclusions remain in place.\nTested with Sodium 0.9.2 and ImmediatelyFast 1.16.5. These safeguards do not\nimply validation with every combination of rendering or model mods.\n\n**Performance and limitations**\n\nIn alternating player profiles on a live server scene with about 28 visible\nplayers, armor rendering CPU dropped by about 1.3 ms per frame, with no visual\ndifferences noticed. FPS in that scene varied too much with the player count\nfor a headline FPS claim, and GPU time was not measured. Existing public\nbenchmarks keep their original build labels and conditions.\n\nGlint is drawn after solid armor and before translucent objects. Local native\nframe comparisons (standalone and with Sodium + ImmediatelyFast, with and without\nimproved transparency) matched vanilla behind water, stained glass, translucent\nitem displays and slimes; behind a text display with a semi-transparent\nbackground, glint stays slightly more visible than in vanilla (up to 9/255 per\nchannel). A rejected earlier armor approach is recorded in\n[the decision log](https://github.com/WilyFoxM/DrawLess/blob/main/docs/REJECTED_OPTIMIZATIONS.md).\n\n**Requirements**\n\nMinecraft **26.2**, Fabric Loader **0.19.3+**, Fabric API **0.161.0+26.2** and\nJava **25**. Sodium is optional; no server-side installation is needed.\n\nThanks to **fzzyhmstrs and the Particle Core contributors**, alongside\n**RK_01 / RaphiMC**, the **ImmediatelyFast contributors**, **LlamaLad7** and the\n**MixinExtras contributors**. [Attributions and reference links](https://github.com/WilyFoxM/DrawLess#attributions)."
+		},
+		{
+			"tag": "1.1.0",
+			"published": "2026-10-26T20:50:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 679432413,
+					"name": "drawless-1.1.0.jar",
+					"url": "https://github.com/WilyFoxM/DrawLess/releases/download/1.1.0/drawless-1.1.0.jar",
+					"size": 267776,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "317cbde877d2d980b76137376928acbbe22fa66d48ae27a4ff573ca1caefd329",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "drawless",
+							"version": "1.1.0",
+							"name": "DrawLess",
+							"description": "Client-side rendering optimizations for Item Display scenes and particles.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium"
+							]
+						}
+					],
+					"icon": "1880ff639f3c9e9984939b7d131865559b2a30a054339e65ab79b69f685a5d4d.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 114,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**DrawLess 1.1.0 — Less repeated work. Better measurements.**\n\nDrawLess 1.1.0 improves particle lighting and collision reuse, and adds automated\ncomparisons to help measure what the optimizations actually save in your scene.\n\n**Particles**\n\n- Particle light and empty-collision caches are now **ON by default for new settings**.\n  Existing saved ON/OFF choices are preserved. Both switches remain available under\n  **F8 → Particles**.\n- Reuse base particle lighting across rendering passes within a valid client tick,\n  with invalidation when blocks, chunks or published lighting change.\n- Reuse immutable block positions and a bounded table of chunk references and block\n  states, avoiding repeated world reads across overlapping collision checks.\n- Skip collision collection for empty air sections and non-air shapes verified as\n  empty for the current collision context. Unsupported cases use ordinary collision\n  handling, without reducing particle counts or pausing their simulation.\n- Release retained world data on disconnect, world changes and resource reloads.\n\n**Measurements**\n\n- Added automated **OFF → ON → OFF** comparisons, with one or three bracketed ON\n  runs. Compare the whole mod, particle caches together, individual particle caches,\n  text reuse or feature batching.\n- Save per-phase reports, a readable summary and JSON measurements; restore the\n  original settings afterwards. Detect camera/settings changes and focus loss,\n  and temporarily prevent Minecraft's AFK frame cap from contaminating a series.\n- Expanded particle CPU and cache diagnostics, including shared-state hits,\n  physical proof-state reads and context maintenance. These CPU scopes do not\n  measure GPU execution or all shared upload costs.\n\nFor example, `/drawless benchmark 3 smoke particles` compares both particle caches\nwith three bracketed ON runs. Use `/drawless benchmark cancel` to stop a series.\n\n**Compatibility**\n\nOverlapping particle caches are disabled when Particle Core or AsyncParticles is\npresent. With Iris or recognized dynamic-light integrations, light reuse stays\nwithin the current rendering pass. Existing ImmediatelyFast and Iris rendering\nexclusions remain in place. These safeguards do not imply validation with every\ncombination of optimization mods.\n\n**Performance and limitations**\n\nLocal checks and a live-scene comparison showed lower particle CPU costs, with no\nvisible differences reported in that field session. Scene variation prevents a\nnew headline FPS claim or a release-to-release improvement percentage. Existing\npublic benchmarks keep their original build labels and conditions.\n\nEXPANDED batching can still change overlapping layers; select LIMITED or OFF if\nneeded. Rejected particle experiments and their costs are recorded in\n[the decision log](https://github.com/WilyFoxM/DrawLess/blob/main/docs/REJECTED_OPTIMIZATIONS.md).\n\n**Requirements**\n\nMinecraft **26.2**, Fabric Loader **0.19.3+**, Fabric API **0.161.0+26.2** and\nJava **25**. Sodium is optional; no server-side installation is needed.\n\nThanks to **fzzyhmstrs and the Particle Core contributors**, alongside\n**RK_01 / RaphiMC**, the **ImmediatelyFast contributors**, **LlamaLad7** and the\n**MixinExtras contributors**. [Attributions and reference links](https://github.com/WilyFoxM/DrawLess#attributions)."
+		},
+		{
+			"tag": "1.0.0",
+			"published": "2026-10-23T20:06:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 670258327,
+					"name": "drawless-1.0.0.jar",
+					"url": "https://github.com/WilyFoxM/DrawLess/releases/download/1.0.0/drawless-1.0.0.jar",
+					"size": 225485,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "c913b2b7fdcc7ba708a59030376de1ed3aadb80b1dbd09597f25c454d65d2303",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "drawless",
+							"version": "1.0.0",
+							"name": "DrawLess",
+							"description": "Client-side rendering optimizations for Item Display scenes and particles.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium"
+							]
+						}
+					],
+					"icon": "1880ff639f3c9e9984939b7d131865559b2a30a054339e65ab79b69f685a5d4d.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 100,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "DrawLess 1.0.0 — Less work. Clearer controls.\nDrawLess 1.0.0 brings a redesigned settings experience and improved rendering compatibility, making its existing optimizations easier to configure and use alongside other mods.\nWhat’s new\n- A new navy-and-orange settings menu, organized into Rendering, Particles, Advanced and Diagnostics.\n- Global search and explanatory tooltips.\n- Clear ON/OFF switches, reversible mode selectors and draggable numbers with live Shift precision.\n- Full keyboard navigation, including Tab, arrow keys, Ctrl+F and Page Up/Down.\n- English and Russian translations that follow the Minecraft language setting.\n- Automatic saving, reset confirmation and a retry action if settings cannot be saved.\n- A compact 32×32 mod icon, reducing the release JAR from 1.39 MiB to 220.2 KiB — 84.6% smaller.\nControls\nOpen settings with F8, rebindable under Options → Controls → Key Binds → DrawLess. The old /drawless settings and bare /drawless menu shortcuts have been removed; diagnostic subcommands remain available. Existing saved settings are preserved.\nCompatibility\nReworked 18 rendering call-site hooks to use composable operation wrappers, reducing conflicts when other mods modify the same calls. Ordinary fallbacks preserve the surrounding hook chain. ImmediatelyFast and Iris exclusions remain in place; compatibility with every renderer is not guaranteed.\nPerformance\nThis release focuses on usability and compatibility. No new FPS improvement over 0.2.0 is claimed. Existing benchmarks retain their original build labels and conditions.\n[Full results, raw measurements and limitations](https://github.com/WilyFoxM/DrawLess/blob/main/benchmarks/README.md).\nKnown limitations\nEXPANDED batching remains the default and can change overlapping layers. If text backgrounds or other layers look incorrect, select LIMITED or OFF under Rendering → Feature batching. Optional text reuse and particle caches remain experimental and OFF by default.\nRequirements\nMinecraft 26.2, Fabric Loader 0.19.3+, Fabric API 0.161.0+26.2 and Java 25. Sodium is optional; no server-side installation is needed.\nThanks to RK_01 / RaphiMC, the ImmediatelyFast contributors, LlamaLad7 and the MixinExtras contributors. [Attributions and reference links](https://github.com/WilyFoxM/DrawLess#attributions)."
+		},
+		{
+			"tag": "0.2.0",
+			"published": "2026-10-17T13:07:39Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 650490026,
+					"name": "drawless-0.2.0.jar",
+					"url": "https://github.com/WilyFoxM/DrawLess/releases/download/0.2.0/drawless-0.2.0.jar",
+					"size": 1429914,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "91dd0c014237f36924c9d1ab80b7dca6f0440a81e347a339e30cbbff82c9a340",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "drawless",
+							"version": "0.2.0",
+							"name": "DrawLess",
+							"description": "Client-side rendering optimizations for Item Display scenes and particles.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 93,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**DrawLess 0.2.0 — Expanded feature batching**\nDrawLess 0.2.0 broadens feature batching to combine compatible material draws across more rendering groups, reducing separate draw submissions where the scene allows it.\n\n**What’s new**\n- EXPANDED batching enabled by default for new configurations and after resetting settings.\n- Three batching modes: OFF, LIMITED and EXPANDED. Existing saved choices are preserved.\n- Optional text and name-tag buffer reuse, with pass-local ownership and active-buffer validation. OFF by default.\n- Improved diagnostics: requested/effective modes, material reuse counters and CPU search/submission scopes.\n- Overlapping text/batching hooks are excluded when ImmediatelyFast is installed. Iris also disables feature batching.\n- Source distributions now include the project’s MIT license.\n\n**Performance**\nA separate 0.2.0-dev.4 benchmark recorded +34.53% mean paired FPS change in one animated Item Display scene: 241.88 FPS bracketed OFF baseline versus 325.39 FPS ON.\nThat test used Sodium, EXPANDED batching and optional text reuse, with particle caches OFF. It is not a measured improvement over 0.1.0 or a benchmark of final 0.2.0 defaults. OFF controls varied by 12.03%, and the Display population changed late in the series.\n[Full results, all seven phases, raw measurements and limitations](https://github.com/WilyFoxM/DrawLess/blob/main/benchmarks/README.md).\n\n**Known limitations**\nEXPANDED can change the appearance of overlapping transparent or opaque layers because it permits broader draw reordering. If text backgrounds or other layers look incorrect, select LIMITED or OFF under /drawless settings → Advanced.\nFPS gains depend on the scene and rendering bottleneck; no general improvement in frame-time stability is claimed.\n\n**Requirements**\nMinecraft 26.2, Fabric Loader 0.19.3+, Fabric API and Java 25. Sodium is optional.\nThanks to RK_01 / RaphiMC and the ImmediatelyFast contributors for the reference approaches. Detailed attribution and pinned source links are available in the README."
+		},
+		{
+			"tag": "0.1.0",
+			"published": "2026-10-15T21:53:10Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 645280277,
+					"name": "drawless-0.1.0.jar",
+					"url": "https://github.com/WilyFoxM/DrawLess/releases/download/0.1.0/drawless-0.1.0.jar",
+					"size": 1417787,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "3d69eb5f7ad88730327a97068b78c2c525a87948e7bbb960056454ca61eceb3b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "drawless",
+							"version": "0.1.0",
+							"name": "DrawLess",
+							"description": "Client-side rendering optimizations for Item Display scenes and particles.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 86,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Getting started"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [
+		"benchmarks/results/spawn-20261016/cache-cpu.png",
+		"benchmarks/results/spawn-20261016/modrinth-card.png",
+		"benchmarks/results/spawn-20261016/phase-fps.png",
+		"benchmarks/results/spawn-20261017/cache-cpu.png",
+		"benchmarks/results/spawn-20261017/modrinth-card.png",
+		"benchmarks/results/spawn-20261017/phase-fps.png"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 14,
+		"more": 0,
+		"people": [
+			{
+				"login": "WilyFoxM",
+				"commits": 14,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

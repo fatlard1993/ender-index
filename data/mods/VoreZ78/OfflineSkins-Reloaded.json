@@ -1,0 +1,733 @@
+{
+	"repo": "VoreZ78/OfflineSkins-Reloaded",
+	"host": "github",
+	"description": "This is an unofficial port of OflineSkins mod made by zlainsama and ported by VoreZ",
+	"stars": 1,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-06-25T11:05:43Z",
+	"pushed": "2026-10-30T11:48:00Z",
+	"releases": [
+		{
+			"tag": "1.2.2-Fabric-1",
+			"published": "2026-10-30T11:48:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 691954622,
+					"name": "offlineskins-reloaded-1.21.6-1.21.8-Fabric-1.2.2.jar",
+					"url": "https://github.com/VoreZ78/OfflineSkins-Reloaded/releases/download/1.2.2-Fabric-1/offlineskins-reloaded-1.21.6-1.21.8-Fabric-1.2.2.jar",
+					"size": 304928,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "1bb55082e1fa68e39fc3f9cb8494f3e93d0946af6e481d6f0fe18cf49672e348",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "offlineskins-reloaded",
+							"version": "1.2.2",
+							"name": "OfflineSkins Reloaded",
+							"description": "Cache your local skins and capes for offline play!\n\nOriginally created by zlainsama (LainMI)",
+							"minecraft": ">=1.21.6 <=1.21.8",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"yet_another_config_lib_v3",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": "81af7959f580240c68f405d7e00044c18d11281a249d62a9f6fcf105fbfd1ffb.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 67,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"vorez/lib/SimpleDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/MojangService$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/Utils/RangeUtils.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/network/SmartInternetCheck.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								],
+								"vorez/network/URLConnectionValidator.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"example.com": [
+								"vorez/mods/skins/impl/ConfigOptions.class"
+							],
+							"skinsystem.ely.by": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"auth.tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"tlauncher.org": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class"
+							],
+							"api.mojang.com": [
+								"vorez/mods/skins/impl/MojangService$1.class"
+							],
+							"raw.githubusercontent.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"discord.gg": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"github.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"www.curseforge.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"modrinth.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"crafatar.com": [
+								"vorez/mods/skins/providers/CrafatarCapeProvider.class",
+								"vorez/mods/skins/providers/CrafatarSkinProvider.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Fixed 1.2.0  URLs save process\n- 1.2.0\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```\n\n- 1.2.2\n``` java\nOption<String> customServerSkinUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_skin\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_skin\")))\n                .binding(\n                        defaults.linkCustomServerSkin,\n                        () -> options.linkCustomServerSkin,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerSkin = value;\n                                setSkinUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n\n        Option<String> customServerCapeUrl = Option.<String>createBuilder()\n                .name(Component.translatable(\"option.offlineskins-reloaded.link_custom_server_cape\"))\n                .description(OptionDescription.of(Component.translatable(\"tooltip.offlineskins-reloaded.link_custom_server_cape\")))\n                .binding(\n                        defaults.linkCustomServerCape,\n                        () -> options.linkCustomServerCape,\n                        value -> {\n                            if (!options.customServersList.isElyBy() && !options.customServersList.isTLauncher()) {\n                                options.linkCustomServerCape = value;\n                                setCapeUrl(value);\n                            }\n                        }\n                )\n                .controller(StringControllerBuilder::create)\n                .build();\n```"
+		},
+		{
+			"tag": "1.2.0-MAIN",
+			"published": "2026-10-08T19:39:25Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 622812956,
+					"name": "offlineskins-reloaded-26.3-fabric-1.2.0.jar",
+					"url": "https://github.com/VoreZ78/OfflineSkins-Reloaded/releases/download/1.2.0-MAIN/offlineskins-reloaded-26.3-fabric-1.2.0.jar",
+					"size": 299151,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "0e985079c8bb1ebc830389de5b90d7b9b2e20970dc43999cd109fc61d60ffa4d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "offlineskins-reloaded",
+							"version": "1.2.0",
+							"name": "OfflineSkins Reloaded",
+							"description": "Offline skins and capes support. Original mod by Zlainsama. Port to Minecraft 26.3 by VoreZ.",
+							"minecraft": "26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"yet_another_config_lib_v3",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": "81af7959f580240c68f405d7e00044c18d11281a249d62a9f6fcf105fbfd1ffb.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 68,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"vorez/lib/SimpleDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/MojangService$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/Utils/RangeUtils.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/network/SmartInternetCheck.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								],
+								"vorez/network/URLConnectionValidator.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"example.com": [
+								"vorez/mods/skins/impl/ConfigOptions.class"
+							],
+							"api.mojang.com": [
+								"vorez/mods/skins/impl/MojangService$1.class"
+							],
+							"raw.githubusercontent.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"discord.gg": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"github.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"modrinth.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"skinsystem.ely.by": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"crafatar.com": [
+								"vorez/mods/skins/providers/CrafatarCapeProvider.class",
+								"vorez/mods/skins/providers/CrafatarSkinProvider.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "<div align=\"center\">\n\n# OfflineSkins Reloaded\n\n</div>\n\nThis is a major update for the OfflineSkins Reloaded mod on Fabric. Here is what has been changed.\n\n<div align=\"center\">\n\n## Added 🧣\n\n</div>\n\n**1. Dressing Room 🗄️**\n\nThe Dressing Room now lets you easily select skins and capes that you have placed in the `cachedImages` folder.\n\n• Remember Skin & Remember Cape — Remember the latest selected skin and cape  \n• Reset button — You can now reset your selected skin or cape directly from the Dressing Room.  \n• Appearance Delay — Added Appearance Delay for recaching and skin/cape selection.\n\n**2. OfflineSkins Reloaded Network 🛜**\n\n• Added Smart Internet Check  \n• Added recache support for every player on the server  \n• Added Smooth Recache  \n• Added a GitHub preset for easier raw repository data connections  \n• Added a maximum HD resolution setting for HD skins and capes from custom servers  \n• Added a list of common URLs for easier configuration\n\n**3. FAQ menu ❓**\n\n• Added a dedicated FAQ menu for questions, help, and support.\n\n**4. Debug**\n\n• Added an option to enable or disable logs in Minecraft.\n\n<div align=\"center\">\n\n# Bug fixes 🐞\n\n</div>\n\n_1. Fixed Skull Block rendering  \n2. Fixed URL validation  \n3. Fixed the skin/cape caching system  \n4. Fixed unnecessary logs  \n5. Fixed excessive HD network traffic  \n6. Fixed configuration file issues_\n\n<div align=\"center\">\n\n# DEV INFO 💻\n\n</div>\n\n# The code has also been optimized\n\n1. RangeUtils class — a special algorithm for getting the first bytes of an image. This prevents unnecessary downloads of high-resolution skins and reduces network traffic.\n\n```java\npackage vorez.mods.skins.impl.Utils;\n\nimport vorez.network.SmartInternetCheck;\n\nimport java.io.InputStream;\nimport java.net.HttpURLConnection;\nimport java.net.Proxy;\nimport java.net.URI;\nimport java.net.URL;\nimport java.util.Optional;\n\npublic final class RangeUtils {\n\n    private static final int CONNECT_TIMEOUT_MS = 5000;\n    private static final int READ_TIMEOUT_MS = 5000;\n    private static final int HEADER_SIZE = 24;\n\n    private RangeUtils() {\n        throw new Error(\"NoInstance\");\n    }\n\n    public static Optional<byte[]> getPngHeader(String resource, Proxy proxy) {\n        if (SmartInternetCheck.shouldBlockRequests())\n            return Optional.empty();\n\n        HttpURLConnection connection = null;\n\n        try {\n            URL url = new URI(resource).toURL();\n\n            connection = (HttpURLConnection) (proxy == null ? url.openConnection() : url.openConnection(proxy));\n\n            connection.setRequestMethod(\"GET\");\n            connection.setRequestProperty(\"Range\", \"bytes=0-23\");\n            connection.setRequestProperty(\"Accept-Encoding\", \"identity\");\n            connection.setRequestProperty(\"User-Agent\", \"Mozilla/5.0\");\n            connection.setRequestProperty(\"Connection\", \"close\");\n            connection.setInstanceFollowRedirects(true);\n            connection.setConnectTimeout(CONNECT_TIMEOUT_MS);\n            connection.setReadTimeout(READ_TIMEOUT_MS);\n\n            if (connection.getResponseCode() != HttpURLConnection.HTTP_PARTIAL)\n                return Optional.empty();\n\n            try (InputStream input = connection.getInputStream()) {\n                byte[] data = input.readNBytes(HEADER_SIZE);\n\n                if (data.length != HEADER_SIZE)\n                    return Optional.empty();\n\n                return Optional.of(data);\n            }\n        } catch (Throwable ignored) {\n            return Optional.empty();\n        } finally {\n            if (connection != null)\n                connection.disconnect();\n        }\n    }\n}\n```\n\n2. Image validation happens in the ImageUtils class. The result is then used to determine whether the image should be downloaded or not.\n\n```java\npublic static ImageSize getImageSize(byte[] data) {\n        if (data == null || data.length < 24)\n            return null;\n\n        if (data[0] != (byte) 0x89\n                || data[1] != 0x50\n                || data[2] != 0x4E\n\n..."
+		},
+		{
+			"tag": "1.2.0-5",
+			"published": "2026-10-08T19:38:21Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 622810705,
+					"name": "offlineskins-reloaded-26.2-fabric-1.2.0.jar",
+					"url": "https://github.com/VoreZ78/OfflineSkins-Reloaded/releases/download/1.2.0-5/offlineskins-reloaded-26.2-fabric-1.2.0.jar",
+					"size": 299251,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "09edc127f1f87bea7027f909c3ddfaeb148eb10830abf107c539e2b56f3eca32",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "offlineskins-reloaded",
+							"version": "1.2.0",
+							"name": "OfflineSkins Reloaded",
+							"description": "Offline skins and capes support. Original mod by Zlainsama. Port to Minecraft 26.2 by VoreZ.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"yet_another_config_lib_v3",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": "81af7959f580240c68f405d7e00044c18d11281a249d62a9f6fcf105fbfd1ffb.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 68,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"vorez/lib/SimpleDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/MojangService$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/Utils/RangeUtils.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/network/SmartInternetCheck.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								],
+								"vorez/network/URLConnectionValidator.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"example.com": [
+								"vorez/mods/skins/impl/ConfigOptions.class"
+							],
+							"api.mojang.com": [
+								"vorez/mods/skins/impl/MojangService$1.class"
+							],
+							"raw.githubusercontent.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"discord.gg": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"github.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"modrinth.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"skinsystem.ely.by": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"crafatar.com": [
+								"vorez/mods/skins/providers/CrafatarCapeProvider.class",
+								"vorez/mods/skins/providers/CrafatarSkinProvider.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "<div align=\"center\">\n\n# OfflineSkins Reloaded\n\n</div>\n\nThis is a major update for the OfflineSkins Reloaded mod on Fabric. Here is what has been changed.\n\n<div align=\"center\">\n\n## Added 🧣\n\n</div>\n\n**1. Dressing Room 🗄️**\n\nThe Dressing Room now lets you easily select skins and capes that you have placed in the `cachedImages` folder.\n\n• Remember Skin & Remember Cape — Remember the latest selected skin and cape  \n• Reset button — You can now reset your selected skin or cape directly from the Dressing Room.  \n• Appearance Delay — Added Appearance Delay for recaching and skin/cape selection.\n\n**2. OfflineSkins Reloaded Network 🛜**\n\n• Added Smart Internet Check  \n• Added recache support for every player on the server  \n• Added Smooth Recache  \n• Added a GitHub preset for easier raw repository data connections  \n• Added a maximum HD resolution setting for HD skins and capes from custom servers  \n• Added a list of common URLs for easier configuration\n\n**3. FAQ menu ❓**\n\n• Added a dedicated FAQ menu for questions, help, and support.\n\n**4. Debug**\n\n• Added an option to enable or disable logs in Minecraft.\n\n<div align=\"center\">\n\n# Bug fixes 🐞\n\n</div>\n\n_1. Fixed Skull Block rendering  \n2. Fixed URL validation  \n3. Fixed the skin/cape caching system  \n4. Fixed unnecessary logs  \n5. Fixed excessive HD network traffic  \n6. Fixed configuration file issues_\n\n<div align=\"center\">\n\n# DEV INFO 💻\n\n</div>\n\n# The code has also been optimized\n\n1. RangeUtils class — a special algorithm for getting the first bytes of an image. This prevents unnecessary downloads of high-resolution skins and reduces network traffic.\n\n```java\npackage vorez.mods.skins.impl.Utils;\n\nimport vorez.network.SmartInternetCheck;\n\nimport java.io.InputStream;\nimport java.net.HttpURLConnection;\nimport java.net.Proxy;\nimport java.net.URI;\nimport java.net.URL;\nimport java.util.Optional;\n\npublic final class RangeUtils {\n\n    private static final int CONNECT_TIMEOUT_MS = 5000;\n    private static final int READ_TIMEOUT_MS = 5000;\n    private static final int HEADER_SIZE = 24;\n\n    private RangeUtils() {\n        throw new Error(\"NoInstance\");\n    }\n\n    public static Optional<byte[]> getPngHeader(String resource, Proxy proxy) {\n        if (SmartInternetCheck.shouldBlockRequests())\n            return Optional.empty();\n\n        HttpURLConnection connection = null;\n\n        try {\n            URL url = new URI(resource).toURL();\n\n            connection = (HttpURLConnection) (proxy == null ? url.openConnection() : url.openConnection(proxy));\n\n            connection.setRequestMethod(\"GET\");\n            connection.setRequestProperty(\"Range\", \"bytes=0-23\");\n            connection.setRequestProperty(\"Accept-Encoding\", \"identity\");\n            connection.setRequestProperty(\"User-Agent\", \"Mozilla/5.0\");\n            connection.setRequestProperty(\"Connection\", \"close\");\n            connection.setInstanceFollowRedirects(true);\n            connection.setConnectTimeout(CONNECT_TIMEOUT_MS);\n            connection.setReadTimeout(READ_TIMEOUT_MS);\n\n            if (connection.getResponseCode() != HttpURLConnection.HTTP_PARTIAL)\n                return Optional.empty();\n\n            try (InputStream input = connection.getInputStream()) {\n                byte[] data = input.readNBytes(HEADER_SIZE);\n\n                if (data.length != HEADER_SIZE)\n                    return Optional.empty();\n\n                return Optional.of(data);\n            }\n        } catch (Throwable ignored) {\n            return Optional.empty();\n        } finally {\n            if (connection != null)\n                connection.disconnect();\n        }\n    }\n}\n```\n\n2. Image validation happens in the ImageUtils class. The result is then used to determine whether the image should be downloaded or not.\n\n```java\npublic static ImageSize getImageSize(byte[] data) {\n        if (data == null || data.length < 24)\n            return null;\n\n        if (data[0] != (byte) 0x89\n                || data[1] != 0x50\n                || data[2] != 0x4E\n\n..."
+		},
+		{
+			"tag": "1.2.0-4",
+			"published": "2026-10-08T19:37:20Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 622808789,
+					"name": "offlineskins-reloaded-26.1-26.1.2-fabric-1.2.0.jar",
+					"url": "https://github.com/VoreZ78/OfflineSkins-Reloaded/releases/download/1.2.0-4/offlineskins-reloaded-26.1-26.1.2-fabric-1.2.0.jar",
+					"size": 299292,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "bb1d50d6dcbdd37086b0d87fed895a8e2b5a9b2e0b9d722eeea7154aeb493e2b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "offlineskins-reloaded",
+							"version": "1.2.0",
+							"name": "OfflineSkins Reloaded",
+							"description": "Offline skins and capes support. Original mod by Zlainsama. Port to Minecraft 26.1-26.1.2 by VoreZ.",
+							"minecraft": ">=26.1 <=26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"yet_another_config_lib_v3",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": "81af7959f580240c68f405d7e00044c18d11281a249d62a9f6fcf105fbfd1ffb.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 68,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"vorez/lib/SimpleDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/MojangService$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/Utils/RangeUtils.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/network/SmartInternetCheck.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								],
+								"vorez/network/URLConnectionValidator.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"example.com": [
+								"vorez/mods/skins/impl/ConfigOptions.class"
+							],
+							"api.mojang.com": [
+								"vorez/mods/skins/impl/MojangService$1.class"
+							],
+							"raw.githubusercontent.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"discord.gg": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"github.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"modrinth.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"skinsystem.ely.by": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"crafatar.com": [
+								"vorez/mods/skins/providers/CrafatarCapeProvider.class",
+								"vorez/mods/skins/providers/CrafatarSkinProvider.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "<div align=\"center\">\n\n# OfflineSkins Reloaded\n\n</div>\n\nThis is a major update for the OfflineSkins Reloaded mod on Fabric. Here is what has been changed.\n\n<div align=\"center\">\n\n## Added 🧣\n\n</div>\n\n**1. Dressing Room 🗄️**\n\nThe Dressing Room now lets you easily select skins and capes that you have placed in the `cachedImages` folder.\n\n• Remember Skin & Remember Cape — Remember the latest selected skin and cape  \n• Reset button — You can now reset your selected skin or cape directly from the Dressing Room.  \n• Appearance Delay — Added Appearance Delay for recaching and skin/cape selection.\n\n**2. OfflineSkins Reloaded Network 🛜**\n\n• Added Smart Internet Check  \n• Added recache support for every player on the server  \n• Added Smooth Recache  \n• Added a GitHub preset for easier raw repository data connections  \n• Added a maximum HD resolution setting for HD skins and capes from custom servers  \n• Added a list of common URLs for easier configuration\n\n**3. FAQ menu ❓**\n\n• Added a dedicated FAQ menu for questions, help, and support.\n\n**4. Debug**\n\n• Added an option to enable or disable logs in Minecraft.\n\n<div align=\"center\">\n\n# Bug fixes 🐞\n\n</div>\n\n_1. Fixed Skull Block rendering  \n2. Fixed URL validation  \n3. Fixed the skin/cape caching system  \n4. Fixed unnecessary logs  \n5. Fixed excessive HD network traffic  \n6. Fixed configuration file issues_\n\n<div align=\"center\">\n\n# DEV INFO 💻\n\n</div>\n\n# The code has also been optimized\n\n1. RangeUtils class — a special algorithm for getting the first bytes of an image. This prevents unnecessary downloads of high-resolution skins and reduces network traffic.\n\n```java\npackage vorez.mods.skins.impl.Utils;\n\nimport vorez.network.SmartInternetCheck;\n\nimport java.io.InputStream;\nimport java.net.HttpURLConnection;\nimport java.net.Proxy;\nimport java.net.URI;\nimport java.net.URL;\nimport java.util.Optional;\n\npublic final class RangeUtils {\n\n    private static final int CONNECT_TIMEOUT_MS = 5000;\n    private static final int READ_TIMEOUT_MS = 5000;\n    private static final int HEADER_SIZE = 24;\n\n    private RangeUtils() {\n        throw new Error(\"NoInstance\");\n    }\n\n    public static Optional<byte[]> getPngHeader(String resource, Proxy proxy) {\n        if (SmartInternetCheck.shouldBlockRequests())\n            return Optional.empty();\n\n        HttpURLConnection connection = null;\n\n        try {\n            URL url = new URI(resource).toURL();\n\n            connection = (HttpURLConnection) (proxy == null ? url.openConnection() : url.openConnection(proxy));\n\n            connection.setRequestMethod(\"GET\");\n            connection.setRequestProperty(\"Range\", \"bytes=0-23\");\n            connection.setRequestProperty(\"Accept-Encoding\", \"identity\");\n            connection.setRequestProperty(\"User-Agent\", \"Mozilla/5.0\");\n            connection.setRequestProperty(\"Connection\", \"close\");\n            connection.setInstanceFollowRedirects(true);\n            connection.setConnectTimeout(CONNECT_TIMEOUT_MS);\n            connection.setReadTimeout(READ_TIMEOUT_MS);\n\n            if (connection.getResponseCode() != HttpURLConnection.HTTP_PARTIAL)\n                return Optional.empty();\n\n            try (InputStream input = connection.getInputStream()) {\n                byte[] data = input.readNBytes(HEADER_SIZE);\n\n                if (data.length != HEADER_SIZE)\n                    return Optional.empty();\n\n                return Optional.of(data);\n            }\n        } catch (Throwable ignored) {\n            return Optional.empty();\n        } finally {\n            if (connection != null)\n                connection.disconnect();\n        }\n    }\n}\n```\n\n2. Image validation happens in the ImageUtils class. The result is then used to determine whether the image should be downloaded or not.\n\n```java\npublic static ImageSize getImageSize(byte[] data) {\n        if (data == null || data.length < 24)\n            return null;\n\n        if (data[0] != (byte) 0x89\n                || data[1] != 0x50\n                || data[2] != 0x4E\n\n..."
+		},
+		{
+			"tag": "1.2.0-3",
+			"published": "2026-10-08T19:35:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 622803655,
+					"name": "offlineskins-reloaded-1.21.11-fabric-1.2.0.jar",
+					"url": "https://github.com/VoreZ78/OfflineSkins-Reloaded/releases/download/1.2.0-3/offlineskins-reloaded-1.21.11-fabric-1.2.0.jar",
+					"size": 304779,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "1e0d2c8f28894829e26e34031b13091efb6a7b191b1d8e784075c3029a8a1ba4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "offlineskins-reloaded",
+							"version": "1.2.0",
+							"name": "OfflineSkins Reloaded",
+							"description": "Offline skins and capes support. Original mod by Zlainsama. Port to Minecraft 1.21.11 by VoreZ.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"yet_another_config_lib_v3",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": "81af7959f580240c68f405d7e00044c18d11281a249d62a9f6fcf105fbfd1ffb.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 68,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"vorez/lib/SimpleDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/MojangService$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/Utils/RangeUtils.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/network/SmartInternetCheck.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								],
+								"vorez/network/URLConnectionValidator.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"example.com": [
+								"vorez/mods/skins/impl/ConfigOptions.class"
+							],
+							"skinsystem.ely.by": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"api.mojang.com": [
+								"vorez/mods/skins/impl/MojangService$1.class"
+							],
+							"raw.githubusercontent.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"discord.gg": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"github.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"modrinth.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"crafatar.com": [
+								"vorez/mods/skins/providers/CrafatarCapeProvider.class",
+								"vorez/mods/skins/providers/CrafatarSkinProvider.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "<div align=\"center\">\n\n# OfflineSkins Reloaded\n\n</div>\n\nThis is a major update for the OfflineSkins Reloaded mod on Fabric. Here is what has been changed.\n\n<div align=\"center\">\n\n## Added 🧣\n\n</div>\n\n**1. Dressing Room 🗄️**\n\nThe Dressing Room now lets you easily select skins and capes that you have placed in the `cachedImages` folder.\n\n• Remember Skin & Remember Cape — Remember the latest selected skin and cape  \n• Reset button — You can now reset your selected skin or cape directly from the Dressing Room.  \n• Appearance Delay — Added Appearance Delay for recaching and skin/cape selection.\n\n**2. OfflineSkins Reloaded Network 🛜**\n\n• Added Smart Internet Check  \n• Added recache support for every player on the server  \n• Added Smooth Recache  \n• Added a GitHub preset for easier raw repository data connections  \n• Added a maximum HD resolution setting for HD skins and capes from custom servers  \n• Added a list of common URLs for easier configuration\n\n**3. FAQ menu ❓**\n\n• Added a dedicated FAQ menu for questions, help, and support.\n\n**4. Debug**\n\n• Added an option to enable or disable logs in Minecraft.\n\n<div align=\"center\">\n\n# Bug fixes 🐞\n\n</div>\n\n_1. Fixed Skull Block rendering  \n2. Fixed URL validation  \n3. Fixed the skin/cape caching system  \n4. Fixed unnecessary logs  \n5. Fixed excessive HD network traffic  \n6. Fixed configuration file issues_\n\n<div align=\"center\">\n\n# DEV INFO 💻\n\n</div>\n\n# The code has also been optimized\n\n1. RangeUtils class — a special algorithm for getting the first bytes of an image. This prevents unnecessary downloads of high-resolution skins and reduces network traffic.\n\n```java\npackage vorez.mods.skins.impl.Utils;\n\nimport vorez.network.SmartInternetCheck;\n\nimport java.io.InputStream;\nimport java.net.HttpURLConnection;\nimport java.net.Proxy;\nimport java.net.URI;\nimport java.net.URL;\nimport java.util.Optional;\n\npublic final class RangeUtils {\n\n    private static final int CONNECT_TIMEOUT_MS = 5000;\n    private static final int READ_TIMEOUT_MS = 5000;\n    private static final int HEADER_SIZE = 24;\n\n    private RangeUtils() {\n        throw new Error(\"NoInstance\");\n    }\n\n    public static Optional<byte[]> getPngHeader(String resource, Proxy proxy) {\n        if (SmartInternetCheck.shouldBlockRequests())\n            return Optional.empty();\n\n        HttpURLConnection connection = null;\n\n        try {\n            URL url = new URI(resource).toURL();\n\n            connection = (HttpURLConnection) (proxy == null ? url.openConnection() : url.openConnection(proxy));\n\n            connection.setRequestMethod(\"GET\");\n            connection.setRequestProperty(\"Range\", \"bytes=0-23\");\n            connection.setRequestProperty(\"Accept-Encoding\", \"identity\");\n            connection.setRequestProperty(\"User-Agent\", \"Mozilla/5.0\");\n            connection.setRequestProperty(\"Connection\", \"close\");\n            connection.setInstanceFollowRedirects(true);\n            connection.setConnectTimeout(CONNECT_TIMEOUT_MS);\n            connection.setReadTimeout(READ_TIMEOUT_MS);\n\n            if (connection.getResponseCode() != HttpURLConnection.HTTP_PARTIAL)\n                return Optional.empty();\n\n            try (InputStream input = connection.getInputStream()) {\n                byte[] data = input.readNBytes(HEADER_SIZE);\n\n                if (data.length != HEADER_SIZE)\n                    return Optional.empty();\n\n                return Optional.of(data);\n            }\n        } catch (Throwable ignored) {\n            return Optional.empty();\n        } finally {\n            if (connection != null)\n                connection.disconnect();\n        }\n    }\n}\n```\n\n2. Image validation happens in the ImageUtils class. The result is then used to determine whether the image should be downloaded or not.\n\n```java\npublic static ImageSize getImageSize(byte[] data) {\n        if (data == null || data.length < 24)\n            return null;\n\n        if (data[0] != (byte) 0x89\n                || data[1] != 0x50\n                || data[2] != 0x4E\n\n..."
+		},
+		{
+			"tag": "1.2.0-2",
+			"published": "2026-10-08T19:34:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 622800054,
+					"name": "offlineskins-reloaded-1.21.10-fabric-1.2.0.jar",
+					"url": "https://github.com/VoreZ78/OfflineSkins-Reloaded/releases/download/1.2.0-2/offlineskins-reloaded-1.21.10-fabric-1.2.0.jar",
+					"size": 304832,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "132172ff8cde85d6adf97c5f79af90a44f31ec206beba6eb9fc8c584acb0c979",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "offlineskins-reloaded",
+							"version": "1.2.0",
+							"name": "OfflineSkins Reloaded",
+							"description": "Offline skins and capes support. Original mod by Zlainsama. Port to Minecraft 1.21.10 by VoreZ.",
+							"minecraft": "1.21.10",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"yet_another_config_lib_v3",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": "81af7959f580240c68f405d7e00044c18d11281a249d62a9f6fcf105fbfd1ffb.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 68,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"vorez/lib/SimpleDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/MojangService$1.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/Utils/RangeUtils.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/network/SmartInternetCheck.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								],
+								"vorez/network/URLConnectionValidator.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close",
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"example.com": [
+								"vorez/mods/skins/impl/ConfigOptions.class"
+							],
+							"skinsystem.ely.by": [
+								"vorez/mods/skins/impl/CustomServersList/CustomServersList.class",
+								"vorez/network/URLConnectionValidator.class"
+							],
+							"api.mojang.com": [
+								"vorez/mods/skins/impl/MojangService$1.class"
+							],
+							"raw.githubusercontent.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"discord.gg": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"github.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"modrinth.com": [
+								"vorez/mods/skins/impl/YaclSettings.class"
+							],
+							"crafatar.com": [
+								"vorez/mods/skins/providers/CrafatarCapeProvider.class",
+								"vorez/mods/skins/providers/CrafatarSkinProvider.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "<div align=\"center\">\n\n# OfflineSkins Reloaded\n\n</div>\n\nThis is a major update for the OfflineSkins Reloaded mod on Fabric. Here is what has been changed.\n\n<div align=\"center\">\n\n## Added 🧣\n\n</div>\n\n**1. Dressing Room 🗄️**\n\nThe Dressing Room now lets you easily select skins and capes that you have placed in the `cachedImages` folder.\n\n• Remember Skin & Remember Cape — Remember the latest selected skin and cape  \n• Reset button — You can now reset your selected skin or cape directly from the Dressing Room.  \n• Appearance Delay — Added Appearance Delay for recaching and skin/cape selection.\n\n**2. OfflineSkins Reloaded Network 🛜**\n\n• Added Smart Internet Check  \n• Added recache support for every player on the server  \n• Added Smooth Recache  \n• Added a GitHub preset for easier raw repository data connections  \n• Added a maximum HD resolution setting for HD skins and capes from custom servers  \n• Added a list of common URLs for easier configuration\n\n**3. FAQ menu ❓**\n\n• Added a dedicated FAQ menu for questions, help, and support.\n\n**4. Debug**\n\n• Added an option to enable or disable logs in Minecraft.\n\n<div align=\"center\">\n\n# Bug fixes 🐞\n\n</div>\n\n_1. Fixed Skull Block rendering  \n2. Fixed URL validation  \n3. Fixed the skin/cape caching system  \n4. Fixed unnecessary logs  \n5. Fixed excessive HD network traffic  \n6. Fixed configuration file issues_\n\n<div align=\"center\">\n\n# DEV INFO 💻\n\n</div>\n\n# The code has also been optimized\n\n1. RangeUtils class — a special algorithm for getting the first bytes of an image. This prevents unnecessary downloads of high-resolution skins and reduces network traffic.\n\n```java\npackage vorez.mods.skins.impl.Utils;\n\nimport vorez.network.SmartInternetCheck;\n\nimport java.io.InputStream;\nimport java.net.HttpURLConnection;\nimport java.net.Proxy;\nimport java.net.URI;\nimport java.net.URL;\nimport java.util.Optional;\n\npublic final class RangeUtils {\n\n    private static final int CONNECT_TIMEOUT_MS = 5000;\n    private static final int READ_TIMEOUT_MS = 5000;\n    private static final int HEADER_SIZE = 24;\n\n    private RangeUtils() {\n        throw new Error(\"NoInstance\");\n    }\n\n    public static Optional<byte[]> getPngHeader(String resource, Proxy proxy) {\n        if (SmartInternetCheck.shouldBlockRequests())\n            return Optional.empty();\n\n        HttpURLConnection connection = null;\n\n        try {\n            URL url = new URI(resource).toURL();\n\n            connection = (HttpURLConnection) (proxy == null ? url.openConnection() : url.openConnection(proxy));\n\n            connection.setRequestMethod(\"GET\");\n            connection.setRequestProperty(\"Range\", \"bytes=0-23\");\n            connection.setRequestProperty(\"Accept-Encoding\", \"identity\");\n            connection.setRequestProperty(\"User-Agent\", \"Mozilla/5.0\");\n            connection.setRequestProperty(\"Connection\", \"close\");\n            connection.setInstanceFollowRedirects(true);\n            connection.setConnectTimeout(CONNECT_TIMEOUT_MS);\n            connection.setReadTimeout(READ_TIMEOUT_MS);\n\n            if (connection.getResponseCode() != HttpURLConnection.HTTP_PARTIAL)\n                return Optional.empty();\n\n            try (InputStream input = connection.getInputStream()) {\n                byte[] data = input.readNBytes(HEADER_SIZE);\n\n                if (data.length != HEADER_SIZE)\n                    return Optional.empty();\n\n                return Optional.of(data);\n            }\n        } catch (Throwable ignored) {\n            return Optional.empty();\n        } finally {\n            if (connection != null)\n                connection.disconnect();\n        }\n    }\n}\n```\n\n2. Image validation happens in the ImageUtils class. The result is then used to determine whether the image should be downloaded or not.\n\n```java\npublic static ImageSize getImageSize(byte[] data) {\n        if (data == null || data.length < 24)\n            return null;\n\n        if (data[0] != (byte) 0x89\n                || data[1] != 0x50\n                || data[2] != 0x4E\n\n..."
+		},
+		{
+			"tag": "1.1.1-2",
+			"published": "2026-08-03T15:28:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 500214436,
+					"name": "offlineskins-reloaded-1.21.9-1.21.11-fabric-1.1.1.jar",
+					"url": "https://github.com/VoreZ78/OfflineSkins-Reloaded/releases/download/1.1.1-2/offlineskins-reloaded-1.21.9-1.21.11-fabric-1.1.1.jar",
+					"size": 148414,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "e7c6d15cf02bdf6da58a15e0f11a4452f2f17c3aacbe7c6abf6910f76558a06c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "offlineskins-reloaded",
+							"version": "1.1.1",
+							"name": "OfflineSkins Reloaded",
+							"description": "Offline skins and capes support. Original mod by Zlainsama. Port to Minecraft 1.21.9-1.21.11 by VoreZ.",
+							"minecraft": ">=1.21.9 <=1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "81af7959f580240c68f405d7e00044c18d11281a249d62a9f6fcf105fbfd1ffb.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 54,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"vorez/lib/SimpleDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"vorez/mods/skins/impl/MojangService$2.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"example.com": [
+								"vorez/mods/skins/impl/ConfigOptions.class"
+							],
+							"api.mojang.com": [
+								"vorez/mods/skins/impl/MojangService$2.class"
+							],
+							"crafatar.com": [
+								"vorez/mods/skins/providers/CrafatarCapeProvider.class",
+								"vorez/mods/skins/providers/CrafatarSkinProvider.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# OfflineSkins for Fabric 1.21.9-1.21.11\n🎨 Display custom skins and capes without relying on Mojang servers.\n\nOfflineSkins allows you to use local player skins and capes on offline-mode servers, private networks, and custom setups.\n\n### The mod is only used when Minecraft cannot retrieve skins from Mojang. It is designed to show on your skin even without an internet connection. However, if your Minecraft client does not have an official license, this mod will show your skin to you, but no one else will see it unless somebody put your skin in their cachedimages folder and also have the mod installed.\n\n### OfflineSkins Reloaded Bug fixes\n## What changed?\n\n> Mixins bug fixes\n> Rebranding\n> Skin and cape servers providers fix\n\n## Providers:\n# Before:\n```\nShared.downloadSkin(url, Runnable::run)\n    .thenApply(Optional::get)\n    .thenAccept(data -> {\n        if (ImageUtils.validateData(data))\n            skin.put(data, ImageUtils.judgeSkinType(data));\n    });\n```\n## Afer:\n```\nShared.downloadSkin(url, Runnable::run)\n    .thenAccept(optional -> {\n        optional.ifPresent(data -> {\n            if (ImageUtils.validateData(data)) {\n                skin.put(data, ImageUtils.judgeSkinType(data));\n            }\n        });\n    });\n```\nNote:\n1.1.1 is entirly better than 1.1.0 on 1.21.11-1.21.6, but not on 26.1-26.2\n\n## 📁 Simply place your textures into:\n\n> cachedimages/skins/ - Player skins\n> \n> cachedimages/capes/ - Player capes\n\n_Exmaple: \"cashedimages/skins/steve.png\" or \"cashedimages/capes/steve.png\"_\n\nThe file name must match the player's nickname.\n\n✨ Features: • Custom skins from local files • Custom capes support • Works on offline-mode servers • Lightweight and client-side only • No external skin services required\n\nOriginal author: zlainsama 🔧 Fabric port: VoreZ\nZlainsama's repository: https://github.com/zlainsama/offlineskins"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 99,
+		"more": 0,
+		"people": [
+			{
+				"login": "VoreZ78",
+				"commits": 99,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

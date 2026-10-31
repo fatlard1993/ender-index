@@ -1,0 +1,84 @@
+{
+	"repo": "Serendisand/SerendiModGuarder",
+	"host": "github",
+	"description": "一款Fabric Mod，用于检测并拦截使用了违规客户端 Mod 的玩家。【服务端和客户端都必须安装本 Mod】",
+	"stars": 2,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-07-12T13:31:04Z",
+	"pushed": "2026-10-04T05:40:48Z",
+	"releases": [
+		{
+			"tag": "1.4.3",
+			"published": "2026-07-13T04:25:03Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 475069702,
+					"name": "SerendiModGuarder-1.4.3.jar",
+					"url": "https://github.com/Serendisand/SerendiModGuarder/releases/download/1.4.3/SerendiModGuarder-1.4.3.jar",
+					"size": 28211,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "00dfd6589d1416263518cd22447104e7855271c7f7088fb2dc07c34aa8ae03e7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "serendimodguarder",
+							"version": "1.4.3",
+							"name": "SerendiModGuarder",
+							"description": "🛡️ 检查玩家客户端 Mod，双重保障：登录阶段主动查询 + 游戏内检测！",
+							"minecraft": ">=26.2- <26.3-",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "● SerendiModGuarder 1.4.3 更新日志\n\n  性能与稳定性优化\n\n  - 修复日志记录可能导致服务器卡死/死锁的问题。\n    - 模组业务逻辑不再直接同步调用 LOGGER.info/warn/error。\n    - 新增独立异步日志线程 SerendiModGuarder-Log。\n    - 日志队列使用有界队列，日志系统阻塞时不会拖死 MC 主线程或登录线程。\n  - 优化 PLAY 阶段网络回调。\n    - 网络回调中不再直接执行检测和踢人逻辑。\n    - 改为通过 server.execute() 切回服务器主线程处理，避免跨线程调用 Minecraft API。\n  - 优化 Tick 检测逻辑。\n    - pendingPlayCheck 改为无锁并发队列。\n    - 每 Tick 最多处理 16 个玩家，避免大量玩家同时进入服务器时单 Tick 卡顿。\n  - 优化延迟验证扫描。\n    - 延迟验证队列不再每 Tick 全表扫描。\n    - 改为每 20 Tick 扫描一次，降低在线人数较多时的固定 TPS 开销。\n\n  网络包安全与防卡顿\n\n  - 限制客户端上报的 Mod 列表大小。\n    - 最大 Mod 数：512。\n    - 单个 Mod ID 最大长度：128 字符。\n    - 防止异常或恶意客户端发送超大数据包导致服务端内存分配、排序、哈希计算压力过大。\n  - PLAY 阶段 Mod 列表 Payload 同步加入大小限制。\n    - 旧上限过大，可能造成网络解码和内存压力。\n    - 现在与登录阶段限制保持一致。\n  - 修复客户端与服务端 Mod 列表截断规则不一致的问题。\n    - 客户端登录响应也会按服务端规则截断。\n    - SHA256 签名基于截断后的列表计算，避免误判签名不匹配。"
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "custom",
+			"url": "https://afdian.com/a/lengmc",
+			"from": "owner-repositories"
+		}
+	],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 11,
+		"more": 0,
+		"people": [
+			{
+				"login": "Serendisand",
+				"commits": 11,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

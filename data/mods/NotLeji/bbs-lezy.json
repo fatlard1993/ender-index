@@ -1,0 +1,422 @@
+{
+	"repo": "NotLeji/bbs-lezy",
+	"host": "github",
+	"description": "Addon BBS yg dipake oleh Leji untuk konten Minecraftnya ",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-09-23T11:03:09Z",
+	"pushed": "2026-10-19T16:01:09Z",
+	"releases": [
+		{
+			"tag": "v0.4.2",
+			"published": "2026-10-15T10:21:39Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 643481872,
+					"name": "bbs-lezy-0.4.2.jar",
+					"url": "https://github.com/NotLeji/bbs-lezy/releases/download/v0.4.2/bbs-lezy-0.4.2.jar",
+					"size": 361183,
+					"downloads": 27,
+					"inspection": 2,
+					"sha256": "6e322e1115d7e62cd5e744746248964ae1220ae85e8314f7c2ecf8a98176633a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "bbslezy",
+							"version": "0.4.2",
+							"name": "BBS Lezy",
+							"description": "LOD render capping, mass replay controls, CML screen effects (vintage camera, color grade, grain, letterbox, vignette), action clips, and visual form illusion duplicates for BBS.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"bbs"
+							],
+							"provides": []
+						}
+					],
+					"icon": "d70cd5da72397b18ec3c4a7d42436b9537c736467db78f0b710e34bc35687f17.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 130,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"leji/bbslezy/audio/LezyAudioCodecs.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								],
+								"leji/bbslezy/audio/LezyAudioMuxer.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"leji/bbslezy/video/LezyEncoderProbe.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"leji/bbslezy/ui/skin/SkinFetcher.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"api.mojang.com": [
+								"leji/bbslezy/ui/skin/SkinFetcher.class"
+							],
+							"sessionserver.mojang.com": [
+								"leji/bbslezy/ui/skin/SkinFetcher.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changelog / Catatan Rilis\n\n---\n\n## English\n\nA performance-focused release delivering responsive UI workflows: async background file scanning, asynchronous film parsing, world-rendering bypass under opaque menus, and clean client-side Night Vision.\n\n**Optimizations**\n\n- **Async File Scanning & Smart Caching (`ui_async_keys`)** — Scans BBS directories (films, models, particles) on a dedicated background I/O worker thread with intelligent caching (2-second TTL) and immediate invalidation on file saves/creation. Eliminates UI hitches and freezes when browsing files or opening dashboard panels.\n- **Async Film Loading (`ui_async_film_load`)** — Offloads reading and parsing of large film `.dat` files to background threads, keeping the main render thread smooth when opening complex film projects.\n- **Opaque Dashboard World-Skip (`ui_world_skip`)** — Automatically pauses 3D world rendering when an opaque full-screen dashboard panel covers the view. Frees up substantial CPU and GPU cycles while working inside BBS editors.\n- **Configurable Performance Toggles** — All UI performance features are fully toggleable via BBS Configuration (`ui_async_keys`, `ui_async_film_load`, `ui_world_skip`), all enabled by default.\n\n**New Features**\n\n- **Client-Side Night Vision (Fullbright)** — Instant fullbright toggle without potion swirl particles, HUD status icons, or potion sound effects. Scoped strictly to the local player camera so mobs, armor stands, replay actors, and server logic remain completely vanilla and unaffected. Toggleable via keybind (default: `H`) or dashboard shortcut.\n\n---\n\n## Bahasa Indonesia\n\nRilis fokus performa untuk alur kerja UI yang lebih responsif: pemindaian file asinkron di latar belakang, loading data film async, bypass rendering dunia di balik dashboard opak, dan fitur Night Vision client-side yang bersih.\n\n**Optimisasi**\n\n- **Async File Scanning & Smart Caching (`ui_async_keys`)** — Pemindaian direktori BBS (film, model, partikel) dipindahkan ke worker thread latar belakang khusus dengan sistem cache pintar (TTL 2 detik) serta invalidasi otomatis saat menyimpan atau membuat file baru. Menghilangkan freeze saat membuka panel data dashboard.\n- **Async Film Loading (`ui_async_film_load`)** — Pembacaan dan parsing file film `.dat` besar dijalankan di background thread, mencegah render thread macet saat membuka film berskala besar.\n- **Skip Render Dunia di Balik Dashboard Opak (`ui_world_skip`)** — Otomatis melewati rendering dunia 3D saat panel dashboard full-screen yang opak menutupi layar, menghemat penggunaan CPU dan GPU secara signifikan saat beraktivitas di editor BBS.\n- **Opsi Pengaturan Baru** — Seluruh fitur optimisasi UI dapat diatur secara fleksibel melalui Pengaturan BBS (`ui_async_keys`, `ui_async_film_load`, `ui_world_skip`), aktif secara default (ON).\n\n**Fitur Baru**\n\n- **Client-Side Night Vision (Fullbright)** — Toggle fullbright instan tanpa partikel swirl, tanpa ikon status HUD, dan tanpa efek samping potion. Dibatasi khusus hanya untuk kamera player lokal, sehingga mob, armor stand, replay actor, dan logika server tetap vanilla dan berjalan normal. Dapat dinyalakan/dimatikan melalui tombol pintas (default: `H`) atau shortcut dashboard."
+		},
+		{
+			"tag": "v0.4.1",
+			"published": "2026-10-10T09:12:24Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 627514898,
+					"name": "bbs-lezy-0.4.1.jar",
+					"url": "https://github.com/NotLeji/bbs-lezy/releases/download/v0.4.1/bbs-lezy-0.4.1.jar",
+					"size": 307844,
+					"downloads": 19,
+					"inspection": 2,
+					"sha256": "d9ae9443059aa94a7ac3b9b016e0f6650571d04e73ed99a049da838d63c529d4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "bbslezy",
+							"version": "0.4.1",
+							"name": "BBS Lezy",
+							"description": "LOD render capping, mass replay controls, CML screen effects (vintage camera, color grade, grain, letterbox, vignette), action clips, and visual form illusion duplicates for BBS.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"bbs"
+							],
+							"provides": []
+						}
+					],
+					"icon": "d70cd5da72397b18ec3c4a7d42436b9537c736467db78f0b710e34bc35687f17.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 98,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"leji/bbslezy/audio/LezyAudioCodecs.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								],
+								"leji/bbslezy/audio/LezyAudioMuxer.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"leji/bbslezy/video/LezyEncoderProbe.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"leji/bbslezy/ui/skin/SkinFetcher.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"api.mojang.com": [
+								"leji/bbslezy/ui/skin/SkinFetcher.class"
+							],
+							"sessionserver.mojang.com": [
+								"leji/bbslezy/ui/skin/SkinFetcher.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changelog / Catatan Rilis\n\n---\n\n## English\n\nA camera-feel release: two new clips for shake and punch, one-click aspect ratios on the letterbox, and a proper on/off switch for the framing guides.\n\n**New stuff**\n\n- **Camera Shake clip** — procedural handheld wobble with Gentle / Action / Explosion presets and per-axis amplitude control, so you don't have to hand-keyframe every tremor.\n- **Impact Frame clip** — everything an anime hit-stop needs in one clip: freeze frame, screen flash, FOV punch-in, and a shake kick. Presets: Anime Impact / Hard Hit / Explosion / Dramatic.\n- **Letterbox aspect presets** — Scope 2.39:1, Cinema, Univisium, Flat, 16:9, 4:3, Square, 9:16 Shorts, and Custom. Picking one sets the bars for you; dragging a slider flips it back to Custom. Pillarbox works for vertical video, and the inner-edge feather finally goes the full 0–100%.\n- **Framing guides button** — new toggle in the film preview toolbar. Left-click turns all guides on/off (your last setup is remembered), right-click picks which ones show: Action Safe 90%, Title Safe 80%, 9:16 vertical, 2.39:1 scope, plus BBS's native center lines and crosshair.\n\n**Fixed**\n\n- Letterbox sliders actually move the bars now — they were silently dead before, and smoothness was stuck at 0 (static values and keyframe channels were registered under the same IDs, so edits never landed).\n\n---\n\n## Bahasa Indonesia\n\nRilis tentang rasa kamera: dua clip baru buat goyangan dan gebukan, rasio aspek letterbox sekali klik, dan tombol on/off beneran buat framing guides.\n\n**Yang baru**\n\n- **Clip Camera Shake** — goyangan handheld prosedural dengan preset Gentle / Action / Explosion plus atur amplitudo per sumbu, jadi nggak perlu keyframe manual tiap getaran.\n- **Clip Impact Frame** — semua yang dibutuhin efek hit-stop ala anime dalam satu clip: freeze frame, flash layar, punch-in FOV, dan tendangan shake. Preset: Anime Impact / Hard Hit / Explosion / Dramatic.\n- **Preset aspek letterbox** — Scope 2.39:1, Cinema, Univisium, Flat, 16:9, 4:3, Square, 9:16 Shorts, dan Custom. Pilih satu, bar langsung kepasang; geser slider, balik lagi ke Custom. Pillarbox jalan buat video vertikal, dan feather tepi dalam akhirnya full 0–100%.\n- **Tombol framing guides** — toggle baru di toolbar preview film. Klik kiri nyala/matiin semua guide (setup terakhir diingat), klik kanan buat milih mana yang tampil: Action Safe 90%, Title Safe 80%, vertikal 9:16, scope 2.39:1, plus center lines dan crosshair bawaan BBS.\n\n**Perbaikan**\n\n- Slider letterbox sekarang beneran gerakin bar — sebelumnya mati diam-diam, dan smoothness kekunci di 0 (value statis dan keyframe channel kedaftar dengan ID yang sama, jadi editan nggak pernah nyampe)."
+		},
+		{
+			"tag": "v0.4.0",
+			"published": "2026-10-08T05:28:39Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 621712972,
+					"name": "bbs-lezy-0.4.0.jar",
+					"url": "https://github.com/NotLeji/bbs-lezy/releases/download/v0.4.0/bbs-lezy-0.4.0.jar",
+					"size": 277552,
+					"downloads": 15,
+					"inspection": 2,
+					"sha256": "56630979f03b8d113637e2914339527268083a9937f2db71ccd47d2a5856cfd6",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "bbslezy",
+							"version": "0.4.0",
+							"name": "BBS Lezy",
+							"description": "LOD render capping, mass replay controls, CML screen effects (vintage camera, color grade, grain, letterbox, vignette), action clips, and visual form illusion duplicates for BBS.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"bbs"
+							],
+							"provides": []
+						}
+					],
+					"icon": "d70cd5da72397b18ec3c4a7d42436b9537c736467db78f0b710e34bc35687f17.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 87,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"leji/bbslezy/audio/LezyAudioCodecs.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								],
+								"leji/bbslezy/audio/LezyAudioMuxer.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"leji/bbslezy/video/LezyEncoderProbe.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"leji/bbslezy/ui/skin/SkinFetcher.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"api.mojang.com": [
+								"leji/bbslezy/ui/skin/SkinFetcher.class"
+							],
+							"sessionserver.mojang.com": [
+								"leji/bbslezy/ui/skin/SkinFetcher.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changelog / Catatan Rilis\n\n---\n\n## English\n\nA screen-effect and audio release: a halftone clip with real screentone dots, camera motion blur, one-click player snap, reverse audio playback, dedicated volume keyframe track, and overhauled skin search.\n\n**New features**\n\n- **Halftone clip (S4-R)** — new screen clip rendering a reference screentone dot grid with threshold mapping, plus its dope sheet panel, for manga-style print shading in film.\n- **Camera motion blur (S7)** — motion trail accumulation in the screen-effect shader; works without a depth-buffer dependency, so it survives any framebuffer.\n- **Player snap to preview (S8)** — snap the player to the preview position with one click and restore the original spot when you leave, for framing checks in-world.\n- **Reverse audio playback** — reverse toggle for audio clips, with the reversed sound buffer integrated straight into the sound manager.\n- **Volume keyframe track** — audio clips now get a dedicated Volume track in the dope sheet (same workflow as cinematic clips), including envelope keyframes.\n- **Overhaul skin search** — replaced simple skin download button with full skin search panels in the form editor (search by nickname and by keywords from minecraft-inside.ru), with 3D preview and paginated results.\n- **Pixelation channel** — new pixelation channel in the cinematic clip with its own shader pass.\n- **Iris shader toggle** — clickable shader toggle button on the dashboard, placed next to the layout lock in the film panel.\n- **Chromatic aberration cleanup** — simplified implementation; legacy channels removed.\n\n**Fixes**\n\n- Fixed `IllegalClassLoadError` by keeping `AudioClientClipMixin` in `leji.bbslezy.mixin.client`.\n- Fixed the duplicate reverse toggle and clarified envelope keyframe usage.\n\n**Docs**\n\n- Noted that ffmpeg is an external, user-provided binary (not bundled or linked).\n\n**Credits**\n\n- Thanks to **lakasva12** on Discord for the skin search features.\n\n---\n\n## Bahasa Indonesia\n\nRilis screen-effect dan audio: clip halftone dengan titik screentone sungguhan, motion blur kamera, snap pemain satu klik, pemutaran audio terbalik, track keyframe Volume khusus, dan perombakan pencarian skin.\n\n**Fitur baru**\n\n- **Clip halftone (S4-R)** — clip screen baru yang menggambar grid titik screentone berdasar referensi dengan threshold mapping, plus panel dope sheet-nya, untuk shading cetak gaya manga di film.\n- **Motion blur kamera (S7)** — akumulasi jejak gerak di shader screen-effect; tanpa dependensi depth buffer, jadi aman di framebuffer apa pun.\n- **Snap pemain ke preview (S8)** — snap pemain ke posisi preview satu klik, posisi asli dikembalikan saat kamu pergi — buat cek framing langsung di dunia.\n- **Pemutaran audio terbalik** — toggle reverse untuk clip audio, buffer suara terbalik terintegrasi langsung ke sound manager.\n- **Track Volume** — clip audio kini punya track Volume khusus di dope sheet (alur kerja sama seperti clip cinematic), termasuk envelope keyframe.\n- **Overhaul skin search** — mengganti tombol download skin sederhana dengan panel pencarian skin lengkap di editor form (pencarian berdasarkan nickname dan kata kunci dari minecraft-inside.ru), dengan preview 3D dan hasil terpaginasi.\n- **Channel pixelation** — channel pixelation baru di clip cinematic dengan shader pass sendiri.\n- **Toggle shader Iris** — tombol toggle shader yang bisa diklik di dashboard, diletakkan di samping layout lock di film panel.\n- **Pembersihan chromatic aberration** — implementasi disederhanakan; channel lama dibuang.\n\n**Perbaikan**\n\n- Perbaiki `IllegalClassLoadError` dengan menahan `AudioClientClipMixin` di `leji.bbslezy.mixin.client`.\n- Perbaiki toggle reverse duplikat dan klarifikasi pemakaian envelope keyframe.\n\n**Dokumentasi**\n\n- Dicatat bahwa ffmpeg adalah binary eksternal yang disediakan pengguna (tidak dibundel/tidak di-link).\n\n**Kredit**\n\n- Terima kasih untuk **lakasva12** di Discord untuk fitur skin search."
+		},
+		{
+			"tag": "v0.3.2",
+			"published": "2026-10-02T00:42:18Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 604450657,
+					"name": "bbs-lezy-0.3.2.jar",
+					"url": "https://github.com/NotLeji/bbs-lezy/releases/download/v0.3.2/bbs-lezy-0.3.2.jar",
+					"size": 235823,
+					"downloads": 22,
+					"inspection": 2,
+					"sha256": "62143c0755f2ea7904c4a13c56127d18f8a5dde91893e735bf2aa29ce4b61ee4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "bbslezy",
+							"version": "0.3.2",
+							"name": "BBS Lezy",
+							"description": "LOD render capping, mass replay controls, CML screen effects (vintage camera, color grade, grain, letterbox, vignette), action clips, and visual form illusion duplicates for BBS.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"bbs"
+							],
+							"provides": []
+						}
+					],
+					"icon": "d70cd5da72397b18ec3c4a7d42436b9537c736467db78f0b710e34bc35687f17.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 73,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"leji/bbslezy/audio/LezyAudioCodecs.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								],
+								"leji/bbslezy/audio/LezyAudioMuxer.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"leji/bbslezy/video/LezyEncoderProbe.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changelog / Catatan Rilis\n\n---\n\n## English\n\nA content-pipeline release for large BBS scenes: keyframable screen-effect centers, mass-selection replay tools, one-click Look At baking, lossless audio import, GPU video export with dual audio tracks, and form illusions.\n\n- **Keyframable effect centers** — lens distortion, radial blur, and light leak centers (`lens_center_x/y`, `radial_blur_center_x/y`, `light_leak_center_x/y`) are now channels you can animate instead of fixed hardcoded spots.\n- **Aberration angle that actually rotates** — `aberration_angle` now steers the split direction in both radial and linear modes.\n- **Signed cinematic values** — effect values no longer saturate at 1, and negatives invert the effect instead of clamping to nothing.\n- **Replay Cap (formerly LOD)** — renamed to what it does: cap how many replay actors render per frame, with focus-distance ranking. Set limit to 0 when exporting video so everything renders.\n- **Replay panel mass tools** — right-click the replay list for Select All, Select Same Model, and Duplicate to Total, plus ▲▼ scroll buttons.\n- **Look At batch baking** — Process Replays → Look At keys rotation per tick at the playhead, with a progress bar and single-step Undo.\n- **Reset Replay where you need it** — moved from the list menu to right-click on the replay dope sheet and the camera timeline.\n- **Skin search by Java player name** — magnifier button in the texture browser downloads skins via the Mojang API.\n- **Lossless audio import** — 11 codecs (.mp3 .m4a .aac .opus .wma .alac .ape .flac .aif .aiff .ac3) import without re-encoding; WAV is never re-encoded.\n- **Dual-track video export** — optional separate film-audio and Minecraft-sound tracks in one file (ffmpeg required in PATH).\n- **GPU video export** — NVENC/AMF/QSV encoders with CQP control and CPU fallback warning dialog (VP9 stays CPU).\n- **Illusion for forms and model blocks** — visual duplication with `illusion` + `illusion_transform` keyframe tracks in the replay dope sheet.\n- **Premiere-style slider scrub on Linux** — drag past the window edge wraps the cursor to the other side so long drags never get stuck.\n\n---\n\n## Bahasa Indonesia\n\nRilis alur konten buat scene BBS skala besar: titik tengah screen-effect yang bisa di-keyframe, tool seleksi massal replay, baking Look At sekali klik, import audio tanpa convert, export video GPU dengan dua track audio, dan illusion buat form.\n\n- **Titik tengah efek bisa di-keyframe** — posisi lens distortion, radial blur, dan light leak (`lens_center_x/y`, `radial_blur_center_x/y`, `light_leak_center_x/y`) sekarang channel animasi, bukan titik hardcoded.\n- **Sudut aberration beneran muter** — `aberration_angle` sekarang ngatur arah split di mode radial maupun linear.\n- **Nilai cinematic bertanda** — nilai efek nggak lagi mentok di 1, dan nilai negatif ngebalik efeknya alih-alih hilang.\n- **Replay Cap (dulu LOD)** — diganti nama sesuai fungsinya: batasin berapa replay actor yang digambar per frame, pakai ranking jarak fokus. Set limit ke 0 pas export video biar semua ke-render.\n- **Tool massal panel replay** — klik kanan list replay buat Select All, Select Same Model, Duplicate to Total, plus tombol scroll ▲▼.\n- **Baking Look At massal** — Process Replays → Look At ngisi rotasi per tick di playhead, ada progress bar dan sekali Undo.\n- **Reset Replay di tempat yang pas** — pindah dari menu list ke klik kanan dope sheet replay dan timeline kamera.\n- **Cari skin pakai nama player Java** — tombol kaca pembesar di texture browser download skin via Mojang API.\n- **Import audio tanpa convert** — 11 codec (.mp3 .m4a .aac .opus .wma .alac .ape .flac .aif .aiff .ac3) masuk apa adanya; WAV nggak pernah di-encode ulang.\n- **Export video dua track audio** — opsi track terpisah audio film dan suara Minecraft dalam satu file (butuh ffmpeg di PATH).\n- **Export video pakai GPU** — encoder NVENC/AMF/QSV dengan kontrol CQP plus dialog peringatan fallback CPU (VP9 tetap CPU).\n\n..."
+		},
+		{
+			"tag": "v0.3.1",
+			"published": "2026-09-30T07:47:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 600391443,
+					"name": "bbs-lezy-0.3.1.jar",
+					"url": "https://github.com/NotLeji/bbs-lezy/releases/download/v0.3.1/bbs-lezy-0.3.1.jar",
+					"size": 227694,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "ea2f275b732d82109c439e296e71b374ce82589646332143923536f455516a80",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "bbslezy",
+							"version": "0.3.1",
+							"name": "BBS Lezy",
+							"description": "LOD render capping, mass replay controls, CML screen effects (vintage camera, color grade, grain, letterbox, vignette), action clips, and visual form illusion duplicates for BBS.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"bbs"
+							],
+							"provides": []
+						}
+					],
+					"icon": "d70cd5da72397b18ec3c4a7d42436b9537c736467db78f0b710e34bc35687f17.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 70,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"bbslezy/audio/LezyAudioCodecs.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectError",
+									"java/lang/ProcessBuilder.start"
+								],
+								"bbslezy/audio/LezyAudioMuxer.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"bbslezy/video/LezyEncoderProbe.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changelog / Catatan Rilis\n\n---\n\n## Bahasa Indonesia\n\nUpdate kecil khusus buat pengguna Linux biar pengalaman ngedit di BBS jadi sama mulusnya kayak di Windows:\n\n- **Geser angka dan slider nggak mentok lagi di ujung layar** — pas kamu drag angka (kayak FOV, posisi, rotasi) atau slider di Linux/Wayland sampai lewat batas pinggir jendela, kursornya sekarang otomatis nyambung muter ke sisi seberang kayak di Premiere Pro. Jadi bisa terus ditarik kanan-kiri tanpa nyangkut di pojokan layar.\n- **Fix chunk hilang (cuma sisa langit) pas nyalain shader Iris di dalam editor** — sebelumnya kalau nyalain atau ganti shader Iris pas lagi buka Film Editor, dunia Minecraft-nya suka tiba-tiba ilang dan cuma kelihatan skybox doang gara-gara ukuran layar preview editor tabrakan sama depth buffer Iris. Sekarang udah otomatis disinkronin tiap frame, jadi dunia dan chunk tetap ke-render normal.\n- **Render video pakai GPU di Linux sekarang beneran jalan** — sebelumnya opsi Hardware Acceleration di Linux cuma ngasih argumen punya Windows jadi GPU-nya nggak kepakai. Sekarang mod-nya otomatis ngecek GPU dan ffmpeg kamu buat pakai encoder Linux yang bener: Intel pakai QSV (otomatis pindah ke VA-API kalau QSV nggak ada), AMD pakai VA-API, dan NVIDIA pakai NVENC. Kalau GPU atau ffmpeg kamu belum support codec yang dipilih, bakal muncul pop-up buat pindah ke CPU biar hasil videonya nggak rusak.\n\n---\n\n## English\n\nA small update focused on Linux users so editing in BBS feels just as smooth as it does on Windows:\n\n- **Dragging numbers and sliders no longer gets stuck at the screen edge** — when you drag value fields (like FOV, position, rotation) or sliders past the edge of the window on Linux/Wayland, the cursor now wraps around to the other side just like in Premiere Pro. You can keep dragging left or right smoothly without hitting an invisible wall.\n- **Fixed chunks disappearing (skybox only) when turning on Iris shaders inside the editor** — turning on or reloading an Iris shaderpack while the Film Editor was open used to make all terrain chunks vanish because the editor preview resolution desynced Iris's depth buffer. This is now synced automatically every frame so the world renders normally.\n- **GPU video export actually works on Linux now** — previously, Hardware Acceleration on Linux tried to use Windows-only encoder flags, so your GPU wasn't actually doing the work. The mod now checks your GPU and ffmpeg setup on startup and picks the right Linux encoder: Intel uses QSV (and falls back to VA-API if QSV isn't available), AMD uses VA-API, and NVIDIA uses NVENC. If your GPU or ffmpeg build doesn't support the codec you picked, you'll get a prompt to switch to CPU rendering instead of ending up with a broken video file."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [
+		"bbs-lezy.webp",
+		"docs/camera-effects-demo.jpg"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 262,
+		"more": 0,
+		"people": [
+			{
+				"login": "NotLeji",
+				"commits": 262,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

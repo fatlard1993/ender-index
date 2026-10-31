@@ -1,0 +1,89 @@
+{
+	"repo": "Nekuzaky/better-controller",
+	"host": "github",
+	"description": "Lightweight, zero-allocation Fabric mod that lets you play Minecraft Java with any gamepad. Analog look + movement, full GUI navigation, creative double-tap fly, virtual keyboard for chat.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-03-13T15:55:06Z",
+	"pushed": "2026-10-26T15:35:38Z",
+	"releases": [
+		{
+			"tag": "v0.1.0",
+			"published": "2026-05-23T21:34:21Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 428119589,
+					"name": "bettercontroller-0.1.0.jar",
+					"url": "https://github.com/Nekuzaky/better-controller/releases/download/v0.1.0/bettercontroller-0.1.0.jar",
+					"size": 125536,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "13be912fd38234405bb748d0e7fe8df9b2f9ac6fa5e01e1c9f146d2ec03fce74",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "bettercontroller",
+							"version": "0.1.0",
+							"name": "BetterController",
+							"description": "Client-side gamepad support for Minecraft Java. Analog look + movement, full GUI navigation, creative double-tap fly, virtual keyboard for chat.",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 49,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\nAll notable changes to BetterController are documented in this file. The format\nloosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and\nthe project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [0.1.0] - Initial public release\n\nFirst clean release. The mod's scope is intentionally limited to *playing\nMinecraft Java with a gamepad*; everything else has been removed.\n\n### Added\n- Plug-and-play GLFW controller detection (Xbox, PlayStation, Switch Pro,\n  generic) with live connect / disconnect.\n- Analog look + movement pipeline with per-axis deadzone, anti-deadzone,\n  configurable response curve, and adaptive smoothing.\n- Controller-driven GUI navigation across vanilla screens, including:\n  - widget navigation (buttons, sliders, list widgets)\n  - inventory slot navigation with row/lane aware scoring\n  - creative inventory tab cycling (RB / LB)\n  - right stick analog scroll for any scrollable screen\n  - virtual keyboard for chat / text fields\n- In-game settings screen with five sliders (movement deadzone, look X / Y\n  sensitivity, look speed multiplier, trigger threshold). Other options live\n  in `config/bettercontroller.json`.\n- Debug overlay (toggle with `F8`): raw axes, trigger values, glyph set,\n  pressed buttons, processed move / look vectors.\n- HUD button-prompt hints (jump / attack / use / inventory) when looking at\n  something, with the glyph set adapted to the detected controller type.\n- Mixin Accessor for `CreativeInventoryScreen.selectedTab` / `setSelectedTab`\n  replaces the previous reflection path.\n\n### Fixed\n- Creative double-tap A now toggles flight correctly. The previous build\n  overwrote `input.playerInput.jump`, which masked the rising-edge detection\n  Minecraft uses in `ClientPlayerEntity.tickMovement`.\n- RB / LB now cycle creative inventory tabs reliably (Mixin Accessor instead\n  of reflection plus chained `||` fallbacks).\n- The OS mouse cursor is now centralised in `CursorCaptureManager`: hidden\n  while the controller is driving any non-text-input mode, restored when the\n  player switches to mouse, leaves the screen, or unplugs the controller.\n- `TextFieldWidget` no longer traps the controller on screens without\n  inventory slots (e.g. Create World). Any directional input releases focus\n  and resumes widget navigation.\n- Virtual keyboard navigation now uses lane-based scoring so each row\n  (Lowercase / Backspace / ..., Cursor < / Cursor > / Cancel / Enter) is\n  reachable consistently via left / right inside the row.\n\n### Changed\n- Single generic input layout. Glyphs still adapt to the detected controller\n  type for display, but bindings are no longer duplicated per-type.\n- `GameplayInputFrame` is mutable and reused every tick. The tick loop no\n  longer allocates a frame per tick.\n- `GuiNavigationController` split into focused helpers (`NavigationMode`\n  resolver, `SlotNavigator`, `WidgetNavigator`, `CursorCaptureManager`,\n  `CreativeTabNavigator`); all methods stay under 60 lines.\n- `BetterControllerSettingsScreen` rewritten around a slider factory; the rest\n  of the configuration moved to the JSON file.\n\n### Removed\n- Haptics / rumble architecture (`ControllerHaptics`, `HapticEvent`,\n  `HapticProfile`) — GLFW provides no cross-platform rumble in this stack and\n  the runtime was a permanent no-op.\n- Radial menu (`RadialMenu`, `RadialMenuController`, `RadialMenuRenderer`,\n  `RadialMenuSlot`).\n- Animated inventory help panel.\n- `ControllerPreset` and multi-layout overrides\n  (xbox / playstation / switch / generic).\n\n[0.1.0]: https://github.com/Nekuzaky/BetterController/releases/tag/v0.1.0\n\n\n**Full Changelog**: https://github.com/Nekuzaky/BetterController/commits/v0.1.0"
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "github",
+			"url": "https://github.com/sponsors/Nekuzaky"
+		}
+	],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 2,
+		"more": 0,
+		"people": [
+			{
+				"login": "Nekuzaky",
+				"commits": 2,
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/Nekuzaky"
+					}
+				]
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

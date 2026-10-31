@@ -1,0 +1,474 @@
+{
+	"repo": "Sighte/SighteAddons",
+	"host": "github",
+	"description": "Client-side Fabric mod for Hypixel SkyBlock Catacombs: per-player contribution, room times and secret attribution (MC 26.1.2)",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-08-12T12:58:33Z",
+	"pushed": "2026-09-17T20:43:05Z",
+	"releases": [
+		{
+			"tag": "v1.1.1",
+			"published": "2026-09-12T15:18:23Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 559467662,
+					"name": "sighteaddons-1.1.1.jar",
+					"url": "https://github.com/Sighte/SighteAddons/releases/download/v1.1.1/sighteaddons-1.1.1.jar",
+					"size": 1651850,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "8ff3dd90f1ff3d70d9c4e6fe743ae30fb6b71fc7cf30237717666b0145036639",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "sighteaddons",
+							"version": "1.1.1",
+							"name": "Sighte Addons",
+							"description": "Tracks per-player contribution in Hypixel SkyBlock Catacombs runs by attributing room clears to the party members who were actually in the room.",
+							"minecraft": "~26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"blackskija"
+							]
+						}
+					],
+					"icon": "208f25a108f17988dbaf787a841bf0fec0ac563542bcde7dd14036a5e9c047a3.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 646,
+						"jars": [
+							"META-INF/jars/blackskija-26.1.2-2.3.3.jar",
+							"META-INF/jars/blackskija-26.1.2-2.3.3.jar!META-INF/jars/skija-shared-0.143.17.jar",
+							"META-INF/jars/blackskija-26.1.2-2.3.3.jar!META-INF/jars/types-0.2.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"sighteaddons/Mayor.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"sighteaddons/RoomStats.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"sighteaddons/RunPbs.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"sighteaddons/SecretApi.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"sighteaddons/SoloClear.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"sighteaddons/TelemetryUpload.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"META-INF/jars/blackskija-26.1.2-2.3.3.jar!org/blackaddons/blackskija/backend/natives/NativeDownloader.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"META-INF/jars/blackskija-26.1.2-2.3.3.jar!META-INF/jars/skija-shared-0.143.17.jar!io/github/humbleui/skija/impl/Library.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"native": {
+								"META-INF/jars/blackskija-26.1.2-2.3.3.jar!META-INF/jars/skija-shared-0.143.17.jar!io/github/humbleui/skija/impl/Library.class": [
+									"java/lang/System.loadLibrary",
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {
+							"api.hypixel.net": [
+								"sighteaddons/Mayor.class"
+							],
+							"217.160.51.229.sslip.io": [
+								"sighteaddons/RoomStats.class",
+								"sighteaddons/TelemetryUpload.class"
+							],
+							"youtu.be": [
+								"sighteaddons/ui/screens/SoloPanel.class"
+							],
+							"repo1.maven.org": [
+								"META-INF/jars/blackskija-26.1.2-2.3.3.jar!org/blackaddons/blackskija/backend/natives/NativeDownloader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "The clear score on every solo run, filters and sorting on the record views, and a stricter rule for what counts as a clear PB. Minecraft 26.1.2, Fabric, client only.\n\n**Clear score** — every solo record now carries the clear half of the standings for you (the sum of the room weights by time share, which solo is the difficulty of the floor) and the standing number with the secret share.\n- Shown in the list's meta line, as the first line of the run's summary, and in the discord post as a `clear score` component.\n- Older solo files without a score get it computed on load from their rooms, with today's weights. Files without a cleared room stay without a number.\n\n**Filters and sorting**\n- Solo list: chips all / f7 / m7 / 300 with counts, every column sortable from its header. Missing values sort last in both directions, and time sorts 300 before 270 before nothing.\n- Splits table: chips all / master / normal. Runs table: chips all / solo / party.\n- Escape takes the chip back first, then closes.\n\n**Clear PBs only when you were alone** — a room clear is a personal best only if no other player was in the room for a second or more, the same threshold the run report uses for `playersInRoom`. Someone running through in under a second is not company.\n- Secret PBs keep their own rule: the mod knows whose secrets they were, and company takes nothing from that.\n- Run reports go out unchanged on every party run, the clear line in chat still comes, and old records in `history.jsonl` stay where they are.\n\n## Not in the jar\n\nNothing about the run-report schema changed — `RunReport.SCHEMA` stays 6 and the receiver owes nothing for this build. The receiver's own half of the alone-in-the-room rule (a clear world record only counts visits where one player was alone in the room) sits on the `solo-records` branch and is **not deployed yet**; until it is, the box keeps the old rule for world records while the mod already applies the new one for personal bests.\n\n## Build\n\n479 tests / 45 classes.\nSHA256 `8ff3dd90f1ff3d70d9c4e6fe743ae30fb6b71fc7cf30237717666b0145036639`"
+		},
+		{
+			"tag": "v1.1.0",
+			"published": "2026-09-06T22:11:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 547746281,
+					"name": "sighteaddons-1.1.0.jar",
+					"url": "https://github.com/Sighte/SighteAddons/releases/download/v1.1.0/sighteaddons-1.1.0.jar",
+					"size": 1622987,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "1b2a96fbb69204367ef34061deb79ac6aaae03663db4725050c801486c2b038f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "sighteaddons",
+							"version": "1.1.0",
+							"name": "Sighte Addons",
+							"description": "Tracks per-player contribution in Hypixel SkyBlock Catacombs runs by attributing room clears to the party members who were actually in the room.",
+							"minecraft": "~26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"blackskija"
+							]
+						}
+					],
+					"icon": "208f25a108f17988dbaf787a841bf0fec0ac563542bcde7dd14036a5e9c047a3.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 633,
+						"jars": [
+							"META-INF/jars/blackskija-26.1.2-2.3.3.jar",
+							"META-INF/jars/blackskija-26.1.2-2.3.3.jar!META-INF/jars/skija-shared-0.143.17.jar",
+							"META-INF/jars/blackskija-26.1.2-2.3.3.jar!META-INF/jars/types-0.2.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"sighteaddons/Mayor.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"sighteaddons/RoomStats.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"sighteaddons/RunPbs.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"sighteaddons/SecretApi.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"sighteaddons/SoloClear.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"sighteaddons/TelemetryUpload.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"META-INF/jars/blackskija-26.1.2-2.3.3.jar!org/blackaddons/blackskija/backend/natives/NativeDownloader.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"META-INF/jars/blackskija-26.1.2-2.3.3.jar!META-INF/jars/skija-shared-0.143.17.jar!io/github/humbleui/skija/impl/Library.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"native": {
+								"META-INF/jars/blackskija-26.1.2-2.3.3.jar!META-INF/jars/skija-shared-0.143.17.jar!io/github/humbleui/skija/impl/Library.class": [
+									"java/lang/System.loadLibrary",
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {
+							"api.hypixel.net": [
+								"sighteaddons/Mayor.class"
+							],
+							"217.160.51.229.sslip.io": [
+								"sighteaddons/RoomStats.class",
+								"sighteaddons/TelemetryUpload.class"
+							],
+							"youtu.be": [
+								"sighteaddons/ui/screens/SoloPanel.class"
+							],
+							"repo1.maven.org": [
+								"META-INF/jars/blackskija-26.1.2-2.3.3.jar!org/blackaddons/blackskija/backend/natives/NativeDownloader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "The solo tab, the map as a picture, and the score the way Odin counts it. Minecraft 26.1.2, Fabric, client only.\n\n**Solo tab** — `/sa` → solo. Every solo F7/M7 run is filed on the way out of the floor.\n- The list: time to 300 on Hypixel's clock, falling back to the time to 270, with the floor's best marked.\n- The run's page: the whole floor as the item map showed it — every revealed room in its colour, the doors, the greyed rooms nobody opened — with your route drawn through it and numbered, and a ring around the room where 300 fell.\n- The rundown: room by room in the order you walked them, with when you went in, how long you stayed, how long the clear took, and the secrets. Hover a room on the map for the same numbers.\n- **Post to discord**, by hand, per run: a picture of the floor with the room names, the announcement line, and a YouTube link if you add one. Enter posts, escape cancels, ctrl+v pastes.\n\n**Score** — the projection that fires the 300 announcement now counts what Odin counts.\n- Mimic (a baby zombie's death in the clear phase of a mimic floor), prince and bat (their chat lines), deaths in the skill score, and Mayor Paul's ten points, read off Hypixel's public election page.\n- The tab list is read twice a second, so the crossing is seen within half a second of Odin's.\n- Measured on the solo M7 that started this: Odin said 300, the old projection said 297 — a mimic and a prince it could not see.\n\n**UI** — the settings screen draws through Skija now: a floating panel over blur, rows in cards, JetBrains Mono, two colours with narrow rules (accent for what is selected, green for your own best and nothing else).\n- The splits panel was redrawn, and shows a projected end time once every split of the floor has an expected time in `/sa`.\n\n## Not in the jar\n\nThe receiver half is deployed: the announcement route prints the video link under the headline and attaches the map as `map.png` in the embed. Nothing about the run-report schema changed — `RunReport.SCHEMA` stays 6 and the receiver owes nothing.\n\n## Build\n\n475 tests / 45 classes.\nSHA256 `1b2a96fbb69204367ef34061deb79ac6aaae03663db4725050c801486c2b038f`"
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-08-20T19:20:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 522687078,
+					"name": "sighteaddons-1.0.0.jar",
+					"url": "https://github.com/Sighte/SighteAddons/releases/download/v1.0.0/sighteaddons-1.0.0.jar",
+					"size": 689368,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "6b492d16f996f980d8812454d3b5393962f50253f10136c2b863d3f425c74205",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "sighteaddons",
+							"version": "1.0.0",
+							"name": "Sighte Addons",
+							"description": "Tracks per-player contribution in Hypixel SkyBlock Catacombs runs by attributing room clears to the party members who were actually in the room.",
+							"minecraft": "~26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": "208f25a108f17988dbaf787a841bf0fec0ac563542bcde7dd14036a5e9c047a3.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 254,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"sighteaddons/RoomStats.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"sighteaddons/RunPbs.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"sighteaddons/SecretApi.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"sighteaddons/SoloClear.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"sighteaddons/TelemetryUpload.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"217.160.51.229.sslip.io": [
+								"sighteaddons/RoomStats.class",
+								"sighteaddons/TelemetryUpload.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Everything the mod does, in one jar. Minecraft 26.1.2, Fabric, client only.\n\n**Attribution** — who actually cleared which room, sampled off the dungeon map every tick, no party sync.\n- A clear is yours only if you were there from the start; a secret run only if every secret in it was yours.\n- Run summary at the end: standings, unattributed remainder, deaths, idle and navigation time.\n\n**Records**\n- Room times and personal bests, appended permanently and announced in chat. `/sa pbs` lists them.\n- Splits: the run as spans — blood open, blood clear, portal, every boss phase, total. Two clocks per row, the wall clock and Hypixel's own server ticks.\n- Split records per floor, on Odin's record keys. `/sa import` folds an existing Odin install's in.\n- Run records: best time for a whole run, per floor **and** per party size.\n\n**Secrets**\n- Per room: how many, which of them were provably yours, and a stopwatch from the first to the last.\n- Teammate counts from their lifetime total, looked up through this project's receiver — no key to enter, no setting for one.\n\n**HUD** — map with every party member, clear popup, run clock, current room, storm countdown, crit readout, splits panel, split clock.\n- Each placed by anchor and offset: drag to move, arrow keys to nudge, scroll wheel to scale, `r` to reset.\n- `/sa` for settings, `/sa gallery` for every element frozen on a scripted run.\n\n**Announcements** — off until you turn them on.\n- Solo clears into the team's channel, or the moment a run reaches a score you set (F7, M7).\n- New run bests to a leaderboard.\n- A failed run is never announced as a clear: `☠ Defeated` is required, and Hypixel prints the rest of the summary block on a death too.\n\n**Telemetry** — anonymous run reports, uploaded at the *next* game start so a crash or an early leave cannot lose one. Your name is off by default and teammates never appear by name at all. `/sa` → debug turns the whole thing off.\n\n---\n\n461 tests / 42 classes. `RunReport.SCHEMA` 6, unchanged — the receiver owes nothing, and the teammate-secret route is live.\nSHA256 `6b492d16f996f980d8812454d3b5393962f50253f10136c2b863d3f425c74205`"
+		},
+		{
+			"tag": "v0.16.0",
+			"published": "2026-08-17T23:37:18Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 518654746,
+					"name": "sighteaddons-0.16.0.jar",
+					"url": "https://github.com/Sighte/SighteAddons/releases/download/v0.16.0/sighteaddons-0.16.0.jar",
+					"size": 534869,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "803930e113baa235d50faddb0572ff35377b528f1beb5d5b0099f19e1dc16bea",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "sighteaddons",
+							"version": "0.16.0",
+							"name": "Sighte Addons",
+							"description": "Tracks per-player contribution in Hypixel SkyBlock Catacombs runs by attributing room clears to the party members who were actually in the room.",
+							"minecraft": "~26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 206,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"sighteaddons/RoomStats.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"sighteaddons/SecretApi.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"sighteaddons/TelemetryUpload.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"217.160.51.229.sslip.io": [
+								"sighteaddons/RoomStats.class",
+								"sighteaddons/TelemetryUpload.class"
+							],
+							"api.hypixel.net": [
+								"sighteaddons/SecretApi.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Fifty-six commits since 0.15.0. \n\n## The interface was rebuilt\n\nOne monochrome design system — white, grey, black, no hue — under all four surfaces: the HUD, the\nstats screen, the config screen and the chat. Emphasis is carried by position, weight and *words*\ninstead of colour, because the neutral ramp's two lower tones sit 1.27:1 apart and nobody should be\nasked to tell them apart. Every text pair on every surface is measured against 4.5:1 in a test, over a\nblack dungeon and over a white one.\n\n- **The HUD card** is a card: one scrim, rounded corners, a double-size room clock, a segmented secrets\n  bar, and the rooms behind you receding as history. It fades out when the boss room starts, because\n  every number on it is frozen from that moment and the fight wants the screen.\n- **The stats page** is new — coverage against the room database, the three kinds counted and timed\n  apart, personal bests total and this week, floors. Under five attempts there is no median; it says\n  `fastest of 3` instead of inventing one.\n- **The config screen** has sections, one-line explanations, switches, steppers, a slider and a masked\n  field for a Hypixel key. Every page scrolls.\n- **The chat** has one tag, one field separator, one time notation, and one sentence order.\n- **The room history table** measures its own columns. At 1280×720 and 1366×768 — Minecraft's own auto\n  scale — a click on `secrets` used to sort by `clear`.\n\n## Everything on screen can be moved\n\nThe card, the clear popup and Storm's countdown each hang from one of nine anchors with an offset\ninward from it, so a position survives a GUI-scale change and a resize. `/sa` → hud drags each one at\nits real position: arrows nudge a pixel, shift eight, `r` resets. The two chips still start centred on\nthe crosshair, exactly where they have always been drawn.\n\nThe backdrop's opacity is one slider for all three, and it now reaches 30 %. Below 88 % the smallest\ngrey text can drop under 4.5:1 — that is measured, and the row says so when you are there.\n\n## The standings score everybody's secrets\n\nThey used to compare your clears-plus-secrets against everybody else's clears alone, because\nattribution only works for the local player. Now there are two passes:\n\n- **Live**, a room's action bar knows how many secrets the party found and the tracker knows which were\n  provably yours. The difference is a real count with an unknown owner, so it is split over the other\n  players who were in that room, by the time each spent there. Estimated rows are marked `~`.\n- **At the end of the run**, Hypixel's per-player counts arrive and replace every estimate with the\n  truth — including your own, because attribution is a floor rather than a total.\n\nThe correction needs your own API key in `/sa` → debug. Without one, nothing waits and the summary\nreads as it always did.\n\n## Also\n\n- **The blood room is Odin's `Blood Clear` split** — door to boss, its own record kind, no longer\n  filed as a `clear`.\n- **Run totals** — the standings and the idle/navigation split — are a setting now, not only a keybind\n  that shipped unbound. `/sa` → hud → run totals, which also binds the key.\n- `idle` and `nav` are counted apart: standing in a finished room and walking between rooms are\n  different problems.\n\n## The receiver\n\nNothing is owed. Every field this build uploads was diffed against the deployed `master`'s accepted\nkeys and matches exactly; `RunReport.SCHEMA` stays 6. The new standings are a client-side figure and no\npart of them leaves the machine, and no teammate is ever named in a report.\n\n391 tests, 34 classes, green."
+		},
+		{
+			"tag": "v0.15.0",
+			"published": "2026-08-16T21:50:05Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 517255987,
+					"name": "sighteaddons-0.15.0.jar",
+					"url": "https://github.com/Sighte/SighteAddons/releases/download/v0.15.0/sighteaddons-0.15.0.jar",
+					"size": 260722,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "5e1987d83823f14d952b5f15613aa77fad21aa383a98db1e0157b3ec32c2bda3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "sighteaddons",
+							"version": "0.15.0",
+							"name": "Sighte Addons",
+							"description": "Tracks per-player contribution in Hypixel SkyBlock Catacombs runs by attributing room clears to the party members who were actually in the room.",
+							"minecraft": "~26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 94,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"sighteaddons/RoomStats.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"sighteaddons/SecretApi.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"sighteaddons/TelemetryUpload.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"217.160.51.229.sslip.io": [
+								"sighteaddons/RoomStats.class",
+								"sighteaddons/TelemetryUpload.class"
+							],
+							"api.hypixel.net": [
+								"sighteaddons/SecretApi.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "The crit half of the port, Storm's release countdown, and a scoring change you will notice immediately.\n\n## What changed\n\n- **Crit readout.** When Hypixel reports an Explosive Shot hit, the damage per target is divided by your Blessing of Power — read out of the tab footer — and printed to your own chat. Nothing is sent anywhere and nothing is written to party or private chat; the line is local to your client.\n- **Storm's release window.** Storm's cast lines start a countdown on screen, ending in a `SHOOT NOW` window. Both tick values are settings rather than constants, for the reason under \"What is not verified\".\n- **ClearPoints now pay for the secrets you find.** A room used to be worth 0.25 for every secret it *contains*, credited when it cleared — so the number never moved while you were collecting, and a seven-secret room paid 1.75 even if you touched none. Now each secret attributed to **you** adds 0.25 the moment you find it. `Pipes` goes from a flat 2.50 to 0.75 plus what you actually find.\n\n**Scores from before this build are not comparable with scores after it.** That is the second time ClearPoints has changed kind, and it is deliberate both times.\n\nEverything new is behind a toggle: crit readout on the chat tab of `/sa`, storm timer and both its tick values on the HUD tab.\n\n## The receiver needs nothing\n\nReport schema is unchanged at **6**. `Sighte/skyblock-server` `master` is `1a7f435`, deployed since 2026-08-16. ClearPoints have never left the client, so the scoring change is invisible to the server.\n\n## Requirements\n\nMinecraft 26.1.2 · Fabric Loader ≥ 0.19.3 · Java ≥ 25 · Fabric API · fabric-language-kotlin ≥ 1.13.13\n\n`sha256` of the attached jar:\n\n```\n5e1987d83823f14d952b5f15613aa77fad21aa383a98db1e0157b3ec32c2bda3\n```\n\n## What is not verified\n\nThe development client cannot reach Hypixel. Everything below is stated because a played floor is the only thing that settles it:\n\n- **Every Hypixel string in the crit readout and the storm timer is a hypothesis.** They come from the mod this was ported from, and twenty real session logs on disk contain none of them — no build ever looked. Both features log a debug event when they see something close and fail to match it, so one M7 settles it either way. If Storm speaks and you see neither the countdown nor a `storm_unparsed` event, the line never reached the mod at all, and correcting the wording would not fix that.\n- **The countdown's 138 ticks and its 20-tick window are inherited numbers with no derivation.** Unlike a wrong string they will never announce themselves — the timer will count down, turn red and fire, simply at the wrong moment. That is exactly why both are adjustable in `/sa` rather than compiled in. Correct them once you have watched a real cast.\n- **The 2.5 added per Blessing of Time** in the crit calculation is inherited the same way, and produces a plausible number whether or not it is right.\n- **Which secrets count as yours is still the weak part.** A secret you walk over counts as somebody else's, so both the readout and the new points under-credit you. That is a known open item, not a defect in this build.\n\n286 tests, 21 classes, green."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 311,
+		"more": 0,
+		"people": [
+			{
+				"login": "Sighte",
+				"commits": 311,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

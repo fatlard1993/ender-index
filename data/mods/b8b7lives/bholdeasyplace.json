@@ -18,7 +18,7 @@
 					"name": "bholdeasyplace-0.5.1+26.3.jar",
 					"url": "https://github.com/b8b7lives/bholdeasyplace/releases/download/v0.5.1/bholdeasyplace-0.5.1%2B26.3.jar",
 					"size": 20922,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "da79803e91e04d2b5fe8bd7f3f83a4417ca57bd265004de2eee5eee4f031467e",
 					"mods": [
@@ -40,7 +40,10 @@
 							"provides": [],
 							"breaks": [
 								"holdeasyplace"
-							]
+							],
+							"breaksVersions": {
+								"holdeasyplace": "*"
+							}
 						}
 					],
 					"icon": "a2f6444fdb8951ca6d28d3b15085c4e676e9a88b9d034d90fd59991b65583374.png",
@@ -58,7 +61,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "- Minecraft 26.3 build. Needs Litematica 0.29.1 or newer and malilib\n  0.30.2 or newer. The 26.2 line stays available as 0.5.0+26.2.\n- Removed the Lenient Item Match option. Litematica's own misplacement\n  guard already matches server custom items by base item, on 26.2 as\n  well as 26.3, so the option never had an effect and the 0.4.0 note\n  describing the guard was wrong. The pick block toggles and the loss\n  watchdog are unchanged."
 		},
 		{
 			"tag": "v0.5.0",
@@ -70,7 +74,7 @@
 					"name": "bholdeasyplace-0.5.0+26.2.jar",
 					"url": "https://github.com/b8b7lives/bholdeasyplace/releases/download/v0.5.0/bholdeasyplace-0.5.0%2B26.2.jar",
 					"size": 22482,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "e0c975ddc4d3966f1c416132beacb5365ead03731332633f48f1786ba48f5ca4",
 					"mods": [
@@ -110,7 +114,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## 0.5.0+26.2 (2026-08-22)\n\n- New icon, a hold ring in the mod's red on the dark background.\n- New banner art for the repo and listing.\n- Display name is now bHold easyPlace. The mod id and your configs are\n  unchanged.\n\n## 0.4.1+26.2 (2026-08-22)\n\n- Fix, the loss watchdog no longer false alarms on infinite blocks and\n  cyclers. Server custom items change their hidden data every time the\n  server gives one back or the player cycles a mode, so tracking exact\n  items produced a warning on nearly every placement. The watchdog now\n  tracks the total count of custom items instead, which survives both.\n  Warnings are also rate limited to one per thirty seconds.\n\n## 0.4.0+26.2 (2026-08-22)\n\n- Custom item server support. Easy place now accepts server custom\n  items such as infinite blocks. Litematica's misplacement guard\n  demanded exact item data on the held stack while the rest of easy\n  place matched by base item, so any custom item failed and clicks on\n  existing blocks were cancelled. When the schematic wants a plain\n  block, the guard now matches by base item. Items that need exact\n  data, like filled shulkers, stay exact. The toggle is named Lenient Item Match.\n- Easy place leaves your hotbar alone when what you hold already\n  matches the target. The toggle is named Skip Pick Block When Held.\n- Pick block never moves another item into a slot holding a server\n  custom item. The toggle is named Protect Custom Items.\n- New watchdog warns when a server custom item leaves your inventory\n  and is not given back within two seconds, with a timestamped log\n  line for lost item tickets. Detection only, the loss itself happens\n  server side. The toggle is named Custom Item Loss Watchdog.\n- New loadcheck harness, the production jar now boots against the full\n  play modlist in CI before any release."
 		},
 		{
 			"tag": "v0.3.1",
@@ -122,7 +127,7 @@
 					"name": "bholdeasyplace-0.3.1+26.2.jar",
 					"url": "https://github.com/b8b7lives/bholdeasyplace/releases/download/v0.3.1/bholdeasyplace-0.3.1%2B26.2.jar",
 					"size": 15914,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "7625fdab742971fe5cf3a5668acc8c24b72118d12be2b7ba02b475bac5d98cca",
 					"mods": [
@@ -162,7 +167,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Icon and log-hygiene release.\n\n- Replaced the icon with the handmade version (the 0.3.0 icon export exceeded Modrinth's icon size cap).\n- Marked the two extended Litematica config lists `@Mutable`, removing two cosmetic \"@Final field should be final\" warnings at startup.\n\nNo behavior changes. Verified loading in a 263-mod stack alongside litematica 0.28.4 / malilib 0.29.3 on Minecraft 26.2.\n\n**Requires:** Fabric Loader >= 0.19.0, Fabric API, malilib, Litematica. Client-side only."
 		},
 		{
 			"tag": "v0.3.0",
@@ -174,7 +180,7 @@
 					"name": "bholdeasyplace-0.3.0+26.2.jar",
 					"url": "https://github.com/b8b7lives/bholdeasyplace/releases/download/v0.3.0/bholdeasyplace-0.3.0%2B26.2.jar",
 					"size": 31849,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "53b5eca7c46c861e96cec9f059c9b7fa548e6a5c9799bac249b8521385b54b48",
 					"mods": [
@@ -214,11 +220,29 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "First public release of **bHold Easy Place**, a Litematica addon that keeps Easy Place running every client tick without holding the use key.\n\nMinecraft 26.x continuation of [Hold-Easy-Place](https://github.com/shane04111/Hold-Easy-Place) by shane0411 (MIT), rewritten against litematica 0.28.4 / malilib 0.29.3 for Minecraft 26.2.\n\n**Requires:** Fabric Loader >= 0.19.0, Fabric API, malilib, Litematica. Client-side only. Remove the original Hold-Easy-Place jar if present.\n\nSee [CHANGELOG.md](https://github.com/b8b7lives/bholdeasyplace/blob/main/CHANGELOG.md) for details."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [
+		"gallery/bhold-litematica-keybind.png",
+		"gallery/bhold-off.png",
+		"gallery/bhold-on.png",
+		"gallery/bhold-options.webp",
+		"icon/bholdeasyplace-handmade-icon.png",
+		"icon/bholdeasyplace-icon-128.png",
+		"icon/bholdeasyplace-icon-16.png",
+		"icon/bholdeasyplace-icon-512.png"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 0,
+		"more": 0,
+		"people": []
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
 	"history": 1
 }

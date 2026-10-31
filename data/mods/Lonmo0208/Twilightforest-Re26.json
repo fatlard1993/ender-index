@@ -18,7 +18,7 @@
 					"name": "twilightforest.re26-26.3-4.8.4210-fabric.jar",
 					"url": "https://github.com/Lonmo0208/Twilightforest-Re26/releases/download/Fabric-26.3-4.8.4210/twilightforest.re26-26.3-4.8.4210-fabric.jar",
 					"size": 23994241,
-					"downloads": 7,
+					"downloads": 14,
 					"inspection": 2,
 					"sha256": "adbacccd4216d174d0ec80b679797b8abd87a2fd6942bd66fd1487a52420a083",
 					"mods": [
@@ -242,7 +242,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 3
+					"downloads": 5
 				}
 			],
 			"notes": "## Changes in 4.8.4210\n- Added the C2ME density-function compiler bindings for Twilight Forest's custom density functions\n- Added a reliable C2ME OpenCL fallback (in-memory flag + c2me.toml) so the Twilight Forest dimension generates on the CPU instead of crashing\n\n## Prerequisite (Important)\nThis mod requires Forge Config API Port to run properly (not bundled in this jar):\n- CurseForge: `https://www.curseforge.com/minecraft/mc-mods/forge-config-api-port`\n- Modrinth: `https://modrinth.com/mod/forge-config-api-port`\n\nRequires Fabric Loader `0.19.3+`, Fabric API `0.158.0+26.2` and Forge Config API Port `26.1.3+`.\n\n## Minecraft 26.2\nFabric build for Minecraft 26.2. This is the first Fabric release since 26.1.2, so it rolls up the whole 26.2 port plus the fixes below.\n\n## C2ME & server\n- Hardened world generation for C2ME's parallel generation: the overworld seed is resolved lazily behind a volatile field registered at `SERVER_STARTING`, so worldgen workers never touch the server object, and chunk blanket processors guard their biome sampling\n- Guarded the mushroom block `canSurvive` mixin against `WorldGenRegion` chunk bounds to avoid a C2ME crash\n- Fixed multipart entities ticking while their chunk is unloaded (Fabric chunk crash)\n- Fixed portal teleport blocking the server thread during chunk generation\n\n## Bosses & combat\n- Fixed the Lich fight: phase 3 attacks, minion summoning, lifedrain trigger and weapon switching\n- Fixed Naga body segments not following the head during a charge, and adjusted Naga Courtyard terrain generation\n- Fixed the Destruction enchantment not smashing blocks\n- Fixed the Fortification Scepter not consuming durability per use\n\n## Items & equipment\n- Travel goggles: item display GUI stays readable with the F3 debug overlay open, removed the default `ITEM_DISPLAY` component and fixed the swap logic\n- Phantom armor is kept on death in all game modes\n- Corrected vanilla mining tier tags (`needs_*`/`incorrect_for_*`) so vanilla blocks such as ancient debris keep vanilla behaviour\n- Fixed the sulfur cube growing when it picks up giant blocks by itself\n\n## Rendering\n- Fixed dimension rendering of stars, clouds and precipitation\n- Sun and moon are hidden in the Twilight Forest dimension\n- Fixed sign rendering for 26.2 (block model based signs, GUI background textures, wall sign variants)\n- Reduced IceLayer rendering jitter and freeze overlay jitter in the Frosted effect\n\n## World generation & data\n- Added chunk generator tuning for the Twilight Forest noise settings\n- Removed residual dark tree leaves inside the Dark Tower between Y11-Y22\n- Fixed worldgen JSON block ids (`twilightforest:root` -> `twilightforest:root_block`)\n- Added hollow log translations across all languages and corrected advancements\n\n## Hydra\n- Synced the Hydra's attack logic with upstream: bite/flame/mortar chances and ranges, secondary target attacks, look and body turn speeds, shield interaction and reflected-mortar damage range\n- Fixed the heads and necks staying locked in a collapsed pose (clampedLerp factor order)\n- Fixed the Hydra being culled while its visible body parts were still on screen\n\n## C2ME / OpenCL\n- Added a pre-launch compatibility hook for C2ME's OpenCL acceleration module: the Twilight Forest dimension now falls back to CPU generation instead of crashing the server, while the vanilla dimensions keep OpenCL acceleration\n\n## Changes in 4.8.4209\n- Hydra combat logic fully synced with upstream (attack chances and ranges, secondary attacks, body/head turning, shield interaction, reflected-mortar damage range) and the collapsed head/neck pose fixed\n- C2ME-OCL compatibility: the Twilight Forest dimension falls back to CPU generation instead of crashing the server when C2ME's OpenCL accelerator is installed"
@@ -742,5 +742,17 @@
 	"fundingChecked": "2026-10-26T21:38:43.306Z",
 	"pictures": [],
 	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"contributors": {
+		"commits": 121,
+		"more": 0,
+		"people": [
+			{
+				"login": "Lonmo0208",
+				"commits": 121,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
 	"history": 1
 }

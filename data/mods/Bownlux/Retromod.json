@@ -6,7 +6,7 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-03-06T22:39:13Z",
-	"pushed": "2026-10-28T14:48:54Z",
+	"pushed": "2026-10-31T01:26:25Z",
 	"releases": [
 		{
 			"tag": "latest",
@@ -4929,9 +4929,119 @@
 						"data": [],
 						"shaders": false
 					}
+				},
+				{
+					"id": 693949140,
+					"name": "retromod-1.4.0-snapshot.3+26.2-fabric.jar",
+					"url": "https://github.com/Bownlux/Retromod/releases/download/latest/retromod-1.4.0-snapshot.3%2B26.2-fabric.jar",
+					"size": 8878660,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "78f425a776fad2d0f034febc73d3a76a4947b9ced269bd669b05cacb8f387774",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "retromod",
+							"version": "1.4.0-snapshot.3",
+							"name": "Retromod",
+							"description": "Helps older Minecraft mods run on newer versions by updating their bytecode, mixins, and loader metadata.",
+							"minecraft": "26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"fabric-api"
+							]
+						},
+						{
+							"loader": "quilt",
+							"id": "retromod",
+							"version": "1.4.0-snapshot.3",
+							"name": "Retromod",
+							"description": "Helps older Minecraft mods run on newer versions by updating their bytecode, mixins, and loader metadata.",
+							"minecraft": "=26.2",
+							"environment": "*",
+							"depends": [
+								"quilt_loader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "af3d953a5890c066ede4da1a25d0248e0195b0f146d28d3d0bbe5db1541798a2.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 2096,
+						"jars": [],
+						"capabilities": {
+							"classloading": {
+								"com/retromod/gui/ScreenClassGenerator$BytecodeClassLoader.class": [
+									"java/lang/ClassLoader.defineClass",
+									"extends java/lang/ClassLoader"
+								]
+							},
+							"network": {
+								"com/retromod/archive/ApiArchiveManager.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/retromod/core/ModrinthVersionChecker.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/retromod/gui/ConfigScreenFactory.class",
+								"com/retromod/core/Retromod.class",
+								"com/retromod/core/TransformationErrorHandler.class",
+								"com/retromod/core/RetromodPreLaunch.class",
+								"com/retromod/core/SafeCrashHandler.class",
+								"com/retromod/core/ModHealthChecker.class",
+								"com/retromod/core/RetromodVersion.class",
+								"com/retromod/core/RetromodConfig.class",
+								"com/retromod/shaded/gson/internal/TroubleshootingGuide.class"
+							],
+							"maven.fabricmc.net": [
+								"com/retromod/archive/ApiArchiveManager.class"
+							],
+							"maven.neoforged.net": [
+								"com/retromod/archive/ApiArchiveManager.class"
+							],
+							"maven.minecraftforge.net": [
+								"com/retromod/archive/ApiArchiveManager.class"
+							],
+							"repo1.maven.org": [
+								"com/retromod/archive/ApiArchiveManager.class"
+							],
+							"api.modrinth.com": [
+								"com/retromod/core/ModrinthVersionChecker.class"
+							],
+							"modrinth.com": [
+								"com/retromod/core/ModrinthVersionChecker.class"
+							],
+							"www.slf4j.org": [
+								"com/retromod/shaded/slf4j/MDC.class",
+								"com/retromod/shaded/slf4j/LoggerFactory.class"
+							],
+							"bownlux.github.io": [
+								"com/retromod/compat/OptiFineCompat.class"
+							]
+						},
+						"unreadable": []
+					}
 				}
 			],
-			"notes": "Rolling pre-release for Fabric and Quilt on MC 26.2. It is published after every successful CI run against `main` and always points at the newest passing build. Versioned milestones are cut separately.\n\n### What This Is\nThis is the Fabric and Quilt variant of Retromod for MC 26.2. It carries `fabric.mod.json` and `quilt.mod.json`. There is no separate Quilt jar. The fat shaded jar with Forge and NeoForge metadata is not published here because other loader families can reject it.\n\nThe rolling channel does not publish Forge or NeoForge variants. Use a tagged milestone release, or run `bash build-all.sh` to produce `dist/Forge/<MC>/` and `dist/NeoForge/<MC>/` artifacts.\n\n### Build Info\n| Field | Value |\n|---|---|\n| Loader | Fabric and Quilt |\n| Target Minecraft | 26.2 |\n| Source commit | [`63ef628`](https://github.com/Bownlux/Retromod/commit/63ef62870826a3e629083107b8b661dceb736bb9) |\n| Built at | `2026-10-19T03:21:15Z` |\n| Commits since previous rolling release | `2` |\n| Java | 25 (Temurin) |\n\n### Install\n1. Download `retromod-1.4.0-snapshot.2+26.2-fabric.jar` below.\n2. Drop it into your Fabric or Quilt instance's `mods/` folder.\n3. Launch once. Retromod creates `retromod-input/` next to `mods/`. Drop old mods there for transformation, then restart when prompted.\n\nSee the [installation docs](https://bownlux.github.io/Retromod/installation) for the full per-loader walkthrough.\n\n### Verify the Download\n```\nSHA-256: fcb96f0d84956b5248b03877d4c163cbd048d75032074da312fa734012a473ab\n```\n\n### Heads Up\nThis beta rolling build has had less manual exercise than milestone releases. If something breaks, please attach `latest.log` and the failing mod jar to a [GitHub issue](https://github.com/Bownlux/Retromod/issues)."
+			"notes": "Rolling pre-release for Fabric and Quilt on MC 26.2. It is published after every successful CI run against `main` and always points at the newest passing build. Versioned milestones are cut separately.\n\n### What This Is\nThis is the Fabric and Quilt variant of Retromod for MC 26.2. It carries `fabric.mod.json` and `quilt.mod.json`. There is no separate Quilt jar. The fat shaded jar with Forge and NeoForge metadata is not published here because other loader families can reject it.\n\nThe rolling channel does not publish Forge or NeoForge variants. Use a tagged milestone release, or run `bash build-all.sh` to produce `dist/Forge/<MC>/` and `dist/NeoForge/<MC>/` artifacts.\n\n### Build Info\n| Field | Value |\n|---|---|\n| Loader | Fabric and Quilt |\n| Target Minecraft | 26.2 |\n| Source commit | [`e2f00e9`](https://github.com/Bownlux/Retromod/commit/e2f00e996fc9a766bc74de27ab050fafd372676b) |\n| Built at | `2026-10-31T01:06:31Z` |\n| Commits since previous rolling release | `12` |\n| Java | 25 (Temurin) |\n\n### Install\n1. Download `retromod-1.4.0-snapshot.3+26.2-fabric.jar` below.\n2. Drop it into your Fabric or Quilt instance's `mods/` folder.\n3. Launch once. Retromod creates `retromod-input/` next to `mods/`. Drop old mods there for transformation, then restart when prompted.\n\nSee the [installation docs](https://bownlux.github.io/Retromod/installation) for the full per-loader walkthrough.\n\n### Verify the Download\n```\nSHA-256: 78f425a776fad2d0f034febc73d3a76a4947b9ced269bd669b05cacb8f387774\n```\n\n### Heads Up\nThis beta rolling build has had less manual exercise than milestone releases. If something breaks, please attach `latest.log` and the failing mod jar to a [GitHub issue](https://github.com/Bownlux/Retromod/issues)."
 		}
 	],
 	"readme": "README.md",
@@ -4941,5 +5051,22 @@
 		"brand/retromod-social-1280x640.png"
 	],
 	"picturesChecked": "2026-10-29T10:54:18.815Z",
+	"contributors": {
+		"commits": 223,
+		"more": 0,
+		"people": [
+			{
+				"login": "Bownlux",
+				"commits": 184,
+				"funding": []
+			},
+			{
+				"login": "ttaute",
+				"commits": 39,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
 	"history": 1
 }

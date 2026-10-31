@@ -1,0 +1,161 @@
+{
+	"repo": "soyuz-dev/KCraft",
+	"host": "github",
+	"stars": 1,
+	"archived": false,
+	"license": "MPL-2.0",
+	"created": "2026-09-01T12:54:31Z",
+	"pushed": "2026-10-01T03:53:36Z",
+	"releases": [
+		{
+			"tag": "v0.2-alpha",
+			"published": "2026-09-24T04:49:55Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 585168952,
+					"name": "kcraft-0.2-alpha.jar",
+					"url": "https://github.com/soyuz-dev/KCraft/releases/download/v0.2-alpha/kcraft-0.2-alpha.jar",
+					"size": 214075,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "016ca0817e00760d9d5470b9d76e034a012fe8a5238300e2617cb0838aa71ae5",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "kcraft",
+							"version": "0.2-alpha",
+							"name": "KCraft",
+							"description": "",
+							"minecraft": "26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-language-kotlin",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": "807165601731cd041adca22028d33f8c4cea99325665093f19c3078459c273a8.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Computer Chip",
+								"Ruby"
+							],
+							"block": [
+								"Computer",
+								"Ruby Block",
+								"Ruby Ore"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 105,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# KCraft 0.2 Alpha: *KotlinCraft*\n\nKCraft computers can now run **real Kotlin/JVM programs inside Minecraft**.\n\nThis release introduces KCraft's main programming environment: write `.kts` files in Pico, compile and execute them at runtime, run multiple programs concurrently, interact with the computer through a controlled scripting API, and even query the Minecraft world itself.\n\nYes, the computer now actually runs Kotlin.\n\n## What's new\n\n### Kotlin scripting\n\nKCraft computers can compile and execute `.kts` files at runtime using Kotlin's embedded scripting compiler.\n\nWrite a program:\n\n```kotlin\nterminal.println(\"Hello from Kotlin!\")\n```\n\nThen:\n\n```text\n> run hello.kts\nStarted process 1\nHello from Kotlin!\n```\n\nPrograms can be created and edited entirely inside Minecraft using Pico.\n\nCompiler diagnostics and runtime exceptions are reported directly in the KCraft terminal, providing an in-game edit-run-debug loop.\n\n### KCraft scripting API\n\nKotlin programs now have access to a deliberately small KCraft API:\n\n```kotlin\nterminal.println(\"Hello!\")\n\nfiles.write(\"message.txt\", \"Hello from Kotlin!\")\nval message = files.read(\"message.txt\")\n\nval user = env[\"USER\"]\nval cwd = env[\"PWD\"]\nval pid = env[\"PID\"]\n\nval here = computer.position\nval block = world.blockAt(here)\n\nterminal.println(block.id)\n```\n\nCurrent capabilities include:\n\n- `terminal` — terminal output\n- `files` — persistent filesystem access\n- `env` — process environment\n- `computer` — information about the current computer\n- `world` — controlled access to live Minecraft world state\n\n`world.blockAt(...)` performs a live world query and returns an immutable KCraft representation of the block at that position.\n\n### Processes and multitasking\n\nKotlin programs now execute as independent KCraft processes.\n\n```text\n> run worker.kts\nStarted process 4\n\n> ps\nPID STATE PROGRAM\n4 RUNNING /home/worker.kts\n\n> kill 4\nStopped process 4\n```\n\nProcesses have their own:\n\n- PID\n- Working directory\n- Environment\n- Lifecycle state\n- Execution task\n\nMultiple Kotlin programs can run concurrently without blocking KSh.\n\nProcess cancellation currently uses JVM thread interruption and is cooperative; CPU-bound programs that ignore interruption may continue running.\n\n### Server-thread request system\n\nKotlin programs execute away from Minecraft's server thread.\n\nFilesystem and Minecraft operations are passed through KCraft's request system and performed authoritatively during computer ticks. Programs still see ordinary synchronous-looking Kotlin while KCraft handles the thread boundary underneath.\n\nEach computer also processes a limited number of requests per tick so excessive program requests cannot consume an unlimited amount of work in one Minecraft tick.\n\n### Restricted scripting classpath\n\nKCraft's public scripting API is now separated from the main mod implementation.\n\nScripts compile against the KCraft scripting API and Kotlin standard library rather than KCraft's entire implementation classpath. Minecraft internals, Fabric internals and KCraft runtime implementation classes are therefore not part of the supported scripting surface.\n\n**This is not a complete security sandbox.**\n\nKCraft programs are real JVM code running inside Minecraft's JVM and currently retain access to JDK functionality.\n\n**Treat `.kts` programs as trusted code. Do not run Kotlin scripts from untrusted sources on a server.**\n\n## Also included\n\nKCraft retains the computer environment introduced in 0.1 Alpha:\n\n- Persistent per-computer filesystems\n- KSh shell and `.ksh` scripts\n- Pico in-game text editor\n- Familiar filesystem commands\n- Persistent storage across chunk, world and Minecraft restarts\n- Multiplayer-aware display synchronisation\n- Ruby, Ruby Blocks and Ruby Ore\n- Survival crafting progression towards computer chips and computers\n\nKSh currently includes:\n\n```text\necho clear help source\npwd cd ls cat\ntouch mkdir rmdir rm\nappend appendln\npico\nrun ps kill\n```\n\n## Requirements\n\n- Minecraft 26.2\n- Fabric Loader\n- Fabric API\n\n\n..."
+		},
+		{
+			"tag": "v0.1-alpha",
+			"published": "2026-09-21T02:50:40Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 578075856,
+					"name": "kcraft-0.1-alpha.jar",
+					"url": "https://github.com/soyuz-dev/KCraft/releases/download/v0.1-alpha/kcraft-0.1-alpha.jar",
+					"size": 152543,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "bb8effc6a28024ec784443b3daa748c743ac1ffe0b71a10c72c2beff211e176a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "kcraft",
+							"version": "0.1-alpha",
+							"name": "KCraft",
+							"description": "",
+							"minecraft": "26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-language-kotlin",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": "807165601731cd041adca22028d33f8c4cea99325665093f19c3078459c273a8.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Computer Chip",
+								"Ruby"
+							],
+							"block": [
+								"Computer",
+								"Ruby Block",
+								"Ruby Ore"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 71,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### KCraft 0.1 Alpha: *It computes!*\n\nKCraft is a programmable-computer and automation mod for Minecraft 26.2, built with Kotlin and Fabric.\n\nThis is the first alpha release where the computer does, in fact, compute.\n\n**What's here:**\n\n* Persistent, server-authoritative computers with their own filesystems\n* An interactive terminal with history, scrolling and cursor editing\n* **KSh**, KCraft's shell and orchestration language\n* Familiar filesystem commands including `cd`, `pwd`, `ls`, `cat`, `touch`, `mkdir`, `rm` and `rmdir`\n* Executable `.ksh` scripts with `source`\n* File writing with `append` and `appendln`\n* **Pico**, a tiny in-game text editor for editing scripts directly inside Minecraft\n* Ruby, Ruby Blocks and naturally generating **Ruby Ore** in Nether blackstone\n* Survival crafting progression towards computer chips and computers\n* Persistent per-computer storage across world/chunk reloads\n* Multiplayer-aware display synchronisation\n\nKCraft's eventual goal is to combine Kotlin scripting with KSh orchestration, programmable golems, peripherals, networking and automation. `.kts` execution and much of that larger automation environment are **not implemented yet**.\n\n### Requirements\n\n* Minecraft 26.2\n* Fabric Loader\n* Fabric API\n* Fabric Language Kotlin\n* Java 25\n\n### Alpha warning\n\nThis is an early alpha. APIs, recipes, filesystem formats, world data and basically anything else may change without backwards compatibility.\n\nDo not entrust KCraft with the only copy of anything important. Or do, for all I care.\n\n> *“I have learnt from my previous mistakes. Unfortunately, I am still me.”*\n\n**Licence:** MPL-2.0"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "KCraft is a programmable-computer and automation mod for Minecraft, built with Kotlin and Fabric.",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 64,
+		"more": 0,
+		"people": [
+			{
+				"login": "soyuz-dev",
+				"commits": 62,
+				"funding": []
+			},
+			{
+				"login": "srivikashrameshkumar-afk",
+				"commits": 2,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

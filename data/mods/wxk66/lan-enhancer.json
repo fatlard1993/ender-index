@@ -1,0 +1,150 @@
+{
+	"repo": "wxk66/lan-enhancer",
+	"host": "github",
+	"description": "它把多人游戏界面里平平无奇的「局域网房间」列表，升级成像服务器列表一样显示延迟、玩家数和版本还能一键屏蔽垃圾房间列表",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-06-28T13:20:14Z",
+	"pushed": "2026-08-28T13:18:46Z",
+	"releases": [
+		{
+			"tag": "v2.0.0",
+			"published": "2026-08-28T13:18:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 533831412,
+					"name": "lanenhancer-2.0.0.jar",
+					"url": "https://github.com/wxk66/lan-enhancer/releases/download/v2.0.0/lanenhancer-2.0.0.jar",
+					"size": 25845,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "3034df728f725e922fe75c3586d8eca5849661ccef71067af52c3c82fc1f81ae",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lanenhancer",
+							"version": "2.0.0",
+							"name": "LAN Enhancer",
+							"description": "增强多人游戏中的局域网房间列表：显示在线人数、玩家名与延迟，并支持按 IP / IP:端口 的“仅一次”屏蔽。",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/example/lanenhancer/net/SlpClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.connect",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 适配 Minecraft 26.2\n\nMinecraft 自 1.21.11 之后启用「年份.序号」新版本命名方案，本版本适配其最新正式版 **26.2**。\n\n### 环境要求\n\n- Minecraft **26.2**\n- Fabric Loader ≥ 0.19.3\n- Java 25 及以上（官方启动器自带）\n\n### 主要变化\n\n- 全面切换 **Mojang 官方映射**（Yarn 已停止维护 26.x 映射），构建链升级 Loom 1.17 / Gradle 9.5.1 / Java 25\n- 适配 26.2 新 GUI 渲染管线（`extractContent` / `GuiGraphicsExtractor` / `MouseButtonEvent` 等）\n- 悬浮提示改用新 API 帧末延迟绘制，删除旧 TooltipHolder + 整屏 Mixin 方案，代码更精简\n- 功能与 1.0.0 完全一致：局域网房间**人数 / 延迟 / 玩家名**显示 + **IP 屏蔽（仅一次）**\n\n### 下载\n\n- `lanenhancer-2.0.0.jar` —— Minecraft 26.2\n- 旧版本（1.21.11）请前往 [v1.0.0](https://github.com/wxk66/lan-enhancer/releases/tag/v1.0.0)"
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-06-28T13:48:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 460258583,
+					"name": "lanenhancer-1.0.0.jar",
+					"url": "https://github.com/wxk66/lan-enhancer/releases/download/v1.0.0/lanenhancer-1.0.0.jar",
+					"size": 28366,
+					"downloads": 10,
+					"inspection": 2,
+					"sha256": "ee5089bf4c7a4af6e02f88eef6fbc5394d39b00b96e78065e189509ae8e80556",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lanenhancer",
+							"version": "1.0.0",
+							"name": "LAN Enhancer",
+							"description": "增强多人游戏中的局域网房间列表：显示在线人数、玩家名与延迟，并支持按 IP / IP:端口 的“仅一次”屏蔽。",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 13,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/example/lanenhancer/net/SlpClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.setSoTimeout",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.connect",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 功能一：显示房间详情\n\n原版的局域网房间只显示一行「在 xxx 上的世界」，看不到人数和延迟。本模组会主动查询每个局域网房间，像服务器条目一样展示：\n\n- 在线人数 / 人数上限（如 3/8）\n- 延迟（ms）+ 5 格信号条（绿 / 黄 / 红按延迟分级）\n- 离线 / 查询中 状态提示\n- 把光标移到信号格上时，弹出悬浮提示，显示在线玩家名样本与服务端版本\n\n## 功能二：屏蔽按钮 + 二级菜单\n\n每个局域网条目右侧新增一个红色「×」按钮，点击进入原版风格的二级菜单，提供两种屏蔽：\n\n- 屏蔽该 IP:端口（仅一次）——只屏蔽这一个具体房间\n- 屏蔽该 IP（仅一次）——屏蔽该 IP 下所有端口的房间\n\n「仅一次」= 屏蔽只保存在内存，游戏重启后自动清空，被屏蔽的房间会重新出现。适合临时清理刷屏房间，不会永久误杀。\n\n---\n\n## 安装方法\n\n1. 安装 Fabric Loader（0.16.0 及以上）。\n2. 下载 lanenhancer-1.0.0.jar，放进 .minecraft/mods/ 文件夹。\n3. 启动游戏，进入「多人游戏」界面即可看到效果。\n\n\n## 环境要求\n\n- Minecraft：1.21.11\n- Mod Loader：Fabric Loader ≥ 0.16.0\n- Java：21 及以上\n- 运行端：仅客户端"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 5,
+		"more": 0,
+		"people": [
+			{
+				"login": "wxk66",
+				"commits": 5,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

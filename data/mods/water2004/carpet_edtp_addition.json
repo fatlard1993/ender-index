@@ -1,0 +1,395 @@
+{
+	"repo": "water2004/carpet_edtp_addition",
+	"host": "github",
+	"description": "为 Carpet Mod 提供一组简洁、实用的生存规则扩展。",
+	"stars": 7,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2025-10-30T03:02:43Z",
+	"pushed": "2026-10-23T16:43:01Z",
+	"releases": [
+		{
+			"tag": "v1.11-26.3",
+			"published": "2026-10-23T16:44:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 669746222,
+					"name": "carpet_edtp_addition-1.11.jar",
+					"url": "https://github.com/water2004/carpet_edtp_addition/releases/download/v1.11-26.3/carpet_edtp_addition-1.11.jar",
+					"size": 2044669,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "7e9fd99452941b1970df80dd6da57f8c2bd0281798b8c8ce25adb7db0801f272",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "carpet_edtp_addition",
+							"version": "1.11",
+							"name": "carpet_edtp_addition",
+							"description": "A Carpet mod addition providing various gameplay tweaks and enhancements.",
+							"minecraft": ">=26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"carpet"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 45,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.11 (Minecraft 26.3)\n\n## 更新内容\n\n### 版本适配：\n\n- 将 1.11 迁移至 Minecraft 26.3，保留已有规则、默认值和矿车规则的独立组合方式；Mod 版本号仍为 `1.11`。\n- `main` 跟进 Minecraft 26.3；Minecraft 26.2 的代码保留在 [`26.2` 分支](https://github.com/water2004/carpet_edtp_addition/tree/26.2)，旧版 Release `v1.11-26.2` 保持可下载。\n- 使用 Fabric API `0.165.0+26.3`、Carpet `26.3+v261008`，最低 Fabric Loader 为 `0.19.5`（构建使用 `0.20.1`）。\n- 适配 26.3 的耕地还原调用，保持“生物不会踩坏耕地”和“摔落保护防踩坏耕地”两条规则的效果。\n\n### 新内容：\n\n- 添加规则：\n\n1. `fakePlayerConnectionLifecycle`：补全 Carpet 假人下线与服务器关闭时的 Fabric `DISCONNECT` 事件和网络会话清理，帮助 BlueMap 等依赖下线事件的模组及时更新状态。\n2. `iceRailSpeed`：分档调整浮冰、蓝冰支撑的轨道限速，提供原版、两种冰均为 `1`、浮冰/蓝冰为 `1/2`，以及按原版乘客倍率预留补偿的四个档位。\n3. `minecartNoPassengerSpeedPenalty`：将有乘客矿车在轨道上的位移倍率从 `0.75` 改为 `1`，可与冰基限速独立组合。\n\n新增规则均默认关闭：`iceRailSpeed` 默认值为 `0`，其余两条规则默认值为 `false`。\n\n- 关于 `fakePlayerConnectionLifecycle` 的附加说明：\n\n> 1. 复用现有 Fabric 网络对象完成下线，不重复触发已有的 `INIT` 和 `JOIN` 事件。开启时建立的假人连接，即使之后关闭规则，也会完成下线清理。\n> 2. 支持影子假人与同 UUID 玩家替换；保留原版假人 tick 和动作包时序，可与 Carpet TIS Addition 的 `fakePlayerTicksLikeRealPlayer` 配合使用。\n> 3. 假人仍没有真实客户端，此规则不模拟客户端握手。下线监听器异常会记录日志并完成会话清理，但不能保证异常之后的其他监听器继续执行。\n\n- 关于矿车规则的附加说明：\n\n所有速度均为**方块/tick**，不随 TPS 换算或补偿。\n\n| `iceRailSpeed` | 浮冰位移上限 | 蓝冰位移上限 | 蓝冰载人直线最高速度（倍率规则关闭 / 开启） |\n| --- | --- | --- | --- |\n| `0` | 原版 | 原版 | 原版 / 原版 |\n| `1` | `1` | `1` | `1` / `1` |\n| `2` | `1` | `2` | `1.5` / `2` |\n| `3` | `4/3` | `8/3` | `2` / `8/3` |\n\n> 1. 两条规则互不读取或限制对方。第 `3` 档固定按原版 `0.75` 预留补偿；同时开启倍率规则后，蓝冰载人速度仍可进一步提高到 `8/3`。\n> 2. 适用于默认矿车运动，不修改“矿车改进”实验。按轨道正下方的支撑方块识别冰种；普通冰、其他路基和脱轨状态保留原版限速。倍率规则也可单独用于普通轨道。\n> 3. 保留原版加速、制动、阻力和速度储备。离开冰基轨道后恢复原版限速，不额外清空内部速度；提高上限不保证所有车辆都能自行加速到该上限。动力矿车保留自身限速倍率。\n> 4. 冰基上限也适用于水中轨道，额外水中阻力保留。弯坡、跨格方向修正和轨道触发顺序沿用原版，不增加自动限速或分段运动。\n\n### 其他改进：\n\n- 在 Minecraft 26.3 重新验证假人连接生命周期、矿车规则、光照升级、声音抑制及已有规则的回归用例。\n- 新增 2 项耕地踩踏 GameTest，覆盖规则开关、生物与玩家区别、摔落保护附魔鞋及普通鞋；使用独立批次并恢复全局规则。\n- 适配 26.3 传送确认包中的坐标、朝向与移动校验，以及区块升级后的方块状态 `id` 字段，保留原测试断言的验证目标；当前共 59 项测试通过。\n- 为新整数规则添加严格选项校验，保留既有整数规则的取值行为。\n\n---\n\n## Update Details\n\n### Compatibility Update:\n\n- Ported 1.11 to Minecraft 26.3, preserving existing rules, defaults, and independent minecart rule combinations. The mod version remains `1.11`.\n- `main` now targets Minecraft 26.3. Minecraft 26.2 sources are preserved on the [`26.2` branch](https://github.com/water2004/carpet_edtp_addition/tree/26.2), and the existing `v1.11-26.2` release remains available.\n- Uses Fabric API `0.165.0+26.3` and Carpet `26.3+v261008`. Requires Fabric Loader `0.19.5` or newer; builds use `0.20.1`.\n- Adapted the farmland conversion hook for 26.3, preserving both mob trampling prevention and Feather Falling protection.\n\n### What's New:\n\n- Added rules:\n\n1. `fakePlayerConnectionLifecycle`: Completes Fabric `DISCONNECT` events and network session cleanup when Carpet fake players leave or the server shuts down, helping mods such as BlueMap update player state.\n2. `iceRailSpeed`: Adds four speed-limit modes for rails supported by packed or blue ice: vanilla, `1` on both, `1/2` on packed/blue ice, and limits with compensation reserved for the vanilla passenger multiplier.\n3. `minecartNoPassengerSpeedPenalty`: Changes the on-rail movement multiplier for occupied minecarts from `0.75` to `1`, independently of the ice speed rule.\n\nAll new rules are disabled by default: `iceRailSpeed` defaults to `0`, and the other two rules default to `false`.\n\n- Additional notes about `fakePlayerConnectionLifecycle`:\n\n> 1. Reuses the existing Fabric networking object for disconnect cleanup without repeating existing `INIT` or `JOIN` events. Connections created while enabled still receive cleanup if the rule is later disabled.\n> 2. Supports shadow players and replacement by a player with the same UUID. Fake-player tick and action-pack scheduling are preserved, allowing use alongside Carpet TIS Addition's `fakePlayerTicksLikeRealPlayer`.\n\n..."
+		},
+		{
+			"tag": "v1.11-26.2",
+			"published": "2026-10-23T14:58:56Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 669461836,
+					"name": "carpet_edtp_addition-1.11.jar",
+					"url": "https://github.com/water2004/carpet_edtp_addition/releases/download/v1.11-26.2/carpet_edtp_addition-1.11.jar",
+					"size": 2044635,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "aaa7fce0d60d8c47fae029d49760532528224269668f4ba102bfcf77662fde30",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "carpet_edtp_addition",
+							"version": "1.11",
+							"name": "carpet_edtp_addition",
+							"description": "A Carpet mod addition providing various gameplay tweaks and enhancements.",
+							"minecraft": ">=26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"carpet"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 45,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.11 (Minecraft 26.2)\n\n## 更新内容\n\n### 新内容：\n\n- 添加规则：\n\n1. `fakePlayerConnectionLifecycle`：补全 Carpet 假人下线与服务器关闭时的 Fabric `DISCONNECT` 事件和网络会话清理，帮助 BlueMap 等依赖下线事件的模组及时更新状态。\n2. `iceRailSpeed`：分档调整浮冰、蓝冰支撑的轨道限速，提供原版、两种冰均为 `1`、浮冰/蓝冰为 `1/2`，以及按原版乘客倍率预留补偿的四个档位。\n3. `minecartNoPassengerSpeedPenalty`：将有乘客矿车在轨道上的位移倍率从 `0.75` 改为 `1`，可与冰基限速独立组合。\n\n新增规则均默认关闭：`iceRailSpeed` 默认值为 `0`，其余两条规则默认值为 `false`。\n\n- 关于 `fakePlayerConnectionLifecycle` 的附加说明：\n\n> 1. 复用现有 Fabric 网络对象完成下线，不重复触发已有的 `INIT` 和 `JOIN` 事件。开启时建立的假人连接，即使之后关闭规则，也会完成下线清理。\n> 2. 支持影子假人与同 UUID 玩家替换；保留原版假人 tick 和动作包时序，可与 Carpet TIS Addition 的 `fakePlayerTicksLikeRealPlayer` 配合使用。\n> 3. 假人仍没有真实客户端，此规则不模拟客户端握手。下线监听器异常会记录日志并完成会话清理，但不能保证异常之后的其他监听器继续执行。\n\n- 关于矿车规则的附加说明：\n\n所有速度均为**方块/tick**，不随 TPS 换算或补偿。\n\n| `iceRailSpeed` | 浮冰位移上限 | 蓝冰位移上限 | 蓝冰载人直线最高速度（倍率规则关闭 / 开启） |\n| --- | --- | --- | --- |\n| `0` | 原版 | 原版 | 原版 / 原版 |\n| `1` | `1` | `1` | `1` / `1` |\n| `2` | `1` | `2` | `1.5` / `2` |\n| `3` | `4/3` | `8/3` | `2` / `8/3` |\n\n> 1. 两条规则互不读取或限制对方。第 `3` 档固定按原版 `0.75` 预留补偿；同时开启倍率规则后，蓝冰载人速度仍可进一步提高到 `8/3`。\n> 2. 适用于默认矿车运动，不修改“矿车改进”实验。按轨道正下方的支撑方块识别冰种；普通冰、其他路基和脱轨状态保留原版限速。倍率规则也可单独用于普通轨道。\n> 3. 保留原版加速、制动、阻力和速度储备。离开冰基轨道后恢复原版限速，不额外清空内部速度；提高上限不保证所有车辆都能自行加速到该上限。动力矿车保留自身限速倍率。\n> 4. 冰基上限也适用于水中轨道，额外水中阻力保留。弯坡、跨格方向修正和轨道触发顺序沿用原版，不增加自动限速或分段运动。\n\n### 其他改进：\n\n- 新增 19 项 Fabric GameTest：10 项假人生命周期用例覆盖连接事件、会话清理、规则切换、监听器异常、重生、重复登录、影子假人与关服；9 项矿车用例覆盖规则组合、实际 tick 位移、原版阻力、动力轨加速制动、路基变化、脱轨和参数校验。\n- 生命周期、关服及矿车用例使用独立测试批次，减少全局规则和玩家连接之间的干扰；当前共 57 项测试通过。\n- 为新整数规则添加严格选项校验，保留既有整数规则的取值行为。\n\n---\n\n## Update Details\n\n### What's New:\n\n- Added rules:\n\n1. `fakePlayerConnectionLifecycle`: Completes Fabric `DISCONNECT` events and network session cleanup when Carpet fake players leave or the server shuts down, helping mods such as BlueMap update player state.\n2. `iceRailSpeed`: Adds four speed-limit modes for rails supported by packed or blue ice: vanilla, `1` on both, `1/2` on packed/blue ice, and limits with compensation reserved for the vanilla passenger multiplier.\n3. `minecartNoPassengerSpeedPenalty`: Changes the on-rail movement multiplier for occupied minecarts from `0.75` to `1`, independently of the ice speed rule.\n\nAll new rules are disabled by default: `iceRailSpeed` defaults to `0`, and the other two rules default to `false`.\n\n- Additional notes about `fakePlayerConnectionLifecycle`:\n\n> 1. Reuses the existing Fabric networking object for disconnect cleanup without repeating existing `INIT` or `JOIN` events. Connections created while enabled still receive cleanup if the rule is later disabled.\n> 2. Supports shadow players and replacement by a player with the same UUID. Fake-player tick and action-pack scheduling are preserved, allowing use alongside Carpet TIS Addition's `fakePlayerTicksLikeRealPlayer`.\n> 3. Fake players still have no real client, and this rule does not simulate client handshakes. Disconnect listener exceptions are logged and session cleanup still runs, but subsequent listeners are not guaranteed to execute after an exception.\n\n- Additional notes about the minecart rules:\n\nAll speeds are in **blocks per tick**, without conversion or compensation for TPS.\n\n| `iceRailSpeed` | Packed ice movement limit | Blue ice movement limit | Occupied blue ice straight-track maximum (passenger rule off / on) |\n| --- | --- | --- | --- |\n| `0` | Vanilla | Vanilla | Vanilla / Vanilla |\n| `1` | `1` | `1` | `1` / `1` |\n| `2` | `1` | `2` | `1.5` / `2` |\n| `3` | `4/3` | `8/3` | `2` / `8/3` |\n\n> 1. Neither rule reads or restricts the other. Mode `3` reserves fixed compensation for vanilla's `0.75` multiplier; enabling the passenger rule as well raises the occupied blue ice maximum further to `8/3`.\n> 2. Applies to default minecart movement without changing the Minecart Improvements experiment. Ice type is determined by the block directly supporting the current rail. Ordinary ice, other supports, and derailed carts retain vanilla limits. The passenger rule also works independently on ordinary tracks.\n\n..."
+		},
+		{
+			"tag": "v1.10-26.2",
+			"published": "2026-09-06T03:43:52Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 546683335,
+					"name": "carpet_edtp_addition-1.10.jar",
+					"url": "https://github.com/water2004/carpet_edtp_addition/releases/download/v1.10-26.2/carpet_edtp_addition-1.10.jar",
+					"size": 2036908,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "3552830de8c6c6f60c34803bf1e85056d85a697d4af6fe221914719d17bb38e3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "carpet_edtp_addition",
+							"version": "1.10",
+							"name": "carpet_edtp_addition",
+							"description": "A Carpet mod addition providing various gameplay tweaks and enhancements.",
+							"minecraft": ">=26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"carpet"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 40,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.10 (Minecraft 26.2)\n\n## 更新内容\n\n### 新内容：\n\n- 添加规则：\n\n1. `preserveLightOnUpgrade`：版本升级时保留旧区块中已标记有效的光照缓存，避免升级修复主动清除已有光照数据，默认关闭。\n\n- 关于 `preserveLightOnUpgrade` 的附加说明：\n\n> 1. 需在旧区块升级前启用。首次用新版打开存档前，在存档的 `carpet.conf` 中加入 `preserveLightOnUpgrade true`，然后正常加载游戏。\n> 2. 不要先运行“优化世界”或 `--forceUpgrade`：离线升级发生在 Carpet 加载存档规则之前，不受此配置保护。\n> 3. 不会将无效光照强制标记为有效；世界高度迁移、主动清除缓存以及正常光照更新仍遵循原版逻辑。\n> 4. 旧光照错误也会被保留，不能保证兼容所有跨版本光照变化。使用前请备份存档；关闭规则不会自动重算已经升级的区块，也不能恢复已经删除的光照缓存。\n\n### 其他改进：\n\n- 新增 6 项 Fabric GameTest，覆盖两次光照清除升级、缓存转换器中的规则切换、无效标记、完整升级与序列化、世界高度迁移、主动清除缓存，以及服务端正常光照传播和消退。\n- README 规则列表使用 Mod 版本范围标注规则可用版本，移除独立更新日志。\n\n---\n\n## Update Details\n\n### What's New:\n\n- Added rule:\n\n1. `preserveLightOnUpgrade`: Preserves light caches marked valid in old chunks when upgrading game versions, preventing upgrade fixes from deleting existing lighting data. Disabled by default.\n\n- Additional notes about `preserveLightOnUpgrade`:\n\n> 1. Enable the rule before old chunks are upgraded. Before opening the world in the newer version for the first time, add `preserveLightOnUpgrade true` to the world's `carpet.conf`, then load the game normally.\n> 2. Do not run Optimize World or `--forceUpgrade` first: offline upgrades run before Carpet loads the world's rule configuration and are not protected by this setting.\n> 3. Invalid lighting is not forcibly marked valid. World-height migration, explicit cache erasure, and normal light updates retain vanilla behavior.\n> 4. Existing lighting errors are preserved too; compatibility with every cross-version lighting change is not guaranteed. Back up your world first. Disabling the rule does not automatically relight already upgraded chunks or restore deleted light caches.\n\n### Other Improvements:\n\n- Added six Fabric GameTests covering both light-deletion upgrades, rule changes with cached converters, invalid markers, full upgrades and serialization, world-height migration, explicit cache erasure, and normal server-side light propagation and removal.\n- Replaced the standalone README changelog with Mod version ranges in the rule table."
+		},
+		{
+			"tag": "v1.9-26.2",
+			"published": "2026-09-05T06:04:28Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 545442541,
+					"name": "carpet_edtp_addition-1.9.jar",
+					"url": "https://github.com/water2004/carpet_edtp_addition/releases/download/v1.9-26.2/carpet_edtp_addition-1.9.jar",
+					"size": 2035152,
+					"downloads": 3,
+					"inspection": 2,
+					"error": "download answered 503"
+				}
+			],
+			"notes": "# 1.9 (Minecraft 26.2)\n\n## 更新内容\n\n### 新内容：\n\n- 添加规则：\n\n1. `naturalSkeletonTraps`：雷击生成的陷阱骷髅马必须通过自然出生位置和碰撞检查，避免在不允许自然刷怪的位置生成。\n2. `soundSuppressionReintroduced`：重新引入 Minecraft 1.21 的声音抑制器相关行为，允许受更新抑制影响的幽匿感测体方块实体交换并保留。\n3. `staggeredBeacons`：按坐标错开信标的底座检查、效果刷新和环境音时刻，减少大量信标在同一 tick 集中工作的峰值。\n\n新增规则均默认关闭。\n\n- 关于 `soundSuppressionReintroduced` 的附加说明：\n\n> 支持讲台、蜂巢和潜影盒等对应声音抑制装置，但规则本身不提供更新抑制器。声音抑制通过异常中断事件处理；玩家操作数据包中的异常可以被原版拦截，其他触发路径仍可能导致服务器崩溃，使用前请备份存档。\n\n- 关于 `staggeredBeacons` 的附加说明：\n\n> 仍然每 80 tick 执行一次，不改变效果等级、范围、持续时间或逐 tick 的光柱扫描。规则减少集中工作峰值，不减少总扫描次数；切换规则会改变刷新时序。\n\n### 其他改进：\n\n- 整理村民交易、收纳袋、安全传送和水桶规则的代码，将主要逻辑与 Mixin 分离，保持既有规则行为。\n- 补充 Fabric GameTest，覆盖陷阱骷髅马生成检查、声音抑制、玩家放置数据包异常处理，以及信标错峰。\n- 添加标签触发的自动发布流程，构建和 GameTest 通过后，使用根目录的发布说明创建 GitHub Release，并上传模组和源码 JAR。\n\n---\n\n## Update Details\n\n### What's New:\n\n- Added rules:\n\n1. `naturalSkeletonTraps`: Requires lightning-generated skeleton traps to pass natural spawn-position and collision checks, preventing them from appearing at invalid natural spawn positions.\n2. `soundSuppressionReintroduced`: Reintroduces Minecraft 1.21 sound-suppressor behavior by preserving sculk sensor block entity swaps caused by update suppression.\n3. `staggeredBeacons`: Distributes beacon base checks, effect refreshes, and ambient sounds across different ticks using position-based offsets, reducing spikes caused by many beacons updating together.\n\nAll new rules are disabled by default.\n\n- Additional notes about `soundSuppressionReintroduced`:\n\n> Supports corresponding sound suppressors using lecterns, bee nests, and shulker boxes. The rule does not provide an update suppressor itself. Sound suppression interrupts event processing through exceptions: vanilla can catch exceptions during player interaction packet handling, but other trigger paths may still crash the server. Back up your world before use.\n\n- Additional notes about `staggeredBeacons`:\n\n> Each beacon still updates every 80 ticks. Effect levels, range, duration, and per-tick beam scanning remain unchanged. The rule spreads workload peaks without reducing the total number of scans; toggling it changes the update schedule.\n\n### Other Improvements:\n\n- Separated the main logic of villager trades, bundles, safe teleportation, and bucket rules from their Mixins while preserving existing behavior.\n- Expanded Fabric GameTest coverage for skeleton trap spawn checks, sound suppression, player placement packet error handling, and staggered beacon updates.\n- Added tag-triggered automated releases. After the build and GameTests pass, the workflow publishes a GitHub Release using the release notes in the repository root and uploads the mod and sources JARs."
+		},
+		{
+			"tag": "v1.8-26.2",
+			"published": "2026-08-31T15:53:50Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 538200211,
+					"name": "carpet_edtp_addition-1.8.jar",
+					"url": "https://github.com/water2004/carpet_edtp_addition/releases/download/v1.8-26.2/carpet_edtp_addition-1.8.jar",
+					"size": 2026039,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2d93df6f7ad0ef90ae0f4822e81e871bf4f132637529828d6e222f91219878f0",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "carpet_edtp_addition",
+							"version": "1.8",
+							"name": "carpet_edtp_addition",
+							"description": "A Carpet mod addition providing various gameplay tweaks and enhancements.",
+							"minecraft": ">=26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"carpet"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 30,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 更新内容\n\n### 新内容：\n\n- 添加规则：\n\n1. `snowlessDepths`：Y=0 以下无法自然生成或增厚雪层，不影响雪傀儡造雪和细雪炼药锅。\n2. `noChickenJockeysOnMagmaBlocks`：阻止鸡骑士在岩浆块上生成。\n\n新增规则均默认关闭。\n\n- 添加 Fabric GameTest 与 CI 检查，覆盖寒冷群系降雪、Y=0 边界、Y<0 积雪限制、雪傀儡和细雪炼药锅行为。\n- 将 Fabric Loom 从 `1.15.4` 升级至 `1.16.3`。\n\n### Bug 修复：\n\n- 将 `resonantWater` 的水桶注入改为 `WrapOperation`，仅处理放置分支（`ordinal = 0`），通过 `original.call(...)` 保留其他模组的调用链，维持 ViaFabricPlus 兼容性，规则原有功能不受影响。\n- 为 TNT 爆炸掉落处理补充非空参数注解，不改变规则行为。\n- 修复运行时修改 `tickCommandForAll` 后，在线玩家的命令树没有刷新、需要重新登录才能使用 `/tick` 的问题。\n\n---\n\n## Update Details\n\n### What's New:\n\n- Added rules:\n\n1. `snowlessDepths`: Prevents snow layers from naturally forming or growing below Y=0 without affecting snow golems or powder snow cauldrons.\n2. `noChickenJockeysOnMagmaBlocks`: Prevents chicken jockeys from spawning on magma blocks.\n\nBoth new rules are disabled by default.\n\n- Added Fabric GameTest coverage and CI checks for snowfall in cold biomes, the Y=0 boundary, snow restrictions below Y=0, snow golems, and powder snow cauldrons.\n- Updated Fabric Loom from `1.15.4` to `1.16.3`.\n\n### Bug Fixes:\n\n- Changed the `resonantWater` bucket injection to `WrapOperation`, targeting only the placement branch (`ordinal = 0`). Delegating through `original.call(...)` preserves other mods' call chains and maintains ViaFabricPlus compatibility without changing the rule's existing behavior.\n- Added a non-null parameter annotation to TNT explosion drop handling without changing the rule's behavior.\n- Fixed `tickCommandForAll` not refreshing the command tree of connected players when changed at runtime, which previously required players to reconnect before using `/tick`."
+		},
+		{
+			"tag": "1.5-26.1",
+			"published": "2026-04-07T19:41:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 391033194,
+					"name": "carpet_edtp_addition-1.5.jar",
+					"url": "https://github.com/water2004/carpet_edtp_addition/releases/download/1.5-26.1/carpet_edtp_addition-1.5.jar",
+					"size": 2019098,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "01761cbc1b797a85b9d8c89938713e92f32b83dc97a173ed6d471deb699b7e48",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "carpet_edtp_addition",
+							"version": "1.5",
+							"name": "carpet_edtp_addition",
+							"description": "A Carpet mod addition providing various gameplay tweaks and enhancements.",
+							"minecraft": ">=26.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"carpet"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 26,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Update to 26.1"
+		},
+		{
+			"tag": "1.4-1.21.11",
+			"published": "2026-04-07T18:12:43Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 390984252,
+					"name": "carpet_edtp_addition-1.4.jar",
+					"url": "https://github.com/water2004/carpet_edtp_addition/releases/download/1.4-1.21.11/carpet_edtp_addition-1.4.jar",
+					"size": 2018936,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "3abb504d30ace4a2192cd42680fb3d1fb5659dd667be4a2c3303662940b2ccb4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "carpet_edtp_addition",
+							"version": "1.4",
+							"name": "carpet_edtp_addition",
+							"description": "A Carpet mod addition providing various gameplay tweaks and enhancements.",
+							"minecraft": "1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft",
+								"carpet"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 27,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 更新内容\n### 新内容：\n- 添加规则\n`tntBreaksWithoutDrops`: TNT 爆炸破坏方块时不生成掉落物（可显著降低服务器因大量爆炸产生的掉落物计算开销）\n- 迁移到mojmap\n ---\n## Update Details\n### What's new:\n- Add rules\n`tntBreaksWithoutDrops`: TNT explosions destroy blocks without generating item drops (significantly reducing server overhead from drop calculations during large-scale explosions)\n- Migrate to mojmap"
+		},
+		{
+			"tag": "1.0-snapshot-1.21.10",
+			"published": "2025-10-30T09:16:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 310834801,
+					"name": "carpet_edtp_addition-1.0-SNAPSHOT.jar",
+					"url": "https://github.com/water2004/carpet_edtp_addition/releases/download/1.0-snapshot-1.21.10/carpet_edtp_addition-1.0-SNAPSHOT.jar",
+					"size": 1993518,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "78ba734ae8df46cf8fdeb08b0ea133153b09402f05b20d986c67bfc1ebfa4718",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "carpet_edtp_addition",
+							"version": "1.0-SNAPSHOT",
+							"name": "carpet_edtp_addition",
+							"description": "",
+							"minecraft": "1.21.10",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft",
+								"carpet"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 13,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "1.0 snapshot"
+		}
+	],
+	"readme": "readme.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 56,
+		"more": 0,
+		"people": [
+			{
+				"login": "EasterGhost",
+				"commits": 44,
+				"funding": []
+			},
+			{
+				"login": "water2004",
+				"commits": 12,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

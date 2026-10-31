@@ -1,0 +1,402 @@
+{
+	"repo": "Underwood-Inc/compressy",
+	"host": "github",
+	"description": "A Minecraft mod by strixun",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2025-12-21T02:14:32Z",
+	"pushed": "2026-02-07T14:22:55Z",
+	"releases": [
+		{
+			"tag": "1.1.7",
+			"published": "2026-01-16T18:33:05Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 341578357,
+					"name": "compressy-1.21.11-lite-v1.1.7.jar",
+					"url": "https://github.com/Underwood-Inc/compressy/releases/download/1.1.7/compressy-1.21.11-lite-v1.1.7.jar",
+					"size": 1399298,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "4053b478387bf7eb1a458ffac8c530b2ccd3ebd9497f81c6d4b43e4662d58f26",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "compressy",
+							"version": "1.1.7",
+							"name": "Compressy",
+							"description": "Compress ANY block up to 32 times! Uses Minecraft's block tags for automatic support. No giant config files needed!",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"fabric-command-api-v2",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"com_moandjiezana_toml_toml4j"
+							],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 58,
+						"jars": [
+							"META-INF/jars/toml4j-0.7.2.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/compressy/CompressyMod.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 341578374,
+					"name": "compressy-1.21.11-v1.1.7.jar",
+					"url": "https://github.com/Underwood-Inc/compressy/releases/download/1.1.7/compressy-1.21.11-v1.1.7.jar",
+					"size": 1399260,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "0194daa561f63c91a2c697b7118fdb58c804dbd4307dc332a95a888f197c707b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "compressy",
+							"version": "1.1.7",
+							"name": "Compressy",
+							"description": "Compress ANY block up to 32 times! Uses Minecraft's block tags for automatic support. No giant config files needed!",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"fabric-command-api-v2",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"com_moandjiezana_toml_toml4j"
+							],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 58,
+						"jars": [
+							"META-INF/jars/toml4j-0.7.2.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/compressy/CompressyMod.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: https://github.com/Underwood-Inc/compressy/compare/1.1.6...1.1.7\n\n# Changelog v1.1.7\n\n## Bug Fixes\n\n### fix(crafting): resolve item duplication when uncrafting compressed blocks (#3)\n- Created `CraftingResultSlotMixin` to properly consume compressed block input\n- Prevents vanilla recipe system from causing duplicate items in output\n- One compressed block now correctly yields 9 decompressed items (not 9 + extras)\n\n### fix(crafting): enable decompression in 2x2 player inventory grid (#1)\n- Created `PlayerScreenHandlerMixin` for 2x2 crafting grid support\n- Compressed logs now correctly decompress to logs (not planks)\n- Both HEAD and TAIL injection to ensure vanilla recipes don't override\n\n### fix(crafting): prevent double consumption of input materials\n- Added `cancellable = true` to `CraftingResultSlotMixin` injection\n- Calls `ci.cancel()` after manual consumption to prevent vanilla double-take\n- One uncraft now consumes exactly 1 compressed block as expected\n\n### fix(crafting): enable sequential uncrafting (shift-click support)\n- Properly triggers inventory updates via `setStack()` and `markDirty()`\n- Shift-clicking now smoothly decompresses entire stacks one at a time\n\n### fix(config): consolidate ModMenu integration to single config source\n- Deleted duplicate `CompressyClientConfig.java` class\n- All settings now properly read/write to `config/compressy.toml`\n- ModMenu toggles (Roman numerals, darkening overlay) now work correctly\n\n### fix(display): respect showRomanNumerals config server-side\n- `CompressyBlockHandler` now checks config before spawning text display entities\n- Disabling Roman numerals in ModMenu actually hides them now\n\n### fix(mixin): remove broken TextDisplayEntityMixin from config\n- Prevented crash on startup due to invalid render method signature\n- Mixin was targeting non-existent method in obfuscated class\n\n## Technical Changes\n\n- Added `CraftingResultSlotMixin` to `compressy.mixins.json`\n- Added `PlayerScreenHandlerMixin` to `compressy.mixins.json`\n- Removed `TextDisplayEntityMixin` from client mixins array\n- Fixed `/cblocks admin reload` to actually call `CompressyConfig.reload()`"
+		},
+		{
+			"tag": "1.1.6",
+			"published": "2025-12-27T12:00:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 333443261,
+					"name": "compressy-1.21.11-lite-v1.1.6.jar",
+					"url": "https://github.com/Underwood-Inc/compressy/releases/download/1.1.6/compressy-1.21.11-lite-v1.1.6.jar",
+					"size": 1395411,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "ceeedd8304f5ebc13935c4cae57c9fa093cd9ac115e8372816c0bccc08d24672",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "compressy",
+							"version": "1.1.6",
+							"name": "Compressy",
+							"description": "Compress ANY block up to 32 times! Uses Minecraft's block tags for automatic support. No giant config files needed!",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"fabric-command-api-v2",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"com_moandjiezana_toml_toml4j"
+							],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 57,
+						"jars": [
+							"META-INF/jars/toml4j-0.7.2.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/compressy/CompressyMod.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 333443263,
+					"name": "compressy-1.21.11-v1.1.6.jar",
+					"url": "https://github.com/Underwood-Inc/compressy/releases/download/1.1.6/compressy-1.21.11-v1.1.6.jar",
+					"size": 1395374,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "637084a2917daff7137771b87a4fad2ced58cb6dcfa26bc5afeb59387ecaba3f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "compressy",
+							"version": "1.1.6",
+							"name": "Compressy",
+							"description": "Compress ANY block up to 32 times! Uses Minecraft's block tags for automatic support. No giant config files needed!",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"fabric-command-api-v2",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"com_moandjiezana_toml_toml4j"
+							],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 57,
+						"jars": [
+							"META-INF/jars/toml4j-0.7.2.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/compressy/CompressyMod.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's Changed\n* feat: enhance compression and decompression mechanics with new configuration options by @mamokin in https://github.com/Underwood-Inc/compressy/pull/2\n\n## New Contributors\n* @mamokin made their first contribution in https://github.com/Underwood-Inc/compressy/pull/2\n\n**Full Changelog**: https://github.com/Underwood-Inc/compressy/compare/v1.1.0...1.1.6"
+		},
+		{
+			"tag": "v1.1.0",
+			"published": "2025-12-21T09:43:38Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 331313853,
+					"name": "compressy-1.1.0.jar",
+					"url": "https://github.com/Underwood-Inc/compressy/releases/download/v1.1.0/compressy-1.1.0.jar",
+					"size": 1331358,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "d94962dbc4b63c392a2b4645f58a45f48403d564ac0a89a96c74ad903a0c264d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "compressy",
+							"version": "1.1.0",
+							"name": "Compressy",
+							"description": "Compress ANY block up to 32 times! Uses Minecraft's block tags for automatic support. No giant config files needed!",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"fabric-command-api-v2",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/compressy/CompressyMod.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 331313854,
+					"name": "compressy-lite-1.1.0.jar",
+					"url": "https://github.com/Underwood-Inc/compressy/releases/download/v1.1.0/compressy-lite-1.1.0.jar",
+					"size": 1330745,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "178b219c4ec1f00a2695e756175b15d8c9c629f2c647ab87b8fac55b8b6c606c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "compressy",
+							"version": "1.1.0",
+							"name": "Compressy",
+							"description": "Compress ANY block up to 32 times! Uses Minecraft's block tags for automatic support. No giant config files needed!",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"fabric-command-api-v2",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/compressy/CompressyMod.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Compressy v1.1.0\n\n### Changes\n- Added CI/CD workflow with automatic version bumping and GitHub releases%0A- feat: add smart placement protections\n\n### Downloads\n\n| File | Description |\n|------|-------------|\n| `compressy-1.1.0.jar` | **FULL** - Fabric mod with block placement support |\n| `compressy-lite-1.1.0.jar` | **LITE** - Fabric mod, inventory-only (no block placement) |\n| `compressy-datapack-1.1.0.zip` | **Datapack** - Standalone, no Fabric required |\n\n### Installation\n\n**Fabric Mod (FULL or LITE):**\n1. Install [Fabric Loader](https://fabricmc.net/) (0.18.2+)\n2. Install [Fabric API](https://modrinth.com/mod/fabric-api)\n3. Drop the JAR into your `mods` folder\n\n**Datapack:**\n1. Drop the ZIP into your world's `datapacks` folder\n2. Run `/reload` or restart the world"
+		}
+	],
+	"readme": ".github/README.md",
+	"funding": [
+		{
+			"platform": "custom",
+			"url": "https://www.twitch.tv/strixun"
+		},
+		{
+			"platform": "custom",
+			"url": "https://sponsor.idling.app/"
+		}
+	],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [
+		"compressy.png",
+		"pack.png"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 3,
+		"more": 0,
+		"people": [
+			{
+				"login": "mamokin",
+				"commits": 3,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

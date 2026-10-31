@@ -17,7 +17,7 @@
 					"name": "vitraux-0.2.14b.jar",
 					"url": "https://github.com/AlexisTrouwaert/vitraux/releases/download/0.2.14b/vitraux-0.2.14b.jar",
 					"size": 290754,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "de50cbbf7be8e31d2c75646b2588e2ddbf9ab7fd2c97a080d37fefc15e09905e",
 					"mods": [
@@ -90,7 +90,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## [0.2.14b] — 2026-06-20\n\n### Added\n- **`vitraux:blank_template`** — craftable item (8 sticks + 1 paper) required to create a template at the Glazier's Bench; consumed on use instead of templates being free\n- **`vitraux:blueprint`** — reusable, non-consumable item that permanently stores a canvas design; lets you reproduce a design without redrawing it\n  - **Save Design** button at the bench captures the current canvas into a new Blueprint\n  - Inserting a filled Blueprint into its slot **auto-loads** its design into the canvas (no button hunting required); a manual **Reload** button is also available to revert after further edits\n  - Inserting a named Blueprint pre-fills the Template/Blueprint name field with its name; removing it resets the field back to \"Template\"\n- **Player inventory access in the Glazier's Bench** — full 36-slot inventory + hotbar added to the GUI so items can actually be moved in and out\n- **Two-stage Glazier's Bench GUI** — opening the bench now shows only the input slots + inventory until a blank template or blueprint is inserted; the canvas/editor/palette tools unlock once something is loaded\n- **Dynamic item icons** — Template and Blueprint items render their actual saved design directly on the item (inventory, hand, ground) via a custom builtin item renderer, instead of a static placeholder texture\n  - Template: design + dashed gray frame (\"sketch\" look)\n  - Blueprint: design + solid frame (\"finished\" look)\n- **Tooltip canvas size** — Template/Blueprint tooltips show a \"W x H cells\" line so designs stay distinguishable even when sharing a name\n\n### Fixed\n- **Typing in the name field moved the player / closed the GUI** — `W`/`A`/`S`/`D`/`E` leaked through to movement and inventory-toggle keybindings while the text field was focused; all key events are now fully captured while it has focus\n- **No tooltip when hovering items/slots inside the Glazier's Bench GUI** — `HandledScreen` never calls `drawMouseoverTooltip()` on its own; the screen now triggers it explicitly after `render()`\n- **Blueprint reload showed a shifted/cut-off design** — `setPixel()` indexed the canvas buffer using the active canvas width instead of the buffer's fixed stride, corrupting any saved design narrower than the max canvas size with 2+ rows"
 		},
 		{
 			"tag": "0.2b",
@@ -102,7 +103,7 @@
 					"name": "vitraux-0.2.3b.jar",
 					"url": "https://github.com/AlexisTrouwaert/vitraux/releases/download/0.2b/vitraux-0.2.3b.jar",
 					"size": 266610,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "46a15c64e8f3cf694825d1d8d12fbb8d8e362e779baef48ce01f03949f628e48",
 					"mods": [
@@ -173,7 +174,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## Custom Vitraux System\n\n### New Blocks & Items\n- **Blank Vitraux** — transparent glass pane that accepts a template\n- **Glazier's Bench** — pixel-art editor for designing custom stained glass windows\n- **Template** — stores a full multi-block design; consumed on use\n\n### Glazier's Bench Editor\n- Overview mode: see all cells at a glance, click any to edit\n- Left-click or drag to paint pixels\n- Right-click + drag to fill a custom rectangle\n- Bucket button to fill an entire cell instantly\n- Neighbor cell borders shown as reference for seamless continuity\n- Canvas up to 4×4 blocks (W-/W+/H-/H+ controls)\n\n### Template System\n- BFS flood-fill applies the design across all connected blank vitraux\n- Each pane automatically receives its correct 16×16 cell of the design\n\n### Rendering & Fixes\n- Custom vitraux cast colored shadows matching their design (Iris shaders)\n- Fixed visible grid between connected panes\n- Seamless vertical stacking — no border lines between stacked panes\n- Corrected transparent pixel rendering (no longer appears dark)\n- Z-fighting flicker eliminated"
 		},
 		{
 			"tag": "0.1b",
@@ -185,7 +187,7 @@
 					"name": "vitraux-0.1b.jar",
 					"url": "https://github.com/AlexisTrouwaert/vitraux/releases/download/0.1b/vitraux-0.1b.jar",
 					"size": 204599,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "536e9d731d104b3b519eddd720a686089670e00611aaf20e9c76e0db071d7141",
 					"mods": [
@@ -253,12 +255,27 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## Initial Release\n\n### Blocks\n- 16 decorative vitraux panes (one per dye color) crafted from glazed terracotta\n- Luminance-based transparency — dark pattern lines more opaque, bright areas more transparent\n- 4 texture orientations per block, auto-oriented toward the player on placement\n- Silk-touch only drop\n\n### Items\n- **Glazier's Pincers** — right-click a placed vitraux to rotate its pattern 90° CCW\n\n### Shader Support\n- Bundled `vitraux_shadows` shader pack for colored shadow projection via `shadowcolor0`\n- Compatible with Complementary, BSL and SEUS out of the box — no configuration required"
 		}
 	],
 	"readme": "README.md",
 	"readmeSummary": "Minecraft Fabric mod — version 1.0.0 — 1.21.1",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 6,
+		"more": 0,
+		"people": [
+			{
+				"login": "AlexisTrouwaert",
+				"commits": 6,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
 	"history": 1
 }

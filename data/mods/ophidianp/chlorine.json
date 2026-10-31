@@ -1,0 +1,336 @@
+{
+	"repo": "ophidianp/chlorine",
+	"host": "github",
+	"description": "sodium compatible performance mod, vibe coded with claude, chatgpt codex, and github copilot",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-08-05T18:18:37Z",
+	"pushed": "2026-10-26T23:22:54Z",
+	"releases": [
+		{
+			"tag": "v1.0.8",
+			"published": "2026-10-26T22:56:07Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 679745045,
+					"name": "chlorine-1.0.8.jar",
+					"url": "https://github.com/ophidianp/chlorine/releases/download/v1.0.8/chlorine-1.0.8.jar",
+					"size": 106366,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "c77790a80f66372339c502ad0962bc2b9dc0965c142dca14ff7322ed96af7af6",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "chlorine",
+							"version": "1.0.8",
+							"name": "Chlorine",
+							"description": "CPU-side performance tuning for Minecraft 26.3 with Sodium workload governors, adaptive simulation distance, entity merging, and client effect budgets.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cloth-config",
+								"sodium"
+							],
+							"provides": [],
+							"suggests": [
+								"lithium",
+								"ferritecore",
+								"entityculling",
+								"immediatelyfast",
+								"iris",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "ff7993932ae12507f833bb9198e84665b51a4d8cb939f2f29644b999e0cac6b9.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 58,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Chlorine 1.0.8 for Minecraft 26.3\n\nRequires Fabric Loader 0.19.5+, Fabric API, Cloth Config API, Sodium 0.9.2+ and Java 25+.\n\n## What's new\n\n- **Memory governor.** A new client-side system with its own \"Memory Governor\" config category.\n  - Empties Chlorine's collision cache when heap usage passes a configurable percentage (default 85%).\n  - Requests one garbage collection on a background thread after you leave a world, at most once a minute. Ignored if the JVM runs with `-XX:+DisableExplicitGC`.\n  - Leak watch logs a warning if memory kept after garbage collections keeps growing. It only logs and never changes behavior.\n- Java's garbage collector is chosen by your launcher's JVM flags, so a mod cannot replace it. G1 or Generational ZGC with 6 to 8 GB allocated usually helps most.\n\n## Notes\n\n- Everything is toggleable in the in-game config.\n- The memory governor has not been benchmarked, so no FPS gain is claimed."
+		},
+		{
+			"tag": "v1.0.7",
+			"published": "2026-10-25T16:41:20Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 675560467,
+					"name": "chlorine-1.0.7.jar",
+					"url": "https://github.com/ophidianp/chlorine/releases/download/v1.0.7/chlorine-1.0.7.jar",
+					"size": 102977,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "def8557a32d5fe62afbd6000b3711b0541123810604f2e61c4811ca6293d3f0e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "chlorine",
+							"version": "1.0.7",
+							"name": "Chlorine",
+							"description": "CPU-side performance tuning for Minecraft 26.3 with Sodium workload governors, adaptive simulation distance, entity merging, and client effect budgets.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cloth-config",
+								"sodium"
+							],
+							"provides": [],
+							"suggests": [
+								"lithium",
+								"ferritecore",
+								"entityculling",
+								"immediatelyfast",
+								"iris",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "ff7993932ae12507f833bb9198e84665b51a4d8cb939f2f29644b999e0cac6b9.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 57,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Chlorine 1.0.7 for Minecraft 26.3. Requires Fabric API, Cloth Config and Sodium 0.9.2 or newer.\n\nNew in 1.0.7 (each has a config toggle, under Sodium Workload Governors):\n- Adaptive chunk upload budget: lowers Sodium's 10 ms minimum per-frame chunk upload time so uploads can't outlast a frame at high FPS. The full budget is kept for the first seconds after joining a world.\n- Nearby rebuild scaling: while FPS is low, shrinks the radius in which block changes are rebuilt and shown immediately on the main thread (TNT, pistons, redstone).\n- Async culling under pressure: while FPS is low, keeps Sodium's visibility culling on its background thread during fast camera movement.\n\nThese three patch Sodium's internals. If a future Sodium version changes that code, they switch themselves off instead of crashing the game.\n\nAlso includes everything from 1.0.6: light update smoothing, adaptive ambient effects, sign text, item drop and block entity LOD, and autosave smoothing."
+		},
+		{
+			"tag": "v1.0.6",
+			"published": "2026-10-25T15:51:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 675443317,
+					"name": "chlorine-1.0.6.jar",
+					"url": "https://github.com/ophidianp/chlorine/releases/download/v1.0.6/chlorine-1.0.6.jar",
+					"size": 99164,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "1dc2ce58df7a3ec63e483ac9cc0b68a1d19bdc3be4ed7e59f5abe6fbb9cbc9c3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "chlorine",
+							"version": "1.0.6",
+							"name": "Chlorine",
+							"description": "CPU-side performance tuning for Minecraft 26.3 with Sodium workload governors, adaptive simulation distance, entity merging, and client effect budgets.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cloth-config",
+								"sodium"
+							],
+							"provides": [],
+							"suggests": [
+								"lithium",
+								"ferritecore",
+								"entityculling",
+								"immediatelyfast",
+								"iris",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "ff7993932ae12507f833bb9198e84665b51a4d8cb939f2f29644b999e0cac6b9.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 55,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Chlorine 1.0.6 for Minecraft 26.3. Requires Fabric API, Cloth Config and Sodium 0.9.2 or newer.\n\nNew in 1.0.6 (every feature has a config toggle):\n- Light update smoothing: spreads large client light-update bursts across frames.\n- Adaptive ambient effects: scales ambient particles down when FPS is low.\n- Sign text LOD: skips sign text beyond a configurable distance.\n- Item drop LOD: draws distant item stacks as a single item.\n- Block entity LOD: skips distant block entity rendering.\n- Autosave smoothing: spreads the periodic autosave over several ticks to remove the stutter."
+		},
+		{
+			"tag": "v1.0.5",
+			"published": "2026-10-22T22:56:31Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 667325340,
+					"name": "chlorine-1.0.5.jar",
+					"url": "https://github.com/ophidianp/chlorine/releases/download/v1.0.5/chlorine-1.0.5.jar",
+					"size": 88002,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "29cac680d199024d340b1d76bffbe0582a0cc1e1ce36f6db5535dcac52250371",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "chlorine",
+							"version": "1.0.5",
+							"name": "Chlorine",
+							"description": "CPU-side performance tuning for Minecraft 26.3 with Sodium workload governors, adaptive simulation distance, entity merging, and client effect budgets.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cloth-config",
+								"sodium"
+							],
+							"provides": [],
+							"suggests": [
+								"lithium",
+								"ferritecore",
+								"entityculling",
+								"immediatelyfast",
+								"iris",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "ff7993932ae12507f833bb9198e84665b51a4d8cb939f2f29644b999e0cac6b9.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 47,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Chlorine 1.0.5\n\n### Performance\n\n- Reduced client-tick overhead with primitive FPS ring buffers and rolling averages.\n- Removed recurring boxed FPS sampling and stream-based averaging from adaptive performance scaling.\n- Replaced retained camera-vector state with primitive coordinate tracking in the Sodium workload governor.\n- Avoided per-tick square-root work in the fast-travel chunk governor.\n\n### Compatibility\n\n- Preserved Sodium's existing terrain renderer, culling, batching, and visual quality.\n\n### Requirements\n\n- Minecraft 26.3\n- Fabric Loader 0.19.5 or newer\n- Fabric API\n- Cloth Config API\n- Sodium 0.9.2 or newer\n- Java 25 or newer"
+		},
+		{
+			"tag": "v1.0.4",
+			"published": "2026-10-22T22:31:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 667275044,
+					"name": "chlorine-1.0.4.jar",
+					"url": "https://github.com/ophidianp/chlorine/releases/download/v1.0.4/chlorine-1.0.4.jar",
+					"size": 88007,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "6920bce81b2310c9afffc9a527e4f300ca6126c0c7e07e606a68c538e9ce63c0",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "chlorine",
+							"version": "1.0.4",
+							"name": "Chlorine",
+							"description": "CPU-side performance tuning for Minecraft 26.3 with Sodium workload governors, adaptive simulation distance, entity merging, and client effect budgets.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cloth-config",
+								"sodium"
+							],
+							"provides": [],
+							"suggests": [
+								"lithium",
+								"ferritecore",
+								"entityculling",
+								"immediatelyfast",
+								"iris",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "ff7993932ae12507f833bb9198e84665b51a4d8cb939f2f29644b999e0cac6b9.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 47,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Chlorine 1.0.4 — Minecraft 26.3\n\nRaw-performance update for Fabric/Minecraft 26.3, focused on reducing repeated math cost, collision-query work, tick bursts, and allocation pressure.\n\n### New performance features\n- **Fast math LUTs:** added a client-only, power-of-two sine/cosine lookup table and wired it into verified particle animation paths, including note, water-current, falling, and firework particles.\n- **Stationary collision caching:** caches block collision-shape results for eligible stationary entities and invalidates the cache whenever a block state changes.\n- **Fluid tick governor:** adds a configurable per-level fluid callback budget and reschedules overflow one tick later to flatten pathological water/lava bursts.\n- **Allocation reduction:** reuses spatial-index candidate buffers during item and XP-orb merge scans instead of creating new candidate lists for every query.\n- **Configuration and documentation:** exposes the new collision and fluid controls through Cloth Config and documents the behavior and safety boundaries.\n\n### Requirements\n- Minecraft 26.3\n- Fabric Loader 0.19.5+\n- Fabric API\n- Cloth Config API\n- Sodium 0.9.2+\n- Java 25+\n\nAsset: `chlorine-1.0.4.jar`"
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "patreon",
+			"url": "https://patreon.com/Shadownetwork229?",
+			"from": "owner-repositories"
+		}
+	],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 58,
+		"more": 0,
+		"people": [
+			{
+				"login": "ophidianp",
+				"commits": 55,
+				"funding": []
+			},
+			{
+				"login": "web-flow",
+				"commits": 3,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

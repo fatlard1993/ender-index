@@ -2,7 +2,7 @@
 	"repo": "At87668/MinerTrack",
 	"host": "github",
 	"description": "The Powerful Anti-Xray, help you auto catch X-rayers and punish them according to your configuration.",
-	"stars": 27,
+	"stars": 26,
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2024-11-02T08:39:46Z",
@@ -18,7 +18,7 @@
 					"name": "MinerTrack-2.1.2.0+bukkit.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.2.0/MinerTrack-2.1.2.0%2Bbukkit.jar",
 					"size": 2207755,
-					"downloads": 46,
+					"downloads": 47,
 					"inspection": 2,
 					"sha256": "8704de922044f5b2a5171fccc92a2dae32ddb27a4167c3570af8a83342519a21",
 					"mods": [],
@@ -162,7 +162,7 @@
 					"name": "MinerTrack-2.1.2.0+fabric.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.2.0/MinerTrack-2.1.2.0%2Bfabric.jar",
 					"size": 2946244,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "095e52d942acde2f1370224c56c2edce5edc08bf2581b9dee90e464abad53073",
 					"mods": [
@@ -344,7 +344,7 @@
 					"name": "MinerTrack-2.1.2.0+forge.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.2.0/MinerTrack-2.1.2.0%2Bforge.jar",
 					"size": 2942727,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "0b6528c84085149252dc5fad2cc8b2aefe25fd152080ff9b9739be269de3bcd8",
 					"mods": [
@@ -519,7 +519,7 @@
 					"name": "MinerTrack-2.1.2.0+neoforge.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.2.0/MinerTrack-2.1.2.0%2Bneoforge.jar",
 					"size": 2941025,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "a10611fe107b00e98edcf767df6a3d115b6838b6736c98bbd53a6acdf34a8fdd",
 					"mods": [
@@ -702,7 +702,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### New features\n\n- `/mt check <player>` and `/mt reset <player>` now work on players who are **not currently on the server**. Previously the target was resolved through a name-to-UUID lookup that only queried online players, so both commands failed with `player-not-found` as soon as the player logged off — even though their violation levels and mining state were still held in memory.\n  - `ViolationEngine` now maintains a bidirectional name↔UUID history (`knownPlayerIds`, `knownPlayerNames`), populated on every violation increase. This index is deliberately **not** cleared by `resetViolation`, so a player who has just been reset stays addressable by name.\n  - Each platform resolves a target name through: engine history → platform-side name cache → online lookup → offline profile (Bukkit only, guarded by `hasPlayedBefore()` / `isOnline()`).\n  - Tab completion for `check` and `reset` offers the union of online players and known player names. `kick` remains online-only.\n- `/mt reset <player>` now also clears the mining-behaviour counters (mining path, vein count, vein clusters, air exposure) and the placed-block / artificial-air tracking maps, in addition to zeroing the violation level. Resetting only the violation counter left a stale mining path behind, which caused the next rare-ore break to immediately re-evaluate the old path and push the violation level back up.\n\n### Fixed BUG\n\n- `/mt kick <player>` no longer broadcasts the kick message and the lightning effect for a player who is not online. Since name resolution became offline-aware, the command would otherwise report success and kick nobody.\n- Forge: listener registration no longer relies on the legacy event bus, which has been removed in recent Forge versions. Lifecycle, mining and server-tick listeners are now registered on the EventBus 7 static `BUS` fields, which had silently stopped firing.\n- Forge / NeoForge: mod resources (`config.yml`, `language.yml`, and the `Configuration/*.yml` group files) are now loaded through the mod-file resource API instead of the classloader, which could not see them inside the mod JAR.\n- Forge / NeoForge: a missing bundled resource or a missing YAML file is now reported as a warning and treated as an empty config, instead of throwing and aborting startup. The same guard was applied to the core resource loader.\n- Fabric: permission-gated commands now work for OP players on Minecraft 26.1+ without LuckPerms installed. The MC 26.1+ permission model is detected once at class-load time, and the bypass and verbose checks now share a single OP-level check.\n\n### Other Changed\n\n- `pack.mcmeta` is now bundled into the mod JAR, making it a valid resource pack.\n- Resource filtering during the build is forced to UTF-8 to keep non-ASCII config content intact.\n- Replaced a non-ASCII em-dash in a `mods.toml` comment."
 		},
 		{
 			"tag": "2.1.1.2",
@@ -714,7 +715,7 @@
 					"name": "MinerTrack-2.1.1.2+bukkit.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.1.2/MinerTrack-2.1.1.2%2Bbukkit.jar",
 					"size": 2205787,
-					"downloads": 223,
+					"downloads": 224,
 					"inspection": 2,
 					"sha256": "d2f7f29cc59bc1e5a16adad1686961747edfff195c3af841322674cbdbbe8d5a",
 					"mods": [],
@@ -858,7 +859,7 @@
 					"name": "MinerTrack-2.1.1.2+fabric.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.1.2/MinerTrack-2.1.1.2%2Bfabric.jar",
 					"size": 2943055,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "c05a9e7fad72c835e898e5d821a39d4256d2c0d9df7db0ed28b6b46ac5f6e774",
 					"mods": [
@@ -1040,7 +1041,7 @@
 					"name": "MinerTrack-2.1.1.2+forge.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.1.2/MinerTrack-2.1.1.2%2Bforge.jar",
 					"size": 2938296,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "b20ce40221f94108833d095934086c31ec4944fc97392cf19f1711bbf7375a15",
 					"mods": [
@@ -1215,7 +1216,7 @@
 					"name": "MinerTrack-2.1.1.2+neoforge.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.1.2/MinerTrack-2.1.1.2%2Bneoforge.jar",
 					"size": 2936905,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "52012bd2360aaa8ea5e4c5916d9945b8347d73ee8f75ce3fb667e383559f95ef",
 					"mods": [
@@ -1398,7 +1399,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "**Star pls:** https://github.com/At87668/MinerTrack\n\n---\n\n### Fixed BUG\n- Can't run` MinerTrack`-related commands in the console on the `Fabric` platform if `LuckPerms` isn't installed.\n\n---\n\n*Happy using~*"
 		},
 		{
 			"tag": "2.1.1.1",
@@ -1410,7 +1412,7 @@
 					"name": "MinerTrack-2.1.1.1+bukkit.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.1.1/MinerTrack-2.1.1.1%2Bbukkit.jar",
 					"size": 2205785,
-					"downloads": 94,
+					"downloads": 95,
 					"inspection": 2,
 					"sha256": "08d74b3a80e0d7dc9da3475021f238f77cdfef9d25de0eeb16cec32c2f0fb145",
 					"mods": [],
@@ -1554,7 +1556,7 @@
 					"name": "MinerTrack-2.1.1.1+fabric.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.1.1/MinerTrack-2.1.1.1%2Bfabric.jar",
 					"size": 2943046,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "e771f1a41b20937cb460dad7ac7060e6e7163db41deb4ec35cd5fa6a3b686543",
 					"mods": [
@@ -1736,7 +1738,7 @@
 					"name": "MinerTrack-2.1.1.1+forge.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.1.1/MinerTrack-2.1.1.1%2Bforge.jar",
 					"size": 2938295,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "2ae1a64cdfa54e6ebc81b08f183e7615f0883afb080bbf8e9658cc1be6a0a4ee",
 					"mods": [
@@ -1911,7 +1913,7 @@
 					"name": "MinerTrack-2.1.1.1+neoforge.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.1.1/MinerTrack-2.1.1.1%2Bneoforge.jar",
 					"size": 2936904,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "d39d8b329d8a7ecab1430808860f04bbc94c428143b495973df08dc899a5872e",
 					"mods": [
@@ -2094,7 +2096,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### What's News\n#### Fixed BUG\n- The NeoForge platform jar doesn't include mods.toml, so mods can't load in `1.20.x`.\n- The config file doesn't generate correctly when there are other mods that include `config.yml`.\n- Comments get cleared when filling in missing configuration items.\n\n---\n\n*Happy using~*"
 		},
 		{
 			"tag": "2.1.1.0",
@@ -2106,7 +2109,7 @@
 					"name": "MinerTrack-2.1.1.0+bukkit.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.1.0/MinerTrack-2.1.1.0%2Bbukkit.jar",
 					"size": 2199979,
-					"downloads": 70,
+					"downloads": 71,
 					"inspection": 2,
 					"sha256": "f0478eafb0a685818536609bd2e98e8f84dcf564bee1f4cb40ac5534dd7d133a",
 					"mods": [],
@@ -2250,7 +2253,7 @@
 					"name": "MinerTrack-2.1.1.0+fabric.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.1.0/MinerTrack-2.1.1.0%2Bfabric.jar",
 					"size": 2937248,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "9302a08fff063da68b9adcec685833822de0c3f725cee2f6aea6a0bb1dcd74fa",
 					"mods": [
@@ -2432,7 +2435,7 @@
 					"name": "MinerTrack-2.1.1.0+forge.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.1.0/MinerTrack-2.1.1.0%2Bforge.jar",
 					"size": 2932519,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "12484aed75231e85512a3505618e6ee2810d3275bde28da16efca462ef0c2a26",
 					"mods": [
@@ -2607,7 +2610,7 @@
 					"name": "MinerTrack-2.1.1.0+neoforge.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.1.0/MinerTrack-2.1.1.0%2Bneoforge.jar",
 					"size": 2930591,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "62de45238b537f0029843dc12096752e8c0a25ae00adf56538f03a6ae8475e9b",
 					"mods": [
@@ -2778,7 +2781,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "`MinerTrack 2.1.1.0` is here! 🚀\n\n**Support the Project**\n\nMinerTrack has not received any donations in the past year, and the number of GitHub Stars remains low. Your support is my greatest motivation to continue development!\nIf you appreciate this project, please consider supporting me via:\n\n- Subscribing on **Patreon**: https://patreon.com/Author87668/join\n- Starring the repository on **GitHub**: https://github.com/At87668/MinerTrack\n\nThank you so much to every supporter! ❤️\n\n---\n\n## What's News\n\n### BUG Fixes\n\n- Translation file wasn't released properly.\n- The Minecraft version required in `neoforge.mods.toml` is incorrect.\n\n### Data Collection\n\n- We’re now using [FastStats](https://faststats.dev/) to collect usage data from the mod platform.\n  Joining the data collection program is optional, it helps us better understand usage and make improvements.\n  We won't collect any private data.\n\n---\n\n*Enjoy~*"
 		},
 		{
 			"tag": "2.1.0.1",
@@ -2790,7 +2794,7 @@
 					"name": "MinerTrack-2.1.0.1+bukkit.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.0.1/MinerTrack-2.1.0.1%2Bbukkit.jar",
 					"size": 2172968,
-					"downloads": 9,
+					"downloads": 10,
 					"inspection": 2,
 					"sha256": "5a096c0ed24766b447f206f4dec977de59b0a66abd4f1f25b92416a121cbb904",
 					"mods": [],
@@ -2934,7 +2938,7 @@
 					"name": "MinerTrack-2.1.0.1+fabric.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.0.1/MinerTrack-2.1.0.1%2Bfabric.jar",
 					"size": 2511844,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "01e0fb42a81a60168bb4cfaf99275089d1fca0c4ee9cdeb1e5e677c30ff38b71",
 					"mods": [
@@ -3093,7 +3097,7 @@
 					"name": "MinerTrack-2.1.0.1+forge.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.0.1/MinerTrack-2.1.0.1%2Bforge.jar",
 					"size": 2507642,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "160a61499ea42ed6b83b2952d104ebee6567a41c1ead7ae1d1467a843595f5eb",
 					"mods": [
@@ -3245,7 +3249,7 @@
 					"name": "MinerTrack-2.1.0.1+neoforge.jar",
 					"url": "https://github.com/At87668/MinerTrack/releases/download/2.1.0.1/MinerTrack-2.1.0.1%2Bneoforge.jar",
 					"size": 2505684,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "61467bf49389306bca33d95fe0651d6a1faad6fd4982c47164a248e3aff8460f",
 					"mods": [
@@ -3393,11 +3397,48 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "`Forge`/`NeoForge` bugs fixed in `MinerTrack 2.1.0.1`! 🚀\n\n**Support the Project**\n\nMinerTrack has not received any donations in the past year, and the number of GitHub Stars remains low. Your support is my greatest motivation to continue development!\nIf you appreciate this project, please consider supporting me via:\n\n- Subscribing on **Patreon**: https://patreon.com/Author87668/join\n- Starring the repository on **GitHub**: https://github.com/At87668/MinerTrack\n\nThank you so much to every supporter! ❤️\n\n---\n\n## What's News\n\n### BUG Fixes\n\n- Fixed the issue where permission nodes haven't registered correctly.\n- Fixed the issue where the `/mt notify` command couldn't send messages in some minecraft versions.\n\n### Package Optimization\n\n- Now package the JAR separately for each platform.\n\n---\n\n*Enjoy~*"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [
+		"Images/Commands.png",
+		"Images/Configuration.png",
+		"Images/Features.png",
+		"Images/Installation.png",
+		"Images/MinerTrack.png",
+		"Images/MinerTrack_64x.png",
+		"Images/Overview.png",
+		"Images/Permissions.png",
+		"Images/Requirements.png",
+		"Images/Support.png",
+		"Images/Template.png"
+	],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 858,
+		"more": 0,
+		"people": [
+			{
+				"login": "At87668",
+				"commits": 856,
+				"funding": []
+			},
+			{
+				"login": "thboehi",
+				"commits": 1,
+				"funding": []
+			},
+			{
+				"login": "xiaoyueyoqwq",
+				"commits": 1,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
 	"history": 1
 }

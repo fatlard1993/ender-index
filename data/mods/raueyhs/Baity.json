@@ -1,0 +1,925 @@
+{
+	"repo": "raueyhs/Baity",
+	"host": "github",
+	"description": "A visual and utility mod currently in development mainly for hypixel skyblock.",
+	"stars": 17,
+	"archived": false,
+	"license": "LGPL-3.0",
+	"created": "2025-09-28T15:22:24Z",
+	"pushed": "2026-10-23T11:31:38Z",
+	"releases": [
+		{
+			"tag": "baity-26.3-v1.8.0",
+			"published": "2026-10-23T11:31:38Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 668923767,
+					"name": "baity-v1.8.0-26.3mc.jar",
+					"url": "https://github.com/raueyhs/Baity/releases/download/baity-26.3-v1.8.0/baity-v1.8.0-26.3mc.jar",
+					"size": 1701138,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "088350b66ab228106c56163abeb32c0d35d0a3d6e2d9c1041a1774c96698ab48",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baity",
+							"version": "1.7.2",
+							"name": "Baity",
+							"description": "A visual and utility mod currently in development mainly for hypixel skyblock.",
+							"minecraft": "26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api",
+								"fabric-command-api-v2"
+							],
+							"provides": [
+								"mixinextras"
+							],
+							"suggests": [
+								"hypixel-mod-api"
+							]
+						}
+					],
+					"icon": "51d71b49a423a3d3b124cf7aec4ab95cdeeafcb94f93aee586e2688bbb2c1d79.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 640,
+						"jars": [
+							"META-INF/jars/mixinextras-fabric-0.4.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/shyeuar/baity/config/DevConfig.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/shyeuar/baity/sync/SyncClient.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/shyeuar/baity/utils/RemoteFileFetcher.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"unsafe": {
+								"META-INF/jars/mixinextras-fabric-0.4.1.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"baity-sync-d7gx0aiqb6c3727d5-1502560706.ap-shanghai.app.tcloudbase.com": [
+								"com/shyeuar/baity/config/ConfigManager.class",
+								"com/shyeuar/baity/sync/BaityPresenceSync.class"
+							],
+							"space.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"api.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"www.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"raw.githubusercontent.com": [
+								"com/shyeuar/baity/features/enchantlore/EnchantCatalog.class",
+								"com/shyeuar/baity/features/fishing/HypixelFishingRodCatalog.class",
+								"com/shyeuar/baity/features/legacytweaks/blockanimation/BlockAnimationSwordCatalog.class"
+							],
+							"github.com": [
+								"com/shyeuar/baity/features/fishing/FishHookTimerTemplateManager.class",
+								"com/shyeuar/baity/gui/ClickGui.class",
+								"com/shyeuar/baity/gui/internal/ClickGuiInputHandler.class"
+							],
+							"api.github.com": [
+								"com/shyeuar/baity/utils/VersionCheckUtils.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### 新增\n\n- **CameraTweaks · no camera clip**：可自定义的第三人称相机距离；\n- **LegacyTweaks**：把 1.7 相关的还原类功能统一收进该模块；\n- **LegacyTweaks · legacy music priority**：自动调度材质更新后hub音乐的优先级，防止神秘二重奏；\n- **LegacyTweaks · legacy moonglade marsh replay fix**：仅对资源包[**Hypixel Skyblock Legacy**](https://github.com/nightlibra/hypixel_skyblock_legacy)的旧版moonglade marsh音乐进行调度，解决其背景音多次播放的问题；\n- **FancyDmgSplash · misc**：设置房间清理与 BOSS 战期间隐藏伤害数字。\n\n### 改进\n\n- **Keybinds · commands keybind**：删除绑定改为二次确认，避免误触；\n- **MotionBlur**：几乎不移动的像素不再进行采样，降低模糊开销；\n- **static rainbow/chroma**：可自定义文本起始颜色；\n- **NickTweaks · nick changer**：输入时颜色代码会以自身颜色显示；\n- 项目许可证变更为 **LGPL-3.0**。\n\n### 修复\n\n- 贴图比较改用 `Objects.equals`，避免无意义的刷新；by @FlyModeZ in https://github.com/raueyhs/Baity/pull/26\n- **SmolPeople**：游泳/趴下时不再叠加第三人称正面的相机下移；\n- **EnchantLore**：修复了模块关闭时预览处彩虹显示丢失的问题；\n- **InventoryTweaks · SidePanel**：在像素层面调整了贴图；所穿套装不在衣柜中时不再清空装备列；\n- **InventoryTweaks · middle click**：被替换的点击不再跳过容器界面的点击处理；\n- **NickTweaks**：昵称不再被截断、不再在颜色代码后跳过、不再同步到自己的 nametag；\n- 修复 nametag 的 submit scope 泄漏，并清理失效注入；\n- 相关文本输入框在点击其它控件后不再继续捕获按键；\n- 修复侧栏（SidePanel）检测始终为空的问题，Safari、Stillgore Chateau 与副本判断恢复正常；\n- **SoftFullscreen**：调整了功能与游戏自身全屏的兼容行为。\n\n---\n\n\n### Added\n\n- **CameraTweaks · no camera clip**: Customizable third-person camera distance;\n- **LegacyTweaks**: gather all the features related to restoring old-version visuals into this module;\n- **LegacyTweaks · legacy music priority**: Automatically adjusts the priority of hub music after pack updating to prevent bgm duets;\n- **LegacyTweaks · legacy moonglade marsh replay fix**: Only schedules the old Moonglade Marsh music for the resource pack [**Hypixel Skyblock Legacy**](https://github.com/nightlibra/hypixel_skyblock_legacy), fixing the issue of the background music playing muti-times in same time;\n- **FancyDmgSplash · misc**: set damage numbers are hidden during dungeon clears and boss fights;\n\n### Improved\n\n- **Keybinds · commands keybind**: deleting a binding requires a second click to prevent misclicks;\n- **MotionBlur**: pixels that barely move are no longer sampled, cutting the blur cost;\n- **static rainbow/chroma**: you can customize the starting color of the text;\n- **NickTweaks · nick changer**: color codes will display in their own color when typing;\n- the project is relicensed to **LGPL-3.0**.\n\n### Fixed\n\n- switched to using `Objects.equals` for texture comparison to avoid unnecessary refreshes; by @FlyModeZ in https://github.com/raueyhs/Baity/pull/26\n- **SmolPeople**: the third person front offset is no longer applied while swimming or crawling;\n- **EnchantLore**: the rainbow preview renders even when the module is disabled;\n- **InventoryTweaks · SidePanel**: adjusted the texture at the pixel level; the equipped column is no longer cleared when the worn set is not in the wardrobe;\n- **InventoryTweaks · middle click**: replaced clicks no longer skip the container screen's click handling;\n- **NickTweaks**: nicknames are no longer cut off, skipped after a colour code, or synced onto your own nametag;\n- fixed a nametag submit scope leak and removed dead injections;\n- text fields no longer keep capturing keys after clicking another control;\n- SidePanel area detection was always empty, so Safari, Stillgore Chateau and dungeon checks work again;\n- **SoftFullscreen**: tweaked how the features work with the game's fullscreen behavior."
+		},
+		{
+			"tag": "baity-26.2-v1.7.3",
+			"published": "2026-10-23T11:28:09Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 668980406,
+					"name": "baity-v1.7.3-26.2mc.jar",
+					"url": "https://github.com/raueyhs/Baity/releases/download/baity-26.2-v1.7.3/baity-v1.7.3-26.2mc.jar",
+					"size": 1688946,
+					"downloads": 8,
+					"inspection": 2,
+					"sha256": "578c2ce13449e499093e6b9cd57a24ccc306f1a40487bd99aebc579fc3e76476",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baity",
+							"version": "1.7.3",
+							"name": "Baity",
+							"description": "A visual and utility mod currently in development mainly for hypixel skyblock.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api",
+								"fabric-command-api-v2"
+							],
+							"provides": [
+								"mixinextras"
+							],
+							"suggests": [
+								"hypixel-mod-api"
+							]
+						}
+					],
+					"icon": "51d71b49a423a3d3b124cf7aec4ab95cdeeafcb94f93aee586e2688bbb2c1d79.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 630,
+						"jars": [
+							"META-INF/jars/mixinextras-fabric-0.4.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/shyeuar/baity/config/DevConfig.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/shyeuar/baity/sync/SyncClient.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/shyeuar/baity/utils/RemoteFileFetcher.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"unsafe": {
+								"META-INF/jars/mixinextras-fabric-0.4.1.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"baity-sync-d7gx0aiqb6c3727d5-1502560706.ap-shanghai.app.tcloudbase.com": [
+								"com/shyeuar/baity/config/ConfigManager.class",
+								"com/shyeuar/baity/sync/BaityPresenceSync.class"
+							],
+							"space.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"api.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"www.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"raw.githubusercontent.com": [
+								"com/shyeuar/baity/features/enchantlore/EnchantCatalog.class",
+								"com/shyeuar/baity/features/fishing/HypixelFishingRodCatalog.class",
+								"com/shyeuar/baity/features/legacytweaks/blockanimation/BlockAnimationSwordCatalog.class"
+							],
+							"github.com": [
+								"com/shyeuar/baity/features/fishing/FishHookTimerTemplateManager.class",
+								"com/shyeuar/baity/gui/ClickGui.class",
+								"com/shyeuar/baity/gui/internal/ClickGuiInputHandler.class"
+							],
+							"api.github.com": [
+								"com/shyeuar/baity/utils/VersionCheckUtils.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### 新增\n\n- **CameraTweaks · no camera clip**：可自定义的第三人称相机距离；\n- **LegacyTweaks**：把 1.7 相关的还原类功能统一收进该模块；\n- **LegacyTweaks · legacy music priority**：自动调度材质更新后hub音乐的优先级，防止神秘二重奏；\n- **LegacyTweaks · legacy moonglade marsh replay fix**：仅对资源包[**Hypixel Skyblock Legacy**](https://github.com/nightlibra/hypixel_skyblock_legacy)的旧版moonglade marsh音乐进行调度，解决其背景音多次播放的问题；\n- **FancyDmgSplash · misc**：设置房间清理与 BOSS 战期间隐藏伤害数字。\n\n### 改进\n\n- **Keybinds · commands keybind**：删除绑定改为二次确认，避免误触；\n- **MotionBlur**：几乎不移动的像素不再进行采样，降低模糊开销；\n- **static rainbow/chroma**：可自定义文本起始颜色；\n- **NickTweaks · nick changer**：输入时颜色代码会以自身颜色显示；\n- 项目许可证变更为 **LGPL-3.0**。\n\n### 修复\n\n- 贴图比较改用 `Objects.equals`，避免无意义的刷新；by @FlyModeZ in https://github.com/raueyhs/Baity/pull/26\n- **SmolPeople**：游泳/趴下时不再叠加第三人称正面的相机下移；\n- **EnchantLore**：修复了模块关闭时预览处彩虹显示丢失的问题；\n- **InventoryTweaks · SidePanel**：在像素层面调整了贴图；所穿套装不在衣柜中时不再清空装备列；\n- **InventoryTweaks · middle click**：被替换的点击不再跳过容器界面的点击处理；\n- **NickTweaks**：昵称不再被截断、不再在颜色代码后跳过、不再同步到自己的 nametag；\n- 修复 nametag 的 submit scope 泄漏，并清理失效注入；\n- 相关文本输入框在点击其它控件后不再继续捕获按键；\n- 修复侧栏（SidePanel）检测始终为空的问题，Safari、Stillgore Chateau 与副本判断恢复正常；\n- **SoftFullscreen**：调整了功能与游戏自身全屏的兼容行为。\n\n---\n\n\n### Added\n\n- **CameraTweaks · no camera clip**: Customizable third-person camera distance;\n- **LegacyTweaks**: gather all the features related to restoring old-version visuals into this module;\n- **LegacyTweaks · legacy music priority**: Automatically adjusts the priority of hub music after pack updating to prevent bgm duets;\n- **LegacyTweaks · legacy moonglade marsh replay fix**: Only schedules the old Moonglade Marsh music for the resource pack [**Hypixel Skyblock Legacy**](https://github.com/nightlibra/hypixel_skyblock_legacy), fixing the issue of the background music playing muti-times in same time;\n- **FancyDmgSplash · misc**: set damage numbers are hidden during dungeon clears and boss fights;\n\n### Improved\n\n- **Keybinds · commands keybind**: deleting a binding requires a second click to prevent misclicks;\n- **MotionBlur**: pixels that barely move are no longer sampled, cutting the blur cost;\n- **static rainbow/chroma**: you can customize the starting color of the text;\n- **NickTweaks · nick changer**: color codes will display in their own color when typing;\n- the project is relicensed to **LGPL-3.0**.\n\n### Fixed\n\n- switched to using `Objects.equals` for texture comparison to avoid unnecessary refreshes; by @FlyModeZ in https://github.com/raueyhs/Baity/pull/26\n- **SmolPeople**: the third person front offset is no longer applied while swimming or crawling;\n- **EnchantLore**: the rainbow preview renders even when the module is disabled;\n- **InventoryTweaks · SidePanel**: adjusted the texture at the pixel level; the equipped column is no longer cleared when the worn set is not in the wardrobe;\n- **InventoryTweaks · middle click**: replaced clicks no longer skip the container screen's click handling;\n- **NickTweaks**: nicknames are no longer cut off, skipped after a colour code, or synced onto your own nametag;\n- fixed a nametag submit scope leak and removed dead injections;\n- text fields no longer keep capturing keys after clicking another control;\n- SidePanel area detection was always empty, so Safari, Stillgore Chateau and dungeon checks work again;\n- **SoftFullscreen**: tweaked how the features work with the game's fullscreen behavior."
+		},
+		{
+			"tag": "baity-26.2-v1.7.2",
+			"published": "2026-10-13T09:15:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 636507333,
+					"name": "baity-v1.7.2-26.2mc.jar",
+					"url": "https://github.com/raueyhs/Baity/releases/download/baity-26.2-v1.7.2/baity-v1.7.2-26.2mc.jar",
+					"size": 1674534,
+					"downloads": 17,
+					"inspection": 2,
+					"sha256": "80739a061d01f45416d40d6bc6cef4783a30892e15e86c159b5ef929e77c1415",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baity",
+							"version": "1.7.2",
+							"name": "Baity",
+							"description": "A visual and utility mod currently in development mainly for hypixel skyblock.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api",
+								"fabric-command-api-v2"
+							],
+							"provides": [
+								"mixinextras"
+							],
+							"suggests": [
+								"hypixel-mod-api"
+							]
+						}
+					],
+					"icon": "51d71b49a423a3d3b124cf7aec4ab95cdeeafcb94f93aee586e2688bbb2c1d79.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 621,
+						"jars": [
+							"META-INF/jars/mixinextras-fabric-0.4.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/shyeuar/baity/config/DevConfig.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/shyeuar/baity/sync/SyncClient.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/shyeuar/baity/utils/RemoteFileFetcher.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"unsafe": {
+								"META-INF/jars/mixinextras-fabric-0.4.1.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"baity-sync-d7gx0aiqb6c3727d5-1502560706.ap-shanghai.app.tcloudbase.com": [
+								"com/shyeuar/baity/config/ConfigManager.class",
+								"com/shyeuar/baity/sync/BaityPresenceSync.class"
+							],
+							"space.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"api.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"www.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"raw.githubusercontent.com": [
+								"com/shyeuar/baity/features/blockanimation/BlockAnimationSwordCatalog.class",
+								"com/shyeuar/baity/features/enchantlore/EnchantCatalog.class",
+								"com/shyeuar/baity/features/fishing/HypixelFishingRodCatalog.class"
+							],
+							"github.com": [
+								"com/shyeuar/baity/features/fishing/FishHookTimerTemplateManager.class",
+								"com/shyeuar/baity/gui/ClickGui.class",
+								"com/shyeuar/baity/gui/internal/ClickGuiInputHandler.class"
+							],
+							"api.github.com": [
+								"com/shyeuar/baity/utils/VersionCheckUtils.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### 新增\n\n- **InventoryTweaks · middle click**：在拍卖浏览器、宠物、社区商店等界面，把槽位的左键点击改为中键点击，免去高延迟下\"拿起物品\"动画造成的操作拖慢；\n- **EnchantLore · missing enchants**：按住快捷键即可在物品说明里列出该物品缺失的附魔。\n\n### 改进\n\n- **ClickGUI**：重做模块分类，把视觉与摄像机相关模块归入 Render——CameraNoClip 与 NoHurtCam 合并为 **CameraTweaks**，NoSwimPose、SoftFullscreen 移入 Render，PrismBreak 移入 Misc；**Nodebuff** 更名为 **NoDebuff**（旧配置会自动迁移）；\n- **InventoryTweaks**：并入 RemoveRecipeBook 与 SidePanel，物品栏相关功能统一收纳到该模块下；\n- **EnchantLore**：附魔数据改为直接取自 **SkyblockAddons** 维护的数据集，方便跟上后续数据更新；\n- **ModernTooltip**：smoothtooltip 不再每帧重复测量全部提示文本，降低查看物品时的帧数开销；\n- **SidePanel**：写盘时不再逐件深拷贝缓存的物品，进一步消除周期性的主线程卡顿；\n- 改变了 kat reminder 的取消提示样式，改为与同步提示一致的 *[Error alert?]* 链接。\n\n### 修复\n\n- 修复 commands keybind 新绑定的按键组合在保存后不生效、必须重启客户端的问题；\n- 修复 /showitem 的聊天悬停提示中不渲染附魔说明的问题，现在与物品说明保持一致。\n\n---\n\n\n### Added\n\n- **InventoryTweaks · middle click**: turns slot left-clicks into middle-clicks in the Auction Browser, Pets, Community Shop and similar menus, so the \"pick up item\" animation no longer slows you down on high ping;\n- **EnchantLore · missing enchants**: hold the shortcut to list the enchants an item is missing in its tooltip.\n\n### Improved\n\n- **ClickGUI**: reworked the module categories, moving the visual and camera modules into Render — CameraNoClip and NoHurtCam merged into **CameraTweaks**; NoSwimPose and SoftFullscreen moved to Render; PrismBreak moved to Misc; **Nodebuff** renamed to **NoDebuff** (old configs are migrated automatically);\n- **InventoryTweaks**: RemoveRecipeBook and SidePanel merged into it, so the side panel features now live under this module;\n- **EnchantLore**: enchant data now comes from the dataset maintained by **SkyblockAddons**, making future data updates easier;\n- **ModernTooltip**: smoothtooltip no longer re-measures every tooltip line each frame, cutting the frame cost of looking at items;\n- **SidePanel**: the cache no longer deep-copies every item when writing to disk, further removing the periodic main-thread stutter;\n- Fixed the kat reminder cancel prompt, now an *[Error alert?]* link matching the sync prompts.\n\n### Fixed\n\n- Fixed newly bound key combos in commands keybind not working until the game was restarted;\n- Fixed the /showitem chat hover tooltip not rendering the enchant lore; it now matches the item tooltip."
+		},
+		{
+			"tag": "baity-26.2-v1.7.1",
+			"published": "2026-10-09T12:53:06Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 624967234,
+					"name": "baity-v1.7.1-26.2mc.jar",
+					"url": "https://github.com/raueyhs/Baity/releases/download/baity-26.2-v1.7.1/baity-v1.7.1-26.2mc.jar",
+					"size": 1654887,
+					"downloads": 17,
+					"inspection": 2,
+					"sha256": "f9a21f6b608a81fa46730786649a3794ec3eb6017baf3eaff89c9d0b70fdfd46",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baity",
+							"version": "1.7.1",
+							"name": "Baity",
+							"description": "A visual and utility mod currently in development mainly for hypixel skyblock.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api",
+								"fabric-command-api-v2"
+							],
+							"provides": [
+								"mixinextras"
+							],
+							"suggests": [
+								"hypixel-mod-api"
+							]
+						}
+					],
+					"icon": "51d71b49a423a3d3b124cf7aec4ab95cdeeafcb94f93aee586e2688bbb2c1d79.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 615,
+						"jars": [
+							"META-INF/jars/mixinextras-fabric-0.4.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/shyeuar/baity/config/DevConfig.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/shyeuar/baity/sync/SyncClient.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/shyeuar/baity/utils/RemoteFileFetcher.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"unsafe": {
+								"META-INF/jars/mixinextras-fabric-0.4.1.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"baity-sync-d7gx0aiqb6c3727d5-1502560706.ap-shanghai.app.tcloudbase.com": [
+								"com/shyeuar/baity/config/ConfigManager.class",
+								"com/shyeuar/baity/sync/BaityPresenceSync.class"
+							],
+							"space.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"api.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"www.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"raw.githubusercontent.com": [
+								"com/shyeuar/baity/features/blockanimation/BlockAnimationSwordCatalog.class",
+								"com/shyeuar/baity/features/enchantlore/EnchantCatalog.class",
+								"com/shyeuar/baity/features/fishing/HypixelFishingRodCatalog.class"
+							],
+							"github.com": [
+								"com/shyeuar/baity/features/fishing/FishHookTimerTemplateManager.class",
+								"com/shyeuar/baity/gui/ClickGui.class",
+								"com/shyeuar/baity/gui/internal/ClickGuiInputHandler.class"
+							],
+							"api.github.com": [
+								"com/shyeuar/baity/utils/VersionCheckUtils.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### 新增\n\n- **HollowScanner**：扫描水晶洞穴的结构，并把它们标记为路径点；\n- **CameraNoClip**：第三人称视角穿墙时保持摄像机距离；\n- **commands keybind**：命令或聊天消息热键绑定；\n- **Culling · remove the filter**：移除下雨雪时的阴天滤镜；\n- **NoSwimPose**：生效区域黑名单。\n\n### 改进\n\n- **远端同步重写**：同步后端迁至国内，不再需要代理；增加数据上传的 Mojang 会话验证；\n- **ClickGUI**：改进了抽屉样式的子模块；\n- **EnchantLore**：附魔数据更新逻辑优化；默认布局不再重排附魔；\n- **PepCat**：让Pep和Cat独立开来。\n\n### 修复\n\n- 修复 SidePanel 面板缓存导致的间歇性卡顿，以及装备槽的渲染错误；\n- 修复 ClickGUI 模块列表需要重开界面才更新、切换类别时滚动位置错乱的问题；\n- 修复 Safari ESP 区域象限边界、AutoSprint 破坏染色盔甲材质、Kat reminder 误报等问题；\n- 修复VanillaHudHider逻辑与fabric自身冲突导致的物品栏文本错位问题\n- 修复nick changer当输入内容存在字串与本地玩家名称相等时其余字符dupe的问题；\n- 修复ModernTooltip在按住horizontal scroll快捷键时移动鼠标出现的的严重卡顿；\n- 修复FishHookTimer打开的引导页为其他分支文件的问题。\n\n### 已知问题⚠️🚨\n\n- **commands keybind**：在命令热键编辑界面保存后，新绑定的按键组合在当前游戏会话内不会生效，需要重启客户端；若该按键此前已被其他绑定占用，则可立即生效。该问题已在 v1.7.2 中修复，建议更新至 v1.7.2 及以上版本。\n---\n\n\n### Added\n\n- **HollowScanner**: scans Crystal Hollows structures and marks them as waypoints;\n- **CameraNoClip**: keeps the third-person camera distance through walls;\n- **commands keybind**: binds hotkeys to commands or chat messages;\n- **Culling · remove the filter**: hides the overcast filter along with the rain and snow;\n- **NoSwimPose**: active-area-blacklist.\n\n### Improved\n\n- **Remote sync rebuilt**: the syncing now runs in mainland China, so no proxy is needed anymore; uploads are verified through the Mojang session;\n- **ClickGUI**: improved group submodule;\n- **EnchantLore**: improved enchant data updating; the default layout stops rearranging enchants;\n- **PepCat**: separated Pep from Cat.\n\n### Fixed\n\n- Fixed intermittent stutter caused by the SidePanel cache, and equipment slot rendering issues;\n- Fixed the ClickGUI module list not refreshing until the GUI was reopened, and the scroll position carrying over when switching categories;\n- Fixed Safari ESP zone quadrant boundaries, AutoSprint breaking dyed armor models, and false Kat reminder alarms;\n- Fixed VanillaHudHider logic conflict with Fabric causing misaligned inventory text;\n- Fixed the issue in nick changer where if the input contains a substring equal to the local player's name, the rest of the characters get duplicated;\n- Fixed serious stuttering in ModernTooltip when moving the mouse while holding the horizontal scroll shortcut;\n- Fixed the issue where the guide page opened from FishHookTimer would redirect to other branch files.\n\n### Known issues⚠️🚨\n\n- **commands keybind**: after saving in the command hotkey editor, a newly bound key combo does not fire in the current session and needs a game restart; it works immediately only if the key was already used by another binding. This issue has been fixed in v1.7.2 — please update to v1.7.2 or above."
+		},
+		{
+			"tag": "baity-26.2-v1.7.0",
+			"published": "2026-08-23T01:34:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 559041769,
+					"name": "baity-v1.7.0-26.2mc.jar",
+					"url": "https://github.com/raueyhs/Baity/releases/download/baity-26.2-v1.7.0/baity-v1.7.0-26.2mc.jar",
+					"size": 1556529,
+					"downloads": 39,
+					"inspection": 2,
+					"sha256": "0a80ccef9673018c2604eeeed9dcec0fbb546cd62f10cc6d741b68bcbf0b9632",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baity",
+							"version": "1.7.0",
+							"name": "Baity",
+							"description": "A visual and utility mod currently in development mainly for hypixel skyblock.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api",
+								"fabric-command-api-v2"
+							],
+							"provides": [
+								"mixinextras"
+							]
+						}
+					],
+					"icon": "51d71b49a423a3d3b124cf7aec4ab95cdeeafcb94f93aee586e2688bbb2c1d79.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 581,
+						"jars": [
+							"META-INF/jars/mixinextras-fabric-0.4.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/shyeuar/baity/config/DevConfig.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/shyeuar/baity/sync/PresenceProxyResolver.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/shyeuar/baity/utils/RemoteFileFetcher.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"unsafe": {
+								"META-INF/jars/mixinextras-fabric-0.4.1.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"baity-presence-sync.1427637445.workers.dev": [
+								"com/shyeuar/baity/config/ConfigManager.class",
+								"com/shyeuar/baity/sync/BaityPresenceSync.class"
+							],
+							"space.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"api.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"www.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"raw.githubusercontent.com": [
+								"com/shyeuar/baity/features/blockanimation/BlockAnimationSwordCatalog.class",
+								"com/shyeuar/baity/features/fishing/HypixelFishingRodCatalog.class"
+							],
+							"github.com": [
+								"com/shyeuar/baity/features/fishing/FishHookTimerTemplateManager.class",
+								"com/shyeuar/baity/gui/ClickGui.class",
+								"com/shyeuar/baity/gui/internal/ClickGuiInputHandler.class"
+							],
+							"api.github.com": [
+								"com/shyeuar/baity/utils/VersionCheckUtils.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": ">26.1分支停止维护于v1.6.4，如有需要请升级您的项目至26.2以获取后续功能支持<3\n>the 26.1 branch is no longer maintained in v1.6.4. If necessary, please upgrade your project to 26.2 to obtain subsequent functional support.<3\n \n**增加了:**\n-Safari Zone 的一系列esp高亮 ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/14\n-ModernTooltip:tooltip切换动画和滚动浏览；\n-AutoSprint 强制疾跑 ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/19\n-PrismBreak 方块破坏描边 ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/20\n-RemoveRecipeBook 移除配方书 ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/21\n**修改了:**\n-修复潜影贝高亮在galatea失效的问题；\n-修复和优化了Keybinds功能；\n-修改了SidePanel的图标；\n-扩展了小人的生效对象范围(大致包含各种情况下的替身)；\n-修复了由取消游泳视角变化(NoSwimPose)和旧版蹲起高度(OldSneaking)导致的睡觉视角高度问题；\n-优化了ClickGUI的滚动和展开动画；\n-使纸娃娃的表现联动NoSwimPose；\n**其他:**\n-内化了**owo-lib**的部分逻辑以取消其作为前置模组的条件.\n\n---\n\n**Added:**\n-Safari Zone esp ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/14\n-ModernTooltip:tooltip switch animation and scrolling;\n-AutoSprint ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/19;\n-PrismBreak:breaking progress overhaul ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/20\n-RemoveRecipeBook ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/21\n**Modified:**\n-fixed the issue where shulker highlight fails in galatea;\n-fixed and optimized the Keybinds function;\n-modified the icon of SidePanel;\n-expanded the range of effective objects for SmolPeople (roughly including stand-ins in various situations);\n-fixed the issue of sleeping angle height caused by NoSwimPose and OldSneaking;\n-optimized the scrolling and unfolding animations of ClickGUI;\n-made the performance of the paper doll interact with the NoSwimPose;\n**Misc:**\n-part of the logic of **owo-lib** has been internalized to remove its condition as a premodule."
+		},
+		{
+			"tag": "baity-26.1-v1.6.4",
+			"published": "2026-08-23T01:27:21Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 537279058,
+					"name": "baity-v1.6.4-26.1mc.jar",
+					"url": "https://github.com/raueyhs/Baity/releases/download/baity-26.1-v1.6.4/baity-v1.6.4-26.1mc.jar",
+					"size": 1553567,
+					"downloads": 51,
+					"inspection": 2,
+					"sha256": "158fa4cdd1f7baef6869eb6b0d6c00b2d13acf815cd796cca5f4860663adf45d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baity",
+							"version": "1.6.4",
+							"name": "Baity",
+							"description": "A visual and utility mod currently in development mainly for hypixel skyblock.",
+							"minecraft": ">=26.1 <=26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api",
+								"fabric-command-api-v2"
+							],
+							"provides": [
+								"mixinextras"
+							]
+						}
+					],
+					"icon": "51d71b49a423a3d3b124cf7aec4ab95cdeeafcb94f93aee586e2688bbb2c1d79.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 581,
+						"jars": [
+							"META-INF/jars/mixinextras-fabric-0.4.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/shyeuar/baity/config/DevConfig.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/shyeuar/baity/sync/PresenceProxyResolver.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/shyeuar/baity/utils/RemoteFileFetcher.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"unsafe": {
+								"META-INF/jars/mixinextras-fabric-0.4.1.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"baity-presence-sync.1427637445.workers.dev": [
+								"com/shyeuar/baity/config/ConfigManager.class",
+								"com/shyeuar/baity/sync/BaityPresenceSync.class"
+							],
+							"space.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"api.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"www.bilibili.com": [
+								"com/shyeuar/baity/config/DevConfig.class"
+							],
+							"raw.githubusercontent.com": [
+								"com/shyeuar/baity/features/blockanimation/BlockAnimationSwordCatalog.class",
+								"com/shyeuar/baity/features/fishing/HypixelFishingRodCatalog.class"
+							],
+							"github.com": [
+								"com/shyeuar/baity/features/fishing/FishHookTimerTemplateManager.class",
+								"com/shyeuar/baity/gui/ClickGui.class",
+								"com/shyeuar/baity/gui/internal/ClickGuiInputHandler.class"
+							],
+							"api.github.com": [
+								"com/shyeuar/baity/utils/VersionCheckUtils.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**增加了:**\n-Safari Zone 的一系列esp高亮 ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/14\n-ModernTooltip:tooltip切换动画和滚动浏览；\n-AutoSprint 强制疾跑 ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/19\n-PrismBreak 方块破坏描边 ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/20\n-RemoveRecipeBook 移除配方书 ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/21\n**修改了:**\n-修复潜影贝高亮在galatea失效的问题；\n-修复和优化了Keybinds功能；\n-修改了SidePanel的图标；\n-扩展了小人的生效对象范围(大致包含各种情况下的替身)；\n-修复了由取消游泳视角变化(NoSwimPose)和旧版蹲起高度(OldSneaking)导致的睡觉视角高度问题；\n-优化了ClickGUI的滚动和展开动画；\n-使纸娃娃的表现联动NoSwimPose；\n**其他:**\n-内化了**owo-lib**的部分逻辑以取消其作为前置模组的条件.\n\n---\n\n**Added:**\n-Safari Zone esp ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/14\n-ModernTooltip:tooltip switch animation and scrolling;\n-AutoSprint ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/19;\n-PrismBreak:breaking progress overhaul ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/20\n-RemoveRecipeBook ---by @alexeys1 in https://github.com/raueyhs/Baity/pull/21\n**Modified:**\n-fixed the issue where shulker highlight fails in galatea;\n-fixed and optimized the Keybinds function;\n-modified the icon of SidePanel;\n-expanded the range of effective objects for SmolPeople (roughly including stand-ins in various situations);\n-fixed the issue of sleeping angle height caused by NoSwimPose and OldSneaking;\n-optimized the scrolling and unfolding animations of ClickGUI;\n-made the performance of the paper doll interact with the NoSwimPose;\n**Misc:**\n-part of the logic of **owo-lib** has been internalized to remove its condition as a premodule."
+		},
+		{
+			"tag": "baity-1.21.11-v1.5.4",
+			"published": "2026-06-18T12:00:06Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 451174587,
+					"name": "baity-v1.5.4-1.21.11mc.jar",
+					"url": "https://github.com/raueyhs/Baity/releases/download/baity-1.21.11-v1.5.4/baity-v1.5.4-1.21.11mc.jar",
+					"size": 1308993,
+					"downloads": 36,
+					"inspection": 2,
+					"sha256": "5893b7b0cae03aef8f426ee914bea63b20f436a12bb36adbfd0fe68083fb93f7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baity",
+							"version": "1.5.4",
+							"name": "Baity",
+							"description": "A visual and utility mod currently in development mainly for hypixel skyblock.",
+							"minecraft": ">=1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric",
+								"fabric-command-api-v2"
+							],
+							"provides": [
+								"mixinextras",
+								"owo-sentinel"
+							]
+						}
+					],
+					"icon": "51d71b49a423a3d3b124cf7aec4ab95cdeeafcb94f93aee586e2688bbb2c1d79.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 477,
+						"jars": [
+							"META-INF/jars/mixinextras-fabric-0.4.1.jar",
+							"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar"
+						],
+						"capabilities": {
+							"unsafe": {
+								"META-INF/jars/mixinextras-fabric-0.4.1.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							},
+							"network": {
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/OwoSentinel.class": [
+									"java/net/URL.openStream"
+								],
+								"com/shyeuar/baity/features/fishing/HypixelFishingRodCatalog.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/shyeuar/baity/sync/PresenceProxyResolver.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/shyeuar/baity/utils/VersionCheckUtils.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"api.modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/OwoSentinel.class"
+							],
+							"modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/SentinelConsole.class"
+							],
+							"github.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/SentinelWindow.class",
+								"com/shyeuar/baity/features/fishing/FishHookTimerTemplateManager.class",
+								"com/shyeuar/baity/features/sounds/SoulcrySoundManager.class",
+								"com/shyeuar/baity/gui/ClickGui.class",
+								"com/shyeuar/baity/gui/internal/ClickGuiInputHandler.class"
+							],
+							"baity-presence-sync.1427637445.workers.dev": [
+								"com/shyeuar/baity/config/ConfigManager.class",
+								"com/shyeuar/baity/sync/BaityPresenceSync.class"
+							],
+							"raw.githubusercontent.com": [
+								"com/shyeuar/baity/features/fishing/HypixelFishingRodCatalog.class"
+							],
+							"space.bilibili.com": [
+								"com/shyeuar/baity/gui/internal/ClickGuiInputHandler.class"
+							],
+							"api.github.com": [
+								"com/shyeuar/baity/utils/VersionCheckUtils.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**增加了:**\n-动态模糊MotionBlur；\n-简易纸娃娃PaperDoll；\n-对莲花岛虫洞的消音（Sounds-muffler-mute wormhole）；\n-针对告示牌的数字输入器-由模组**rhizome**所启发。\n**修改了:**\n-修复了ChromaFishingLine GUI错乱的问题，并将该功能划分到更适合的位置。\n**其他:**\n-一则通知：1.21.11分支将随着众模组更新到26.1而停止维护，但具体时间未知。\n\n---\n\n**Added:**\n-MotionBlur;\n-PaperDoll;\n-mute wormholes in Lotus Atoll(Sounds-muffler--mute wormhole);\n-number inputer for signs-inspired by mod project **rhizome**.\n**Modified:**\n-Fixed the issue of the ChromaFishingLine GUI being disordered and reassigned this feature to a more suitable location.\n**Misc:**\n-Notice: The 1.21.11 branch will cease maintenance as all modules update to 26.1, while the exact time is unknown."
+		},
+		{
+			"tag": "baity-1.21.10-v1.2.9",
+			"published": "2026-04-21T12:44:31Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 401567006,
+					"name": "baity-v1.2.9-1.21.10mc.jar",
+					"url": "https://github.com/raueyhs/Baity/releases/download/baity-1.21.10-v1.2.9/baity-v1.2.9-1.21.10mc.jar",
+					"size": 962109,
+					"downloads": 18,
+					"inspection": 2,
+					"sha256": "2ae1f2f7806734ea7653ed0a13e8f42641c946b444335d55e6f13f884045710e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baity",
+							"version": "1.2.8",
+							"name": "Baity",
+							"description": "A visual and utility mod currently in development mainly for hypixel skyblock.",
+							"minecraft": ">=1.21.10",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric",
+								"fabric-command-api-v2"
+							],
+							"provides": [
+								"mixinextras",
+								"owo-sentinel"
+							]
+						}
+					],
+					"icon": "51d71b49a423a3d3b124cf7aec4ab95cdeeafcb94f93aee586e2688bbb2c1d79.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 381,
+						"jars": [
+							"META-INF/jars/mixinextras-fabric-0.4.1.jar",
+							"META-INF/jars/owo-sentinel-0.12.24+1.21.9.jar"
+						],
+						"capabilities": {
+							"unsafe": {
+								"META-INF/jars/mixinextras-fabric-0.4.1.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							},
+							"network": {
+								"META-INF/jars/owo-sentinel-0.12.24+1.21.9.jar!io/wispforest/owosentinel/OwoSentinel.class": [
+									"java/net/URL.openStream"
+								],
+								"com/shyeuar/baity/sync/BaityPresenceSync.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/shyeuar/baity/utils/VersionCheckUtils.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"api.modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.12.24+1.21.9.jar!io/wispforest/owosentinel/OwoSentinel.class"
+							],
+							"modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.12.24+1.21.9.jar!io/wispforest/owosentinel/SentinelConsole.class"
+							],
+							"github.com": [
+								"META-INF/jars/owo-sentinel-0.12.24+1.21.9.jar!io/wispforest/owosentinel/SentinelWindow.class",
+								"com/shyeuar/baity/gui/internal/ClickGuiInputHandler.class"
+							],
+							"baity-presence-sync.1427637445.workers.dev": [
+								"com/shyeuar/baity/config/ConfigManager.class",
+								"com/shyeuar/baity/sync/BaityPresenceSync.class"
+							],
+							"space.bilibili.com": [
+								"com/shyeuar/baity/gui/internal/ClickGuiInputHandler.class"
+							],
+							"api.github.com": [
+								"com/shyeuar/baity/utils/VersionCheckUtils.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "⚠️🚨由于作者开发能力有限，于是决定自本版本起，**正式停止对该版本分支（1.21.10）的维护与更新**。后续将不再提供**任何**安全补丁、Bug 修复或功能迭代！(就算是有遗漏bug也不会!)为确保您能够继续获得功能支持与安全保障，请将您的项目尽快迁移至正在维护的版本！\n\n添加了：\n-自定义准心Crosshair\n-两种新的娱乐向防砍动画\n修改了：\n-移除meowalert\n-修复CustomHandHolding里变换原点固定不动的问题\n-修改了Pepcat的死亡tips\n-修复了名称标签的位置问题\n-若干小修复\n\ntranslated by youdao:\n⚠️🚨 Due to the author 's limited development capabilities, it has been decided that starting from this version, the maintenance and update of this version branch (1.21.10) will be officially discontinued. **No** further security patches, Bug fixes or feature iterations will be provided in the future! (Even if there are any missing bugs, it won't happen!)     To ensure that you can continue to receive functional support and security guarantees, please migrate your project to the version under maintenance as soon as possible! \n\nAdded: \n- Custom Crosshair \n- Two new entertainment oriented blockhit animations \nModified: \n- Removed meowalert \n- Fixed the provit issue in CustomHandHolding \n- Modified the death tips of Pepcat \n- Fixed the position issue of the nametag\n- Several minor fixes"
+		},
+		{
+			"tag": "baity-1.21.8-1.1.3",
+			"published": "2025-11-23T05:07:49Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 319825588,
+					"name": "baity-1.21.8-v1.1.3.jar",
+					"url": "https://github.com/raueyhs/Baity/releases/download/baity-1.21.8-1.1.3/baity-1.21.8-v1.1.3.jar",
+					"size": 170610,
+					"downloads": 12,
+					"inspection": 2,
+					"sha256": "cc8780dec423dfc155b13d6dce2d0ec526e37d8b276330348f0c8caffa97e50d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baity",
+							"version": "1.1.2",
+							"name": "Baity",
+							"description": "A visual and utility mod currently in development mainly for hypixel skyblock.",
+							"minecraft": ">=1.21.5",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric",
+								"fabric-command-api-v2"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 64,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "移植到1.21.8；\n20/11/25：优化了tooltip的显示问题；更改了pepcat的死亡检测.\n\n⚠️🚨该分支已停止维护！有大量bug未修复！\n          playeresp失效；clickgui快捷键未设置时显示空白（不影响使用）."
+		},
+		{
+			"tag": "v1.1.3",
+			"published": "2025-11-23T05:05:19Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 319825280,
+					"name": "baity-1.21.5-v1.1.3.jar",
+					"url": "https://github.com/raueyhs/Baity/releases/download/v1.1.3/baity-1.21.5-v1.1.3.jar",
+					"size": 171619,
+					"downloads": 24,
+					"inspection": 2,
+					"sha256": "be265572faa712247468e09f5ce3a163219f88b4bd2a67d4f267708201b9d795",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baity",
+							"version": "1.1.2",
+							"name": "Baity",
+							"description": "A visual and utility mod currently in development mainly for hypixel skyblock.",
+							"minecraft": ">=1.21.5",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric",
+								"fabric-command-api-v2"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 64,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "2/11/25：重新架构了一下；修复了tooltip背景大小的问题；补全了快捷键映射.\n4/11/25：再次优化架构.\n20/11/25：不小心提交了错误的修改，紧急抢救回来了；优化了tooltip的显示问题；更改了pepcat的死亡检测.\n\n⚠️🚨pepcat仍有问题，不打算修了；meowalert似乎只在原版游戏当中生效？（没人帮我测试sad:("
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 256,
+		"more": 0,
+		"people": [
+			{
+				"login": "raueyhs",
+				"commits": 240,
+				"funding": []
+			},
+			{
+				"login": "alexeys1",
+				"commits": 15,
+				"funding": []
+			},
+			{
+				"login": "FlyModeZ",
+				"commits": 1,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

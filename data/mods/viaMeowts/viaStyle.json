@@ -1,0 +1,212 @@
+{
+	"repo": "viaMeowts/viaStyle",
+	"host": "github",
+	"description": "A simple mod that adds local and global chat channels to Minecraft",
+	"stars": 3,
+	"archived": false,
+	"license": "Unlicense",
+	"created": "2025-04-21T05:25:35Z",
+	"pushed": "2026-10-09T18:36:51Z",
+	"releases": [
+		{
+			"tag": "v2.8.0-mc1.21.11",
+			"published": "2026-08-22T20:27:25Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 525420014,
+					"name": "viastyle-2.8.0+mc1.21.11.jar",
+					"url": "https://github.com/viaMeowts/viaStyle/releases/download/v2.8.0-mc1.21.11/viastyle-2.8.0%2Bmc1.21.11.jar",
+					"size": 252710,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "84bd37a18e1eff8851b7af9eb7925ca9e39768c407b5849ab17d48afe829abea",
+					"metadataError": "JSON Parse error: Unrecognized token '﻿'",
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 62,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## viaStyle 2.8.0 - viapanel 2.9.0 annotation API migration\n\n### Changed\n- Panel integration migrated from the legacy `ViaStylePanelProvider` (324 lines) to `@ViaPanelField` annotations: **103 fields across 19 sections**\n- Registration via `ViaPanelProviders.builder(...)` with hooks:\n  - `permission`: `viastyle.panel` (LuckPerms-first, OP 2 fallback)\n  - `onFieldUpdated`: defaultLanguage handling, join/leave overrides, visual refresh for nick/nametag/tab/AFK\n  - `languageHook`: en/ru normalization + placeholder localization\n  - `onReload`: managers reload (Lang, JoinLeaveManager, TabListManager, NickColorManager)\n- viapanel dependency is now resolved via `fileTree('../lib', 'viapanel-*.jar')`\n\n### Removed\n- `ViaStylePanelProvider.java` - replaced by annotations + core-managed lifecycle\n\n### Requires\n- viapanel **2.9.0+** at runtime: https://github.com/viaMeowts/viapanel/releases/tag/v2.9.0\n\n**Requires:** Minecraft 1.21.11, Fabric Loader, Fabric API, Java 21"
+		},
+		{
+			"tag": "v2.7.6",
+			"published": "2026-06-27T06:27:55Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 459297007,
+					"name": "viastyle-2.7.6+mc1.21.11.jar",
+					"url": "https://github.com/viaMeowts/viaStyle/releases/download/v2.7.6/viastyle-2.7.6%2Bmc1.21.11.jar",
+					"size": 252694,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b13d11478d9222b597eb22bee6f9ef4adf673dcde4e71356938eee5467878a26",
+					"metadataError": "JSON Parse error: Unrecognized token '﻿'",
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 63,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Added\n\n### Broadcast System\n- New `/bc` command with configurable sound, cooldown, header/message formats, console sender support.\n- Config section `[broadcast]` in viaStyle.toml (broadcastEnabled, cooldownSeconds, sound settings, format strings).\n- ViaStylePanelProvider: Broadcast section with all broadcast fields.\n- `BroadcastCommand.java` — full command implementation (`/bc <message>`, cooldown tracking, sound playback, console support).\n\n### Chat Share Placeholders\n- Players can type `[item]`, `[pos]`, `[inv]`, `[ec]` in chat to share held item, coordinates, inventory, or ender chest.\n- Configurable cooldown (default 10s), max per message (default 4), inventory snapshot expiry (default 180s).\n- Per-placeholder permission nodes (`viastyle.placeholder.item`, `.pos`, `.inv`, `.ec`).\n- Localized hover/display text (EN/RU).\n- `ChatSharePlaceholders.java` — full implementation with inventory/enderchest GUI viewers.\n- New config fields in `[chat_placeholders]` section.\n\n### Join/Leave System\n- Per-player and per-group join/leave format overrides.\n- Persisted to `config/viaStyle/joinleave-users.json`.\n- `/joinleave` command to manage overrides in-game.\n- viaPanel sections for Join/Leave and Join/Leave Overrides.\n- `JoinLeaveManager.java` — data management with JSON persistence.\n- `JoinLeaveCommand.java` — command with subcommands.\n\n### PM Sound System\n- Per-player PM sound toggle (`/msound`) — preference persists across restarts in `config/viaStyle/pm-sound.json`.\n- `PmSoundCommand.java` — `/msound`, `/msound on|off`, `/msound status`.\n- `viaStyle.playerPmSoundDisabled` set with JSON persistence (load/save helpers).\n\n### AFK System\n- Full automatic AFK detection with configurable timeout.\n- Movement detection via player input state (`PlayerInput` record) — only WASD/jump/sneak resets AFK.\n- AFK suffix appended to nametag, tab list, and chat.\n- Configurable suffix content, colors, exempt players, bypass permission.\n- `AfkManager.java` — tick-based idle tracking, player activity hooks.\n- `AfkCommand.java` — `/afk`, `/afk <player>`, `/afk bypass <player>`, `/afk bypass list`.\n- Config section `[afk]` with `afkSuffixEnabled`, `afkTimeout`, `afkSuffix`, `afkNameColor`, etc.\n\n### Chat MiniMessage\n- Players can use MiniMessage tags in chat (`<red>`, `<gradient:#ff0000:#ffaa00>`, etc.).\n- Config toggle and optional permission gate (`viastyle.chat.minimessage`).\n- `ChatMiniMessageParser.java` — lightweight MiniMessage tag parser for chat context.\n\n### Placeholder View Command\n- `/placeholders` command shows available chat placeholder tokens to the player.\n- `PlaceholderViewCommand.java`\n\n### ViaStylePanelProvider — New Sections\nAdded 19 viaPanel sections total, including new: Chat Formatting, Timestamp, Broadcast, Join/Leave, Join/Leave Overrides, viaSuper, AFK.\n\n### Language System\n- Expanded `Lang.java` with +311 lines — localized strings for all new features (broadcasts, placeholders, join/leave, AFK, PM sound, etc.).\n- New `getRaw()` and `getColored()` methods for flexible text construction.\n- Broadcast format localization (EN/RU templates).\n\n## Changed\n\n### Config Overhaul\n- `ViaStyleConfig.java` reorganised with clear section separators and consistent field naming.\n- Added config fields for: chat MiniMessage, PM sound/color/ban-hammer-mute, mention color/style, chat placeholders (all sub-fields), broadcast (all fields), join/leave (format strings), AFK (all fields), viaSuper (title/subtitle formats).\n- New `applyLocalizedPlaceholderDefaults()` method for language-aware default templates.\n\n### ChatHandler\n- Removed ScarpetHelper integration.\n- Added AFK activity reset on chat message send.\n- Permission checks use new `checkPlayerPermission()` with proper precedence.\n- Local chat delivers to a recipient list for mention radius filtering.\n- Message processing pipeline now includes `ChatSharePlaceholders.processMessage()`.\n- SocialSpy relay refactored to accept sender name string + optional exclude player.\n\n### MentionHandler\n\n..."
+		},
+		{
+			"tag": "v2.6.8-mc1.21.11",
+			"published": "2026-03-16T14:48:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 375036744,
+					"name": "viastyle-2.6.8+mc1.21.11.jar",
+					"url": "https://github.com/viaMeowts/viaStyle/releases/download/v2.6.8-mc1.21.11/viastyle-2.6.8%2Bmc1.21.11.jar",
+					"size": 179382,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "dbfa33a5e971e2d4b8cecc28cf5788076d86f677b945835da91a3abdc1eb2e67",
+					"metadataError": "JSON Parse error: Unrecognized token '﻿'",
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 47,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "viaStyle 2.6.8 for Minecraft 1.21.11.\n\nThis release ports the mod to 1.21.11 and updates dependency/runtime compatibility for the new command permission API and integration stack.\n\n## What changed\n\n- Updated project target to Minecraft 1.21.11.\n- Updated Yarn mappings to 1.21.11+build.4.\n- Updated Fabric Loader to 0.18.4.\n- Updated Fabric API to 0.141.3+1.21.11.\n- Migrated Vanish compile-only dependency to Modrinth Maven:\n  - maven.modrinth:vanish:1.6.6+1.21.11\n- Reworked OP-level fallback checks for the new 1.21.11 permission model\n  (`PermissionPredicate` / `LeveledPermissionPredicate`) replacing removed `hasPermissionLevel(int)` calls.\n- Kept existing optional integrations operational:\n  - LuckPerms\n  - BlockBot\n  - Carpet/Scarpet\n  - PlaceholderAPI\n  - BanHammer\n  - melius-vanish\n\n## Build status\n\n- Clean build completed successfully on 1.21.11.\n\n## Artifacts\n\n- Main jar: viastyle-2.6.8+mc1.21.11.jar\n- Sources jar: viastyle-2.6.8+mc1.21.11-sources.jar"
+		},
+		{
+			"tag": "v2.6.8-mc1.21.10",
+			"published": "2026-03-13T10:03:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 373001929,
+					"name": "viastyle-2.6.8+mc1.21.10.jar",
+					"url": "https://github.com/viaMeowts/viaStyle/releases/download/v2.6.8-mc1.21.10/viastyle-2.6.8%2Bmc1.21.10.jar",
+					"size": 179048,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "50b8b6a4a2c1280bacf0a198ec534330178d179e96f8d1abeadd45f7ebf7d38b",
+					"metadataError": "JSON Parse error: Unrecognized token '﻿'",
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 47,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Highlights\n\n- Local, global, and staff chat channels with configurable formats\n- Private messages (`/msg`, `/reply` and their aliases) and SocialSpy\n- @mentions with highlight and optional sound ping\n- Ignore system for chat and PM filtering\n- Per-player nick color system with RGB and gradient support\n- Tab list customization with dynamic sorting and Carpet HUD compatibility\n- Join/leave and first-join custom messages\n- BlockBot Discord bridge support (passthrough and custom formatting modes)\n- In-game admin panel (`/viapanel`) with EN/RU localization\n- Optional \"Nobody heard you\" local-chat feedback when no players are in range\n\n## Integrations\n\nLuckPerms · PlaceholderAPI · BlockBot · Carpet / Scarpet · BanHammer · Vanish\n\n## Scarpet\n\nNew simple generator script included – generates ready-to-use templates:\nlogger, antispam, filter, discord queue, welcome, commands, stats\n\n## Configuration\n\n- Main config: `viaStyle.toml`\n- Runtime edit and reload via `/viapanel` and `/viaStyle reload`\n\n## Compatibility\n\n- Minecraft 1.21.10\n- Fabric Loader 0.16.12+\n- Java 21+\n\n## Notes\n\n- Server-side only, no client mod required\n- If upgrading from older builds, review `blockbot.passthrough` and mention-related settings in config"
+		},
+		{
+			"tag": "myFirstMeow",
+			"published": "2025-04-21T05:35:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 248094842,
+					"name": "viachat-1.0.0+mc1.21.4.jar",
+					"url": "https://github.com/viaMeowts/viaStyle/releases/download/myFirstMeow/viachat-1.0.0%2Bmc1.21.4.jar",
+					"size": 12811,
+					"downloads": 11,
+					"inspection": 2,
+					"sha256": "061e603b07782c4f77a2e9bffee5c34d3b33d42e037919939d3e2a282b97315c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "viachat",
+							"version": "1.0.0+mc1.21.4",
+							"name": "viaChat",
+							"description": "Adds local and global chat channels to Minecraft.",
+							"minecraft": "~1.21.4",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 5,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "I am Alpha and Omega, the beginning and the end, the First and the Last."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 23,
+		"more": 0,
+		"people": [
+			{
+				"login": "viaMeowts",
+				"commits": 17,
+				"funding": []
+			},
+			{
+				"login": "claude",
+				"commits": 6,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}

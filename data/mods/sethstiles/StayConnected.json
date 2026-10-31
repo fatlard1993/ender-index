@@ -1,0 +1,173 @@
+{
+	"repo": "sethstiles/StayConnected",
+	"host": "github",
+	"description": "Tiny Fabric client mod (MC 26.1.2): auto-reconnect with retry + Microsoft session re-auth so you stay on the server. Press R for the menu.",
+	"stars": 0,
+	"archived": false,
+	"created": "2026-06-25T01:55:13Z",
+	"pushed": "2026-06-25T02:03:52Z",
+	"releases": [
+		{
+			"tag": "v1.0.1",
+			"published": "2026-06-25T02:03:52Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 457206413,
+					"name": "stayconnected-1.0.1.jar",
+					"url": "https://github.com/sethstiles/StayConnected/releases/download/v1.0.1/stayconnected-1.0.1.jar",
+					"size": 30214,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "1452e51a6dbab20a87188c66c8388cabe2eb9c51cdaa884b35389cd794935eef",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "stayconnected",
+							"version": "1.0.1",
+							"name": "Stay Connected",
+							"description": "Keeps you on the server: auto-reconnects (retrying on a timer) and refreshes your Microsoft session token so reconnects survive the ~24h token expiry. Press R for the menu.",
+							"minecraft": "~26.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/seth/stayconnected/SessionAuth.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"login.live.com": [
+								"dev/seth/stayconnected/SessionAuth.class"
+							],
+							"api.minecraftservices.com": [
+								"dev/seth/stayconnected/SessionAuth.class"
+							],
+							"user.auth.xboxlive.com": [
+								"dev/seth/stayconnected/SessionAuth.class"
+							],
+							"xsts.auth.xboxlive.com": [
+								"dev/seth/stayconnected/SessionAuth.class"
+							],
+							"auth.xboxlive.com": [
+								"dev/seth/stayconnected/SessionAuth.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Bugfix release — please update from v1.0.0.\n\n## Fixed\n- **Silent session refresh now works.** v1.0.0 could sign in, but the automatic refresh failed with `invalid_scope` because login.live.com requires a `scope` parameter on the refresh request. Without the fix the token would still expire after ~24h. Re-auth now refreshes correctly on its timer and on reconnect.\n\nIf you ran v1.0.0: just replace the jar and relaunch. Your saved login carries over (no need to sign in again).\n\n## Requirements — play on this version\n- **Minecraft 26.1.2** (Fabric)\n- **Fabric Loader** 0.19.3+\n- **Fabric API** `0.150.0+26.1.2` — https://modrinth.com/mod/fabric-api\n- Java 25 (comes with the 26.1 launcher)\n\n## Install\n1. Download **stayconnected-1.0.1.jar** below.\n2. Put it **and Fabric API** into your `mods/` folder.\n3. Launch Minecraft **26.1.2** (Fabric) and press **R** in-game.\n\n## What it does\n- **Auto-reconnect** — after a disconnect (incl. \"Connection reset\"), reconnects to the last server and keeps retrying every *X* seconds until you're back in-world.\n- **Session re-auth** — refreshes your Microsoft session token so reconnects survive the ~24h \"Try restarting your client\" expiry. One-time Microsoft login required (see README).\n\nFull setup + login steps: https://github.com/sethstiles/StayConnected#readme"
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-06-25T01:55:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 457201300,
+					"name": "stayconnected-1.0.0.jar",
+					"url": "https://github.com/sethstiles/StayConnected/releases/download/v1.0.0/stayconnected-1.0.0.jar",
+					"size": 30201,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "79d56c701564cc4dfe4cd31f0d7ce43b9a1486709889cd920fb4633e0d67e174",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "stayconnected",
+							"version": "1.0.0",
+							"name": "Stay Connected",
+							"description": "Keeps you on the server: auto-reconnects (retrying on a timer) and refreshes your Microsoft session token so reconnects survive the ~24h token expiry. Press R for the menu.",
+							"minecraft": "~26.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/seth/stayconnected/SessionAuth.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"login.live.com": [
+								"dev/seth/stayconnected/SessionAuth.class"
+							],
+							"api.minecraftservices.com": [
+								"dev/seth/stayconnected/SessionAuth.class"
+							],
+							"user.auth.xboxlive.com": [
+								"dev/seth/stayconnected/SessionAuth.class"
+							],
+							"xsts.auth.xboxlive.com": [
+								"dev/seth/stayconnected/SessionAuth.class"
+							],
+							"auth.xboxlive.com": [
+								"dev/seth/stayconnected/SessionAuth.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Keep yourself on the server: auto-reconnect (with retry) + Microsoft session re-auth.\n\n## Requirements — play on this version\n- **Minecraft 26.1.2** (Fabric)\n- **Fabric Loader** 0.19.3 or newer\n- **Fabric API** `0.150.0+26.1.2` — https://modrinth.com/mod/fabric-api\n- Java 25 (comes with the 26.1 launcher)\n\n## Install\n1. Download **stayconnected-1.0.0.jar** below.\n2. Put it **and Fabric API** into your `mods/` folder.\n3. Launch Minecraft **26.1.2** (Fabric) and press **R** in-game.\n\n## What it does\n- **Auto-reconnect** — after a disconnect, reconnects to the last server and keeps retrying every *X* seconds until you're actually back in-world.\n- **Session re-auth** — refreshes your Microsoft session token so reconnects still work past the ~24h \"Try restarting your client\" expiry.\n\n## The menu (press R)\n- **Stay connected: ON/OFF** — master switch for both features.\n- **Reconnect every (seconds)** — retry interval (default 30).\n- **Refresh session every (hours)** — token refresh cadence (default 12).\n- **Microsoft login…** — one-time sign-in for the re-auth.\n\n### One-time Microsoft login\nThe game can't reuse the launcher's login, so sign in once: **Microsoft login… → Open Microsoft login page**, log in, then copy the resulting `login.live.com/oauth20_desktop.srf?code=...` URL from your browser's address bar and paste it back into the box → **Sign in**. After that it refreshes automatically and survives restarts. Full steps in the [README](https://github.com/sethstiles/StayConnected#readme)."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T08:15:11.584Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T08:15:11.584Z",
+	"contributors": {
+		"commits": 2,
+		"more": 0,
+		"people": [
+			{
+				"login": "sethstiles",
+				"commits": 2,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T08:15:11.584Z",
+	"history": 1
+}
