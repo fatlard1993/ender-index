@@ -27,6 +27,7 @@ import {
 	CAPABILITIES,
 	INDEX,
 	collectionKey,
+	contributorSupportOf,
 	LOADERS,
 	aboutOf,
 	authorPath,
@@ -47,6 +48,7 @@ import {
 	recordUrl,
 	releaseUrl,
 	repositoryUrl,
+	shareOf,
 	titleOf,
 	writeQuery,
 } from './search';
@@ -659,6 +661,57 @@ const downloadsPanel = (entry, record) => {
 	};
 };
 
+/** Who made a mod, the most commits first: each with their part of its commits, and how they take support. */
+const contributorsPanel = (entry, { commits, more, people }) => [
+	new Meta({
+		tag: 'p',
+		textContent:
+			'Who made its commits, as GitHub counts them on its default branch, and how each takes support: their own FUNDING.yml, GitHub Sponsors, or a support site their profile links.',
+	}),
+	...people.map(
+		person =>
+			new Row({
+				style: { flexWrap: 'nowrap', alignItems: 'center', gap: theme.space.md },
+				append: [
+					avatar(`https://github.com/${person.login}.png?size=64`, 32),
+					new Stack({
+						style: { flex: '1', minWidth: '0', gap: theme.space.xs },
+						append: [
+							new Row({
+								append: [
+									new Link({ href: `https://github.com/${person.login}`, target: '_blank', textContent: person.login }),
+									new Meta({
+										textContent: `${count(person.commits)} ${person.commits === 1 ? 'commit' : 'commits'} · ${shareOf(person.commits, commits)}`,
+									}),
+								],
+							}),
+							new Row({
+								append: contributorSupportOf(person).map(
+									({ url, label }) =>
+										new Link({
+											href: url,
+											target: '_blank',
+											attributes: { rel: 'noopener noreferrer' },
+											textContent: label,
+										}),
+								),
+							}),
+						],
+					}),
+				],
+			}),
+	),
+	...(more > 0
+		? [
+				new Link({
+					href: `${repositoryUrl(entry)}/graphs/contributors`,
+					target: '_blank',
+					textContent: `and ${count(more)} more, on GitHub`,
+				}),
+			]
+		: []),
+];
+
 export default class ModPage extends View {
 	static schema = { host: {}, owner: {}, name: {} };
 
@@ -742,6 +795,7 @@ export default class ModPage extends View {
 			}),
 			related: new Stack({ append: related }),
 			packs: new Stack(),
+			contributors: new Stack({ append: record.contributors ? contributorsPanel(entry, record.contributors) : [] }),
 			author: new Stack({
 				append: [
 					tiles(others, others.length),
@@ -749,6 +803,8 @@ export default class ModPage extends View {
 				],
 			}),
 		};
+		const funded = (record.contributors?.people ?? []).filter(person => person.funding?.length > 0);
+		const contributing = (record.contributors?.people.length ?? 0) + (record.contributors?.more ?? 0);
 		const tabsFor = ({ shared, pictures: shots, packs = [] }) => [
 			{ id: 'readme', label: 'Readme' },
 			...(shots.length > 0 ? [{ id: 'gallery', label: 'Gallery', count: shots.length }] : []),
@@ -756,6 +812,7 @@ export default class ModPage extends View {
 			{ id: 'downloads', label: 'Downloads', count: downloads.count },
 			...(related.length > 0 ? [{ id: 'related', label: 'Related' }] : []),
 			...(packs.length > 0 ? [{ id: 'packs', label: 'Packs', count: packs.length }] : []),
+			...(contributing > 0 ? [{ id: 'contributors', label: 'Contributors', count: contributing }] : []),
 			...(others.length > 0 ? [{ id: 'author', label: `More from ${owner}`, count: others.length }] : []),
 		];
 		const tabs = new Tabs({
@@ -915,6 +972,21 @@ export default class ModPage extends View {
 							style: { marginTop: theme.space.xl },
 							append: [
 								'The index knows no way to support its author. ',
+								...(funded.length > 0
+									? [
+											`${count(funded.length)} of its contributors ${funded.length === 1 ? 'takes' : 'take'} support: `,
+											new Link({
+												href: `${repositoryUrl(entry)}/graphs/contributors`,
+												textContent: funded.length === 1 ? 'see who' : 'see who they are',
+												onPointerPress: event => {
+													event.preventDefault();
+													tabs.options.selected = 'contributors';
+													tabs.elem.scrollIntoView({ behavior: 'smooth' });
+												},
+											}),
+											'. ',
+										]
+									: []),
 								new Link({ href: authorsPath('funding'), textContent: 'Is it yours? Here is how to add one.' }),
 							],
 						}),

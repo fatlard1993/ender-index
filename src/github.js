@@ -217,6 +217,9 @@ export const filesOf = async fullName =>
 		.filter(item => item.type === 'blob')
 		.map(item => item.path);
 
+/** A repository's contributors, the most commits first, as `keep` trims them: it is kept and asked about conditionally. */
+export const contributors = (fullName, keep) => request(`/repos/${fullName}/contributors?per_page=100`, keep);
+
 /**
  * POST a GraphQL query, whose rate limit is counted apart from the REST one the crawl spends. A repository that is not
  * there answers null beside a NOT_FOUND error, which is an answer; any other error is not.

@@ -35,6 +35,8 @@ import {
 	askedCount,
 	askedUrl,
 	hasAsked,
+	contributorSupportOf,
+	shareOf,
 } from '../client/search';
 
 const entry = (extra = {}) => ({
@@ -313,6 +315,29 @@ describe('a mod page', () => {
 		expect(fileSize(51234)).toBe('50 KB');
 		expect(fileSize(3 * 1024 * 1024)).toBe('3.0 MB');
 		expect(fileSize(10)).toBe('1 KB');
+	});
+});
+
+describe("a mod's contributors", () => {
+	test('each have their part of its commits as a whole percent, and under one as such', () => {
+		expect(shareOf(1329, 2542)).toBe('52%');
+		expect(shareOf(3, 2542)).toBe('<1%');
+		expect(shareOf(0, 0)).toBe('<1%');
+	});
+
+	test('name their support by where it leads, and whose page it is when it is not theirs', () => {
+		expect(
+			contributorSupportOf({
+				login: 'TelepathicGrunt',
+				funding: [
+					{ platform: 'github', url: 'https://github.com/sponsors/neoforged' },
+					{ platform: 'ko_fi', url: 'https://ko-fi.com/telepathicgrunt' },
+				],
+			}),
+		).toEqual([
+			{ url: 'https://github.com/sponsors/neoforged', label: 'GitHub Sponsors: neoforged' },
+			{ url: 'https://ko-fi.com/telepathicgrunt', label: 'Ko-fi' },
+		]);
 	});
 });
 

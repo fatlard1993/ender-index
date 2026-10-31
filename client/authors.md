@@ -41,6 +41,8 @@ custom: ['https://example.com/support']
 
 A FUNDING.yml is read again weekly, a jar's links with the release, and Modrinth's donation links nightly.
 
+**If you contribute to mods on GitHub**, a mod's page lists its contributors, each with their part of its commits and how they take support: the FUNDING.yml in the `.github` repository on your account, your GitHub Sponsors listing, or your profile's website when it is a support site such as Ko-fi. These are read again weekly too.
+
 ## Being found
 
 Every night the crawl looks for new mods. On GitHub it finds them by the metadata a loader keeps in source, searching a share of GitHub each night, so a new mod can take a few nights to turn up: `fabric.mod.json` or `quilt.mod.json` under `src/main/resources`, `mods.toml` or `neoforge.mods.toml` under `META-INF`. On GitHub, Codeberg and GitLab a topic finds them too: `minecraft-mod`, `fabric-mod`, `fabricmc`, `forge-mod`, `neoforge`, `neoforge-mod` or `quilt-mod`. A Modrinth project that links its source repository leads there as well, and so does a modpack the index lists that downloads a mod's jar from its releases. Once found, a mod's releases are read again by the nightly crawl.

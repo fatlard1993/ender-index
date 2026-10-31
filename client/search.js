@@ -1,5 +1,6 @@
 import { HOSTS, fit, ownerOf } from 'ender-launcher/rank';
 import { specFor } from 'ender-launcher/spec';
+import { supportOf } from 'ender-launcher/support';
 
 export const INDEX = 'https://raw.githubusercontent.com/fatlard1993/ender-index/main/data';
 
@@ -256,7 +257,7 @@ export const aboutOf = entry => {
 	return undefined;
 };
 
-export { supportOf } from 'ender-launcher/support';
+export { supportOf };
 
 export const titleOf = entry =>
 	[...new Set((entry.latest?.mods ?? []).map(mod => mod.name ?? mod.id))].join(', ') || entry.repo;
@@ -526,6 +527,26 @@ export const askedCount = (interest, notices, entry, kind) => {
 		...(note?.issue && note.closed && !note.draft ? { closed: { on: note.closed, url: note.issue.url } } : {}),
 	};
 };
+
+/** A contributor's part of a repository's commits, as a whole percent, and under one as such. */
+export const shareOf = (commits, total) => {
+	const percent = total > 0 ? (commits / total) * 100 : 0;
+
+	return percent < 1 ? '<1%' : `${Math.round(percent)}%`;
+};
+
+/**
+ * How a contributor takes support, each named for where it leads. A page not named for them also says whose it is, as
+ * when an account's FUNDING.yml sends its support to a project.
+ */
+export const contributorSupportOf = person =>
+	supportOf(person).map(link => {
+		const handle = new URL(link.url).pathname.split('/').filter(Boolean).at(-1);
+
+		return handle && !link.url.toLowerCase().includes(person.login.toLowerCase())
+			? { ...link, label: `${link.label}: ${handle}` }
+			: link;
+	});
 
 /** Whether the index has counted this player asking this of a mod. */
 export const hasAsked = (interest, entry, kind, login) =>

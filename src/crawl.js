@@ -13,6 +13,7 @@ import * as gitlab from './gitlab';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
 import { GIST_LINE, buildPacks, crawlPack, packDemand, packPage } from './packs';
 import { buildSearch, latestAssets, themesOf } from './search';
+import { contributorsOf } from './contributors';
 import { DONATIONS, FUNDING_PATHS, parseFunding, supportLinks } from './funding';
 import { rawUrl } from './raw';
 import { readmeSummary } from './summary';
@@ -477,7 +478,7 @@ export const picturesOf = async ({ host, name, recorded, now }) => {
 	}
 };
 
-const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners }) => {
+const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, people }) => {
 	const { host, name } = parseLine(line);
 	const path = recordPath({ host, name });
 	const record = await readJson(path);
@@ -521,6 +522,7 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners }) =
 			readmeSummary: await readmeSummaryOf({ host, name, repo, recorded, readme }),
 			...(await fundingOf({ host, name: repo.full_name ?? name, recorded, now, owners })),
 			...(await picturesOf({ host, name: repo.full_name ?? name, recorded, now })),
+			...(host === 'github' ? await contributorsOf({ name: repo.full_name ?? name, recorded, now, people }) : {}),
 			history: HISTORY,
 		});
 	}
@@ -792,6 +794,7 @@ export const crawl = async ({ only } = {}) => {
 	const gameVersions = await releasedGameVersions();
 	// An owner's FUNDING.yml stands for each of their repositories without one, so it is read once a crawl
 	const owners = new Map();
+	const people = new Map();
 	// A crawl the runner kills commits nothing, so it stops itself while there is time to commit.
 	const minutes = Number(process.env.CRAWL_MINUTES ?? Infinity);
 	const deadline = Date.now() + minutes * 60_000;
@@ -821,7 +824,7 @@ export const crawl = async ({ only } = {}) => {
 			parallel,
 			beforeWait: () => github.saveCache(),
 			crawlRepo: async fullName => {
-				for (const event of await crawlOne(fullName, { now, inspect, gameVersions, scratch, owners })) {
+				for (const event of await crawlOne(fullName, { now, inspect, gameVersions, scratch, owners, people })) {
 					console.log(
 						[event.type.padEnd(7), event.repo, event.tag, event.asset, event.error && `:: ${event.error}`]
 							.filter(Boolean)
