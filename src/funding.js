@@ -54,7 +54,7 @@ export const parseFunding = yaml => {
 	const links = [];
 	let listing;
 
-	for (const line of yaml.split('\n')) {
+	for (const line of yaml.split(/\r?\n/)) {
 		const text = line.replace(/\s+#.*$/, '').replace(/^#.*$/, '');
 		const item = text.match(/^\s+-\s*(.+)$/);
 		const pair = text.match(/^([a-z_]+)\s*:\s*(.*)$/i);

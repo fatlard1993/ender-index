@@ -37,6 +37,13 @@ describe('a FUNDING.yml', () => {
 		expect(parseFunding(yaml)).toEqual([]);
 	});
 
+	test('is read the same with Windows line endings', () => {
+		expect(parseFunding('github: neoforged\r\nko_fi:\r\n  - maker\r\n')).toEqual([
+			{ platform: 'github', url: 'https://github.com/sponsors/neoforged' },
+			{ platform: 'ko_fi', url: 'https://ko-fi.com/maker' },
+		]);
+	});
+
 	test('names a link once however often the file repeats it', () => {
 		expect(parseFunding('github: maker\ngithub: [maker]')).toEqual([
 			{ platform: 'github', url: 'https://github.com/sponsors/maker' },
