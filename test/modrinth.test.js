@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 
-import { donationsOf, lineOf } from '../src/modrinth';
+import { renamedLine } from '../src/crawl';
+import { donationsOf, lineOf, renamedSources } from '../src/modrinth';
 
 describe("a Modrinth project's source link", () => {
 	test('names the repository it is in, on each host the index crawls', () => {
@@ -45,5 +46,31 @@ describe("a Modrinth project's donation links", () => {
 
 		expect(donations.has('org/bare')).toBe(false);
 		expect(donations.has('quiet/bare')).toBe(false);
+	});
+});
+
+describe('a renamed repository', () => {
+	test('is named as its host now names it, through each rename, and a loop ends', () => {
+		const renames = { 'a/old': 'a/older-new', 'a/older-new': 'a/new', 'b/x': 'b/y', 'b/y': 'b/x' };
+
+		expect(renamedLine(renames, 'a/old')).toBe('a/new');
+		expect(renamedLine(renames, 'c/same')).toBe('c/same');
+		expect(renamedLine(renames, 'b/x')).toBe('b/y');
+	});
+
+	test("carries a Modrinth project's slug, id and donation links to its new name", () => {
+		const renamed = line => renamedLine({ 'Fuzss/forgeconfigapiport': 'Fuzss/forge-config-api-port' }, line);
+		const found = renamedSources(
+			{
+				sources: new Map([['forge-config-api-port', 'Fuzss/forgeconfigapiport']]),
+				ids: new Map([['ohNO6lps', 'Fuzss/forgeconfigapiport']]),
+				donations: new Map([['Fuzss/forgeconfigapiport', [{ platform: 'patreon', url: 'https://www.patreon.com/x' }]]]),
+			},
+			renamed,
+		);
+
+		expect(found.sources.get('forge-config-api-port')).toBe('Fuzss/forge-config-api-port');
+		expect(found.ids.get('ohNO6lps')).toBe('Fuzss/forge-config-api-port');
+		expect([...found.donations.keys()]).toEqual(['Fuzss/forge-config-api-port']);
 	});
 });

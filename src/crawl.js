@@ -130,6 +130,27 @@ export const parseLine = line => {
 	return { host, name: separator === -1 ? line : line.slice(separator + 1) };
 };
 
+/** The repos.txt line of a repository on its host. */
+export const lineFor = ({ host, name }) => (host === 'github' ? name : `${host}:${name}`);
+
+/** Where the crawl keeps each line it found renamed, to the line its host now names it by. */
+export const RENAMES = 'renames.json';
+
+export const readRenames = () => readJson(join(DATA, RENAMES), {});
+
+/** A line as its host now names it, following renames one after another. */
+export const renamedLine = (renames, line) => {
+	const seen = new Set([line]);
+	let current = line;
+
+	while (renames[current] !== undefined && !seen.has(renames[current])) {
+		current = renames[current];
+		seen.add(current);
+	}
+
+	return current;
+};
+
 export const recordPath = ({ host, name }) => join(DATA, 'mods', DIRECTORIES[host], `${name}.json`);
 
 /**
@@ -478,7 +499,7 @@ export const picturesOf = async ({ host, name, recorded, now }) => {
 	}
 };
 
-const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, people }) => {
+const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, people, renames }) => {
 	const { host, name } = parseLine(line);
 	const path = recordPath({ host, name });
 	const record = await readJson(path);
@@ -526,7 +547,10 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, peo
 			history: HISTORY,
 		});
 	}
-	if (canonical !== path) await rm(path, { force: true });
+	if (canonical !== path) {
+		renames.set(line, lineFor({ host, name: repo.full_name }));
+		await rm(path, { force: true });
+	}
 
 	return result.events;
 };
@@ -795,6 +819,7 @@ export const crawl = async ({ only } = {}) => {
 	// An owner's FUNDING.yml stands for each of their repositories without one, so it is read once a crawl
 	const owners = new Map();
 	const people = new Map();
+	const renames = new Map();
 	// A crawl the runner kills commits nothing, so it stops itself while there is time to commit.
 	const minutes = Number(process.env.CRAWL_MINUTES ?? Infinity);
 	const deadline = Date.now() + minutes * 60_000;
@@ -824,7 +849,15 @@ export const crawl = async ({ only } = {}) => {
 			parallel,
 			beforeWait: () => github.saveCache(),
 			crawlRepo: async fullName => {
-				for (const event of await crawlOne(fullName, { now, inspect, gameVersions, scratch, owners, people })) {
+				for (const event of await crawlOne(fullName, {
+					now,
+					inspect,
+					gameVersions,
+					scratch,
+					owners,
+					people,
+					renames,
+				})) {
 					console.log(
 						[event.type.padEnd(7), event.repo, event.tag, event.asset, event.error && `:: ${event.error}`]
 							.filter(Boolean)
@@ -841,6 +874,16 @@ export const crawl = async ({ only } = {}) => {
 	for (const line of [...outcome.stopped, ...packOutcome.stopped]) console.log(line);
 
 	console.log(spendingLine(github.spent()));
+
+	if (renames.size > 0) {
+		const known = { ...(await readRenames()), ...Object.fromEntries(renames) };
+
+		await writeJson(
+			join(DATA, RENAMES),
+			Object.fromEntries(Object.entries(known).sort(([a], [b]) => a.localeCompare(b))),
+		);
+		console.log(`${renames.size === 1 ? 'One repository was' : `${renames.size} repositories were`} found renamed`);
+	}
 
 	const { records, packs } = await writeLists();
 

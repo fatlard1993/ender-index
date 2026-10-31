@@ -126,6 +126,13 @@ export const donationsOf = projects => {
 	return donations;
 };
 
+/** Modrinth's lines as their hosts now name them, by the renames the crawl found. */
+export const renamedSources = ({ sources, ids, donations }, renamed) => ({
+	sources: new Map([...sources].map(([slug, line]) => [slug, renamed(line)])),
+	ids: new Map([...ids].map(([id, line]) => [id, renamed(line)])),
+	donations: new Map([...donations].map(([line, links]) => [renamed(line), links])),
+});
+
 /**
  * Every Modrinth project of a type whose source is on a host the index crawls, by its slug and by its id, each to the
  * repos.txt line of its source, and the donation links each line's project, or its owner, gives; read page by page at

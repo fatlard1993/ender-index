@@ -7,7 +7,9 @@ import {
 	readModrinthRepos,
 	readNoJars,
 	readPacks,
+	readRenames,
 	readRepos,
+	renamedLine,
 	repositoryKey,
 	uniqueRepositories,
 } from './crawl';
@@ -16,7 +18,7 @@ import { RateLimited } from './fetch';
 import { DONATIONS, donationsByMod } from './funding';
 import { searchCode, searchRepositories } from './github';
 import * as gitlab from './gitlab';
-import { modrinthSources } from './modrinth';
+import { modrinthSources, renamedSources } from './modrinth';
 import { releasedByPacks } from './packs';
 import { triage, writeNoJars } from './triage';
 
@@ -258,8 +260,10 @@ export const discover = async () => {
 	try {
 		console.log('Reading the source links of every Modrinth mod and modpack; this takes about ten minutes');
 
-		const mods = await modrinthSources();
-		const modpacks = await modrinthSources({ type: 'modpack' });
+		const renames = await readRenames();
+		const renamed = line => renamedLine(renames, line);
+		const mods = renamedSources(await modrinthSources(), renamed);
+		const modpacks = renamedSources(await modrinthSources({ type: 'modpack' }), renamed);
 		const own = new Set(merged.map(repositoryKey));
 		const ownPacks = new Set(packs.map(repositoryKey));
 		const asJson = map =>

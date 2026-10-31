@@ -39,6 +39,8 @@ custom: ['https://example.com/support']
 
 **Your Modrinth project's donation links**, when it links this repository as its source: the ones set under Links in the project's settings. A project with none takes those you give on your other Modrinth projects, so one set of links covers every mod of yours there.
 
+A Modrinth project that links the repository by an old name still counts once the crawl has followed GitHub's redirect to the new one.
+
 A FUNDING.yml is read again weekly, a jar's links with the release, and Modrinth's donation links nightly.
 
 **If you contribute to mods on GitHub**, a mod's page lists its contributors, each with their part of its commits and how they take support: the FUNDING.yml in the `.github` repository on your account, your GitHub Sponsors listing, or your profile's website when it is a support site such as Ko-fi. These are read again weekly too.
