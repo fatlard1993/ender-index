@@ -661,6 +661,48 @@ const downloadsPanel = (entry, record) => {
 	};
 };
 
+/** Where a fork came from: the original's page here when the index lists it, otherwise on its host. */
+const forkedFrom = entry => {
+	const original = { ...entry, repo: entry.forkOf.repo };
+
+	return new Meta({
+		tag: 'span',
+		append: [
+			'a fork of ',
+			new Link(
+				entry.forkOf.listed
+					? { href: `#${modPath(original)}`, textContent: original.repo }
+					: { href: repositoryUrl(original), target: '_blank', textContent: original.repo },
+			),
+		],
+	});
+};
+
+/** How the author of the project a fork came from takes support, said as theirs, not the fork's. */
+const originalSupport = entry => [
+	new SectionLabel({
+		level: 2,
+		textContent: `Support the author of ${entry.forkOf.repo}`,
+		style: { marginTop: theme.space.xl },
+	}),
+	new Row({
+		append: supportOf(entry.forkOf).map(
+			({ url, label }) =>
+				new Link({
+					variant: 'raised',
+					href: url,
+					target: '_blank',
+					attributes: { rel: 'noopener noreferrer' },
+					textContent: label,
+				}),
+		),
+	}),
+	new Meta({
+		tag: 'p',
+		textContent: `It is a fork of ${entry.forkOf.repo}, whose author made what it was forked from.`,
+	}),
+];
+
 /** Who made a mod, the most commits first: each with their part of its commits, and how they take support. */
 const contributorsPanel = (entry, { commits, more, people }) => [
 	new Meta({
@@ -881,6 +923,7 @@ export default class ModPage extends View {
 										textContent: `Every mod of ${owner}'s`,
 										tooltip: `Search the index for ${owner}'s mods alone`,
 									}),
+									...(entry.forkOf ? [forkedFrom(entry)] : []),
 									...(record.license ? [new Meta({ textContent: record.license })] : []),
 									...(author ? [new Meta({ textContent: `by the author of ${author}` })] : []),
 								],
@@ -1001,6 +1044,7 @@ export default class ModPage extends View {
 							],
 						}),
 					]),
+			...(entry.forkOf?.funding ? originalSupport(entry) : []),
 			tabs,
 			...Object.values(panels),
 		]);

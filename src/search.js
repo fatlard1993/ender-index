@@ -101,6 +101,7 @@ export const summarize = (record, donations = []) => {
 		funding: fundingOf(record, assets, donations),
 		stars: record.stars,
 		archived: record.archived,
+		...(record.forkOf ? { forkOf: { repo: record.forkOf } } : {}),
 		license: record.license,
 		pushed: record.pushed,
 		downloads: downloadsOf(record),
@@ -273,6 +274,17 @@ export const themesOf = records => {
 	);
 };
 
+/**
+ * The project a fork was forked from, with how its author takes support: from its own entry when the index lists it,
+ * or its Modrinth project's links when it does not.
+ */
+const originalOf = (fork, byRepo, donations) => {
+	const original = byRepo.get(`${fork.host}:${fork.forkOf.repo}`.toLowerCase());
+	const funding = original?.funding ?? donationsOf(donations, { host: fork.host, repo: fork.forkOf.repo });
+
+	return { repo: fork.forkOf.repo, ...(original ? { listed: true } : {}), ...(funding.length > 0 ? { funding } : {}) };
+};
+
 export const buildSearch = (records, themes = themesOf(records), sources = {}, donations = {}) => {
 	const listed = records.filter(record => record.gone === undefined);
 	const entries = listed
@@ -280,7 +292,11 @@ export const buildSearch = (records, themes = themesOf(records), sources = {}, d
 		.filter(entry => entry.latest !== undefined)
 		.sort((a, b) => a.repo.localeCompare(b.repo));
 
+	const byRepo = new Map(entries.map(entry => [`${entry.host}:${entry.repo}`.toLowerCase(), entry]));
+
 	for (const entry of entries) {
+		if (entry.forkOf) entry.forkOf = originalOf(entry, byRepo, donations);
+
 		entry.shares = sharing(entry, entries);
 		entry.author = authorOf(entry, entries);
 

@@ -97,6 +97,40 @@ describe('the search file', () => {
 	});
 });
 
+describe('a fork', () => {
+	const releases = [{ tag: '1.0', prerelease: false, assets: [asset()] }];
+
+	test("names its original, with its author's support from the original's entry when the index lists it", () => {
+		const entries = buildSearch([
+			record('fork/mod', releases, { forkOf: 'Origin/Mod' }),
+			record('origin/mod', releases, { funding: [{ platform: 'ko_fi', url: 'https://ko-fi.com/origin' }] }),
+		]);
+
+		expect(entries.find(entry => entry.repo === 'fork/mod').forkOf).toEqual({
+			repo: 'Origin/Mod',
+			listed: true,
+			funding: [{ platform: 'ko_fi', url: 'https://ko-fi.com/origin', from: 'repository' }],
+		});
+		expect(entries.find(entry => entry.repo === 'origin/mod').forkOf).toBeUndefined();
+	});
+
+	test("takes the original's Modrinth links when the index does not list it, and names it alone when there are none", () => {
+		const patreon = { platform: 'patreon', url: 'https://patreon.com/mcrcortex' };
+		const [listed] = buildSearch(
+			[record('drouarb/nvidium', releases, { forkOf: 'MCRcortex/nvidium' })],
+			undefined,
+			{},
+			{
+				'github:mcrcortex/nvidium': [patreon],
+			},
+		);
+		const [bare] = buildSearch([record('a/fork', releases, { forkOf: 'b/original' })]);
+
+		expect(listed.forkOf).toEqual({ repo: 'MCRcortex/nvidium', funding: [patreon] });
+		expect(bare.forkOf).toEqual({ repo: 'b/original' });
+	});
+});
+
 describe('discovery', () => {
 	test('counts the downloads its hosts report for every jar read, and nothing for a host that reports none', () => {
 		const [counted, uncounted] = buildSearch([

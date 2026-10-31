@@ -94,7 +94,8 @@ const note = (path, response) => {
 
 /**
  * GET an API path. With `keep`, the response is cached as `keep` trims it and asked for again
- * conditionally, and an unchanged answer comes from the cache.
+ * conditionally, and an unchanged answer comes from the cache; one `stale` finds trimmed of a field kept since is asked
+ * for in full.
  */
 /**
  * Requests left untouched for whoever the token belongs to: a personal token's hourly allowance is all of its owner's
@@ -102,7 +103,7 @@ const note = (path, response) => {
  */
 const reserve = () => Number(process.env.CRAWL_RESERVE ?? 0);
 
-export const request = async (path, keep) => {
+export const request = async (path, keep, stale = () => false) => {
 	const { remaining, resetAt } = spending;
 
 	if (remaining !== undefined && remaining <= reserve() && Date.now() < resetAt && !path.startsWith('/search/')) {
@@ -112,7 +113,8 @@ export const request = async (path, keep) => {
 		);
 	}
 
-	const cached = keep && (await cache())[path];
+	const known = keep && (await cache())[path];
+	const cached = known && !stale(known.body) ? known : undefined;
 	const response = await fetchSteady(`${API}${path}`, {
 		headers: {
 			accept: 'application/vnd.github+json',
@@ -163,6 +165,8 @@ const repositoryFields = repo => ({
 	license: repo.license && { spdx_id: repo.license.spdx_id },
 	created_at: repo.created_at,
 	pushed_at: repo.pushed_at,
+	parent: repo.parent && { full_name: repo.parent.full_name },
+	fork: repo.fork,
 });
 
 const releaseFields = list =>
@@ -183,7 +187,7 @@ const releaseFields = list =>
 
 export const repositoryPath = fullName => `/repos/${fullName}`;
 
-export const repository = fullName => request(repositoryPath(fullName), repositoryFields);
+export const repository = fullName => request(repositoryPath(fullName), repositoryFields, kept => !('fork' in kept));
 
 /** The first page is kept and asked about conditionally each crawl; a deeper page is read once, so it is not kept. */
 export const releases = async (fullName, page = 1) =>

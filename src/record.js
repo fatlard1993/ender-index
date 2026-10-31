@@ -64,6 +64,7 @@ const about = (repo, host) => ({
 	license: repo.license?.spdx_id ?? undefined,
 	created: repo.created_at,
 	pushed: repo.pushed_at,
+	forkOf: repo.parent?.full_name,
 });
 
 /** The most of a release's notes kept: a changelog generated from every commit can run to tens of thousands. */
