@@ -254,12 +254,14 @@ const noteLine = notice => {
 };
 
 /**
- * Count every open ask on the index, then post or update the notice of each mod and ask whose count, or place, its
- * notice does not show yet, and learn which of the rest their authors closed. Answers the counts, the notices, what to reply to each ask, and the notices that failed.
+ * Count every open ask on the index; then, with `post`, post or update the notice of each mod and ask whose count, or
+ * place, its notice does not show yet, and learn which of the rest their authors closed. Answers the counts, the
+ * notices, what to reply to each ask, and the notices that failed.
  */
 export const processAsks = async ({
 	indexApi,
 	noticeApi = indexApi,
+	post = true,
 	live = false,
 	interest: counted = {},
 	notices: kept = {},
@@ -285,7 +287,7 @@ export const processAsks = async ({
 
 	const failures = [];
 
-	for (const [key, kinds] of Object.entries(interest)) {
+	for (const [key, kinds] of post ? Object.entries(interest) : []) {
 		for (const [kind, logins] of Object.entries(kinds)) {
 			const recorded = notices[key]?.[kind];
 			const target = live && key.startsWith('github:') ? key.slice('github:'.length) : INDEX_REPOSITORY;
@@ -357,15 +359,16 @@ export const reply = async ({ indexApi, replies }) => {
 };
 
 /**
- * `count` counts the open asks and posts their notices, writing the counts and the replies, and exits 2 when a notice
- * failed; `reply` answers and closes the asks, once the counts are kept. NOTICES=live posts notices on the mods' own
- * repositories, with NOTICE_TOKEN.
+ * `count` counts the open asks, writing the counts and the replies, and posts their notices when NOTICES asks for them,
+ * exiting 2 when one failed; `reply` answers and closes the asks, once the counts are kept. NOTICES=draft posts each
+ * notice on the index as a draft, NOTICES=live on the mod's own repository with NOTICE_TOKEN; unset, none is posted.
  */
 if (import.meta.main) {
 	const interestPath = join(DATA, INTEREST);
 	const noticesPath = join(DATA, NOTICES);
 	const indexApi = githubApi(process.env.GH_TOKEN);
 	const live = process.env.NOTICES === 'live';
+	const post = live || process.env.NOTICES === 'draft';
 
 	if (process.argv[2] === 'reply') {
 		await reply({ indexApi, replies: await Bun.file(process.env.INTEREST_REPLIES).json() });
@@ -375,6 +378,7 @@ if (import.meta.main) {
 	const result = await processAsks({
 		indexApi,
 		noticeApi: live ? githubApi(process.env.NOTICE_TOKEN) : indexApi,
+		post,
 		live,
 		interest: await readJson(interestPath, {}),
 		notices: await readJson(noticesPath, {}),
@@ -385,7 +389,9 @@ if (import.meta.main) {
 	await writeJson(noticesPath, result.notices);
 	await Bun.write(process.env.INTEREST_REPLIES, JSON.stringify(result.replies));
 
-	console.log(`Read ${result.replies.length} asks; ${Object.keys(result.notices).length} mods have a notice`);
+	console.log(
+		`Read ${result.replies.length} asks; ${post ? `${Object.keys(result.notices).length} mods have a notice` : 'notices are off, so none is posted'}`,
+	);
 	for (const failure of result.failures) console.error(`The notice for ${failure}`);
 	process.exit(result.failures.length > 0 ? 2 : 0);
 }

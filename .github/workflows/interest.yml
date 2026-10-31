@@ -44,8 +44,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           INTEREST_REPLIES: ${{ runner.temp }}/replies.json
-          # Until this is live, a notice is posted here as a draft to read, never on the author's repository
-          NOTICES: ${{ vars.NOTICES || 'draft' }}
+          # Off unless the NOTICES repository variable says draft (a notice posted here) or live (on the author's
+          # repository): the index counts asks, and its owner reaches out when enough players have asked
+          NOTICES: ${{ vars.NOTICES }}
           NOTICE_TOKEN: ${{ secrets.NOTICE_TOKEN }}
         run: |
           gh label create notice-draft --color BFD4F2 --description 'A notice to an author, posted here to read first' 2>/dev/null || true

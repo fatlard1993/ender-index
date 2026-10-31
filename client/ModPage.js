@@ -1039,7 +1039,7 @@ export default class ModPage extends View {
 									variant: 'raised',
 									textContent: 'I would pay its author',
 									tooltip:
-										'Counted once per player on GitHub; the index tells its author, and keeps the count on its note to them.',
+										'Counted once per player on GitHub, and shown here; when enough players have asked, the index reaches out to its author.',
 								}),
 							],
 						}),

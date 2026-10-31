@@ -183,6 +183,18 @@ const notices = github =>
 	github.repos[INDEX].filter(issue => issue.labels.some(label => label.name === 'notice-draft'));
 
 describe('a notice to an author', () => {
+	test('is not posted when notices are off: the ask is counted and answered, and nothing else is written', async () => {
+		const github = fakeGithub({ issues: { [INDEX]: [askIssue(2, 'ann')] } });
+		const result = await processing(github, {}, { post: false });
+
+		expect(notices(github)).toEqual([]);
+		expect(result.notices).toEqual({});
+		expect(result.interest).toEqual({ 'github:a/boats': { fund: ['ann'] } });
+		expect(result.replies).toEqual([
+			{ number: 2, counted: true, say: 'Counted: 1 player would pay its author of Big Boats.' },
+		]);
+	});
+
 	test('is posted on the first ask, as a draft on the index under a line saying where it would go live', async () => {
 		const github = fakeGithub({ issues: { [INDEX]: [askIssue(2, 'ann')] } });
 		const result = await processing(github);
