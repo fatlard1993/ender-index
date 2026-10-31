@@ -256,7 +256,7 @@ export const discover = async () => {
 	// the hosts themselves, which comes first; a mod's slug and id are kept with its source, so a mod needed but not
 	// indexed can be pointed at its source, and a pack's Modrinth mods matched to the index.
 	try {
-		console.log('Reading the source links of every Modrinth mod and modpack; this takes about seven minutes');
+		console.log('Reading the source links of every Modrinth mod and modpack; this takes about ten minutes');
 
 		const mods = await modrinthSources();
 		const modpacks = await modrinthSources({ type: 'modpack' });

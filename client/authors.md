@@ -37,7 +37,7 @@ custom: ['https://example.com/support']
 }
 ```
 
-**Your Modrinth project's donation links**, when it links this repository as its source: the ones set under Links in the project's settings.
+**Your Modrinth project's donation links**, when it links this repository as its source: the ones set under Links in the project's settings. A project with none takes those you give on your other Modrinth projects, so one set of links covers every mod of yours there.
 
 A FUNDING.yml is read again weekly, a jar's links with the release, and Modrinth's donation links nightly.
 

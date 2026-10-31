@@ -94,15 +94,47 @@ export const lineOf = url => {
 	return `${HOST_LINES[host]}${path.join('/')}`;
 };
 
+/** The member who owns a Modrinth project, when a person does rather than an organization. */
+const ownerOf = members => members.find(member => member.accepted && member.role === 'Owner')?.user.id;
+
+/**
+ * Each line's donation links: its own project's, or when it gives none, those its owner gives on their other projects,
+ * marked as from them. A project an organization owns stands for no one person.
+ */
+export const donationsOf = projects => {
+	const byOwner = new Map();
+
+	for (const { owner, links } of projects)
+		if (owner && links.length > 0)
+			byOwner.set(owner, [
+				...(byOwner.get(owner) ?? []),
+				...links.filter(link => !byOwner.get(owner)?.some(({ url }) => url === link.url)),
+			]);
+
+	const donations = new Map();
+
+	for (const { line, owner, links } of projects) {
+		if (!line) continue;
+		if (links.length > 0) donations.set(line, links);
+		else if (byOwner.has(owner))
+			donations.set(
+				line,
+				byOwner.get(owner).map(link => ({ ...link, from: 'modrinth-author' })),
+			);
+	}
+
+	return donations;
+};
+
 /**
  * Every Modrinth project of a type whose source is on a host the index crawls, by its slug and by its id, each to the
- * repos.txt line of its source, and the donation links each line's project gives; read page by page at the pace
- * Modrinth allows. Takes about six minutes for its mods.
+ * repos.txt line of its source, and the donation links each line's project, or its owner, gives; read page by page at
+ * the pace Modrinth allows. Takes about eight minutes for its mods.
  */
 export const modrinthSources = async ({ type = 'mod', pause = PAUSE, pages = Infinity } = {}) => {
 	const sources = new Map();
 	const ids = new Map();
-	const donations = new Map();
+	const projects = [];
 	const facets = encodeURIComponent(JSON.stringify([[`project_type:${type}`]]));
 
 	for (let page = 0, total = Infinity; page * PAGE < total && page < pages; ++page) {
@@ -115,21 +147,34 @@ export const modrinthSources = async ({ type = 'mod', pause = PAUSE, pages = Inf
 
 		if (asked.length === 0) break;
 
-		for (const project of await get(`/projects?ids=${encodeURIComponent(JSON.stringify(asked))}`)) {
+		const described = await get(`/projects?ids=${encodeURIComponent(JSON.stringify(asked))}`);
+
+		await Bun.sleep(pause);
+
+		const teams = described.filter(project => !project.organization).map(project => project.team);
+		const owners = new Map(
+			(teams.length > 0 ? await get(`/teams?ids=${encodeURIComponent(JSON.stringify(teams))}`) : [])
+				.filter(members => members.length > 0)
+				.map(members => [members[0].team_id, ownerOf(members)]),
+		);
+
+		for (const project of described) {
 			const line = project.source_url && lineOf(project.source_url);
 
-			if (!line) continue;
+			if (line) {
+				sources.set(project.slug, line);
+				ids.set(project.id, line);
+			}
 
-			sources.set(project.slug, line);
-			ids.set(project.id, line);
-
-			const links = donationLinks((project.donation_urls ?? []).map(donation => donation.url));
-
-			if (links.length > 0) donations.set(line, links);
+			projects.push({
+				line,
+				owner: owners.get(project.team),
+				links: donationLinks((project.donation_urls ?? []).map(donation => donation.url)),
+			});
 		}
 
 		await Bun.sleep(pause);
 	}
 
-	return { sources, ids, donations };
+	return { sources, ids, donations: donationsOf(projects) };
 };

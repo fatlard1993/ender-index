@@ -75,14 +75,14 @@ const summaryOf = record => {
 
 /**
  * How its author takes support: their FUNDING.yml first, then what the listed release's jars link to, then the
- * donation links of its Modrinth project, each once.
+ * donation links of its Modrinth project, or of its owner's other projects there, each once.
  */
 const fundingOf = (record, assets, donations) => {
 	const seen = new Set();
 	const links = [
 		...(record.funding ?? []).map(link => ({ ...link, from: 'repository' })),
 		...assets.flatMap(asset => asset.funding ?? []).map(link => ({ ...link, from: 'jar' })),
-		...donations.map(link => ({ ...link, from: 'modrinth' })),
+		...donations.map(link => ({ from: 'modrinth', ...link })),
 	].filter(({ url }) => !seen.has(url) && seen.add(url));
 
 	return links.length > 0 ? links : undefined;

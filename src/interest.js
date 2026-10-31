@@ -53,7 +53,7 @@ export const KINDS = {
 			title: `${players(count)} would like to support ${title}`,
 			body: `Hi! This is the [ender index](${SITE}/), which lists Minecraft mods from the repositories their authors keep, and installs them with the ender launcher.
 
-${players(count, { opening: true })} looking at ${title} on the index asked how they could pay you for it, and the index found no way to: no FUNDING.yml here or on your account, no support link in the mod's metadata, and no donation link on a Modrinth project linking here.
+${players(count, { opening: true })} looking at ${title} on the index asked how they could pay you for it, and the index found no way to: no FUNDING.yml here or on your account, no support link in the mod's metadata, and no donation link on a Modrinth project linking here or on your others there.
 
 If you'd like to take support, any one of those is enough, and the index then shows it on the mod's page and in \`ender support\`: [how to add one](${guide('funding')}).
 
