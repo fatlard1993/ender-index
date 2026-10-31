@@ -14,7 +14,15 @@ import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
 import { GIST_LINE, buildPacks, crawlPack, packDemand, packPage } from './packs';
 import { buildSearch, latestAssets, themesOf } from './search';
 import { contributorsOf } from './contributors';
-import { DONATIONS, FUNDING_PATHS, parseFunding, supportLinks } from './funding';
+import {
+	DONATIONS,
+	FUNDING_PATHS,
+	fundingLinksOf,
+	linksOf,
+	parseFunding,
+	readmeSupport,
+	supportLinks,
+} from './funding';
 import { rawUrl } from './raw';
 import { readmeSummary } from './summary';
 
@@ -402,6 +410,18 @@ const readmeOf = async ({ host, name, repo, recorded }) => {
  * For a repository that describes itself nowhere, its readme's first paragraph, read once and kept. A readme that does
  * not load leaves it unknown, to be read next crawl.
  */
+/** A repository's readme as text, fetched once however often it is asked for; empty when it has none or fails to load. */
+const readmeText = (host, name, readme) => {
+	let text;
+
+	return () =>
+		(text ??= readme
+			? fetchSteady(rawUrl(host, name, readme), { headers: HOSTS[host].requestHeaders?.() })
+					.then(response => (response.ok ? response.text() : ''))
+					.catch(() => '')
+			: Promise.resolve(''));
+};
+
 const readmeSummaryOf = async ({ host, name, repo, recorded, readme }) => {
 	if (repo.description || !readme) return undefined;
 	if (recorded?.readmeSummary !== undefined) return recorded.readmeSummary;
@@ -437,22 +457,59 @@ const fundingFrom = async (host, name, paths) => {
 };
 
 /**
- * How a repository's author takes support: its FUNDING.yml, or on GitHub its owner's, which GitHub shows for every
- * repository of theirs without one. Read again weekly; an answer that fails keeps what was known.
+ * How a GitHub account takes support across its repositories: the FUNDING.yml in its repository named `.github`, which
+ * GitHub shows for every repository of theirs without one, or the files of its other repositories, forks left out.
  */
-export const fundingOf = async ({ host, name, recorded, now, owners }) => {
+const ownerFunding = async (owner, ownerRepositories) => {
+	const shared = await fundingFrom('github', `${owner}/.github`, ['FUNDING.yml', '.github/FUNDING.yml']);
+
+	if (shared.length > 0) return shared;
+
+	return fundingLinksOf(await ownerRepositories(owner)).map(link => ({ ...link, from: 'owner-repositories' }));
+};
+
+/** Its author's own links in a readme: the owner's, or those of a contributor who made at least half its commits. */
+export const authorsInReadme = (links, owner, contributors) => {
+	const authors = [
+		owner,
+		...(contributors?.people ?? [])
+			.filter(person => person.commits * 2 >= contributors.commits)
+			.map(person => person.login),
+	];
+	const seen = new Set();
+
+	return authors
+		.flatMap(login => linksOf(links, login))
+		.filter(({ url }) => !seen.has(url) && seen.add(url))
+		.map(link => ({ ...link, from: 'readme' }));
+};
+
+/**
+ * How a repository's author takes support: its FUNDING.yml, then its readme's links to its author's own pages, then
+ * what its owner gives across their repositories, read once a crawl in `owners`. Read again weekly; an answer that
+ * fails keeps what was known.
+ */
+export const fundingOf = async ({
+	host,
+	name,
+	recorded,
+	now,
+	owners,
+	readme = async () => '',
+	contributors,
+	ownerRepositories = github.ownerRepositoryFunding,
+}) => {
 	const known = { funding: recorded?.funding, fundingChecked: recorded?.fundingChecked };
 
 	if (known.fundingChecked && Date.parse(now) - Date.parse(known.fundingChecked) < WEEK) return known;
 
 	try {
+		const owner = name.split('/')[0];
 		let funding = await fundingFrom(host, name, FUNDING_PATHS);
 
+		if (funding.length === 0) funding = authorsInReadme(readmeSupport(await readme()), owner, contributors);
 		if (funding.length === 0 && host === 'github') {
-			const owner = name.split('/')[0];
-
-			if (!owners.has(owner))
-				owners.set(owner, fundingFrom(host, `${owner}/.github`, ['FUNDING.yml', '.github/FUNDING.yml']));
+			if (!owners.has(owner)) owners.set(owner, ownerFunding(owner, ownerRepositories));
 			funding = await owners.get(owner);
 		}
 
@@ -536,14 +593,26 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, peo
 		await fillIcons(result.record, scratch);
 		await fillJars(result.record, scratch);
 		const readme = await readmeOf({ host, name, repo, recorded });
+		const current = repo.full_name ?? name;
+		const text = readmeText(host, current, readme);
+		const contributed =
+			host === 'github' ? await contributorsOf({ name: current, recorded, now, people, readme: text }) : {};
 
 		await writeJson(canonical, {
 			...result.record,
 			readme,
 			readmeSummary: await readmeSummaryOf({ host, name, repo, recorded, readme }),
-			...(await fundingOf({ host, name: repo.full_name ?? name, recorded, now, owners })),
-			...(await picturesOf({ host, name: repo.full_name ?? name, recorded, now })),
-			...(host === 'github' ? await contributorsOf({ name: repo.full_name ?? name, recorded, now, people }) : {}),
+			...(await fundingOf({
+				host,
+				name: current,
+				recorded,
+				now,
+				owners,
+				readme: text,
+				contributors: contributed.contributors,
+			})),
+			...(await picturesOf({ host, name: current, recorded, now })),
+			...contributed,
 			history: HISTORY,
 		});
 	}

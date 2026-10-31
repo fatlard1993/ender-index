@@ -127,3 +127,52 @@ export const donationLinks = addresses =>
  */
 export const supportLinks = links =>
 	links.map(link => ({ platform: platformOf(link), url: link.url })).filter(({ platform }) => platform !== undefined);
+
+/** The path segments a support site puts before a person's handle. */
+const HANDLE_PREFIXES = new Set(['c', 'cw', 'sponsors', 'u', 'r']);
+
+/** Whose page a support link leads to, as the site spells their handle. */
+export const handleOf = url => {
+	const segments = new URL(url).pathname.split('/').filter(Boolean);
+
+	return segments.find(segment => !HANDLE_PREFIXES.has(segment.toLowerCase()));
+};
+
+const spelled = name => name.toLowerCase().replace(/[-_.]/g, '');
+
+/** Of these support links, the ones to this person's own page: the handle is their login, whatever its case or separators. */
+export const linksOf = (links, login) =>
+	links.filter(({ url }) => {
+		const handle = handleOf(url);
+
+		return handle !== undefined && spelled(handle) === spelled(login);
+	});
+
+const ADDRESS = /https?:\/\/[^\s)"'<>\]]+/gi;
+
+/** The links in a readme to a site known for support, each once: whose they are is for the caller to say. */
+export const readmeSupport = markdown => {
+	const seen = new Set();
+
+	return supportLinks(
+		(markdown.match(ADDRESS) ?? []).map(url => ({ name: 'readme', url: url.replace(/[.,]+$/, '') })),
+	).filter(({ url }) => !seen.has(url) && seen.add(url));
+};
+
+/**
+ * The links GitHub reads from FUNDING.yml files, as it gives them for each repository, in the index's form: a GitHub
+ * handle leads to its Sponsors page, and only a web address is kept.
+ */
+export const fundingLinksOf = links => {
+	const seen = new Set();
+
+	return links
+		.map(({ platform, url }) => {
+			const key = platform.toLowerCase();
+
+			return key === 'github'
+				? { platform: key, url: `https://github.com/sponsors/${handleOf(url)}` }
+				: { platform: key, url };
+		})
+		.filter(({ url }) => /^https?:\/\//i.test(url) && !seen.has(url) && seen.add(url));
+};

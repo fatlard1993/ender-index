@@ -963,7 +963,7 @@ export default class ModPage extends View {
 						new Meta({
 							tag: 'p',
 							textContent:
-								"From the author's own FUNDING.yml, the links their mod gives in Mod Menu, and its Modrinth project or their other projects there.",
+								"From the author's FUNDING.yml, here or in their other repositories, its readme's links to their own pages, the links their mod gives in Mod Menu, and Modrinth.",
 						}),
 					]
 				: [

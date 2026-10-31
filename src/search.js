@@ -80,7 +80,7 @@ const summaryOf = record => {
 const fundingOf = (record, assets, donations) => {
 	const seen = new Set();
 	const links = [
-		...(record.funding ?? []).map(link => ({ ...link, from: 'repository' })),
+		...(record.funding ?? []).map(link => ({ from: 'repository', ...link })),
 		...assets.flatMap(asset => asset.funding ?? []).map(link => ({ ...link, from: 'jar' })),
 		...donations.map(link => ({ from: 'modrinth', ...link })),
 	].filter(({ url }) => !seen.has(url) && seen.add(url));

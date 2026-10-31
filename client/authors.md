@@ -16,9 +16,9 @@ A mod on GitHub with no jar on its releases is listed by its source, when that b
 
 ## Funding
 
-When players install your mod through ender, the index shows them how to support you: on the mod's page, and in `ender support`, which lists who made an instance's mods and how each takes support. It looks in three places, and any one is enough.
+When players install your mod through ender, the index shows them how to support you: on the mod's page, and in `ender support`, which lists who made an instance's mods and how each takes support. It looks in these places, and any one is enough.
 
-**A FUNDING.yml**, the file GitHub's Sponsor button reads: `.github/FUNDING.yml` in the repository, or on GitHub in a repository named `.github` on your account, which covers every repository you own.
+**A FUNDING.yml**, the file GitHub's Sponsor button reads: `.github/FUNDING.yml` in the repository, or on GitHub in a repository named `.github` on your account, which covers every repository you own. Failing those, the FUNDING.yml of another of your own repositories stands for this one too; a fork's is left out, as it keeps the file of the project it was forked from.
 
 ```yaml
 github: your-name
@@ -26,6 +26,8 @@ ko_fi: your-name
 patreon: your-name
 custom: ['https://example.com/support']
 ```
+
+**Your readme's links to your own page** on one of the sites below: the handle has to be the repository owner's, or that of a contributor who made at least half its commits, so a thank-you to someone else is not taken for yours.
 
 **The links in your jar**, as Mod Menu shows them: `contact` or `custom.modmenu.links` in `fabric.mod.json`, or their places in `quilt.mod.json`. A link to GitHub Sponsors, Ko-fi, Patreon, Open Collective, Liberapay, Buy Me a Coffee, Polar, thanks.dev, PayPal or Boosty counts, as does any link under a key that says donate or sponsor.
 
@@ -41,9 +43,9 @@ custom: ['https://example.com/support']
 
 A Modrinth project that links the repository by an old name still counts once the crawl has followed GitHub's redirect to the new one.
 
-A FUNDING.yml is read again weekly, a jar's links with the release, and Modrinth's donation links nightly.
+A FUNDING.yml and a readme are read again weekly, a jar's links with the release, and Modrinth's donation links nightly.
 
-**If you contribute to mods on GitHub**, a mod's page lists its contributors, each with their part of its commits and how they take support: the FUNDING.yml in the `.github` repository on your account, your GitHub Sponsors listing, or your profile's website when it is a support site such as Ko-fi. These are read again weekly too.
+**If you contribute to mods on GitHub**, a mod's page lists its contributors, each with their part of its commits and how they take support: the FUNDING.yml in the `.github` repository on your account, your GitHub Sponsors listing, your profile's website when it is a support site such as Ko-fi, or the mod's readme linking your own page there. These are read again weekly too.
 
 ## Being found
 

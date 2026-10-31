@@ -217,6 +217,18 @@ export const filesOf = async fullName =>
 		.filter(item => item.type === 'blob')
 		.map(item => item.path);
 
+/**
+ * The funding links GitHub reads from each of an account's own repositories that is not a fork, in no order: a fork
+ * keeps the FUNDING.yml of the project it was forked from.
+ */
+export const ownerRepositoryFunding = async login => {
+	const data = await graphql(
+		`query { repositoryOwner(login: ${JSON.stringify(login)}) { repositories(first: 100, isFork: false, ownerAffiliations: OWNER, orderBy: { field: STARGAZERS, direction: DESC }) { nodes { fundingLinks { platform url } } } } }`,
+	);
+
+	return (data.repositoryOwner?.repositories.nodes ?? []).flatMap(node => node.fundingLinks);
+};
+
 /** A repository's contributors, the most commits first, as `keep` trims them: it is kept and asked about conditionally. */
 export const contributors = (fullName, keep) => request(`/repos/${fullName}/contributors?per_page=100`, keep);
 

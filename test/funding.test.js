@@ -1,6 +1,15 @@
 import { describe, expect, test } from 'bun:test';
 
-import { donationLinks, donationsByMod, parseFunding, supportLinks } from '../src/funding';
+import {
+	donationLinks,
+	donationsByMod,
+	fundingLinksOf,
+	handleOf,
+	linksOf,
+	parseFunding,
+	readmeSupport,
+	supportLinks,
+} from '../src/funding';
 
 describe('a FUNDING.yml', () => {
 	test("names each platform's page for its handles, and custom addresses as they are", () => {
@@ -104,5 +113,50 @@ describe("a Modrinth project's donation links", () => {
 			'github:a/mod': links,
 			'codeberg:b/mod': links,
 		});
+	});
+});
+
+describe("a readme's support links", () => {
+	test('are its links to sites known for support, each once, badges and all', () => {
+		const markdown = [
+			'[![Patreon](https://img.shields.io/badge/patreon-x)](https://www.patreon.com/qouteall).',
+			'Thanks to [Patbox](https://ko-fi.com/patbox), and see https://example.com/donate',
+			'Again: https://www.patreon.com/qouteall',
+		].join('\n');
+
+		expect(readmeSupport(markdown)).toEqual([
+			{ platform: 'patreon', url: 'https://www.patreon.com/qouteall' },
+			{ platform: 'ko_fi', url: 'https://ko-fi.com/patbox' },
+		]);
+	});
+
+	test("are a person's own when the handle is their login, whatever its case or separators", () => {
+		const links = [
+			{ platform: 'patreon', url: 'https://www.patreon.com/c/Some_One' },
+			{ platform: 'github', url: 'https://github.com/sponsors/someone' },
+			{ platform: 'ko_fi', url: 'https://ko-fi.com/someoneelse' },
+		];
+
+		expect(handleOf('https://www.patreon.com/cw/AmyMialee')).toBe('AmyMialee');
+		expect(linksOf(links, 'SomeOne').map(({ url }) => url)).toEqual([
+			'https://www.patreon.com/c/Some_One',
+			'https://github.com/sponsors/someone',
+		]);
+	});
+});
+
+describe("GitHub's funding links", () => {
+	test('lead a GitHub handle to its Sponsors page and keep only web addresses, each once', () => {
+		expect(
+			fundingLinksOf([
+				{ platform: 'GITHUB', url: 'https://github.com/LatvianModder' },
+				{ platform: 'PATREON', url: 'https://patreon.com/LatvianModder' },
+				{ platform: 'PATREON', url: 'https://patreon.com/LatvianModder' },
+				{ platform: 'CUSTOM', url: 'javascript:alert(1)' },
+			]),
+		).toEqual([
+			{ platform: 'github', url: 'https://github.com/sponsors/LatvianModder' },
+			{ platform: 'patreon', url: 'https://patreon.com/LatvianModder' },
+		]);
 	});
 });

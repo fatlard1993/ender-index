@@ -1,4 +1,4 @@
-import { parseFunding, supportLinks } from './funding';
+import { linksOf, parseFunding, readmeSupport, supportLinks } from './funding';
 import * as github from './github';
 import { RateLimited } from './fetch';
 
@@ -52,8 +52,9 @@ export const personFunding = (login, user) => {
 };
 
 /**
- * Who made a GitHub repository, from its contributors, each with how they take support. Read again weekly; a person's
- * funding is asked once a crawl, in `people`, and an answer that fails keeps what was known.
+ * Who made a GitHub repository, from its contributors, each with how they take support: their account's, and the
+ * repository's readme's links to their own pages. Read again weekly; a person's account is asked once a crawl, in
+ * `people`, and an answer that fails keeps what was known.
  */
 export const contributorsOf = async ({
 	name,
@@ -62,6 +63,7 @@ export const contributorsOf = async ({
 	people,
 	list = repo => github.contributors(repo, rankContributors),
 	ask = github.graphql,
+	readme = async () => '',
 }) => {
 	const known = { contributors: recorded?.contributors, contributorsChecked: recorded?.contributorsChecked };
 
@@ -92,12 +94,24 @@ export const contributorsOf = async ({
 		);
 	}
 
+	const inReadme = ranked.people.length > 0 ? readmeSupport(await readme()) : [];
+
 	try {
 		return {
 			contributors: {
 				...ranked,
 				people: await Promise.all(
-					ranked.people.map(async person => ({ ...person, funding: await people.get(person.login) })),
+					ranked.people.map(async person => {
+						const own = await people.get(person.login);
+
+						return {
+							...person,
+							funding: [
+								...own,
+								...linksOf(inReadme, person.login).filter(link => !own.some(({ url }) => url === link.url)),
+							],
+						};
+					}),
 				),
 			},
 			contributorsChecked: now,

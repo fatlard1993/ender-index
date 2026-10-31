@@ -105,6 +105,23 @@ describe('reading contributors in a crawl', () => {
 		expect(second).toEqual(first);
 	});
 
+	test("take the readme's links to their own pages too", async () => {
+		const { ask } = answering({ lead: null, helper: null });
+		const found = await contributorsOf({
+			name: 'a/b',
+			now,
+			people: new Map(),
+			list: async () => rankContributors(listed),
+			ask,
+			readme: async () => '[Support the helper](https://ko-fi.com/helper)',
+		});
+
+		expect(found.contributors.people.map(({ login, funding }) => [login, funding])).toEqual([
+			['lead', []],
+			['helper', [{ platform: 'ko_fi', url: 'https://ko-fi.com/helper' }]],
+		]);
+	});
+
 	test('are read again only after a week', async () => {
 		const recorded = { contributors: { commits: 1, more: 0, people: [] }, contributorsChecked: now };
 		let listings = 0;

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { fundingOf } from '../src/crawl';
+import { authorsInReadme, fundingOf } from '../src/crawl';
 
 const serving = files => {
 	const original = globalThis.fetch;
@@ -51,6 +51,62 @@ describe("an author's funding", () => {
 			expect(await fundingOf({ host: 'github', name: 'a/b', recorded, now: later, owners: new Map() })).toEqual(
 				recorded,
 			);
+		} finally {
+			restore();
+		}
+	});
+});
+
+describe("an author's funding, past their files", () => {
+	const qouteall = { platform: 'patreon', url: 'https://www.patreon.com/qouteall' };
+	const patbox = { platform: 'ko_fi', url: 'https://ko-fi.com/patbox' };
+	const contributors = {
+		commits: 100,
+		more: 0,
+		people: [
+			{ login: 'qouteall', commits: 96 },
+			{ login: 'patbox', commits: 4 },
+		],
+	};
+
+	test("is the readme's links to its owner, or to a contributor who made at least half its commits", () => {
+		expect(authorsInReadme([qouteall, patbox], 'iPortalTeam', contributors)).toEqual([{ ...qouteall, from: 'readme' }]);
+		expect(authorsInReadme([patbox], 'patbox', undefined)).toEqual([{ ...patbox, from: 'readme' }]);
+		expect(authorsInReadme([patbox], 'TerraformersMC', contributors)).toEqual([]);
+	});
+
+	test("comes from the readme before the owner's other repositories, which are asked only when it has none", async () => {
+		const { restore } = serving({});
+		let asked = 0;
+		const ownerRepositories = async () => {
+			asked += 1;
+
+			return [{ platform: 'PATREON', url: 'https://patreon.com/LatvianModder' }];
+		};
+
+		try {
+			const fromReadme = await fundingOf({
+				host: 'github',
+				name: 'iPortalTeam/ImmersivePortalsMod',
+				now,
+				owners: new Map(),
+				readme: async () => 'Support me: https://www.patreon.com/qouteall',
+				contributors,
+				ownerRepositories,
+			});
+			const fromOwner = await fundingOf({
+				host: 'github',
+				name: 'kube-mods/kubejs',
+				now,
+				owners: new Map(),
+				ownerRepositories,
+			});
+
+			expect(fromReadme.funding).toEqual([{ ...qouteall, from: 'readme' }]);
+			expect(fromOwner.funding).toEqual([
+				{ platform: 'patreon', url: 'https://patreon.com/LatvianModder', from: 'owner-repositories' },
+			]);
+			expect(asked).toBe(1);
 		} finally {
 			restore();
 		}
