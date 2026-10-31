@@ -408,10 +408,6 @@ const readmeOf = async ({ host, name, repo, recorded }) => {
 	}
 };
 
-/**
- * For a repository that describes itself nowhere, its readme's first paragraph, read once and kept. A readme that does
- * not load leaves it unknown, to be read next crawl.
- */
 /** A repository's readme as text, fetched once however often it is asked for; empty when it has none or fails to load. */
 const readmeText = (host, name, readme) => {
 	let text;
@@ -424,6 +420,10 @@ const readmeText = (host, name, readme) => {
 			: Promise.resolve(''));
 };
 
+/**
+ * For a repository that describes itself nowhere, its readme's first paragraph, read once and kept. A readme that does
+ * not load leaves it unknown, to be read next crawl.
+ */
 const readmeSummaryOf = async ({ host, name, repo, recorded, readme }) => {
 	if (repo.description || !readme) return undefined;
 	if (recorded?.readmeSummary !== undefined) return recorded.readmeSummary;
