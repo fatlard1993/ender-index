@@ -1,0 +1,229 @@
+{
+	"repo": "Jopgood/Create-Information-Addon",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2024-05-30T22:51:16Z",
+	"pushed": "2026-06-27T07:26:55Z",
+	"releases": [
+		{
+			"tag": "v1.9.1",
+			"published": "2026-06-27T07:34:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 459332432,
+					"name": "cfwinfo-1.9.1.jar",
+					"url": "https://github.com/Jopgood/Create-Information-Addon/releases/download/v1.9.1/cfwinfo-1.9.1.jar",
+					"size": 40330,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "13c4651dec10f54772c01c285a259f8ae2db88cb458908ed5fbd5bcb70da5641",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cfwinfo",
+							"version": "1.9.1",
+							"name": "Create: Fuel & Water Information",
+							"description": "This mod will render Tank fuel and water levels on the HUD so you do not have to keep checking!",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 15,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 🎯 Release v1.9.1 - Jetpacks & Drill Read Right Again\n\n> **Highlights**: Fixes the HUD showing jetpacks, exoskeletons and the portable drill as empty on current Create: Stuff 'N Additions builds.\n\n## 🔧 Fixes\n\n### ⛽ Jetpacks and the Hand Drill No Longer Show Empty\n- On newer Create: Stuff 'N Additions (2.1.4+), the overlay drew **every jetpack, exoskeleton and portable drill as empty**, no matter how much fuel or water they actually held ([#19](https://github.com/Jopgood/Create-Information-Addon/issues/19)).\n- CS&A 2.1.4 stopped storing levels in item NBT (`tagFuel` / `tagWater`) and moved them into a **NeoForge fluid handler** — fuel as lava, water as water. The overlay was still reading the old NBT, which no longer exists, so everything read as zero.\n- The overlay now reads the fluid handler directly and scales each bar to the tank's **own reported capacity** (so CS&A's configurable capacities are honoured). Pre-2.1.4 CS&A still works via the old NBT fallback.\n\n### 🦴 Netherite Exoskeleton Now Shows Up\n- The **netherite exoskeleton** holds both fuel and water, but it was missing from the overlay's recognised-item list, so it displayed nothing. It's now detected like the other exoskeletons.\n\n## 🔄 Backward Compatibility\n\n✅ **Older CS&A still supported** — pre-2.1.4 installs keep reading via the legacy NBT path.\n✅ **Existing configs keep working** — your saved overlay position and settings are unchanged.\n✅ **Same Minecraft version** — still Minecraft 1.21.1 / NeoForge.\n\n## 📥 Installation\n\n1. Download the latest `.jar` file from this release\n2. Place it in your `mods` folder\n3. Launch Minecraft with NeoForge\n\n---\n\n**Requirements**: Minecraft 1.21.1 | NeoForge 21.1.233+ | Create 6.0.11+\n\n**Compatibility**: Works with Create: Stuff & Additions (2.1.4+) and other Create-compatible tank items"
+		},
+		{
+			"tag": "v1.9.0+mc1.20.1",
+			"published": "2026-06-04T12:38:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 438279004,
+					"name": "cfwinfo-1.9.0+mc1.20.1.jar",
+					"url": "https://github.com/Jopgood/Create-Information-Addon/releases/download/v1.9.0%2Bmc1.20.1/cfwinfo-1.9.0%2Bmc1.20.1.jar",
+					"size": 38540,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "4aeb098728e0b159ed1902f5ea676a5f116037325dd8da7d77c608528c54a534",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "cfwinfo",
+							"version": "1.9.0",
+							"name": "Create: Fuel & Water Information",
+							"description": "This mod will render Tank fuel and water levels on the HUD so you do not have to keep checking!",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"create"
+							],
+							"suggests": [
+								"create_sa"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 15,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 🎯 Release v1.9.0 - Handheld Tanks Read Right, and a Smarter Position Editor\n\n> **Highlights**: Held filling/fueling tanks now show their actual level on the HUD, and the position editor can finally place the *detailed* overlay too — not just the sprite.\n\n## ✨ What's New\n\n### 📝 Position the Detailed Overlay\n- The **Edit Overlay Position** keybind (default `O`) now previews **whichever overlay you're using**.\n- In **detailed (text) mode**, the editor shows the real tooltip while you drag it, so what you see is what you get — previously you could only ever preview the simplified sprite.\n- The tank **scale slider** only appears in simplified mode now, since it doesn't apply to the text view.\n- Position is still shared between both views, so setting it once carries across.\n\n## 🔧 Fixes\n\n### 🪣 Held Tanks Now Show Their Real Level\n- Standalone Create: Stuff 'N Additions tanks — the **small / medium / large filling and fueling tanks** and the **creative filling tank** — used to display as empty even when full.\n- They store their contents differently from the jetpacks/exoskeletons, so the overlay was reading the wrong value. They now read correctly in **both** the sprite and text overlays.\n- The level is scaled to each tank's capacity (including CS&A's configurable capacities), and the **creative filling tank** always reads as full.\n\n## 🔄 Under the Hood\n- License metadata corrected to **MIT** to match `LICENSE.txt`.\n\n## 🔄 Backward Compatibility\n\n✅ **Existing configs keep working** — your saved overlay position and settings are unchanged.\n✅ **Same Minecraft version** — still Minecraft 1.21.1 / NeoForge.\n\n## 📥 Installation\n\n1. Download the latest `.jar` file from this release\n2. Place it in your `mods` folder\n3. Launch Minecraft with NeoForge\n\n---\n\n**Requirements**: Minecraft 1.21.1 | NeoForge 21.1.233+ | Create 6.0.11+\n\n**Compatibility**: Works with Create: Stuff & Additions and other Create-compatible tank items"
+		},
+		{
+			"tag": "v1.9.0",
+			"published": "2026-06-03T23:41:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 437718875,
+					"name": "cfwinfo-1.9.0.jar",
+					"url": "https://github.com/Jopgood/Create-Information-Addon/releases/download/v1.9.0/cfwinfo-1.9.0.jar",
+					"size": 39483,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "05e550e4f748ac49dc4716da94f0243a4c8a6e24fbd10fc6685811e0d6b6e533",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cfwinfo",
+							"version": "1.9.0",
+							"name": "Create: Fuel & Water Information",
+							"description": "This mod will render Tank fuel and water levels on the HUD so you do not have to keep checking!",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 15,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 🎯 Release v1.9.0 - Handheld Tanks Read Right, and a Smarter Position Editor\n\n> **Highlights**: Held filling/fueling tanks now show their actual level on the HUD, and the position editor can finally place the *detailed* overlay too — not just the sprite.\n\n## ✨ What's New\n\n### 📝 Position the Detailed Overlay\n- The **Edit Overlay Position** keybind (default `O`) now previews **whichever overlay you're using**.\n- In **detailed (text) mode**, the editor shows the real tooltip while you drag it, so what you see is what you get — previously you could only ever preview the simplified sprite.\n- The tank **scale slider** only appears in simplified mode now, since it doesn't apply to the text view.\n- Position is still shared between both views, so setting it once carries across.\n\n## 🔧 Fixes\n\n### 🪣 Held Tanks Now Show Their Real Level\n- Standalone Create: Stuff 'N Additions tanks — the **small / medium / large filling and fueling tanks** and the **creative filling tank** — used to display as empty even when full.\n- They store their contents differently from the jetpacks/exoskeletons, so the overlay was reading the wrong value. They now read correctly in **both** the sprite and text overlays.\n- The level is scaled to each tank's capacity (including CS&A's configurable capacities), and the **creative filling tank** always reads as full.\n\n## 🔄 Under the Hood\n- License metadata corrected to **MIT** to match `LICENSE.txt`.\n\n## 🔄 Backward Compatibility\n\n✅ **Existing configs keep working** — your saved overlay position and settings are unchanged.\n✅ **Same Minecraft version** — still Minecraft 1.21.1 / NeoForge.\n\n## 📥 Installation\n\n1. Download the latest `.jar` file from this release\n2. Place it in your `mods` folder\n3. Launch Minecraft with NeoForge\n\n---\n\n**Requirements**: Minecraft 1.21.1 | NeoForge 21.1.233+ | Create 6.0.11+\n\n**Compatibility**: Works with Create: Stuff & Additions and other Create-compatible tank items"
+		},
+		{
+			"tag": "v1.7.0",
+			"published": "2026-06-03T18:20:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 437511436,
+					"name": "cfwinfo-1.7.0.jar",
+					"url": "https://github.com/Jopgood/Create-Information-Addon/releases/download/v1.7.0/cfwinfo-1.7.0.jar",
+					"size": 31569,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "52a51dbc0989a0a5bba6c3036bcc68b6ed8f366fafbc3ddaa1f715b378ff3074",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cfwinfo",
+							"version": "1.7.0",
+							"name": "Create: Fuel & Water Information",
+							"description": "This mod will render Tank fuel and water levels on the HUD so you do not have to keep checking!",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 13,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 🔧 Release v1.7.0 - Updated for Create 6.0.11\n\n> **Maintenance**: Rebuilt against the latest Create and platform dependencies on Minecraft 1.21.1.\n\n## 🔄 What Changed\n\nThis release brings the mod in line with the current Create release line. There are no new features and no config changes — it's a compatibility refresh so the overlay keeps working smoothly on up-to-date packs.\n\n### ⬆️ Dependency Updates\n| Dependency | From | To |\n|---|---|---|\n| Create | 6.0.6-98 | **6.0.11-292** |\n| NeoForge | 21.1.206 | 21.1.233 |\n| Ponder | 1.0.59 | 1.0.85 |\n| Flywheel | 1.0.4 | 1.0.6 |\n| Registrate | MC1.21-1.3.0+62 | MC1.21-1.3.0+67 |\n| JEI | 19.22.1.316 | 19.27.0.340 |\n\n### 🛠️ Build Notes\n- Create stopped publishing its `:slim` classifier at 6.0.11, so the build now depends on the full Create jar (with `transitive = false`). This is a build-only change and does not affect the shipped mod.\n- Ponder moved Maven coordinates: Create 6.0.10+ requires Ponder `1.0.82+`, now published under `net.createmod.ponder:ponder-neoforge` (the old `Ponder-NeoForge-1.21.1` artifact stopped at `1.0.69`).\n\n## 🔄 Backward Compatibility\n\n✅ **No config changes** — existing config files work unchanged\n✅ **No behaviour changes** — overlay rendering and settings are identical\n✅ **Same Minecraft version** — still Minecraft 1.21.1 / NeoForge\n\n## 📥 Installation\n\n1. Download the latest `.jar` file from this release\n2. Place it in your `mods` folder\n3. Launch Minecraft with NeoForge and an up-to-date Create\n\n---\n\n**Requirements**: Minecraft 1.21.1 | NeoForge 21.1.233+ | Create 6.0.11+\n\n**Compatibility**: Works with Create: Stuff & Additions and other Create-compatible tank items"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "Create: Fuel &amp; Water Information",
+	"funding": [
+		{
+			"platform": "github",
+			"url": "https://github.com/sponsors/juliusmarminge",
+			"from": "owner-repositories"
+		}
+	],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [
+		"assets/cfwinfo_logo.png",
+		"assets/configs.png",
+		"assets/information.png",
+		"assets/simplified.png"
+	],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 17,
+		"more": 0,
+		"people": [
+			{
+				"login": "Jopgood",
+				"commits": 17,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

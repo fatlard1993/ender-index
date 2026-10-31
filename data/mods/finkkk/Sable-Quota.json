@@ -1,0 +1,172 @@
+{
+	"repo": "finkkk/Sable-Quota",
+	"host": "github",
+	"description": "Sable Quota 是NeoForge 1.21.1 版本下 Sable的服务器端附属模组，用玩家 UUID 记录其拥有的物理结构数量（Sub-Level），并限制继续创建。可以做到控制玩家可创建的物理结构总量并自定义配置。",
+	"stars": 1,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-07-14T20:17:35Z",
+	"pushed": "2026-07-31T04:56:33Z",
+	"releases": [
+		{
+			"tag": "1.2.0",
+			"published": "2026-07-31T04:56:34Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 496258267,
+					"name": "sable_quota-1.2.0.jar",
+					"url": "https://github.com/finkkk/Sable-Quota/releases/download/1.2.0/sable_quota-1.2.0.jar",
+					"size": 118908,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "24c1547b58a8632a05b57e7c3d724a3b412a731fc3efd16621368e38e66ddd38",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "sable_quota",
+							"version": "1.2.0",
+							"name": "Sable Quota",
+							"description": "Sable Quota provides persistent per-player structure limits for Sable.\nIt protects creation and splitting paths, displays Action Bar feedback, and includes server administration commands.\n\nSable Quota 为 Sable 添加基于玩家的物理结构配额限制系统。\n它覆盖结构创建与断裂路径，提供 Action Bar 提示、持久化个人上限和服务器管理指令。",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"sable"
+							]
+						}
+					],
+					"icon": "fc77b7befc24cd93ad784713950f18977220279613057b32221c4124316ecc34.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 36,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 新增\n\n- 新增 `/sablequota delete <structure-uuid>` 结构管理命令。\n- 新增基于 UUID 删除已加载和未加载 Sable 结构的支持。\n- 删除结构时自动清理相关实体、Plot、强制加载票据、存储数据和配额记录。\n- 新增中英文命令反馈和错误提示。\n\n## 改进\n\n- 优化结构查找逻辑，优先使用缓存的维度数据和 Sable 存储引用，减少不必要的磁盘扫描。\n- 重构兼容模块，将核心配额逻辑与 Create、Simulated 兼容功能分离。\n- 提高可选模组缺失或内部实现发生变化时的稳定性。\n\n## 修复\n\n- 修复 Create 连续 OBB 碰撞检测中分离轴为 `null` 时导致的崩溃。\n- 防止可选兼容 Mixin 影响核心功能。\n\n## 其他\n\n- 更新 README，补充功能、安装方式、配置、命令、API 和数据管理等详细说明。\n- 明确模组服务端必须安装、客户端可选安装；Create 碰撞修复需要安装在对应发生问题的一侧。\n- 版本更新至 `1.2.0`。"
+		},
+		{
+			"tag": "1.1.0",
+			"published": "2026-07-17T10:58:01Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 480281731,
+					"name": "sable_quota-1.1.0.jar",
+					"url": "https://github.com/finkkk/Sable-Quota/releases/download/1.1.0/sable_quota-1.1.0.jar",
+					"size": 107525,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "bc613072bef4c73c97208aae12a414c3eaed913853a69fe6212b52c4ae7217a7",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "sable_quota",
+							"version": "1.1.0",
+							"name": "Sable Quota",
+							"description": "Sable Quota provides persistent per-player structure limits for Sable.\nIt protects creation and splitting paths, displays Action Bar feedback, and includes server administration commands.\n\nSable Quota 为 Sable 添加基于玩家的物理结构配额限制系统。\n它覆盖结构创建与断裂路径，提供 Action Bar 提示、持久化个人上限和服务器管理指令。",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"sable"
+							]
+						}
+					],
+					"icon": "fc77b7befc24cd93ad784713950f18977220279613057b32221c4124316ecc34.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 31,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 1.1.0 更新\n\n- 修复通过断裂一个大型结构批量生成碎片来绕过数量上限的问题。\n- 玩家破坏关键连接方块前会进行连通性预判；超额时直接取消破坏，不再先断裂后补救。\n- 创建成功显示白色 `已用/上限` Action Bar，额度不足显示红色 Action Bar，不占用聊天框。\n- 新增 `/sablequota add` 与 `/sablequota remove` 管理指令。\n- 优化断裂扫描、服务端翻译、SavedData 访问和延迟装配临时队列。"
+		},
+		{
+			"tag": "1.0.0",
+			"published": "2026-07-14T21:56:26Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 477201046,
+					"name": "sable_quota-1.0.0.jar",
+					"url": "https://github.com/finkkk/Sable-Quota/releases/download/1.0.0/sable_quota-1.0.0.jar",
+					"size": 98176,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c4313268dc45a16da30d42f8e29b02ce52169c2e28e415f7ee3af09d13bf174d",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "sable_quota",
+							"version": "1.0.0",
+							"name": "Sable Quota",
+							"description": "Sable Quota introduces per-player structure quotas for Sable.\nLimit the maximum number of physical structures each player can create and prevent excessive world resource usage.\nProvides server-friendly control over Sable structure creation with configurable limits and feedback messages.\n\nSable Quota 为 Sable 添加基于玩家的物理结构配额限制系统。\n限制每位玩家可创建的最大物理结构数量，避免服务器资源过度占用。\n提供可配置的结构创建上限，并在达到限制时给予玩家提示。",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"sable"
+							]
+						}
+					],
+					"icon": "fc77b7befc24cd93ad784713950f18977220279613057b32221c4124316ecc34.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 26,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "初次发布"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 6,
+		"more": 0,
+		"people": [
+			{
+				"login": "finkkk",
+				"commits": 6,
+				"name": "finkkk飞飞",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

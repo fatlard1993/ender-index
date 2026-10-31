@@ -1,0 +1,138 @@
+{
+	"repo": "Fi3w0/Fiw-Warp",
+	"host": "github",
+	"description": "Fiw Warp — lightweight, server-side homes/warps/back teleport mod for Fabric + NeoForge (MC 1.21.11)",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-07-08T02:37:00Z",
+	"pushed": "2026-07-08T02:56:53Z",
+	"releases": [
+		{
+			"tag": "v1.1.0",
+			"published": "2026-07-08T02:52:28Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 469819206,
+					"name": "fiw-warp-fabric-1.1.0.jar",
+					"url": "https://github.com/Fi3w0/Fiw-Warp/releases/download/v1.1.0/fiw-warp-fabric-1.1.0.jar",
+					"size": 73131,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "47b5fdb3f530f292a720b1756fe305bcd403ef4f29cbed5529b67af0bf467a60",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "fiwwarp",
+							"version": "1.1.0",
+							"name": "Fiw Warp",
+							"description": "Lightweight, server-side teleport mod: homes, warps, warmups and cooldowns.",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": "40afcc4cdf364f977d9a79243ef4497964e41e51c70e1c3367ff67b949ab8a62.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 26,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 469819207,
+					"name": "fiw-warp-neoforge-1.1.0.jar",
+					"url": "https://github.com/Fi3w0/Fiw-Warp/releases/download/v1.1.0/fiw-warp-neoforge-1.1.0.jar",
+					"size": 70556,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2dad17d8d28384b951cc42dcdeb15c533beb9dcf9d9e6102dda3f183e069a2ee",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "fiwwarp",
+							"version": "1.1.0",
+							"name": "Fiw Warp",
+							"description": "Lightweight, server-side teleport mod: homes, warps, warmups and cooldowns.",
+							"minecraft": "[1.21.11,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"kotlinforforge"
+							]
+						}
+					],
+					"icon": "40afcc4cdf364f977d9a79243ef4497964e41e51c70e1c3367ff67b949ab8a62.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 26,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n- `enable_homes` and `enable_warps` config switches to turn the home and warp systems on or off\n  independently (the `back` system already had `enable_back`). Disabled systems hide all of\n  their commands and respond to `/fiwwarp reload`.\n- Player-created warps: `warps_players_can_create` lets non-admins use `/setwarp` up to\n  `max_warps_per_player` each (admins stay unlimited). Each warp remembers its creator —\n  non-admins can only `/delwarp`/`/editwarp` their own; admins can manage any warp.\n- Warp confirmation: `/warp <name>` now prompts a clickable **[Accept]**/**[Deny]** message\n  before the warmup starts (like a teleport request), controlled by `warp_confirmation_enabled`\n  and `warp_confirmation_seconds`. New `/warp accept` and `/warp deny` commands. Set\n  `warp_confirmation_enabled` to `false` for the old instant behavior.\n- Separate cooldowns per command: `home_cooldown_seconds`, `warp_cooldown_seconds`, and\n  `back_cooldown_seconds` replace the single `cooldown_seconds`, each ticking independently.\n- Visual polish for teleports: `vanish_particles_enabled` adds an extra \"poof\" burst at the\n  spot a player teleports away from, and `instant_teleport_blindness_enabled` gives a short,\n  purely cosmetic Blindness effect (`instant_teleport_blindness_seconds`, default 2s) on any\n  instant teleport (no warmup), so instant hops feel less jarring.\n- Every player-facing message is now customizable via a `messages` object in `config.json` —\n  reword any text the mod sends, with `{placeholder}` tokens for dynamic values.\n\n### Changed\n- `cooldown_seconds` was replaced by `home_cooldown_seconds` / `warp_cooldown_seconds` /\n  `back_cooldown_seconds`. If you had a custom cooldown set, re-apply it under the matching key.\n- Built jar files are now named `fiw-warp-fabric-*.jar` / `fiw-warp-neoforge-*.jar`\n  (the loader mod id stays `fiwwarp`).\n- License changed to MIT.\n\n### Notes\n- `warps.json` from 1.0.0 loads and migrates automatically — existing warps keep working with\n  no owner (admin-managed), same as before.\n- Don't name a warp `accept` or `deny`; those are reserved `/warp` subcommands. `/setwarp` and\n  `/editwarp` now reject those names, and the server logs a warning on startup if a warp with\n  a reserved name already exists from before the upgrade."
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "github",
+			"url": "https://github.com/sponsors/Fi3w0",
+			"from": "owner-repositories"
+		},
+		{
+			"platform": "ko_fi",
+			"url": "https://ko-fi.com/fi3w0",
+			"from": "owner-repositories"
+		}
+	],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [
+		"fiw warp.jpg"
+	],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 9,
+		"more": 0,
+		"people": [
+			{
+				"login": "Fi3w0",
+				"commits": 9,
+				"name": "Alex",
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/Fi3w0"
+					}
+				]
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

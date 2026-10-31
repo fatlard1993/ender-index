@@ -1,0 +1,462 @@
+{
+	"repo": "jingqi-ohhh/boneskeleton",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-08-12T18:27:04Z",
+	"pushed": "2026-08-27T17:27:13Z",
+	"releases": [
+		{
+			"tag": "v1.2.0+1.20.1",
+			"published": "2026-08-27T18:00:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 532675737,
+					"name": "boneskeleton-1.2.0+1.20.1.jar",
+					"url": "https://github.com/jingqi-ohhh/boneskeleton/releases/download/v1.2.0%2B1.20.1/boneskeleton-1.2.0%2B1.20.1.jar",
+					"size": 158856,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "df330000d623d06a2437779b4a2a5869f8db70bfe94d2dc1b6f7f076a0a4f02d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "boneskeleton",
+							"version": "1.2.0+1.20.1",
+							"name": "BoneSkeleton 骷髅近战化",
+							"description": "Turn skeletons into melee creatures: skeletons hold bones, strays hold fish. All melee, damage 2.0, no bows dropped, extra arrow drops. Wither skeletons are unaffected.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "52e36fe54a6f6e4b7e6dee7f52783c0f76e93354d36683925540010a0e4b43e4.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 2,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# BoneSkeleton 骷髅近战化（Minecraft 1.20.1 Fabric）\n\n> 非官方粉丝作品，与 Mojang 和 Microsoft 无关。\n\n把原版两种骷髅——**普通骷髅（Skeleton）、流浪者（Stray）**——全部改成近战生物（1.20.1 没有沼骸 Bogged（1.21 才添加）、没有干枯骷髅 Parched（1.21.11 才添加），对应版本请用 1.21+ 分支）：\n\n- **普通骷髅**出生时主手拿**骨头**（原版是弓）\n- **流浪者**主手拿**鱼**\n- 两种都只进行**近战攻击**（哪怕是命令刷出弓或捡到弓也不射箭）\n- 近战伤害 **2.0**（1 颗心，原版默认值，未做修改）\n- 掉落物**不再有弓**，并追加了箭类掉落：\n  - 骷髅：骨头 + **箭**（0-2 支）\n  - 流浪者：鱼 + **迟缓之箭**\n- **凋灵骷髅不受影响**（它原版就是持剑近战）\n\n## 文件说明\n\n| 路径 | 作用 |\n|------|------|\n| `src/main/java/.../mixin/AbstractSkeletonMixin.java` | 核心修改（2 处 Mixin） |\n| `src/main/java/.../BoneSkeletonMod.java` | 模组入口 |\n| `src/main/resources/data/minecraft/loot_tables/entities/skeleton.json` | 骷髅掉落表（骨头 + 箭） |\n| `src/main/resources/data/minecraft/loot_tables/entities/stray.json` | 流浪者掉落表（鱼 + 迟缓之箭） |\n| `src/main/resources/assets/boneskeleton/icon.png` | 模组图标 |\n\n> 注意：1.20.1 的掉落表目录是复数 `loot_tables/`（1.21.2+ 才改成单数 `loot_table/`）。\n\n## 怎么构建 jar\n\n需要 **Java 17**（Gradle 会通过 foojay 自动下载缺失的 toolchain；中国网络下载失败时需手动安装 JDK 17）。在 `boneskeleton` 文件夹里打开命令行，运行：\n\n```\ngradlew build\n```\n\n成品在 `build\\libs\\boneskeleton-1.2.0+1.20.1.jar`。\n\n## 怎么装进游戏\n\n把 `build\\libs\\boneskeleton-1.2.0+1.20.1.jar` 复制到你的\n**Minecraft 1.20.1 + Fabric** 实例的 `mods` 文件夹里，启动游戏即可。\n服务端必备，客户端可不装（纯服务端逻辑模组）。\n\n## 游戏内怎么测试\n\n1. 打开一个世界（建议开创造模式，方便测试）\n2. 聊天栏分别输入：\n   - `/summon minecraft:skeleton`\n   - `/summon minecraft:stray`\n3. 检查：\n   - 骷髅手里拿的是**骨头**，流浪者手里拿的是**鱼** ✔\n   - 两种都会**跑过来打你**，而不是站远处射箭 ✔\n   - 打你一下掉 **1 颗心**（普通难度）✔\n   - 掉落物：骷髅掉**骨头 + 箭**，流浪者掉**鱼 + 迟缓之箭** ✔\n4. 顺便刷一只**凋灵骷髅**（`/summon minecraft:wither_skeleton`），应该还是持剑近战的老样子 ✔（证明没误伤其他怪物）\n\n## 想改伤害的话\n\n原版骷髅近战伤害默认就是 2.0（普通难度 1 颗心），所以本模组没有改伤害代码。"
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-08-22T08:03:43Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 532679438,
+					"name": "boneskeleton-1.2.0+1.20.1.jar",
+					"url": "https://github.com/jingqi-ohhh/boneskeleton/releases/download/v1.2.0/boneskeleton-1.2.0%2B1.20.1.jar",
+					"size": 158856,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "df330000d623d06a2437779b4a2a5869f8db70bfe94d2dc1b6f7f076a0a4f02d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "boneskeleton",
+							"version": "1.2.0+1.20.1",
+							"name": "BoneSkeleton 骷髅近战化",
+							"description": "Turn skeletons into melee creatures: skeletons hold bones, strays hold fish. All melee, damage 2.0, no bows dropped, extra arrow drops. Wither skeletons are unaffected.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "52e36fe54a6f6e4b7e6dee7f52783c0f76e93354d36683925540010a0e4b43e4.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 2,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 524826284,
+					"name": "boneskeleton-1.2.0+1.21.1.jar",
+					"url": "https://github.com/jingqi-ohhh/boneskeleton/releases/download/v1.2.0/boneskeleton-1.2.0%2B1.21.1.jar",
+					"size": 159791,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "0f8eba72bb602018322eb61d5e0fdccf7fab3a006ac7c8354306bc4c95df4dff",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "boneskeleton",
+							"version": "1.2.0+1.21.1",
+							"name": "BoneSkeleton 骷髅近战化",
+							"description": "Turn skeletons into melee creatures: skeletons hold bones, strays hold fish, bogged hold poisoned arrows. All melee, damage 2.0, no bows dropped, extra arrow drops. Wither skeletons are unaffected.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "52e36fe54a6f6e4b7e6dee7f52783c0f76e93354d36683925540010a0e4b43e4.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 2,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 524826334,
+					"name": "boneskeleton-1.2.0+1.21.11.jar",
+					"url": "https://github.com/jingqi-ohhh/boneskeleton/releases/download/v1.2.0/boneskeleton-1.2.0%2B1.21.11.jar",
+					"size": 160489,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "c56e0ac3f2a0920239530c38a52b2f6e0555377e49b875d12a344f360c380dea",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "boneskeleton",
+							"version": "1.2.0+1.21.11",
+							"name": "BoneSkeleton 骷髅近战化",
+							"description": "Turn skeletons into melee creatures: skeletons hold bones, strays hold fish, bogged hold poisoned arrows, parched hold dead bushes. All melee, damage 2.0, no bows dropped, extra arrow drops. Wither skeletons are unaffected.",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "52e36fe54a6f6e4b7e6dee7f52783c0f76e93354d36683925540010a0e4b43e4.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 2,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 524826479,
+					"name": "boneskeleton-1.2.0+26.1.1.jar",
+					"url": "https://github.com/jingqi-ohhh/boneskeleton/releases/download/v1.2.0/boneskeleton-1.2.0%2B26.1.1.jar",
+					"size": 160186,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "f6132f0f22b7a8f951685e95a7ff19019f058994e7f477728f7a122e2dccec70",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "boneskeleton",
+							"version": "1.2.0+26.1.1",
+							"name": "BoneSkeleton 骷髅近战化",
+							"description": "Turn skeletons into melee creatures: skeletons hold bones, strays hold fish, bogged hold poisoned arrows, parched hold dead bushes. All melee, damage 2.0, no bows dropped, extra arrow drops. Wither skeletons are unaffected.",
+							"minecraft": "~26.1.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "52e36fe54a6f6e4b7e6dee7f52783c0f76e93354d36683925540010a0e4b43e4.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 2,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 524826595,
+					"name": "boneskeleton-1.2.0+26.1.2.jar",
+					"url": "https://github.com/jingqi-ohhh/boneskeleton/releases/download/v1.2.0/boneskeleton-1.2.0%2B26.1.2.jar",
+					"size": 160185,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "812d4d5d8a5a845ecb28007dfb54f2d3c790fc56607bb983514426031d1a72ee",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "boneskeleton",
+							"version": "1.2.0+26.1.2",
+							"name": "BoneSkeleton 骷髅近战化",
+							"description": "Turn skeletons into melee creatures: skeletons hold bones, strays hold fish, bogged hold poisoned arrows, parched hold dead bushes. All melee, damage 2.0, no bows dropped, extra arrow drops. Wither skeletons are unaffected.",
+							"minecraft": "~26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "52e36fe54a6f6e4b7e6dee7f52783c0f76e93354d36683925540010a0e4b43e4.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 2,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 524826431,
+					"name": "boneskeleton-1.2.0+26.1.jar",
+					"url": "https://github.com/jingqi-ohhh/boneskeleton/releases/download/v1.2.0/boneskeleton-1.2.0%2B26.1.jar",
+					"size": 160183,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "1bc15545ddb5479756c006d5330c11308c5e92c8b52d094b6dd6b24f04cd8df5",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "boneskeleton",
+							"version": "1.2.0+26.1",
+							"name": "BoneSkeleton 骷髅近战化",
+							"description": "Turn skeletons into melee creatures: skeletons hold bones, strays hold fish, bogged hold poisoned arrows, parched hold dead bushes. All melee, damage 2.0, no bows dropped, extra arrow drops. Wither skeletons are unaffected.",
+							"minecraft": "~26.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "52e36fe54a6f6e4b7e6dee7f52783c0f76e93354d36683925540010a0e4b43e4.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 2,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 524826634,
+					"name": "boneskeleton-1.2.0+26.2.jar",
+					"url": "https://github.com/jingqi-ohhh/boneskeleton/releases/download/v1.2.0/boneskeleton-1.2.0%2B26.2.jar",
+					"size": 160134,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "aeb25b553aabe4cfbd8d98cc9c0e890a38fd98c17afd5766daef6a3e5f3babc4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "boneskeleton",
+							"version": "1.2.0+26.2",
+							"name": "BoneSkeleton 骷髅近战化",
+							"description": "Turn skeletons into melee creatures: skeletons hold bones, strays hold fish, bogged hold poisoned arrows, parched hold dead bushes. All melee, damage 2.0, no bows dropped, extra arrow drops. Wither skeletons are unaffected.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "52e36fe54a6f6e4b7e6dee7f52783c0f76e93354d36683925540010a0e4b43e4.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 2,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Update: Parched is holding Dead Bush. Drops are the Dead Bush and Arrow of Weakness (effective in version 1.21.11 and above).\n更新：焦骸手里拿着枯木，掉落物为枯木和虚弱之箭（在1.21.11版本以上有效）"
+		},
+		{
+			"tag": "v1.1.1+1.21.1",
+			"published": "2026-08-13T04:17:22Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 512478850,
+					"name": "boneskeleton-1.1.1+1.21.1.jar",
+					"url": "https://github.com/jingqi-ohhh/boneskeleton/releases/download/v1.1.1%2B1.21.1/boneskeleton-1.1.1%2B1.21.1.jar",
+					"size": 8186,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "67f162e116138732b2faf82bc98ba5ea96af8c4f34f7dd13086588532dcbd6fd",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "boneskeleton",
+							"version": "1.1.1+1.21.1",
+							"name": "BoneSkeleton 骷髅近战化",
+							"description": "Turn skeletons into melee creatures holding bones, strays holding fish, bogged holding arrows: Damage 2.0, no bows dropped. Wither skeletons are unaffected.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "608747d8b3a90377b5788aac65960b77dae98c89e73d0444fec395fe98c8fa79.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 2,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 🦴 BoneSkeleton 骷髅近战化 v1.1.1+1.21.1\n\n把原版三种骷髅全部变成近战生物——**骷髅持骨头**，**流浪者持鱼**，**沼骸持箭**，不再站远处射箭。\n\n> 非官方粉丝作品，与 Mojang / Microsoft 无关。\n> A fan-made unofficial mod, not affiliated with Mojang or Microsoft.\n\n## ✨ 功能 / Features\n\n- 🦴 **骷髅**：手持骨头近战，伤害 2.0，掉落物只有骨头\n- 🐟 **流浪者**：手持鱼近战，伤害 2.0，掉落物只有鱼\n- 🏹 **沼骸**：手持箭近战，伤害 2.0，掉落物只有箭\n- 🚫 三种骷髅不再掉落弓和箭矢弹药（沼骸掉落的是它手里的箭）\n- ✅ **凋灵骷髅不受影响**，保持原版持剑近战\n\n## 📝 v1.1.1 更新内容 / Changelog\n\n- ✨ 流浪者主手从骨头改为**鱼**（鳕鱼），掉落物同步改为鱼\n- 骷髅和沼骸不变\n\n## 📦 安装 / Installation\n\n1. 安装 [Fabric Loader](https://fabricmc.net/use/)（0.16.0 或更高）和 Java 21\n2. 下载下方的 `boneskeleton-1.1.1+1.21.1.jar`\n3. 放入 `.minecraft/mods/` 文件夹，启动游戏即可\n\n## ⚠️ 要求 / Requirements\n\n| 项目 | 版本 |\n|------|------|\n| Minecraft | **1.21.1** |\n| Fabric Loader | ≥ 0.16.0 |\n| Java | ≥ 21 |\n\n## 🎮 游戏内测试 / In-game test\n\n```\n/summon minecraft:skeleton   → 持骨头追人，掉骨头\n/summon minecraft:stray      → 持鱼追人，掉鱼\n/summon minecraft:bogged     → 持箭追人，掉箭\n```\n\n## 📄 许可证 / License\n\n[MIT](LICENSE) © jingqi-ohhh"
+		},
+		{
+			"tag": "v1.1.0+1.21.1",
+			"published": "2026-08-12T18:30:12Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 511924517,
+					"name": "boneskeleton-1.1.0+1.21.1.jar",
+					"url": "https://github.com/jingqi-ohhh/boneskeleton/releases/download/v1.1.0%2B1.21.1/boneskeleton-1.1.0%2B1.21.1.jar",
+					"size": 8152,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "506e62a3faf3b9b1200c6dbc959d1cc54e495dec98360a492e7e4bf8526565c4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "boneskeleton",
+							"version": "1.1.0+1.21.1",
+							"name": "BoneSkeleton 骷髅近战化",
+							"description": "Turn skeletons and strays into melee creatures holding bones, bogged into a melee creature holding arrows: Damage 2.0, no bows dropped. Wither skeletons are unaffected.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "608747d8b3a90377b5788aac65960b77dae98c89e73d0444fec395fe98c8fa79.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 2,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 🦴 BoneSkeleton 骷髅近战化 v1.1.0+1.21.1\n\n把原版三种骷髅全部变成近战生物——**骷髅和流浪者持骨头**，**沼骸持箭**，不再站远处射箭。\n\n> 非官方粉丝作品，与 Mojang / Microsoft 无关。\n> A fan-made unofficial mod, not affiliated with Mojang or Microsoft.\n\n## ✨ 功能 / Features\n\n- 🦴 **骷髅 / 流浪者**：手持骨头近战，伤害 2.0，掉落物只有骨头\n- 🏹 **沼骸**：手持箭近战，伤害 2.0，掉落物只有箭\n- 🚫 三种骷髅不再掉落弓和箭矢弹药（沼骸掉落的是它手里的箭）\n- ✅ **凋灵骷髅不受影响**，保持原版持剑近战\n\n## 📝 v1.1.0 更新内容 / Changelog\n\n- ✨ 新增：流浪者（Stray）和沼骸（Bogged）近战化\n- ✨ 新增：沼骸改为**持箭、掉箭**\n- 🐛 修复：掉落表目录与格式不兼容 1.21.1，导致骷髅**没有掉落物**的问题\n- 📝 完善 README、修正许可证版权人\n\n## 📦 安装 / Installation\n\n1. 安装 [Fabric Loader](https://fabricmc.net/use/)（0.16.0 或更高）和 Java 21\n2. 下载下方的 `boneskeleton-1.1.0+1.21.1.jar`\n3. 放入 `.minecraft/mods/` 文件夹，启动游戏即可\n\n## ⚠️ 要求 / Requirements\n\n| 项目 | 版本 |\n|------|------|\n| Minecraft | **1.21.1** |\n| Fabric Loader | ≥ 0.16.0 |\n| Java | ≥ 21 |\n\n## 🎮 游戏内测试 / In-game test\n\n```\n/summon minecraft:skeleton   → 持骨头追人，掉骨头\n/summon minecraft:stray      → 持骨头追人，掉骨头\n/summon minecraft:bogged     → 持箭追人，掉箭\n```\n\n## 📄 许可证 / License\n\n[MIT](LICENSE) © jingqi-ohhh"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "成品在 build\\libs\\boneskeleton-1.2.0+1.21.1.jar。",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 8,
+		"more": 0,
+		"people": [
+			{
+				"login": "jingqi-ohhh",
+				"commits": 8,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

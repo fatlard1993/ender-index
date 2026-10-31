@@ -1,0 +1,101 @@
+{
+	"repo": "Errnick-code/2core",
+	"host": "github",
+	"stars": 1,
+	"archived": false,
+	"created": "2026-05-20T18:35:27Z",
+	"pushed": "2026-05-20T18:41:50Z",
+	"releases": [
+		{
+			"tag": "1.0.0",
+			"published": "2026-05-20T18:41:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 425465867,
+					"name": "2core-1.0.0.jar",
+					"url": "https://github.com/Errnick-code/2core/releases/download/1.0.0/2core-1.0.0.jar",
+					"size": 49492,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "d74b9c8cf030288b35585c93b60575ce9d4037e497178c9b0a36b0380abd4d61",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "twocore",
+							"version": "1.0.0",
+							"name": "2Core",
+							"description": "Run a second Fabric server as a separate JVM process. One mod, two roles.",
+							"minecraft": "~1.21.11",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"fabric-language-kotlin",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 8,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/errnicraft/twocore/ChatLinkClient.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getInputStream"
+								],
+								"dev/errnicraft/twocore/ChatLinkServer.class": [
+									"java/net/Socket.getInetAddress",
+									"java/net/Socket.close",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.getInputStream"
+								]
+							},
+							"exec": {
+								"dev/errnicraft/twocore/TwoCoreMod.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 1.0.0 — Initial Release\n\n### Core\n- Launch and manage a second Fabric server as a child JVM process from a single mod\n- Automatic role detection — both servers use the same JAR (`primary` / `secondary` via system property)\n- Graceful shutdown of the secondary when the primary stops or crashes\n- Primary PID monitoring on the secondary side — secondary exits automatically if the primary dies\n\n### Process Management\n- `/2core start` / `stop` / `restart` — control the secondary server in-game or from console\n- `/2core status` — shows running state, uptime, PID, IPC connection, and current config\n- `/2core cmd <command>` — send a command to the secondary server's stdin\n- `/2core console on|off` — toggle live relay of secondary console output to primary\n- `auto_start` — optionally start the secondary automatically on primary startup\n- `copy_mode` (`none` / `launcher` / `full`) — automatic copying of server files into `2core/`\n- Secondary console output always saved to `2core/logs/console.log`\n\n### Cross-Server Sync\n- `/listother` — show online players on the other server, available to all players on both sides\n- Chat messages, join/leave notifications, and death messages relayed between servers in real time\n- `/2core chatlink on|off` — toggle sync without restarting\n- Fully configurable message formats with `%player%`, `%message%` placeholders and `&` color codes\n\n### Configuration\n- Config file auto-created at `2core/2core.properties` on first start\n- `/2core set <key> <value>` — change any config value live without editing the file\n- Secondary reads only its relevant config keys — cannot accidentally trigger server launch logic\n- IPC port auto-assigned if not set (`ipc_port=0`)"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "2Core lets you run two Minecraft servers on the same machine from a single mod. The primary server launches and manages the secondary server as a child JVM process.",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 3,
+		"more": 0,
+		"people": [
+			{
+				"login": "Errnick-code",
+				"commits": 3,
+				"name": "Errnick_",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

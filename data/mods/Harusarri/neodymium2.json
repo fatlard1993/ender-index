@@ -7,35 +7,294 @@
 	"license": "MIT",
 	"created": "2026-10-24T04:00:03Z",
 	"pushed": "2026-10-26T18:41:08Z",
-	"releases": [],
-	"source": {
-		"commit": "a047c48a702874a70eb211431b7850c8c446469a",
-		"committed": "2026-10-26T18:41:02Z",
-		"minecraft": "26.3",
-		"loader": "fabric",
-		"mods": [
+	"releases": [
+		{
+			"tag": "v2.0.0-rc.13",
+			"published": "2026-10-26T18:41:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 679101888,
+					"name": "neodymium2-2.0.0-rc.13+26.3.jar",
+					"url": "https://github.com/Harusarri/neodymium2/releases/download/v2.0.0-rc.13/neodymium2-2.0.0-rc.13%2B26.3.jar",
+					"size": 320551,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "136aec880fafe236397fb8b047e384a93d9fb275e74ec0e092e3da2ffac794d8",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "neodymium2",
+							"version": "2.0.0-rc.13+26.3",
+							"name": "네오디윰 2 (Neodymium 2)",
+							"description": "Region-aware ServerCore policies, lazy-chunk projectile cleanup and villager Brain maintenance with live trade prices and vanilla hero gifts.",
+							"minecraft": "26.3",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"servercore"
+							],
+							"provides": [],
+							"suggests": [
+								"yawp",
+								"yawpmanager"
+							]
+						}
+					],
+					"icon": "a0fb64dfbef860521be2800a168d0d9e1ee8b1b2c9a98a9f7a2af7f7e7adfe5f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 110,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Neodymium 2 v2.0.0-rc.13+26.3 (Minecraft 26.3)\n\n#### Highlights (100% Vanilla Behavior Preserved in Protected Regions)\n\n- **Lossless L0/L1 Direct-Mapped `SimulationChunkTracker.getLevel` Cache (`SimulationChunkTrackerTightMixin`):**\n  - Eliminates repeated interface-dispatched `Long2ByteOpenHashMap.get(long)` probing across `tickSpawningChunk`, `tickChunks`, `NearbyEntityTracking`, and `shouldTickBlocksAt`.\n  - Synchronously updated on every `setLevel(long, int)` mutation using the map's dynamic `defaultReturnValue()` threshold for full compatibility with `c2me-notickvd` (level `34`) and Vanilla (level `33`).\n- **Single-Chunk Reference Reuse for `SpreadingSnowyBlock.randomTick` (`SpreadingSnowyBlockTightMixin`):**\n  - Pins the center `LevelChunk` and any crossed neighbor `LevelChunk` across the 4 spread attempts in grass/mycelium random ticks, eliminating up to 13 redundant `ServerLevel.getBlockState` -> `ServerChunkCache.getChunk` pipeline traversals per random tick while preserving exact Vanilla light, fluid, and spread order.\n- **Fastutil `ReferenceOpenHashSet` Replacement in `AttributeMap` (`AttributeMapTightMixin`):**\n  - Replaces `java.util.HashSet` (`HashMap` + `Node` wrapper allocation on every `getInstance`, `onAttributeModified`, and `assignBaseValues` call) with open-addressed `ReferenceOpenHashSet` for identity-based `Holder<Attribute>` and `AttributeInstance` tracking.\n- **Minute-Granularity UTC Cache for `SpecialDates.dayNow()` (`SpecialDatesTightMixin`):**\n  - Caches `MonthDay.now(ZoneOffset.UTC)` across consecutive entity spawns (`Zombie`, `AbstractSkeleton`) within the same 60-second UTC window, eliminating repeated `System.currentTimeMillis()`, `Instant`, and `ZonedDateTime` allocations on every monster spawn.\n- **Direct Concrete `LevelChunk.shouldTickBlocksAt` & `NaturalSpawner.tickChunk` Fast-Paths (`LevelDormantTickersMixin`, `NaturalSpawnerMixin`):**\n  - Replaces virtual `Level.shouldTickBlocksAt(long)` dispatch in `BoundTickingBlockEntity` with direct concrete `LevelChunk` / `ServerLevel` invocation and eliminates redundant `ChunkPos.pack()` calls during mob spawning."
+		},
+		{
+			"tag": "v2.0.0-rc.12",
+			"published": "2026-10-26T05:16:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 677103919,
+					"name": "neodymium2-2.0.0-rc.12+26.3.jar",
+					"url": "https://github.com/Harusarri/neodymium2/releases/download/v2.0.0-rc.12/neodymium2-2.0.0-rc.12%2B26.3.jar",
+					"size": 312241,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "38e90d8565e5a91064964df5c6e41d7bf6305ce59217c4a0b2fdb5ff7ad419da",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "neodymium2",
+							"version": "2.0.0-rc.12+26.3",
+							"name": "네오디윰 2 (Neodymium 2)",
+							"description": "Region-aware ServerCore policies, lazy-chunk projectile cleanup and villager Brain maintenance with live trade prices and vanilla hero gifts.",
+							"minecraft": "26.3",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"servercore"
+							],
+							"provides": [],
+							"suggests": [
+								"yawp",
+								"yawpmanager"
+							]
+						}
+					],
+					"icon": "a0fb64dfbef860521be2800a168d0d9e1ee8b1b2c9a98a9f7a2af7f7e7adfe5f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 106,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Neodymium 2 v2.0.0-rc.12+26.3 (Minecraft 26.3)\n\n#### Highlights (100% Vanilla Behavior Preserved in Protected Regions)\n\n- **Purpur 1x1 Villager Lobotomy & Pufferfish Villager Brain DAB (`VillagerLobotomy`, `Neodymium2.forceActive`):**\n  - Villagers inside `vanillaSensitive` protected regions remain 100% 1-tick pure Vanilla.\n  - Fixed `forceActive()` so distant `CHUNK_OUTSIDE` villagers (`> 16` blocks from players) respect ServerCore's 16-block Villager Activation Range instead of ticking 20 times/sec globally.\n  - Added Purpur-style 1x1 trading-hall villager lobotomy (periodic restock/gossip maintenance while skipping pathfinding) and Pufferfish-style distance-based Brain DAB throttling outside protected regions.\n- **Lithium-Compatible Mob-Only `NaturalSpawner.createState` & 65,536-Slot Epoch Chunk Cache (`NaturalSpawnerMixin`, `RegionSpawner`):**\n  - Switched `NaturalSpawner.createState` hook from `Redirect` (which was shadowed by Lithium's priority-1000 redirect) to `ModifyVariable` (`STORE`) to skip non-`Mob` entities and restore parallel `NeodymiumWorkerPool` chunk precomputation.\n  - Upgraded the thread-local chunk lookup cache to an epoch-stamped 65,536-slot hash table (eliminating `Arrays.fill` overhead and hash collisions) and added `O(1)` `PlayerSpatialGrid.findNearestPlayerForSpawn` lookup.\n- **Purpur/Pufferfish `O(1)` `Mob.checkDespawn` & Underground Cave Mob Lifetime Normalization (`OutsideEntityOptimizer`, `MobTightMixin`):**\n  - Short-circuited unnecessary nearest-player lookups in `checkDespawn()` for persistent mobs (`removeWhenFarAway(0.0) == false`, such as villagers, animals, and golems).\n  - Normalized `noActionTime` progression and despawn probability for inactive `CHUNK_OUTSIDE` monsters to match vanilla lifetime (~70s average), preventing underground cave monster accumulation over long sessions.\n- **Stationary Physics, Tracker & Random-Tick Optimizations (`EntityTightMixin`, `LivingEntityTightMixin`, `OutsideWorldOptimizer`):**\n  - Extended stationary 3D voxel collision (`Shapes.collide`) short-circuiting to partial-height blocks (`dirt_path`, slabs, stairs) outside protected regions.\n  - Added Pufferfish `onClimbable()` block-state caching, empty stationary `AbstractBoat` movement striding, distant aquatic/ambient `travel()` throttling, removal of `PathfinderMob.isPanicking()` goal iteration on passive animals, and `O(1)` phase bitmask pre-filtering for outside random ticks."
+		},
+		{
+			"tag": "v2.0.0-rc.9",
+			"published": "2026-10-24T23:40:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 673595798,
+					"name": "neodymium2-2.0.0-rc.9+26.3.jar",
+					"url": "https://github.com/Harusarri/neodymium2/releases/download/v2.0.0-rc.9/neodymium2-2.0.0-rc.9%2B26.3.jar",
+					"size": 301418,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "d2117f78b1031285c440ab07f427a67a678a60fed687bbb12472b7ca33e77ab1",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "neodymium2",
+							"version": "2.0.0-rc.9+26.3",
+							"name": "네오디윰 2 (Neodymium 2)",
+							"description": "Region-aware ServerCore policies, lazy-chunk projectile cleanup and villager Brain maintenance with live trade prices and vanilla hero gifts.",
+							"minecraft": "26.3",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"servercore"
+							],
+							"provides": [],
+							"suggests": [
+								"yawp",
+								"yawpmanager"
+							]
+						}
+					],
+					"icon": "a0fb64dfbef860521be2800a168d0d9e1ee8b1b2c9a98a9f7a2af7f7e7adfe5f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 105,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Neodymium 2 v2.0.0-rc.9 (Minecraft 26.3)\n\n#### Highlights\n- **Dark-Room & Flushing Mob Farm Pathfinding (`OutsideEntityOptimizer`)**: Added a 100-tick grace period (`tickCount < 100`) and active water/navigation checks (`isInWater()`, `!getNavigation().isDone()`) before applying distant entity tick throttling (`4x` instead of `8x`), allowing mobs in classic dark-room and flushing towers to walk into water channels naturally.\n- **Balanced Mob Farm Spawning & Per-Player 2D Spatial Cap (`RegionSpawner`, `PlayerSpatialGrid`)**: Replaced over-aggressive skylight/cave spawn culling with roofed/enclosed structure detection (`lightSky <= 7`) and a fast per-player 2D spatial grid monster counter (`PlayerSpatialGrid.countMonstersNear`, radius 64, cap 70) so mob farms maintain vanilla-like rates without exceeding the per-player 70-mob cap.\n- **Aquatic, Nether/Lava & Flying Mob Support (`OutsideEntityOptimizer`, `RegionSpawner`, `MobTightMixin`)**: Excluded `WaterAnimal`, `FlyingMob`, and `EnderDragon` from ground-only suffocation/throttling assumptions; preserved `Drowned` river/ocean depth spawning and `Ghast`/`Strider`/`MagmaCube` Nether spawning.\n\n**SHA-256 (`neodymium2-2.0.0-rc.9+26.3.jar`)**: `d2117f78b1031285c440ab07f427a67a678a60fed687bbb12472b7ca33e77ab1`"
+		},
+		{
+			"tag": "v2.0.0-rc.8",
+			"published": "2026-10-24T09:59:27Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 671920372,
+					"name": "neodymium2-2.0.0-rc.8+26.3.jar",
+					"url": "https://github.com/Harusarri/neodymium2/releases/download/v2.0.0-rc.8/neodymium2-2.0.0-rc.8%2B26.3.jar",
+					"size": 298927,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "6f32e62be5a9813819ddadeaa285cac66a45f7dc3e71805fddd37ea25070b396",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "neodymium2",
+							"version": "2.0.0-rc.8+26.3",
+							"name": "네오디윰 2 (Neodymium 2)",
+							"description": "Region-aware ServerCore policies, lazy-chunk projectile cleanup and villager Brain maintenance with live trade prices and vanilla hero gifts.",
+							"minecraft": "26.3",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"servercore"
+							],
+							"provides": [],
+							"suggests": [
+								"yawp",
+								"yawpmanager"
+							]
+						}
+					],
+					"icon": "a0fb64dfbef860521be2800a168d0d9e1ee8b1b2c9a98a9f7a2af7f7e7adfe5f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 105,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Changes in v2.0.0-rc.8\n- **Paper-Style Low-Level Mob Farm Support (Outside Regions)**:\n  - Separated horizontal simulation-distance limits from the 128-block 3D despawn sphere so sky dark-room mob farms (AFK 95-124m above platform) spawn properly.\n  - Added O(1) active Y-band spawn position probing for 1-3 story dark-room and slime-chunk farms while culling deep underground cave spawns (y < 32) below surface/sky players.\n  - Kept monsters (Enemy) within the player's active mob-farm column (<= 48m horizontal, <= 128m 3D) active in EAR and even-tick GoalSelector AI so water canals, drop chutes, and trapdoor walk-off operate reliably.\n- **Standard Gradle Build (./gradlew build)**: Replaced internal Python scripts with a standard Fabric Loom Gradle build setup.\n- **Updated Mod Icon**: Applied the new Neodymium (Nd) icon."
+		},
+		{
+			"tag": "v2.0.0-rc.7",
+			"published": "2026-10-24T08:31:56Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 671716302,
+					"name": "neodymium2-2.0.0-rc.7+26.3.jar",
+					"url": "https://github.com/Harusarri/neodymium2/releases/download/v2.0.0-rc.7/neodymium2-2.0.0-rc.7%2B26.3.jar",
+					"size": 226571,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "32dce993fda9c43576a718f0e3a41031683b426ede803daebf9a03d2d854f0fd",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "neodymium2",
+							"version": "2.0.0-rc.7+26.3",
+							"name": "네오디윰 2 (Neodymium 2)",
+							"description": "Region-aware ServerCore policies, lazy-chunk projectile cleanup and villager Brain maintenance with live trade prices and vanilla hero gifts.",
+							"minecraft": "26.3",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"servercore"
+							],
+							"provides": [],
+							"suggests": [
+								"yawp",
+								"yawpmanager"
+							]
+						}
+					],
+					"icon": "b99ef221123c8f2fc510f0d352be37033c0bf65d0fc3acf63b9b118692a7d535.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 105,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Localization & Enhancements (`v2.0.0-rc.7+26.3`)\n- **English (`en_us.json`) & Korean (`ko_kr.json`) Language Files**: Added standard localization files under `assets/neodymium2/lang/` and server-side locale resolution (`NeodymiumI18n`).\n- **Automatic Client Locale Detection**: Automatically localizes `/neodymium2` chat UIs (`status`, `modules`, `regions`, `chunk`, `nametags`, `reload`), hover tooltips, and protected-region entry Action Bar notifications to Korean for `ko_*` clients and English (`en_us`) for all other clients.\n- **Language Override Command & Config**: Added `/neodymium2 lang [auto|en_us|ko_kr]` command and optional `\"language\"` key in `config/neodymium2/config.json`.\n- **Includes all `v2.0.0-rc.6` Fixes**: Retains `BrainTightMixin` ↔ Lithium `memoryModCount` expiration sync (Breeze `WindCharge` contraption fix) and `MoverType.PISTON` mob wake-up."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 14,
+		"more": 0,
+		"people": [
 			{
-				"loader": "fabric",
-				"id": "neodymium2",
-				"version": "2.0.0-rc.13+26.3",
-				"name": "네오디윰 2 (Neodymium 2)",
-				"description": "Region-aware ServerCore policies, lazy-chunk projectile cleanup and villager Brain maintenance with live trade prices and vanilla hero gifts.",
-				"minecraft": "26.3",
-				"environment": "server",
-				"depends": [
-					"fabricloader",
-					"minecraft",
-					"java",
-					"fabric-api",
-					"servercore"
-				],
-				"provides": [],
-				"suggests": [
-					"yawp",
-					"yawpmanager"
-				]
+				"login": "Harusarri",
+				"commits": 14,
+				"funding": []
 			}
-		],
-		"checked": "2026-10-31"
-	}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
 }

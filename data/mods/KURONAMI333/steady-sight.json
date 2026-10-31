@@ -1,0 +1,116 @@
+{
+	"repo": "KURONAMI333/steady-sight",
+	"host": "github",
+	"description": "Client-side comfort options for players prone to motion sickness: an always-on edge vignette, automatic vanilla accessibility settings, and camera smoothing for step-ups and minecart slopes.",
+	"stars": 0,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-07-30T08:45:03Z",
+	"pushed": "2026-09-18T04:06:20Z",
+	"releases": [
+		{
+			"tag": "v0.2.0",
+			"published": "2026-07-31T10:42:20Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 496576311,
+					"name": "steady_sight-0.2.0+neoforge-1.21.1.jar",
+					"url": "https://github.com/KURONAMI333/steady-sight/releases/download/v0.2.0/steady_sight-0.2.0%2Bneoforge-1.21.1.jar",
+					"size": 86384,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "14454bb88565f5abd57d5ed0275f9a2f03ac3177f2a40f5fd531a7e58ea9d960",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "steady_sight",
+							"version": "0.2.0",
+							"name": "Steady Sight",
+							"description": "Steady Sight bundles comfort settings for players who get motion sick: an always-on vignette, smoother camera over one-block steps and minecart slopes, the vanilla accessibility settings applied automatically, and screen-shake settings in other installed mods capped. Client-side only.",
+							"minecraft": "[1.21.1]",
+							"environment": "client",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "a1a5aaf690e9b55f668c5d3b19c922f9955b4408eb57a51217dcd03479b0af7b.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 23,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Vignette now blends the way vanilla's does.**\n\nThe previous build composited the vignette with alpha blending. The visible result in RGB was actually identical, but it also wrote a vignette-shaped pattern into the framebuffer's alpha channel every frame — and shader packs were picking that up and drawing it as a hard outline around the screen. Alpha is now held at 1.0 and the blend matches vanilla's exactly, so the vignette sits in the picture instead of on top of it.\n\n**Field of view is now part of the one-time comfort pass.**\n\nRaised to 80 if yours is currently lower, left alone if you already play wider. Minecraft's FOV slider is vertical, so 80 is roughly 115° horizontal — wide enough to help, short of the range where the distortion starts working against you.\n\n**New: other mods' screen shake is capped too.**\n\nIf you have them installed, Steady Sight now nudges Blueprint's screen-shake scale (to 0.3 — capped rather than zeroed, so an explosion still reads as an explosion) and its concurrent-shaker limit, Punchy's freeze-frame hit shake, and SmoothGUI's menu-open slide, which feeds directly into mouse-look pitch.\n\nThis is judged one setting at a time, not one mod at a time. A mod is never touched just because it adds particles, arm animation, or extra visual detail — those don't move your viewpoint, and moving viewpoints are what this mod is about. It runs once, only for mods you actually have, never overwrites a value you've changed yourself, and sits behind its own toggle separate from the vanilla settings pass.\n\n**Upgrading from 0.1.0**: the marker file now records which settings were applied rather than a single 'done' flag, so you'll get the newly added ones without the five from 0.1.0 being pushed back over anything you've since changed."
+		},
+		{
+			"tag": "v0.1.0",
+			"published": "2026-07-30T08:45:31Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 495132659,
+					"name": "steady_sight-0.1.0+neoforge-1.21.1.jar",
+					"url": "https://github.com/KURONAMI333/steady-sight/releases/download/v0.1.0/steady_sight-0.1.0%2Bneoforge-1.21.1.jar",
+					"size": 63021,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "274eb174444b1d0402491f26729c75eb16c7fed42b53d42723ef4659d641342b",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "steady_sight",
+							"version": "0.1.0",
+							"name": "Steady Sight",
+							"description": "Steady Sight bundles comfort settings for players who get motion sick: an always-on vignette that dims the screen edges, a smoother camera on one-block steps, and the vanilla accessibility settings applied automatically. Client-side only.",
+							"minecraft": "[1.21.1]",
+							"environment": "client",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "a1a5aaf690e9b55f668c5d3b19c922f9955b4408eb57a51217dcd03479b0af7b.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First release.\n\nA client-side comfort mod for players who get motion sick in Minecraft. Everything is on by default — you should not need to open a config screen for it to do anything.\n\n**What it does**\n\n- **Edge vignette.** The screen edges stay slightly dimmed, which narrows how much of the periphery streams past you while you move. Peripheral-vision restriction is associated with lower cybersickness in the literature.\n- **Vanilla accessibility settings, applied for you.** On first launch it turns off view bobbing and auto-jump, and sets FOV effects, distortion effects and damage tilt to zero. These are vanilla options most players never open. It records that it has done this, so if you change any of them later they are left alone. Can be disabled entirely in the config.\n- **Step-up camera smoothing.** Walking up a one-block step snaps your Y position instantly in vanilla. The camera now absorbs that over a few frames.\n- **Minecart slope smoothing.** Entering a sloped rail moves you a full block vertically in a single tick, with no interpolation. Same treatment.\n\nBoth smoothing features touch **only the camera**. Your position, collision and physics are unchanged, so movement and multiplayer behaviour are identical to vanilla.\n\n**Settings**: one strength preset (off / subtle / standard / strong) plus a toggle per feature.\n\n**Notes**: client-side only, no server install needed. 9 languages. MIT licensed — modpacks welcome, no credit required.\n\nThis is not a cure for motion sickness. It bundles adjustments that the research and community reports point at, so you can try them without hunting down four separate mods."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 0,
+		"more": 0,
+		"people": []
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

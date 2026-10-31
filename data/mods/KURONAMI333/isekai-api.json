@@ -1,0 +1,168 @@
+{
+	"repo": "KURONAMI333/isekai-api",
+	"host": "github",
+	"description": "A universal worldgen library for NeoForge 1.21.1. Provides world rule extraction and remap for Java MOD and datapack consumers. Unrelated to the Isekai Adventure modpack.",
+	"stars": 2,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-05-27T04:16:03Z",
+	"pushed": "2026-09-18T03:54:33Z",
+	"releases": [
+		{
+			"tag": "v2.2.0",
+			"published": "2026-09-04T23:13:19Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 545032821,
+					"name": "isekai_api-2.2.0.jar",
+					"url": "https://github.com/KURONAMI333/isekai-api/releases/download/v2.2.0/isekai_api-2.2.0.jar",
+					"size": 487236,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "dd61cb2ad8c442bf474f349280ae3737c3514f41f4269c4c138211f1ccba7ad3",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "isekai_api",
+							"version": "2.2.0",
+							"name": "Isekai API",
+							"description": "A universal worldgen library for NeoForge 1.21.1. Provides world rule extraction and remap for Java MOD and datapack consumers. Unrelated to the Isekai Adventure modpack.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "a49bd761825ed15b4216991b6e7fdb99e5ea21527c3282e73ba4b22310af1c48.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 211,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**No Java API breaks.** The one addition is a `default` method, so `SurfaceAnchor` variants\nwritten against 1.x / 2.0.0 / 2.1.0 compile and run unchanged. The datapack schema is untouched;\nwhat changes is where ore lands in a column that holds more than one body.\n\n### Fixed — datapack behaviour\n\n- **`isekai_api:column_relative` reaches every body in a column, not just the topmost one.**\n  A column of floating terrain can hold several islands stacked above one another, and both\n  default anchors resolved against the highest of them by construction — `world_surface` reads\n  the heightmap, and `world_floor` scans down from whatever that found. An island with anything\n  floating above it therefore received no ore at all. It now emits one position per body, at the\n  same normalized depth, so an island's ore no longer depends on what happens to float above it.\n  Measured on Sky World: andesite, granite, diorite, coal, iron and copper were all exactly 0\n  through the lower island band, in a region where 29 of 29 lower-island chunks also carried an\n  upper island.\n- A body too thin for the band is skipped on its own instead of ending the column, so a thin\n  island no longer hides the ones below it.\n- **A column holding one body places exactly what it placed before**, at the same Y, having drawn\n  the same amount from the random source — the depth is drawn once per placement however many\n  bodies the column turns out to hold, and a column that yields nothing still draws nothing.\n  Worlds whose terrain never stacks generate identically.\n\n### Added — Java API\n\n- **`SurfaceAnchor.resolveYBelow(PlacementContext, BlockPos, int)`** — resolve an anchor against\n  the part of a column at or below a ceiling, which is how the walk reaches the second body and\n  the ones under it. It is a `default` method with single-shot semantics (the anchor's own Y when\n  that lies at or below the ceiling, otherwise nothing), so a variant that does not override it\n  keeps reporting one body per column exactly as before. `world_surface` and `world_floor`\n  override it; see [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md)."
+		},
+		{
+			"tag": "v2.1.0",
+			"published": "2026-08-08T12:34:20Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 506367749,
+					"name": "isekai-api-2.1.0-neoforge-1.21.1.jar",
+					"url": "https://github.com/KURONAMI333/isekai-api/releases/download/v2.1.0/isekai-api-2.1.0-neoforge-1.21.1.jar",
+					"size": 484813,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "48e712644224a95b83476a062680a783ebe68e178cd42a1bd94e0cb50dc13a87",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "isekai_api",
+							"version": "2.1.0",
+							"name": "Isekai API",
+							"description": "A universal worldgen library for NeoForge 1.21.1. Provides world rule extraction and remap for Java MOD and datapack consumers. Unrelated to the Isekai Adventure modpack.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "a49bd761825ed15b4216991b6e7fdb99e5ea21527c3282e73ba4b22310af1c48.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 211,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Three features that the documentation promised but the implementation never\ndelivered are now real: biome zones vary with the world seed, `count_scale`\nthins structures, and `TransitionRule` blend/gap are evaluated.\n\n**No Java API breaks.** Everything added is a `default` method or a new static,\nso variants written against 1.x / 2.0.0 compile and run unchanged.\n\n### Changed — datapack behaviour\n\n- **`isekai_api:noise_threshold` and `isekai_api:edge_jitter` now vary with the\n  world seed.** Their JSON `seed` field is unchanged in shape but changed in\n  meaning: it was an absolute noise seed, and is now combined with the world\n  seed via `BiomeZone.deriveSeed`. Two worlds made from the same datapack with\n  different seeds get different patterns; the same seed reproduces. **Worlds\n  created before 2.1.0 will generate a different pattern in newly explored\n  chunks** — finish or retire such a world before updating.\n- Combinators (`and` / `or` / `not`) propagate the world seed to their children.\n  Purely geometric zones (`always`, `y_above`, `y_below`, `y_between`,\n  `within_distance`, `beyond_distance`) are unaffected by seed, as before.\n- **A world's terrain *shape* is not seeded by this change.** Density functions\n  built only from `isekai_api:distance` / `repeat` / `add` / `max` and constants\n  stay identical in every world; seed variation there comes from including a\n  vanilla `minecraft:noise` term, which the world seed already drives.\n\n### Added\n\n- **`structure_strategy` accepts `isekai_api:count_scale`.** A factor below 1.0\n  deterministically thins vanilla structures from `(world seed, chunk x, chunk z,\n  structure id)`. It vetoes candidates at `Structure.findValidGenerationPoint`\n  rather than touching `RandomSpreadStructurePlacement.spacing`: that placement\n  object is shared by every dimension referencing the structure set, and\n  `ChunkGeneratorStructureState` caches the candidate grid at world load, so\n  rescaling spacing would leak across dimensions and break seed reproducibility.\n  The consequence of the safer route is that structures can be **made rarer but\n  not more common** — a factor above 1.0 is a validation error, not a silent\n  round-down.\n- **`TransitionRule.Blend` and `Gap` are evaluated** at layer boundaries.\n  `Blend(b)` spreads the seam across a `b`-block band whose per-position choice\n  between the two descriptors ramps from 0 to 1, turning a flat seam into a\n  grainy gradient. `Gap(g)` leaves the top `g` blocks of the lower layer\n  unclaimed. Blend affects a descriptor's positional output — `block_overrides`\n  (`surface_top`, `default_block`) and `structure_predicates` — not terrain\n  shape, and not ore/mob/feature remap (those select a layer by biome, not Y).\n- `BiomeZone.withWorldSeed(long)` and `BiomeZone.deriveSeed(long, long)`.\n  `withWorldSeed` defaults to returning `this`, so third-party variants keep\n  working; a third-party *combinator* that does not override it will not\n  propagate the seed to nested built-in noise zones.\n- `IsekaiRemap.getDescriptorAt(dimension, x, y, z)` as a `default` method\n  delegating to the existing Y-only form.\n- A server-start warning when a rule biome source never received a world seed.\n\n### Changed — `isekai_api:pool` behaviour\n\n`pool` used to carve, floor and fill unconditionally, so a basin that straddled a step\nin the ground ended up with its water surface above the neighbouring ground and drained\nover the lip. It now follows `LakeFeature`'s shape: it **tests the shell for solidity\nbefore writing anything** and returns without placing a single block when the site\ncannot hold the fluid, it **lines the whole shell** with `rim_block` rather than only\nthe floor, and its outline is a **union of several random ellipsoids** instead of a\nmathematical disc. The ice-capping pass is deliberately not ported — it calls\n`getBiome()` up to 15 blocks out, which throws during worldgen.\n\nNo codec change: `fluid` / `rim_block` / `xz_radius` / `depth` are untouched and 1.x\n\n..."
+		},
+		{
+			"tag": "v2.0.0",
+			"published": "2026-08-05T08:06:58Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 502354228,
+					"name": "isekai-api-2.0.0-neoforge-1.21.1.jar",
+					"url": "https://github.com/KURONAMI333/isekai-api/releases/download/v2.0.0/isekai-api-2.0.0-neoforge-1.21.1.jar",
+					"size": 472599,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "ae631a35ce27afd9a27aaf220547f281fab2cb15fb81dd30a24b42f5c58f858d",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "isekai_api",
+							"version": "2.0.0",
+							"name": "Isekai API",
+							"description": "A universal worldgen library for NeoForge 1.21.1. Provides world rule extraction and remap for Java MOD and datapack consumers. Unrelated to the Isekai Adventure modpack.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "a49bd761825ed15b4216991b6e7fdb99e5ea21527c3282e73ba4b22310af1c48.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 205,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "The rule-adaptation layer becomes an open extension point, terrain shape gets a\ncopy-free hook mechanism, and the library ships as a proper Gradle dependency.\n\n**Datapacks are unaffected.** Every 1.x datapack loads unchanged: the `isekai:`\ndispatch prefix is accepted as a deprecated alias (logs one warning per id), and all\nexisting payload schemas are byte-for-byte compatible. The breaking changes are on the\n**Java API** only (see below) — this is a major bump because the SPI interfaces changed\nshape, not because datapacks broke.\n\n### Breaking (Java API)\n\nThe five in-house dispatch interfaces — `SpatialPredicate`, `RemapStrategy`, `BiomeZone`,\n`SurfaceAnchor`, `TransitionRule` — are now **registry-backed extension points** instead of\n`sealed` codec unions:\n\n- `sealed` is removed from all five. Exhaustive `switch` statements over their variants no\n  longer compile — handle them through their behavior methods or a `default` branch.\n- `String typeId()` is **removed** from all five. To recover a variant's registered id, ask\n  the registry: `registry.getKey(variant.codec())`. The registry keys live in\n  `api/registry/IsekaiRegistries`.\n- New abstract methods carry each interface's evaluation contract:\n  `SpatialPredicate.test(EvaluationContext)`, `RemapStrategy.remap(VerticalRange, RemapContext)`,\n  `SurfaceAnchor.resolveY(PlacementContext, BlockPos)`. Custom Java implementations must\n  supply them.\n\nDatapack authors and consumers who only use the built-in variants from JSON are unaffected.\n\n### Added\n\n- **Open SPI.** Third parties register their own variant of any of the five interfaces from\n  their own mod id by adding a `MapCodec` to the matching registry in\n  `api/registry/IsekaiRegistries` — no fork, no PR. See\n  [docs/DATAPACK_REFERENCE.md](docs/DATAPACK_REFERENCE.md) → \"Extending the SPI\".\n- `api/predicate/EvaluationContext` and `api/remap/RemapContext` — the world-access and\n  math seams that variant `test` / `remap` implementations receive.\n- **`isekai_api:hooked_overworld` preset + `hook/final_density` density function.** A new\n  dimension references the preset and overrides one small hook file to change terrain shape —\n  no 2500-line `noise_settings` copy. A whole floating-island world is two files.\n  ([README](README.md#quick-start--a-floating-island-world-in-2-files))\n- **Terrain-relative ore remap** — `isekai_api:column_local` (RemapStrategy),\n  `isekai_api:world_floor` (SurfaceAnchor) and `isekai_api:column_relative` (placement\n  modifier). Every other remap strategy produces one absolute Y band per feature, which can\n  only ever be right for terrain at one altitude; `column_local` normalizes a feature's\n  vanilla Y to a depth and resolves it against each column's own surface and underside as the\n  feature is placed. Floating islands, orbiting planets and sky continents get the same\n  internal ore layout whatever height they sit at. `RemapStrategy` gained a\n  `remapToColumn(VerticalRange, RemapContext)` **default** method returning\n  `Optional.empty()`, so every existing strategy — built-in or third-party — keeps the\n  absolute behaviour unchanged.\n- **`isekai_api:vanilla_overworld_surface`** — a delegate `SurfaceRules.RuleSource` that\n  reproduces the vanilla overworld surface rule, so overworld-replacement datapacks skip the\n  30 KB surface-rule copy.\n- **Distribution as a Gradle dependency**: `sources` and `javadoc` jars, and a maven repo.\n  See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md#depending-on-isekai-api).\n\n### Changed\n\n- **Dispatch prefix unified to `isekai_api:`.** All `\"type\"` values normalise to the\n  `isekai_api` namespace; docs and examples use it throughout.\n- Inline `apply_worldshape` / `apply_worldshape_structures` modifier forms are superseded by\n  the `_ref` forms.\n\n### Fixed\n\n- **`isekai_api:worldshape_surface_top` self-gates to the surface layer.** Prepended bare into a\n  `surface_rule` sequence it replaces only the topmost surface block; the blocks beneath keep the\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 0,
+		"more": 0,
+		"people": []
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

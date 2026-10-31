@@ -1,0 +1,499 @@
+{
+	"repo": "kizio806/jump-delay-fix",
+	"host": "github",
+	"description": "A Minecraft Fabric mod that removes the jump delay, allowing faster and more responsive movement in combat. Ideal for PvP and intense gameplay.",
+	"stars": 3,
+	"archived": false,
+	"license": "Apache-2.0",
+	"created": "2026-02-21T14:24:24Z",
+	"pushed": "2026-10-28T20:01:59Z",
+	"releases": [
+		{
+			"tag": "v1.4.2",
+			"published": "2026-10-28T20:03:05Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 686182804,
+					"name": "jumpdelayfix-fabric-26.3-1.4.2.jar",
+					"url": "https://github.com/kizio806/jump-delay-fix/releases/download/v1.4.2/jumpdelayfix-fabric-26.3-1.4.2.jar",
+					"size": 246861,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "6f2e64480b7bbec1a8f6c205a0ffdac52d447a6cfdbbe6193166aa6e9f5ef627",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "jumpdelayfix",
+							"version": "1.4.2",
+							"name": "Jump Delay Fix",
+							"description": "Lightweight client-side mod for smoother, more responsive jumping with multiplayer-friendly behavior.",
+							"minecraft": ">=26.3 <26.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"sodium",
+								"iris",
+								"lithium"
+							]
+						}
+					],
+					"icon": "9eb78398c2cfdb15b0e38e677e9c99c327c5876bc8441e0b3ac9ac0b1226717f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 23,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 686182805,
+					"name": "jumpdelayfix-neoforge-26.3-1.4.2.jar",
+					"url": "https://github.com/kizio806/jump-delay-fix/releases/download/v1.4.2/jumpdelayfix-neoforge-26.3-1.4.2.jar",
+					"size": 246054,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "602ff6bf96ac015c2b75884002f18fbdc4af90c2c8588d8594bcefb5b0dc1150",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "jumpdelayfix",
+							"version": "1.4.2",
+							"name": "Jump Delay Fix",
+							"description": "Lightweight client-side mod for smoother, more responsive jumping with multiplayer-friendly behavior.",
+							"minecraft": "[26.3,26.4)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "9eb78398c2cfdb15b0e38e677e9c99c327c5876bc8441e0b3ac9ac0b1226717f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Jump Delay Fix v1.4.2\n\n- Mod version: 1.4.2\n- Minecraft version: 26.3\n- Fabric versions: 26.3\n- NeoForge versions: 26.3\n\n\n### Added\n- Canonical compatibility matrix (`docs/compatibility-matrix.md`) detailing multi-branch support, loader dependencies, artifact generation strategies, and SHA-256 checksums across all 16 supported combinations.\n- Comprehensive 9-step procedure for porting and adding new Minecraft versions documented in `docs/development.md`.\n- Explicit player state predicates in Fabric and NeoForge input adapters covering active swimming (`isSwimming`), submerged status (`isInWater`), visual crawling (`isVisuallyCrawling`), vehicle passenger immunity (`isPassenger`), and flight/gliding.\n- Inconclusive jump tracking diagnostics (`getInconclusiveJumpCount()`) and regression verification.\n\n### Changed\n- Zero-allocation `JumpInput` architecture: refactored input abstraction from per-tick functional allocations to direct state query methods, eliminating per-tick garbage collection pressure during the client tick loop.\n- Memory leak prevention: bounded `ServerAdaptiveStats` history with a 256-entry LRU (Least Recently Used) cache, preventing unbounded heap growth across long-running multiplayer sessions.\n- Concurrency hardening: added synchronization guards to profile queries and server adaptive tracking against race conditions during asynchronous network/tick events.\n- Refined jump confirmation heuristics in `JumpHandler`: airborne jumps exceeding the timeout window without detected rollback or lift confirmation are marked inconclusive rather than falsely credited as successful confirmations, preventing skewed server latency statistics and inappropriate adaptive penalties.\n- Reorganized `ConfigManager` package structure to `com.kizio.jumpdelayfix.ConfigManager` in pure Java `:common` with package structure validation.\n- Completely removed dead and unused GameTest structure files from NeoForge resources.\n- Eliminated all `@SuppressWarnings` annotations across the codebase and migrated keymapping categories to non-deprecated APIs with automated `validateSourceHygiene` enforcement.\n- Strengthened NeoForge loader version ranges to strictly bounded intervals (`[26.3,26.4)`), preventing runtime mismatches against untested future major releases.\n- Hardened CI/CD release workflow to ensure each artifact is published exclusively for its exact compatible Minecraft version without broad version leakage.\n\n### Fixed\n- Localized settings menu \"Done\" button (`gui.jumpdelayfix.option.done`) across Italian (`Fatto`), Japanese (`完了`), Portuguese (`Concluído`), Russian (`Готово`), and Simplified Chinese (`完成`).\n- Rectified profile cycling order in documentation and wiki guides to reflect actual implementation sequence (`SMART` → `STABLE` → `COMPETITIVE`).\n- Fixed misleading keybinding descriptions in troubleshooting documentation across all loaders (`J` for toggle, `H` for profile cycle, `O` for settings GUI).\n- Remedied broken anchor links and external repository references across project documentation, ensuring clean onboarding for new contributors.\n\n### Compatibility\n- Minecraft: 26.3\n- Fabric: Loader 0.18.4+ / Fabric API 0.160.6+26.3\n- NeoForge: 26.3.0.1-beta+\n- Java: 25"
+		},
+		{
+			"tag": "v1.3.2",
+			"published": "2026-10-28T19:56:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 686166490,
+					"name": "jumpdelayfix-fabric-26.2-1.3.2.jar",
+					"url": "https://github.com/kizio806/jump-delay-fix/releases/download/v1.3.2/jumpdelayfix-fabric-26.2-1.3.2.jar",
+					"size": 246869,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e48f1e1167990a2e6903e7fd3e8f220071b2e3911bbf6433bdfbc3c58d6746da",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "jumpdelayfix",
+							"version": "1.3.2",
+							"name": "Jump Delay Fix",
+							"description": "Lightweight client-side mod for smoother, more responsive jumping with multiplayer-friendly behavior.",
+							"minecraft": ">=26.2 <26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"sodium",
+								"iris",
+								"lithium"
+							]
+						}
+					],
+					"icon": "9eb78398c2cfdb15b0e38e677e9c99c327c5876bc8441e0b3ac9ac0b1226717f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 23,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 686166494,
+					"name": "jumpdelayfix-neoforge-26.2-1.3.2.jar",
+					"url": "https://github.com/kizio806/jump-delay-fix/releases/download/v1.3.2/jumpdelayfix-neoforge-26.2-1.3.2.jar",
+					"size": 246051,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "047730d064e741f44a7090ee93daf6bb9bbb40cdd514556ee6f03372b46f377e",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "jumpdelayfix",
+							"version": "1.3.2",
+							"name": "Jump Delay Fix",
+							"description": "Lightweight client-side mod for smoother, more responsive jumping with multiplayer-friendly behavior.",
+							"minecraft": "[26.2,26.3)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "9eb78398c2cfdb15b0e38e677e9c99c327c5876bc8441e0b3ac9ac0b1226717f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Jump Delay Fix v1.3.2\n\n- Mod version: 1.3.2\n- Minecraft version: 26.2\n- Fabric versions: 26.2\n- NeoForge versions: 26.2\n\n\n### Added\n- Canonical compatibility matrix (`docs/compatibility-matrix.md`) detailing Minecraft 26.2 support, loader dependencies, artifact packaging, and verification status.\n- Comprehensive 9-step procedure for porting and adding new Minecraft versions documented in `docs/development.md`.\n- Explicit player state predicates in Fabric and NeoForge input adapters covering active swimming (`isSwimming`), submerged status (`isInWater`), visual crawling (`isVisuallyCrawling`), vehicle passenger immunity (`isPassenger`), and flight/gliding.\n- Inconclusive jump tracking diagnostics (`getInconclusiveJumpCount()`) and regression verification.\n\n### Changed\n- Zero-allocation `JumpInput` architecture: refactored input abstraction from per-tick functional allocations to direct state query methods, eliminating per-tick garbage collection pressure during the client tick loop.\n- Memory leak prevention: bounded `ServerAdaptiveStats` history with a 256-entry LRU (Least Recently Used) cache, preventing unbounded heap growth across long-running multiplayer sessions.\n- Concurrency hardening: added synchronization guards to profile queries and server adaptive tracking against race conditions during asynchronous network/tick events.\n- Refined jump confirmation heuristics in `JumpHandler`: airborne jumps exceeding the timeout window without detected rollback or lift confirmation are marked inconclusive rather than falsely credited as successful confirmations, preventing skewed server latency statistics and inappropriate adaptive penalties.\n- Reorganized `ConfigManager` package structure to `com.kizio.jumpdelayfix.ConfigManager` in pure Java `:common` with package structure validation.\n- Completely removed dead and unused GameTest structure files from NeoForge resources.\n- Eliminated all `@SuppressWarnings` annotations across the codebase and migrated keymapping categories to non-deprecated APIs with automated `validateSourceHygiene` enforcement.\n- Strengthened NeoForge loader version ranges to strictly bounded intervals (`[26.2,26.3)`), preventing runtime mismatches against untested future major releases.\n- Hardened CI/CD release workflow to ensure each artifact is published exclusively for its exact compatible Minecraft version without broad version leakage.\n\n### Fixed\n- Localized settings menu \"Done\" button (`gui.jumpdelayfix.option.done`) across Italian (`Fatto`), Japanese (`完了`), Portuguese (`Concluído`), Russian (`Готово`), and Simplified Chinese (`完成`).\n- Rectified profile cycling order in documentation and wiki guides to reflect actual implementation sequence (`SMART` → `STABLE` → `COMPETITIVE`).\n- Fixed misleading keybinding descriptions in troubleshooting documentation across all loaders (`J` for toggle, `H` for profile cycle, `O` for settings GUI).\n- Remedied broken anchor links and external repository references across project documentation, ensuring clean onboarding for new contributors.\n\n### Compatibility\n- Minecraft: 26.2\n- Fabric: Loader 0.18.4+ / Fabric API 0.159.0+26.2\n- NeoForge: 26.2.0.79+ (Loader `[26.2,26.3)`)\n- Java: 25"
+		},
+		{
+			"tag": "v1.2.2",
+			"published": "2026-10-28T19:54:21Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 686160345,
+					"name": "jumpdelayfix-fabric-26.1.2-1.2.2.jar",
+					"url": "https://github.com/kizio806/jump-delay-fix/releases/download/v1.2.2/jumpdelayfix-fabric-26.1.2-1.2.2.jar",
+					"size": 246825,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "42045235babd1258b3f4cd1e933c307354d33048a5ceb8ef96b36db45961bc96",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "jumpdelayfix",
+							"version": "1.2.2",
+							"name": "Jump Delay Fix",
+							"description": "Lightweight client-side mod for smoother, more responsive jumping with multiplayer-friendly behavior.",
+							"minecraft": ">=26.1 <26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"sodium",
+								"iris",
+								"lithium"
+							]
+						}
+					],
+					"icon": "9eb78398c2cfdb15b0e38e677e9c99c327c5876bc8441e0b3ac9ac0b1226717f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 23,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 686160343,
+					"name": "jumpdelayfix-neoforge-26.1.2-1.2.2.jar",
+					"url": "https://github.com/kizio806/jump-delay-fix/releases/download/v1.2.2/jumpdelayfix-neoforge-26.1.2-1.2.2.jar",
+					"size": 246000,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "8d1a367adaa9cb3282a8b44d7b4bdb79b07b6ce1c8593cd6530d6f0a83f7f8ac",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "jumpdelayfix",
+							"version": "1.2.2",
+							"name": "Jump Delay Fix",
+							"description": "Lightweight client-side mod for smoother, more responsive jumping with multiplayer-friendly behavior.",
+							"minecraft": "[26.1,26.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "9eb78398c2cfdb15b0e38e677e9c99c327c5876bc8441e0b3ac9ac0b1226717f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Jump Delay Fix v1.2.2\n\n- Mod version: 1.2.2\n- Minecraft version: 26.1.2\n- Fabric versions: 26.1,26.1.1,26.1.2\n- NeoForge versions: 26.1,26.1.1,26.1.2\n\n\n### Added\n- Canonical compatibility matrix (`docs/compatibility-matrix.md`) detailing Minecraft 26.1.x support across 26.1, 26.1.1, and 26.1.2, loader dependencies, unified artifact packaging, and verification status.\n- Comprehensive 9-step procedure for porting and adding new Minecraft versions documented in `docs/development.md`.\n- Explicit player state predicates in Fabric and NeoForge input adapters covering active swimming (`isSwimming`), submerged status (`isInWater`), visual crawling (`isVisuallyCrawling`), vehicle passenger immunity (`isPassenger`), and flight/gliding.\n- Inconclusive jump tracking diagnostics (`getInconclusiveJumpCount()`) and regression verification.\n\n### Changed\n- Zero-allocation `JumpInput` architecture: refactored input abstraction from per-tick functional allocations to direct state query methods, eliminating per-tick garbage collection pressure during the client tick loop.\n- Memory leak prevention: bounded `ServerAdaptiveStats` history with a 256-entry LRU (Least Recently Used) cache, preventing unbounded heap growth across long-running multiplayer sessions.\n- Concurrency hardening: added synchronization guards to profile queries and server adaptive tracking against race conditions during asynchronous network/tick events.\n- Refined jump confirmation heuristics in `JumpHandler`: airborne jumps exceeding the timeout window without detected rollback or lift confirmation are marked inconclusive rather than falsely credited as successful confirmations, preventing skewed server latency statistics and inappropriate adaptive penalties.\n- Reorganized `ConfigManager` package structure to `com.kizio.jumpdelayfix.ConfigManager` in pure Java `:common` with package structure validation.\n- Completely removed dead and unused GameTest structure files from NeoForge resources.\n- Eliminated all `@SuppressWarnings` annotations across the codebase and migrated keymapping categories to non-deprecated APIs with automated `validateSourceHygiene` enforcement.\n- Strengthened NeoForge loader version ranges to strictly bounded intervals (`[26.1,26.2)`), preventing runtime mismatches against untested future major releases.\n- Hardened CI/CD release workflow to ensure each artifact is published exclusively for its exact compatible Minecraft version without broad version leakage.\n\n### Fixed\n- Localized settings menu \"Done\" button (`gui.jumpdelayfix.option.done`) across Italian (`Fatto`), Japanese (`完了`), Portuguese (`Concluído`), Russian (`Готово`), and Simplified Chinese (`完成`).\n- Rectified profile cycling order in documentation and wiki guides to reflect actual implementation sequence (`SMART` → `STABLE` → `COMPETITIVE`).\n- Fixed misleading keybinding descriptions in troubleshooting documentation across all loaders (`J` for toggle, `H` for profile cycle, `O` for settings GUI).\n- Remedied broken anchor links and external repository references across project documentation, ensuring clean onboarding for new contributors.\n\n### Compatibility\n- Minecraft: 26.1, 26.1.1, 26.1.2\n- Fabric: Loader 0.18.4+ / Fabric API 0.155.2+26.1.2\n- NeoForge: 26.1.2.103+ (Loader `[26.1,26.2)`)\n- Java: 25"
+		},
+		{
+			"tag": "v1.1.2",
+			"published": "2026-10-28T19:51:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 686152938,
+					"name": "jumpdelayfix-fabric-1.21.11-1.1.2.jar",
+					"url": "https://github.com/kizio806/jump-delay-fix/releases/download/v1.1.2/jumpdelayfix-fabric-1.21.11-1.1.2.jar",
+					"size": 247318,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a2ac4075ee7312127b60de91e59907103268f182a0427d7946346555bda87209",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "jumpdelayfix",
+							"version": "1.1.2",
+							"name": "Jump Delay Fix",
+							"description": "Lightweight client-side mod for smoother, more responsive jumping with multiplayer-friendly behavior.",
+							"minecraft": ">=1.21.9 <1.21.12",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"sodium",
+								"iris",
+								"lithium"
+							]
+						}
+					],
+					"icon": "9eb78398c2cfdb15b0e38e677e9c99c327c5876bc8441e0b3ac9ac0b1226717f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 23,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 686152937,
+					"name": "jumpdelayfix-neoforge-1.21.11-1.1.2.jar",
+					"url": "https://github.com/kizio806/jump-delay-fix/releases/download/v1.1.2/jumpdelayfix-neoforge-1.21.11-1.1.2.jar",
+					"size": 245981,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "44dd30f5306e5a3d63a09d209392d67a462cf0a058261457fbd5abc4de6e814b",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "jumpdelayfix",
+							"version": "1.1.2",
+							"name": "Jump Delay Fix",
+							"description": "Lightweight client-side mod for smoother, more responsive jumping with multiplayer-friendly behavior.",
+							"minecraft": "[1.21.9,1.21.12)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "9eb78398c2cfdb15b0e38e677e9c99c327c5876bc8441e0b3ac9ac0b1226717f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Jump Delay Fix v1.1.2\n\n- Mod version: 1.1.2\n- Minecraft version: 1.21.11\n- Fabric versions: 1.21.9,1.21.10,1.21.11\n- NeoForge versions: 1.21.9,1.21.10,1.21.11\n\n\n### Added\n- Unified Minecraft 1.21.9, 1.21.10, and 1.21.11 support across both Fabric and NeoForge loaders.\n- Unified single-JAR architecture per loader: Jump Delay Fix Fabric JAR and NeoForge JAR seamlessly support Minecraft 1.21.9, 1.21.10, and 1.21.11 via comprehensive version ranges (`fabric_minecraft_version_range=>=1.21.9 <1.21.12`, `minecraft_version_range=[1.21.9,1.21.12)`).\n- Canonical compatibility matrix (`docs/compatibility-matrix.md`) detailing Minecraft 1.21.x versions, loader dependencies, and release targets.\n- Comprehensive 9-step procedure for porting and adding new Minecraft versions documented in `docs/development.md`.\n- Explicit player state predicates in Fabric (Yarn mappings: `isTouchingWater`, `isSwimming`, `isCrawling`, `hasVehicle`, `isGliding`) and NeoForge (`isInWater`, `isSwimming`, `isVisuallyCrawling`, `isPassenger`, `isFallFlying`) input adapters.\n- Inconclusive jump tracking diagnostics (`getInconclusiveJumpCount()`) and regression verification.\n\n### Changed\n- Zero-allocation `JumpInput` architecture: refactored input abstraction from per-tick functional allocations to direct state query methods, eliminating per-tick garbage collection pressure during the client tick loop.\n- Memory leak prevention: bounded `ServerAdaptiveStats` history with a 256-entry LRU (Least Recently Used) cache, preventing unbounded heap growth across long-running multiplayer sessions.\n- Concurrency hardening: added synchronization guards to profile queries and server adaptive tracking against race conditions during asynchronous network/tick events.\n- Refined jump confirmation heuristics in `JumpHandler`: airborne jumps exceeding the timeout window without detected rollback or lift confirmation are marked inconclusive rather than falsely credited as successful confirmations, preventing skewed server latency statistics and inappropriate adaptive penalties.\n- Reorganized `ConfigManager` package structure to `com.kizio.jumpdelayfix.ConfigManager` in pure Java `:common` with package structure validation.\n- Completely removed dead and unused GameTest structure files and duplicate resources.\n- Eliminated all `@SuppressWarnings` annotations across the codebase with automated `validateSourceHygiene` enforcement.\n- Strengthened NeoForge loader version ranges to strictly bounded intervals (`[21.9,21.10)`, `[21.10,21.11)`, `[21.11,21.12)`).\n- Hardened CI/CD release workflow to ensure each artifact is published exclusively for its exact compatible Minecraft version without broad version leakage.\n\n### Fixed\n- Localized settings menu \"Done\" button (`gui.jumpdelayfix.option.done`) across Italian (`Fatto`), Japanese (`完了`), Portuguese (`Concluído`), Russian (`Готово`), and Simplified Chinese (`完成`).\n- Rectified profile cycling order in documentation and wiki guides to reflect actual implementation sequence (`SMART` → `STABLE` → `COMPETITIVE`).\n- Fixed misleading keybinding descriptions in troubleshooting documentation across all loaders (`J` for toggle, `H` for profile cycle, `O` for settings GUI).\n- Remedied broken anchor links and external repository references across project documentation, ensuring clean onboarding for new contributors.\n\n### Compatibility\n- Minecraft: 1.21.9, 1.21.10, 1.21.11 (Both Fabric and NeoForge)\n- Fabric: Loader 0.18.4+ / Fabric API 0.134.1+ (1.21.9), 0.138.4+ (1.21.10), 0.141.6+ (1.21.11)\n- NeoForge: 21.9.16+ (1.21.9), 21.10.64+ (1.21.10), 21.11.48+ (1.21.11)\n- Java: 21"
+		},
+		{
+			"tag": "v1.4.1",
+			"published": "2026-10-25T14:22:13Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 675239529,
+					"name": "jumpdelayfix-fabric-26.3-1.4.1.jar",
+					"url": "https://github.com/kizio806/jump-delay-fix/releases/download/v1.4.1/jumpdelayfix-fabric-26.3-1.4.1.jar",
+					"size": 247019,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "72d43612c60eda84630134f34c7ef8083ad47687a279ebd0f84c69faf31e21f3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "jumpdelayfix",
+							"version": "1.4.1",
+							"name": "Jump Delay Fix",
+							"description": "Lightweight client-side mod for smoother, more responsive jumping with multiplayer-friendly behavior.",
+							"minecraft": ">=26.3 <26.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"sodium",
+								"iris",
+								"lithium",
+								"rei",
+								"emi"
+							]
+						}
+					],
+					"icon": "9eb78398c2cfdb15b0e38e677e9c99c327c5876bc8441e0b3ac9ac0b1226717f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 24,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 675239528,
+					"name": "jumpdelayfix-neoforge-26.3-1.4.1.jar",
+					"url": "https://github.com/kizio806/jump-delay-fix/releases/download/v1.4.1/jumpdelayfix-neoforge-26.3-1.4.1.jar",
+					"size": 246627,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "7ee5c6f9911025c517f94a47f3855988182be7784354cf1bde1734741077c117",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "jumpdelayfix",
+							"version": "1.4.1",
+							"name": "Jump Delay Fix",
+							"description": "Lightweight client-side mod for smoother, more responsive jumping with multiplayer-friendly behavior.",
+							"minecraft": "[26.3,26.4)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"jei",
+								"emi"
+							]
+						}
+					],
+					"icon": "9eb78398c2cfdb15b0e38e677e9c99c327c5876bc8441e0b3ac9ac0b1226717f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 23,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Jump Delay Fix v1.4.1\n\n- Mod version: 1.4.1\n- Minecraft version: 26.3\n- Fabric versions: 26.3\n- NeoForge versions: 26.3\n\n\n### Added\n- In-game \"Reset to Defaults\" button in the settings screen for both Fabric and NeoForge, allowing quick restoration of default configuration.\n- Enhanced player lifecycle validity checks (sleeping state, alive check, entity instance validation across respawns and dimension changes) to immediately reset transient jump delay tracking.\n- Client connection and respawn event listeners on both loaders to cleanly reset transient jump states upon joining worlds or respawning.\n- Localized reset button strings (`gui.jumpdelayfix.reset_defaults`) across all 10 supported languages (`en_us`, `pl_pl`, `de_de`, `es_es`, `fr_fr`, `it_it`, `ja_jp`, `pt_br`, `ru_ru`, `zh_cn`).\n- Dedicated `docs/installation.md` and `docs/troubleshooting.md` guides along with updated documentation and wiki instructions.\n- Unified release script (`scripts/release.sh`) with multi-branch awareness, `--dry-run` and `--publish` modes, and verification gates.\n\n### Changed\n- Strengthened concurrency thread safety in `JumpDelayFix` by ensuring synchronized access across runtime state queries (`isEnabled()`, `getProfile()`).\n- Corrected Polish localization diacritics in `pl_pl.json`.\n- Updated GitHub Actions CI and CodeQL workflows for broader support branch coverage and reliable build performance.\n\n### Compatibility\n- Minecraft: 26.3\n- Fabric: Loader 0.18.4+ / Fabric API 0.160.6+26.3\n- NeoForge: 26.3.0.1-beta+\n- Java: 25"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 45,
+		"more": 0,
+		"people": [
+			{
+				"login": "kizio806",
+				"commits": 45,
+				"name": "kizio",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

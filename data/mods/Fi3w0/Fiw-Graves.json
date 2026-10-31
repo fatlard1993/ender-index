@@ -1,0 +1,134 @@
+{
+	"repo": "Fi3w0/Fiw-Graves",
+	"host": "github",
+	"description": "Death chests without the clutter: packet-only markers, a griefed-loot rollback, and a durable loot-backup safety net.",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-07-08T18:37:44Z",
+	"pushed": "2026-08-07T16:52:48Z",
+	"releases": [
+		{
+			"tag": "v1.1.0",
+			"published": "2026-07-08T18:48:13Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 470556184,
+					"name": "fiwgraves-fabric-1.21.11-1.1.0.jar",
+					"url": "https://github.com/Fi3w0/Fiw-Graves/releases/download/v1.1.0/fiwgraves-fabric-1.21.11-1.1.0.jar",
+					"size": 90747,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "23848dc1ce6c8f33538c16ef197545b91c5ac8a9814ea25f1577ca6c10821190",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "fiwgraves",
+							"version": "1.1.0",
+							"name": "Fiw Graves",
+							"description": "Death chests without the clutter: ghost markers that live only in packets, a rollback net for griefed loot, and nothing installed on the client.",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "549fa1f7040f28808a3693ab585e8fad0bbd7eb920d555639bd29e329b103141.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 34,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 470556187,
+					"name": "fiwgraves-neoforge-1.21.11-1.1.0.jar",
+					"url": "https://github.com/Fi3w0/Fiw-Graves/releases/download/v1.1.0/fiwgraves-neoforge-1.21.11-1.1.0.jar",
+					"size": 90610,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "0b6ba717f131d2a0d2a1802dabaffadd118cab6dbb2db404bb80a04b419876ec",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "fiwgraves",
+							"version": "1.1.0",
+							"name": "Fiw Graves",
+							"description": "Death chests without the clutter: ghost markers that live only in packets, a rollback net for griefed loot, and nothing installed on the client.",
+							"minecraft": "[1.21.11,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "549fa1f7040f28808a3693ab585e8fad0bbd7eb920d555639bd29e329b103141.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 35,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Fixed\n- **Quick-collect (sneak + right-click) could silently delete items.** Vanilla's own\n  `Inventory#add` returns success as soon as it merges *any* portion of a stack into an\n  already-partially-filled inventory — not only when the stack is fully consumed. The\n  mod trusted that return value to decide whether to drop the leftover, so a partial\n  merge (common with a nearly-full inventory) left the remainder undropped and it was\n  then discarded when the grave slot was cleared. Quick-collect now checks the actual\n  leftover count on the stack and drops it on the floor, every time.\n\n### Added\n- **Loot-backup safety net.** Every grave's original contents are now snapshotted the\n  moment it's created, independent of the live grave and of the existing anti-grief\n  rollback history — it survives normal collection, so a bug anywhere in the\n  pickup/expiry path (like the one above) still leaves a recoverable copy.\n  - New config: `lootBackupRetentionDays` (default `7`). Days to keep a backup;\n    recommended presets are `1`, `3`, `7`, or `14`, but any value works. `0` disables\n    the feature, `-1` keeps every backup forever.\n  - New command: `/graves restore <player> [index]` (operator-only) — restores a grave\n    from its backup. Unlike `/graves rollback`, backups aren't consumed on restore and\n    may still exist even if the player already collected the original grave, so check\n    before using it to avoid duplicating loot.\n\n> **Update immediately if you've had reports of players losing items on quick-collect** —\n> this release fixes the root cause and gives you a recovery path (`/graves restore`) for\n> anything already lost, as far back as your `lootBackupRetentionDays` window reaches."
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "github",
+			"url": "https://github.com/sponsors/Fi3w0",
+			"from": "owner-repositories"
+		},
+		{
+			"platform": "ko_fi",
+			"url": "https://ko-fi.com/fi3w0",
+			"from": "owner-repositories"
+		}
+	],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 11,
+		"more": 0,
+		"people": [
+			{
+				"login": "Fi3w0",
+				"commits": 11,
+				"name": "Alex",
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/Fi3w0"
+					}
+				]
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

@@ -1,0 +1,130 @@
+{
+	"repo": "KURONAMI333/free-server-saver",
+	"host": "github",
+	"description": "Heap-aware adaptive throttle for low-RAM Minecraft servers. Prevents GC pauses by scaling back random ticks, mob spawns, chunk loads, and tick rate as JVM heap fills. NeoForge 1.21.1. Ideal for Aternos, home servers, and 2-4GB modpacks.",
+	"stars": 0,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-05-13T16:23:08Z",
+	"pushed": "2026-09-18T03:55:49Z",
+	"releases": [
+		{
+			"tag": "v0.1.1",
+			"published": "2026-08-07T10:32:54Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 505017250,
+					"name": "freeserversaver-0.1.1-neoforge-1.21.1.jar",
+					"url": "https://github.com/KURONAMI333/free-server-saver/releases/download/v0.1.1/freeserversaver-0.1.1-neoforge-1.21.1.jar",
+					"size": 133961,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "886a39f2ba558128e08f0943d7e2024eb19c8f8e658c70410e987c6eaf23dca7",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "freeserversaver",
+							"version": "0.1.1",
+							"name": "Free Server Saver",
+							"description": "Heap-aware lag reducer for free Minecraft servers (Falixnodes, Minehut, self-hosted), and anyone else stuck on 2-4GB hardware. Prevents the GC pauses behind \"mobs teleporting\", \"OutOfMemoryError\", and \"disconnected even though only 2 players online\". Monitors heap + Metaspace + chunk count + boot time, throttles AI ticks / spawns / view distance under pressure, auto-quarantines entities/block-entities that throw repeating tick exceptions, yields to Lithium / FerriteCore / ModernFix / DAB / Chunky / Neruina when present.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "85c7d55970f105cdcd9ef82fd1c6b68679ba3134bab859b9d5d9a05d4ec359cf.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 49,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/kuronami/freeserversaver/modules/DiscordWebhookModule.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Release v0.1.1.\n\nSee [Modrinth](https://modrinth.com/mod/free-server-saver) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/free-server-saver) for full description and changelog."
+		},
+		{
+			"tag": "v0.1.0",
+			"published": "2026-05-14T21:43:21Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 420486837,
+					"name": "freeserversaver-0.1.0.jar",
+					"url": "https://github.com/KURONAMI333/free-server-saver/releases/download/v0.1.0/freeserversaver-0.1.0.jar",
+					"size": 133908,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "4b7e70e01c70a5e941cc32ad392916f013084592daff316061bb89dba30fed93",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "freeserversaver",
+							"version": "0.1.0",
+							"name": "Free Server Saver",
+							"description": "Heap-aware lag reducer for free Minecraft servers (Falixnodes, Minehut, self-hosted), and anyone else stuck on 2-4GB hardware. Prevents the GC pauses behind \"mobs teleporting\", \"OutOfMemoryError\", and \"disconnected even though only 2 players online\". Monitors heap + Metaspace + chunk count + boot time, throttles AI ticks / spawns / view distance under pressure, auto-quarantines entities/block-entities that throw repeating tick exceptions, yields to Lithium / FerriteCore / ModernFix / DAB / Chunky / Neruina when present.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "85c7d55970f105cdcd9ef82fd1c6b68679ba3134bab859b9d5d9a05d4ec359cf.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 49,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/kuronami/freeserversaver/modules/DiscordWebhookModule.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Free Server Saver v0.1.0\n\n**Initial public release.** Heap-aware adaptive throttle for low-RAM\nMinecraft servers — Falixnodes, Minehut, self-hosted, anything stuck\non 2–4 GB of RAM.\n\nIf you've seen any of these on your server, you've seen the same root\ncause:\n\n- 🟦 Mobs teleporting 5–10 blocks instead of moving smoothly\n- 🟦 You and a friend get disconnected with only 2 of you online\n- 🟦 The server freezes for half a second every few minutes\n- 🟦 `OutOfMemoryError` after a clean hour of play\n\nAll garbage-collection pauses. Free Server Saver polls heap pressure\nevery 2 seconds and scales back AI ticks, mob spawns, and view\ndistance **before** the heap fills up. No GC pause, no rubber-banding.\n\n---\n\n## How it works\n\n| Heap | Tier | What changes |\n|---|---|---|\n| < 60 % | NORMAL | Vanilla behavior |\n| 60–70 % | L1 | Far mobs tick every other tick; 50 % of natural spawns rejected |\n| 70–80 % | L2 | Distant mobs at 1/8 tick rate; all natural spawns rejected |\n| 80–85 % | L3 | View distance compressed to 6 chunks |\n| ≥ 85 % | L4 EMERGENCY | Distant mobs force-discarded; server tick rate halved (10 TPS) |\n\n5 percentage-point hysteresis on recovery — no oscillation at the boundary.\n\n## ExceptionGuard\n\nEntities and block-entities that throw unhandled exceptions 3 times\nwithin 10 seconds are silently `discard()`ed (the block stays in the\nworld for block-entities). Catches the kind of stuck-zombie / corrupted-\nNBT problem that crashes unattended free-tier servers.\n\nBosses (`BossDetection`) are never discarded — exceptions get logged,\nbut the entity keeps ticking. If [Neruina](https://modrinth.com/mod/neruina) /\nBug Fix Mod / Failsafe is installed, ExceptionGuard yields entirely.\n\n## Protections at every tier\n\n- **Bosses**: EnderDragon, WitherBoss, Warden, ElderGuardian, Ravager,\n  Hoglin, anything with > 80 max HP — never throttled\n- **Important NPCs**: Villagers, traders, golems, allays — iron farms\n  and trading halls keep working\n- **Combat-engaged mobs**: `getTarget() != null` — keep ticking at full\n  rate, no PvE breakage\n- **Newly spawned (< 10 s)** mobs — 200-tick grace period\n- **Random ticks** (crops, leaves, snow, fire) — never touched, Lithium\n  handles those better\n\n## Commands (`/freeserversaver`, alias `/fss`, op-only)\n\n| Command | Description |\n|---|---|\n| `help` | All subcommands |\n| `status` | Current tier + heap percentage |\n| `metrics` | Heap, tier, players, chunks, view distance |\n| `history` | Last 20 tier transitions, color-coded |\n| `env` | JVM heap/CPU snapshot from server start, with RAM Boost detection |\n| `lagspikes` | Recent ticks over 100 ms with heap state at the time |\n| `top entities` | Top 10 entity types by count |\n| `inspect chunks` | Per-dimension loaded / forced / player counts |\n| `tuning` | Current AutoTuner threshold offset |\n| `prune` | Identify unreachable loaded chunks (flood-fill) |\n| `storage` | World directory size vs the 4 GB cap common to free hosts |\n| `pregen <radius>` | Pre-generate chunks around your position |\n| `quarantine` | Recently quarantined entities/block-entities |\n\n## Plays well with everything\n\nAt server start, scans loaded mods and yields overlapping modules:\n\n- **Lithium / FerriteCore / ModernFix** — stay out of their lane,\n  recommended as companions\n- **Adaptive Performance Tweaks / Tick Dynamic / Tick Tweaks** — yield\n  tick / spawn / item modules\n- **Where's my Brain / DAB / OptimizeMod / Immersive Optimization /\n  No See No Tick** — yield distance-bucket AI throttle\n- **Chunky** — yield pregen\n- **Neruina / Bug Fix Mod / Failsafe** — yield ExceptionGuard\n\nThe startup log shows which modules were yielded and to whom.\n\n## 9 languages\n\nEnglish, 日本語, Deutsch, Português (BR), Español, 简体中文, 한국어,\nFrançais, Русский. Output goes through `Component.translatable` so a\nJapanese client sees Japanese on a server of any locale. Translations\nare machine-generated as a starting point — native-speaker corrections\nvia PR/issue very welcome.\n\n## Optional modules (default OFF)\n\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 0,
+		"more": 0,
+		"people": []
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

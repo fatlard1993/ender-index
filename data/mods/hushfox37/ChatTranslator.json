@@ -1,0 +1,165 @@
+{
+	"repo": "hushfox37/ChatTranslator",
+	"host": "github",
+	"description": "A lightweight client-side Fabric mod for Minecraft that asynchronously translates chat messages using OpenAI-compatible APIs, DeepL, or LibreTranslate.",
+	"stars": 0,
+	"archived": false,
+	"license": "Apache-2.0",
+	"created": "2026-07-15T17:05:53Z",
+	"pushed": "2026-08-08T12:24:29Z",
+	"releases": [
+		{
+			"tag": "v0.0.2beta",
+			"published": "2026-08-08T12:24:29Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 506358790,
+					"name": "chat-translator-0.0.2-beta.jar",
+					"url": "https://github.com/hushfox37/ChatTranslator/releases/download/v0.0.2beta/chat-translator-0.0.2-beta.jar",
+					"size": 78889,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "d2ee3480e82dec333b1f1b284c9ef71bd7b35089d9b26692a982845c02ad9bbc",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "chat_translator",
+							"version": "0.0.2-beta",
+							"name": "Chat Translator",
+							"description": "Translates chat messages directly beneath the original text.",
+							"minecraft": "~26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"cloth-config"
+							]
+						}
+					],
+					"icon": "e7681741df50ccd1fa3c35e7e4d1db63d7122f3356f2d79f86c09180b3369ec0.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 40,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/hushfox/chattranslator/translation/HttpJsonSupport.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"api.openai.com": [
+								"com/hushfox/chattranslator/config/ProviderSettings.class"
+							],
+							"api-free.deepl.com": [
+								"com/hushfox/chattranslator/config/ProviderSettings.class"
+							],
+							"localhost": [
+								"com/hushfox/chattranslator/config/ProviderSettings.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Chat Translator v0.0.2beta\n\n此预发布版本加入了完整的游戏内配置界面。安装可选的 Mod Menu 和 Cloth Config 后，可以直接在 Mod Menu 中配置翻译服务，无需手动编辑常用配置项。\n\n### 新增功能\n\n- 支持在配置界面启用或关闭 Chat Translator。\n- 支持从下拉菜单选择 OpenAI、DeepL 或 LibreTranslate。\n- 支持选择目标语言，也允许手动填写自定义语言代码。\n- 支持选择服务商默认地址，也允许填写自定义 API 地址：\n  - OpenAI：`https://api.openai.com/v1`\n  - DeepL：`https://api-free.deepl.com`\n  - LibreTranslate：`http://localhost:5000`\n- 配置界面只显示当前服务商需要的凭据；切换服务商时会清空上一服务商的凭据并填入新服务商的默认地址。\n- 保持单一 `provider_settings` 配置结构，未使用的服务商字段保存为空。\n- 新增中英文配置界面、校验结果和 reload 反馈。\n- README 新增游戏内演示、配置方式、服务商说明和客户端命令说明。\n\n### 保存与生效\n\n- 只有点击“保存”才会写入配置；按 Esc 或返回 Mod Menu 不会保存未提交的修改。\n- 点击“保存”后，Mod 会先将界面中的内容写入配置文件，再执行与 `/chattranslate reload` 相同的重载逻辑。\n- 重载结果会显示在配置界面顶部，同时发送到游戏聊天栏。\n- 即使校验失败，用户输入仍会保留在配置文件中；运行时继续遵循原有 reload 行为，保留最后一次有效配置。\n- 超时、并发数和队列上限仍属于高级 JSON 配置，不在游戏内界面显示。\n\n### 服务商说明\n\n- OpenAI：支持自定义 API 根地址、API Key 和模型名称。\n- DeepL：支持 Free、Pro 或自定义兼容地址，需要 API Key。\n- LibreTranslate：支持本地或远程实例，API Key 可选。\n- API Key 会以明文显示并保存在本地配置文件中。\n\n### 保持不变\n\n- Mod Menu 只用于编辑客户端配置，不替代服务器授权流程。\n- 新服务器仍默认禁止翻译；进入服务器后通过聊天提示或 `/chattranslate toggle` 授权。\n- `/chattranslate reload`、`/chattranslate status` 和 `/chattranslate test` 等原有命令继续可用。\n- 关闭翻译只改变 Chat Translator 自身的运行状态，不影响游戏中的其他功能。\n\n### 修复\n\n- 修复在配置界面选择 OpenAI 时因 Cloth Config 返回空退出按钮而导致的崩溃。\n- 改进配置读取、保存和校验错误的反馈，避免无效配置覆盖最后一次有效的运行时配置。\n\n### 兼容性\n\n- Minecraft `26.1.2`\n- Fabric Loader `0.19.3` 或更高版本\n- Fabric API `0.154.2+26.1.2`\n- Java `25` 或更高版本\n- Mod Menu `18.0.0` 或更高版本（可选）\n- Cloth Config `26.1.154` 或更高版本（可选）\n\n### 下载\n\n下载本 Release 附带的 `chat-translator-0.0.2-beta.jar`，放入客户端的 `mods` 文件夹。\n\n**Full Changelog**: [v0.0.1...v0.0.2beta](https://github.com/hushfox37/ChatTranslator/compare/v0.0.1...v0.0.2beta)"
+		},
+		{
+			"tag": "v0.0.1",
+			"published": "2026-07-15T17:57:49Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 478218816,
+					"name": "chat-translator-0.0.1.jar",
+					"url": "https://github.com/hushfox37/ChatTranslator/releases/download/v0.0.1/chat-translator-0.0.1.jar",
+					"size": 63565,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "14fe3c1fe3717fb31fe4e3438cebf621ad4ec9bc36408a3155faeda67803238b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "chat_translator",
+							"version": "1.0.0",
+							"name": "Chat Translator",
+							"description": "Translates chat messages directly beneath the original text.",
+							"minecraft": "~26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "e7681741df50ccd1fa3c35e7e4d1db63d7122f3356f2d79f86c09180b3369ec0.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 34,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/hushfox/chattranslator/translation/HttpJsonSupport.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "The first public release of Chat Translator, a client-side Fabric mod that displays translated text directly below Minecraft chat messages.\n\n## Features\n\n- Displays translations directly below the original chat message\n- Shows a “Translating…” placeholder while requests are in progress\n- Supports OpenAI-compatible APIs, DeepL, and LibreTranslate\n- Works with OpenAI-compatible services such as DeepSeek\n- Automatically detects the source language\n- Hides translations when the message is already in the target language\n- Preserves player names, URLs, emoji, line breaks, and game terminology\n- Limits concurrent requests and queued messages\n- Cancels pending requests when leaving a server or clearing the chat\n- Stores server permissions separately from API configuration\n- Includes English and Simplified Chinese localization\n- Does not intentionally log chat text, translations, API keys, requests, or responses\n\n## Requirements\n\n- Minecraft 26.1.2\n- Fabric Loader 0.19.3 or newer\n- Fabric API 0.154.2+26.1.2\n- Java 25 or newer\n\n## Installation\n\n1. Install Fabric Loader and Fabric API.\n2. Download `chat-translator-1.0.0.jar`.\n3. Place the JAR in your Minecraft instance’s `mods` directory.\n4. Start the game to generate the configuration files.\n5. Edit `config/chat_translator.json`.\n6. Run `/chattranslate test` to verify the translation provider.\n7. Join a server and click “Enable permanently”, or run `/chattranslate toggle`.\n\nDo not install a `-sources.jar` file. It contains source code and is not a runnable mod.\n\n## Supported Providers\n\n- OpenAI-compatible APIs\n- DeepL\n- LibreTranslate\n\nFor OpenAI-compatible services, configure:\n\n```json\n{\n  \"provider\": \"openai\",\n  \"provider_settings\": {\n    \"base_url\": \"https://api.example.com/v1\",\n    \"api_key\": \"YOUR_API_KEY\",\n    \"model\": \"MODEL_NAME\"\n  }\n}"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [
+		"docs/assets/chattranslator_demo.gif"
+	],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 17,
+		"more": 0,
+		"people": [
+			{
+				"login": "FabricMCBot",
+				"commits": 14,
+				"name": "Fabric Bot",
+				"funding": []
+			},
+			{
+				"login": "hushfox37",
+				"commits": 3,
+				"name": "hushfox",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

@@ -1,0 +1,528 @@
+{
+	"repo": "dinnermc/Endless-Gravity",
+	"host": "github",
+	"description": "Low gravity for The End and atmospheric physics for the Overworld!",
+	"stars": 2,
+	"archived": false,
+	"license": "Apache-2.0",
+	"created": "2026-07-19T12:21:23Z",
+	"pushed": "2026-10-19T13:50:04Z",
+	"releases": [
+		{
+			"tag": "v1.3.1-neoforge",
+			"published": "2026-10-14T17:23:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 641100165,
+					"name": "endless_gravity-fabric-1.3.1-1.21.1.jar",
+					"url": "https://github.com/dinnermc/Endless-Gravity/releases/download/v1.3.1-neoforge/endless_gravity-fabric-1.3.1-1.21.1.jar",
+					"size": 172458,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e23791d9759fc82a53c9ea70d760a227fa086d9faa12353afe592e3d13552d6d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "endless_gravity",
+							"version": "1.3.1-1.21.1-fabric",
+							"name": "Endless Gravity",
+							"description": "Endless Gravity adds low gravity to The End and layered gravity to the Overworld. Features configurable gravity, muffled audio filters, Overworld height-based space layers with continuous gravity.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"cloth-config",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "72c3775690b88f7a02b703fb17dd4dee97d7574ea42373e2abe33b6e15de0560.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"effect": [
+								"Heaviness",
+								"Weightlessness"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 49,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 641100054,
+					"name": "endless_gravity-neoforge-1.3.1-1.21.1.jar",
+					"url": "https://github.com/dinnermc/Endless-Gravity/releases/download/v1.3.1-neoforge/endless_gravity-neoforge-1.3.1-1.21.1.jar",
+					"size": 1233944,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "101dcfb0858b66f5f9746ea4a0e4ba5e46061f48042c50e3238b68f345a1397f",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "endless_gravity",
+							"version": "1.3.1",
+							"name": "Endless Gravity",
+							"description": "Endless Gravity adds low gravity to The End and layered gravity to the Overworld. Features configurable gravity, muffled audio filters, Overworld height-based space layers with continuous gravity, Sable physics integration.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"sable",
+								"cloth_config"
+							]
+						}
+					],
+					"icon": "72c3775690b88f7a02b703fb17dd4dee97d7574ea42373e2abe33b6e15de0560.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"effect": [
+								"Heaviness",
+								"Weightlessness"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 696,
+						"jars": [
+							"META-INF/jarjar/sable-companion-common-1.21.1-1.6.0.jar",
+							"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 1.3.1\n\n- new stable addon API in `dinner.dev.endless_gravity.api`: `GravityApi.getGravityOffset` / `getGravityContext` to ask what gravity the mod would apply, `GravityApi.registerModifier` to change or cancel it (the \"calculate gravity\" event), and `GravityApi.channelFor` to map an entity to its gravity channel. Identical on Fabric and NeoForge\n- the mod's own gravity resolution now runs through one shared resolver, so `GravityApi.getGravityOffset` and the in-game behaviour can never disagree\n- `EndlessGravityAPI` is no longer the documented addon surface; the versioned `api` package is\n- new `/endlessgravity` command (permission level 2): `reload` re-reads `dimensions.json` and re-syncs clients, `info` prints the gravity resolved for you right now, and `set <key> <value>` changes any scalar setting live (for example `set playerGravityOffset 0.04`)\n- new **Weightlessness** and **Heaviness** status effects, with brewable potions of each (regular, splash, lingering and tipped arrows). Weightlessness lifts entities, Heaviness pulls them down; tune both under the new **Potions** tab. Brew Weightlessness from an awkward potion + phantom membrane, Heaviness from an awkward potion + iron ingot, and add redstone for the longer variants\n- `dimensions.json` entries can now set an optional `playerGravityOffset` to give players a different offset than mobs in that dimension; omit it to inherit the global `playerGravityOffset`\n- new `endlessGravity` game rule: turn the mod's gravity off for a single world without touching the config\n- optional on-screen **Gravity HUD** readout, off by default (enable it on the config screen)\n- fix: Overworld entity gravity now follows the layered atmosphere curve instead of a linear ramp, so gravity, atmospheric audio and the Sable pressure function share the exact same profile. The shipped `minecraft:overworld` entry in `dimensions.json` is ignored\n- fix: the config screen's \"Max Gravity Offset\" tooltip no longer claims the Overworld entry overrides it"
+		},
+		{
+			"tag": "v1.3.0-neoforge",
+			"published": "2026-10-13T16:17:22Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 637570840,
+					"name": "endless_gravity-1.3.0-neoforge.jar",
+					"url": "https://github.com/dinnermc/Endless-Gravity/releases/download/v1.3.0-neoforge/endless_gravity-1.3.0-neoforge.jar",
+					"size": 1205536,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "97552b414cf5d748e6962d377b715e2bdc89206351e772da3df936b54a08289b",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "endless_gravity",
+							"version": "1.3.0",
+							"name": "Endless Gravity",
+							"description": "Endless Gravity adds low gravity to The End and layered gravity to the Overworld. Features configurable gravity, muffled audio filters, Overworld height-based space layers with continuous gravity, Sable physics integration.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"sable",
+								"cloth_config"
+							]
+						}
+					],
+					"icon": "72c3775690b88f7a02b703fb17dd4dee97d7574ea42373e2abe33b6e15de0560.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 678,
+						"jars": [
+							"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar",
+							"META-INF/jarjar/sable-companion-common-1.21.1-1.6.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 637570846,
+					"name": "endless_gravity-fabric-1.3.0-1.21.1-fabric.jar",
+					"url": "https://github.com/dinnermc/Endless-Gravity/releases/download/v1.3.0-neoforge/endless_gravity-fabric-1.3.0-1.21.1-fabric.jar",
+					"size": 144656,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e3a2971cd96205b7c229a3bb79f41391b4a1ffb436e87e8731528736b6ff7110",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "endless_gravity",
+							"version": "1.3.0-1.21.1-fabric",
+							"name": "Endless Gravity",
+							"description": "Endless Gravity adds low gravity to The End and layered gravity to the Overworld. Features configurable gravity, muffled audio filters, Overworld height-based space layers with continuous gravity.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"cloth-config",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "72c3775690b88f7a02b703fb17dd4dee97d7574ea42373e2abe33b6e15de0560.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 31,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Endless Gravity 1.3.0\n\nFabric + NeoForge for Minecraft 1.21.1.\n\n### Features\n- new `mobFallDamageMode`: mob fall damage in The End and Sable sub-levels is disabled by default, separate from the player `fallDamageMode`\n- new `gravityImmuneEntities` list in the config screen: extra entity IDs that ignore low gravity without a datapack. It only affects living entities, in addition to the `gravity_immune` tag\n- mobs now fall with reduced gravity on Fabric too. Flying and anchored mobs (ghast, bat, allay, armor stands...) are skipped automatically so they don't float away\n- the default `gravity_immune` tag now ships with the ender dragon, wither, allay, bat, bee, blaze, ghast, phantom, vex, parrot, armor stands and anything tagged `#c:bosses`. If your datapack replaces that tag file, your file wins and the default list is not applied\n- block-breaking particles now get the reduced-gravity effect from a `Particle.tick` mixin (every tick, End and Overworld) instead of a reflection pass every 4 ticks, so the effect no longer compounds over a particle's lifetime\n- lower the default particle gravity offset to 0.1. A config that already saved 0.5 keeps 0.5, so delete the entry or hit the reset button to pick up the new default\n\n### Fixes\n- custom-gravity dimensions: players used the mob offset instead of `playerGravityOffset`\n- the `gravityImmuneEntities` list is now limited to living entities (keeps items/arrows in sync)\n- the Fabric config screen showed 0.5 as the particle offset default instead of 0.1\n\n[Full changelog](https://modrinth.com/project/endless-gravity/version/1.3.0)\n```"
+		},
+		{
+			"tag": "v1.2.9",
+			"published": "2026-10-12T16:20:49Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 634353484,
+					"name": "endless_gravity-1.2.9-neoforge.jar",
+					"url": "https://github.com/dinnermc/Endless-Gravity/releases/download/v1.2.9/endless_gravity-1.2.9-neoforge.jar",
+					"size": 1199356,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "767f9a6f48071579f42b120f3d09c0d52932096a273f22c5f197b37232353783",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "endless_gravity",
+							"version": "1.2.9",
+							"name": "Endless Gravity",
+							"description": "Endless Gravity adds low gravity to The End and layered gravity to the Overworld. Features configurable gravity, muffled audio filters, Overworld height-based space layers with continuous gravity, Sable physics integration.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"sable",
+								"cloth_config"
+							]
+						}
+					],
+					"icon": "72c3775690b88f7a02b703fb17dd4dee97d7574ea42373e2abe33b6e15de0560.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 676,
+						"jars": [
+							"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar",
+							"META-INF/jarjar/sable-companion-common-1.21.1-1.6.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 634361362,
+					"name": "endless_gravity-fabric-1.2.9-1.21.1-fabric.jar",
+					"url": "https://github.com/dinnermc/Endless-Gravity/releases/download/v1.2.9/endless_gravity-fabric-1.2.9-1.21.1-fabric.jar",
+					"size": 138539,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "1ea96d50cb733c3d3deb8e14980fb454a128b87d7118d3568c186ced0c91a7a2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "endless_gravity",
+							"version": "1.2.9-1.21.1-fabric",
+							"name": "Endless Gravity",
+							"description": "Endless Gravity adds low gravity to The End and layered gravity to the Overworld. Features configurable gravity, muffled audio filters, Overworld height-based space layers with continuous gravity.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"cloth-config",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "72c3775690b88f7a02b703fb17dd4dee97d7574ea42373e2abe33b6e15de0560.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 30,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Endless Gravity 1.2.9\n\n### Fixes\n- **Fixed config crash on NeoForge**: removed a stray `builder.pop()` that caused `Attempted to pop 1 elements when we only had: []` during mod loading.\n- **Fixed custom dimensions config crash**: a corrupt/truncated `config/endless_gravity/dimensions.json` no longer crashes the server. The file is now written atomically, and a corrupt file is backed up to `.bak` and regenerated automatically.\n- **Fixed particle mixin on dedicated servers**: `ParticleMixin` is now a client-only mixin so it is not applied on the server.\n\n### Features\n- **End particle gravity**: existing particles in The End now fall slower (configurable via `particleGravityOffset`). No custom particles are added and none are spawned by the mod.\n- **Mob gravity**: all mobs experience reduced gravity in The End and custom dimensions (`enableMobGravity`, `mobGravityOffset`).\n- **Custom dimensions**: modpack authors can define per-dimension gravity/atmosphere in `config/endless_gravity/dimensions.json`.\n- **Atmosphere**: Overworld altitude physics with a configurable pressure curve.\n\n### Files\n- **NeoForge 1.21.1**: `endless_gravity-1.2.9-neoforge.jar`\n- **Fabric 1.21.1**: `endless_gravity-fabric-1.2.9-1.21.1-fabric.jar`\n\n### Requirements\n- **NeoForge**: NeoForge 21.1.238+, Java 21\n- **Fabric**: Fabric Loader 0.19.5+, Fabric API 0.116.17+1.21.1, Java 21"
+		},
+		{
+			"tag": "v1.2.7-neoforge",
+			"published": "2026-10-11T21:56:23Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 631903422,
+					"name": "endless_gravity-fabric-1.21.1-1.2.7.jar",
+					"url": "https://github.com/dinnermc/Endless-Gravity/releases/download/v1.2.7-neoforge/endless_gravity-fabric-1.21.1-1.2.7.jar",
+					"size": 1191493,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "d75a67a1b44ca068acb42427b7353bf7a8c2f97da94432b3f1a7d4616e17e0ff",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "endless_gravity",
+							"version": "1.2.7",
+							"name": "Endless Gravity",
+							"description": "Endless Gravity adds low gravity to The End and layered gravity to the Overworld. Features configurable gravity, muffled audio filters, Overworld height-based space layers with continuous gravity, Sable physics integration.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"sable",
+								"cloth_config"
+							]
+						}
+					],
+					"icon": "72c3775690b88f7a02b703fb17dd4dee97d7574ea42373e2abe33b6e15de0560.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 674,
+						"jars": [
+							"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar",
+							"META-INF/jarjar/sable-companion-common-1.21.1-1.6.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 631904615,
+					"name": "endless_gravity-neoforge-1.21.1-1.2.7.jar",
+					"url": "https://github.com/dinnermc/Endless-Gravity/releases/download/v1.2.7-neoforge/endless_gravity-neoforge-1.21.1-1.2.7.jar",
+					"size": 1191493,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c805633766bea5d397ec67fb8f7fe7e929e58a060ae33c3bf40424a861f02885",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "endless_gravity",
+							"version": "1.2.7",
+							"name": "Endless Gravity",
+							"description": "Endless Gravity adds low gravity to The End and layered gravity to the Overworld. Features configurable gravity, muffled audio filters, Overworld height-based space layers with continuous gravity, Sable physics integration.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"sable",
+								"cloth_config"
+							]
+						}
+					],
+					"icon": "72c3775690b88f7a02b703fb17dd4dee97d7574ea42373e2abe33b6e15de0560.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 674,
+						"jars": [
+							"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar",
+							"META-INF/jarjar/sable-companion-common-1.21.1-1.6.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Endless Gravity 1.2.7\n\n### Fixed\n\n- Set default particle gravity offset to 0.5 (was 0.1) in both Fabric and NeoForge configurations\n- Removed duplicate particleGravityOffset slider from atmosphere section in Fabric config screen\n\n### Changed\n\n- Particle gravity adjustment now uses offset of 0.5 by default for stronger slow-motion particle effect in The End\n- Configuration menu now has consistent particle gravity offset slider in the End gravity section only\n\n### Technical\n\n- Fabric: Updated JSON-backed config default value and config screen slider\n- NeoForge: Updated ModConfigSpec default value and config screen slider\n- Both platforms: Client-side particle gravity handler remains unchanged (still reads offset from GravityHandler)"
+		},
+		{
+			"tag": "v1.2.5",
+			"published": "2026-08-15T15:56:08Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 515835960,
+					"name": "endless_gravity-1.2.5.jar",
+					"url": "https://github.com/dinnermc/Endless-Gravity/releases/download/v1.2.5/endless_gravity-1.2.5.jar",
+					"size": 1183376,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "5ea5a7c213f160d1dc847006f6ae3e99c109ba4e5850de615984cc325c1a0554",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "endless_gravity",
+							"version": "1.2.5",
+							"name": "Endless Gravity",
+							"description": "Endless Gravity adds low gravity to The End and layered gravity to the Overworld. Features configurable gravity per entity type, velocity-based fall damage, muffled audio filters, Overworld height-based space layers with continuous gravity, Sable physics integration, and server->client config sync.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"sable",
+								"cloth_config"
+							]
+						}
+					],
+					"icon": "72c3775690b88f7a02b703fb17dd4dee97d7574ea42373e2abe33b6e15de0560.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 668,
+						"jars": [
+							"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar",
+							"META-INF/jarjar/sable-companion-common-1.21.1-1.6.0.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jarjar/cloth-config-neoforge-15.0.140-neoforge.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- fall damage is disabled by default in the end and sable sub-levels"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 119,
+		"more": 0,
+		"people": [
+			{
+				"login": "dinnermc",
+				"commits": 119,
+				"name": "dinner",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

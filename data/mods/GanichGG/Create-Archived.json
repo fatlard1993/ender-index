@@ -1,0 +1,135 @@
+{
+	"repo": "GanichGG/Create-Archived",
+	"host": "github",
+	"description": "Stop belt lag! Automatically compresses thousands of items into a single entity on belts and chutes, fully compatible with all Create processing machines.",
+	"stars": 1,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2026-07-27T11:27:12Z",
+	"pushed": "2026-10-22T08:02:41Z",
+	"releases": [
+		{
+			"tag": "v1.0.1",
+			"published": "2026-10-22T08:01:40Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 665117145,
+					"name": "create_archived-1.0.1.jar",
+					"url": "https://github.com/GanichGG/Create-Archived/releases/download/v1.0.1/create_archived-1.0.1.jar",
+					"size": 427889,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "039ef90cb89019bb06328e3eea0392985e878b035db58737f6a926da80eccd23",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "create_archived",
+							"version": "1.0.1",
+							"name": "Create: Archived",
+							"description": "Aggregates items from Create chutes to improve performance.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create"
+							],
+							"suggests": [
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 46,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "v1.0.1\n\nUpgrade notes\n\nSettings moved from the common config to a per-world server config (serverconfig/create_archived-server.toml). Values from config/create_archived-common.toml are not carried over, so set them again if you changed them.\nClient and server must run the same version of the mod. Create 6.0.0 or newer is now a declared requirement; tested with Create 6.0.10 and 6.0.11.\n\nBug fixes\n\nChutes: a partially filled buffer is now released after chuteFlushTicks (default 40) without new items. Before, the tail of a stream, or a second item type arriving, could stall the line forever. Buffers are capped at 99 items and no longer merge already-compressed stacks, which could lose items.\nCrushing Wheels: large compressed stacks no longer lose items (400 obsidian used to yield 20 powder). Encased Fans also return one stack per result instead of one per roll.\nMechanical Drills: the buffer is dropped when the drill is broken instead of vanishing, and mined blocks keep their data (a shulker box no longer loses its contents). Tool, loot and after-break behaviour are Create’s own again.\nDropped items: compressed stacks that end up in the world are split into normal-sized item entities instead of one oversized stack.\nInventories: simulated insertions of compressed stacks no longer promise space that does not exist.\nComparators: the signal for compressed stacks now matches the same items as normal stacks, using Create’s own rounding.\nOnly Create’s own belts, chutes and funnels are treated as compression-aware.\n\nImprovements\n\nThe in-game config screen is fully translated (English, Russian, French), shows the real defaults, and explains where to edit settings when no singleplayer world is open.\nNew option chuteFlushTicks.\nSafer on other Create versions: the Create-specific parts are only applied on tested versions (6.0.10 up to, not including, 6.1.0). Elsewhere the mod stays loaded but inactive and logs an error, instead of crashing.\nRequired dependencies are declared; YACL is optional.\nFewer mixins that conflict with other mods.\n\nUnder the hood\n\n24 item balance gametests, run in CI.\nReproducible chute throughput benchmark (scripts/benchmark.sh / scripts/benchmark.ps1).\nJava package renamed to io.github.ganichgg.createarchived. Saved data is unaffected."
+		},
+		{
+			"tag": "Release",
+			"published": "2026-08-18T09:21:57Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 519223247,
+					"name": "create_archived-1.0.0.jar",
+					"url": "https://github.com/GanichGG/Create-Archived/releases/download/Release/create_archived-1.0.0.jar",
+					"size": 403167,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "6a1ea3b975c7b1c8c83cc001a484325642c451d4b2aa910200ddc415c93d3d41",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "create_archived",
+							"version": "1.0.0",
+							"name": "Create: Archived",
+							"description": "Aggregates items from Create chutes to improve performance.",
+							"environment": "*",
+							"depends": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Example Mod Tab"
+							],
+							"block": [
+								"Example Block"
+							],
+							"item": [
+								"Example Item"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 42,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog:\n\n<img width=\"2030\" height=\"492\" alt=\"create-archived_tittle\" src=\"https://github.com/user-attachments/assets/b80a9f99-355e-4479-8a43-cfbfbdcf6e1d\" />\n[v1.0.0] - Initial Release\n\n**Features & Enhancements:**\n* **Drill Extraction Buffering:** Mechanical Drills now buffer extracted items internally (up to 1,000 items by default) rather than ejecting them individually per operation. This significantly reduces loose entity count and improves server TPS during large-scale mining operations.\n* **Chute Accumulation Logic:** Standard and Smart Chutes have been enhanced to function as item accumulators. They will hold items until a complete stack is formed (up to 64 by default) before transferring the payload downstream.\n* **Mechanical Belt Compression:** Items ejected from Chutes or Drills onto Mechanical Belts are now seamlessly compressed into a single data-rich item entity. This allows belts to transport thousands of items simultaneously with minimal performance impact.\n* **Seamless World & Inventory Decompression:** When compressed items are deposited into standard inventories (Chests, Vaults) or dropped into the world as entities, they are instantly and safely unpacked back into vanilla-compliant item stacks, ensuring zero data loss or mod incompatibility.\n* **Fan Processing Compatibility:** Fully integrated support for Encased Fan processing. Washing, Smelting, Haunting, and Smoking will correctly process compressed item payloads on belts and depots, yielding the appropriate multiplied output.\n* **Comprehensive Configuration:** Introduced a dedicated configuration file allowing server administrators to fine-tune buffering thresholds, aggregate limits, and compression thresholds to suit their specific performance needs.\n\n**Bug Fixes:**\n* Fixed an issue where Smart Chutes would enter an infinite loop and eject items individually, bypassing the aggregation logic.\n* Resolved a critical bug where compressed items dropped as world entities failed to unpack properly, resulting in item loss upon pickup.\n* Optimized item comparison logic to prevent redundant stack splitting and improve overall throughput reliability.\n\n**Performance Benchmarks (Test Setup):**\n* **Without Mod (Vanilla Create):** ~4.01 - 4.83 ms per tick.\n* **With Create: Archived:** ~2.87 - 3.03 ms per tick.\n* **Result:** ~30-40% reduction in server tick time on small/medium setups, with exponentially higher gains on massive automated factories."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 34,
+		"more": 0,
+		"people": [
+			{
+				"login": "GanichGG",
+				"commits": 34,
+				"name": "Ganich",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

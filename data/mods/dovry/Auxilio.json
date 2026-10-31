@@ -1,0 +1,257 @@
+{
+	"repo": "dovry/Auxilio",
+	"host": "github",
+	"description": "Latin for help, or assist. Tweaks to make inventory sorting and item manipulation more ergonomic",
+	"stars": 0,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2026-05-14T23:26:04Z",
+	"pushed": "2026-05-20T16:11:45Z",
+	"releases": [
+		{
+			"tag": "1.2.0",
+			"published": "2026-05-20T14:36:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 425296435,
+					"name": "auxilio-26.1.2-26.1.2.60-beta.jar",
+					"url": "https://github.com/dovry/Auxilio/releases/download/1.2.0/auxilio-26.1.2-26.1.2.60-beta.jar",
+					"size": 26324,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "7413e5ad5bf96e9b29afb08e1c3c10786640136eeb29e3b22ee5750d35ccb46a",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "auxilio",
+							"version": "1.2.0",
+							"name": "Auxilio",
+							"description": "mouse and inventory tweaks",
+							"minecraft": "[26.1.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Example Mod Tab"
+							],
+							"block": [
+								"Example Block"
+							],
+							"item": [
+								"Example Item"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 5,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.2.0\n\n## Versions\n- Mod: 1.2.0\n- Minecraft: 26.1.2\n- NeoForge: 26.1.2.60-beta\n\n## Changelog\n- AE2 compatibility (#10) (381cecc)\n\n## Pull Requests\n- [#10](https://github.com/dovry/Auxilio/pull/10)\n\n## README\n![build status](https://github.com/dovry/Auxilio/actions/workflows/build-and-publish.yml/badge.svg?branch=master)\n\n[CurseForge](https://www.curseforge.com/minecraft/mc-mods/auxilio)\n[Modrinth](https://modrinth.com/mod/auxilio)\n\n# Auxilio\nMeans help or assist in Latin.\n\nFocuses on mouse/item interaction quality-of-life in inventory and crafting screens.\n\n---\n\n#  Features\n\nAll options can be toggled on/off via in-game mod config menu, or root Minecraft directory config file\n\n`Esc > Mods > Auxilio config`\n\n`minecraft_root/config/auxilio-common.toml`\n\n## Middle click sort in crafting grid:\nMiddle click on any crafting slot (2x2 or 3x3) and it will sort the grid.\n\nSingle-item-type grids are spread as evenly as possible across all valid crafting slots.\n\n![single item ](https://github.com/dovry/Auxilio/blob/master/images/item_spread.gif?raw=true)\n\nMixed-item grids use type-local balancing: each type is equalized within the slots that already contain that type.\n\n![mixed items](https://github.com/dovry/Auxilio/blob/master/images/mixed_items1.gif?raw=true)\n\n![mod compatibility](https://github.com/dovry/Auxilio/blob/master/images/ae2_spread.gif?raw=true)\n\n![mod compatibility](https://github.com/dovry/Auxilio/blob/master/images/ae2_scroll.gif?raw=true)\n\n\n## Shift + double left-click bulk transfer:\n\nShift + double left-click on a player-inventory slot quick-moves all matching items from player inventory into the currently open container (for example chest or crafting table inventory), as allowed by slot rules.\n\n![bulk deposit](https://raw.githubusercontent.com/dovry/Auxilio/refs/heads/master/images/doubleclick_quick_deposit.gif)\n\n## Shift + drag quick move:\n\nHold Shift and drag left-click across slots to quick-move hovered stacks. Each hovered slot is clicked at most once per drag stroke to avoid repeated click spam.\n\n![shift drag](https://github.com/dovry/Auxilio/blob/master/images/shift_hover_quickmove.gif?raw=true)\n\n## Scroll transfer:\n\nScroll up: move 1 item from hovered slot toward the opposite inventory side.\n\nScroll down: move 1 item from hovered non-player slot into player inventory.\n\n![scroll deposit](https://github.com/dovry/Auxilio/blob/master/images/scroll_items.gif?raw=true)\n\n### Furnace fuel scroll\n\nScrolling items into furnaces will deposit almost anything into the top slot. Shift scroll up will scroll items into the fuel slot instead\n\n![furnace scroll](https://github.com/dovry/Auxilio/blob/master/images/furnace_scroll.gif?raw=true)\n\n## Repeat right-drag:\n\nConfig option: `enableRepeatRightDrag` (default `true`).\nWhen enabled, RMB drag replaces vanilla drag behavior.\nRe-entering a slot during the same drag places another item there.\n\n![rmb drag](https://github.com/dovry/Auxilio/blob/master/images/rmb_drag_increment.gif?raw=true)\n\n## Debug logging:\n- Config option: `debugMouseTweaks`.\n- When enabled, detailed mouse tweak traces are logged with `[MouseTweaks]` in `run/logs/latest.log`.\n\n```\n[15:52:22] [FileWatcher-1-thread-1/DEBUG] [ne.ne.fm.co.ConfigWatcher/CONFIG]: Config file auxilio-common.toml changed, re-loading\n[15:52:25] [Render thread/INFO] [co.ja.au.Auxilio/]: [MouseTweaks] scrollUp moved one item from slot 30 to slot 0\n[15:52:25] [Render thread/INFO] [co.ja.au.Auxilio/]: [MouseTweaks] scrollUp moved one item from slot 30 to slot 0\n[15:52:25] [Render thread/INFO] [co.ja.au.Auxilio/]: [MouseTweaks] scrollUp moved one item from slot 30 to slot 0\n[15:52:25] [Render thread/INFO] [co.ja.au.Auxilio/]: [MouseTweaks] scrollUp moved one item from slot 30 to slot 0\n```\n\n# Release Checklist\n\n- Bump version in `settings.gradle` (`ext.release_version`).\n- Keep `gradle.properties` `mod_version` aligned with the same value.\n- Commit and tag (for example `v1.0.0`).\n\n..."
+		},
+		{
+			"tag": "1.1.0",
+			"published": "2026-05-15T20:49:54Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 421785570,
+					"name": "auxilio-26.1.2-26.1.2.50-beta.jar",
+					"url": "https://github.com/dovry/Auxilio/releases/download/1.1.0/auxilio-26.1.2-26.1.2.50-beta.jar",
+					"size": 18262,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "3c93a4aea0b7f1c2c02ee986ba360f24a72714123e039ee0f09e98e07f66365f",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "auxilio",
+							"version": "1.1.0",
+							"name": "Auxilio",
+							"description": "mouse and inventory tweaks",
+							"minecraft": "[26.1.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Example Mod Tab"
+							],
+							"block": [
+								"Example Block"
+							],
+							"item": [
+								"Example Item"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 3,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 424932762,
+					"name": "auxilio-26.1.2-26.1.2.60-beta.jar",
+					"url": "https://github.com/dovry/Auxilio/releases/download/1.1.0/auxilio-26.1.2-26.1.2.60-beta.jar",
+					"size": 18383,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c59fdcb0fcce138b64c62ae6f27239bd82a4d79ddd3cd5ec09e56dfa5bef47c3",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "auxilio",
+							"version": "1.1.0",
+							"name": "Auxilio",
+							"description": "mouse and inventory tweaks",
+							"minecraft": "[26.1.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Example Mod Tab"
+							],
+							"block": [
+								"Example Block"
+							],
+							"item": [
+								"Example Item"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 3,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.1.0\n\n## Versions\n- Mod: 1.1.0\n- Minecraft: 26.1.2\n- NeoForge: 26.1.2.60-beta\n\n## Changelog\n- Creative mode (#9) (dfaece6)\n\n## Pull Requests\n- [#9](https://github.com/dovry/Auxilio/pull/9)\n\n## README\n![build status](https://github.com/dovry/Auxilio/actions/workflows/build-and-publish.yml/badge.svg?branch=master)\n\n# Auxilio\nMeans help or assist in Latin.\n\nFocuses on mouse/item interaction quality-of-life in inventory and crafting screens.\n\n---\n\n#  Features\n\nAll options can be toggled on/off via in-game mod config menu, or root Minecraft directory config file\n\n`Esc > Mods > Auxilio config`\n\n`minecraft_root/config/auxilio-common.toml`\n\n## Middle click sort in crafting grid:\nMiddle click on any crafting slot (2x2 or 3x3) and it will sort the grid.\n\nSingle-item-type grids are spread as evenly as possible across all valid crafting slots.\n\n![single item ](https://github.com/dovry/Auxilio/blob/master/images/item_spread.gif?raw=true)\n\nMixed-item grids use type-local balancing: each type is equalized within the slots that already contain that type.\n\n![mixed items](https://github.com/dovry/Auxilio/blob/master/images/mixed_items1.gif?raw=true)\n\n## Shift + double left-click bulk transfer:\n\nShift + double left-click on a player-inventory slot quick-moves all matching items from player inventory into the currently open container (for example chest or crafting table inventory), as allowed by slot rules.\n\n![bulk deposit](https://raw.githubusercontent.com/dovry/Auxilio/refs/heads/master/images/doubleclick_quick_deposit.gif)\n\n## Shift + drag quick move:\n\nHold Shift and drag left-click across slots to quick-move hovered stacks. Each hovered slot is clicked at most once per drag stroke to avoid repeated click spam.\n\n![shift drag](https://github.com/dovry/Auxilio/blob/master/images/shift_hover_quickmove.gif?raw=true)\n\n## Scroll transfer:\n\nScroll up: move 1 item from hovered slot toward the opposite inventory side.\n\nScroll down: move 1 item from hovered non-player slot into player inventory.\n\n![scroll deposit](https://github.com/dovry/Auxilio/blob/master/images/scroll_items.gif?raw=true)\n\n### Furnace fuel scroll\n\nScrolling items into furnaces will deposit almost anything into the top slot. Shift scroll up will scroll items into the fuel slot instead\n\n![furnace scroll](https://github.com/dovry/Auxilio/blob/master/images/furnace_scroll.gif?raw=true)\n\n## Repeat right-drag:\n\nConfig option: `enableRepeatRightDrag` (default `true`).\nWhen enabled, RMB drag replaces vanilla drag behavior.\nRe-entering a slot during the same drag places another item there.\n\n![rmb drag](https://github.com/dovry/Auxilio/blob/master/images/rmb_drag_increment.gif?raw=true)\n\n## Debug logging:\n- Config option: `debugMouseTweaks`.\n- When enabled, detailed mouse tweak traces are logged with `[MouseTweaks]` in `run/logs/latest.log`.\n\n```\n[15:52:22] [FileWatcher-1-thread-1/DEBUG] [ne.ne.fm.co.ConfigWatcher/CONFIG]: Config file auxilio-common.toml changed, re-loading\n[15:52:25] [Render thread/INFO] [co.ja.au.Auxilio/]: [MouseTweaks] scrollUp moved one item from slot 30 to slot 0\n[15:52:25] [Render thread/INFO] [co.ja.au.Auxilio/]: [MouseTweaks] scrollUp moved one item from slot 30 to slot 0\n[15:52:25] [Render thread/INFO] [co.ja.au.Auxilio/]: [MouseTweaks] scrollUp moved one item from slot 30 to slot 0\n[15:52:25] [Render thread/INFO] [co.ja.au.Auxilio/]: [MouseTweaks] scrollUp moved one item from slot 30 to slot 0\n```\n\n# Release Checklist\n\n- Bump version in `settings.gradle` (`ext.release_version`).\n- Keep `gradle.properties` `mod_version` aligned with the same value.\n- Commit and tag (for example `v1.0.0`).\n- The `Release Jar` workflow will build and attach `build/jar/*.jar` to the release.\n\n# Additional Resources:\n\nCommunity Documentation: https://docs.neoforged.net/  \nNeoForged Discord: https://discord.neoforged.net/"
+		},
+		{
+			"tag": "1.0.0",
+			"published": "2026-05-15T20:15:57Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 421288572,
+					"name": "auxilio-26.1.2-26.1.2.50-beta.jar",
+					"url": "https://github.com/dovry/Auxilio/releases/download/1.0.0/auxilio-26.1.2-26.1.2.50-beta.jar",
+					"size": 17538,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "772a5be78548c26606883c5b5085fe2f4484d62111ed2270af767a05960ad00d",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "auxilio",
+							"version": "1.0.0",
+							"name": "Auxilio",
+							"description": "mouse and inventory tweaks",
+							"minecraft": "[26.1.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Example Mod Tab"
+							],
+							"block": [
+								"Example Block"
+							],
+							"item": [
+								"Example Item"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 3,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Versions\n- Mod: 1.0.0\n- Minecraft: 26.1.2\n- NeoForge: 26.1.2.50-beta\n\n## Changelog\n- curseforge deployment (d5be008)\n\n## Pull Requests\n- None referenced in commit messages."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [
+		"images/ae2_scroll.gif",
+		"images/ae2_spread.gif",
+		"images/doubleclick_quick_deposit.gif",
+		"images/furnace_scroll.gif",
+		"images/item_spread.gif",
+		"images/mixed_items1.gif",
+		"images/rmb_drag_increment.gif",
+		"images/scroll_items.gif",
+		"images/shift_hover_quickmove.gif"
+	],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 23,
+		"more": 0,
+		"people": [
+			{
+				"login": "dovry",
+				"commits": 23,
+				"name": "Dovry",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

@@ -1,0 +1,1470 @@
+{
+	"repo": "Enaium/fabric-mod-MineConf",
+	"host": "github",
+	"description": "MineConf is a config manager for Fabric that supports 26.1-1.14 and 1.12.2-1.7.10",
+	"stars": 0,
+	"archived": false,
+	"license": "Apache-2.0",
+	"created": "2026-03-15T15:48:17Z",
+	"pushed": "2026-10-06T11:58:59Z",
+	"releases": [
+		{
+			"tag": "26.2-1.2.0",
+			"published": "2026-10-06T11:59:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615389454,
+					"name": "mineconf-26.2-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/26.2-1.2.0/mineconf-26.2-1.2.0.jar",
+					"size": 2743638,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "ca5b697a675ea4ffe2c4d2cb058527d07a73574fcce10bdf79334165e5aa149b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "26.2-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "26.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1362,
+						"jars": [
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "26.3-1.2.0",
+			"published": "2026-10-06T11:58:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615389409,
+					"name": "mineconf-26.3-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/26.3-1.2.0/mineconf-26.3-1.2.0.jar",
+					"size": 2743671,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "32d28e051443dc4c972d4096b7cb6f8d6038a580e9d8abb399e740c2a4754560",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "26.3-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "26.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1362,
+						"jars": [
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "26.1.2-1.2.0",
+			"published": "2026-10-06T11:58:58Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615389369,
+					"name": "mineconf-26.1.2-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/26.1.2-1.2.0/mineconf-26.1.2-1.2.0.jar",
+					"size": 2742457,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "b7ed9d7fda2fef926af0428849933bd4e2e2b834dba324c7b98eb90fbf8da772",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "26.1.2-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "26.1.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1361,
+						"jars": [
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "1.9.4-1.2.0",
+			"published": "2026-10-06T11:58:57Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615389257,
+					"name": "mineconf-1.9.4-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/1.9.4-1.2.0/mineconf-1.9.4-1.2.0.jar",
+					"size": 2817543,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "7a3afa78872b2dba5a345c28b8fdd0ee35dc61b563207348dbb7f9890f72e63a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "1.9.4-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "1.9.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_mojang_brigadier",
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1413,
+						"jars": [
+							"META-INF/jars/brigadier-1.0.17.jar",
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "1.8.9-1.2.0",
+			"published": "2026-10-06T11:58:56Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615389218,
+					"name": "mineconf-1.8.9-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/1.8.9-1.2.0/mineconf-1.8.9-1.2.0.jar",
+					"size": 2817466,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "fb3abcc41142f5ab70ad16b8b4802c26fd80bedd297ff510b5fbe19e3dde4d23",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "1.8.9-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "1.8.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_mojang_brigadier",
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1413,
+						"jars": [
+							"META-INF/jars/brigadier-1.0.17.jar",
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "1.7.10-1.2.0",
+			"published": "2026-10-06T11:58:55Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615389180,
+					"name": "mineconf-1.7.10-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/1.7.10-1.2.0/mineconf-1.7.10-1.2.0.jar",
+					"size": 2805381,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "eb8a9d1410a90182608e0987beb5b6c7a9254321f68cc4b915f295822aaba091",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "1.7.10-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "1.7.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_mojang_brigadier",
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1406,
+						"jars": [
+							"META-INF/jars/brigadier-1.0.17.jar",
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "1.21.11-1.2.0",
+			"published": "2026-10-06T11:58:54Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615389135,
+					"name": "mineconf-1.21.11-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/1.21.11-1.2.0/mineconf-1.21.11-1.2.0.jar",
+					"size": 2747745,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "0217407c2a478bddbd0148e4f9e6f8d29c8cd777c2f2de83655c2861b2e28dfc",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "1.21.11-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "1.21.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1361,
+						"jars": [
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "1.20.6-1.2.0",
+			"published": "2026-10-06T11:58:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615389085,
+					"name": "mineconf-1.20.6-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/1.20.6-1.2.0/mineconf-1.20.6-1.2.0.jar",
+					"size": 2746745,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e47bc800d35d4a32ce225c54d009b9f6e4f15b16bd47521a156430292be515bb",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "1.20.6-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "1.20.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1361,
+						"jars": [
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "1.16.5-1.2.0",
+			"published": "2026-10-06T11:58:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615388601,
+					"name": "mineconf-1.16.5-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/1.16.5-1.2.0/mineconf-1.16.5-1.2.0.jar",
+					"size": 2745931,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e839295ed09d947a87b67e93f4814c0f1f79a6e5cc55990ca060a6b23926f869",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "1.16.5-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "1.16.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1361,
+						"jars": [
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "1.18.2-1.2.0",
+			"published": "2026-10-06T11:58:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615388598,
+					"name": "mineconf-1.18.2-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/1.18.2-1.2.0/mineconf-1.18.2-1.2.0.jar",
+					"size": 2746148,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "032f29e809503023741917322cc671e2f799a6ee9b7e22b7dca1ad08fb901c29",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "1.18.2-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "1.18.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1361,
+						"jars": [
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "1.10.2-1.2.0",
+			"published": "2026-10-06T11:58:50Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615388597,
+					"name": "mineconf-1.10.2-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/1.10.2-1.2.0/mineconf-1.10.2-1.2.0.jar",
+					"size": 2817543,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "5556e77f7ddabcfda83b902f42a9e8e4d4009e7fcda9a053d1dc5b0ff37f3738",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "1.10.2-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "1.10.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_mojang_brigadier",
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1413,
+						"jars": [
+							"META-INF/jars/brigadier-1.0.17.jar",
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "1.14.4-1.2.0",
+			"published": "2026-10-06T11:58:50Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615388592,
+					"name": "mineconf-1.14.4-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/1.14.4-1.2.0/mineconf-1.14.4-1.2.0.jar",
+					"size": 2745013,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "9fa30fd396f6c38bb2e2ac36d49a6d934e143f8b1f4826829bff4868be8bf76c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "1.14.4-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "1.14.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1361,
+						"jars": [
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "1.17.1-1.2.0",
+			"published": "2026-10-06T11:58:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615388600,
+					"name": "mineconf-1.17.1-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/1.17.1-1.2.0/mineconf-1.17.1-1.2.0.jar",
+					"size": 2746151,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "30f837fb7a850753f79840e19c51389dfa8b3398420be8e2e06d004f4197e417",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "1.17.1-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "1.17.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1361,
+						"jars": [
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "1.11.2-1.2.0",
+			"published": "2026-10-06T11:58:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615388596,
+					"name": "mineconf-1.11.2-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/1.11.2-1.2.0/mineconf-1.11.2-1.2.0.jar",
+					"size": 2817541,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2452f047c52308a2f8af5324ac6381a9433f93fbbdab668bf27d7202ff501e45",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "1.11.2-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "1.11.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_mojang_brigadier",
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1413,
+						"jars": [
+							"META-INF/jars/brigadier-1.0.17.jar",
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "1.15.2-1.2.0",
+			"published": "2026-10-06T11:58:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615388593,
+					"name": "mineconf-1.15.2-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/1.15.2-1.2.0/mineconf-1.15.2-1.2.0.jar",
+					"size": 2745014,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "d94f2a89cac601f9d8247314994dcdd5eceebb8a768b65ed714e6d18c741f981",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "1.15.2-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "1.15.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1361,
+						"jars": [
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "1.12.2-1.2.0",
+			"published": "2026-10-06T11:58:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615388589,
+					"name": "mineconf-1.12.2-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/1.12.2-1.2.0/mineconf-1.12.2-1.2.0.jar",
+					"size": 2817543,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "25394b6c1d51ea9e3b73a2271b43bb0187ca5ca61394b43bdc64a6e22634e5f0",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "1.12.2-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "1.12.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_mojang_brigadier",
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1413,
+						"jars": [
+							"META-INF/jars/brigadier-1.0.17.jar",
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "1.19.4-1.2.0",
+			"published": "2026-10-06T11:58:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 615388590,
+					"name": "mineconf-1.19.4-1.2.0.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/1.19.4-1.2.0/mineconf-1.19.4-1.2.0.jar",
+					"size": 2746477,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b7af6e54012355d5012c5db49ec911048dfbb842179f4dd637556c50d0054a70",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "1.19.4-1.2.0",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "1.19.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1361,
+						"jars": [
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🆕Features\n\n- Add screen extensions: a mod draws the rows of its own confs itself, with the icon and the name the\n  game shows for a value, and picks the confs it draws by their id, by their type or by a rule of its own\n  (`IdExtension`, `TypeExtension`, `ValueRender.where`). The rows of a list, the preview of a combo and\n  the name of a conf are drawn by them, and a block whose model is built from several textures, like a\n  furnace or a stair, is drawn with the particle of the model the game draws for it, so it is no longer\n  listed without an icon\n- Add an optional `separator` to the options of a conf, a collection or a multimap: the options are then\n  completed segment per segment, so `stone` completes to `minecraft:stone` just like vanilla, in the\n  screen and in the commands. A value written without a namespace is the value of the default namespace,\n  so `stone` sets `minecraft:stone` even when the path alone starts the paths of other options, where it\n  used to be rejected. `valueOptions` of a multimap now really sets the options of the values, it used to\n  set the ones of the keys\n- Search a value by the name the game shows for it as well as by the value itself\n- Show the name and the description of a conf in the language of the game: a mod ships them under\n  `<mod id>.<conf id>.name` and `<mod id>.<conf id>.description`, in the screen and in the output of the\n  `get` command\n- Ask before a value is dropped from a list: the Remove of a collection or a multimap asks the same way\n  the reset of a conf does\n- Add a language option that follows the game: it is the default, it is shown in the language of the game\n  when MineConf is translated in it and in English otherwise, and the option itself is named in the\n  language MineConf is shown in\n- Support Minecraft 26.1.2: the module of 26.1 follows the patch, and the imgui build of a patch is taken\n  from the version it follows (`fabric.gui.imgui.minecraft.version`)\n\n## 🐛Bug fixes\n\n- Fix the characters missing from the font atlas: every character of the ranges is now loaded into the\n  atlas before the first frame, which is the last moment the atlas can be loaded into at all, so a name\n  like 杜鹃花丛 is no longer drawn as `?`\n- Fix the fonts not being built again when the ImGui context is recreated, the font of the old context is\n  freed with it\n- Fix the atlas of a merged system font: the glyph ranges are not passed to the atlas anymore, the\n  binding releases them before the atlas reads them, and subpixel positioning is off for a system font,\n  which halves the atlas\n- Fix the value of a conf being lost when a mod replaces the conf itself with a copy, e.g. to give it a\n  default value or the options of the game: the copy finds the value the registry keeps, so the reset of a\n  conf restores the default the mod gave it\n- Fix the confs of a screen being listed in hash order, they are now listed in the order they are declared\n  in the config object\n- Fix the multimap of a screen: clicking the row of a key selects it, the Remove of a popup drops the key\n  the popup was opened on, and the values of a key keep their order when one is added or removed"
+		},
+		{
+			"tag": "26.1-1.1.4",
+			"published": "2026-09-20T16:36:28Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 577154925,
+					"name": "mineconf-26.1-1.1.4.jar",
+					"url": "https://github.com/Enaium/fabric-mod-MineConf/releases/download/26.1-1.1.4/mineconf-26.1-1.1.4.jar",
+					"size": 2695592,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "435fedac4d89aa5c2784213f9ffa5b1901986d8bb1e2b1c1747ae91ab876fbb6",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineconf",
+							"version": "26.1-1.1.4",
+							"name": "MineConf",
+							"description": "A config library!",
+							"minecraft": "26.x",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-language-kotlin"
+							],
+							"provides": [
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"com_fasterxml_jackson_core_jackson-core",
+								"com_fasterxml_jackson_core_jackson-databind",
+								"com_fasterxml_jackson_module_jackson-module-kotlin"
+							],
+							"suggests": [
+								"fabric-gui-imgui"
+							]
+						}
+					],
+					"icon": "1276d907b6b27352877f0d3a1d9e0c3fc852cb09ecf0aab3745138a727fff268.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1335,
+						"jars": [
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-2.21.1.jar",
+							"META-INF/jars/jackson-databind-2.21.1.jar",
+							"META-INF/jars/jackson-module-kotlin-2.21.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jackson-core-2.21.1.jar!com/fasterxml/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ObjectReader.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-2.21.1.jar!com/fasterxml/jackson/databind/ext/DOMDeserializer.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🛠️ Changes\n\n- Fix the value of a conf being lost when the config object is replaced, the value is now kept by the registry\n- Fix the font of the MineConf windows: search the chinese fonts of macOS, check that the found font can really\n  render the language and only use it for the windows of MineConf\n- Fix the crash of the font atlas when a system font is merged\n- Add the font tests for macOS"
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "custom",
+			"url": "https://donate.enaium.cn/",
+			"from": "owner-repositories"
+		}
+	],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 26,
+		"more": 0,
+		"people": [
+			{
+				"login": "Enaium",
+				"commits": 26,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

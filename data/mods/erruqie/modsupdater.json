@@ -1,0 +1,125 @@
+{
+	"repo": "erruqie/modsupdater",
+	"host": "github",
+	"description": "Fabric mod for Minecraft that checks installed mods against Modrinth and shows which ones have updates.",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-05-17T18:18:59Z",
+	"pushed": "2026-05-17T20:28:21Z",
+	"releases": [
+		{
+			"tag": "v1.0.0",
+			"published": "2026-05-17T20:27:52Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 422714587,
+					"name": "modsupdater-1.0.0.jar",
+					"url": "https://github.com/erruqie/modsupdater/releases/download/v1.0.0/modsupdater-1.0.0.jar",
+					"size": 60374,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "68364b47c8e0968ace1ab5a00c3592b63fa5d76ea520d75fb80c2938e122324c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "modsupdating",
+							"version": "1.0.0",
+							"name": "ModsUpdater",
+							"description": "Checks installed Fabric mods for updates on Modrinth.",
+							"minecraft": "~26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "d598642354c5dbf6e6e00df7cdfdbc6486d9c87cc21bc6d31ba4f28002519fdf.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 27,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"io/github/erruqie/modsupdater/UpdateApplier.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"io/github/erruqie/modsupdater/UpdateDownloader.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"io/github/erruqie/modsupdater/modrinth/ModrinthClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"modrinth.com": [
+								"io/github/erruqie/modsupdater/ModUpdateInfo.class"
+							],
+							"api.modrinth.com": [
+								"io/github/erruqie/modsupdater/modrinth/ModrinthClient.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First public release of ModsUpdater.\n\nChecks every Fabric mod in your `mods/` folder against Modrinth and lets you download updates from inside the game.\n\n## Features\n- **Hash-first lookup** against Modrinth's `/version_files/update` with a slug fallback for mods that aren't matched by hash.\n- **Title screen / pause menu** \"Updates\" button — shows the count of available updates.\n- **Dedicated screen** with refresh, download-all, and double-click to open the Modrinth page.\n- **ModMenu integration** — update badges on outdated mods plus a contextual \"Download update\" button on the selected mod.\n- **Apply-on-exit pipeline** — staged downloads are swapped into `mods/` after Minecraft exits via a detached helper script.\n- **English and Russian** localisations.\n\n## Requirements\n- Minecraft `26.1.2`\n- Fabric Loader `>= 0.19.2`\n- Fabric API\n- (optional) ModMenu — recommended\n\n## Install\nDrop `modsupdater-1.0.0.jar` into your `mods/` folder.\n\n## Known limitations\n- Old mod filenames are kept after an update (the jar contents are updated). Cosmetic only.\n- ModMenu integration uses reflection; if a future ModMenu release renames internal fields, the contextual button will silently disappear (everything else keeps working)."
+		}
+	],
+	"readme": "README.md",
+	"funding": [
+		{
+			"platform": "custom",
+			"url": "https://www.paypal.me/clownl3ss",
+			"from": "owner-repositories"
+		},
+		{
+			"platform": "custom",
+			"url": "https://yoomoney.ru/to/4100112259262413",
+			"from": "owner-repositories"
+		},
+		{
+			"platform": "liberapay",
+			"url": "https://liberapay.com/clownless",
+			"from": "owner-repositories"
+		}
+	],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 3,
+		"more": 0,
+		"people": [
+			{
+				"login": "erruqie",
+				"commits": 3,
+				"name": "Maxim",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

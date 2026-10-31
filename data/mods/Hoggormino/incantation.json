@@ -1,0 +1,365 @@
+{
+	"repo": "Hoggormino/incantation",
+	"host": "github",
+	"description": "Voice-cast Iron's Spells 'n Spellbooks through Simple Voice Chat. Offline speech recognition with grammar restricted to spells you actually own.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-05-21T16:46:54Z",
+	"pushed": "2026-09-09T10:18:29Z",
+	"releases": [
+		{
+			"tag": "v0.9.5",
+			"published": "2026-08-04T21:28:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 501839346,
+					"name": "incantation-0.9.5.jar",
+					"url": "https://github.com/Hoggormino/incantation/releases/download/v0.9.5/incantation-0.9.5.jar",
+					"size": 25986728,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b11f2e90bec56fd448f3fd045f4db9a513bbb00d48d11f47997093e9d8d4e00a",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "voicespells",
+							"version": "0.9.5",
+							"name": "Iron's Spells: Incantation",
+							"description": "Voice-cast Iron's Spells 'n Spellbooks through Simple Voice Chat. Offline speech recognition (Vosk) with the grammar dynamically narrowed to the spells you actually have equipped, so background chatter doesn't misfire a fireball. No voice training, no extra keybind, no setup beyond unzipping a small model into the config folder. Imbued weapons and spellbooks both supported. Customisable themes, hands-free queue, near-miss alias suggestions, and a full configuration UI.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"voicechat",
+								"irons_spellbooks"
+							]
+						}
+					],
+					"icon": "7a32d97c313bcbf13372653dade4bbb996a8e5716161c1554cdd3a9bca416a77.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 77,
+						"jars": [
+							"META-INF/jarjar/vosk-0.3.45.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/niko/voicespells/speech/ModelDownloader.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"alphacephei.com": [
+								"com/niko/voicespells/speech/ModelDownloader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Iron's Spells: Incantation 0.9.5\n\nA small release that closes out the three open issues. Thanks to @Shadower007 and @Tubeess\nfor the reports, and to Kogyuu on CurseForge for diagnosing the mod conflict below.\n\n### Cast errors now name the mod responsible\n\nIf another mod hooks Iron's Spells' cast path and throws, you used to get\n`Cast Error: InvocationTargetException` — an error from Incantation, naming nothing useful.\nEvery cast goes through reflection, so the real exception arrived wrapped.\n\nIncantation now works out which mod the failure actually came from and says so:\n**`Cast blocked by <mod> — mod conflict`**, with the full explanation in the log.\n\nThe known case is **Iron's Restrictions** (#3). Its `AbstractSpellMixin` injects into\n`AbstractSpell.canBeCastedBy(...)` and reads a data attachment plus your Curios slots; when\nthat chain fails, the cast fails. It's a conflict between that mod and Iron's Spells rather\nthan anything Incantation does, and it affects any cast that reaches the hook. Removing or\nreconfiguring Iron's Restrictions resolves it.\n\n### Already fixed in 0.9.4, and worth repeating\n\nIf you're coming from 0.9.3 or earlier, 0.9.4 fixed the crash that mattered most:\n\n- **Dedicated servers no longer crash on startup** (#1, #2). The config-screen registration\n  sat in the mod constructor, where its reference to a client-only class was resolved before\n  the `Dist.CLIENT` check guarding it could run. **0.9.0 and 0.9.3 both crash dedicated\n  servers — if your pack ships either, please update.**\n- **Spell indexing works on dedicated servers.** It read client-only config and silently\n  indexed nothing.\n- **You can cast the same spell twice in a row.** The duplicate-suppression window re-armed\n  itself on every blocked repeat, so with an open mic it never lapsed and the only way to\n  recast was to say a different spell first.\n\nThe reason the server crash shipped twice is that the project had no dedicated-server run\nconfiguration — every release was tested on a client, where that code path is fine by\ndefinition. `./gradlew runServer` now exists and every release is checked against it.\n\n### Upgrading\n\nDrop `incantation-0.9.5.jar` over your existing jar. No config migration.\n\nRequires Minecraft 1.21.1, NeoForge 21.1.x, Simple Voice Chat and Iron's Spells 'n\nSpellbooks."
+		},
+		{
+			"tag": "v0.9.4",
+			"published": "2026-08-03T17:29:21Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 500338841,
+					"name": "incantation-0.9.4.jar",
+					"url": "https://github.com/Hoggormino/incantation/releases/download/v0.9.4/incantation-0.9.4.jar",
+					"size": 25985438,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e3255cdbac6ca5f2b69b3f70cbbadb92825c451604e1ac9fff5ed4b58d860951",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "voicespells",
+							"version": "0.9.4",
+							"name": "Iron's Spells: Incantation",
+							"description": "Voice-cast Iron's Spells 'n Spellbooks through Simple Voice Chat. Offline speech recognition (Vosk) with the grammar dynamically narrowed to the spells you actually have equipped, so background chatter doesn't misfire a fireball. No voice training, no extra keybind, no setup beyond unzipping a small model into the config folder. Imbued weapons and spellbooks both supported. Customisable themes, hands-free queue, near-miss alias suggestions, and a full configuration UI.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"voicechat",
+								"irons_spellbooks"
+							]
+						}
+					],
+					"icon": "7a32d97c313bcbf13372653dade4bbb996a8e5716161c1554cdd3a9bca416a77.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 77,
+						"jars": [
+							"META-INF/jarjar/vosk-0.3.45.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/niko/voicespells/speech/ModelDownloader.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"alphacephei.com": [
+								"com/niko/voicespells/speech/ModelDownloader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Iron's Spells: Incantation 0.9.4\n\nBug-fix release built from the issues players reported on 0.9.3. Thanks to\n@Shadower007, @Tubeess, eli_zeele, bayratbill, xxshadow007, PhsycoPhink and Kogyuu\nfor the reports and the diagnosis work.\n\n### Fixed\n\n- **Dedicated servers no longer crash on startup.** The server died during mod\n  construction with `Attempted to load class net/minecraft/client/gui/screens/Screen\n  for invalid dist DEDICATED_SERVER`. The cause was the Mods-screen config extension\n  point being registered in the mod constructor: it compiles to a method that names\n  the client-only `Screen` class, and NeoForge resolves the types a method references\n  *before* the `Dist.CLIENT` check inside it can run — so a runtime guard could never\n  have stopped it. Registration moved to a class the server never touches. This is the\n  crash from #1 and #2, which the 0.9.1 fix covered elsewhere but not here.\n\n- **Spell indexing now works on dedicated servers.** A second, quieter server bug:\n  indexing read client-only config values, which don't exist on a server, so every\n  boot logged `Cannot get config value before config is loaded` and left the index\n  empty. Servers now index normally.\n\n- **You can cast the same spell twice in a row.** The duplicate-suppression window was\n  pushed forward every time it *blocked* a repeat, so it kept re-arming itself: with an\n  always-on or voice-activated mic, background noise gets matched to the nearest spell\n  name in the grammar, which meant the window never expired and the only way to recast\n  was to say a different spell first. The window is now measured from the actual cast.\n\n- **Failed casts say what actually went wrong.** Casting goes through reflection, so an\n  error thrown by Iron's Spells — or by another mod hooking it — arrived wrapped, and\n  the message you got was the useless `Cast Error: InvocationTargetException`. The real\n  cause is now shown and logged, with a note identifying the mod responsible. If you hit\n  this on 0.9.3, one known trigger is a conflict with **Iron's Restrictions** (#3).\n\n- **Iron's Spells compatibility.** Current Iron's builds hand back a different shape from\n  `getAllSpells()` than older ones. Both are now handled; previously equipped-spell\n  detection could fail silently.\n\n### Changed\n\n- **Owned-spell restriction now matches Iron's Spells' own rule** — only your Curios\n  spellbook slot, main hand and off hand count. Previously a spellbook anywhere in your\n  inventory counted, the server then rejected the cast, and it still showed up as a\n  phantom cast in your HUD streak and history.\n- `sculk tentacles` is now recognised — its alias could never match.\n- The voice macro recorder and its **J** / **K** keybinds have been removed.\n- Slightly tighter noise gate (600 ms → 450 ms hold).\n\n### Note for anyone who themed their HUD\n\nEight individual HUD colour options (`text`, `dotReady`, `dotListen`, `dotLoad`,\n`dotError`, `dotOff`, `meterBg`, `meterFill`) have been removed in favour of the palette\nand accent presets. Nothing breaks, but if you had set those by hand they will quietly\nrevert to preset colours.\n\n### Upgrading\n\nDrop `incantation-0.9.4.jar` over your existing jar. No config migration.\n\n**Server owners:** this is the release you want — 0.9.0 and 0.9.3 both crash on dedicated\nservers. If your modpack still ships 0.9.0, please update."
+		},
+		{
+			"tag": "v0.9.3",
+			"published": "2026-05-31T09:15:01Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 434362211,
+					"name": "incantation-0.9.3.jar",
+					"url": "https://github.com/Hoggormino/incantation/releases/download/v0.9.3/incantation-0.9.3.jar",
+					"size": 27891415,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "0a36c83185a83c933c38af0d2e4e7f546d67c3f6e92df5889ba13bd54375d949",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "voicespells",
+							"version": "0.9.3",
+							"name": "Iron's Spells: Incantation",
+							"description": "Voice-cast Iron's Spells 'n Spellbooks through Simple Voice Chat. Offline speech recognition (Vosk) with the grammar dynamically narrowed to the spells you actually have equipped, so background chatter doesn't misfire a fireball. No voice training, no extra keybind, no setup beyond unzipping a small model into the config folder. Imbued weapons and spellbooks both supported. Customisable themes, hands-free queue, near-miss alias suggestions, and a full configuration UI.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"voicechat",
+								"irons_spellbooks"
+							]
+						}
+					],
+					"icon": "7a32d97c313bcbf13372653dade4bbb996a8e5716161c1554cdd3a9bca416a77.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 78,
+						"jars": [
+							"META-INF/jarjar/vosk-0.3.45.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/niko/voicespells/speech/ModelDownloader.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"alphacephei.com": [
+								"com/niko/voicespells/speech/ModelDownloader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Iron's Spells: Incantation 0.9.3\n\nUI fix for players running with **Minecraft GUI Scale = Large** (or on small windows).\n\n### Fixed\n- **Panels now shrink to fit the screen.** Every Incantation screen (Config, Welcome wizard, Spell list, Diagnostics, Test Arena, Voice Codex, Add Alias, Help, More menu) used to be a fixed pixel size, so at a large GUI Scale the panel got cut off at the right edge and bottom — the **Done** button could disappear before you could press it. The panels now clamp to whatever screen space is available with an 8 px margin, so everything stays visible at every GUI Scale.\n\n### No behaviour change at default scale\nAt the default GUI Scale the layout is visually identical to 0.9.2. The clamping only kicks in when the preferred panel would be larger than the screen.\n\n### Drop-in upgrade\nDrop `incantation-0.9.3.jar` over your existing 0.9.2 jar. No config migration."
+		},
+		{
+			"tag": "v0.9.2",
+			"published": "2026-05-31T08:32:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 434341294,
+					"name": "incantation-0.9.2.jar",
+					"url": "https://github.com/Hoggormino/incantation/releases/download/v0.9.2/incantation-0.9.2.jar",
+					"size": 27890621,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "b4f128ffc95c418d198f3464d53785d55d1e52cfacde916f8cdb9a59e31c8cc1",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "voicespells",
+							"version": "0.9.2",
+							"name": "Iron's Spells: Incantation",
+							"description": "Voice-cast Iron's Spells 'n Spellbooks through Simple Voice Chat. Offline speech recognition (Vosk) with the grammar dynamically narrowed to the spells you actually have equipped, so background chatter doesn't misfire a fireball. No voice training, no extra keybind, no setup beyond unzipping a small model into the config folder. Imbued weapons and spellbooks both supported. Customisable themes, hands-free queue, near-miss alias suggestions, and a full configuration UI.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"voicechat",
+								"irons_spellbooks"
+							]
+						}
+					],
+					"icon": "7a32d97c313bcbf13372653dade4bbb996a8e5716161c1554cdd3a9bca416a77.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 78,
+						"jars": [
+							"META-INF/jarjar/vosk-0.3.45.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/niko/voicespells/speech/ModelDownloader.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"alphacephei.com": [
+								"com/niko/voicespells/speech/ModelDownloader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Iron's Spells: Incantation 0.9.2\n\nSmall hardening pass on the 0.9.1 phrasebook so it can't eat your translations.\n\n### Fixed\n- **Phrasebook won't overwrite a file it couldn't read.** If you save `phrasebook.json` half-finished and the game tries to reload mid-edit, the parse fails — previously we'd then rewrite the file with an empty-override version and silently destroy your work. Now we leave the file untouched until you save a valid version. Your in-memory overrides from the last successful load stay active so the grammar doesn't degrade either.\n- **Stale entries keep their `default` field.** Spells from temporarily-uninstalled addons used to round-trip back to `\"default\": \"\"`. Now we remember the last-seen default per spell and write it back, so the file stays self-documenting across addon swaps.\n- **Atomic writes.** The file is written to `phrasebook.json.tmp` then atomically renamed onto the real path, so a text editor watching the file (or a backup tool, or a second game instance) never observes a half-written JSON.\n\n### No code changes for end users\nDrop `incantation-0.9.2.jar` over your existing 0.9.1 jar. No config migration. If you don't use the phrasebook, this release is a no-op for you."
+		},
+		{
+			"tag": "v0.9.1",
+			"published": "2026-05-30T09:57:13Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 433719947,
+					"name": "incantation-0.9.1.jar",
+					"url": "https://github.com/Hoggormino/incantation/releases/download/v0.9.1/incantation-0.9.1.jar",
+					"size": 27890011,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "1a2643e3008a0c07e0d6444bde7eea35d5f989bea5efa334658e3dcef99a1ee2",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "voicespells",
+							"version": "0.9.1",
+							"name": "Iron's Spells: Incantation",
+							"description": "Voice-cast Iron's Spells 'n Spellbooks through Simple Voice Chat. Offline speech recognition (Vosk) with the grammar dynamically narrowed to the spells you actually have equipped, so background chatter doesn't misfire a fireball. No voice training, no extra keybind, no setup beyond unzipping a small model into the config folder. Imbued weapons and spellbooks both supported. Customisable themes, hands-free queue, near-miss alias suggestions, and a full configuration UI.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"voicechat",
+								"irons_spellbooks"
+							]
+						}
+					],
+					"icon": "7a32d97c313bcbf13372653dade4bbb996a8e5716161c1554cdd3a9bca416a77.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 78,
+						"jars": [
+							"META-INF/jarjar/vosk-0.3.45.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/niko/voicespells/speech/ModelDownloader.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"alphacephei.com": [
+								"com/niko/voicespells/speech/ModelDownloader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Iron's Spells: Incantation 0.9.1\n\nTwo community-reported issues addressed.\n\n### Fixed\n- **Dedicated server crash on mod load.** The Simple Voice Chat plugin loader instantiates `@ForgeVoicechatPlugin` classes on both client and server. Incantation's SVC plugin (and a couple of common-side helpers) statically referenced client-only classes, so the JVM verifier pulled the Minecraft GUI chain in on the server side → `NoClassDefFoundError` → crash. Plugin, `SpellIndex`, and the config's theme cache now route those references through `Consumer` / `Supplier` / `Runnable` sinks wired from `ClientEvents.bootstrap()`, so common code never link-references the GUI chain.\n  - Thanks to **xxshadow007** for the report.\n\n### Added\n- **`config/voicespells/phrasebook.json` for bulk-translation.** Auto-generated on first launch with one entry per installed spell:\n  ```json\n  {\n    \"spells\": {\n      \"irons_spellbooks:fireball\": { \"default\": \"fireball\", \"override\": \"\" }\n    }\n  }\n  ```\n  Set the `override` value to whatever you want to say for that spell; leave it empty to use the English default. New spells installed later are appended automatically, and your existing overrides survive reindexes and addon uninstalls.\n\n  > Vosk only recognises words from the loaded model's lexicon, so non-English overrides need a same-language Vosk model — install one from <https://alphacephei.com/vosk/models> and point `modelPath` at it in `voicespells-client.toml`.\n  - Thanks to **NeoTargetStudios** for the request.\n\n### Installation\nDrop `incantation-0.9.1.jar` into your `mods/` folder alongside Simple Voice Chat 2.5.x+ and Iron's Spells 'n Spellbooks 3.x+. No config migration needed — `voicespells-client.toml` is unchanged from 0.9.0."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [
+		"gallery/01-hero.png",
+		"gallery/02-features.png",
+		"gallery/03-owned.png",
+		"gallery/04-cast-fireball.png",
+		"gallery/05-cast-sunbeam.png",
+		"gallery/06-config.png",
+		"gallery/07-spell-list.png",
+		"gallery/08-codex.png"
+	],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 207,
+		"more": 0,
+		"people": [
+			{
+				"login": "Hoggormino",
+				"commits": 207,
+				"name": "Nikolai Abyzov",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

@@ -1,0 +1,198 @@
+{
+	"repo": "FQO3/Aeronautics-Display-Link-Fix",
+	"host": "github",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-06-20T15:00:20Z",
+	"pushed": "2026-07-05T01:24:22Z",
+	"releases": [
+		{
+			"tag": "v1.3",
+			"published": "2026-07-05T01:17:43Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 466764906,
+					"name": "aeronautics_display_link_fix-1.3-1.21.1.jar",
+					"url": "https://github.com/FQO3/Aeronautics-Display-Link-Fix/releases/download/v1.3/aeronautics_display_link_fix-1.3-1.21.1.jar",
+					"size": 10374,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "0797728723c04621e974c61e4c967f43ef6949a9afefaaedc056460579b03d9e",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "aeronautics_display_link_fix",
+							"version": "1.3",
+							"name": "Aeronautics display link fix",
+							"description": "A mod to fix display link's offset",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Example Mod Tab"
+							],
+							"block": [
+								"Example Block"
+							],
+							"item": [
+								"Example Item"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 4,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.3 — 全面 TargetOffset 保护\n\n### 修复\n- **修复所有场景下 TargetOffset 损坏问题**：此前的修复仅针对 Case 3（DL 和目标告示牌在同一结构上），但现在发现即使是 Case 1/2（DL 在结构中但告示牌不在），DisplayLink 的 TargetOffset 也会在 Sable 物理化/反物理化过程中被损坏。\n  - 根本原因：物理化后 DL 的 `target()` 方法使用物理化空间坐标重新计算 offset=告示牌物理化位置-DL物理化位置，产生巨大异常值并持久化\n- **移除 Case 3 检测**：不再需要 HashSet 预处理器或复杂的 Case 3 判定逻辑。所有被物理化的 DisplayLink 都需要保护。\n\n### 更改\n- 简化架构：仅用一个 ThreadLocal `DL_LIST` 存储 (原始坐标, 新坐标, 修正后 offset) 三元组\n- Phase 1 在 `loadWithComponents` 之前保存所有 DisplayLink 的原始 TargetOffset 及旋转变换\n- Phase 2 在 TAIL 无条件恢复所有 DisplayLink 的正确 TargetOffset\n- `BLOCKSET_CACHE`、`LIST_NEWPOS`、`LIST_OFFSET` ThreadLocal 全部移除\n\n### 性能\n- **O(1) 无**：无需遍历方块列表或构造 HashSet，只处理 DisplayLink 本身\n- 对任意规模和任意数量 DisplayLink 的结构保持恒定开销\n\n---\n**Full Changelog**: https://github.com/FQO3/Aeronautics-Display-Link-Fix/compare/v1.2...v1.3"
+		},
+		{
+			"tag": "v1.2",
+			"published": "2026-06-21T03:46:05Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 453442597,
+					"name": "aeronautics_display_link_fix-1.2-1.21.1.jar",
+					"url": "https://github.com/FQO3/Aeronautics-Display-Link-Fix/releases/download/v1.2/aeronautics_display_link_fix-1.2-1.21.1.jar",
+					"size": 11289,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "04a7f413da138a4d3b098179ee0377c1af6e5c0848908b143a37357577f1dd4f",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "aeronautics_display_link_fix",
+							"version": "1.2",
+							"name": "Aeronautics display link fix",
+							"description": "A mod to fix display link's offset",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Example Mod Tab"
+							],
+							"block": [
+								"Example Block"
+							],
+							"item": [
+								"Example Item"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 4,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.2 — 旋转感知偏移修正\n\n### 新增\n- **旋转感知 TargetOffset 计算**：Phase 2 现在使用 `transform.apply(oldTargetAbsolute)` 独立计算目标方块的正确新位置，然后 `correctedOffset = newTarget - newDLPos`，正确处理 Sable 旋转装配\n- **配置文件**：`adlf-common.toml` 新增 `debug` 开关（默认 `false`），无需重启即可切换详细日志\n- **条件日志**：生产模式仅输出错误日志；开启 `debug = true` 后输出完整的 Case 3 检测和修复追踪\n\n### 更改\n- 主 mod 入口从 `Aeronautics_display_link_fix.java` 迁移至 `ADLFMod.java`，使用 NeoForge `ModContainer` 注册配置\n- 配置类从 `Config.java`（仅 enabled 字段）迁移至 `AdlfConfig.java`（debug 开关 + 完整 spec builder）\n- Mixin ThreadLocal 从 `LIST_NEWPOS` 改为 `LIST_BLOCKPOS`（保存原始 `block` 而非 tag 中的 newPos），用于 Phase 2 计算\n- 日志调用全部切换为条件包装器 `logDebug()` / `logError()`，默认不产生信息输出\n\n### 移除\n- 旧版 `Config.java`（已被 `AdlfConfig` 替代）\n- `LIST_DEBUG` ThreadLocal（冗余，debug 日志由条件开关控制）\n- 不再需要 `newPosFromTag` 读取（Phase 2 自行计算新位置）\n\n---\n**Full Changelog**: https://github.com/FQO3/Aeronautics-Display-Link-Fix/compare/v1.1...v1.2"
+		},
+		{
+			"tag": "v1.1",
+			"published": "2026-06-20T15:38:03Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 453062203,
+					"name": "AeronauticsDisplayLinkFix-1.1-1.21.1.jar",
+					"url": "https://github.com/FQO3/Aeronautics-Display-Link-Fix/releases/download/v1.1/AeronauticsDisplayLinkFix-1.1-1.21.1.jar",
+					"size": 9981,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "3f446e411a446771ad0f65cffd1a32eb98b48cd50089d45568306904e921c20d",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "aeronautics_display_link_fix",
+							"version": "1.2",
+							"name": "Aeronautics display link fix",
+							"description": "A mod to fix display link's offset",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Example Mod Tab"
+							],
+							"block": [
+								"Example Block"
+							],
+							"item": [
+								"Example Item"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 3,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.1 - 双层判定修复\n\n### 修复\n\n- 修复 Case 3：当显示链接器（Display Link）与告示牌在同一飞行器上同步物理化/反物理化时，TargetOffset 被错误变换为世界坐标级大偏移的问题\n- 采用双层判定逻辑，同时覆盖正向（方块→物理化）和反向（物理化→方块）组装方向\n- 避免误判正常的 Case 1（告示牌在地面）和 Case 2（告示牌在另一飞行器）场景\n\n### 技术细节\n\n- TargetOffset 读取方式从 `@Local` 字节码索引改为从 NBT tag 直接读取（`tag.getInt(\"x/y/z\")`），消除编译差异风险\n- 移除 Mixin 内部类 `SavedCase3`，改用三组平行 `ThreadLocal` 列表，避免 Mixin 包隔离限制导致 `IllegalClassLoadError`\n- 修正 `registryAccess` 从源世界改为目标世界（`dest.registryAccess()`）\n\n---\n\n## v1.1 - Two-Layer Detection Fix\n\n### Fixed\n\n- Fixed Case 3: DisplayLink's TargetOffset was incorrectly transformed into world-scale coordinates when the DisplayLink and its sign are on the same contraption\n- Two-layer detection covers both forward (blocks→physics) and reverse (physics→blocks) assembly directions\n- Correctly excludes normal Case 1 (sign on ground) and Case 2 (sign on different contraption) scenarios\n\n### Technical\n\n- TargetOffset now read from NBT tag directly (`tag.getInt(\"x/y/z\")`) instead of `@Local` bytecode indexing\n- Removed inner class `SavedCase3`, replaced with three parallel `ThreadLocal` lists to avoid Mixin package isolation `IllegalClassLoadError`\n- Fixed `registryAccess` from source level to destination level (`dest.registryAccess()`)"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "修复 Create: Aeronautics（机械动力航空学）中显示链接器（Display Link）在物理化/反物理化后 TargetOffset 被损坏的问题。覆盖所有场景：无论告示牌在飞行器上、在地面、还是在另一飞行器上。",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 12,
+		"more": 0,
+		"people": [
+			{
+				"login": "FQO3",
+				"commits": 12,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

@@ -6,8 +6,122 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-23T13:49:13Z",
-	"pushed": "2026-10-24T04:56:08Z",
+	"pushed": "2026-10-31T09:43:33Z",
 	"releases": [
+		{
+			"tag": "v1.0.4-test.2-r36",
+			"published": "2026-10-31T09:43:51Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 694976142,
+					"name": "skybox-validation-probe-r36.jar",
+					"url": "https://github.com/BingShanFengXue/skyboxblock/releases/download/v1.0.4-test.2-r36/skybox-validation-probe-r36.jar",
+					"size": 82416,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "bb174f12a9c2df672838c2c919d6c09df6584965fd06d4a98538eae92cc10d95",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "skybox_r30_probe",
+							"version": "0.1.0-r34.2",
+							"name": "Sky Box R30 Owned Validation Probe",
+							"description": "Explicit isolated-fixture dynamic DH and performance measurements; not a production dependency.",
+							"minecraft": "~1.21.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"skyboxblock"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 17,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 694975136,
+					"name": "skyboxblock-1.0.4-test.2-r36.jar",
+					"url": "https://github.com/BingShanFengXue/skyboxblock/releases/download/v1.0.4-test.2-r36/skyboxblock-1.0.4-test.2-r36.jar",
+					"size": 17068478,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "465836d84bbbbff0445c4c5e306b8092045ba77f103df3831465d8c32d6d9d80",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "skyboxblock",
+							"version": "1.0.4-test.2-r36",
+							"name": "Sky Box Block",
+							"description": "天空盒方块：原版独立天空、纯白、纯黑及六套连续全景天空。Minecraft 1.21.1 Fabric；各环境验证范围见项目交付记录。新增用户提供素材的来源声明见 THIRD_PARTY_NOTICES.md。",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"iris",
+								"immersive_portals",
+								"distanthorizons"
+							]
+						}
+					],
+					"icon": "67d01353d782c5dc82d19a77d29504c63720c142ee3ec5e69c353ece049442d3.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Sky Box Blocks"
+							],
+							"block": [
+								"Sky Box Block (Apocalypse Land)",
+								"Sky Box Block (Clear Sky A)",
+								"Sky Box Block (Clear Sky B)",
+								"Sky Box Block (Dusk)",
+								"Sky Box Block (Lush Planet)",
+								"Sky Box Block (Milky Way)",
+								"Sky Box Block (Pure Black)",
+								"Sky Box Block (Pure White)",
+								"Sky Box Block (Vanilla)"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 89,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Minecraft 1.21.1 / Fabric 天空盒方块 —— **1.0.4-test.2-r36**（有范围测试版，Pre-release）。\n\n## 本版新增（R35 → R36）\n\n**原版天空盒方块的环境属性改为服务端权威**\n- 15 项属性：`sky_color` `fog_color` `fog_start_distance` `fog_end_distance` `sky_fog_end_distance` `cloud_color` `cloud_height` `cloud_fog_end_distance` `sunrise_sunset_color` `sun_angle` `moon_angle` `star_angle` `moon_phase` `star_brightness` `has_sky_occluder`\n- 一份设置存在服务端 world 里，改动**同步给所有同版本玩家**；查询对所有人开放，修改需要权限等级 2\n- 日月星角度彼此独立；15 项全 `auto` 时画面与升级前完全一致\n\n**私有天空时间（不影响世界）**\n- `time set / lock / unlock / reset`，只改方块画布里的时刻；世界时间、天气、光照一律不动\n- 服务端持久化，重新进服从保存的锚点继续，不计离线时间\n\n**云接缝修复**\n- 移动云的亮点来自相交云面重复通过颜色遍、重复 alpha 混合\n- 现在只在模组私有天空画布上做 stencil 首片元消费：云网格、UV、纹理、世界 framebuffer 全部未改\n\n## ⚠ 破坏性变更\n\n- 根命令 `cloudheight` / `clouddistance` / `cloudfade` / 根 `reload` **已移除**，现在输入会解析失败\n- 替代写法见 [指令手册](https://github.com/BingShanFengXue/skyboxblock/blob/main/docs/COMMANDS-R36-2026-10-31.md)，例如\n  `cloudheight 240` → `/skyboxblock env set cloud_height 240.33`（旧命令是名义高度，环境属性是最终高度，差 0.33）\n- 颜色统一为 `#RRGGBB` / `#AARRGGBB`；`0x…`、无 `#`、三位缩写、颜色名一律拒绝；旧配置里的 `0x…` 读到按无效处理并回落 `auto`\n\n## 验收数据\n\n| 项目 | 结果 |\n|---|---|\n| Java 断言合计（五组回归） | **500,811** |\n| 服务端后端 / 命令·权限·TAB·时间 | 91 / 782 |\n| 天空时间 / 环境渲染 / 既有数学 | 68,012 / 42,257 / 389,385 |\n| 独立 javac | 56 个主源码文件，0 错误 |\n| 包内容审计 | 76/76 |\n| 移动云（原版、Iris+ITRP+FSR2） | 各 128 帧，912 checks，重复混合 0、覆盖丢失 0 |\n| 真实 Fabric 专服 + 双回环客户端 | 29/29（含重启后重新入服）|\n| 交付包 SHA-256 | `465836d84bbbbff0445c4c5e306b8092045ba77f103df3831465d8c32d6d9d80` |\n\n## 安装\n\n1. Minecraft 1.21.1 + Fabric Loader 0.16.14+ + Fabric API + Java 21\n2. **客户端与服务端都要装本版**；未安装的客户端不会收到同步、也看不到方块\n3. 把 `skyboxblock-1.0.4-test.2-r36.jar` 放进 `mods/`，只保留一个版本\n\n## 验证边界\n\n不扩大为：公共服务器、旧版客户端或未安装本模组客户端的同步、历史门户矩阵、性能长测、旧严格恢复四项失败项、任意版本通用兼容。多人矩阵为本机回环双客户端，不代表公网延迟与并发结论。\n\n## 许可与署名\n\n- 项目代码 **MIT**（见仓库 `LICENSE`），第三方归属在 `NOTICE` 与 `THIRD_PARTY_NOTICES.md`\n- 六套全景素材按各自上游协议分发：CC0 1.0（Poly Haven / Screaming Brain Studios / VertexZero）与 **CC BY 4.0（Solar System Scope，必须署名）**\n- 授权原文与素材清单随仓库分发：`docs/third-party-evidence/`\n\n## 附件\n\n- `skyboxblock-1.0.4-test.2-r36.jar` — 模组本体\n- `skyboxblock-1.0.4-test.2-r36-sources.jar` — 源码包\n- `skybox-validation-probe-r36.jar` — 验证探针（回归/诊断用，非玩法必需）\n- `skybox-r36-source-and-evidence.zip` — 源码／工具／选定证据快照"
+		},
 		{
 			"tag": "v1.0.3-test.4-r34.2",
 			"published": "2026-10-24T04:39:08Z",
@@ -18,7 +132,7 @@
 					"name": "skyboxblock-1.0.3-test.4-r34.2.jar",
 					"url": "https://github.com/BingShanFengXue/skyboxblock/releases/download/v1.0.3-test.4-r34.2/skyboxblock-1.0.3-test.4-r34.2.jar",
 					"size": 16998907,
-					"downloads": 18,
+					"downloads": 22,
 					"inspection": 2,
 					"sha256": "55337b11fb3e268cb972bf9873bbd77aa25fc8481ddb8054d057224e6f61c022",
 					"mods": [
@@ -125,5 +239,18 @@
 		"docs/screenshots/user-water-xray-20261019.png"
 	],
 	"picturesChecked": "2026-10-30T12:12:39.453Z",
+	"contributors": {
+		"commits": 4,
+		"more": 0,
+		"people": [
+			{
+				"login": "BingShanFengXue",
+				"commits": 4,
+				"name": "Bing6512",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
 	"history": 1
 }

@@ -1,0 +1,223 @@
+{
+	"repo": "HalfHeartMC/DimensionDaddy",
+	"host": "github",
+	"description": "A Fabric mod for Minecraft that lets server operators enable or disable the End and Nether dimensions at will. When a dimension is disabled, portal blocks are blocked and players attempting to enter receive an action bar message.",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-02-19T14:38:17Z",
+	"pushed": "2026-07-03T14:18:02Z",
+	"releases": [
+		{
+			"tag": "v2.0.0-26.2",
+			"published": "2026-07-03T13:58:18Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 465464199,
+					"name": "DimensionDaddy-2.0.0-26.2.jar",
+					"url": "https://github.com/HalfHeartMC/DimensionDaddy/releases/download/v2.0.0-26.2/DimensionDaddy-2.0.0-26.2.jar",
+					"size": 145282,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "a6de2d051b7ae80e3c1c03ca91c16c1bf09807c867b1705c63a2ff6a92fd8882",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dimensiondaddy",
+							"version": "2.0.0",
+							"name": "Dimension Daddy",
+							"description": "Allows server operators to enable/disable the End and Nether dimensions",
+							"minecraft": ">=26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": "fd61b8ab8c7515dc07f2decc98dddc57662d951f4483fd28aa0d720430ec9888.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 2.0.0 (26.2) - 2026-07-02\n\n### Just a version port upgrade!\n- Ported to Minecraft 26.2 and Fabric API 0.153.0+26.2\n- No functional or behavioral changes from the 26.1.2 release; this is the same 2.0.0 feature set targeting a newer Minecraft version. Nothing in 26.2's own patch notes touches the world save layout, portal block handling, or command and permission APIs this mod depends on, so the port did not require any code changes\n\n\n## **Full Changelog**: \nhttps://github.com/HalfHeartMC/DimensionDaddy/releases/tag/v2.0.0-26.1.2"
+		},
+		{
+			"tag": "v2.0.0-26.1.2",
+			"published": "2026-07-03T13:54:52Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 465461525,
+					"name": "DimensionDaddy-2.0.0-26.1.2.jar",
+					"url": "https://github.com/HalfHeartMC/DimensionDaddy/releases/download/v2.0.0-26.1.2/DimensionDaddy-2.0.0-26.1.2.jar",
+					"size": 145284,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "70227bfc444e93a565bfb9408884044a78e6448a5c21c68023ae85ff1b04a0da",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dimensiondaddy",
+							"version": "2.0.0",
+							"name": "Dimension Daddy",
+							"description": "Allows server operators to enable/disable the End and Nether dimensions",
+							"minecraft": ">=26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": "fd61b8ab8c7515dc07f2decc98dddc57662d951f4483fd28aa0d720430ec9888.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 2.0.0 - 2026-07-02\n\n### Added\n- Unified command tree under a single `/DimensionDaddy` root, with `enable`, `disable`, `status`, `backup`, `restore`, `reset`, and `list` subcommands, each taking `overworld`, `nether`, `end`, or `all` as the target\n- Overworld toggle support; previously only the End and Nether could be disabled\n- Blocking of the Nether portal's return trip and the End's exit portal when the Overworld is disabled, in addition to the existing entry-side blocking\n- Real world data backup, restore, and reset, covering the `region`, `entities`, `poi`, and per-dimension `data` folders for each dimension, rather than only an enabled and disabled flag\n- A one-time Initial Backup, captured automatically the first time the mod runs on a world, preserving the world exactly as it was before the mod made any changes\n- An in-game report broadcast the moment a scheduled restore or reset finishes applying, showing per-dimension file counts or the specific failure reason\n- Retry logic with a short backoff on every file delete and copy operation, to avoid silent failures caused by brief file locks right after a world reload\n- Tab completion for dimension names and known backup ids\n- Support for Minecraft 26.1's restructured world save layout, where each dimension's data lives under `dimensions/minecraft/<dimension>/` instead of the previous root-level layout\n\n### Changed\n- Replaced the previous six separate commands, `enableend`, `disableend`, `endstatus`, `enablenether`, `disablenether`, and `netherstatus`, with the unified `/DimensionDaddy` command tree. This is a breaking change for anyone with the old commands saved in scripts, macros, or keybinds\n- Backup storage changed from a single properties file per backup to a folder per backup, containing a metadata file plus copied world data\n- Removed the automatic safety backups that were previously taken on every server startup and immediately before every restore or reset; the mod now only creates a backup automatically once, the Initial Backup, and otherwise only when explicitly requested\n\n### Fixed\n- Restore and reset previously only ever changed the enabled and disabled flag and never touched actual block or entity data on disk; they now genuinely restore or regenerate world data\n- Fixed a bug where a partially completed Initial Backup left behind by an earlier failed run would permanently prevent the mod from ever creating a valid one; it now retries automatically on the next server start\n- Fixed dimension folder paths to match Minecraft 26.1's new world save layout; the previous paths were left over from the pre-26.1 layout and caused every backup to silently capture no data at all\n- Fixed a bug where a single file that could not be deleted, typically due to a brief lock immediately after a world reload, would cause the entire delete step to be silently treated as successful"
+		},
+		{
+			"tag": "v1.0.1",
+			"published": "2026-03-09T03:37:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 369824699,
+					"name": "DimensionDaddy-1.0.1.jar",
+					"url": "https://github.com/HalfHeartMC/DimensionDaddy/releases/download/v1.0.1/DimensionDaddy-1.0.1.jar",
+					"size": 119574,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "88ec4e7f9e416d1abad0be5838bb2b5a2145a87dd42ef58911f501dc1209eaf2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dimensiondaddy",
+							"version": "1.0.1",
+							"name": "Dimension Daddy",
+							"description": "Allows server operators to enable/disable the End and Nether dimensions",
+							"minecraft": "1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": "fd61b8ab8c7515dc07f2decc98dddc57662d951f4483fd28aa0d720430ec9888.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 6,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.0.1\n\n- Fixed commands not working in singleplayer and when using server hosting mods such as Essential\n- Toggle commands are now also usable in-game by opped players, not just console/RCON"
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-02-19T15:03:31Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 358608119,
+					"name": "DimensionDaddy-1.0.0.jar",
+					"url": "https://github.com/HalfHeartMC/DimensionDaddy/releases/download/v1.0.0/DimensionDaddy-1.0.0.jar",
+					"size": 9641,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "5b4ca91c104753f8a33e20b7c0fa710d09ebbbc000aa2219ae4326283b2ea43e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dimensiondaddy",
+							"version": "1.0.0",
+							"name": "Dimension Daddy",
+							"description": "Allows server operators to enable/disable the End and Nether dimensions",
+							"minecraft": "1.21.11",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 5,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# DimensionDaddy\n\nA Fabric mod for Minecraft 1.21.11 that lets server operators enable or disable the End and Nether dimensions at will. When a dimension is disabled, portal blocks are blocked and players attempting to enter receive an action bar message.\n\n## Commands\n\nAll toggle commands are console/RCON only (not usable by in-game players).\n\n| Command | Description |\n|---|---|\n| `/enableend` | Enables the End dimension |\n| `/disableend` | Disables the End dimension |\n| `/endstatus` | Shows the current End status |\n| `/enablenether` | Enables the Nether dimension |\n| `/disablenether` | Disables the Nether dimension |\n| `/netherstatus` | Shows the current Nether status |\n\n## Configuration\n\nState is persisted in `config/DimensionDaddy/dimensiondaddy.properties`. The file is created automatically on first run with both dimensions enabled:\n\n```properties\n#DimensionDaddy Configuration\nendEnabled=true\nnetherEnabled=true\n```\n\nYou can edit this file directly while the server is stopped. Changes made via commands are written to it immediately.\n\n## Requirements\n\n- Minecraft 1.21.11\n- Fabric Loader ≥ 0.18.2\n- Fabric API\n- Java 21\n\n## Installation\n\n1. Install [Fabric Loader](https://fabricmc.net/use/) for Minecraft 1.21.11.\n2. Download [Fabric API](https://modrinth.com/mod/fabric-api) and place it in your `mods` folder.\n3. Place the DimensionDaddy `.jar` into your `mods` folder.\n4. Start your server.\n\n## License\n\nMIT"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 27,
+		"more": 0,
+		"people": [
+			{
+				"login": "HalfHeartMC",
+				"commits": 27,
+				"name": "Half Heart",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

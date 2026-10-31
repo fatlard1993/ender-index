@@ -1,0 +1,81 @@
+{
+	"repo": "iTomma/Errata",
+	"host": "github",
+	"description": "A published list of corrections for your recipe book. Unlocks modded recipes that ship without an unlock advancement, and repairs advancements written for pre-1.20.5.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-08-11T15:12:11Z",
+	"pushed": "2026-08-22T11:02:52Z",
+	"releases": [
+		{
+			"tag": "v1.0.0",
+			"published": "2026-08-11T15:21:57Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 510286186,
+					"name": "errata-1.0.0.jar",
+					"url": "https://github.com/iTomma/Errata/releases/download/v1.0.0/errata-1.0.0.jar",
+					"size": 31451,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "893a9267258ec34dd02ee7cefc30a0a4359ebf469d1dfa37cce89ebc701c0357",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "errata",
+							"version": "1.0.0",
+							"name": "Errata",
+							"description": "A published list of corrections for your recipe book. Unlocks modded recipes that ship without an unlock advancement, and repairs advancements written for pre-1.20.5 that fire on any pickup.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "b45cad0903070fe23da06837eeb57cefa9b12bbdfadd9dd0e369875dfa46411a.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 9,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Release description\n\nFirst release. Errata fixes two things that go wrong with recipe books in modded Minecraft.\n\n**Recipes that never unlock.** Vanilla only puts a recipe in the book when a matching\n`minecraft:recipes/...` advancement fires. Plenty of mods ship recipes and forget the advancement,\nso those recipes stay invisible forever. Errata unlocks them directly, triggered by the recipe's\nmost distinctive ingredient.\n\n**Advancements that unlock everything at once.** In 1.20.5 the item-predicate fields `item` and\n`tag` were replaced by a single `items` field. Mods still using the old keys produce an empty\npredicate, and an empty predicate matches every item, so the recipe unlocks on the player's next\npickup no matter what it is. Errata detects these and writes corrected copies into a generated\ndatapack in your world folder. Mod jars are never touched.\n\nRecipes that already have a working advancement are left completely alone, so mods with correct\nprogression are unaffected.\n\n## What's in it\n\n- Unlocks recipes missing an unlock advancement, using the rarest ingredient as the trigger so a\n  stick does not unlock 162 unrelated things\n- Silently unlocks recipes the vanilla book cannot display (Farmer's Delight cooking and cutting,\n  machine recipes, and also vanilla campfire, stonecutting and smithing), since a notification\n  pointing at a page that does not exist is only noise\n- Repairs pre-1.20.5 advancement predicates via a generated datapack, applied automatically on\n  world load\n- `/errata stats`, `triggers`, `why`, `repair`, `rebuild`, `unlockall` for inspecting what it did\n  and why\n- Per-unlock logging that names the exact item responsible\n- 13 config options, including namespace allow and deny lists\n\n## Requirements\n\n- Minecraft 1.21.1\n- NeoForge 21.1.0 or newer\n- Java 21\n\nServer-side logic only. The jar is safe on both sides and the recipe book syncs to clients\nnormally.\n\n## Install\n\nDrop `errata-1.0.0.jar` into your `mods` folder. Config is written to `config/errata-common.toml`\non first launch.\n\nIf the mod finds broken advancements it will write a datapack to\n`<world>/datapacks/errata_repairs` and reload once on that first load. This does not repeat, and\ndeleting that folder undoes it.\n\n## Known limitations\n\n- `requireAllIngredients` tracks the items a player has been seen holding per session rather than\n  saving them, so partial progress toward a recipe resets on logout and is re-derived from the\n  inventory at login. Recipes already unlocked stay unlocked.\n- Tested in single player only.\n- The repair covers `minecraft:inventory_changed` predicates. Other trigger types using the same\n  removed syntax are not currently rewritten.\n\n## Verify the download\n\n```\nsha256  893a9267258ec34dd02ee7cefc30a0a4359ebf469d1dfa37cce89ebc701c0357\nsha1    87361b672824f9727d39d071ecbdbfacff2c9736\nsize    31,451 bytes\n```\n\nMIT licensed."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [
+		"icon/errata-gallery-1.png",
+		"icon/errata-icon-128.png",
+		"icon/errata-icon-512.png",
+		"icon/errata-icon-transparent-512.png"
+	],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 7,
+		"more": 0,
+		"people": [
+			{
+				"login": "iTomma",
+				"commits": 7,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

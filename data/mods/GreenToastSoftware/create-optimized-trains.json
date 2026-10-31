@@ -1,0 +1,78 @@
+{
+	"repo": "GreenToastSoftware/create-optimized-trains",
+	"host": "github",
+	"description": "Create Optimized Trains — Performance optimization addon for Create Mod trains. By GreenToastSoftware Games.",
+	"stars": 4,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-04-04T11:21:37Z",
+	"pushed": "2026-09-29T00:19:38Z",
+	"releases": [
+		{
+			"tag": "v1.3.2",
+			"published": "2026-09-07T14:51:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 548942549,
+					"name": "create-optimized-trains-1.3.2.jar",
+					"url": "https://github.com/GreenToastSoftware/create-optimized-trains/releases/download/v1.3.2/create-optimized-trains-1.3.2.jar",
+					"size": 765222,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "25907502919bb6c511afafb825e09986bd5f78376a0619888feee28a1eb45b9c",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "create_optimized_trains",
+							"version": "1.2.0",
+							"name": "Create Optimized Trains",
+							"description": "Performance optimization addon for Create Mod trains.\nIncludes LOD rendering, carriage grouping, safe multi-threading,\ntick throttling, render optimization, proxy entities,\nsmart chunk management, physics & networking optimization,\npriority system and dynamic performance monitor.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"create"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 81,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## v1.3.2\n\n### Focus\n\n- Fixes the remaining Copycats+ bit lag, a critical world-load freeze, and last-carriage movement stutter\n- All fixes are follow-ups discovered while stress-testing v1.3.1 on maps with 40+ trains and Copycats+ bit-heavy contraptions\n\n### Bug Fixes\n\n#### Copycats+ Periodic Lag (Bit Blocks with BlockEntity)\n- Contraptions containing Copycats+ \"bits\" (sub-block sized pieces with a BlockEntity, unlike plain slabs/panels) caused periodic lag spikes every few seconds\n- Root cause: `ContraptionWorld` does not override `getBlockEntity()`, so it fell back to `WrappedLevel.getBlockEntity()`, which queried the **real world** using the contraption's **local** coordinates (e.g. 5,1,3) — forcing the server to load/query the chunk at real-world (0,0) on every call\n- Fix: `ContraptionWorldBlockEntityMixin` intercepts `getBlockEntity()` on `Level` (filtered to `ContraptionWorld` instances) and always serves the BlockEntity from `contraption.getBlocks()`, with a lazy per-instance cache — never touching the real world with local coordinates\n\n#### World Freeze on Startup (Memory Pressure)\n- On some world loads, especially after the server had been running a while, the game would hang completely at the loading screen (no crash, just a full freeze)\n- Root cause: heap memory pressure genuinely reaching 90%+ during startup, mainly from Distant Horizons' distant world generation competing with ~40 Create contraptions being assembled simultaneously — triggering long stop-the-world GC pauses (minutes-long in the worst case)\n- Fix: `DistantHorizonsThrottle` temporarily reduces DH's distant world generation and worker thread count for the first `startupThrottleTicks` (default 200 ticks / 10s) after the server starts, giving vanilla terrain and contraption assembly priority. DH's original settings are restored automatically afterwards. Uses DH's public API via reflection — no hard dependency\n\n#### Last-Carriage Movement Stutter\n- Long trains (10+ carriages) without a player on board showed irregular movement — the stutter would noticeably improve once the rearmost carriage's entity finally loaded\n- Root cause: `ChunkLoadManager`'s per-tick chunk load rate limit applied to *every* needed chunk indiscriminately, including the exact chunk each carriage physically occupies. On unoccupied trains, that chunk competed with lookahead/trailing chunks for the same 6-per-tick budget, so the last carriage in line could take several ticks just to get its own chunk loaded — delaying its entity creation\n- Fix: chunk requests are now split into **critical** (the exact chunk under each carriage — always loaded immediately, no rate limit, regardless of occupancy) and **soft** (LOD comfort radius, directional lookahead, trailing buffer — still rate-limited). No carriage, including the rearmost one, waits behind empty pre-load chunks anymore\n\n#### Chunks Not Unloading When a Train Stops\n- Chunks along a train's previous travel direction could remain force-loaded indefinitely after the train stopped, accumulating over a session and degrading performance over time\n- Root cause: the anti-thrash \"recently loaded\" deque only advances when new chunks are loaded; once a train stops, nothing loads, so old lookahead chunks stayed protected from unloading forever\n- Fix: the anti-thrash deque is cleared as soon as a train's speed drops below the movement threshold, letting unneeded chunks unload immediately\n\n### Improvements\n\n#### Chunk Loading Tuning\n- Adaptive lookahead margin increased from ~2s to ~5s of travel time, to reliably cover cold-terrain chunk generation (which can take 2-3s) — default cap raised from 10 to 20 chunks\n- Per-tick chunk load budget reduced to 6 chunks with a 5ms time budget per train, preventing a single train's chunk update from blocking the whole server tick\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 11,
+		"more": 0,
+		"people": [
+			{
+				"login": "AlfredoProgramer",
+				"commits": 11,
+				"name": "GreenToastSoftware CEO",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

@@ -1,0 +1,193 @@
+{
+	"repo": "JackOtsig/villagerfarm",
+	"host": "github",
+	"description": "Fabric mod for MC 1.21.11 that overhauls villager farming: gamerule split, atomic harvest+replant, sugar cane / nether wart / pumpkin / melon / cocoa support, food sharing, pickup effects, anti-trample, WTHIT/Jade tooltip.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-05-08T22:29:52Z",
+	"pushed": "2026-05-10T08:25:29Z",
+	"releases": [
+		{
+			"tag": "v0.7.1",
+			"published": "2026-05-10T08:25:29Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 416545036,
+					"name": "villagerfarm-0.7.1.jar",
+					"url": "https://github.com/JackOtsig/villagerfarm/releases/download/v0.7.1/villagerfarm-0.7.1.jar",
+					"size": 48970,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "0126650783789db77e0924fc658e831f4ea913326809169f4524419c8e46cf08",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "villagerfarm",
+							"version": "0.7.1",
+							"name": "Villager Farm",
+							"description": "Splits villager farming off the mobGriefing gamerule and makes harvest+replant atomic. Adds farming for sugar cane, nether wart, pumpkin, melon, and cocoa.",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"blockorigin",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"jade",
+								"wthit"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 31,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Sugar-cane and cocoa-bean pickup effects now read from `pickup_effects.<crop>.effect` in the config. Defaults preserved (`minecraft:speed` for cane, `minecraft:regeneration` for cocoa); any vanilla or modded status-effect identifier works.\n\nExisting config files: add the new `effect` field, or delete the file and let the mod regenerate it. Missing field falls back to the default in code (so old configs keep their existing behavior)."
+		},
+		{
+			"tag": "v0.7.0",
+			"published": "2026-05-09T19:01:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 416172320,
+					"name": "villagerfarm-0.7.0.jar",
+					"url": "https://github.com/JackOtsig/villagerfarm/releases/download/v0.7.0/villagerfarm-0.7.0.jar",
+					"size": 48790,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "d90b298a8c74d8a445f5e6f6db2d64622c7de02dc6b42ef3cd3eedc3370ec4d7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "villagerfarm",
+							"version": "0.7.0",
+							"name": "Villager Farm",
+							"description": "Splits villager farming off the mobGriefing gamerule and makes harvest+replant atomic. Adds farming for sugar cane, nether wart, pumpkin, melon, and cocoa.",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"blockorigin",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"jade",
+								"wthit"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 31,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Breaking change**: the two gamerules (`villager_farming`, `villager_extended_farming`) are gone. All configuration is now in `config/villagerfarm.json`, auto-created with sensible defaults on first launch.\n\n## What's new\n\n- **Toggle for every feature** — `gamerule_split`, `atomic_harvest_replant`, `anti_trample`, `secondary_job_site_patcher`, `tooltip_integration`, plus per-crop sub-toggles for the five extended crops, per-item sharing toggles, and per-effect pickup toggles.\n- **Editable numbers** — food values per item, effect durations + amplifiers, search radii, harvest distance, unstuck-fallback window, share threshold, max share distance, secondary-job-site scan dimensions and tick interval. Effect identifiers (the wart pool) are also editable.\n- **Edit-and-restart model** — no hot-reload command. Restart the game/server to apply changes.\n- **No validation** — config is read with `Gson.fromJson`, no value sanity checks. Set things to bad values at your own risk; defaults fill in for missing keys.\n\nSee [README's Configuration section](https://github.com/JackOtsig/villagerfarm#configuration) for the full schema and field meanings.\n\n## Migration from v0.6.0\n\nIf you were relying on `villager_farming = false` to disable farming entirely, set `features.gamerule_split = false` (then villager farming is once again gated on `mob_griefing`). To disable farming completely, turn off the relevant feature toggles.\n\nOld worlds with the gamerules persisted in `world.dat` will see harmless \"Unknown registry key\" warnings on first load — vanilla complaining the gamerules don't exist anymore.\n\n## Install\n\nDrop into your `mods/` folder:\n\n- `villagerfarm-0.7.0.jar` (this release)\n- [`blockorigin-0.1.0-dev.jar`](https://github.com/JackOtsig/blockorigin/releases) — required runtime dep\n- Fabric API for MC 1.21.11\n- Optional: WTHIT or Jade for the tooltip overlay"
+		},
+		{
+			"tag": "v0.6.0",
+			"published": "2026-05-08T22:32:10Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 415607850,
+					"name": "villagerfarm-0.6.0.jar",
+					"url": "https://github.com/JackOtsig/villagerfarm/releases/download/v0.6.0/villagerfarm-0.6.0.jar",
+					"size": 37791,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "dd08cb60b5838981adff066b8e100cb93b56ebe9b3ae410a7b9a8f79c03282e7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "villagerfarm",
+							"version": "0.6.0",
+							"name": "Villager Farm",
+							"description": "Splits villager farming off the mobGriefing gamerule and makes harvest+replant atomic. Adds farming for sugar cane, nether wart, pumpkin, melon, and cocoa.",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"blockorigin",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"jade",
+								"wthit"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First public release of Villager Farm.\n\n## Features\n\n- **Gamerule split**: `villagerfarm:villager_farming` (default `true`) controls villager harvest/replant/pickup independently of `mob_griefing`. You can now run a no-griefing world with working farms.\n- **Atomic harvest + replant**: farmer breaks a mature crop and the seedling appears in the same tick. Yields are vanilla loot minus one seed-equivalent.\n- **Five extended crops**: sugar cane, nether wart, pumpkin, melon, cocoa. Gated by `villagerfarm:villager_extended_farming`. Pumpkin/melon harvest only fires for stem-grown fruit (decorative ones are left alone).\n- **Food sharing + breeding**: pumpkin (food=4), melon slice / cane / cocoa (food=1) all count toward villager breeding. Custom share path lets the new crops actually circulate.\n- **Pickup effects**: cane → Speed I (+10s/cane), cocoa → Regen I (+5s/bean), nether wart picked up by a cleric → random positive effect (30s).\n- **Farmer anti-trample**: farmer-profession villagers no longer trample their own farmland.\n- **Wider AI scan**: extended ±2 search + a SECONDARY_JOB_SITE patcher so soul-sand and jungle-log farms are recognized by the brain framework.\n- **WTHIT + Jade tooltip**: hover a villager → see current activity (Working / Resting / etc.) plus inventory contents.\n\n## Install\n\nDrop into your `mods/` folder:\n\n- `villagerfarm-0.6.0.jar` (this release)\n- [`blockorigin-0.1.0-dev.jar`](https://github.com/JackOtsig/blockorigin/releases) — required runtime dep\n- Fabric API for MC 1.21.11\n- Optional: WTHIT or Jade for the tooltip overlay\n\n## Requirements\n\n- Minecraft 1.21.11\n- Fabric Loader ≥ 0.19.2\n- Fabric API\n- blockorigin"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 3,
+		"more": 0,
+		"people": [
+			{
+				"login": "JackOtsig",
+				"commits": 3,
+				"name": "Jackson Otsig",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

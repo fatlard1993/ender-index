@@ -1,0 +1,89 @@
+{
+	"repo": "DLZstudio/IEMS",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"created": "2026-07-01T07:17:17Z",
+	"pushed": "2026-10-11T02:42:44Z",
+	"releases": [
+		{
+			"tag": "v0.8.0-beta.120",
+			"published": "2026-09-30T15:40:32Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 629585808,
+					"name": "iems-1.21.1-neoforge-0.8.0-beta.120.jar",
+					"url": "https://github.com/DLZstudio/IEMS/releases/download/v0.8.0-beta.120/iems-1.21.1-neoforge-0.8.0-beta.120.jar",
+					"size": 772345,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "8268b06da2e4efeacdd4002ea796b83e870d2bbcaac6e9297dbc375962665a5a",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "iems",
+							"version": "0.8.0-beta.120",
+							"name": "IEMS",
+							"description": "Integrated Energy Management System - 面向 Minecraft NeoForge 的综合能源管理系统\n\n内置第三方组件 / Bundled third-party component:\nGeckoLib 4.8.4 (https://github.com/bernie-g/geckolib) 以 Jar-in-Jar 方式随本模组分发（META-INF/jarjar/）。\n其版权与许可声明见嵌套 JAR 内的 LICENSE_GeckoLib 4，同为 MIT License。",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"geckolib"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"IEMS"
+							],
+							"block": [
+								"Energy Broadcast Tower",
+								"Energy Transfer Relay"
+							]
+						},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 331,
+						"jars": [
+							"META-INF/jarjar/geckolib-neoforge-1.21.1-4.8.4.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# IEMS v0.8.0-beta.120 抢先体验版发布\n\n![版本](https://img.shields.io/badge/版本-0.8.0--beta.119-blue)  ![开发代号](https://img.shields.io/badge/开发代号-IEMS0930-purple)  [![NEOFORGE](https://img.shields.io/badge/NeoForge-21.1%2B-orange)](https://neoforged.net/)  [![MINECRAFT](https://img.shields.io/badge/Minecraft-1.21.1-green)](https://www.minecraft.net/)\n\n> **⚠️ 破坏性更新**：本次为完全重写，旧存档、旧配置、旧 API 与旧同步策略完全不兼容。\n\n本次发布是对旧版 IEMS（v0.6.0 ~ v0.8.0-alpha）的**完全重写**：从「方块实体即电网」的单体实现，改为「逻辑-表现彻底分离 + 工厂化持久化」的能源管理框架。\n\n---\n\n## 🚀 核心亮点速览\n\n- **架构重构**：逻辑与表现彻底分离，电网模拟不再因区块卸载而停摆\n- **FEDA 自动桥接**：外部 FE 设备零改动自动接入，发现即建连\n- **Web 监控面板**：REST API + Token 鉴权，实时监控电网状态\n- **配置热重载**：`/iems reload` 一条命令重载全部配置\n\n---\n\n## 📋 完整变更日志\n\n<details>\n<summary><b>点击展开完整变更详情</b></summary>\n\n## 优化\n\n### 架构\n\n- **逻辑与表现彻底分离**：电网逻辑从 BlockEntity 中剥离为独立逻辑层（纯 POJO，不依赖 `Level`），方块实体退化为外观/视图\n- **设备实例自治**：设备不再互相持有引用，只经调度器与电网交互，可独立 new / 销毁 / 改参数，天然适配多核并行\n- **无区块加载持续运行**：电网模拟不再因区块卸载而停摆\n\n### 持久化\n\n- **存储升级为完整电网快照**：由「只存连接坐标 + type 枚举」升级为「设备（工厂 ID + 参数）+ 核心信息 + 全部连接」\n- **重建方式改为工厂化**：服务器启动时由设备工厂重建，消除旧版对设备注册顺序的依赖\n- **修复顺序敏感缺陷**：旧版「设备早于核心加载 → 注册无效 → 电网永远为空」已修复\n\n### 连接与网络\n\n- **拉线交互全面强化**：HUD 实时显示拉线距离与最大距离；超距（+10 格缓冲）自动收线；维度变化立即收线；退出世界强制清理，杜绝状态残留\n- **服务端二次校验**：C2S 拉线请求在服务端复核端点、同维度、距离、重复与中继规则，不再以客户端为准\n- **安全防护**：新增建连邻近检查与频率限制，防改包远程任意建连\n- **同步包加固**：`GridSyncPayload` 全量拓扑同步前做尺寸校验，防超大包导致客户端 OOM\n\n### 激光渲染\n\n- **侧视不再消失**：改用 Billboard 宽度方向（宽 = 光束方向 × (相机→光束)）\n- **远处不再细化消失**：增加屏幕空间最小宽度 `max(0.03, 距离 × 0.0015)`\n- **任意角度可见**：关闭背面剔除做双面渲染，同时保留深度测试（仍被方块遮挡）\n- **消除幽灵斜线**：相邻条带间插入退化三角形分隔\n- **客户端缓存扩展**：`ClientGridCache` 同时处理主网 / 孤岛 / 桥接三列表，含四象限统计与 EMA 平滑\n\n### Web 监控面板\n\n- **从无鉴权只读页升级为 REST API**：默认端口 8080 → 28567，默认仅绑定 127.0.0.1，可显式开放远程\n- **鉴权**：全部 `/api/*` 需 Token（请求头或查询参数）\n- **数据结构统一**：统一信封 `{schema, ts, data}`，BigInteger 字段以十进制字符串传输，避免精度丢失\n- **线程安全**：HTTP 线程任务队列化到 tick 线程，杜绝与核心的数据竞争；世界重载时线程池显式停止，指标缓冲随会话清理，避免线程泄漏与跨存档串扰\n\n### 并发模型\n\n- **明确 tick 线程独占**：电网状态由服务端 tick 线程专有，外部线程统一经 `IEMSAPI.runOnServerThread()` / `callOnServerThread()` 提交任务\n\n### 能量体系\n\n- **结算节拍**：由 SE/2tick（每 2 tick 一次）改为 SE/tick（每 Tick 结算）\n- **单位统一**：以 SE 为内部结算基准，FE / AE 由适配层换算，不再需要额外放置转换器\n- **电网拓扑三态**：新增主网 / 孤岛 / 边界视角的 BFS 可达性判定与拓扑快照；未接入核心的设备允许先行互连（孤岛），渲染红色激光提示，核心就位后自动上电\n- **协议容量改由核心声明**：不再由设备端自行增减，框架统一计算与超限检测\n- **连接距离改为声明式**：旧版固定 1500 格 → 新版由设备/核心自行声明，未声明时框架默认 500 格\n- **命令体系**：调试命令 `/iems_debug add_connection | list_connections | clear_connections` 升级为 `/iems status | protocol | scan | shutdown | restart`\n\n### 构建与依赖\n\n- **GeckoLib 4.8.4 以 Jar-in-Jar 内嵌**：玩家无需单独安装（旧版列为必需外部依赖）\n- **NeoForge 依赖范围放宽**：由固定 `21.1.228+` 放宽为 `NeoForge 21.1.0+`\n\n---\n\n## 新增\n\n- **设备工厂机制（M9 模拟化）**：设备以「工厂 ID + 参数」持久化，脱离方块依然存在，是重启重建与无区块运行的基础\n- **FEDA 外部 FE 设备自动桥接**：每 20 tick 扫描范围内任意 NeoForge FE 设备（发电机 / 用电器 / 储能），发现即自动建连，**对方模组零改动**；桥接激光默认青色，可配置为常规色\n- **孤岛连接**：未接入核心的连接可被创建并保留，以红色激光提示未供电\n- **Web REST 端点**：`/api/status`、`/api/devices`、`/api/connections`、`/api/topology`、`/api/metrics`、`POST /api/grid/active`\n- **指标环形缓冲**：为 `/api/metrics` 提供能量 / 容量 / 协议 / 设备数的时序采样，可接外部仪表盘\n- **配置体系 `config/DLZstudio/IEMS/`**：首次启动自动生成带注释的配置文件\n  - `Energy.toml` — `fePerSe` 能量汇率（默认 1 SE = 10 FE，范围 1 ~ 9×10²⁶）\n  - `APIserve.toml` — Web 面板 `enabled` / `host` / `port` / `token`\n  - `Renderer.toml` — `colorizeAutoConnect` 桥接激光配色开关\n- **`/iems reload` 热重载命令**：一条命令重载全部 IEMS 配置，无需重启游戏（权限等级 2）\n- **拉线契约 `IIemsInteractable`**：设备实现该接口即可参与框架内置拉线交互，与具体方块类型解耦\n- **静态 API 门面 `IEMSAPI`**：提供设备/核心接入、连接管理、拓扑查询、电网开关、功率源注册、设备扫描、外部线程任务提交等入口\n- **拓扑快照查询 `getSnapshot()`**：一次获取主网 / 孤岛 / 边界三视角\n- **示例设备**：能源传输中继器（500 格，手动）与能源广播塔（50 格，自动 + 手动），含模型渲染与自带 7 级光照\n- **四象限功率 HUD**：`EnergyOverlayRenderer` 以 EMA 平滑（1.5s 时间常数）展示四象限统计\n- **适配器桥接连接类型**：`ADAPTER_BRIDGE` 与常规连接在拓扑与渲染上分别处理\n\n---\n\n## 删除\n\n- **GE 单位体系**：彻底移除 GE（含其单位枚举与全工程引用），新版单位体系为 FE / AE / SE\n- **时间显示模式 API**：移除旧版 `standard` / `coordinated` 双显示模式，统一为 SE/tick\n- **能量转换器方块**：不再需要手动切换 SE↔GE↔FE↔AE，FE 由桥接层自动换算\n- **能量存储器方块**：标准存储器（100,000 SE）与通用存储器（10²⁰ GE）不再由框架提供，交由外部模组实现\n- **能源标记方块**：旧版多方块结构定位用的被动方块已移除\n- **广播塔视线遮挡检查**：移除旧版「信号源到设备间 ≥3 层完整方块遮挡则不可连」规则，改为纯距离判定\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "IEMS 0.8.0-beta 是对旧版 IEMS 的完全重写（逻辑层与表现层彻底分离）：",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 11,
+		"more": 0,
+		"people": [
+			{
+				"login": "NSCS-00",
+				"commits": 11,
+				"name": "NSCS00",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

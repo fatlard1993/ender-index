@@ -1,0 +1,251 @@
+{
+	"repo": "Crossing-Dead-Development/Limbus-E.G.O-Weapons",
+	"host": "github",
+	"description": "Limbus E.G.O Weapons plugin for minecraft paper 1.21.4",
+	"stars": 0,
+	"archived": true,
+	"license": "MIT",
+	"created": "2026-05-04T16:14:05Z",
+	"pushed": "2026-07-02T20:20:27Z",
+	"releases": [
+		{
+			"tag": "v3.2.0",
+			"published": "2026-07-02T12:05:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 464681202,
+					"name": "LimbusEGOWeapons-3.2.0.jar",
+					"url": "https://github.com/Crossing-Dead-Development/Limbus-E.G.O-Weapons/releases/download/v3.2.0/LimbusEGOWeapons-3.2.0.jar",
+					"size": 1976644,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "01f5b8542506cd72a9b2bc512db102e47ce2b478a1ef1191866978af14d40943",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 36,
+						"jars": [
+							"resourcepack/assets/solemnlament/LSMP-0.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"me/yisang/limbus/LimbusEGOWeapons.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"me/yisang/limbus/LimbusEGOWeapons.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "效能優化與程式碼整理\n\n- 近戰攻擊事件改讀一次 PDC id 查表，不再逐武器模組複製 ItemMeta\n- 盾牌 tick 先做 Material 檢查，未持盾玩家不讀 ItemMeta\n- StatusManager / SanityManager 的 NamespacedKey 改為建構時快取\n- give 指令改用註冊表，tab-complete 由註冊表推導\n- PACK_URL 改指向 Crossing-Dead-Development 組織\n\n資源包無變動（v.2.17）。"
+		},
+		{
+			"tag": "v3.1.0",
+			"published": "2026-07-02T08:41:24Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 464123396,
+					"name": "LimbusEGOWeapons-3.1.0.jar",
+					"url": "https://github.com/Crossing-Dead-Development/Limbus-E.G.O-Weapons/releases/download/v3.1.0/LimbusEGOWeapons-3.1.0.jar",
+					"size": 1976211,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "5d1474f2c04af43ae0d33602d49eaf25506a83aa99f22c6e18067d8f5bf48a48",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 36,
+						"jars": [
+							"resourcepack/assets/solemnlament/LSMP-0.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"me/yisang/limbus/LimbusEGOWeapons.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"me/yisang/limbus/LimbusEGOWeapons.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 主要更新：多語言 / Localization\n\n新增 config-based 語言切換系統，內建繁體中文（zh_TW）與英文（en_US）。\n\n### 新功能\n- **`config.yml`**：透過 `language: zh_TW` 或 `en_US` 選擇語言\n- **`plugins/LimbusEGOWeapons/lang/`**：首次啟動自動釋出兩份語言檔，玩家可自行編輯或新增其他語言（`<code>.yml`）\n- **`/getego reload`**：重新載入 config 與語言檔（需 `limbus.admin`）\n- **`/getego language [code]`**：顯示目前語言 / 切換語言，含 Tab 補全（需 `limbus.admin`）\n- **回退機制**：目前語言缺 key 會退回 `zh_TW`，再缺就顯示 key 本身\n- **佔位符**：`{0}`、`{1}` … 支援冷卻秒數 / 命中數 / 流血層等動態值；顏色代碼 `&` 與 `&#RRGGBB` 皆可用\n\n### 已本地化範圍\n- 全 12 把武器 + 4 種莊嚴哀悼變體 + 3 種天退彈藥／組合包（name + lore）\n- 所有 ActionBar 提示（冷卻、蓄力進度、暮光斬、解剖斬、肉斬骨斷、W公司過載…）\n- 管理 GUI 與圖鑑 GUI 標題／頁籤／關閉鈕\n- 12 種 Limbus 屬性名（流血 / Bleed、燒傷 / Burn 等）、屬性施加提示、傷害顯示、呼吸法爆擊、震顫爆發\n- 理智值 BossBar 標題與警告訊息\n- 指令回應訊息\n\n### 相依性\n- 資源包版本不變：v.2.17（`060302e85c12d23127b7c4eb3b7050c82615e20d`）\n- ProtocolLib 仍為 soft-depend\n\n### 升級注意\n- 舊版設定會保留；首次啟動 v3.1.0 會在 `plugins/LimbusEGOWeapons/` 下建立 `config.yml` 與 `lang/` 資料夾\n- 想試英文：`/getego language en_US`"
+		},
+		{
+			"tag": "v3.0.3",
+			"published": "2026-07-02T08:08:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 464095763,
+					"name": "LimbusEGOWeapons-3.0.3.jar",
+					"url": "https://github.com/Crossing-Dead-Development/Limbus-E.G.O-Weapons/releases/download/v3.0.3/LimbusEGOWeapons-3.0.3.jar",
+					"size": 1968171,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "53f51421c5545b5dbfdc64a1b776e23ad9d427bcd4a3d7d7655bc69362c89db6",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 35,
+						"jars": [
+							"resourcepack/assets/solemnlament/LSMP-0.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"me/yisang/limbus/LimbusEGOWeapons.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"me/yisang/limbus/LimbusEGOWeapons.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 變更\n- `PACK_URL` / `PACK_HASH` 指向資源包 v.2.17。\n\n## 資源包 v.2.17\n- https://github.com/EvansGoethe/Limbus-E.G.O-weapon-plugin-ResourcePack/releases/tag/v.2.17\n- SHA-1 `060302e85c12d23127b7c4eb3b7050c82615e20d`\n- 隨提比婭一併重新打包，含 shadow_vested_bladesinger / w_corp_knife 素材。"
+		},
+		{
+			"tag": "v3.0.2",
+			"published": "2026-07-01T22:58:05Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 463693418,
+					"name": "LimbusEGOWeapons-3.0.1.jar",
+					"url": "https://github.com/Crossing-Dead-Development/Limbus-E.G.O-Weapons/releases/download/v3.0.2/LimbusEGOWeapons-3.0.1.jar",
+					"size": 1968197,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "1d8c3fc1c800a0be79d4b6451d7e854dcf28daafcf74745efc628bb38a7e0b65",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 35,
+						"jars": [
+							"resourcepack/assets/solemnlament/LSMP-0.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"me/yisang/limbus/LimbusEGOWeapons.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"me/yisang/limbus/LimbusEGOWeapons.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "W公司匕首移回「全部武器」頁，LCE 研發限定頁只留著影揮刀。"
+		},
+		{
+			"tag": "v3.0.1",
+			"published": "2026-07-01T17:57:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 463490999,
+					"name": "LimbusEGOWeapons-3.0.1.jar",
+					"url": "https://github.com/Crossing-Dead-Development/Limbus-E.G.O-Weapons/releases/download/v3.0.1/LimbusEGOWeapons-3.0.1.jar",
+					"size": 1968199,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "04293e526e687e71a816934a043221dfedf9465b4f95c39468f8c1642bcbda16",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 35,
+						"jars": [
+							"resourcepack/assets/solemnlament/LSMP-0.1.jar"
+						],
+						"capabilities": {
+							"network": {
+								"me/yisang/limbus/LimbusEGOWeapons.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"me/yisang/limbus/LimbusEGOWeapons.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 新技能\n\n### 著影揮刀「肉斬骨斷」\n血量 < 3 顆心 + 蹲下 + 右鍵實體 → 原地站定五連斬。每 4 tick 一刀共 5 刀，附帶 SWEEP_ATTACK 劍氣拉線與 CRIT 命中粒子，玩家強緩速 VII 加位置錨定防止位移。ActionBar 顯示「肉斬骨斷」，冷卻 12 秒。\n\n### W公司匕首「過載」\n每次攻擊 20% 機率額外 +1 potency / +1 count 充能，**可突破 potency 10 上限**（設計上為 feature，形容電流過飽和）。\n\n## GUI 補洞\n- 管理員 GUI Row 3 補上 W公司匕首 + 著影揮刀\n- 玩家圖鑑「LCE 研發限定」頁加入這兩把（不在「全部武器」頁重複顯示）\n\n## Docs\n[README](https://github.com/EvansGoethe/Limbus-E.G.O-Weapons/blob/main/README.md) 從 v2.3.3 全面重寫，涵蓋 Limbus 12 屬性、SAN 系統、10 把武器完整說明。"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 60,
+		"more": 0,
+		"people": [
+			{
+				"login": "EvansGoethe",
+				"commits": 60,
+				"name": "Yi Sang | 이산",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

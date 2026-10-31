@@ -1,0 +1,681 @@
+{
+	"repo": "Enderman112/verity-mimo",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-08-17T13:33:25Z",
+	"pushed": "2026-10-23T16:52:19Z",
+	"releases": [
+		{
+			"tag": "v1.4.1",
+			"published": "2026-10-23T16:52:19Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 669764560,
+					"name": "Verity-MiMo-Direct.jar",
+					"url": "https://github.com/Enderman112/verity-mimo/releases/download/v1.4.1/Verity-MiMo-Direct.jar",
+					"size": 454869,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "1f9fd0cbf8d2c5cb8259873827636dd4b8c971041c8fe1169d9f6eca0ab8a315",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "verity_mimo_direct",
+							"version": "1.4.1",
+							"name": "Verity MiMo Direct",
+							"description": "Adds Xiaomi MiMo TTS and ASR directly to Verity (no Smiley's Better Voice involved).\n\n- MiMo TTS: takes over Verity's speech (toggle in the \"Xiaomi MiMo\" category of Verity's own config)\n- MiMo ASR: takes over Verity's speech recognition (Chinese/English)\n- All MiMo settings appear in Verity's own config menu (new \"Xiaomi MiMo\" category)\n- 3D positional audio via Verity's apply3DEffect\n\nBuilt for Verity 6.0.0 (also works on 6.0.0-beta.7+), which routes all speech through varmite.verity.client.audio.TTSHandler.\nMiMo transcripts are passed through Verity's sanitizeTranscript on 6.0.0+.\nGet a MiMo API key at https://platform.xiaomimimo.com/#/console/api-keys",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"verity",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 12,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/veritymimo/direct/stt/MimoSttService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/veritymimo/direct/tts/MimoTtsService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.xiaomimimo.com": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class",
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							],
+							"platform.xiaomimimo.com": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class",
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							],
+							"token-plan-": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class"
+							],
+							"token-plan-cn.xiaomimimo.com": [
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.4.1 — Verity 6.0.0 兼容（Direct）\n\n适配 **Verity JE 6.0.0** 正式版。本版本只更新 **Direct**（不依赖 Smiley's Better Voice）；Addon 版因为 Better Voice 6.0.0-beta.9 仍锁死在 Verity `6.0.0-beta.9`，暂不能用于 6.0.0，等 Better Voice 更新后再补发。\n\n### Direct\n- **适配 Verity 6.0.0**：TTS/ASR 入口没有变化；MiMo 的识别结果现在会走 Verity 自己的 `sanitizeTranscript` 纠错（\"Verity\" 这类名字不容易再被识别成 verdi/birdie 等）。\n- **连续语音不叠音**：Verity 连续下发多句时，新的一句会先停掉上一句。\n- **空文本 / 关闭 TTS 时不再误取消**：空文本或 Verity 的 Text To Speech 关闭时，MiMo 不再取消原生语音。\n- **版本变动会直接报错**：TTS/ASR hook 只保留 `TTSHandler` 且 `require = 1`，以后 Verity 改入口会明确报错，而不是静默失效。\n- **杂项**：复用 HTTP 连接；语速滑块在更大范围内生效；修正配置里\"去 Provider 里选 MIMO\"的过时说明（实际只需要 Xiaomi MiMo 分类里的两个开关）。\n\n### 依赖要求\n- Minecraft 1.20.1 + Forge 47.x\n- Verity JE **6.0.0**（6.0.0-beta.7 及以上也可）\n- YACL 3.6+；**不需要** Smiley's Better Voice\n- 不要和 Addon 版同时安装\n\n### 用法\n- Verity 配置 → **Xiaomi MiMo** 分类：填 MiMo API Key，打开 `Enable MiMo TTS` / `Enable MiMo ASR`；TTS 需要 Verity 的 `Use Text To Speech` 保持开启。\n- MiMo API key：https://platform.xiaomimimo.com/#/console/api-keys\n\n### Files\n- **Verity-MiMo-Direct.jar** — direct 分支（仅需 Verity）\n\n### 源码\n- https://github.com/Enderman112/verity-mimo"
+		},
+		{
+			"tag": "v1.3.0",
+			"published": "2026-09-10T11:03:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 554939699,
+					"name": "Verity-MiMo-Addon.jar",
+					"url": "https://github.com/Enderman112/verity-mimo/releases/download/v1.3.0/Verity-MiMo-Addon.jar",
+					"size": 456955,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "09b047412fd1d071bd69db5865ddfa24cda3f28d62e72f9e75b33150c21586b4",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "verity_mimo",
+							"version": "1.3.0",
+							"name": "Verity MiMo Addon",
+							"description": "Adds Xiaomi MiMo TTS and ASR to Verity + Smiley's Better Voice without modifying either mod.\n\nFeatures:\n- MiMo TTS: takes over Verity's speech while Smiley's Better Voice is installed (toggle in this addon)\n- MiMo ASR: takes over Verity's speech recognition (Chinese/English)\n- Configure API key, voice, speed, style and language in this addon's own config screen\n\nBuilt for Verity 6.0.0-beta.9 and Smiley's Better Voice 6.0.0-beta.9. Better Voice is optional:\nuse Verity-MiMo-Direct instead when you do not want it installed.\nGet a MiMo API key at https://platform.xiaomimimo.com/#/console/api-keys",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"cloth_config",
+								"verity"
+							],
+							"suggests": [
+								"smileys_better_voice"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 12,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/veritymimo/tts/MimoTtsService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/veritymimo/stt/MimoSttService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.xiaomimimo.com": [
+								"com/veritymimo/config/MimoAddonConfig.class",
+								"com/veritymimo/client/MimoAddonClient.class"
+							],
+							"platform.xiaomimimo.com": [
+								"com/veritymimo/config/MimoAddonConfig.class",
+								"com/veritymimo/tts/MimoTtsService.class",
+								"com/veritymimo/client/MimoAddonClient.class"
+							],
+							"token-plan-": [
+								"com/veritymimo/config/MimoAddonConfig.class"
+							],
+							"token-plan-cn.xiaomimimo.com": [
+								"com/veritymimo/client/MimoAddonClient.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 554939700,
+					"name": "Verity-MiMo-Direct.jar",
+					"url": "https://github.com/Enderman112/verity-mimo/releases/download/v1.3.0/Verity-MiMo-Direct.jar",
+					"size": 456177,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "cb2fefc59ce569e3b9dc285716693ec1bee538d288ae3dc473a4273de8397475",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "verity_mimo_direct",
+							"version": "1.3.0",
+							"name": "Verity MiMo Direct",
+							"description": "Adds Xiaomi MiMo TTS and ASR directly to Verity (no Smiley's Better Voice involved).\n\n- MiMo TTS: takes over Verity's speech (toggle in the \"Xiaomi MiMo\" category of Verity's own config)\n- MiMo ASR: takes over Verity's speech recognition (Chinese/English)\n- All MiMo settings appear in Verity's own config menu (new \"Xiaomi MiMo\" category)\n- 3D positional audio via Verity's apply3DEffect\n\nBuilt for Verity 6.0.0-beta.9, which routes all speech through varmite.verity.client.audio.TTSHandler.\nGet a MiMo API key at https://platform.xiaomimimo.com/#/console/api-keys",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"verity",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 12,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/veritymimo/direct/tts/MimoTtsService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/veritymimo/direct/stt/MimoSttService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.xiaomimimo.com": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class",
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							],
+							"platform.xiaomimimo.com": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class",
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							],
+							"token-plan-": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class"
+							],
+							"token-plan-cn.xiaomimimo.com": [
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.3.0 — Verity 6.0.0-beta.9 + Smiley's Better Voice 6.0.0-beta.9 兼容\n\nVerity beta.9 把 TTS/ASR/打断整体收敛到 `varmite.verity.client.audio.TTSHandler`，并删除了 `AiAPI` 上的对应方法；Smiley's Better Voice beta.9 则是一次彻底重写。本版本同时适配两者。\n\n### Direct\n- **修复 beta.9 上「Xiaomi MiMo」配置分类不显示**：Verity 新增了 `createYACLScreen(Screen, boolean)` 重载，原有的 `createYACLScreen(Screen)` 变成只做委托。Mixin 在方法名不带描述符时**只匹配第一个**同名方法（`Quantifier.DEFAULT` 的匹配上限被钳到 1），于是 `@Redirect` 落在委托方法上——它内部没有任何 `category()` 调用，注入点数为 0，又因为 `require = 0` 被静默跳过。现已显式写明两个重载的描述符，beta.8 / beta.9 同时覆盖。\n- TTS / ASR / 打断 hook 目标为 `TTSHandler`，功能与用法不变。\n\n### Addon\n- Smiley's Better Voice beta.9 全量重写：modId `verity_cartesia` → `smileys_better_voice`，包名 `com.gabe.veritycartesia` 整体移除，公开播放管线（`BetterVoiceTtsService` / `SpeechPlayback` / `WavPlayer` / `TtsRequestGate` / `FallAudioService` / `EmotionDetector` 等）全部不存在。\n- TTS hook 改为 `FishAudioManager.handleSpeech`（HEAD，cancellable）：Better Voice 自己的 `TtsHandlerMixin` 把 `TTSHandler.playTTS` 委托给它，并以它的返回值决定是否取消 Verity 原生 TTS。因此我们返回 `true` 接管播放，避免和它抢同一个 `TTSHandler.playTTS` 的 HEAD。\n- 播放层自实现：`SourceDataLine` 播放 + Verity 的 `apply3DEffect` 3D 空间音效 + 读 `cancelCurrentSpeech` 处理打断。\n- **修复启动崩溃（循环依赖）**：`verity` 依赖沿用了旧版的 `ordering=\"BEFORE\"`，与新增的 `smileys_better_voice`（`AFTER`）以及 Better Voice 自己声明的 `verity AFTER` 构成环（Addon < Verity < BetterVoice < Addon），Forge 在 ModSorter 阶段直接报 `Mod Sorting failed. Detected Cycles` 退出，mixin 根本没机会应用。现改为 `AFTER`，加载顺序为 **Verity → Better Voice → Verity MiMo Addon**。\n- **新增依赖：Cloth Config 11.1.136+**（Better Voice beta.9 强制要求）。\n\n### 依赖要求\n- Verity **6.0.0-beta.9**\n- Direct：YACL 3.6+\n- Addon：Smiley's Better Voice 6.0.0-beta.9 + Cloth Config 11.1.136+\n- 两者**不要同时安装**：都会接管 Verity 的 TTS，同时启用行为不可预测\n\n### 用法\n- **Direct**：Verity 配置 → **Xiaomi MiMo** 分类 → 填 key、打开 `Enable MiMo TTS` / `Enable MiMo ASR`\n- **Addon**：Mods → Verity MiMo Addon → Config → 填 key（TTS / ASR 开关默认开启）\n- MiMo API key：https://platform.xiaomimimo.com/#/console/api-keys"
+		},
+		{
+			"tag": "v1.2.1",
+			"published": "2026-08-23T15:21:12Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 526350749,
+					"name": "Verity-MiMo-Addon.jar",
+					"url": "https://github.com/Enderman112/verity-mimo/releases/download/v1.2.1/Verity-MiMo-Addon.jar",
+					"size": 455449,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "9157798a7057a2b259b364074c301d803e5d77e59833c8a5804dc6478099b509",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "verity_mimo",
+							"version": "1.2.1",
+							"name": "Verity MiMo Addon",
+							"description": "Adds Xiaomi MiMo TTS and ASR to Verity + Smiley's Better Voice without modifying either mod.\n\nFeatures:\n- MiMo TTS: new \"MIMO\" provider option in Smiley's Better Voice (or enable the addon's own TTS toggle)\n- MiMo ASR: new \"MIMO\" provider option in Verity speech recognition (Chinese/English)\n- Configure API key, voice, speed, style and language in this addon's own config screen\n\nGet a MiMo API key at https://platform.xiaomimimo.com/#/console/api-keys",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"cloth_config",
+								"verity"
+							],
+							"suggests": [
+								"verity_cartesia"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/veritymimo/tts/MimoTtsService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/veritymimo/stt/MimoSttService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.xiaomimimo.com": [
+								"com/veritymimo/config/MimoAddonConfig.class",
+								"com/veritymimo/client/MimoAddonClient.class"
+							],
+							"platform.xiaomimimo.com": [
+								"com/veritymimo/config/MimoAddonConfig.class",
+								"com/veritymimo/tts/MimoTtsService.class",
+								"com/veritymimo/client/MimoAddonClient.class"
+							],
+							"token-plan-": [
+								"com/veritymimo/config/MimoAddonConfig.class"
+							],
+							"token-plan-cn.xiaomimimo.com": [
+								"com/veritymimo/client/MimoAddonClient.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 526350748,
+					"name": "Verity-MiMo-Direct.jar",
+					"url": "https://github.com/Enderman112/verity-mimo/releases/download/v1.2.1/Verity-MiMo-Direct.jar",
+					"size": 455998,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "c60f10487c06bc35a0058ededbf71afbe70831968ec095e7c2cf25d152ab4bca",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "verity_mimo_direct",
+							"version": "1.2.1",
+							"name": "Verity MiMo Direct",
+							"description": "Adds Xiaomi MiMo TTS and ASR directly to Verity (no Smiley's Better Voice involved).\n\n- MiMo TTS: new \"MIMO\" option in Verity's Text To Speech Provider\n- MiMo ASR: new \"MIMO\" option in Verity's Recognition Provider (Chinese/English)\n- All MiMo settings appear in Verity's own config menu (new \"Xiaomi MiMo\" category)\n\nGet a MiMo API key at https://platform.xiaomimimo.com/#/console/api-keys",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"verity",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 12,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/veritymimo/direct/tts/MimoTtsService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/veritymimo/direct/stt/MimoSttService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.xiaomimimo.com": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class",
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							],
+							"platform.xiaomimimo.com": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class",
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							],
+							"token-plan-": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class"
+							],
+							"token-plan-cn.xiaomimimo.com": [
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.2.1 — Verity 6.0.0-beta.7 兼容\n\nVerity beta.7 将 TTS/ASR 方法从 `AiAPI` 整体迁移到新类 `TTSHandler`（`varmite/verity/client/audio`），旧 hook 点全部失靶。本版本修复：\n\n- **Direct**: TTS/ASR mixin + 反射类 (`VerityApi`) 增加 `TTSHandler` target\n- **Addon**: ASR mixin 增加 `TTSHandler` target（TTS 走 BetterVoice 不受影响）\n- 保留旧 target，兼容 Verity 6.0.0-beta.5 及更老版本\n- 用法不变：Verity 配置 → Xiaomi MiMo 分类 → 填 key / 开开关"
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-08-20T19:16:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 522681343,
+					"name": "Verity-MiMo-Addon.jar",
+					"url": "https://github.com/Enderman112/verity-mimo/releases/download/v1.2.0/Verity-MiMo-Addon.jar",
+					"size": 455428,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "0a21b123abf21b137cae6af503d5725dbcd57b573aed41e41a403ecab6886010",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "verity_mimo",
+							"version": "1.2.0",
+							"name": "Verity MiMo Addon",
+							"description": "Adds Xiaomi MiMo TTS and ASR to Verity + Smiley's Better Voice without modifying either mod.\n\nFeatures:\n- MiMo TTS: new \"MIMO\" provider option in Smiley's Better Voice (or enable the addon's own TTS toggle)\n- MiMo ASR: new \"MIMO\" provider option in Verity speech recognition (Chinese/English)\n- Configure API key, voice, speed, style and language in this addon's own config screen\n\nGet a MiMo API key at https://platform.xiaomimimo.com/#/console/api-keys",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"cloth_config",
+								"verity"
+							],
+							"suggests": [
+								"verity_cartesia"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/veritymimo/tts/MimoTtsService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/veritymimo/stt/MimoSttService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.xiaomimimo.com": [
+								"com/veritymimo/config/MimoAddonConfig.class",
+								"com/veritymimo/client/MimoAddonClient.class"
+							],
+							"platform.xiaomimimo.com": [
+								"com/veritymimo/config/MimoAddonConfig.class",
+								"com/veritymimo/tts/MimoTtsService.class",
+								"com/veritymimo/client/MimoAddonClient.class"
+							],
+							"token-plan-": [
+								"com/veritymimo/config/MimoAddonConfig.class"
+							],
+							"token-plan-cn.xiaomimimo.com": [
+								"com/veritymimo/client/MimoAddonClient.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 522681346,
+					"name": "Verity-MiMo-Direct.jar",
+					"url": "https://github.com/Enderman112/verity-mimo/releases/download/v1.2.0/Verity-MiMo-Direct.jar",
+					"size": 455928,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "6688794a57eefc341082354ea1d0fe0f5bacdf91325c06ba2504d2b123d7195e",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "verity_mimo_direct",
+							"version": "1.2.0",
+							"name": "Verity MiMo Direct",
+							"description": "Adds Xiaomi MiMo TTS and ASR directly to Verity (no Smiley's Better Voice involved).\n\n- MiMo TTS: new \"MIMO\" option in Verity's Text To Speech Provider\n- MiMo ASR: new \"MIMO\" option in Verity's Recognition Provider (Chinese/English)\n- All MiMo settings appear in Verity's own config menu (new \"Xiaomi MiMo\" category)\n\nGet a MiMo API key at https://platform.xiaomimimo.com/#/console/api-keys",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"verity",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 12,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/veritymimo/direct/tts/MimoTtsService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/veritymimo/direct/stt/MimoSttService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.xiaomimimo.com": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class",
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							],
+							"platform.xiaomimimo.com": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class",
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							],
+							"token-plan-": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class"
+							],
+							"token-plan-cn.xiaomimimo.com": [
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 新功能\n\n- **MiMo Voice Mode（音色模式）**，二选一：\n  - **MIMO_PRESET**（默认）：使用预置音色（如 `苏打` 中文男声）\n  - **VERITY_CLONE**：用 Verity 自带的 intro 声音采样（已转 WAV 打包进 mod）克隆 Verity 原版音色，走 `mimo-v2.5-tts-voiceclone` 模型\n- 两个版本（addon / direct）都支持；配置入口：addon 在配置界面，direct 在 Verity 配置菜单的 \\\"Xiaomi MiMo\\\" 分类\n\n> 说明：克隆效果取决于 intro 采样质量；若采样缺失或加载失败会自动回退到预置音色。\n\n## Files\n\n- **Verity-MiMo-Addon.jar** — addon 分支（需 Verity + Smiley's Better Voice）\n- **Verity-MiMo-Direct.jar** — direct 分支（仅需 Verity）"
+		},
+		{
+			"tag": "v1.1.1",
+			"published": "2026-08-18T18:18:07Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 519806479,
+					"name": "Verity-MiMo-Addon.jar",
+					"url": "https://github.com/Enderman112/verity-mimo/releases/download/v1.1.1/Verity-MiMo-Addon.jar",
+					"size": 26979,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "f025fe10740798e151a60a5b0f6286072899ad08c23c52d93c598fd61a83fc88",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "verity_mimo",
+							"version": "1.1.1",
+							"name": "Verity MiMo Addon",
+							"description": "Adds Xiaomi MiMo TTS and ASR to Verity + Smiley's Better Voice without modifying either mod.\n\nFeatures:\n- MiMo TTS: new \"MIMO\" provider option in Smiley's Better Voice (or enable the addon's own TTS toggle)\n- MiMo ASR: new \"MIMO\" provider option in Verity speech recognition (Chinese/English)\n- Configure API key, voice, speed, style and language in this addon's own config screen\n\nGet a MiMo API key at https://platform.xiaomimimo.com/#/console/api-keys",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"cloth_config",
+								"verity"
+							],
+							"suggests": [
+								"verity_cartesia"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 10,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/veritymimo/tts/MimoTtsService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/veritymimo/stt/MimoSttService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.xiaomimimo.com": [
+								"com/veritymimo/config/MimoAddonConfig.class",
+								"com/veritymimo/client/MimoAddonClient.class"
+							],
+							"platform.xiaomimimo.com": [
+								"com/veritymimo/config/MimoAddonConfig.class",
+								"com/veritymimo/tts/MimoTtsService.class",
+								"com/veritymimo/client/MimoAddonClient.class"
+							],
+							"token-plan-": [
+								"com/veritymimo/config/MimoAddonConfig.class"
+							],
+							"token-plan-cn.xiaomimimo.com": [
+								"com/veritymimo/client/MimoAddonClient.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 519806477,
+					"name": "Verity-MiMo-Direct.jar",
+					"url": "https://github.com/Enderman112/verity-mimo/releases/download/v1.1.1/Verity-MiMo-Direct.jar",
+					"size": 27566,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "07055a8f7285c580b9d6509badea7327ad3d553a5e26ed1fb4094f764752a0fe",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "verity_mimo_direct",
+							"version": "1.1.1",
+							"name": "Verity MiMo Direct",
+							"description": "Adds Xiaomi MiMo TTS and ASR directly to Verity (no Smiley's Better Voice involved).\n\n- MiMo TTS: new \"MIMO\" option in Verity's Text To Speech Provider\n- MiMo ASR: new \"MIMO\" option in Verity's Recognition Provider (Chinese/English)\n- All MiMo settings appear in Verity's own config menu (new \"Xiaomi MiMo\" category)\n\nGet a MiMo API key at https://platform.xiaomimimo.com/#/console/api-keys",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"verity",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/veritymimo/direct/tts/MimoTtsService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/veritymimo/direct/stt/MimoSttService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.xiaomimimo.com": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class",
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							],
+							"platform.xiaomimimo.com": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class",
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							],
+							"token-plan-": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class"
+							],
+							"token-plan-cn.xiaomimimo.com": [
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 变更\n\n- **修复构建脚本**：打包前先删除旧 jar，避免 `zip -r` 残留已删除的过期类（此前 v1.1.0 的 jar 里残留了两个未引用的 mixin 类，现已通过干净构建移除）\n- **无功能改动**，纯构建清理，行为与 v1.1.0 一致\n\n## Files\n\n- **Verity-MiMo-Addon.jar** — addon 分支（需 Verity + Smiley's Better Voice）\n- **Verity-MiMo-Direct.jar** — direct 分支（仅需 Verity）"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "给 Verity JE（1.20.1） 增加小米 MiMo 语音（TTS 合成 + ASR 语音识别）的两个附加 mod（纯 Mixin 方案，不改动原 mod）。",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 2,
+		"more": 0,
+		"people": [
+			{
+				"login": "Enderman112",
+				"commits": 2,
+				"name": "Nick Xu",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

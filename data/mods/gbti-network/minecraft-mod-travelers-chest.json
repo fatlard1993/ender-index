@@ -1,0 +1,237 @@
+{
+	"repo": "gbti-network/minecraft-mod-travelers-chest",
+	"host": "github",
+	"description": "Server-side Fabric mod from the Traveler's Series: a chest that refills one cooldown after a player first takes from it. One jar for Minecraft 1.20 to 26.3, with chest menus for operators on every version.",
+	"stars": 2,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2025-01-04T17:21:56Z",
+	"pushed": "2026-10-26T01:34:39Z",
+	"releases": [
+		{
+			"tag": "v2.0.0",
+			"published": "2026-10-25T04:30:40Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 674087612,
+					"name": "travelers-chest-2.0.0.jar",
+					"url": "https://github.com/gbti-network/minecraft-mod-travelers-chest/releases/download/v2.0.0/travelers-chest-2.0.0.jar",
+					"size": 1490989,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "957a59d484121ce4a4cb35f1031b86f4dbeed8e3b1aed0247e381fba6f7040b7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "travelers_chest",
+							"version": "2.0.0",
+							"name": "Traveler's Chest",
+							"description": "A chest that refills one cooldown after a player first takes from it, and that only operators can break. Operators manage every Traveler's Chest from chest menus with /chests.",
+							"minecraft": ">=1.20 <1.20.2- || >=1.20.2 <1.20.5- || >=1.21 <1.21.2- || >=1.21.2 <1.21.5- || >=1.21.5 <1.21.6- || >=1.21.6 <1.21.11- || 1.21.11 || >=26.1 <26.3- || >=26.3 <26.4-",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"travelers_chest_mc"
+							],
+							"provides": [
+								"travelers_chest_mc",
+								"travelers_chest_mc",
+								"travelers_chest_mc",
+								"travelers_chest_mc",
+								"travelers_chest_mc",
+								"travelers_chest_mc",
+								"travelers_chest_mc",
+								"travelers_chest_mc",
+								"travelers_chest_mc"
+							]
+						}
+					],
+					"icon": "975e3850c1e79936a321bec289c4f4287fae05c80ca68e9b0da13dbd404dfab2.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 225,
+						"jars": [
+							"META-INF/jars/travelers-chest-2.0.0+mc1.20-1.20.1.jar",
+							"META-INF/jars/travelers-chest-2.0.0+mc1.20.2-1.20.4.jar",
+							"META-INF/jars/travelers-chest-2.0.0+mc1.21-1.21.1.jar",
+							"META-INF/jars/travelers-chest-2.0.0+mc1.21.2-1.21.4.jar",
+							"META-INF/jars/travelers-chest-2.0.0+mc1.21.5.jar",
+							"META-INF/jars/travelers-chest-2.0.0+mc1.21.6-1.21.10.jar",
+							"META-INF/jars/travelers-chest-2.0.0+mc1.21.11.jar",
+							"META-INF/jars/travelers-chest-2.0.0+mc26.1-26.2.jar",
+							"META-INF/jars/travelers-chest-2.0.0+mc26.3.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- One jar for Minecraft 1.20 to 1.20.4, 1.21 to 1.21.11 and 26.1 to 26.3. Releases before this were built for 1.21.1, and the 1.2.x jars crashed on 1.21.5 and later once a chest was saved.\n- Chest menus for operators on every version: `/chests` opens the chest you face, or a list of every Traveler's Chest with its first items, where it is, its cooldown and whether it is full. From a chest's menu, change the cooldown on a clock, open the chest itself from anywhere to change its items, refill it now, teleport there, rename it in an anvil, or turn it plain. The lime dye in the list adds the chest you face.\n- A chest refills one cooldown after a player first takes from it, not on a fixed cycle. A chest nobody takes from starts no cooldown.\n- Only players take items: hoppers, hopper minecarts, droppers and copper golems can no longer pull from or push into a Traveler's Chest, so a hopper under one is no longer an endless supply. A comparator beside one reads 0.\n- Opening either half of a double chest refills it; before, only the half it was saved under did. The once-a-second check that loaded every chest's area is gone: a chest refills when it is opened or its area loads.\n- Either half of a double chest, and a trapped chest, is protected from breaking; before, only the saved half of a plain chest was.\n- Explosions leave a Traveler's Chest and its items standing, while the blocks around it break as usual: TNT, creepers, end crystals, beds, respawn anchors, fireballs and wither skulls. A wither and the ender dragon pass it without breaking it, and a chest placed against a single one stays single, so the Traveler's Chest keeps its own slots. Before, an explosion broke one, dropped its items and left it listed as gone.\n- A copper chest, from Minecraft 1.21.9, can be one too: it keeps its items, its name and its refills as it oxidizes, and copper golems take nothing from it.\n- A name given in the menus is written onto the chest, so players see it as the chest's title.\n- A slot is refilled when it holds anything other than its saved stack, enchantments and damage included; before, the same item in the same count passed.\n- Chests are saved in `chests.json`, keyed by dimension as well as position, with each stack's data version, so a world that moves to a newer Minecraft keeps its chests. `travelers_chests.json` is imported once and left as it was.\n- A data file that cannot be read is no longer written over with an empty one.\n- The settings file is read from `config/travelers-chest/travelers_chest_config.txt`. Released 1.2.x jars looked in a folder that never exists, printed an error at every start, and could not turn on `debug_logging`.\n\n## Download\n\nOne jar, `travelers-chest-2.0.0.jar`, for every supported Minecraft version: 1.20 to 1.20.4, 1.21 to 1.21.11 and 26.1 to 26.3. It needs Fabric Loader and Fabric API."
+		},
+		{
+			"tag": "v1.2.10",
+			"published": "2026-10-25T04:29:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 674086600,
+					"name": "travelers-chest-1.2.10.jar",
+					"url": "https://github.com/gbti-network/minecraft-mod-travelers-chest/releases/download/v1.2.10/travelers-chest-1.2.10.jar",
+					"size": 110123,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "68bccbd78138998807b579a0543184882ad22ab8994d8d2ef2b9d0383b07a339",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "travelers_chest",
+							"version": "1.2.10",
+							"name": "TravelersChest",
+							"description": "Allows admin to manage chest refills.",
+							"minecraft": ">=1.21 <1.21.5",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": "975e3850c1e79936a321bec289c4f4287fae05c80ca68e9b0da13dbd404dfab2.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 6,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Declares the Minecraft versions this build really runs on: 1.21 to 1.21.4.\n\nVersion 1.2.9 declared every 1.21.x release, but on 1.21.5 and later the server crashes while loading saved chests. On those versions Fabric now refuses this jar with a clear message instead of a crash. 1.21 is newly supported: tested and working.\n\nSame compiled code as 1.2.9; only the mod's metadata changed. Traveler's Chest 2.0.0, released alongside it, runs on Minecraft 1.20 to 1.20.4, 1.21 to 1.21.11 and 26.1 to 26.3."
+		},
+		{
+			"tag": "v1.2.9",
+			"published": "2025-01-12T18:18:08Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 219870331,
+					"name": "travelers-chest-1.2.9.jar",
+					"url": "https://github.com/gbti-network/minecraft-mod-travelers-chest/releases/download/v1.2.9/travelers-chest-1.2.9.jar",
+					"size": 110442,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "b3343c12aa0ea74c32da71e3b8f2d95552179f09c4ccd0f9f61796e1a503c1aa",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "travelers_chest",
+							"version": "1.2.9",
+							"name": "TravelersChest",
+							"description": "Allows admin to manage chest refills.",
+							"minecraft": "~1.21.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"another-mod"
+							]
+						}
+					],
+					"icon": "975e3850c1e79936a321bec289c4f4287fae05c80ca68e9b0da13dbd404dfab2.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 6,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Preparing initial Mondrinth release.\n- Adding product assets for GBTI Network.\n- Adding support double chest objects."
+		}
+	],
+	"readme": "README.MD",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [
+		".product/assets/Icons/travelers_chest_concept_0.webp",
+		".product/assets/Movies/Snapshot.PNG",
+		".product/assets/Movies/Snapshot_1.PNG",
+		".product/assets/Movies/Snapshot_2.PNG",
+		".product/assets/Movies/Snapshot_3.PNG",
+		".product/assets/Movies/Snapshot_4.PNG",
+		".product/assets/Movies/Travelers Chest Video Cover.jpg",
+		".product/assets/Movies/travelers-chest-animated.gif",
+		".product/screenshots/2.0.0-2026-10-25/chest-itself-back.png",
+		".product/screenshots/2.0.0-2026-10-25/list-add.png",
+		".product/screenshots/2.0.0-2026-10-25/menu-back.png",
+		".product/screenshots/2.0.0-2026-10-25/menu-clock.png",
+		".product/screenshots/2.0.0-2026-10-25/menu-open.png",
+		".product/screenshots/2.0.0-2026-10-25/menu-refill.png",
+		".product/screenshots/2.0.0-2026-10-25/menu-rename.png",
+		".product/screenshots/2.0.0-2026-10-25/menu-teleport.png",
+		".product/screenshots/2.0.0-chest-in-world.png",
+		".product/screenshots/2.0.0-chest-itself.png",
+		".product/screenshots/2.0.0-chest-list.png",
+		".product/screenshots/2.0.0-chest-menu-clock.png",
+		".product/screenshots/2.0.0-name-anvil.png",
+		".product/screenshots/screenshot-1.PNG",
+		".product/screenshots/screenshot-2.PNG",
+		".product/screenshots/screenshot-3.PNG",
+		".product/screenshots/screenshot-4.PNG",
+		".product/screenshots/screenshot-5.PNG"
+	],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 36,
+		"more": 0,
+		"people": [
+			{
+				"login": "atwellpub",
+				"commits": 19,
+				"name": "Hudson Atwell",
+				"funding": []
+			},
+			{
+				"login": "gbtilabs",
+				"commits": 17,
+				"name": "GBTI",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

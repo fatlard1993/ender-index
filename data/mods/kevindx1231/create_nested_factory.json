@@ -1,0 +1,484 @@
+{
+	"repo": "kevindx1231/create_nested_factory",
+	"host": "github",
+	"description": "Nestable pocket factories, logistics ports, blueprints, and black-box production for Create on Minecraft 1.21.1 / NeoForge.",
+	"stars": 4,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-08-26T19:43:24Z",
+	"pushed": "2026-10-26T14:38:22Z",
+	"releases": [
+		{
+			"tag": "mc1.20.1-v1.5.23",
+			"published": "2026-10-26T14:38:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 678442853,
+					"name": "create_nested_factory-1.20.1-1.5.23.jar",
+					"url": "https://github.com/kevindx1231/create_nested_factory/releases/download/mc1.20.1-v1.5.23/create_nested_factory-1.20.1-1.5.23.jar",
+					"size": 1159837,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "35290d3fe6a2a4ac4c2a7110b92693fb7c4751ef744455dea20f234276ca3aef",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "create_nested_factory",
+							"version": "1.5.23",
+							"name": "Create Nested Factory",
+							"description": "Create compact nested factories with persistent pocket rooms, ports, automation, and black-box production.",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"create"
+							],
+							"suggests": [
+								"mekanism",
+								"pipez"
+							]
+						}
+					],
+					"icon": "51c6b0929781b2acdece592347ca122f3d872ddcf08164b9638085fd3691a020.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Factory Passage",
+								"Nested Extension Interface",
+								"Nested Factory",
+								"Nested Port",
+								"Nested Stress Port",
+								"Snow Wall",
+								"White Concrete Wall"
+							],
+							"item": [
+								"Battery Casing",
+								"Blaze Battery",
+								"Inactive Blaze Battery",
+								"Incomplete Blaze Battery",
+								"Incomplete Soaked Sturdy Alloy Sheet",
+								"Incomplete Space Collapse Mechanism",
+								"Incomplete Space Expand Mechanism",
+								"Incomplete Sturdy Casing",
+								"Soaked Sturdy Alloy Ingot",
+								"Soaked Sturdy Alloy Sheet",
+								"Space Collapse Mechanism",
+								"Space Expand Mechanism",
+								"Sturdy Alloy Ingot",
+								"Sturdy Alloy Sheet",
+								"Sturdy Casing"
+							],
+							"group": [
+								"Create Nested Factory"
+							]
+						},
+						"data": [
+							"advancement",
+							"dimension",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 409,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.4.1.jar",
+							"META-INF/jarjar/mixinextras-forge-0.4.1.jar!META-INF/jars/MixinExtras-0.4.1.jar"
+						],
+						"capabilities": {
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.4.1.jar!META-INF/jars/MixinExtras-0.4.1.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v1.5.23 - Minecraft 1.20.1\n\n## 简体中文\n\n需要 Minecraft 1.20.1、Java 17、Forge/NeoForge 47 和 Create 6.0.8–6.0.x。开发基线：NeoForge 47.1.106、Create 6.0.8-291、Ponder 1.0.91。\n\n### 新增 Ponder 思索教程\n\n- 新增五类组件的八段教程：嵌套工厂的进入与返回、物流、黑盒与搬迁、多层嵌套，以及嵌套端口、嵌套扩展接口、应力端口和工厂通道。\n- 迁入十个结构资源和中英文各 89 条翻译，保留场景时序、坐标、关键帧、镜头及实体动画，并适配 1.20.1 的物品堆 NBT、结构数据版本与客户端注册接口。\n- 在物品界面对上述组件按住 W 打开思索。包括分类页标题的 1.20.1 适配。\n\n### 嵌套工厂放置、蓝图与搬运修复\n\n- 同层后放工厂可作为无空间蓝图工厂使用；深度上限下一层允许多个终端蓝图工厂，不额外分配房间或占用入口。\n- 分离原空间绑定与当前入口资格。旧工厂 A 搬走后，新工厂 D 可以获得入口；受限放回 A 时保留其完整绑定并冻结原房间。入口空闲后重新搬运 A 可恢复原空间，不会自动升级或错误复用 D 的房间。\n- 修复 Forge 在物品 NBT 写入前触发 `onLoad` 时，临时身份提前分配房间或抢占入口的问题；正确保存、同步受限状态，并处理旧无空间方块迁移及缺失槽位字段。\n- 同层蓝图工厂复用真实投入托管、物品/流体产出和应力合同；取消蓝图后继续阻止旧房间运行。缓存能力遵守冻结、移除和受限状态。\n- 统一玩家挖掘、创造模式、潜行扳手、GUI/指令销毁、爆炸，以及 Create 机械钻头和移动破坏器的内部子工厂保护。\n- 普通搬运和机器掉落保留原空间绑定；潜行扳手只返回一份正确物品；无空间工厂结算真实资源后掉落普通工厂方块。修复客户端护目镜对同层受限状态的误报。\n- 合并蓝图取消、生产禁用和拆除保护判断；子工厂与冻结遍历按房间覆盖区块扫描方块实体，包含无空间工厂。\n\n安装附件 `create_nested_factory-1.20.1-1.5.23.jar`，替换旧版；客户端与服务器使用同一版本。源码和 `test-only` JAR 不用于正常游戏。正式 JAR 内嵌 MixinExtras Forge 0.4.1，无需额外安装。升级既有世界前请备份存档。\n\n## English\n\nRequires Minecraft 1.20.1, Java 17, Forge/NeoForge 47, and Create 6.0.8–6.0.x. Development baseline: NeoForge 47.1.106, Create 6.0.8-291, and Ponder 1.0.91.\n\n### New Ponder tutorials\n\n- Adds eight scenes for five components: factory entry/return, logistics, black-box operation/relocation, nesting, Nested Ports, Extension Interfaces, Stress Ports, and Factory Passages.\n- Includes ten structures and 89 translations each in English and Simplified Chinese. Preserves scene timing, coordinates, keyframes, camera work, and entity animation while adapting item-stack NBT, structure data versions, client registration, and category titles to 1.20.1.\n- Hold W over the corresponding component in the item UI to open its tutorials.\n\n### Nested placement, blueprints, and relocation\n\n- Later siblings can operate as roomless blueprint factories. Multiple terminal blueprint factories are allowed one layer beyond the room depth limit without allocating rooms or taking the entrance.\n- Separates original-room ownership from current entrance eligibility. After moving A away, D may claim the entrance; replacing A in a restricted state preserves its binding and freezes its original room. Relocating A again after the entrance becomes free restores access, without automatic promotion or reusing D's room.\n- Fixes Forge calling `onLoad` before item NBT is installed, which allowed a temporary identity to allocate a room or claim an entrance. Persists/synchronizes restrictions and handles legacy roomless blocks and missing slot fields.\n- Reuses real input escrow, item/fluid output, and stress contracts for sibling blueprint factories. Cancelling a blueprint keeps the old room blocked; cached capabilities honor restrictions, freezing, and removal.\n- Unifies child-factory protection across player/creative breaking, sneak-wrench removal, GUI/commands, explosions, and Create drills/moving breakers.\n- Preserves bindings for relocation and machine drops, prevents duplicate wrench drops, settles real resources before roomless factories drop an ordinary block, and fixes client goggle status.\n- Consolidates blueprint cancellation, production blocking, and removal checks. Child/freeze traversal scans block entities in covered room chunks, including roomless factories.\n\nInstall `create_nested_factory-1.20.1-1.5.23.jar` on both client and server, replacing the old version. Sources and `test-only` JARs are not game releases. MixinExtras Forge 0.4.1 is bundled. Back up existing worlds before upgrading.\n\nPrevious release / 上一版本：[v1.5.22](https://github.com/kevindx1231/create_nested_factory/releases/tag/mc1.20.1-v1.5.22)。\n\nSHA-256: `35290d3fe6a2a4ac4c2a7110b92693fb7c4751ef744455dea20f234276ca3aef`."
+		},
+		{
+			"tag": "mc1.21.1-v1.5.23",
+			"published": "2026-10-26T14:29:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 678416133,
+					"name": "create_nested_factory-1.21.1-1.5.23.jar",
+					"url": "https://github.com/kevindx1231/create_nested_factory/releases/download/mc1.21.1-v1.5.23/create_nested_factory-1.21.1-1.5.23.jar",
+					"size": 984362,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "d6d14cc5d0dac795b646e130d6c6105723131b8460873e279b8f7537a4b91f97",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "create_nested_factory",
+							"version": "1.5.23",
+							"name": "Create Nested Factory",
+							"description": "Create compact nested factories with persistent pocket rooms, ports, automation, and black-box production.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create"
+							],
+							"suggests": [
+								"simulated",
+								"sable",
+								"mekanism",
+								"pipez"
+							]
+						}
+					],
+					"icon": "51c6b0929781b2acdece592347ca122f3d872ddcf08164b9638085fd3691a020.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Factory Passage",
+								"Nested Extension Interface",
+								"Nested Factory",
+								"Nested Port",
+								"Nested Stress Port",
+								"Snow Wall",
+								"White Concrete Wall"
+							],
+							"item": [
+								"Battery Casing",
+								"Blaze Battery",
+								"Inactive Blaze Battery",
+								"Incomplete Blaze Battery",
+								"Incomplete Soaked Sturdy Alloy Sheet",
+								"Incomplete Space Collapse Mechanism",
+								"Incomplete Space Expand Mechanism",
+								"Incomplete Sturdy Casing",
+								"Soaked Sturdy Alloy Ingot",
+								"Soaked Sturdy Alloy Sheet",
+								"Space Collapse Mechanism",
+								"Space Expand Mechanism",
+								"Sturdy Alloy Ingot",
+								"Sturdy Alloy Sheet",
+								"Sturdy Casing"
+							],
+							"group": [
+								"Create Nested Factory"
+							]
+						},
+						"data": [
+							"advancement",
+							"dimension",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 294,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v1.5.23 — Minecraft 1.21.1\n\n发布日期 / Release date: 2026-10-26\n\n## 更新日志\n\n### 同层蓝图工厂与空间绑定\n\n- 同一空间可继续放置嵌套工厂：首个工厂取得下一层空间入口，后放工厂仅支持应用蓝图，不创建内部空间。\n- 入口工厂拆除后立即释放资格，旧蓝图方块不自动升级；新放工厂可以创建独立空间。\n- 带绑定的旧工厂可在入口被占用时放回，仅运行应用蓝图；原空间保持冻结，取消蓝图不会开放入口，拆除后仍掉落原绑定工厂。\n- 修复首个工厂护目镜错误显示“该空间已有可进入的嵌套工厂”。受限状态直接同步到客户端，不再依赖客户端查询服务端父工厂。\n- 普通挖掘、潜行扳手拆卸及 GUI 销毁共用内部子工厂、玩家和房间变更保护；潜行扳手保留绑定掉落。\n- 合并蓝图取消和停机分支，移除无效转发；内部工厂检查改为按区块遍历方块实体，避免逐方块扫描。\n- 旧版合法位置上的无空间无效工厂迁移为受限蓝图工厂；重载不争抢入口，空间绑定不重分配。\n\n### 绑定物品与空间保护\n\n- 修复绑定工厂物品丢失、烧毁、爆炸销毁、自然消失或被磁铁收取时误触发原空间清理的问题。物品消失后继续保留空间、身份和绑定记录，管理员可使用 `/cnf copy <id>` 恢复绑定物品。\n- 空间清理通过 GUI 销毁或 `/cnf delete <id>` 显式执行。清理完成前不回收空间槽位，已删除的旧绑定不能重新占用被回收的空间。\n\n### 内置 Ponder 教程\n\n- 恢复内置 Ponder 教程，共 8 个教学章节：工厂进出、物流、黑盒与搬运、多层嵌套与蓝图、普通端口、应力端口、扩展接口和工厂通道。\n- 加入教学结构、中英文标题与字幕，以及“嵌套工厂组件”分类和专属分类页标题。教程随模组打包，无需额外安装 The Ponderer。\n- 更新中英文 README 的当前版本、下载链接、同层放置规则、绑定保留、拆除保护及教程说明。\n\n## Release notes\n\n### Blueprint-only siblings and room bindings\n\n- Additional factories can be placed in the same parent room. The first receives next-level room entry; later factories run applied blueprints without creating rooms. Terminal blueprint-only factories remain available beyond the room depth limit.\n- Removing the entry holder immediately frees eligibility. Existing blueprint factories are never automatically promoted; a newly placed factory can create its own independent room.\n- A bound factory can be replaced in its original parent while entry is occupied. It can run applied blueprints while its original room stays frozen. Blueprint cancellation does not reopen entry, and removal preserves its binding. Replacing it after entry becomes vacant restores its original room.\n- Fixes the occupied-entry goggle warning incorrectly appearing on the first factory by syncing restriction state directly to the client.\n- Migrates legacy roomless invalid factories in legal positions to blueprint-only factories. Reloading neither claims an entry nor reallocates an existing binding.\n\n### Removal safeguards and item-loss fixes\n\n- Normal breaking, sneak-wrench removal, and GUI destruction share checks for internal factories, players, and active room tasks. Roomless blueprint children also protect their parent from removal, and wrench removal preserves bound drops.\n- Fixes unintended room cleanup when a bound factory item is lost, burned, exploded, despawned, or collected by a magnet. The room, identity, and binding survive; operators can recover a lost bound item with `/cnf copy <id>`.\n- Room cleanup requires explicit GUI destruction or `/cnf delete <id>`. Slots are released only after cleanup, and retired bindings cannot reclaim a reused slot.\n- Consolidates blueprint cancellation and shutdown paths, removes redundant forwarding, and checks internal factories through per-chunk block entities rather than scanning every block.\n\n### Built-in Ponder tutorials\n\n- Restores 8 Ponder chapters covering entry and return, logistics, black-box mode and relocation, nesting and blueprints, ports, stress ports, extension interfaces, and factory passages.\n- Bundles teaching structures, Chinese and English captions, and a dedicated Nested Factory Components category and heading. The Ponderer is not required at runtime.\n- Updates both README languages for the release version, download links, placement rules, binding retention, removal safeguards, and tutorials.\n\n## 安装 / Installation\n\nMinecraft **1.21.1** · Java **21** · NeoForge **21.1.x**（构建验证 / tested: **21.1.248**）· Create **6.0.9–6.0.x**（构建 / built with: **6.0.10-280**）。\n\n客户端与服务端安装相同版本，替换旧版 JAR；升级前备份存档 / Install the same version on client and server, replacing the older JAR; back up existing worlds before upgrading.\n\n文件 / Asset: `create_nested_factory-1.21.1-1.5.23.jar`（984362 bytes）。\n\nSHA-256: `d6d14cc5d0dac795b646e130d6c6105723131b8460873e279b8f7537a4b91f97`.\n\n对比上版 / Full changelog: [mc1.21.1-v1.5.22...mc1.21.1-v1.5.23](https://github.com/kevindx1231/create_nested_factory/compare/mc1.21.1-v1.5.22...mc1.21.1-v1.5.23)."
+		},
+		{
+			"tag": "mc1.20.1-v1.5.22",
+			"published": "2026-10-17T20:49:05Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 651562583,
+					"name": "create_nested_factory-1.20.1-1.5.22.jar",
+					"url": "https://github.com/kevindx1231/create_nested_factory/releases/download/mc1.20.1-v1.5.22/create_nested_factory-1.20.1-1.5.22.jar",
+					"size": 1061639,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "c2f8a8cdc0f647f9c1d1e29aed5a85fabbc01629531c82e1d05bb127fe2396c3",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "create_nested_factory",
+							"version": "1.5.22",
+							"name": "Create Nested Factory",
+							"description": "Create compact nested factories with persistent pocket rooms, ports, automation, and black-box production.",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"create"
+							],
+							"suggests": [
+								"mekanism",
+								"pipez"
+							]
+						}
+					],
+					"icon": "51c6b0929781b2acdece592347ca122f3d872ddcf08164b9638085fd3691a020.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Factory Passage",
+								"Nested Extension Interface",
+								"Nested Factory",
+								"Nested Port",
+								"Nested Stress Port",
+								"Snow Wall",
+								"White Concrete Wall"
+							],
+							"item": [
+								"Battery Casing",
+								"Blaze Battery",
+								"Inactive Blaze Battery",
+								"Incomplete Blaze Battery",
+								"Incomplete Soaked Sturdy Alloy Sheet",
+								"Incomplete Space Collapse Mechanism",
+								"Incomplete Space Expand Mechanism",
+								"Incomplete Sturdy Casing",
+								"Soaked Sturdy Alloy Ingot",
+								"Soaked Sturdy Alloy Sheet",
+								"Space Collapse Mechanism",
+								"Space Expand Mechanism",
+								"Sturdy Alloy Ingot",
+								"Sturdy Alloy Sheet",
+								"Sturdy Casing"
+							],
+							"group": [
+								"Create Nested Factory"
+							]
+						},
+						"data": [
+							"advancement",
+							"dimension",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 388,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.4.1.jar",
+							"META-INF/jarjar/mixinextras-forge-0.4.1.jar!META-INF/jars/MixinExtras-0.4.1.jar"
+						],
+						"capabilities": {
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.4.1.jar!META-INF/jars/MixinExtras-0.4.1.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v1.5.22 - Minecraft 1.20.1\n\n## 简体中文\n\n需要 Minecraft 1.20.1、Java 17 和 Create 6.0.8–6.0.x。专用服务器验证版本：Forge 47.3.0 / NeoForge 47.1.106。\n\n### 修复与改进\n\n- 改进树场/农场学习：按树苗种类或作物 ID 独立认证，有生长或生产活动的来源才参与等待，闲置来源不阻塞其他路线；生长活动不等于认证完成。\n- 学习默认绝对期限由 6000 改为 3600 tick（20 TPS 时 3 分钟），生长不会重置期限；已有存档的显式配置保持原值。\n- 发布计划前重新核对完整学习账本，避免沿用过早锁定的加工路线、错误归属再生产物或忽略库存净损耗；拆分再生路线时保留启动资本合同。\n- 修正 1.20.1/Create 配方字段、序列装配中间物和循环次数、锯切时长、超高温搅拌要求及应力端口的两种仪表材料，并新增全部 15 个配方的反序列化回归。\n- 修复工厂冻结与 Observable 4.4.2 的 Mixin 注入冲突，避免加载世界前退出。\n- 方块实体冻结改用优先级 900 的 MixinExtras v2 `WrapWithCondition`。正常机器保留第三方 tick/性能分析调用链；冻结机器跳过整个操作，包括 Observable 计时样本，解冻后恢复执行。\n- 发布 JAR 通过 Jar-in-Jar 内嵌 MixinExtras Forge 0.4.1，适用于 Forge 47 和 NeoForge 47；保留 SRG refmap 和严格注入检查，无需额外安装 MixinExtras。\n- 保留 Pocket 维度与 XYZ 冻结边界、计划刻/方块事件捕获及恢复、实体边界判断和玩家排除规则。\n- 增加独立测试模组与生产服务器兼容验证脚本；测试模组和 Observable/Radium 等测试依赖不会进入正式 JAR。\n- 同步 README 的版本、下载链接、兼容说明、测试范围及上游 MIT 许可元数据。\n\n### 验证范围\n\n完整构建及 21 组 JVM 回归通过。同一正式 JAR 在以下 8 种专用服务器组合中通过冻结与恢复测试：\n\n| 加载器 | 基础依赖 | Radium 0.12.4 | Observable 4.4.2 | 两者同时 |\n|---|---|---|---|---|\n| Forge 47.3.0 | 通过 | 通过 | 通过 | 通过 |\n| NeoForge 47.1.106 | 通过 | 通过 | 通过 | 通过 |\n\n本次未重测客户端 GUI，也未穷举其他加载器或性能模组版本。完整报告：[冻结兼容验证](https://github.com/kevindx1231/create_nested_factory/blob/mc1.20.1/docs/freeze-compatibility-validation-1.20.1.md)。\n\n安装附件 `create_nested_factory-1.20.1-1.5.22.jar`。源码 JAR 和 `test-only` 测试模组不用于正常游戏。\n\n## English\n\nRequires Minecraft 1.20.1, Java 17, and Create 6.0.8–6.0.x. Dedicated-server tested on Forge 47.3.0 and NeoForge 47.1.106.\n\n### Fixes and improvements\n\n- Improves tree/crop learning with independent sapling-type/crop-ID certification. Only sources with observed growth or production participate in the wait; idle groups do not block other routes, and growth alone does not certify production.\n- Changes the default absolute learning deadline from 6000 to 3600 ticks (3 minutes at 20 TPS). Growth never resets it; existing explicit world configuration retains its value.\n- Reconciles the complete learning ledger before publishing a plan, preventing stale processing candidates, misattributed regenerative output, and ignored inventory losses. Splitting a regenerative route now retains its startup-capital contract.\n- Corrects 1.20.1/Create recipe fields, assembly transitional items/loop counts, cutting duration, superheated mixing, and the stress port's two alternative gauges. Adds deserialization regression coverage for all 15 recipes.\n- Fixes the factory-freeze Mixin injection conflict with Observable 4.4.2 that could abort world loading.\n- Replaces the block-entity freeze Redirect with MixinExtras v2 `WrapWithCondition` at priority 900. Live machines retain third-party tick/profiling behavior; frozen machines skip the whole operation, including Observable timing samples. Thawing restores execution.\n- Bundles MixinExtras Forge 0.4.1 through Jar-in-Jar for Forge 47 and NeoForge 47, preserving the SRG refmap and strict injection checks. No separate MixinExtras installation is required.\n- Preserves Pocket dimension/XYZ freeze boundaries, scheduled-tick and block-event capture/restoration, entity bounds, and player exclusions.\n- Adds a separate test mod and production-server compatibility runner; neither the test mod nor optional profiling/optimization dependencies enter the release JAR.\n- Updates README versions, download links, compatibility/validation scope, and upstream MIT license metadata.\n\n### Validation\n\nFull build and all 21 JVM regression groups passed. The same production JAR passed all eight dedicated-server combinations of Forge 47.3.0 / NeoForge 47.1.106 with base dependencies, Radium 0.12.4, Observable 4.4.2, and both. Client GUI and other loader/mod versions were not retested. See the [freeze compatibility report](https://github.com/kevindx1231/create_nested_factory/blob/mc1.20.1/docs/freeze-compatibility-validation-1.20.1.md).\n\nInstall `create_nested_factory-1.20.1-1.5.22.jar`; sources and `test-only` JARs are not game releases.\n\n\n..."
+		},
+		{
+			"tag": "mc1.21.1-v1.5.22",
+			"published": "2026-10-17T20:48:01Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 651572486,
+					"name": "create_nested_factory-1.21.1-1.5.22.jar",
+					"url": "https://github.com/kevindx1231/create_nested_factory/releases/download/mc1.21.1-v1.5.22/create_nested_factory-1.21.1-1.5.22.jar",
+					"size": 890368,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "4e9e3da5fad3fe45ab864769d6f91070a2e35f44c455d631feb3db33c2213489",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "create_nested_factory",
+							"version": "1.5.22",
+							"name": "Create Nested Factory",
+							"description": "Create compact nested factories with persistent pocket rooms, ports, automation, and black-box production.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create"
+							],
+							"suggests": [
+								"simulated",
+								"sable",
+								"mekanism",
+								"pipez"
+							]
+						}
+					],
+					"icon": "51c6b0929781b2acdece592347ca122f3d872ddcf08164b9638085fd3691a020.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Factory Passage",
+								"Nested Extension Interface",
+								"Nested Factory",
+								"Nested Port",
+								"Nested Stress Port",
+								"Snow Wall",
+								"White Concrete Wall"
+							],
+							"item": [
+								"Battery Casing",
+								"Blaze Battery",
+								"Inactive Blaze Battery",
+								"Incomplete Blaze Battery",
+								"Incomplete Soaked Sturdy Alloy Sheet",
+								"Incomplete Space Collapse Mechanism",
+								"Incomplete Space Expand Mechanism",
+								"Incomplete Sturdy Casing",
+								"Soaked Sturdy Alloy Ingot",
+								"Soaked Sturdy Alloy Sheet",
+								"Space Collapse Mechanism",
+								"Space Expand Mechanism",
+								"Sturdy Alloy Ingot",
+								"Sturdy Alloy Sheet",
+								"Sturdy Casing"
+							],
+							"group": [
+								"Create Nested Factory"
+							]
+						},
+						"data": [
+							"advancement",
+							"dimension",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 275,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v1.5.22 — Minecraft 1.21.1\n\n发布日期 / Release date: 2026-10-18\n\n## 更新日志\n\n### 黑盒学习与来源认证\n\n- 树场按树苗种类、农场按作物类型分别认证。观察到生长活动后，该组加入学习等待；生长本身不代替完整生产循环及对应边界输出。\n- 闲置树苗、作物和没有生产活动的来源不再阻塞已经完成的独立加工路线，也不获得黑盒生产权限。没有独立加工路线的自然来源仍可等待生长。\n- 默认学习绝对期限由 6000 tick 调整为 3600 tick（20 TPS 时为 3 分钟），从切换请求开始计算。生长不重置期限；参与来源到期未认证时整次学习退回常加载，不发布部分路线。现有配置文件中的自定义值保持有效。\n- 发布前依据完整观察与房间物料账本重新编译，防止过早候选计划掩盖后续耗损，或将未认证来源产物当作普通加工产物。\n- 保留混合计划拆分、组合及复制时的启动资本要求，并增加闲置来源、生长未收获、晚启动来源、混合加工、期限和资本回归。\n\n### 功能移除\n\n- 移除未完成的ponder功能：删除 7 个自定义教程场景、客户端注册、教学结构、双语字幕、结构生成脚本和教程文档。\n- 本次重新构建并替换同版本 1.5.22 JAR，保留来源学习和冻结兼容修复。\n\n### 冻结兼容性\n\n- 修复 Observable 5.4.4 与方块实体冻结入口的 Mixin Redirect 冲突，使用 MixinExtras v2 条件包装保留第三方计时调用链。\n- 非冻结区域继续正常 tick，冻结区域跳过执行，解冻后恢复；保留 Lithium 0.15.4 随机刻兼容和关键冻结入口的强制注入检查。\n- 增加四种模组组合的独立 GameTest 及固定依赖校验脚本；测试代码、模板与世界预设不进入正式 JAR。\n\n## Release notes\n\n- Tree and crop evidence is verified per group. Observed growth joins source waiting but does not replace complete production cycles and matching boundary output. Idle sources no longer block completed independent processing or gain production rights; natural-only factories retain their growth wait.\n- The default absolute learning deadline changes from 6000 to 3600 ticks (3 minutes at 20 TPS), starting at the switch request. Growth never resets it. Unverified participating sources fail the entire session back to chunk-loaded mode without publishing partial routes. Existing configured overrides remain effective.\n- Publication recompiles against the complete observations and room ledger, preventing stale processing candidates and uncertified source output from bypassing accounting. Mixed plans retain startup capital when routes are split, combined, or copied.\n- Removes the unfinished Ponder feature: seven custom tutorial scenes, client registration, teaching structures, bilingual captions, the structure generator, and tutorial documentation. The 1.5.22 JAR is rebuilt and replaced, retaining the learning and freeze compatibility fixes.\n- Fixes the Observable 5.4.4 block-entity tick Redirect conflict using a MixinExtras v2 conditional wrapper. Normal ticks and profiling remain intact outside frozen rooms; frozen ticks are skipped and resume after thawing. Lithium 0.15.4 random-tick compatibility and required freeze injections remain enabled.\n- Adds isolated integration tests for base dependencies, Lithium, Observable, and both together. Test classes, structures, and world presets are excluded from the release JAR.\n\n## 验证 / Validation\n\n- 完整 Gradle `check build` 通过，涵盖学习、工厂指令、移动通道、冻结索引、服务器隔离、物流、热量及既有回归。\n- 冻结修复阶段，基础依赖、Lithium 0.15.4、Observable 5.4.4 及两者共存四种 GameTest 通过，检查冻结范围、解冻执行次数与 Observable 计时；本次移除教程后重新通过完整 `check build`。\n- 核对重建包不含自定义教程类、结构和字幕，确认版本元数据、内置兼容类、关键 Mixin 设置及测试资源排除 / Verified removal of custom tutorial classes, structures and captions, release metadata, bundled compatibility classes, required Mixin settings, and exclusion of test resources.\n- 未执行客户端界面手动验收 / Client UI has not received manual in-game acceptance.\n- 服务端测试范围与重跑方式 / Server test scope and rerun instructions: [freeze compatibility report](https://github.com/kevindx1231/create_nested_factory/blob/mc1.21.1/docs/releases/v1.5.22-freeze-compat.md).\n\n## 安装 / Installation\n\nMinecraft **1.21.1** · Java **21** · NeoForge **21.1.x**（构建验证 / tested: **21.1.248**）· Create **6.0.9–6.0.x**（构建 / built with: **6.0.10-280**）。\n\n客户端与服务端安装相同版本，替换旧版 JAR / Install the same version on client and server, replacing the older JAR.\n\n文件 / Asset: `create_nested_factory-1.21.1-1.5.22.jar`（890368 bytes）。\n\nSHA-256: `4e9e3da5fad3fe45ab864769d6f91070a2e35f44c455d631feb3db33c2213489`.\n\n对比上版 / Full changelog: [mc1.21.1-v1.5.21...mc1.21.1-v1.5.22](https://github.com/kevindx1231/create_nested_factory/compare/mc1.21.1-v1.5.21...mc1.21.1-v1.5.22)."
+		},
+		{
+			"tag": "mc1.21.1-v1.5.21",
+			"published": "2026-10-13T07:00:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 636192199,
+					"name": "create_nested_factory-1.21.1-1.5.21.jar",
+					"url": "https://github.com/kevindx1231/create_nested_factory/releases/download/mc1.21.1-v1.5.21/create_nested_factory-1.21.1-1.5.21.jar",
+					"size": 885717,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "452cf3538b05704a3736ba8544c32b15e66f502f8582f323086c0cce4851a980",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "create_nested_factory",
+							"version": "1.5.21",
+							"name": "Create Nested Factory",
+							"description": "Create compact nested factories with persistent pocket rooms, ports, automation, and black-box production.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create"
+							],
+							"suggests": [
+								"simulated",
+								"sable",
+								"mekanism",
+								"pipez"
+							]
+						}
+					],
+					"icon": "51c6b0929781b2acdece592347ca122f3d872ddcf08164b9638085fd3691a020.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Factory Passage",
+								"Nested Extension Interface",
+								"Nested Factory",
+								"Nested Port",
+								"Nested Stress Port",
+								"Snow Wall",
+								"White Concrete Wall"
+							],
+							"item": [
+								"Battery Casing",
+								"Blaze Battery",
+								"Inactive Blaze Battery",
+								"Incomplete Blaze Battery",
+								"Incomplete Soaked Sturdy Alloy Sheet",
+								"Incomplete Space Collapse Mechanism",
+								"Incomplete Space Expand Mechanism",
+								"Incomplete Sturdy Casing",
+								"Soaked Sturdy Alloy Ingot",
+								"Soaked Sturdy Alloy Sheet",
+								"Space Collapse Mechanism",
+								"Space Expand Mechanism",
+								"Sturdy Alloy Ingot",
+								"Sturdy Alloy Sheet",
+								"Sturdy Casing"
+							],
+							"group": [
+								"Create Nested Factory"
+							]
+						},
+						"data": [
+							"advancement",
+							"dimension",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 273,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v1.5.21 — Minecraft 1.21.1\n\n## Release notes\n\n- Fixed chemical losses from wrong-type requests and mixed-type refills on both sides of Mekanism ports.\n- Fixed flight restoration after game-mode changes while preserving NeoForge attributes, external flight grants and legacy saves.\n- Reused logistics handlers, extension delegates and same-tick heat endpoints, with invalidation, unloading, binding and movement refreshes.\n- Added chemical, heat and exploration regressions; existing regressions and the complete build passed.\n\n## Installation\n\nMinecraft 1.21.1 · Java 21 · NeoForge 21.1.x · Create 6.0.9–6.0.x.\n\nSHA-256: `452cf3538b05704a3736ba8544c32b15e66f502f8582f323086c0cce4851a980`."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 27,
+		"more": 0,
+		"people": [
+			{
+				"login": "kevindx1231",
+				"commits": 27,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}

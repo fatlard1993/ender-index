@@ -1,0 +1,307 @@
+{
+	"repo": "GabinFqt/chapters",
+	"host": "github",
+	"stars": 3,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-05-08T17:46:12Z",
+	"pushed": "2026-10-24T09:54:20Z",
+	"releases": [
+		{
+			"tag": "v2.2",
+			"published": "2026-10-24T08:58:56Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 671772183,
+					"name": "chapters-2.2.jar",
+					"url": "https://github.com/GabinFqt/chapters/releases/download/v2.2/chapters-2.2.jar",
+					"size": 405645,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b64242a1ec3d6860ff6d3cddfc188805766cae1e8dea18afe00bcc81f2289fde",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "chapters",
+							"version": "2.2",
+							"name": "Chapters",
+							"description": "GameStages-style chapter progression for NeoForge. Lock items, fluids, recipes, dimensions, and more behind named stages. For Minecraft 1.21 and 26.",
+							"minecraft": "[26.1.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"kubejs",
+								"jei",
+								"mekanism",
+								"ftblibrary",
+								"ftbteams",
+								"ftbquests"
+							]
+						}
+					],
+					"icon": "cd681bdc104e6a091a8df7e9c85fa9b60e2dad22228cbe5ff9c1899091d228a4.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 70,
+						"jars": [
+							"META-INF/jarjar/better-advanced-tooltips-2601.1.0-build.9.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Chapters 2.2\n\n## Changes\n- **Restriction flags**: optional `restrictions` object and per-entry overrides (`hideInJei`, `preventPickup`, `dropFromInventory`, `preventCraft`, `preventTransfer`, `preventTravel`) on datapack / KubeJS stages. Defaults stay fully enforced for legacy JSON.\n- **FTB Teams config**: `config/chapters-common.toml` → `syncWithFtbTeams` (default `true`); set `false` for standalone per-player stages while FTB Teams is installed.\n\n---\n\n# Chapters 2.1\n\n## Changes\n- **Dimension locks**: datapack `dimensions` / KubeJS `dimension:…` gate travel into named dimensions; players already inside are returned to the Overworld when a stage is lost or definitions reload.\n\n## Requirements\n- Minecraft 26.1.2\n- NeoForge 26.1.x\n- Java 25\n- JEI (optional, to hide locked recipes/items client-side)\n- KubeJS (optional)\n- FTB Library / FTB Teams / FTB Quests (all optional; auto-detected at runtime)\n- Mekanism (optional; not available for 26.1 in this release)\n\n---\n\n# Chapters 2.0\n\nMajor port to **Minecraft / NeoForge 26.1.2** (Java **25**).\n\n## Changes\n- Full API port for NeoForge 26.1 (`Identifier`, networking, attachments, FTB/JEI/KubeJS adaptations).\n- Vanilla bucket pickup/place and cauldron interactions are gated when fluids are locked (replaces the removed fill-bucket event path).\n- Mekanism chemical compat is compiled out until a 26.1 Mekanism release exists (`enable_mekanism=false`).\n- Works around KubeJS embedding a broken Better Advanced Tooltips build.8 by Jar-in-Jaring BAT **2601.1.0-build.9+** so NeoForge selects the fixed jar at runtime.\n- Dev runs: Alice (`runClient`) and Bob (`runClientBob`) plus shared root `kubejs/` linking for dual-client testing.\n\n## Requirements\n- Minecraft 26.1.2\n- NeoForge 26.1.x\n- Java 25\n- JEI (optional, to hide locked recipes/items client-side)\n- KubeJS (optional)\n- FTB Library / FTB Teams / FTB Quests (all optional; auto-detected at runtime)\n- Mekanism (optional; not available for 26.1 in this release)\n\n---\n\n# Chapters 1.1\n\nFTB Library / FTB Teams / FTB Quests integration.\n\n## Changes\n- Chapters now registers itself as FTB Library's active stage provider when `ftblibrary` is installed; FTB Quests' built-in **Stage Reward**, **Stage Task**, and \"Stage Required\" field all use chapter ids out of the box — no extra setup required.\n- When `ftbteams` is also installed, chapter unlocks are **team-scoped** through FTB Teams' `TEAM_STAGES` property: every party member instantly shares unlocks, the inventory auditor and JEI hide/reveal run for all online members, and `/chapters add/remove`, KubeJS `PlayerStages.of(player)`, and FTB Quests Stage Reward all converge on the same team-wide store.\n- One-time migration on first login: pre-existing per-player attachment unlocks on a player's personal team are copied into `TEAM_STAGES` (party teams are skipped to avoid leaking personal unlocks).\n- New `examples/kubejs/server_scripts/ftbquests_chapter_reward.js` sample showing the FTB Quests **Custom Reward** path for conditional chapter grants.\n- New optional dependencies declared in `neoforge.mods.toml` and advertised on Modrinth/CurseForge: `ftb-library`, `ftb-teams`, `ftb-quests`.\n- Workaround for an upstream FTB Teams `TEAM_STAGES` aliasing bug: `TeamProperties.TEAM_STAGES` ships with a single shared `HashSet` as its default value, and `TeamStagesHelper.updateStages` mutates that instance in place — meaning a stage write on team A leaks into every other team's first read of the property. Chapters now bypasses `TeamStagesHelper`, copies the current value into a fresh `HashSet` before mutating, and treats the shared default as empty on read, so each FTB team keeps its own isolated stage set.\n\n## Requirements\n- Minecraft 1.21.1\n- NeoForge 21.1.x\n- Java 21\n- Mekanism (optional, for chemical gating)\n- JEI (optional, to hide locked recipes/items client-side)\n- FTB Library / FTB Teams / FTB Quests (all optional; auto-detected at runtime)\n\n---\n\n# Chapters 1.0\n\n\n..."
+		},
+		{
+			"tag": "v1.3",
+			"published": "2026-10-24T08:56:55Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 671767577,
+					"name": "chapters-1.3.jar",
+					"url": "https://github.com/GabinFqt/chapters/releases/download/v1.3/chapters-1.3.jar",
+					"size": 379401,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "2f93b6552221ac69af523bfa73d5592c11abc8df3d35262b52f5cf5a9abbd0a2",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "chapters",
+							"version": "1.3",
+							"name": "Chapters",
+							"description": "GameStages-style chapter progression for NeoForge 1.21. Lock items, fluids, recipes, dimensions, and more behind named stages.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"kubejs",
+								"jei",
+								"mekanism",
+								"ftblibrary",
+								"ftbteams",
+								"ftbquests"
+							]
+						}
+					],
+					"icon": "cd681bdc104e6a091a8df7e9c85fa9b60e2dad22228cbe5ff9c1899091d228a4.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 61,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Chapters 1.3\n\n## Changes\n- **Restriction flags**: optional `restrictions` object and per-entry overrides (`hideInJei`, `preventPickup`, `dropFromInventory`, `preventCraft`, `preventTransfer`, `preventTravel`) on datapack / KubeJS stages. Defaults stay fully enforced for legacy JSON.\n- **FTB Teams config**: `config/chapters-common.toml` → `syncWithFtbTeams` (default `true`); set `false` for standalone per-player stages while FTB Teams is installed.\n\n---\n\n# Chapters 1.2\n\n## Changes\n- **Dimension locks**: datapack `dimensions` / KubeJS `dimension:…` gate travel into named dimensions; players already inside are returned to the Overworld when a stage is lost or definitions reload.\n\n## Requirements\n- Minecraft 1.21.1\n- NeoForge 21.1.x\n- Java 21\n- Mekanism (optional, for chemical gating)\n- JEI (optional, to hide locked recipes/items client-side)\n- FTB Library / FTB Teams / FTB Quests (all optional; auto-detected at runtime)\n\n---\n\n# Chapters 1.1\n\nFTB Library / FTB Teams / FTB Quests integration.\n\n## Changes\n- Chapters now registers itself as FTB Library's active stage provider when `ftblibrary` is installed; FTB Quests' built-in **Stage Reward**, **Stage Task**, and \"Stage Required\" field all use chapter ids out of the box — no extra setup required.\n- When `ftbteams` is also installed, chapter unlocks are **team-scoped** through FTB Teams' `TEAM_STAGES` property: every party member instantly shares unlocks, the inventory auditor and JEI hide/reveal run for all online members, and `/chapters add/remove`, KubeJS `PlayerStages.of(player)`, and FTB Quests Stage Reward all converge on the same team-wide store.\n- One-time migration on first login: pre-existing per-player attachment unlocks on a player's personal team are copied into `TEAM_STAGES` (party teams are skipped to avoid leaking personal unlocks).\n- New `examples/kubejs/server_scripts/ftbquests_chapter_reward.js` sample showing the FTB Quests **Custom Reward** path for conditional chapter grants.\n- New optional dependencies declared in `neoforge.mods.toml` and advertised on Modrinth/CurseForge: `ftb-library`, `ftb-teams`, `ftb-quests`.\n- Workaround for an upstream FTB Teams `TEAM_STAGES` aliasing bug: `TeamProperties.TEAM_STAGES` ships with a single shared `HashSet` as its default value, and `TeamStagesHelper.updateStages` mutates that instance in place — meaning a stage write on team A leaks into every other team's first read of the property. Chapters now bypasses `TeamStagesHelper`, copies the current value into a fresh `HashSet` before mutating, and treats the shared default as empty on read, so each FTB team keeps its own isolated stage set.\n\n## Requirements\n- Minecraft 1.21.1\n- NeoForge 21.1.x\n- Java 21\n- Mekanism (optional, for chemical gating)\n- JEI (optional, to hide locked recipes/items client-side)\n- FTB Library / FTB Teams / FTB Quests (all optional; auto-detected at runtime)\n\n---\n\n# Chapters 1.0\n\nFirst release under the new name **Chapters** (formerly Stagecraft).\n\n## Changes\n- Full mod rename: `stagecraft` → `chapters` (mod id, Java package, asset namespace, mixins, KubeJS bindings)\n- Bumped `mod_version` to `1.0`\n- KubeJS API: `ChaptersEvents` (formerly `StagecraftEvents`)\n- New `chapters_logo.png`\n\n## Requirements\n- Minecraft 1.21.1\n- NeoForge 21.1.x\n- Java 21\n- Mekanism (optional, for chemical gating)\n- JEI (optional, to hide locked recipes/items client-side)"
+		},
+		{
+			"tag": "v1.2",
+			"published": "2026-09-26T09:24:19Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 590348301,
+					"name": "chapters-1.2.jar",
+					"url": "https://github.com/GabinFqt/chapters/releases/download/v1.2/chapters-1.2.jar",
+					"size": 363614,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "309db9f377ae6920e65c3acbea952a295d431ceb45dfbfba2d313236fc307374",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "chapters",
+							"version": "1.2",
+							"name": "Chapters",
+							"description": "GameStages-style chapter progression for NeoForge 1.21. Lock items, fluids, recipes, dimensions, and more behind named stages.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"kubejs",
+								"jei",
+								"mekanism",
+								"ftblibrary",
+								"ftbteams",
+								"ftbquests"
+							]
+						}
+					],
+					"icon": "cd681bdc104e6a091a8df7e9c85fa9b60e2dad22228cbe5ff9c1899091d228a4.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 56,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Chapters 1.2\n\n## Changes\n- **Dimension locks**: datapack `dimensions` / KubeJS `dimension:…` gate travel into named dimensions; players already inside are returned to the Overworld when a stage is lost or definitions reload.\n\n## Requirements\n- Minecraft 1.21.1\n- NeoForge 21.1.x\n- Java 21\n- Mekanism (optional, for chemical gating)\n- JEI (optional, to hide locked recipes/items client-side)\n- FTB Library / FTB Teams / FTB Quests (all optional; auto-detected at runtime)\n\n---\n\n# Chapters 1.1\n\nFTB Library / FTB Teams / FTB Quests integration.\n\n## Changes\n- Chapters now registers itself as FTB Library's active stage provider when `ftblibrary` is installed; FTB Quests' built-in **Stage Reward**, **Stage Task**, and \"Stage Required\" field all use chapter ids out of the box — no extra setup required.\n- When `ftbteams` is also installed, chapter unlocks are **team-scoped** through FTB Teams' `TEAM_STAGES` property: every party member instantly shares unlocks, the inventory auditor and JEI hide/reveal run for all online members, and `/chapters add/remove`, KubeJS `PlayerStages.of(player)`, and FTB Quests Stage Reward all converge on the same team-wide store.\n- One-time migration on first login: pre-existing per-player attachment unlocks on a player's personal team are copied into `TEAM_STAGES` (party teams are skipped to avoid leaking personal unlocks).\n- New `examples/kubejs/server_scripts/ftbquests_chapter_reward.js` sample showing the FTB Quests **Custom Reward** path for conditional chapter grants.\n- New optional dependencies declared in `neoforge.mods.toml` and advertised on Modrinth/CurseForge: `ftb-library`, `ftb-teams`, `ftb-quests`.\n- Workaround for an upstream FTB Teams `TEAM_STAGES` aliasing bug: `TeamProperties.TEAM_STAGES` ships with a single shared `HashSet` as its default value, and `TeamStagesHelper.updateStages` mutates that instance in place — meaning a stage write on team A leaks into every other team's first read of the property. Chapters now bypasses `TeamStagesHelper`, copies the current value into a fresh `HashSet` before mutating, and treats the shared default as empty on read, so each FTB team keeps its own isolated stage set.\n\n## Requirements\n- Minecraft 1.21.1\n- NeoForge 21.1.x\n- Java 21\n- Mekanism (optional, for chemical gating)\n- JEI (optional, to hide locked recipes/items client-side)\n- FTB Library / FTB Teams / FTB Quests (all optional; auto-detected at runtime)\n\n---\n\n# Chapters 1.0\n\nFirst release under the new name **Chapters** (formerly Stagecraft).\n\n## Changes\n- Full mod rename: `stagecraft` → `chapters` (mod id, Java package, asset namespace, mixins, KubeJS bindings)\n- Bumped `mod_version` to `1.0`\n- KubeJS API: `ChaptersEvents` (formerly `StagecraftEvents`)\n- New `chapters_logo.png`\n\n## Requirements\n- Minecraft 1.21.1\n- NeoForge 21.1.x\n- Java 21\n- Mekanism (optional, for chemical gating)\n- JEI (optional, to hide locked recipes/items client-side)"
+		},
+		{
+			"tag": "v2.1",
+			"published": "2026-09-26T09:21:55Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 590344355,
+					"name": "chapters-2.1.jar",
+					"url": "https://github.com/GabinFqt/chapters/releases/download/v2.1/chapters-2.1.jar",
+					"size": 391751,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "a0d0c960245ffb0331e8395b5242c9552ac0669234ffce3748665c305026b6d1",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "chapters",
+							"version": "2.1",
+							"name": "Chapters",
+							"description": "GameStages-style chapter progression for NeoForge. Lock items, fluids, recipes, dimensions, and more behind named stages. For Minecraft 1.21 and 26.",
+							"minecraft": "[26.1.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"kubejs",
+								"jei",
+								"mekanism",
+								"ftblibrary",
+								"ftbteams",
+								"ftbquests"
+							]
+						}
+					],
+					"icon": "cd681bdc104e6a091a8df7e9c85fa9b60e2dad22228cbe5ff9c1899091d228a4.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 65,
+						"jars": [
+							"META-INF/jarjar/better-advanced-tooltips-2601.1.0-build.9.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Chapters 2.1\n\n## Changes\n- **Dimension locks**: datapack `dimensions` / KubeJS `dimension:…` gate travel into named dimensions; players already inside are returned to the Overworld when a stage is lost or definitions reload.\n\n## Requirements\n- Minecraft 26.1.2\n- NeoForge 26.1.x\n- Java 25\n- JEI (optional, to hide locked recipes/items client-side)\n- KubeJS (optional)\n- FTB Library / FTB Teams / FTB Quests (all optional; auto-detected at runtime)\n- Mekanism (optional; not available for 26.1 in this release)\n\n---\n\n# Chapters 2.0\n\nMajor port to **Minecraft / NeoForge 26.1.2** (Java **25**).\n\n## Changes\n- Full API port for NeoForge 26.1 (`Identifier`, networking, attachments, FTB/JEI/KubeJS adaptations).\n- Vanilla bucket pickup/place and cauldron interactions are gated when fluids are locked (replaces the removed fill-bucket event path).\n- Mekanism chemical compat is compiled out until a 26.1 Mekanism release exists (`enable_mekanism=false`).\n- Works around KubeJS embedding a broken Better Advanced Tooltips build.8 by Jar-in-Jaring BAT **2601.1.0-build.9+** so NeoForge selects the fixed jar at runtime.\n- Dev runs: Alice (`runClient`) and Bob (`runClientBob`) plus shared root `kubejs/` linking for dual-client testing.\n\n## Requirements\n- Minecraft 26.1.2\n- NeoForge 26.1.x\n- Java 25\n- JEI (optional, to hide locked recipes/items client-side)\n- KubeJS (optional)\n- FTB Library / FTB Teams / FTB Quests (all optional; auto-detected at runtime)\n- Mekanism (optional; not available for 26.1 in this release)\n\n---\n\n# Chapters 1.1\n\nFTB Library / FTB Teams / FTB Quests integration.\n\n## Changes\n- Chapters now registers itself as FTB Library's active stage provider when `ftblibrary` is installed; FTB Quests' built-in **Stage Reward**, **Stage Task**, and \"Stage Required\" field all use chapter ids out of the box — no extra setup required.\n- When `ftbteams` is also installed, chapter unlocks are **team-scoped** through FTB Teams' `TEAM_STAGES` property: every party member instantly shares unlocks, the inventory auditor and JEI hide/reveal run for all online members, and `/chapters add/remove`, KubeJS `PlayerStages.of(player)`, and FTB Quests Stage Reward all converge on the same team-wide store.\n- One-time migration on first login: pre-existing per-player attachment unlocks on a player's personal team are copied into `TEAM_STAGES` (party teams are skipped to avoid leaking personal unlocks).\n- New `examples/kubejs/server_scripts/ftbquests_chapter_reward.js` sample showing the FTB Quests **Custom Reward** path for conditional chapter grants.\n- New optional dependencies declared in `neoforge.mods.toml` and advertised on Modrinth/CurseForge: `ftb-library`, `ftb-teams`, `ftb-quests`.\n- Workaround for an upstream FTB Teams `TEAM_STAGES` aliasing bug: `TeamProperties.TEAM_STAGES` ships with a single shared `HashSet` as its default value, and `TeamStagesHelper.updateStages` mutates that instance in place — meaning a stage write on team A leaks into every other team's first read of the property. Chapters now bypasses `TeamStagesHelper`, copies the current value into a fresh `HashSet` before mutating, and treats the shared default as empty on read, so each FTB team keeps its own isolated stage set.\n\n## Requirements\n- Minecraft 1.21.1\n- NeoForge 21.1.x\n- Java 21\n- Mekanism (optional, for chemical gating)\n- JEI (optional, to hide locked recipes/items client-side)\n- FTB Library / FTB Teams / FTB Quests (all optional; auto-detected at runtime)\n\n---\n\n# Chapters 1.0\n\nFirst release under the new name **Chapters** (formerly Stagecraft).\n\n## Changes\n- Full mod rename: `stagecraft` → `chapters` (mod id, Java package, asset namespace, mixins, KubeJS bindings)\n- Bumped `mod_version` to `1.0`\n- KubeJS API: `ChaptersEvents` (formerly `StagecraftEvents`)\n- New `chapters_logo.png`\n\n## Requirements\n- Minecraft 1.21.1\n- NeoForge 21.1.x\n- Java 21\n- Mekanism (optional, for chemical gating)\n- JEI (optional, to hide locked recipes/items client-side)\n\n\n\n..."
+		},
+		{
+			"tag": "v2.0",
+			"published": "2026-08-02T10:10:48Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 590340945,
+					"name": "chapters-2.0.jar",
+					"url": "https://github.com/GabinFqt/chapters/releases/download/v2.0/chapters-2.0.jar",
+					"size": 367277,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "ba6f2f4e50226b082026adb6a9595caf8a8f2a1540282a50f98ca5e2b866ffa1",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "chapters",
+							"version": "2.0",
+							"name": "Chapters",
+							"description": "Chapters to gate items and fluids for NeoForge 26.1.2.",
+							"minecraft": "[26.1.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"kubejs",
+								"jei",
+								"mekanism",
+								"ftblibrary",
+								"ftbteams",
+								"ftbquests"
+							]
+						}
+					],
+					"icon": "cd681bdc104e6a091a8df7e9c85fa9b60e2dad22228cbe5ff9c1899091d228a4.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 49,
+						"jars": [
+							"META-INF/jarjar/better-advanced-tooltips-2601.1.0-build.9.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Chapters 2.0\n\nMajor port to **Minecraft / NeoForge 26.1.2** (Java **25**).\n\n## Changes\n- Full API port for NeoForge 26.1 (`Identifier`, networking, attachments, FTB/JEI/KubeJS adaptations).\n- Vanilla bucket pickup/place and cauldron interactions are gated when fluids are locked (replaces the removed fill-bucket event path).\n- Mekanism chemical compat is compiled out until a 26.1 Mekanism release exists (`enable_mekanism=false`).\n- Works around KubeJS embedding a broken Better Advanced Tooltips build.8 by Jar-in-Jaring BAT **2601.1.0-build.9+** so NeoForge selects the fixed jar at runtime.\n- Dev runs: Alice (`runClient`) and Bob (`runClientBob`) plus shared root `kubejs/` linking for dual-client testing.\n\n## Requirements\n- Minecraft 26.1.2\n- NeoForge 26.1.x\n- Java 25\n- JEI (optional, to hide locked recipes/items client-side)\n- KubeJS (optional)\n- FTB Library / FTB Teams / FTB Quests (all optional; auto-detected at runtime)\n- Mekanism (optional; not available for 26.1 in this release)\n\n---\n\n# Chapters 1.1\n\nFTB Library / FTB Teams / FTB Quests integration.\n\n## Changes\n- Chapters now registers itself as FTB Library's active stage provider when `ftblibrary` is installed; FTB Quests' built-in **Stage Reward**, **Stage Task**, and \"Stage Required\" field all use chapter ids out of the box — no extra setup required.\n- When `ftbteams` is also installed, chapter unlocks are **team-scoped** through FTB Teams' `TEAM_STAGES` property: every party member instantly shares unlocks, the inventory auditor and JEI hide/reveal run for all online members, and `/chapters add/remove`, KubeJS `PlayerStages.of(player)`, and FTB Quests Stage Reward all converge on the same team-wide store.\n- One-time migration on first login: pre-existing per-player attachment unlocks on a player's personal team are copied into `TEAM_STAGES` (party teams are skipped to avoid leaking personal unlocks).\n- New `examples/kubejs/server_scripts/ftbquests_chapter_reward.js` sample showing the FTB Quests **Custom Reward** path for conditional chapter grants.\n- New optional dependencies declared in `neoforge.mods.toml` and advertised on Modrinth/CurseForge: `ftb-library`, `ftb-teams`, `ftb-quests`.\n- Workaround for an upstream FTB Teams `TEAM_STAGES` aliasing bug: `TeamProperties.TEAM_STAGES` ships with a single shared `HashSet` as its default value, and `TeamStagesHelper.updateStages` mutates that instance in place — meaning a stage write on team A leaks into every other team's first read of the property. Chapters now bypasses `TeamStagesHelper`, copies the current value into a fresh `HashSet` before mutating, and treats the shared default as empty on read, so each FTB team keeps its own isolated stage set.\n\n## Requirements\n- Minecraft 1.21.1\n- NeoForge 21.1.x\n- Java 21\n- Mekanism (optional, for chemical gating)\n- JEI (optional, to hide locked recipes/items client-side)\n- FTB Library / FTB Teams / FTB Quests (all optional; auto-detected at runtime)\n\n---\n\n# Chapters 1.0\n\nFirst release under the new name **Chapters** (formerly Stagecraft).\n\n## Changes\n- Full mod rename: `stagecraft` → `chapters` (mod id, Java package, asset namespace, mixins, KubeJS bindings)\n- Bumped `mod_version` to `1.0`\n- KubeJS API: `ChaptersEvents` (formerly `StagecraftEvents`)\n- New `chapters_logo.png`\n\n## Requirements\n- Minecraft 1.21.1\n- NeoForge 21.1.x\n- Java 21\n- Mekanism (optional, for chemical gating)\n- JEI (optional, to hide locked recipes/items client-side)\n\n\n**Full Changelog**: https://github.com/GabinFqt/chapters/compare/v1.1...v2.0"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "Chapters locks items, fluids, recipes, and dimensions behind stages until you grant them.",
+	"funding": [],
+	"fundingChecked": "2026-10-31T13:44:08.070Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T13:44:08.070Z",
+	"contributors": {
+		"commits": 25,
+		"more": 0,
+		"people": [
+			{
+				"login": "GabinFqt",
+				"commits": 25,
+				"name": "Gabin Fouquet",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T13:44:08.070Z",
+	"history": 1
+}
