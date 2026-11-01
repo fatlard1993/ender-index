@@ -6,7 +6,7 @@
 	"archived": false,
 	"license": "NOASSERTION",
 	"created": "2023-04-06T04:15:51Z",
-	"pushed": "2026-10-26T15:02:31Z",
+	"pushed": "2026-11-01T04:40:04Z",
 	"releases": [
 		{
 			"tag": "v1.19.2-0.0.10-alpha.1",
@@ -18,7 +18,7 @@
 					"name": "questown-1.19.2-0.0.10-alpha.1.jar",
 					"url": "https://github.com/bradsk88/Questown/releases/download/v1.19.2-0.0.10-alpha.1/questown-1.19.2-0.0.10-alpha.1.jar",
 					"size": 2157106,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "0682e98e4dea136e1299c5abe4ef41ae8ed6cfe6a5a962d448e1177be18c0bd1",
 					"mods": [
@@ -99,7 +99,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "> A \"grab bag\" of fixes, improvements, and changes.\n\n## New Villager Jobs and Rooms\n- Added Mineshaft and Miner\n- Extendable \"cook\" jobs\n  - Any item added to the `villager_simple_furnace_food_raw` tag will be\n    considered by the cook, who will put said items into furnaces.\n- Removed \"gather with pickaxe\" in favour of miner\n\n## Hunger Redux (Experimental)\n- Added \"starving\" visual effect\n- Re-enabled hunger by default\n  - Can be toggled at runtime via `/qt config toggle_hunger <FLAG_POS>`\n- Made dining \"jobs\" more likely to result in villagers eating something\n- Updated \"leaver\" jobs to allow sensible progress even without food\n  - Known Bug: With this restructure, jobs MUST include >0 work-ticks,\n    otherwise the job won't transition to \"WAITING FOR TIMER\" and the\n    villagers will not disappear as they should.\n\n## Onboarding Improvements\n- Tweaked onboarding quests to feel more organic and possible\n- Added \"bonus\" food that can be claimed to kickstart village\n- First villager now always asks for bedroom, job board, and storage\n  - To align better with tutorial.\n- Added hunter/gatherer root jobs and quests\n  - This helps with getting food during early-game\n- When spending Blocks of Progress to change a villager's career for the\n  first time, Questown will now ALWAYS make that new career \"hunter\".\n  - After the first time, it will be random like always.\n- Economy tab now shows ingredients that were needed \"deeper\" into the job\n  - E.g. If the village is missing ingredients for step \"4\" of a job, that ingredient \n    will be shown on the economics tab.\n\n## Realism\n- Villagers now prefer being inside rooms at night - even if there are no beds.\n- Villagers now \"relax\" around town after working for certain amount of time\n- Villagers now look at nearby players for a moment when approached\n- Villagers now render an off-hand item by default\n    - Makes \"add food to job site\" job look more natural (e.g. gatherers holding tools)\n\n## Gameplay\n- Clicking on a villager's status now opens the job definition UI\n- Clearer messaging when work seeker stalls due to no job board\n- Single-block, wall-less rooms (e.g. mineshaft, fishing station) now\n  trigger the \"room created\" and \"room destroyed\" messages.\n\n##Fixes\n- Sub-blocks (e.g. town gate) no longer self-destruct when you walk away from town\n- Fixed bug where status text overrides were not showing up on flag UI\n- Economics are now saved/loaded across server restarts\n- Job change request now survives server reboot\n- Job change now always guarantees a different root than the current job\n- When job change was already requested, the villager UI will indicate that\n  - Prevents players from wasting Blocks of Progress by requesting twice\n- Scheduled \"new career\" is no longer cancelled via normal job transitions\n- Tutorial quest batch 3 now makes sense\n  - Was requesting \"town gate\" because, for batch 3, the town only has two\n    villagers: gatherer and hunter (who both use the gate)\n- Second (etc.) page of flag \"villagers\" screen now shows correct tooltips\n- Cook now stocks coal if *any* cooked food is requested (not just cod)\n- Fixed crash when adding some work requests\n- BlockRooms no longer crash server when blocks are missing item defns\n- Quest batches now have a limit to how big they can grow to\n- No longer crashes when messages are broadcast before flag init is done\n- Other random crash fixes\n\n## Technical:\n- Added `qt flag <pos> destroy` command which removes flag and villagers\n- Updated `qt flag` commands to request position as first argument\n- Economics history size is now has a config value\n- Lowered some log levels by default (now \"debug\" level)\n  - Added `/qtdev debug` command(s) to upgrade them at runtime\n  - Developers can use the INVISIBLE_LOG_LEVEL environment variable to\n    set them to 'trace', making the logs less noisy.\n- SubBlocks are now harder to use wrong\n  - More logic moved to parent\n  - Player is prompted to link via town wand if needed\n\n..."
 		},
 		{
 			"tag": "v1.18.2-0.0.9-alpha.1",
@@ -111,7 +112,7 @@
 					"name": "questown-1.18.2-0.0.9-alpha.1.jar",
 					"url": "https://github.com/bradsk88/Questown/releases/download/v1.18.2-0.0.9-alpha.1/questown-1.18.2-0.0.9-alpha.1.jar",
 					"size": 1941188,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "98183fa22b55b24fde41e6cb01b147961151c7f863e08ec33cc92838c56c53e1",
 					"mods": [
@@ -187,7 +188,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# The Copenhagen Update (Part 1)\n\n(Named as such because I've selected a handful of \"fun\" features to implement before I move away from Copenhagen)\n\n### New Job: Fisher / Fishing Station    \n- Added new \"station\" block which renders fishing lines when used\n- Station block can only be crafted by \"crafter\" villagers\n   - Used \"after extract\" hook to associate fishing station with town\n- Station block can be placed outside of rooms and villagers will still use it for work\n   - See \"Jobs API\", below\n\n### New Job: Fish Cook / Kitchens\n- Added a bunch of \"kitchen\" room recipes\n- Added \"cook\" jobs which can:\n   - Add coal to an empty furnace in a kitchen\n   - Add coal to a chest in a kitchen\n   - Add fish to a furnace with an empty input slot\n   - Extract cooked villager food from a furnace\n      - Even if the cooking was started by someone else (e.g. a player)\n      - Requires a stick \"tool\" for now, due to technical limitations\n\n### Villagers:\n- Improved interaction spot logic (i.e. don't stand on water or air)\n- Added more aggressive navigation \"unsticking\"\n- Updated jobs UI to show all job roots if in creative mode\n\n### Quests:\n- Fixed bug where declined quest batches ramp up difficulty\n- Improved upgrade quest logic\n- Made upgrade quests a possible result after declining a batch\n- Fixed bug where town could get stuck with only finished quests\n- Updated Quests UI to recognize block-rooms\n\n### Leveling:\n- Fixed the \"infinite BOP\" bug\n   - Caused by the client-side slot not being emptied\n\n### Jobs API:\n- Auto-registration for blocks that double as rooms\n- Added \"block rooms\": single blocks that behave like rooms\n   - Welcome mat and town flag always behaved like this\n   - Fishing rod now does, too.\n- Added \"loot\" option for job definitions\n- Added \"after extract\" hook for special rules\n- Added \"has_item_in_slot_initially\" to version 2 job definitions\n   - This allows jobs to only start if the job block has a specific item \n     in a specific slot (or minecraft:air if the slot must be empty)\n- Added \"insert_into_slot_0\", \"insert_into_slot_1\" special rules\n  - Currently used by fish cook to insert raw food and coal, respectively\n- Added \"take_from_slot_2\" special rule\n  - Currently used by fish cook to extract cooked food from furnaces\n\n### Other:\n- Added room recipes for storage progression (e.g. small/bin/huge storage, warehouse, etc.)\n- Bunch of translations added"
 		},
 		{
 			"tag": "v1.19.2-0.0.7-alpha.6",
@@ -199,7 +201,7 @@
 					"name": "questown-1.19.2-0.0.7-alpha.6.jar",
 					"url": "https://github.com/bradsk88/Questown/releases/download/v1.19.2-0.0.7-alpha.6/questown-1.19.2-0.0.7-alpha.6.jar",
 					"size": 1776317,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "cf4f3f431b7ab6974a1f3fc35ca89adea17dc8094feaf2ce5358ed0362d80f18",
 					"mods": [
@@ -266,7 +268,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Ported from https://github.com/bradsk88/Questown/releases/tag/v1.18.2-0.0.7-alpha.6"
 		},
 		{
 			"tag": "v1.18.2-0.0.7-alpha.6",
@@ -278,7 +281,7 @@
 					"name": "questown-1.18.2-0.0.7-alpha.6.jar",
 					"url": "https://github.com/bradsk88/Questown/releases/download/v1.18.2-0.0.7-alpha.6/questown-1.18.2-0.0.7-alpha.6.jar",
 					"size": 1776087,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "8295b6db7a5f71816721d192c2d35fdc68b7b6ea3b6f4d8cca003450d8887058",
 					"mods": [
@@ -346,7 +349,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Final 1.18 Update\n- Aside from bugfixes and the occasional backport, this will be the last update to 1.18\n- 1.19 is the new reference version for Questown\n\n### Improvements\n- Added item weights for several room recipes\n- Fixed game-breaking crash when chests are destroyed\n- Cleaned up logging from tick sampling and UnsafeTown"
 		},
 		{
 			"tag": "v1.19.2-0.0.7-alpha.5",
@@ -358,7 +362,7 @@
 					"name": "questown-1.19.2-0.0.7-alpha.5.jar",
 					"url": "https://github.com/bradsk88/Questown/releases/download/v1.19.2-0.0.7-alpha.5/questown-1.19.2-0.0.7-alpha.5.jar",
 					"size": 1774261,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "cf3ffc652aa9a673ea7b249699fbd3b1cfaf96ef859821f16459e7a86b4d81ba",
 					"mods": [
@@ -425,11 +429,23 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Ported from https://github.com/bradsk88/Questown/releases/tag/v1.18.2-0.0.7-alpha.5"
 		}
 	],
 	"readme": "README.txt",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [
+		"art/bowl_rack.png",
+		"art/bowl_rack2.png",
+		"art/oak_wood_planks.png",
+		"setup/Screenshot_20240723_230050.png",
+		"setup/Screenshot_20240723_230119.png",
+		"setup/Screenshot_20240723_230149.png",
+		"setup/Screenshot_20240723_230205.png",
+		"setup/enable-offline.png"
+	],
+	"picturesChecked": "2026-11-01T03:45:44.080Z",
 	"history": 1
 }

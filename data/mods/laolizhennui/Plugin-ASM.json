@@ -1,0 +1,119 @@
+{
+	"repo": "laolizhennui/Plugin-ASM",
+	"host": "github",
+	"description": "Plugin ASM is a lightweight, Mixin-style bytecode injection framework for Paper/Bukkit servers, enabling declarative method modifications via ASM with no manual bytecode writing.",
+	"stars": 2,
+	"archived": false,
+	"license": "LGPL-2.1",
+	"created": "2026-02-12T06:45:10Z",
+	"pushed": "2026-02-18T12:45:59Z",
+	"releases": [
+		{
+			"tag": "0.1.0-alpha2",
+			"published": "2026-02-15T07:43:24Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 356178475,
+					"name": "pasm-0.1.0-alpha2.jar",
+					"url": "https://github.com/laolizhennui/Plugin-ASM/releases/download/0.1.0-alpha2/pasm-0.1.0-alpha2.jar",
+					"size": 608316,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "860dcfd9fe99e6033e3ac6f871f8487d5e8a72e59e68c108d9a8964d81f5b40a",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 368,
+						"jars": [],
+						"capabilities": {
+							"classloading": {
+								"net/laoli/pasm/loader/InjectionClassLoader.class": [
+									"java/net/URLClassLoader.<init>",
+									"java/net/URLClassLoader.findClass",
+									"extends java/net/URLClassLoader"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/google/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "这个版本做的修改：\n1. 把RedefineAgent重命名成劳动PasmAgent\n2. 把热重载从实验特性转成正式特性\n3. 移除了冗余代码\n4. 优化了ASMHOOK的启动性能（尽管可以忽略不计）"
+		},
+		{
+			"tag": "0.1.0-alpha1",
+			"published": "2026-02-12T08:23:32Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 354713311,
+					"name": "pasm-0.1.0-alpha1.jar",
+					"url": "https://github.com/laolizhennui/Plugin-ASM/releases/download/0.1.0-alpha1/pasm-0.1.0-alpha1.jar",
+					"size": 609905,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "63bbb935efe861347c4f243c2725db7c4cef8e3f2b38feee830f9725bb96ece9",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 367,
+						"jars": [],
+						"capabilities": {
+							"classloading": {
+								"net/laoli/pasm/loader/InjectionClassLoader.class": [
+									"java/net/URLClassLoader.<init>",
+									"java/net/URLClassLoader.findClass",
+									"extends java/net/URLClassLoader"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/google/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🚀 PASM v0.1.0-alpha1\n\n**PASM(Plugin ASM)** 是一个轻量级、Mixin 风格的字节码注入框架，专为 Paper/Bukkit 服务端设计。这是 PASM 的首个公开预览版本，核心功能已稳定，欢迎社区试用反馈。\n\n---\n\n### ✨ 核心特性\n- **声明式注入** –仅需 `@Pasm` + `@Inject` 注解，零字节码基础即可修改目标方法。\n    \n- **完整注入类型** –`BEFORE` / `AFTER` / `REPLACE` / `HEAD` / `TAIL` 全部可用，覆盖绝大多数增强场景。\n    \n- **构造函数支持** –可对 `<init>` 方法进行 `HEAD` 注入，自动在 `super()` 后插入。\n    \n- **异常处理兼容** –完美保留 `try-catch-finally` 结构，注入后异常表不丢失。\n    \n- **宽类型自动偏移** –`long` / `double` 参数在静态→非静态注入时自动计算双槽位偏移，无需手动配置。\n    \n- **REPLACE 独占语义** –同一方法的多个注入点若包含 `REPLACE`，仅执行优先级最高的 `REPLACE`，其余自动跳过，避免冲突。\n    \n- **ASM 处理器扩展** –通过 `pasm.json` 的 `asms` 字段注册自定义处理器，在 `beforeInject` / `afterInject` 生命周期执行任意字节码增强，支持优先级排序。\n    \n- **热加载支持（实验性）** –提供 `reloadPlugins()` 接口，可运行时重新扫描插件并重新注入，适合开发调试。\n\n---\n\n### 📦 系统兼容性\n- **Java 8～25** –框架自身完全兼容，已在 Java 8、11、17、21完成测试。\n    \n- **Paper 1.16.5～1.21+** –实际运行版本取决于服务端要求，最低支持 Java 8（配合 Paper 1.16.5）。\n    \n- **ASM 9.x + Gson 2.10** –内置依赖，无外部冲突风险。\n\n---\n\n### ⚠️ 已知限制\n- `AROUND` 注入暂未实现，使用时会降级为 `REPLACE` 并输出警告。\n    \n- 热加载功能尚不稳定，频繁重载可能导致类冲突，不建议在生产环境高频使用。\n    \n- ASM 处理器钩子（`asms`）为预览特性，API 可能在未来调整。\n\n---\n\n### 📥 快速开始\n1. 下载 `pasm-0.1.0-alpha1.jar` 放置于服务端根目录。\n    \n2. 启动参数添加 `-javaagent:pasm-0.1.0-alpha1.jar[=debug]`。\n    \n3. 在插件 JAR 的 `src/main/resources/pasm.json` 中声明注入类。\n    \n4. 编写带 `@Pasm` 和 `@Inject` 注解的静态方法，打包后放入 `plugins/` 目录。\n    \n5. 启动服务端，框架将自动扫描并完成注入。\n\n详细使用示例请参阅 [README](#readme)。\n\n---\n\n### 🙏 致谢\n\n感谢所有在开发过程中提供反馈与测试的朋友，特别感谢 PaperMC 社区对字节码操作技术的无私分享。\n\n---\n\n**PASM 仍处于早期阶段，欢迎提交 Issue 或 Pull Request。**\n[GitHub 仓库](https://github.com/laolizhennui/Plugin-ASM) | [问题反馈](https://github.com/laolizhennui/Plugin-ASM/issues)"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-11-01T03:45:44.080Z",
+	"pictures": [],
+	"picturesChecked": "2026-11-01T03:45:44.080Z",
+	"contributors": {
+		"commits": 9,
+		"more": 0,
+		"people": [
+			{
+				"login": "laolizhennui",
+				"commits": 9,
+				"name": "yizhixxs",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-11-01T03:45:44.080Z",
+	"history": 1
+}

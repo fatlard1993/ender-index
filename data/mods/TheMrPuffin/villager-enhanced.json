@@ -1,0 +1,283 @@
+{
+	"repo": "TheMrPuffin/villager-enhanced",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-08-05T18:22:30Z",
+	"pushed": "2026-08-19T17:48:41Z",
+	"releases": [
+		{
+			"tag": "v1.0.0",
+			"published": "2026-08-19T17:49:58Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 521159391,
+					"name": "villagerenhanced-26.2-1.0.0.jar",
+					"url": "https://github.com/TheMrPuffin/villager-enhanced/releases/download/v1.0.0/villagerenhanced-26.2-1.0.0.jar",
+					"size": 118576,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "1cce7a7e713b04177638a36e3ee9d9c875a30d07909bb5996d32a314a39b75a1",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "villagerenhanced",
+							"version": "1.0.0",
+							"name": "Villager Enhanced",
+							"description": "A mod aimed to enhance Villager interactions.",
+							"minecraft": "[26.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Diamond Apple"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 46,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Finished, and staying that way.\n\nNothing here is new. 1.0.0 is a promise about what already exists, made now that the two things\nit was waiting on have both happened: NeoForge 26.2 has left beta, and the mod has been played\nrather than only built.\n\n### What 1.0.0 commits to\n\n- **Your worlds keep working.** Villager names and everything a villager remembers about you keep\n  their stored shape. Fields may be added later — they have defaults — but nothing already saved\n  will stop being read.\n- **Settings keep their names.** Renaming a config key silently resets it for whoever had tuned\n  it, so they stay put.\n- **The escape hatch stays.** `dialogueEnabled = false` will always restore ordinary vanilla\n  trading, leaving the mod installed but dormant.\n\nBreaking any of those would be 2.0.0.\n\n**Not covered:** the network protocol between client and server. It is internal, it is already\nversioned, and it turns a version mismatch into a clean refusal to connect rather than a subtle\nmisreading. Expect it to keep changing, and expect clients and servers to need matching versions.\n\n### Changed\n\n- **Now built against NeoForge `26.2.0.62`**, the stable line, up from `26.2.0.48-beta`. Requires\n  26.2.0.62 or newer.\n- **The mod icon appears in the Mods list again.** NeoForge split the old `logoFile` setting into\n  a separate icon and banner, and only the banner kept the old name working — so the icon had\n  quietly stopped being shown.\n\n### Notes\n\n- No protocol change; 1.0.0 talks to 0.13.0 clients and servers.\n- Requires Minecraft 26.2 and NeoForge 26.2.0.62 or newer.\n- Existing worlds need nothing.\n- Still no mixins."
+		},
+		{
+			"tag": "v0.13.0",
+			"published": "2026-08-16T19:46:43Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 517159492,
+					"name": "villagerenhanced-26.2-0.13.0.jar",
+					"url": "https://github.com/TheMrPuffin/villager-enhanced/releases/download/v0.13.0/villagerenhanced-26.2-0.13.0.jar",
+					"size": 118245,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "3bf0e5c6f52dc5c401c60b4cefdf704b831f544303e31bd3fc476f81ca4ce44c",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "villagerenhanced",
+							"version": "0.13.0",
+							"name": "Villager Enhanced",
+							"description": "A mod aimed to enhance Villager interactions.",
+							"minecraft": "[26.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "439171c52a537f76154e54f52ae211bb437ded5b33218d1a780a6c65b969602a.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Diamond Apple"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 46,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Half a minute's warning, and a way to find the last one.\n\n### Added\n\n**You are warned before a raid, not during it**\n\n- A raid does not simply begin. Carrying Bad Omen into a village starts a **thirty second**\n  countdown, and only then does the raid break. Nothing in the game tells you this is happening.\n  Now it does.\n\n  > *An omen hangs over the village. It breaks in 30 seconds.*\n\n- You are also told when the raid starts, and whether the village held.\n- Deliberately three messages and no more. A raid runs for minutes, and a line per wave turns a\n  warning into a running commentary.\n\n**Villagers react to it**\n\n- Walk into a village carrying an omen and they are afraid of *you*.\n- They say something different while a raid is coming, while it is happening, and once it is won.\n- This does not depend on the notification setting. Turning off chat messages asks for less\n  noise, not for villagers to ignore an attack.\n\n**Ringing the bell lights up the raiders**\n\n- The last raider spawning badly and getting stuck out of sight is the thing that drags a raid\n  out. Ring a bell during one and every raider in it glows for thirty seconds — **at any\n  distance**, through walls and rock.\n- Vanilla technically does this already, for three seconds, within 48 blocks, and only if a\n  raider is already within 32 — which is the raider you had already found.\n- The bell also tells you how many are left, which is the part that still helps when a raider is\n  too far away to be drawn at all.\n- Adjustable, or off, under **Raids** in the settings.\n\n### Notes\n\n- No protocol change; 0.13.0 talks to 0.12.0 clients and servers.\n- Requires Minecraft 26.2 and NeoForge 26.2.0.48-beta, as before.\n- Zombie sieges are deliberately not announced. The game gives no signal until a second or two\n  before the zombies arrive, and a warning that lands with the thing it warns about is not one.\n- Existing worlds need nothing."
+		},
+		{
+			"tag": "v0.12.0",
+			"published": "2026-08-16T18:33:29Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 517096475,
+					"name": "villagerenhanced-26.2-0.12.0.jar",
+					"url": "https://github.com/TheMrPuffin/villager-enhanced/releases/download/v0.12.0/villagerenhanced-26.2-0.12.0.jar",
+					"size": 109867,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "dbe55243c93cfa561327b543db267684bc0b8590a14b10f4c73081e3a1d3b12a",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "villagerenhanced",
+							"version": "0.12.0",
+							"name": "Villager Enhanced",
+							"description": "A mod aimed to enhance Villager interactions.",
+							"minecraft": "[26.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "439171c52a537f76154e54f52ae211bb437ded5b33218d1a780a6c65b969602a.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Diamond Apple"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 43,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Why your village stopped growing.\n\n### Added\n\n**\"Do you ever think you'll start a family?\"**\n\n- A new question under **Ask about…**, for villagers who know you well enough to answer.\n- They tell you whether they would, **and what is stopping them** — which is the useful part.\n  Minecraft has always had two separate requirements for a villager to breed, and has never\n  mentioned either: enough food, and a spare bed for the child. A village that has quietly\n  stopped growing is usually missing one of them, and nothing on screen ever says so.\n\n  > *I'd like to, and I've food enough put by for it.*\n  > *But there's nowhere to put a child — not a spare bed in the whole village.*\n\n- Also covers children, and anyone who has recently had one and would like a moment's peace.\n- The bed check matches the game's own: the same search radius, and a bed walled off where they\n  cannot reach it does not count. Asking never claims a bed — only an actual birth does that.\n\n**Gifts a villager can use are kept, not swallowed**\n\n- Give a villager food or seeds and it goes **into their inventory** instead of vanishing.\n  Villagers live off that inventory: they eat from it, plant from it, hand food to villagers who\n  want to breed, and throw the surplus to their neighbours.\n- So three bread now genuinely changes the answer to the question above. Give it to someone who\n  just told you they have nothing put by, and ask again.\n- You can see it afterwards under **\"What are you carrying?\"**.\n- Only things they would actually use are kept — a villager's inventory is eight slots, and\n  stuffing it with emeralds would stop a farmer collecting their own harvest. Everything else is\n  accepted as a gesture and consumed, exactly as before, and improves their opinion of you either\n  way.\n\n### Notes\n\n- **Network protocol version raised to `9`. Clients and servers must both be on 0.12.0.**\n- Requires Minecraft 26.2 and NeoForge 26.2.0.48-beta, as before.\n- Existing worlds need nothing."
+		},
+		{
+			"tag": "v0.11.0",
+			"published": "2026-08-16T17:54:22Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 517064520,
+					"name": "villagerenhanced-26.2-0.11.0.jar",
+					"url": "https://github.com/TheMrPuffin/villager-enhanced/releases/download/v0.11.0/villagerenhanced-26.2-0.11.0.jar",
+					"size": 106317,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "81f96ec2b4a2d7ee69bfa21a092a18e0572a9c1fdf94b535ff0dba9636c79037",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "villagerenhanced",
+							"version": "0.11.0",
+							"name": "Villager Enhanced",
+							"description": "A mod aimed to enhance Villager interactions.",
+							"minecraft": "[26.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "439171c52a537f76154e54f52ae211bb437ded5b33218d1a780a6c65b969602a.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Diamond Apple"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 42,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Teach a villager their trade.\n\n### Added\n\n**The diamond apple**\n\n- A new item: eight diamonds around a golden apple.\n- Offer one to a villager in conversation — the same **\"Offer what you're holding\"** you already\n  use for gifts — and they gain a **trade level**. New stock, better prices, one step nearer\n  mastering their craft. Four apples take someone from Novice to Master.\n- Offer one to a **nitwit** and they stop being a nitwit. They become an ordinary unemployed\n  villager, free to claim a workstation and take up a trade like anyone else — something vanilla\n  never allows. Have a job site ready; they will go looking.\n- **They will only accept one from someone who already trusts you.** Anyone else hands it back\n  and says why, rather than quietly eating your diamonds. The same goes for a villager who has\n  already mastered their trade, or has no trade to better yet — three different refusals, each\n  said out loud.\n- A villager who accepts one tells you what changed, rather than a number in the corner quietly\n  ticking over.\n- It is also **edible**, worth twice a golden apple: 8 hunger, Regeneration II for ten seconds\n  and Absorption for four minutes.\n\n### Notes\n\n- No protocol change; 0.11.0 talks to 0.10.0 clients and servers.\n- Requires Minecraft 26.2 and NeoForge 26.2.0.48-beta, as before.\n- The recipe is a datapack inside the mod jar, so your own datapack can override or disable it.\n- Existing worlds need nothing."
+		},
+		{
+			"tag": "v0.10.0",
+			"published": "2026-08-10T20:33:29Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 509230573,
+					"name": "villagerenhanced-26.2-0.10.0.jar",
+					"url": "https://github.com/TheMrPuffin/villager-enhanced/releases/download/v0.10.0/villagerenhanced-26.2-0.10.0.jar",
+					"size": 97477,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "71e981680da981cc2e1da1b3bc173fd4451bd694f2ceac8f4fde308123374590",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "villagerenhanced",
+							"version": "0.10.0",
+							"name": "Villager Enhanced",
+							"description": "A mod aimed to enhance Villager interactions.",
+							"minecraft": "[26.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "439171c52a537f76154e54f52ae211bb437ded5b33218d1a780a6c65b969602a.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 40,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "You can build them a bell.\n\n### Added\n\n**A crafting recipe for the bell**\n\n- Minecraft has never had one. A bell can only be found in a village that generated with it, so a\n  village you built yourself has no way to get one — and the bell is not decoration. It is the\n  meeting point villagers gather at, and gathering is how they pass opinions to one another.\n  Every reputation, rumour and price this mod shows you is read from that gossip, so a\n  bell-less village runs the whole thing at a fraction of strength with nothing on screen to say\n  why.\n- Six stone, one stick and a gold block, arranged as a bell with an open mouth:\n\n  ```\n  stone  stick  stone\n  stone  gold   stone\n  stone         stone\n  ```\n\n- Nine gold ingots is deliberate. The bell is the centre of a working village, and it should\n  cost like it.\n- Appears in the recipe book as soon as you have gold or stone, so you find out it exists at the\n  point it becomes useful.\n\n### Notes\n\n- No protocol change; 0.10.0 talks to 0.9.0 clients and servers.\n- Requires Minecraft 26.2 and NeoForge 26.2.0.48-beta, as before.\n- The recipe is a datapack inside the mod jar, so a datapack of your own can override or disable\n  it in the usual way.\n- Nothing about existing bells changes, and no other vanilla recipe is touched."
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "A NeoForge mod that turns Minecraft's villagers from vending machines into people.",
+	"pictures": [
+		"docs/images/bell-recipe.png",
+		"docs/images/diamond-apple-recipe.png",
+		"docs/images/gossip.png",
+		"docs/images/greeting.png",
+		"docs/images/regards.png"
+	],
+	"picturesChecked": "2026-11-01T03:45:44.080Z",
+	"history": 1
+}

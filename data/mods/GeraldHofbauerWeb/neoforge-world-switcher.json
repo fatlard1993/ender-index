@@ -1,0 +1,254 @@
+{
+	"repo": "GeraldHofbauerWeb/neoforge-world-switcher",
+	"host": "github",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-07-02T18:56:53Z",
+	"pushed": "2026-09-17T22:27:15Z",
+	"releases": [
+		{
+			"tag": "v1.5.2",
+			"published": "2026-09-17T22:35:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 571291976,
+					"name": "worldswitcher-1.5.2.jar",
+					"url": "https://github.com/GeraldHofbauerWeb/neoforge-world-switcher/releases/download/v1.5.2/worldswitcher-1.5.2.jar",
+					"size": 223849,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "eb8a9f2592da5648836667e127c03e7a376d16c3606876823fcc54d425c0afac",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "worldswitcher",
+							"version": "1.5.2",
+							"name": "World Switcher",
+							"description": "Server-side-only Multiverse-style world manager: switch worlds with /ws, import and manage worlds with /wsc, with per-player per-world inventories.",
+							"minecraft": "[1.21,1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "596528087066719114cf91bef8613ea69584f0b40ad60c1d06db7cd0e0911987.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 52,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## World Switcher v1.5.2\n\n### Added\n- **Respawn-Punkt pro Welt** (`perWorldRespawnPoint`, standardmäßig an). Das Bett bzw. der\n  Respawn-Anker gehört jetzt zum Weltzustand wie das Inventar: Jede Welt merkt sich ihr eigenes.\n  Bisher gab es genau **einen** globalen Respawn-Punkt — wer in Welt A geschlafen hatte und in\n  Welt B starb, wurde aus B herausgerissen und landete in A; ohne Bett schickte Vanilla ihn\n  ersatzweise immer in die **Overworld**. Beides ist behoben:\n  - Der gespeicherte Respawn-Punkt wandert beim Weltwechsel mit dem restlichen Zustand mit.\n  - Ein Tod ohne Bett in der aktuellen Welt führt zum **Spawn dieser Welt**, nicht in die Overworld.\n    Die „Kein Respawn-Block\"-Meldung bleibt erhalten, damit der Client weiterhin erklärt, warum das\n    Bett nicht funktioniert hat.\n  - Welten in derselben Gruppe teilen sich ein Bett, genau wie sie sich ein Inventar teilen — die\n    Vanilla-Dimensionen sind so eine Gruppe, ein Tod im Nether führt also weiterhin zum\n    Overworld-Bett.\n  - `perWorldRespawnPoint = false` stellt das Vanilla-Verhalten wieder her (ein globaler\n    Respawn-Punkt). Ohne per-Welt-Zustand (`separateInventories = false`) gibt es nichts zu\n    speichern, dort ist die Option wirkungslos.\n\n### Changed\n- `/wsc player state copy|move|swap` lässt den Respawn-Punkt in seiner Welt zurück, so wie schon\n  Position und Dimension. Ein mitgewandertes Bett hätte den Spieler beim nächsten Tod aus der Welt\n  gezogen, in die sein Zustand gerade verschoben wurde.\n\n### 🚀 Installation\n1. Download the jar file\n2. Place it in your server's `mods` folder (server-side only — clients don't need it)\n3. Make sure the server runs NeoForge for Minecraft 1.21.1\n\n### 🔧 Configuration\nSee the [README](https://github.com/GeraldHofbauerWeb/neoforge-world-switcher/blob/main/README.md)"
+		},
+		{
+			"tag": "v1.5.1",
+			"published": "2026-09-04T14:57:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 544490454,
+					"name": "worldswitcher-1.5.1.jar",
+					"url": "https://github.com/GeraldHofbauerWeb/neoforge-world-switcher/releases/download/v1.5.1/worldswitcher-1.5.1.jar",
+					"size": 222156,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "9cbbfab4ea8f1de3344a1587096fe55d69397c6e843036cf7d8f58d9553ef64a",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "worldswitcher",
+							"version": "1.5.1",
+							"name": "World Switcher",
+							"description": "Server-side-only Multiverse-style world manager: switch worlds with /ws, import and manage worlds with /wsc, with per-player per-world inventories.",
+							"minecraft": "[1.21,1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "596528087066719114cf91bef8613ea69584f0b40ad60c1d06db7cd0e0911987.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 52,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## World Switcher v1.5.1\n\n### Fixed\n- **`default` wird in `/wsc world …` akzeptiert, wo es sinnvoll ist.** `default` ist der Name der\n  Vanilla-Gruppe (Overworld/Nether/End) und hat keinen `WorldEntry` — `/wsc world gamemode default\n  creative` und `/wsc world info default` scheiterten deshalb an `Unknown world: default`, während\n  `/ws default` und `/wsc player state … default` längst funktionierten. Jetzt einheitlich:\n  - `world gamemode default <modus> [forced]` und `world info default` funktionieren. Die\n    Gamemode-Policy der Default-Gruppe liegt in der `WorldRegistry` selbst, da es keinen\n    `WorldEntry` gibt, in den sie passen würde.\n  - `world gamerule default …` und `world difficulty default …` zielen auf die Overworld — damit\n    lassen sie sich auch aus einer anderen Welt heraus setzen, nicht nur vor Ort.\n  - `world access default` wird bewusst **abgelehnt**, mit Begründung: die Default-Welt ist das\n    Ziel, in das gesperrte Spieler geschickt werden, sie muss erreichbar bleiben.\n  - `world rename|load|unload|delete default` und `group set|unset default` nennen jetzt den\n    echten Grund statt `Unknown world: default`.\n- **Erzwungene Gamemodes greifen jetzt zuverlässig beim Weltwechsel.** Ein Weltwechsel stellt den\n  gespeicherten Zustand — inklusive des gemerkten Gamemodes — über mehrere Handler innerhalb\n  desselben Ticks wieder her. Die Policy wurde bisher mittendrin angewendet und konnte danach\n  wieder überschrieben werden. Sie läuft jetzt am Tick-Ende und hat damit das letzte Wort,\n  unabhängig davon, welcher Handler zuletzt lief; der Modus steht einen Tick später fest.\n- `/wsc help` listet `config playerdata list` sowie `confirm`/`cancel` — beide waren dokumentiert\n  und tab-vervollständigbar, fehlten aber in der Hilfe, die Spieler tatsächlich sehen.\n\n### 🚀 Installation\n1. Download the jar file\n2. Place it in your server's `mods` folder (server-side only — clients don't need it)\n3. Make sure the server runs NeoForge for Minecraft 1.21.1\n\n### 🔧 Configuration\nSee the [README](https://github.com/GeraldHofbauerWeb/neoforge-world-switcher/blob/main/README.md)"
+		},
+		{
+			"tag": "v1.5.0",
+			"published": "2026-09-04T13:44:13Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 544400951,
+					"name": "worldswitcher-1.5.0.jar",
+					"url": "https://github.com/GeraldHofbauerWeb/neoforge-world-switcher/releases/download/v1.5.0/worldswitcher-1.5.0.jar",
+					"size": 218663,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "2edc77820fdbb76be3d886726f639b5d117b4aebc45214c4aecb2707399e7a8e",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "worldswitcher",
+							"version": "1.5.0",
+							"name": "World Switcher",
+							"description": "Server-side-only Multiverse-style world manager: switch worlds with /ws, import and manage worlds with /wsc, with per-player per-world inventories.",
+							"minecraft": "[1.21,1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "596528087066719114cf91bef8613ea69584f0b40ad60c1d06db7cd0e0911987.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 52,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## World Switcher v1.5.0\n\n### Added\n- **Konfigurierbare modded Player-Daten** — statt jeden Mod einzeln zu unterstützen, gibt es jetzt\n  eine generierte, kommentierte Datei `<world-save>/serverconfig/worldswitcher-playerdata.toml`.\n  Sie listet **jedes** auf dem Server gefundene Stück Spielerdaten mit besitzendem Mod und\n  Beschreibung auf, jeweils mit einem einfachen `true` (pro Welt) / `false` (global).\n  Nicht gelistete Keys sind pro Welt. Die Datei wird bei jedem Serverstart aufgefrischt:\n  Entscheidungen bleiben erhalten, Kommentare werden erneuert, neue Keys angehängt.\n  Beschreibungen kommen aus einer kuratierten Liste im Jar, dem Mod-Anzeigenamen aus der\n  ModList und einer Heuristik über die Form der gespeicherten NBT-Daten („looks like an\n  inventory (24 item stacks found)\") — Attachment-Typen haben von sich aus **kein** Label,\n  das Spiel liefert nur die ID.\n- **Bridge-SPI für Mods mit eigenem Storage** — Mods, die Spielerdaten weder als NeoForge-Attachment\n  noch im Persistent-NBT ablegen, sind generisch nicht erreichbar. Erste Implementierung:\n  **Cosmetic Armor Reworked**, das seine Slots in eigene `playerdata/<uuid>.cosarmor`-Dateien\n  schreibt und deshalb bisher weltübergreifend blieb. Dependency-frei über Reflection; ohne den\n  Mod inaktiv, ohne Logspam.\n- **Echte benannte Weltengruppen** (`/wsc group list|info|set|unset`) — bisher konnte eine Welt nur\n  mit `default` teilen. Jetzt lassen sich beliebig viele Welten in eine gemeinsame Gruppe legen;\n  Welten in einer Gruppe teilen sich **einen** Spielerzustand. Das ist auch die Antwort auf\n  „Welten synchron halten\": eine Gruppe statt zwei ständig abgeglichener Zustände.\n  `shareinventory` wird automatisch als Gruppe `default` migriert.\n- **Gamemode pro Welt** (`/wsc world gamemode <welt> [none|<modus> [forced]]`) — bisher behielt man\n  beim Erstbesuch einfach seinen aktuellen Modus (`PlayerSnapshot.applyFresh` fasst den Gamemode\n  bewusst nicht an). Jetzt kann eine Welt einen Modus vorgeben, in zwei Varianten: **default**\n  setzt ihn nur beim Erstbesuch der Inventargruppe, danach gilt wieder der pro Welt gemerkte Modus\n  des Spielers („das ist die Creative-Welt\"); **forced** setzt ihn bei jedem Betreten\n  („hier bleibt jeder im Adventure-Modus\") und greift beim Setzen sofort für alle, die schon drin\n  stehen. Durchgesetzt wird beim Betreten, nicht laufend. Ohne per-Welt-Zustand\n  (`separateInventories = false`) gibt es keinen gemerkten Modus, den ein Default setzen könnte —\n  dort wirkt nur `forced`, worauf der Befehl auch hinweist.\n- **Zugangsbeschränkte Welten** (`/wsc world access <welt> [0-4]`) — Mindest-Permission-Level pro\n  Welt, Default `0` (alle). Geprüft bei `/ws`, bei Portalen, die in die Welt führen, und beim\n  Login: wer sich in einer inzwischen gesperrten Welt einloggt, wird mit seinem Default-Zustand in\n  die Standardwelt versetzt (dieselbe Reconcile-Logik wie bei entladenen Welten). Gesperrte Welten\n  verschwinden aus der `/ws`-Tab-Completion und aus der `/ws`-Liste für Spieler ohne Zugang.\n  `/wsc player tp` umgeht die Sperre bewusst — der Befehl ist ohnehin OP-gated, und jemanden\n  hineinzusetzen ist eine bewusste Admin-Entscheidung. Beim Setzen eines Levels werden Spieler, die\n  drin stehen und es nicht haben, nach Rückfrage in die Standardwelt geholt.\n  ⚠️ Vanilla kennt keinen Befehl, um einzelne Level zu vergeben: `/op` vergibt immer\n  `op-permission-level` aus der `server.properties` (Default `4`). Auf einem Server ohne\n  Permission-Mod sind praktisch nur `0` und „≥ 1\" unterscheidbar.\n- **Spielerzustand zwischen Welten übertragen** (`/wsc player state show|copy|move|swap|clear`) —\n  pro Spieler, auch offline (der Store ist UUID-basiert). Position und Dimension wandern bewusst\n  **nicht** mit; alles andere schon, inklusive des kompletten modded States. Steht der Spieler\n  online in der Zielgruppe, wird der neue Zustand sofort angewendet, ohne Relog.\n\n### Changed\n\n..."
+		},
+		{
+			"tag": "v1.4.0",
+			"published": "2026-07-19T16:57:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 482568138,
+					"name": "worldswitcher-1.4.0.jar",
+					"url": "https://github.com/GeraldHofbauerWeb/neoforge-world-switcher/releases/download/v1.4.0/worldswitcher-1.4.0.jar",
+					"size": 153424,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "f2875b3fb1aec4c3df26ebb2ac851c223921ca0bb0a65386cd05cadf3e1035e5",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "worldswitcher",
+							"version": "1.4.0",
+							"name": "World Switcher",
+							"description": "Server-side-only Multiverse-style world manager: switch worlds with /ws, import and manage worlds with /wsc, with per-player per-world inventories.",
+							"minecraft": "[1.21,1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "596528087066719114cf91bef8613ea69584f0b40ad60c1d06db7cd0e0911987.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 37,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## World Switcher v1.4.0\n\n### Added\n- **Command-Hooks** (`enableCommandHooks`, Default an): Admins können in\n  `serverconfig/worldswitcher-hooks.json` pro Welt und global Befehlslisten hinterlegen, die\n  automatisch bei drei Welt-Events laufen — `firstPlayerJoin` (Welt geht 0 → 1 Spieler),\n  `lastPlayerLeave` (1 → 0) und `playerMoved` (ein Spieler wechselt die Welt). In jedem Befehl\n  werden `{{worldName}}`, `{{worldId}}`, `{{playerName}}` und `{{playerUuid}}` ersetzt. Welt-Identität\n  folgt der World-Switcher-Gruppierung (Overworld/Nether/End = eine Welt `default`, jede verwaltete\n  Welt eigen; ein Overworld→Nether-Portal zählt nicht als Wechsel). Globale Hooks laufen vor den\n  Welt-Hooks. Jeder Hook läuft wahlweise als Server (`as: server`, OP 4, Ausgabe unterdrückt, an\n  der Welt positioniert) oder als auslösender Spieler (`as: player`); ohne Angabe greift\n  `hookDefaultRunAs` (Default `server`). Fehlerhafte Befehle werden geloggt und unterbrechen den\n  Wechsel/Login/Logout nie. Eine kommentierte Beispiel-Datei wird beim ersten Start erzeugt; mit\n  `/wsc hooks reload` lässt sich die Datei live neu laden (`/wsc hooks status` zeigt die Zählung).\n- **Klickbare Switch-Ankündigung** (`announceSwitches`, Default an): wechselt ein Spieler die\n  Welt (`/ws` oder `/wsc tp`), sehen alle anderen Online-Spieler eine Chat-Meldung „<Spieler>\n  switched to <Welt>\" — der Weltname ist ein klickbarer `/ws <welt>`-Link, sodass sie mit einem\n  Klick nachjoinen können. Über `announceSwitches = false` abschaltbar.\n- **Geteiltes Inventar pro Welt** (`/wsc shareinventory <world> [true|false]`): eine Welt kann\n  als „keep-inventory\" markiert werden — sie nutzt dann die `default`-Inventargruppe statt einer\n  eigenen, d. h. Spieler behalten beim Betreten ihre Default-Welt-Items (kein separates\n  Welt-Inventar). Nur der Spielerzustand wird geteilt — Gamerules, Zeit, Wetter und Difficulty\n  bleiben pro Welt. Umschalten während Spieler drin sind gruppiert sie an Ort und Stelle um (der\n  vorherige Zustand bleibt für ein Zurückschalten erhalten; modded Client-HUDs wie Curios können\n  bis zum nächsten Relog nachhinken). `/wsc list` markiert solche Welten mit `keep-inv`, `/wsc\n  info` zeigt den Status. (Erster Schritt Richtung frei konfigurierbarer Weltgruppen.)\n### Changed\n- `persistentDataExcludes` ist jetzt standardmäßig leer (die `WaystonesData`-Ausnahme brachte\n  in der Praxis nichts — Waystones verhalten sich ohnehin pro Welt).\n\n### 🚀 Installation\n1. Download the jar file\n2. Place it in your server's `mods` folder (server-side only — clients don't need it)\n3. Make sure the server runs NeoForge for Minecraft 1.21.1\n\n### 🔧 Configuration\nSee the [README](https://github.com/Gerry3010/neoforge-world-switcher/blob/main/README.md)"
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-07-03T06:15:12Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 465105854,
+					"name": "worldswitcher-1.2.0.jar",
+					"url": "https://github.com/GeraldHofbauerWeb/neoforge-world-switcher/releases/download/v1.2.0/worldswitcher-1.2.0.jar",
+					"size": 133930,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "88525454576b58b3612c87255d0e8c1064194630fa30c43e77717f6107896cee",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "worldswitcher",
+							"version": "1.2.0",
+							"name": "World Switcher",
+							"description": "Server-side-only Multiverse-style world manager: switch worlds with /ws, import and manage worlds with /wsc, with per-player per-world inventories.",
+							"minecraft": "[1.21,1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "596528087066719114cf91bef8613ea69584f0b40ad60c1d06db7cd0e0911987.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 31,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## World Switcher v1.2.0\n\n### Added\n- **Modded Spielerstatus pro Welt** (Teil von `separateInventories`): drei Mechanismen decken\n  alles ab, was Mods am Spieler speichern — ohne Mod-Abhängigkeiten:\n  - **NeoForge-Data-Attachments** (`swapModAttachments`, Default an): z. B. **Curios-Slots**\n    (Charm/Ring/Necklace/… inkl. Elytra-Slot und getragenem Toolbelt) wechseln pro Welt.\n    Ausnahmen über `attachmentExcludes`.\n  - **Persistent-Data** (`swapPersistentData`, Default an): Spieler-NBT unter `NeoForgeData`;\n    einzelne Keys per `persistentDataExcludes` ausnehmbar (Default: `WaystonesData`).\n  - **Tough As Nails** (`swapToughAsNails`, Default an): Durst + Temperatur pro Welt\n    (per Reflection über die TAN-API; ohne TAN wirkungslos).\n- **Difficulty pro Welt** (`perWorldDifficulty`, Default an): `/difficulty` wirkt in einer\n  verwalteten Welt nur auf diese (inkl. Peaceful-Despawn, Mob-Spawnregeln, Regional-Difficulty);\n  neu `/wsc difficulty <world> [value]`. Importe übernehmen die Difficulty aus der `level.dat`,\n  der Client sieht beim Weltwechsel automatisch den richtigen Wert.\n- **Sicherer Relog nach Welt-Entladung**: Wer offline in einer inzwischen entladenen/gelöschten\n  Welt war, wird beim Login nicht mehr an den alten Koordinaten in der Overworld abgesetzt\n  (Erstickungs-/Sturzgefahr), sondern an die letzte Default-Position bzw. den Spawn teleportiert.\n### Fixed\n- Modded Spielerdaten (z. B. Curios) wurden beim Weltwechsel bisher gar nicht getrennt und\n  „lecken\" zwischen Welten — jetzt Teil des Per-Welt-Snapshots (s. o.).\n\n### 🚀 Installation\n1. Download the jar file\n2. Place it in your server's `mods` folder (server-side only — clients don't need it)\n3. Make sure the server runs NeoForge for Minecraft 1.21.1\n\n### 🔧 Configuration\nSee the [README](https://github.com/Gerry3010/neoforge-world-switcher/blob/main/README.md)"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "Server-side-only NeoForge 1.21.1 mod for running multiple worlds on one server, Multiverse-style: switch between them with a command, import existing world saves from a folder, and keep a separate...",
+	"funding": [],
+	"fundingChecked": "2026-11-01T03:45:44.080Z",
+	"pictures": [],
+	"picturesChecked": "2026-11-01T03:45:44.080Z",
+	"contributors": {
+		"commits": 0,
+		"more": 0,
+		"people": []
+	},
+	"contributorsChecked": "2026-11-01T03:45:44.080Z",
+	"history": 1
+}

@@ -1,0 +1,237 @@
+{
+	"repo": "0xNull12/NoSlimeSuperflatMod",
+	"host": "github",
+	"description": "This mod is a simplified alternative to Collective's “Superflat World No Slimes” mod, designed specifically to be lightweight and highly compatible with other versions, and with the potential to be ported to version 1.1",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-05-25T20:13:39Z",
+	"pushed": "2026-08-15T09:13:35Z",
+	"releases": [
+		{
+			"tag": "v1.4.2",
+			"published": "2026-06-28T04:19:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 459976749,
+					"name": "NoSlimeSuperflat-1.12.2-1.4.2.jar",
+					"url": "https://github.com/0xNull12/NoSlimeSuperflatMod/releases/download/v1.4.2/NoSlimeSuperflat-1.12.2-1.4.2.jar",
+					"size": 13005,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "8b901e105e57d417a4019520eadcd365493179fed418303db60535c18e86a3cd",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.4.2 - Performance Update & Build System Migration\n\nThis release focuses on significant performance optimizations, thread-safety improvements, and migrating to a modern build system (RetroFuturaGradle 2.0.2) for better stability and faster builds\n\n---\n\n## New Features\n\n### Spawn Control Options\n- **Block Magma Cubes**: New option to also block magma cubes in Superflat worlds\n- **Underground-Only Blocking**: Option to block slimes only when spawning below a configurable Y level\n- **Configurable Y Level**: Set the maximum Y level for slime blocking (default: Y=40)\n- **Surface Spawn Allowance**: Option to allow slimes to spawn on the surface (Y > 60) in Superflat worlds\n\n### Enhanced Command System\n- **Improved Statistics Display**: Now shows all current configuration options\n- **Better Formatting**: Color-coded output for improved readability\n- **Detailed Configuration Info**: Shows spawn control settings, blacklist size, and debug status\n\n---\n\n## Performance Optimizations\n\n### Early-Exit Pattern Improvements\n- **World Type Check First**: Now checks if world is Superflat BEFORE processing entity type (cheaper operation)\n- **Reduced CPU Overhead**: Processing time reduced to <0.05ms per tick (down from <0.1ms)\n- **Eliminated Costly Operations**: Removed `getEntitiesWithinAABB()` call that caused lag spikes\n\n### World Type Caching\n- **Dimension-Based Cache**: Caches world type checks per dimension using `ConcurrentHashMap`\n- **Automatic Cache Clearing**: Cache is cleared when configuration is reloaded\n- **Configurable**: Can be disabled via `cacheWorldTypeChecks` option\n\n### Thread-Safety Enhancements\n- **Volatile Configuration Variables**: All config values now use `volatile` for thread-safe reads\n- **Concurrent Blacklist**: Changed from `List<String>` to `Set<String>` using `ConcurrentHashMap.newKeySet()`\n- **O(1) Blacklist Lookups**: Blacklist checks are now constant time instead of linear search\n- **Atomic Statistics**: `AtomicLong` counters remain thread-safe for concurrent access\n\n---\n\n## Technical Changes\n\n### Build System Migration\n- **Migrated to RetroFuturaGradle 2.0.2**: Replaced ForgeGradle with GTNewHorizons' improved fork\n- **Gradle 9 Syntax**: Updated to modern Gradle syntax (`tasks.named()`, `tasks.register()`)\n- **Java 8 Toolchain**: Explicit Java 8 toolchain configuration\n- **Improved Build Verification**: Enhanced build verification task with detailed output\n- **Access Transformer Support**: Proper AT configuration for RFG\n\n### Code Improvements\n- **Separated Spawn Logic**: Extracted `shouldBlockSlimeSpawn()` method for cleaner code\n- **Better Null Handling**: Added comprehensive null checks throughout event handler\n- **Improved Debug Logging**: Now includes spawn coordinates in debug messages\n- **Case-Insensitive Blacklist**: Automatic lowercase conversion for all entity names\n\n### Configuration Categories\n- **Reorganized Config**: Split into logical categories (General, Spawn Control, Entities)\n- **Better Documentation**: Enhanced configuration comments and descriptions\n- **Runtime Reload**: Configuration can be reloaded without restarting the game\n\n---\n\n## Bug Fixes\n\n- **Fixed Potential Race Conditions**: Thread-safe configuration updates prevent crashes during reload\n- **Fixed Memory Leaks**: Eliminated object accumulation in event handlers\n- **Fixed Null Pointer Exceptions**: Added defensive null checks for world and entity objects\n- **Fixed Blacklist Case Sensitivity**: Entity names are now properly normalized\n- **Fixed Configuration Reload**: World cache is now properly cleared on reload\n\n---\n\n## Performance Comparison\n\n| Metric | v1.2.1 | v1.4.2 | Improvement |\n|--------|--------|--------|-------------|\n| CPU Overhead | <0.1ms/tick | <0.05ms/tick | **50% faster** |\n| Blacklist Lookup | O(n) | O(1) | **Instant** |\n| World Type Check | Every spawn | Cached | **~90% reduction** |\n| Memory Footprint | ~50KB | ~50KB | **Same** |\n| Thread Safety | Partial | Complete | **100% safe** |\n\n\n..."
+		},
+		{
+			"tag": "v1.4.1",
+			"published": "2026-06-23T00:24:29Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 455115166,
+					"name": "noslimesuperflat-fabric-1.4.1.jar",
+					"url": "https://github.com/0xNull12/NoSlimeSuperflatMod/releases/download/v1.4.1/noslimesuperflat-fabric-1.4.1.jar",
+					"size": 3974,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "a77a56a6fe7232ca84d9513ff256ddac4e615b7f1bf3f805f23096b73853397c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "noslimesuperflat",
+							"version": "1.4.1",
+							"name": "No Slime Superflat",
+							"description": "A lightweight, memory-efficient mod that prevents slimes from spawning in Superflat worlds",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 2,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.4.1 - Updated to Fabric 26.2\nThis update brings the mod to a more modern version (Fabric 26.2) and includes significant changes as almost all the logic code of the mod had to be rewritten\n\n#### Technical Changes\n\n**Build System:**\n- Updated to Minecraft 26.2 (latest stable release)\n- Upgraded Java requirement from 21 to 25\n- Updated Fabric Loader to 0.19.3\n- Updated Fabric API to latest compatible version\n- Migrated to Fabric Loom 1.17\n- Updated Gradle wrapper to 9.6.0\n- Removed mappings configuration (MC 26.2 is unobfuscated)\n- Implemented `splitEnvironmentSourceSets()` for better client/server separation\n\n**Code Changes:**\n- Updated Slime entity import to new package structure (`net.minecraft.world.entity.monster.cubemob.Slime`)\n- Replaced `FlatLevelSource` detection with `isFlatWorld()` API\n- Simplified world type detection logic\n- Removed unnecessary persistence checks\n- Optimized entity spawn event handling\n\n**Compatibility:**\n- Full compatibility with Minecraft 26.2\n- Compatible with Fabric Loader 0.19.3+\n- Requires Java 25 or higher\n- No longer requires Yarn or Mojang mappings\n\n#### Bug Fixes\n\n- Fixed entity detection for new MC 26.2 package structure\n- Resolved build configuration issues with unobfuscated Minecraft\n- Fixed world type detection for superflat worlds\n\n#### Requirements\n\n- **Minecraft:** 26.2\n- **Fabric Loader:** 0.19.3 or higher\n- **Java:** 25 or higher\n- **Fabric API:** Latest version for MC 26.2\n\n> **NOTE**:  The versions 1.12.2, 1.16.5, and 1.21.1 I will stop updating due to lack of time, maybe I will update it again, for example, 1.21.1 could work in any version of 1.21 and I could add one or another optimization\n\n**Full Changelog**: https://github.com/Onyx-i7/NoSlimeSuperflatMod/compare/v1.4.0...v1.4.1"
+		},
+		{
+			"tag": "v1.4.0",
+			"published": "2026-06-20T15:17:05Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 453050064,
+					"name": "noslimesuperflat-fabric-1.4.jar",
+					"url": "https://github.com/0xNull12/NoSlimeSuperflatMod/releases/download/v1.4.0/noslimesuperflat-fabric-1.4.jar",
+					"size": 4101,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "96835e195f4090f581930789abd851994b3af45c86757908a80d17302ec4e3ec",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "noslimesuperflat",
+							"version": "1.4",
+							"name": "No Slime Superflat",
+							"description": "A lightweight, memory-efficient mod that prevents slimes from spawning in Superflat worlds",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 2,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v1.4 - Updated to 1.21.1\n### Changes\n- The commands were removed to keep the mod updated to the new versions and because they were a bit unnecessary\n- Gradle updated to 8.8\n- ForgeGradle in `build.gradle` removed for obvious reasons\n- Updated to Fabric Loader 1.21.1\n\n> The issue with loading the mod in version 1.16.5 does not occur in this version and there are no present errors\n\n### Known bugs\nNone are free from them.\n\n### Code\nThe source code of the mod may be poorly optimized."
+		},
+		{
+			"tag": "v1.3.0",
+			"published": "2026-06-18T23:24:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 451665184,
+					"name": "NoSlimeSuperflat-1.16.5-1.3.0.jar",
+					"url": "https://github.com/0xNull12/NoSlimeSuperflatMod/releases/download/v1.3.0/NoSlimeSuperflat-1.16.5-1.3.0.jar",
+					"size": 10706,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "95488ab75a35929104cc13e1bd8edb89511cdfd7d34d58b8afb1315aeb86b401",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "noslimesuperflat",
+							"version": "1.3.0",
+							"name": "No Slime Superflat",
+							"description": "A lightweight, memory-efficient mod that prevents slimes from spawning in Superflat worlds.",
+							"minecraft": "[1.16.5,1.17)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 3,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v1.3.0 - Version update of Minecraft from 1.12.2 to 1.16.5 \n### Changes\n\n- The configuration was removed because it's the first time I've programd in versions higher than 1.13 and for now, I had to delete it\n- The mod was updated to version 1.16.5, leaving version 1.12.2 without any feature updates\n- The source code files, including the configuration, had to be deleted\n- Gradle updated to version 7.5.1\n- ForgeGradle updated to version 5.1\n\n### Known issues\n\nWhen entering the game, you will see this notice:\n\n<img width=\"854\" height=\"480\" alt=\"Captura de pantalla_2026-06-18_19-18-41\" src=\"https://github.com/user-attachments/assets/46ce0d42-40fd-4f36-a96e-1d00ff943179\" />\n\n\nBut it's nothing serious, the mod will still work."
+		},
+		{
+			"tag": "v1.2.1",
+			"published": "2026-05-29T23:49:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 433416978,
+					"name": "NoSlimeSuperflat-1.12.2-1.2.1.jar",
+					"url": "https://github.com/0xNull12/NoSlimeSuperflatMod/releases/download/v1.2.1/NoSlimeSuperflat-1.12.2-1.2.1.jar",
+					"size": 12741,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "07e05f6d719aa39a5d1c690c446bb1239f3fbd05356c131cf10f4f03cbda7f8f",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# No Slime Superflat Version 1.2.1 Improvements\n\n## Changes Made to the Mod\nThis new version of No Slime Superflat has some improvements. The configuration system is better now. It also has performance optimizations to stop memory leaks.. It has new features to make the user experience better. All of this is done without using APIs like Collective.\n\n## Main Features of the Mod\n\n### 1. Configuration Changes in Time\nThe mod now lets you change the configuration in real time. You do not need to restart Minecraft to see the changes. Here is how it works:\n- The mod can automatically detect changes you make to the settings from the GUI\n- It has a ConfigChangedEvent to listen for changes and apply the configuration\n- You can also manually reload the configuration using the `reloadConfig()` method\n- There is a command to reload the configuration in the game. You can use `/noslimesuperflat reload` to do this\n\n### 2. Statistics and Command System\n\n#### In-Game Command\nThere is a command `/noslimesuperflat` with subcommands:\n- You can use `/noslimesuperflat` or `/noslimesuperflat stats` to see the statistics.\n- You can use `/noslimesuperflat reload` to reload the configuration without restarting the game.\n\n#### Statistics Tracking\n\nThe mod tracks statistics in time. It keeps track of:\n- The total number of slimes blocked.\n- The number of checks performed.\n- The efficiency percentage calculation.\n\n#### API Access\n\nThere are methods to access the statistics programmatically:\n- `EventHandler.getSlimesBlocked()`\n- `EventHandler.getSpawnChecksPerformed()`\n- `EventHandler.resetStatistics()`\n\n### 3. Performance Optimizations\n\n#### World Type Check Cache\nBefore the mod checked if the world was Superflat every time a slime spawned. This was a problem. Now the mod uses a cache with a 5-second expiration. This reduces the number of `getTerrainType()` calls and it is memory-safe\n\n#### Thread-Safe Statistics\nThe mod uses AtomicLong counters for thread-safe operations. This means there is no synchronization which improves performance. It also prevents memory leaks because atomic operations do not create lock objects\n\n#### Performance Configurations\nThere are options in the \"performance\" category:\n\n1. **Optimized Spawn Checking** is enabled by default. It uses optimized algorithms for spawn verification. Reduces memory usage\n2. **Cache World Type Checks** is also enabled by default. It caches world type verifications. Has automatic expiration to prevent stale data\n\n### 4. Memory Leak Prevention\nThe mod has implemented measures to prevent memory leaks:\n\n1. **Private and thread-safe configuration**. The configuration is private and thread-safe to prevent direct access\n2. **Time-expiring cache**. The cache automatically invalidates after 5 seconds to prevent data from accumulating\n3. **Explicit cache clearing**. The `clearCache()` method is called when the configuration changes to prevent accumulation of state\n4. **No heavy dependencies**. The mod does not use APIs like Collective that can cause memory leaks\n5. **Efficient logger**. The logger is conditional. Prevents string accumulation in memory when debug is disabled\n6. **Atomic statistics counters**. The mod uses AtomicLong for lock-free counting, which is GC-friendly\n\n### 5. New Configuration Structure\nThe mod has a configuration structure:\n\n#### Category: General\n- `enableDebugLogging`: This enables logs for troubleshooting\n\n#### Category: Performance\n- `useOptimizedSpawnChecking`: This uses an optimized spawn checking algorithm\n- `cacheWorldTypeChecks`: This caches world type checks\n\n## Technical Changes Made\n\n### NoSlimeSuperflat.java\n- Added a listener for reload\n- Implemented a method to check if the world is Superflat with an optimized cache\n- Added thread-safe synchronization\n- Added a method to access the configuration safely\n- Updated the version to 1.2.1\n- Improved initialization logging\n\n### EventHandler.java\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"pictures": [],
+	"picturesChecked": "2026-11-01T03:45:44.080Z",
+	"contributors": {
+		"commits": 55,
+		"more": 0,
+		"people": [
+			{
+				"login": "0xNull12",
+				"commits": 55,
+				"name": "0xNull",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-11-01T03:45:44.080Z",
+	"history": 1
+}

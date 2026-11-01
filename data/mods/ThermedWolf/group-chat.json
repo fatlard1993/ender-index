@@ -1,0 +1,171 @@
+{
+	"repo": "ThermedWolf/group-chat",
+	"host": "github",
+	"description": "Group chat + offline mailbox for Minecraft servers, built for both Paper and Fabric. Create groups, DM offline players, GUI + commands.",
+	"stars": 0,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-09-17T05:12:02Z",
+	"pushed": "2026-10-23T14:33:57Z",
+	"releases": [
+		{
+			"tag": "v2.1.0",
+			"published": "2026-10-23T14:33:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 669392993,
+					"name": "groupchat-fabric-2.1.0.jar",
+					"url": "https://github.com/ThermedWolf/group-chat/releases/download/v2.1.0/groupchat-fabric-2.1.0.jar",
+					"size": 90035,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "3b4e3ea8115ed153a2c5679195a72da603e60a1cac6ea1f71141d1ae22b5278a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "groupchat",
+							"version": "2.1.0",
+							"name": "GroupChat",
+							"description": "Group chat with an offline mailbox.",
+							"minecraft": ">=26.3",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 32,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 669392987,
+					"name": "groupchat-paper-2.1.0.jar",
+					"url": "https://github.com/ThermedWolf/group-chat/releases/download/v2.1.0/groupchat-paper-2.1.0.jar",
+					"size": 112983,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "8e4293bc0e2cfab892ca8e127b57d3004e4555b7816e648af8826c295fcbf20b",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 52,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Version 2.1.0 — 2026-10-23\n\n## Added\n\n- `feat: server-wide announcements and automatic join messages`\n  - **`/announce [highlight] <message>`** — delivered live to every online player; queued in the mailbox of every known offline player (via `/unread` on next join). `highlight` adds on-screen emphasis on top of the chat line: subtitle-style title + level-up sound on Paper, action-bar overlay on Fabric. Admin-only: `groupchat.admin` (Paper, default op) / gamemaster permission level (Fabric). Console can send (scheduler-friendly). Feedback summarises live/queued/full-mailbox counts.\n  - Recipient set: every player who has joined since install, tracked in new `known-players.json` (`KnownPlayerStore`). Chosen over per-platform offline-player enumeration (Paper's `getOfflinePlayers()` has no Fabric equivalent) so behaviour is identical on both platforms.\n  - **`/joinmsg add|list|remove|clear|cooldown|preview`** — admin-configured messages shown to each player on join (max 10 × 300 chars), stored in `joinmessages.json` (`JoinMessageStore`). Per-player cooldown in minutes counts from the last actual show: `cooldown 30` → \"joins 3× within 30 minutes, sees the message once\". `0` = every join; nothing is tracked while no cooldown is set. Every subcommand works from console.\n  - **Message styling** (`MarkdownFormat`, core): Markdown/MiniMessage-style subset → legacy `§` codes, identical on both platforms. `**bold**`, `*italic*`, `__underline__`, `~~strike~~`, `||spoiler||`, `` `code` ``, all 16 colour tags (`<red>…</red>`, …), style tags (`<bold>`, `<italic>`, `<underlined>`, `<strikethrough>`, `<obfuscated>`, `<reset>` + short forms) with proper nesting (close re-applies still-open codes). Raw `§` in input stripped first; legacy `&`-codes keep working. Applies to announcements + join messages.\n  - **Platform bridge additions** (`PlatformBridge`): `getOnlinePlayerUuids()` and `sendHighlight(UUID, String)` (Paper: Adventure `Title` + `Sound.ENTITY_PLAYER_LEVELUP`; Fabric: `sendOverlayMessage`).\n  - **Mailbox message types** (`PendingMessage`): new `type` field (`group`/`dm`/`announcement`) with legacy-JSON fallback based on `context`; `/unread` renders announcement entries with the `[Announce]` tag.\n  - **GUI: Server Tools** (admin-only entry in the `/groupgui` main menu, command-block icon):\n    - **Announce** / **Announce (Highlighted)** — compose mode: the next chat message is sent as a server-wide announcement (plain or highlighted).\n    - **Join Messages** menu — lists configured join messages (click to remove), **Add join message** via compose mode, and a **Cooldown** dial cycled with left/right-click through presets 0/15/30/60/120/360/720/1440/10080 minutes.\n    - New `PlatformBridge.isAdmin(UUID)` drives visibility (Paper: `groupchat.admin`; Fabric: gamemaster level); click handlers re-check server-side so stale menus can't be used.\n    - `ComposeSession` gained compose targets (`ANNOUNCE`, `ANNOUNCE_HIGHLIGHT`, `JOIN_MESSAGE`) alongside the existing group/DM ones; `PickerMenu.ClickHandler` now receives the vanilla click button (needed for the cooldown dial).\n  - **Umbrella commands** — `/gc`, plus aliases `/groupchat` and `/gchat`: every GroupChat command (`group`, `gmsg`, `gmoffline`, `dm`, `unread`, `groupgui`, `announce`, `joinmsg`) works as a subcommand, so autocomplete doubles as command discovery. Paper: a dispatch executor delegates to the existing executors (labels preserved so usage strings read `/gc announce ...`); Fabric: the registration was refactored into per-command builders registered both standalone and under `/gc`, with `/groupchat`/`/gchat` as Brigadier redirects (the same alias pattern vanilla uses for `/xp` → `/experience`). `/gc` with no arguments prints the command list.\n\n## Fixed\n\n- Highlight sound on Paper now plays only for the receiving player (entity-targeted `playSound`) instead of everyone within earshot.\n\n..."
+		},
+		{
+			"tag": "v2.0.0",
+			"published": "2026-09-17T06:50:58Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 569654820,
+					"name": "groupchat-fabric-2.0.0.jar",
+					"url": "https://github.com/ThermedWolf/group-chat/releases/download/v2.0.0/groupchat-fabric-2.0.0.jar",
+					"size": 66795,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "53d09a53f5be8e7439e97c38153f89ec7938faf794e3ea7cbfac7807bbd9e289",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "groupchat",
+							"version": "2.0.0",
+							"name": "GroupChat",
+							"description": "Group chat with an offline mailbox.",
+							"minecraft": ">=26.3",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 25,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 569654821,
+					"name": "groupchat-paper-2.0.0.jar",
+					"url": "https://github.com/ThermedWolf/group-chat/releases/download/v2.0.0/groupchat-paper-2.0.0.jar",
+					"size": 81646,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "b40b02e1dfa71ea3826776b2c38e7ef3a9da021b77841d5dce3998285506a734",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 40,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\nAll notable changes to GroupChat will be documented in this file.\n\nThis project follows [Semantic Versioning](https://semver.org/). The initial public release (1.0) was published to Modrinth before this repository existed. The commits below constitute everything that shipped after that baseline.\n\n---\n\n## [2.0.0] - 2026-09-17\n\nSecond public release — same Paper + Fabric dual-target, now hardened, with group history and toggle-chat.\n\n> **Minecraft target:** 26.3 · **JDK:** 26 · **Fabric Loom:** 1.18.2 / Loader 0.19.5 / Fabric API 0.160.6+26.3 · **Paper API:** 26.3.build.8-alpha\n\n### Added\n\n- **Per-group message history (last 5)** — persisted in `history.json` per player per group (FIFO, oldest → newest with timestamps). View with flexible syntax (`b783312`, `24b397c`):\n  - `/group history` / `/group <group> history [1-5]` / `/group history <group> [1-5]`\n  - `/gmsg history [group] [1-5]` / `/gmsg <group> history [1-5]` (and `gm`/`gmoffline` aliases)\n  - `/gm history`, `/gmoffline history` — same\n  - Shorthand: if you are in exactly 1 group the group argument is optional (`inferSingleGroup`/`resolveGroupName`). `getGroupHistory` API added to `GroupChatService`; history is also written for every `sendGroupMessage*` call for **all** members (online and offline).\n  - New core types: `GroupHistoryStore`, `GroupHistoryEntry`, `ToggleSession` (`core/src/main/java/.../core/`).\n- **Toggle chat mode** — stay in a group's chat without prefixing every line (`24b397c`, `44a75a4`):\n  - `/group toggle` / `/group <group> toggle`\n  - `/gmsg toggle [group]` / `/gmsg <group> toggle` (and `gm`/`gmoffline` variants)\n  - Once enabled, every normal chat line is routed to the toggled group until `/group toggle` again, `cancel` in chat, or disconnect/quit (cleared via `QuitListener` on Paper and `DISCONNECT` on Fabric, `clearToggleOnDisconnect`). `ToggleSession` is in-memory only.\n  - Unified chat intercept (`ChatComposeListener` on Paper, `ServerMessageEvents.ALLOW_CHAT_MESSAGE` on Fabric) now handles both compose-mode and toggle-mode.\n- **Interactive selection when in multiple groups** (`44a75a4`, `920956d`):\n  - Running `/group toggle` or `/group history` (and `/gmsg toggle|history` etc.) without a group while in 2+ groups no longer fails — it enters a pending chat-selection: `You are part of multiple groups, type the name of one of the groups in chat to select it: <groups>`. Type the group name or `cancel`. Pending state is per-player, cleared on cancel/disconnect/explicit group choice. History variant preserves the requested count (e.g. `/group history 3` → pending → shows 3).\n  - Re-running `/group toggle <group>` while already pending toggles directly.\n- **Improved startup logging**:\n  - Fabric (`b7ac626`): logs absolute data folder on start (`GroupChat data folder: <abs>`) and `Loaded <n> groups from <abs>/groups.json`; broadcasts data folder.\n  - Paper (`e2c9d5e`): mirrors Fabric — `onEnable` now logs same via plugin logger (visible regardless of JUL level). Core adds `GroupManager.getGroupsFile()` and `GroupChatService.getTotalGroupCount()`/`getGroupsFile()`.\n\n### Fixed\n\n- **Fabric persistence after restart** (`b7ac626`): `server.getServerDirectory()/groupchat` resolved to a relative/ephemeral CWD on some launchers, so saves appeared lost after stop/rejoin. Switched canonical location to `FabricLoader.getInstance().getGameDir()/groupchat`, with migration from legacy `/world/config` paths. Logs absolute paths on load/save. Paper was unaffected (`plugins/GroupChat` was already absolute). (`GroupManager`, `GroupChatMod`)\n- **Paper parity logging** (`e2c9d5e`): `GroupChatPlugin` now reports data folder + loaded count like Fabric.\n\n### Security & Hardening\n\nFull audit from `4e4b774` — 10 findings fixed:\n\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"pictures": [
+		"assets/images/1.png",
+		"assets/images/2.png",
+		"assets/images/2026-07-14_17.36.42.png",
+		"assets/images/2026-07-14_17.37.51.png",
+		"assets/images/2026-07-14_17.38.47.png",
+		"assets/images/2026-07-14_17.41.30.png",
+		"assets/images/2026-07-14_17.44.30.png",
+		"assets/images/3.png",
+		"assets/images/4.png",
+		"assets/images/5.png"
+	],
+	"picturesChecked": "2026-11-01T03:45:44.080Z",
+	"history": 1
+}

@@ -1,0 +1,281 @@
+{
+	"repo": "LamaTheReal/Materia-Reborn",
+	"host": "github",
+	"stars": 2,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-07-16T16:36:35Z",
+	"pushed": "2026-08-03T22:03:19Z",
+	"releases": [
+		{
+			"tag": "0.3B",
+			"published": "2026-08-03T22:03:19Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 500579655,
+					"name": "Materia-Reborn-0.3B.jar",
+					"url": "https://github.com/LamaTheReal/Materia-Reborn/releases/download/0.3B/Materia-Reborn-0.3B.jar",
+					"size": 2283622,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "551bb796d12e900c3cf11919a974669b99274dd9a4bbfafd2ce02b5b4c69bf3b",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "materia_reborn",
+							"version": "0.3B",
+							"name": "Materia Reborn",
+							"description": "Collect Essence, analyze and unlock items, expand your Backpack and Furnace, and upgrade the Materia Table through powerful rituals.\n\nDiscord: https://discord.gg/4YmYJc8JTb",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"jei",
+								"jeresources"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Materia Reborn"
+							],
+							"block": [
+								"Deepslate Essence Ore",
+								"Liquid Essence",
+								"Materia Table",
+								"Materia Table II",
+								"Materia Table III",
+								"Materia Table IV"
+							],
+							"effect": [
+								"Essence Sight"
+							],
+							"item": [
+								"Deepslate Essence Ore",
+								"Essence",
+								"Essence Core",
+								"Essence Crystal",
+								"Essence Dust",
+								"Essence Plate",
+								"Upgrade Core Level 2",
+								"Upgrade Core Level 3",
+								"Upgrade Core Level 4"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 201,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"discord.gg": [
+								"com/materiareborn/client/ClientWorldWelcomeMessage.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Materia Reborn 0.3B Update\n\nThis update introduces automatic Essence calculation for Vanilla and modded items, expands the custom Essence configuration system, improves particles and mod information, and fixes several issues with KeepInventory and Essence Ore drops.\n\n## Added\n\n### Automatic Essence Calculation — Mod Support 🎉\n\n* Added optional automatic Essence-value calculation for Vanilla and modded items.\n* Automatic calculation is **disabled by default** and is currently considered a work in progress.\n* Supports crafting, furnace, cooking, and smithing recipes.\n* Recipe chains and modded recipe ingredients are calculated automatically.\n* Items are only calculated when **every required ingredient** already has a known Essence value.\n* Ingredient tags and recipes with multiple choices use the cheapest valid option.\n* Output amounts and crafting remainders, such as empty buckets, are included correctly.\n* Generated items automatically receive:\n\n  * A tier\n  * A Materia Table level\n  * An analysis requirement\n  * A sell value\n  * A purchase value\n* Circular recipes, unsafe items, and stonecutting recipes are ignored.\n* Manually configured values always override automatically calculated values.\n\n### Custom Essence Configuration\n\n* Added `config/materia_reborn/essence/Custom_Essence.json`.\n* Manual and automatically calculated items are stored separately.\n* Automatically generated entries are saved across restarts.\n* Custom and calculated items are fully integrated into the normal Essence catalogue.\n* Existing Essence values can be edited without replacing their tier or analysis requirement.\n\n### Commands\n###      **__This command must be enabled for mod support.__**\n\n*  `/materia calculate on`.\n\n  * Enables automatic Essence calculation.\n  * Automatic calculation is disabled by default.\n\n* Added `/materia calculate off`.\n\n  * Disables automatic calculation.\n  * Removes automatically generated entries.\n\n* Added `/materia reload all`.\n\n  * Recalculates all supported items.\n\n* Added `/materia reload vanilla`.\n\n  * Recalculates Vanilla items.\n\n* Added `/materia reload mod`.\n\n  * Recalculates modded items.\n\n* Added `/materia addItem <item> <essenceDefault> <tableTier> [analyze]`.\n\n  * `<item>` is required, for example: `minecraft:bedrock`\n  * `<essenceDefault>` is required, for example: `1000000`\n  * `<tableTier>` is required, for example: `4`\n  * `[analyze]` is optional, for example: `1`\n  * If the analysis requirement is omitted, the default value for the selected Materia Table level is used.\n\n* Added `/materia setEssence <item> <essenceDefault>`.\n\n  * Changes the Essence value of an item.\n\n* Improved `/materia getinfo <item>`.\n\n  * Now supports custom and automatically calculated items.\n  * Displays the item’s source, tier, Materia Table level, and enabled state.\n\n### World Welcome Message\n\n* Added a clickable Materia Reborn Discord message when entering a world or server for the first time.\n* The message is displayed only once per world or multiplayer server.\n* Previously visited worlds and servers are stored client-side.\n\n### Particles\n\n* Added **12 new 8×8 Essence glyph particle textures**.\n* The new particles are used by:\n\n  * Essence Ores\n  * Upgrade rituals\n  * Liquid Essence\n  * Other Materia effects\n\n### Mod Information\n\n* Updated the internal mod version to **0.3B**.\n* Added the official GitHub and Discord links.\n* Added the Materia Reborn logo to the Mods screen.\n* Changed the project license to **MIT**.\n* Added the MIT License directly to the mod JAR.\n\n## Changed\n\n### Particle System\n\n* Replaced the previous animated particles with randomly selected static Essence glyphs.\n* Liquid Essence now uses the shared Essence glyph particle system.\n* Removed the separate Liquid Essence surface particle type.\n\n## Fixed\n\n### KeepInventory\n\n* Fixed KeepInventory not working when a Materia Table was destroyed by an explosion.\n* Materia Tables now drop as preserved BlockItems when KeepInventory is active.\n\n..."
+		},
+		{
+			"tag": "0.2B",
+			"published": "2026-07-23T18:15:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 487487675,
+					"name": "Materia-Reborn-0.2B.jar",
+					"url": "https://github.com/LamaTheReal/Materia-Reborn/releases/download/0.2B/Materia-Reborn-0.2B.jar",
+					"size": 607831,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "81185fde4aa5bebf6cceb8dc7c5cb71fde5ea96d25e64f8274aab257e5a7e058",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "materia_reborn",
+							"version": "0.1.0",
+							"name": "Materia Reborn",
+							"description": "Collect Essence, analyze and unlock items, expand your Backpack and Furnace, and upgrade the Materia Table through powerful rituals.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"jei",
+								"jeresources"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Materia Reborn"
+							],
+							"block": [
+								"Deepslate Essence Ore",
+								"Liquid Essence",
+								"Materia Table",
+								"Materia Table II",
+								"Materia Table III",
+								"Materia Table IV"
+							],
+							"effect": [
+								"Essence Sight"
+							],
+							"item": [
+								"Deepslate Essence Ore",
+								"Essence",
+								"Essence Core",
+								"Essence Crystal",
+								"Essence Dust",
+								"Essence Plate",
+								"Upgrade Core Level 2",
+								"Upgrade Core Level 3",
+								"Upgrade Core Level 4"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 202,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Materia Reborn Update\n\nThis update significantly improves JEI integration, Materia Table crafting, administrative commands, and the overall Essence interface. It also introduces a new Liquid Essence recipe and resolves several UI and recipe-display issues.\n\n## Added\n\n### Commands\n\n* Added `/materia getinfo <item>`.\n\n  * Displays the required Materia Table level.\n  * Shows the item's Essence values.\n  * Shows its analysis requirement.\n\n* Added `/materia essence get <player>`.\n\n  * Displays the current Essence balance of the selected player.\n\n* Expanded the Essence administration commands:\n\n  * `/materia essence give <player> <amount>`\n  * `/materia essence remove <player> <amount>`\n  * `/materia essence set <player> <amount>`\n\n  Essence can now be managed individually for any selected player.\n\n* Added `/materia unlock <player> <item>`.\n\n  * Permanently unlocks the selected item for a player.\n\n* Added `/materia lock <player> <item>`.\n\n  * Completely resets the selected item's unlock and analysis progress for a player.\n\n## JEI Improvements\n\nMateria Reborn's special recipes have been redesigned as clear, compact 2D instructions to make their requirements and interactions easier to understand.\n\n### Essence Dust\n\nThe Essence Dust JEI recipe now displays:\n\n* Both valid main-hand and off-hand item combinations.\n* The required right-click interaction.\n* The five-second crafting duration.\n* The resulting Essence Dust.\n* Support for crafting multiple items at once.\n\n### Liquid Essence\n\nAdded a new JEI recipe for Liquid Essence:\n\n* 3 Essence\n* 2 Essence Crystals\n* 1 Water Block\n\nThe recipe also explains:\n\n* The four-second creation process.\n* The limited lifetime of Liquid Essence.\n* How it can be stabilized.\n* The effects caused by prolonged exposure.\n\n### Essence Condensation\n\n* Corrected the Essence Condensation recipe to produce **6 Essence**.\n* Improved the recipe layout with more compact spacing and cleaner alignment.\n\n### Direct Craft\n\nAdded a **Direct Craft** button to JEI crafting recipes.\n\nThe button is only available while a Materia Table is open.\n\nDirect Craft:\n\n* Calculates the total Essence cost of all required ingredients.\n* Purchases already unlocked ingredients using Essence.\n* Places the ingredients into the correct Materia Table crafting slots.\n* Displays missing item unlocks.\n* Displays insufficient Materia Table levels.\n* Displays insufficient Essence.\n\n## Crafting Improvements\n\n### Auto Refill\n\nAdded an **Auto Refill** toggle to the Materia Table crafting interface.\n\nAfter a successful craft, Auto Refill:\n\n* Purchases the ingredients required for another crafting operation.\n* Uses the player's Essence balance.\n* Places each ingredient back into its previous crafting-grid position.\n\n### Essence Dust Crafting\n\n* Essence Dust now uses a five-second, two-handed rubbing animation.\n* Up to 64 Essence Dust can be crafted simultaneously.\n* The crafted amount automatically depends on the available ingredients.\n\n## Essence Interface\n\n* The first two positions in the Essence item catalogue now display:\n\n  * The most recently sold item.\n  * The most recently purchased item.\n\n* These quick-access entries reset when leaving the current game session.\n\n* Items requiring a higher Materia Table level are now displayed correctly:\n\n  * Inside the input slot.\n  * While attached to the mouse cursor.\n  * Inside the item information panel.\n\n* The information panel now continues to display:\n\n  * The item icon.\n  * Essence values.\n  * The required Materia Table level.\n\n## Changed\n\n* The Ritual Builder now requires only **3 Essence per Liquid Essence field**.\n* Liquid Essence recipes now consistently use the updated requirement of 3 Essence.\n* JEI cauldron recipes were reorganized into a more compact layout.\n* Recipe results, ingredient quantities, and interaction descriptions are now centered more consistently.\n\n## Fixed\n\n* Decorative lines and background elements no longer render outside the boundaries of the Materia Table interface.\n\n..."
+		},
+		{
+			"tag": "Beta",
+			"published": "2026-07-16T17:58:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 479465945,
+					"name": "Materia-Reborn.0.1B.jar",
+					"url": "https://github.com/LamaTheReal/Materia-Reborn/releases/download/Beta/Materia-Reborn.0.1B.jar",
+					"size": 553256,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e6861ca9621e7d59a812114c168bcac1e4a4bd7e7c7a4533005521da8d68c40e",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "materia_reborn",
+							"version": "0.1.0",
+							"name": "Materia Reborn",
+							"description": "Collect Essence, analyze and unlock items, expand your Backpack and Furnace, and upgrade the Materia Table through powerful rituals.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"jei",
+								"jeresources"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Materia Reborn"
+							],
+							"block": [
+								"Deepslate Essence Ore",
+								"Liquid Essence",
+								"Materia Table",
+								"Materia Table II",
+								"Materia Table III",
+								"Materia Table IV"
+							],
+							"effect": [
+								"Essence Sight"
+							],
+							"item": [
+								"Deepslate Essence Ore",
+								"Essence",
+								"Essence Core",
+								"Essence Crystal",
+								"Essence Dust",
+								"Essence Plate",
+								"Upgrade Core Level 2",
+								"Upgrade Core Level 3",
+								"Upgrade Core Level 4"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 175,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Materia Reborn 0.1B\n\nThe first public beta release of **Materia Reborn**.\n\nMateria Reborn is a standalone transmutation mod focused on the new **Essence** resource, item analysis, and permanently unlocking items for duplication.\n\n## Included Features\n\n- First version of the Materia Table\n- Custom model and textures\n- Essence as the main resource\n- Analyze items to unlock them permanently\n- Create unlocked items by spending Essence\n- Sell items to receive Essence\n- Essence Ore and Deepslate Essence Ore\n- Essence Shards and Refined Essence\n- Basic recipes and progression mechanics\n- Data-driven item values and unlock requirements\n\n## Beta Notice\n\nThis version is still under active development. Features, recipes, balancing, item values, and interfaces may change in future updates.\n\nBugs and incomplete features may still be present. Feedback and bug reports are greatly appreciated."
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "Materia Reborn is a progression-focused Minecraft mod about discovering, collecting, and reshaping the value hidden in the world.",
+	"funding": [],
+	"fundingChecked": "2026-11-01T03:45:44.080Z",
+	"pictures": [
+		"assets/screenshots/backpack-ui.jpg",
+		"assets/screenshots/essence-ui.jpg",
+		"assets/screenshots/furnace-ui.jpg",
+		"assets/screenshots/overview.jpg",
+		"assets/screenshots/ritual-in-action.jpg",
+		"assets/screenshots/table-ritual.jpg"
+	],
+	"picturesChecked": "2026-11-01T03:45:44.080Z",
+	"contributors": {
+		"commits": 43,
+		"more": 0,
+		"people": [
+			{
+				"login": "LamaTheReal",
+				"commits": 43,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-11-01T03:45:44.080Z",
+	"history": 1
+}
