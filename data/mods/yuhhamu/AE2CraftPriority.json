@@ -1,0 +1,262 @@
+{
+	"repo": "yuhhamu/AE2CraftPriority",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-07-18T21:38:10Z",
+	"pushed": "2026-08-17T22:25:49Z",
+	"releases": [
+		{
+			"tag": "ae2craftpriority-1.21.1-neoforge-0.2.0",
+			"published": "2026-08-17T09:53:56Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 517927733,
+					"name": "ae2craftpriority-1.21.1-neoforge-0.2.0.jar",
+					"url": "https://github.com/yuhhamu/AE2CraftPriority/releases/download/ae2craftpriority-1.21.1-neoforge-0.2.0/ae2craftpriority-1.21.1-neoforge-0.2.0.jar",
+					"size": 90889,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "6443a04ef5aff34c41b48aa284a5bb9d02a84d8836ef48220184dbbb348c358f",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "ae2craftpriority",
+							"version": "0.2.0-beta.1",
+							"name": "AE2 Crafting Priority",
+							"description": "AE2(Applied Energistics 2)ã®èªåã¯ã©ããã«ãã¸ã§ãåä½ã®å®è¡åªååº¦ãè¿½å ããã¢ããªã³MODã\nAIã¢ã·ã¹ã¿ã³ããClaudeããæ´»ç¨ãã¦éçºã\nåé¡ãå ±å: https://github.com/yuhhamu/AE2CraftPriority/issues",
+							"minecraft": "[1.21.1,1.21.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"ae2"
+							],
+							"suggests": [
+								"advanced_ae"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 59,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## AE2 Crafting Priority 0.2.0-beta.1 (NeoForge 1.21.1)\n\nAE2(Applied Energistics 2)の自動クラフトに、ジョブ単位の実行優先度を追加するアドオンMODです。今回のBeta版では、他MODから優先度制御と連携できる公開APIを新規に追加したほか、AdvancedAE連携時の不具合を修正しました。\n\n### 今回の変更点(0.2.0-beta.1): 他MOD連携用の公開APIを追加\n\nパッケージ `com.yuuhamu.ae2craftpriority.api` として、他MODから優先度制御と連携できる公開APIを新規に追加しました。\n\n- **`CraftPriorityApi`**(静的ファサード): 優先度の取得・設定、CPUの列挙、優先度変更イベントの購読などをまとめて提供します。\n  - `getPriority` / `getStoredPriority` / `getEffectivePriority`: 保存されている優先度と、他MOD由来の補正を反映した実効優先度を分けて取得\n  - `setPriority`(サーバースレッド専用): 優先度を直接設定\n  - `withPriority(int)` → `PriorityScope`、`runWithPriority` / `callWithPriority`: クラフトジョブ投入時に一時的な優先度を適用するスコープAPI(`AutoCloseable`・ネスト可)\n  - `registerResolver(PriorityResolver, order)`: 保存値やAPI設定値を書き換えずに、他MOD(例: AE2PriorityRequester)が基準優先度を加算・補正できるフック\n  - `registerAdapter(PriorityAdapter)`: AdvancedAEなど、AE2純正以外のクラフトCPUクラスタ型をこのMODの優先度制御に対応させるための拡張ポイント\n  - `addPriorityChangeListener` / `removePriorityChangeListener`: 優先度変更(GUI操作・API経由・ジョブ投入・ジョブ完了リセット・NBTロード等)を検知するイベント購読(`PriorityChangeEvent`)\n  - `getCpusByPriority(grid)` / `snapshot(grid)`: グリッド内CPUの優先度順一覧・読み取り専用スナップショット(`CpuSnapshot`)取得\n  - `isSupported` / `apiVersion()` / `MOD_ID` 等のユーティリティ\n- **`PriorityAdapter`**: `markDirty` / `listCpus` / `isBusy` / `getName` のデフォルトメソッドを追加し、サードパーティMODが独自のCPUクラスタ型をこのMODへ統合しやすくしました。\n- **API設計方針**: (1) AE2・Minecraft固有の型を一切露出させず`Object`型のみで受け渡しするため、`api`パッケージはForge 1.12.2〜NeoForge 1.21.1まで全ブランチでバイト同一のソースを共有可能、(2) Java 8構文のみで実装、(3)「保存された優先度」と「実効優先度」を明確に分離、(4) 副作用を伴うAPIはサーバースレッド専用でfail-closed設計、(5) 未対応環境でも例外を投げず安全に機能を無効化します。\n\n### 不具合修正\n- AdvancedAEのQuantum Computer(`AdvCraftingCPUPart`)使用時に、Mixinメソッドシグネチャの不一致により`InvalidInjectionException`警告が発生していた不具合を修正しました。NBT読み書き用インジェクタ(`AdvCraftingCPUMixin`の`ae2cp$onWriteToNBT` / `ae2cp$onReadFromNBT`)へ`HolderLookup.Provider`引数を正しく追加し、実サーバーでの起動ログにMixin関連の警告が出ないことを確認済みです。\n\n### 主な機能(継続)\n- AE2純正の「優先度」画面から、クラフトジョブごとに優先度(数値が高いほど優先)を設定可能\n- 設定方法は3通り: クラフト開始時 / Crafting CPU画面 / 端末の「クラフト状況」タブ\n- 優先度はジョブ単位。タスク終了時に自動的に0へリセット\n\n### 対応アドオンMOD\n- AdvancedAE: 専用対応コードあり。Quantum Computerを含む優先度UIの動作を確認済み\n\n### 既知の制限\n- 実際のクラフトジョブでの優先度制御そのもの(多数ジョブが競合する状況での動作)は、引き続き検証中です(Betaチャンネル)\n- 公開APIはBeta版のため、今後のマイナーバージョンで破壊的変更が入る可能性があります"
+		},
+		{
+			"tag": "ae2craftpriority-1.12.2-forge-0.2.0",
+			"published": "2026-08-17T09:53:54Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 517927707,
+					"name": "ae2craftpriority-1.12.2-forge-0.2.0.jar",
+					"url": "https://github.com/yuhhamu/AE2CraftPriority/releases/download/ae2craftpriority-1.12.2-forge-0.2.0/ae2craftpriority-1.12.2-forge-0.2.0.jar",
+					"size": 90630,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "5a10eb42cfcc811fc6b9b10640f2cf86c9add834733dd60f57b3c59f69c5a377",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 65,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## AE2 Crafting Priority 0.2.0-beta.1 (Forge 1.12.2)\n\nAE2(Applied Energistics 2)の自動クラフトに、ジョブ単位の実行優先度を追加するアドオンMODです。今回のBeta版では、他MODから優先度制御と連携できる公開APIを新規に追加しました(Java 8構文のみで実装しており、本バージョンも含め全ブランチで共通コードとして共有されています)。\n\n### 今回の変更点(0.2.0-beta.1): 他MOD連携用の公開APIを追加\n\nパッケージ `com.yuuhamu.ae2craftpriority.api` として、他MODから優先度制御と連携できる公開APIを新規に追加しました。\n\n- **`CraftPriorityApi`**(静的ファサード): 優先度の取得・設定、CPUの列挙、優先度変更イベントの購読などをまとめて提供します。\n  - `getPriority` / `getStoredPriority` / `getEffectivePriority`: 保存されている優先度と、他MOD由来の補正を反映した実効優先度を分けて取得\n  - `setPriority`(サーバースレッド専用): 優先度を直接設定\n  - `withPriority(int)` → `PriorityScope`、`runWithPriority` / `callWithPriority`: クラフトジョブ投入時に一時的な優先度を適用するスコープAPI(`AutoCloseable`・ネスト可)\n  - `registerResolver(PriorityResolver, order)`: 保存値やAPI設定値を書き換えずに、他MOD(例: AE2PriorityRequester)が基準優先度を加算・補正できるフック\n  - `registerAdapter(PriorityAdapter)`: AdvancedAEなど、AE2純正以外のクラフトCPUクラスタ型をこのMODの優先度制御に対応させるための拡張ポイント\n  - `addPriorityChangeListener` / `removePriorityChangeListener`: 優先度変更(GUI操作・API経由・ジョブ投入・ジョブ完了リセット・NBTロード等)を検知するイベント購読(`PriorityChangeEvent`)\n  - `getCpusByPriority(grid)` / `snapshot(grid)`: グリッド内CPUの優先度順一覧・読み取り専用スナップショット(`CpuSnapshot`)取得\n  - `isSupported` / `apiVersion()` / `MOD_ID` 等のユーティリティ\n- **`PriorityAdapter`**: `markDirty` / `listCpus` / `isBusy` / `getName` のデフォルトメソッドを追加し、サードパーティMODが独自のCPUクラスタ型をこのMODへ統合しやすくしました。\n- **API設計方針**: (1) AE2・Minecraft固有の型を一切露出させず`Object`型のみで受け渡しするため、`api`パッケージはForge 1.12.2〜NeoForge 1.21.1まで全ブランチでバイト同一のソースを共有可能、(2) Java 8構文のみで実装、(3)「保存された優先度」と「実効優先度」を明確に分離、(4) 副作用を伴うAPIはサーバースレッド専用でfail-closed設計、(5) 未対応環境でも例外を投げず安全に機能を無効化します。\n\n### 主な機能(継続)\n- AE2純正の「優先度」画面から、クラフトジョブごとに優先度(数値が高いほど優先)を設定可能\n- 優先度はジョブ単位。タスク終了時に自動的に0へリセット\n\n### 既知の制限\n- 実際のクラフトジョブでの優先度制御そのもの(多数ジョブが競合する状況での動作)は、引き続き検証中です(Betaチャンネル)\n- 公開APIはBeta版のため、今後のマイナーバージョンで破壊的変更が入る可能性があります"
+		},
+		{
+			"tag": "ae2craftpriority-1.18.2-forge-0.2.0",
+			"published": "2026-08-17T09:53:53Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 517927685,
+					"name": "ae2craftpriority-1.18.2-forge-0.2.0.jar",
+					"url": "https://github.com/yuhhamu/AE2CraftPriority/releases/download/ae2craftpriority-1.18.2-forge-0.2.0/ae2craftpriority-1.18.2-forge-0.2.0.jar",
+					"size": 77252,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "698f8cd9549efe87fe5cbeb28b5659d0d7e5d5b0916328e56da73a9f9f3bbdfd",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "ae2craftpriority",
+							"version": "0.2.0-beta.1",
+							"name": "AE2 Crafting Priority",
+							"description": "AE2(Applied Energistics 2)の自動クラフトに、ジョブ単位の実行優先度を追加するアドオンMOD。\nAIアシスタントClaudeを活用して開発。\n問題を報告: https://github.com/yuhhamu/AE2CraftPriority/issues",
+							"minecraft": "[1.18.2,1.19.0)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"ae2"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 50,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## AE2 Crafting Priority 0.2.0-beta.1 (Forge 1.18.2)\n\nAE2(Applied Energistics 2)の自動クラフトに、ジョブ単位の実行優先度を追加するアドオンMODです。今回のBeta版では、他MODから優先度制御と連携できる公開APIを新規に追加しました。\n\n### 今回の変更点(0.2.0-beta.1): 他MOD連携用の公開APIを追加\n\nパッケージ `com.yuuhamu.ae2craftpriority.api` として、他MODから優先度制御と連携できる公開APIを新規に追加しました。\n\n- **`CraftPriorityApi`**(静的ファサード): 優先度の取得・設定、CPUの列挙、優先度変更イベントの購読などをまとめて提供します。\n  - `getPriority` / `getStoredPriority` / `getEffectivePriority`: 保存されている優先度と、他MOD由来の補正を反映した実効優先度を分けて取得\n  - `setPriority`(サーバースレッド専用): 優先度を直接設定\n  - `withPriority(int)` → `PriorityScope`、`runWithPriority` / `callWithPriority`: クラフトジョブ投入時に一時的な優先度を適用するスコープAPI(`AutoCloseable`・ネスト可)\n  - `registerResolver(PriorityResolver, order)`: 保存値やAPI設定値を書き換えずに、他MOD(例: AE2PriorityRequester)が基準優先度を加算・補正できるフック\n  - `registerAdapter(PriorityAdapter)`: AdvancedAEなど、AE2純正以外のクラフトCPUクラスタ型をこのMODの優先度制御に対応させるための拡張ポイント\n  - `addPriorityChangeListener` / `removePriorityChangeListener`: 優先度変更(GUI操作・API経由・ジョブ投入・ジョブ完了リセット・NBTロード等)を検知するイベント購読(`PriorityChangeEvent`)\n  - `getCpusByPriority(grid)` / `snapshot(grid)`: グリッド内CPUの優先度順一覧・読み取り専用スナップショット(`CpuSnapshot`)取得\n  - `isSupported` / `apiVersion()` / `MOD_ID` 等のユーティリティ\n- **`PriorityAdapter`**: `markDirty` / `listCpus` / `isBusy` / `getName` のデフォルトメソッドを追加し、サードパーティMODが独自のCPUクラスタ型をこのMODへ統合しやすくしました。\n- **API設計方針**: (1) AE2・Minecraft固有の型を一切露出させず`Object`型のみで受け渡しするため、`api`パッケージはForge 1.12.2〜NeoForge 1.21.1まで全ブランチでバイト同一のソースを共有可能、(2) Java 8構文のみで実装、(3)「保存された優先度」と「実効優先度」を明確に分離、(4) 副作用を伴うAPIはサーバースレッド専用でfail-closed設計、(5) 未対応環境でも例外を投げず安全に機能を無効化します。\n\n### 主な機能(継続)\n- AE2純正の「優先度」画面から、クラフトジョブごとに優先度(数値が高いほど優先)を設定可能\n- 設定方法は3通り: クラフト開始時 / Crafting CPU画面 / 端末の「クラフト状況」タブ\n- 優先度はジョブ単位。タスク終了時に自動的に0へリセット\n\n### 既知の制限\n- 実際のクラフトジョブでの優先度制御そのもの(多数ジョブが競合する状況での動作)は、引き続き検証中です(Betaチャンネル)\n- 公開APIはBeta版のため、今後のマイナーバージョンで破壊的変更が入る可能性があります"
+		},
+		{
+			"tag": "ae2craftpriority-1.20.1-fabric-0.2.0",
+			"published": "2026-08-17T09:53:51Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 517927633,
+					"name": "ae2craftpriority-1.20.1-fabric-0.2.0.jar",
+					"url": "https://github.com/yuhhamu/AE2CraftPriority/releases/download/ae2craftpriority-1.20.1-fabric-0.2.0/ae2craftpriority-1.20.1-fabric-0.2.0.jar",
+					"size": 78739,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "9197227442fe360193421084bad4c49001ecbf20370eb112f0b6d444c901046a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "ae2craftpriority",
+							"version": "0.2.0-beta.1",
+							"name": "AE2 Crafting Priority",
+							"description": "AE2(Applied Energistics 2)の自動クラフトに、ジョブ単位の実行優先度を追加するアドオンMOD。",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java",
+								"ae2"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 51,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## AE2 Crafting Priority 0.2.0-beta.1 (Fabric 1.20.1)\n\nAE2(Applied Energistics 2)の自動クラフトに、ジョブ単位の実行優先度を追加するアドオンMODです。今回のBeta版では、他MODから優先度制御と連携できる公開APIを新規に追加しました。\n\n### 今回の変更点(0.2.0-beta.1): 他MOD連携用の公開APIを追加\n\nパッケージ `com.yuuhamu.ae2craftpriority.api` として、他MODから優先度制御と連携できる公開APIを新規に追加しました。\n\n- **`CraftPriorityApi`**(静的ファサード): 優先度の取得・設定、CPUの列挙、優先度変更イベントの購読などをまとめて提供します。\n  - `getPriority` / `getStoredPriority` / `getEffectivePriority`: 保存されている優先度と、他MOD由来の補正を反映した実効優先度を分けて取得\n  - `setPriority`(サーバースレッド専用): 優先度を直接設定\n  - `withPriority(int)` → `PriorityScope`、`runWithPriority` / `callWithPriority`: クラフトジョブ投入時に一時的な優先度を適用するスコープAPI(`AutoCloseable`・ネスト可)\n  - `registerResolver(PriorityResolver, order)`: 保存値やAPI設定値を書き換えずに、他MOD(例: AE2PriorityRequester)が基準優先度を加算・補正できるフック\n  - `registerAdapter(PriorityAdapter)`: AE2純正以外のクラフトCPUクラスタ型をこのMODの優先度制御に対応させるための拡張ポイント(汎用API、詳細下記)\n  - `addPriorityChangeListener` / `removePriorityChangeListener`: 優先度変更(GUI操作・API経由・ジョブ投入・ジョブ完了リセット・NBTロード等)を検知するイベント購読(`PriorityChangeEvent`)\n  - `getCpusByPriority(grid)` / `snapshot(grid)`: グリッド内CPUの優先度順一覧・読み取り専用スナップショット(`CpuSnapshot`)取得\n  - `isSupported` / `apiVersion()` / `MOD_ID` 等のユーティリティ\n- **`PriorityAdapter`**: `markDirty` / `listCpus` / `isBusy` / `getName` のデフォルトメソッドを追加し、サードパーティMODが独自のCPUクラスタ型をこのMODへ統合しやすくしました。\n- **API設計方針**: (1) AE2・Minecraft固有の型を一切露出させず`Object`型のみで受け渡しするため、`api`パッケージはForge 1.12.2〜NeoForge 1.21.1まで全ブランチでバイト同一のソースを共有可能、(2) Java 8構文のみで実装、(3)「保存された優先度」と「実効優先度」を明確に分離、(4) 副作用を伴うAPIはサーバースレッド専用でfail-closed設計、(5) 未対応環境でも例外を投げず安全に機能を無効化します。\n\n### 主な機能(継続)\n- AE2純正の「優先度」画面から、クラフトジョブごとに優先度(数値が高いほど優先)を設定可能\n- 設定方法は3通り: クラフト開始時 / Crafting CPU画面 / 端末の「クラフト状況」タブ\n- 優先度はジョブ単位。タスク終了時に自動的に0へリセット\n- Fabric API 0.88.1+1.20.1に固定(AE2 15.4.10との互換性のため)\n\n### 既知の制限\n- AdvancedAEはFabric版が存在しないため非対応(`PriorityAdapter`拡張は他MOD向けの汎用APIとして提供)\n- 実際のクラフトジョブでの優先度制御そのもの(多数ジョブが競合する状況での動作)は、引き続き検証中です(Betaチャンネル)\n- 公開APIはBeta版のため、今後のマイナーバージョンで破壊的変更が入る可能性があります"
+		},
+		{
+			"tag": "ae2craftpriority-1.16.5-forge-0.2.0",
+			"published": "2026-08-17T09:53:49Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 517927613,
+					"name": "ae2craftpriority-1.16.5-forge-0.2.0.jar",
+					"url": "https://github.com/yuhhamu/AE2CraftPriority/releases/download/ae2craftpriority-1.16.5-forge-0.2.0/ae2craftpriority-1.16.5-forge-0.2.0.jar",
+					"size": 87371,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e8e58bbc5e0e456dd66dd1a38377f1678f875041e3068fbe056815f8600fb54f",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "ae2craftpriority",
+							"version": "0.2.0-beta.1",
+							"name": "AE2 Crafting Priority",
+							"description": "AE2(Applied Energistics 2)ã®èªåã¯ã©ããã«ãã¸ã§ãåä½ã®å®è¡åªååº¦ãè¿½å ããã¢ããªã³MODã(Minecraft 1.16.5ç)\nAIã¢ã·ã¹ã¿ã³ãClaudeãæ´»ç¨ãã¦éçºã\nåé¡ãå ±å: https://github.com/yuhhamu/AE2CraftPriority/issues",
+							"minecraft": "[1.16.5,1.17.0)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"appliedenergistics2"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 59,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## AE2 Crafting Priority 0.2.0-beta.1 (Forge 1.16.5)\n\nAE2(Applied Energistics 2)の自動クラフトに、ジョブ単位の実行優先度を追加するアドオンMODです。今回のBeta版では、他MODから優先度制御と連携できる公開APIを新規に追加しました(Java 8構文のみで実装しており、本バージョンも含め全ブランチで共通コードとして共有されています)。\n\n### 今回の変更点(0.2.0-beta.1): 他MOD連携用の公開APIを追加\n\nパッケージ `com.yuuhamu.ae2craftpriority.api` として、他MODから優先度制御と連携できる公開APIを新規に追加しました。\n\n- **`CraftPriorityApi`**(静的ファサード): 優先度の取得・設定、CPUの列挙、優先度変更イベントの購読などをまとめて提供します。\n  - `getPriority` / `getStoredPriority` / `getEffectivePriority`: 保存されている優先度と、他MOD由来の補正を反映した実効優先度を分けて取得\n  - `setPriority`(サーバースレッド専用): 優先度を直接設定\n  - `withPriority(int)` → `PriorityScope`、`runWithPriority` / `callWithPriority`: クラフトジョブ投入時に一時的な優先度を適用するスコープAPI(`AutoCloseable`・ネスト可)\n  - `registerResolver(PriorityResolver, order)`: 保存値やAPI設定値を書き換えずに、他MOD(例: AE2PriorityRequester)が基準優先度を加算・補正できるフック\n  - `registerAdapter(PriorityAdapter)`: AdvancedAEなど、AE2純正以外のクラフトCPUクラスタ型をこのMODの優先度制御に対応させるための拡張ポイント\n  - `addPriorityChangeListener` / `removePriorityChangeListener`: 優先度変更(GUI操作・API経由・ジョブ投入・ジョブ完了リセット・NBTロード等)を検知するイベント購読(`PriorityChangeEvent`)\n  - `getCpusByPriority(grid)` / `snapshot(grid)`: グリッド内CPUの優先度順一覧・読み取り専用スナップショット(`CpuSnapshot`)取得\n  - `isSupported` / `apiVersion()` / `MOD_ID` 等のユーティリティ\n- **`PriorityAdapter`**: `markDirty` / `listCpus` / `isBusy` / `getName` のデフォルトメソッドを追加し、サードパーティMODが独自のCPUクラスタ型をこのMODへ統合しやすくしました。\n- **API設計方針**: (1) AE2・Minecraft固有の型を一切露出させず`Object`型のみで受け渡しするため、`api`パッケージはForge 1.12.2〜NeoForge 1.21.1まで全ブランチでバイト同一のソースを共有可能、(2) Java 8構文のみで実装、(3)「保存された優先度」と「実効優先度」を明確に分離、(4) 副作用を伴うAPIはサーバースレッド専用でfail-closed設計、(5) 未対応環境でも例外を投げず安全に機能を無効化します。\n\n### 主な機能(継続)\n- AE2純正の「優先度」画面から、クラフトジョブごとに優先度(数値が高いほど優先)を設定可能\n- 優先度はジョブ単位。タスク終了時に自動的に0へリセット\n\n### 既知の制限\n- 実際のクラフトジョブでの優先度制御そのもの(多数ジョブが競合する状況での動作)は、引き続き検証中です(Betaチャンネル)\n- 公開APIはBeta版のため、今後のマイナーバージョンで破壊的変更が入る可能性があります"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "An addon mod for Applied Energistics 2 (AE2) that adds crafting priority to its auto-crafting system. AE2(Applied Energistics 2)の自動クラフトに「優先度」を追加するアドオンMODです。",
+	"funding": [],
+	"fundingChecked": "2026-10-31T22:37:16.645Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 10,
+		"more": 0,
+		"people": [
+			{
+				"login": "yuhhamu",
+				"commits": 10,
+				"name": "ゆっハム",
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/yuhhamu"
+					}
+				]
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
+	"history": 1
+}

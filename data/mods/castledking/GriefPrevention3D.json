@@ -6,8 +6,82 @@
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2025-07-20T07:11:54Z",
-	"pushed": "2026-10-27T18:26:20Z",
+	"pushed": "2026-10-31T12:19:03Z",
+	"forkOf": "GriefPrevention/GriefPrevention",
 	"releases": [
+		{
+			"tag": "v19.0.4",
+			"published": "2026-10-31T12:19:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 695308327,
+					"name": "GriefPrevention3D.jar",
+					"url": "https://github.com/castledking/GriefPrevention3D/releases/download/v19.0.4/GriefPrevention3D.jar",
+					"size": 2386939,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "7e48c657ee1bf3e02470b4b673e05ea7c78c1a8af4d1404e8a00f6ce5b33a4cb",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "griefprevention3d",
+							"version": "19.0.4",
+							"name": "GriefPrevention3D",
+							"description": "Native Fabric adapter for GriefPrevention3D claim protection.",
+							"minecraft": ">=26.1 <26.4- || >=1.21.2 <1.21.12-",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api-base",
+								"fabric-command-api-v2",
+								"fabric-events-interaction-v0",
+								"fabric-lifecycle-events-v1",
+								"fabric-networking-api-v1",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 937,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/griefprevention/metrics/Metrics$MetricsBase.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"yaml.org": [
+								"com/griefprevention/internal/lib/snakeyaml/DumperOptions.class"
+							],
+							"bstats.org": [
+								"com/griefprevention/metrics/Metrics$MetricsBase.class",
+								"com/griefprevention/metrics/Metrics.class"
+							],
+							"github.com": [
+								"me/ryanhamshire/GriefPrevention/Alias.class"
+							],
+							"dev.bukkit.org": [
+								"me/ryanhamshire/GriefPrevention/GriefPrevention.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# GriefPrevention3D v19.0.4\n\n**Wiki:** https://github.com/castledking/GriefPrevention3D/wiki\n\nBack up `GriefPreventionData` before updating.\n\n## Admin claim trust under `RequireIgnoreClaimsInAdminClaims`\n\nWhen `GriefPrevention.RequireIgnoreClaimsInAdminClaims: true` is enabled on Spigot or Paper,\nstaff holding `griefprevention.adminclaims` are no longer blocked before GP3D checks the claim's\ntrust list:\n\n- **Claim trust works without `/ignoreclaims`.** Public grants such as `/containertrust public`\n  (including trading with villagers and opening public containers), personal trust, and permission\n  trust now apply to staff the same way they apply to any other player.\n- **Untrusted build and container actions still require `/ignoreclaims`.** Actions not covered by\n  the claim's trust list continue to return the normal denial message with the `/ignoreclaims`\n  reminder.\n- **Administrative subdivisions follow the same rule.** Administrative subdivisions inside player\n  claims now enforce `RequireIgnoreClaimsInAdminClaims` for build and container checks unless the\n  action is covered by trust on the subdivision (or inherited from an unrestricted parent claim).\n  Walking through, resizing, and managing trust in administrative subdivisions still work without\n  `/ignoreclaims`.\n\n## Upgrade notes\n\n- Only servers with `GriefPrevention.RequireIgnoreClaimsInAdminClaims: true` (off by default) are\n  affected.\n- No config or data changes are required, and Fabric behavior is unchanged.\n- Both platforms continue to ship in one universal `GriefPrevention3D.jar`. Fabric requires Fabric API."
+		},
 		{
 			"tag": "v19.0.3",
 			"published": "2026-10-27T18:26:20Z",
@@ -18,7 +92,7 @@
 					"name": "GriefPrevention3D.jar",
 					"url": "https://github.com/castledking/GriefPrevention3D/releases/download/v19.0.3/GriefPrevention3D.jar",
 					"size": 2386935,
-					"downloads": 0,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "5408c272c669be8f9ee22faa07d2a3ee2ecd6d83bce2f67f371d4d8864c9288d",
 					"mods": [
@@ -78,7 +152,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# GriefPrevention3D v19.0.3\n\n**Wiki:** https://github.com/castledking/GriefPrevention3D/wiki\n\nBack up `GriefPreventionData` before updating.\n\n## Prevent climbing on rejected blocks\n\nPlayers can sometimes use a client-predicted block as a temporary step even though GP3D rejects\nits placement in a claim. This release adds an optional setback to prevent repeated placements\nfrom being used to climb walls. It is available on Bukkit/Paper and Fabric.\n\nThe option is **off by default**. To enable it, add or change this setting in\n`plugins/GriefPreventionData/config.yml`:\n\n```yaml\nGriefPrevention:\n  Claims:\n    PreventBlockPlaceClimbing: true\n```\n\nRun `/gpreload` after saving. When GP3D denies a colliding placement near a player's feet, the\nprotection can return them to a recent position supported by real blocks, including when the\nupward movement arrives after the placement is denied. The destination is checked for support\nand clearance before a setback.\n\nOrdinary jumps, authorized building, active claim bypass, flying, gliding, swimming and vehicle\nmovement are unaffected. A recent safe position is needed before a setback can occur.\n\n## Upgrade notes\n\n- Existing servers keep their previous behavior until the new setting is enabled.\n- No new permission nodes are required.\n- Both platforms continue to ship in one universal `GriefPrevention3D.jar`. Fabric requires Fabric API."
 		},
 		{
 			"tag": "v19.0.2",
@@ -90,7 +165,7 @@
 					"name": "GriefPrevention3D.jar",
 					"url": "https://github.com/castledking/GriefPrevention3D/releases/download/v19.0.2/GriefPrevention3D.jar",
 					"size": 2356947,
-					"downloads": 0,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "41762a4410d3c84383eb8dcf0442218f4ca116c273d0045ff4476acb462cc2a9",
 					"mods": [
@@ -150,7 +225,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# GriefPrevention3D v19.0.2\n\n**Wiki:** https://github.com/castledking/GriefPrevention3D/wiki\n\nBack up `GriefPreventionData` before updating.\n\n## Weaving protection on Paper and Fabric\n\nWeaving could create cobwebs inside another player's claim when an affected player or mob died. This update\nprotects those placements on Paper, Purpur, Folia and Fabric.\n\n- **Player deaths require build trust.** Every prospective cobweb is checked at the block where it would\n  appear. Dying outside a claim can no longer place webs across its boundary. Subdivision restrictions and\n  3D height boundaries are respected, and authorized claim bypass still works.\n- **Mob deaths cannot place cobwebs inside claims.** The death does not reliably identify who applied the\n  weaving effect, so claimed blocks are protected regardless of the mob's type. Weaving still works in\n  survival wilderness and in worlds where claims are disabled.\n- **Claimed animals and villagers require container trust to receive weaving potions.** Access trust alone\n  is insufficient. This covers splash potions and both standard and custom lingering weaving effects.\n- **Dispensers cannot apply weaving across claim boundaries.** They may affect creatures in the same claim\n  as the dispenser, including the same subdivision. A neighboring claim is treated separately even when it\n  has the same owner. Fabric remembers the dispenser's launch location and carries it into the lingering\n  cloud, so the potion's landing position cannot bypass this check.\n\nPlayers may still drink weaving potions and receive their own thrown potion effects. Any cobwebs generated\nby their death follow the build-permission checks above. Other potion effects are unchanged.\n\nThe Fabric protection runs in both bundled adapters, covering Minecraft 1.21.2–1.21.11 and 26.1–26.3.\n\n## Upstream updates\n\n- Removed the obsolete conversion of player names to UUIDs, following upstream GriefPrevention. MySQL\n  support and migration from flat files to the database remain available in GP3D.\n- Synced upstream's knockback-listener cleanup. GP3D retains its existing handling, which already avoids\n  processing the same entity knockback twice.\n\n## Upgrade notes\n\n- No new config keys or permission nodes are needed. Existing claims, trust and UUID-based data keep working.\n- **Mob-based cobweb farms inside claims will stop placing webs.** Mob-generated cobwebs remain allowed in\n  survival wilderness; player-generated webs in claims require build trust.\n- Servers whose GP data still uses pre-UUID player names must first update through an older release that\n  performs that conversion, then update to 19.0.2.\n\nBoth platforms continue to ship in one universal `GriefPrevention3D.jar`. Fabric requires Fabric API."
 		},
 		{
 			"tag": "v19.0.1",
@@ -162,7 +238,7 @@
 					"name": "GriefPrevention3D.jar",
 					"url": "https://github.com/castledking/GriefPrevention3D/releases/download/v19.0.1/GriefPrevention3D.jar",
 					"size": 2340052,
-					"downloads": 6,
+					"downloads": 8,
 					"inspection": 2,
 					"sha256": "18cbb73e033c824bb7349b1da801683df5e416f2785d038b2a44a6c84f45e77e",
 					"mods": [
@@ -228,7 +304,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# GriefPrevention3D v19.0.1\n\n**Wiki:** https://github.com/castledking/GriefPrevention3D/wiki\n\nBack up `GriefPreventionData` before updating.\n\n## Fabric: inactive players' claims expire\n\nFabric used to ignore `Claims.Expiration`. It now cleans up claims as the plugin does, so abandoned claims no\nlonger pile up on long-running servers.\n\n- **`Claims.Expiration.AllClaims.DaysInactive`** (60 days by default) deletes all of a player's claims once they\n  have been away that long.\n- **`Claims.Expiration.ChestClaimDays`** (7 days by default) deletes a player's only claim sooner, if it is no\n  bigger than a new player's claim (`Claims.AutomaticNewPlayerClaimsRadius`, 4 by default, a 9×9 claim). With\n  Fabric's default minimum area of 100 blocks, few claims are that small.\n- As on the plugin, one claim owner is checked every `Advanced.ClaimExpirationCheckRate` seconds (60 by default),\n  going round every owner in turn.\n\nThese players keep their claims:\n\n- anyone online;\n- anyone with at least `ExceptWhenOwnerHasTotalClaimBlocks` claim blocks (10000 by default), or at least\n  `ExceptWhenOwnerHasBonusClaimBlocks` bonus blocks (5000 by default);\n- anyone with **`griefprevention.dontexpire`**.\n\n`griefprevention.dontexpire` works with LuckPerms even while the player is offline: their LuckPerms data is loaded\nfor the check and released afterwards, so a grant on a group they belong to counts too. Without LuckPerms, server\noperators are exempt, which is the permission's default. If the check fails, the claims stay.\n\nExpired claims are deleted without the `AbandonReturnRatio` penalty, and each one is written to the server log.\nOther Fabric mods can keep a claim from expiring through the new `ClaimExpirationCallback`, as plugins can with\n`ClaimExpirationEvent`.\n\n### When the first claims can expire\n\nFabric learns when players were last online from `GriefPreventionData/LastSeen.yml`, which started recording in\n18.4.7 (26 September 2026). Players not seen since then keep their claims, as the plugin keeps the claims of\nplayers without a last-played time. With the default 60 days, no claim can expire before late November 2026.\n\n### New command\n\n| Command | Permission | What it does |\n|---|---|---|\n| `/checkclaimexpiry [player]` (`/claimcheckexpiry`, `/aclaim checkexpiry`) | `griefprevention.checkclaimexpiry` | Shows when the owner of the claim you stand in was last seen, when their claims expire, and what keeps them |\n\nChecking another player by name also takes `griefprevention.admin.checkclaimexpiry`, which only operators have by\ndefault, as on the plugin.\n\n## Spigot and Paper\n\n- **Indonesian messages.** Set `GriefPrevention.Locale` to `id_ID`, or let `PerPlayerLocale` pick it for players\n  whose client is set to Bahasa Indonesia.\n- bStats now reports the server software by its name (for example Paper or Purpur), from upstream GriefPrevention\n  (#2667).\n\n## Config\n\nNew Fabric `config.yml` keys, matching the plugin. They are added to existing files on startup without changing\nanything you have set, and `/gpreload` rereads them:\n\n```yaml\nGriefPrevention:\n  Claims:\n    AutomaticNewPlayerClaimsRadius: 4\n    Expiration:\n      ChestClaimDays: 7\n      AllClaims:\n        DaysInactive: 60\n        ExceptWhenOwnerHasTotalClaimBlocks: 10000\n        ExceptWhenOwnerHasBonusClaimBlocks: 5000\n  Advanced:\n    ClaimExpirationCheckRate: 60\n```\n\n## Upgrade notes\n\n- **Expiration is on by default on Fabric**, as on the plugin. To keep every claim, set both `DaysInactive` and\n  `ChestClaimDays` to `0`.\n- If a Fabric expiration setting cannot be read, expiration turns off and the error is logged, instead of falling\n  back to the defaults.\n- `Claims.Expiration.UnusedClaimDays` and `AutomaticNatureRestoration` are not on Fabric yet. Both need restore\n  nature, which Fabric does not have.\n\nBoth versions still ship in one `GriefPrevention3D.jar`: 1.8 through the latest release on Spigot, Paper, Purpur\nand Folia, and 1.21.2 through 1.21.11 and 26.1 through 26.3 on Fabric."
 		},
 		{
 			"tag": "v19.0.0",
@@ -240,7 +317,7 @@
 					"name": "GriefPrevention3D.jar",
 					"url": "https://github.com/castledking/GriefPrevention3D/releases/download/v19.0.0/GriefPrevention3D.jar",
 					"size": 2291685,
-					"downloads": 6,
+					"downloads": 8,
 					"inspection": 2,
 					"sha256": "a50cb71640f4470bddf989f9bf6fc27e029bb6e73a0e1b841b3af7464c8b133a",
 					"mods": [
@@ -306,7 +383,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# GriefPrevention3D v19.0.0\n\n**Now a stable build.** One universal JAR runs as a Bukkit plugin and as a Fabric dedicated-server mod. Fabric\nrequires Fabric API. Back up `GriefPreventionData` before updating.\n\n## Fabric claims and commands\n\n- **Create and manage claims.** Basic and administrative claims, 2D and 3D subdivisions, claim lookup, abandonment,\n  trust, trust lists, and staff claim management are available through the same command aliases and permission nodes\n  as the plugin. Fabric has no economy integration, so paid claim transfers are refused unless the player has the\n  free-transfer permission.\n- **Shaped claims.** Enable `GriefPrevention.Claims.AllowShapedClaims`, then use `/shapedclaims` (alias\n  `/shapedclaim` or `/claim mode shaped`). With the golden shovel, right-click the outline's corners in order and\n  click the first corner again to close it. The live path and finished claim both show corner nibs and boundary\n  markers. Clicking an existing 2D claim boundary starts a reshape.\n- **Extend claims.** `/extendclaim <numberOfBlocks>` (aliases `/expandclaim` and `/resizeclaim`) extends or shrinks\n  the most specific claim at your location, or the claim selected with the shovel nib. It supports 2D and 3D claims,\n  subdivisions, and shaped outlines.\n- **Inspect claims.** The configured investigation tool (`STICK` by default) shows the claim at the targeted block;\n  sneak-use it to visualize nearby claims. The golden shovel displays claim boundaries and supports claim selection.\n- **Resize with the scroll wheel.** `/scrollresize` previews a claim or subdivision while scrolling and applies the\n  change on right-click. Looking down selects the bottom face of a 3D subdivision. A selected corner is range-gated\n  to avoid a corner click registering through to a farther block.\n\nShaped claims are disabled by default. `AllowShapedSubClaims` also defaults to `false`; `ShapedMinimumWidth` and\n`ShapedMinimumArea` control their size rules. `Allow3DSubdivisions` defaults to `true`. These settings are read from\nthe existing `config.yml` and added on startup when missing.\n\n## Claim protection\n\n- Explosions respect the configured land-claim and surface explosion protections, including protected entities.\n- Starting or extending a raid requires build trust in the raid-center claim, or in the triggering player's claim\n  when the raid center is unclaimed. `Claims.RaidTriggersRequireBuildTrust` defaults to `true`.\n\n## Compatibility and packaging\n\n- One Modrinth release lists Bukkit, Folia, Paper, Purpur, Spigot, and Fabric, using this combined changelog.\n- Fabric supports Minecraft 1.21.2–1.21.11 and 26.1–26.3 on dedicated servers. Bukkit-family support starts at\n  Minecraft 1.8.\n- The universal JAR is about 2.2 MB, below the 5 MB target.\n\n## Upgrade notes\n\nNo claim migration is needed. Existing settings remain in place; new config keys are added with the defaults above."
 		},
 		{
 			"tag": "v18.4.14",
@@ -395,5 +473,100 @@
 		}
 	],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [
+		"gp logo 170x170.png"
+	],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 1625,
+		"more": 59,
+		"people": [
+			{
+				"login": "BigScary",
+				"commits": 696,
+				"name": "Big Scary",
+				"funding": []
+			},
+			{
+				"login": "castledking",
+				"commits": 322,
+				"name": "Jack",
+				"funding": []
+			},
+			{
+				"login": "RoboMWM",
+				"commits": 319,
+				"funding": []
+			},
+			{
+				"login": "Jikoo",
+				"commits": 130,
+				"name": "Adam",
+				"funding": []
+			},
+			{
+				"login": "FrankHeijden",
+				"commits": 14,
+				"name": "Frank van der Heijden",
+				"funding": []
+			},
+			{
+				"login": "FreeMonoid",
+				"commits": 12,
+				"funding": []
+			},
+			{
+				"login": "akdukaan",
+				"commits": 11,
+				"funding": []
+			},
+			{
+				"login": "112RG",
+				"commits": 10,
+				"name": "Rylee George",
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/112RG"
+					}
+				]
+			},
+			{
+				"login": "QarthO",
+				"commits": 9,
+				"name": "Derek | QarthO",
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/QarthO"
+					}
+				]
+			},
+			{
+				"login": "bigpresh",
+				"commits": 8,
+				"name": "David Precious",
+				"funding": []
+			},
+			{
+				"login": "BillyGalbreath",
+				"commits": 8,
+				"name": "William Blake Galbreath",
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/BillyGalbreath"
+					}
+				]
+			},
+			{
+				"login": "nouish",
+				"commits": 6,
+				"name": "Nouish",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

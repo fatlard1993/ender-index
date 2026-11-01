@@ -18,7 +18,7 @@
 					"name": "bloodmagic-0.3.0.jar",
 					"url": "https://github.com/Aldur13/Blood-magic/releases/download/v0.3.0/bloodmagic-0.3.0.jar",
 					"size": 40397,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "05171eabf9b3dba12df313f11b6edd07a3782db77b43c6a0428febdc2be9abf8",
 					"mods": [
@@ -54,7 +54,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Blood Magic now runs **entirely on the server**. Players join with an unmodified vanilla client and install nothing — no mod, no Fabric, no resource pack.\n\nDrop `bloodmagic-0.3.0.jar` into your server's `mods/` folder alongside Fabric API and restart.\n\nRequires Minecraft **26.2**, Fabric Loader **0.19.3+**, Fabric API **0.152.2+26.2**.\n\n## What changed\n\nThe ten buffs used to be custom `MobEffect` registry entries, which made registry sync reject any vanilla client outright. Those are gone, along with the entire client source set (custom `Screen`, custom `HudElement`, B-key polling) and both custom packets. Everything a player sees is now built from vanilla parts:\n\n| Was | Is now |\n|---|---|\n| Custom `Screen` on the B key | `minecraft:generic_9x2` chest menu via `/blood` |\n| Custom HUD cooldown bars | Vanilla boss bars |\n| Custom effect icons | Vanilla item icons with tooltips |\n| Custom serverbound packet | `/blood use <buff>` and menu clicks |\n\n## Commands\n\n| Command | Permission | Action |\n|---|:---:|---|\n| `/blood` | everyone | Open the sacrifice menu |\n| `/blood status` | everyone | List active buffs and cooldowns |\n| `/blood use <buff>` | everyone | Activate a buff directly |\n| `/blood clear [player]` | level 2 | Drop all buffs, debts and cooldowns |\n\nRooted at `/blood` rather than `/bloodmagic` to avoid colliding with the item-import mod.\n\n## Bug fixes\n\n- **Timers no longer break on restart.** Expiry was recorded with `MinecraftServer#getTickCount`, which restarts at zero every boot, while the HUD read `Level#getGameTime`. Persisted buffs looked far in the future after a restart and never expired. Everything uses world game time now.\n- **Buffs cost half what they used to.** Activation subtracted the cost from `MAX_HEALTH` — which clamps current health down — and *then* dealt the same amount again as magic damage, charging twice.\n- **Buffs no longer run during their cooldown.** Hemorrhage, Life Drain and Blood Ward kept firing for the full ten-minute regen window.\n- **Blood Ward** no longer absorbs the activation cost of the next buff you buy, and no longer strands its heart debt permanently when it triggers.\n- **Night Vision from other sources** is no longer stripped during a Crimson Sight cooldown.\n- **Relogging** keeps your buffs. Modifiers are transient but the buff list persists, so a relog used to leave you holding the cooldown with none of the buff. They are rebuilt on join, respawn, End return and dimension change.\n- Malformed saved buff data no longer throws.\n\n## Upgrading\n\nBuff entries saved by 0.1.x use the old restart-unstable clock. They read as expired and are discarded the first time each player logs in after the update — players get their hearts back and start clean.\n\n> Note: this is a different design from `v0.2.0-altar`, which delivers buffs through a placeable Blood Altar block with percentage-based costs. This release continues the `main` line."
 		},
 		{
 			"tag": "v0.1.1",
@@ -66,7 +67,7 @@
 					"name": "bloodmagic-0.1.1.jar",
 					"url": "https://github.com/Aldur13/Blood-magic/releases/download/v0.1.1/bloodmagic-0.1.1.jar",
 					"size": 36923,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "9c50d071e64019e9fe10348a3044a67158f27687be57d031b5fab0985debd756",
 					"mods": [
@@ -102,7 +103,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Fixes a server startup crash (`NullPointerException: Block id not set`) present in the previous **v0.2.0-altar** release, which shipped with an unfinished/broken Blood Altar block registration.\n\nThat in-progress altar feature has been removed. This release is functionally equivalent to v0.1.0 (potion-effect buffs via commands/triggers) and is confirmed to start cleanly.\n\n**If you installed `bloodmagic-0.2.0.jar`, remove it and replace it with `bloodmagic-0.1.1.jar`.**\n\nRequires Minecraft 26.2, Fabric Loader 0.19.3+, Fabric API 0.158.0+26.2."
 		},
 		{
 			"tag": "v0.2.0-altar",
@@ -114,7 +116,7 @@
 					"name": "bloodmagic-0.2.0.jar",
 					"url": "https://github.com/Aldur13/Blood-magic/releases/download/v0.2.0-altar/bloodmagic-0.2.0.jar",
 					"size": 37705,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "b407566e5741cdd460f0d5f5fcd1468cccdf3905b5c05690bb830bfaa67115ec",
 					"mods": [
@@ -160,7 +162,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Server-side-only redesign: buffs now come from a placeable **Blood Altar** you right-click to open, with costs scaled as a percentage of your current max health rather than flat hearts. No client mod needed — vanilla clients join fine.\n\nRequires Minecraft 26.2, Fabric Loader 0.19.3+, Fabric API 0.158.0+26.2.\n\nDrop `bloodmagic-0.2.0.jar` into your server's `mods/` folder alongside Fabric API and restart. See the README on the `altar-port` branch for the full buff list and crafting recipe."
 		},
 		{
 			"tag": "mc-26.1",
@@ -172,7 +175,7 @@
 					"name": "bloodmagic-0.1.0.mc26.1.jar",
 					"url": "https://github.com/Aldur13/Blood-magic/releases/download/mc-26.1/bloodmagic-0.1.0.mc26.1.jar",
 					"size": 36886,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "31bc1ea4ab2fdda9c9708d27f08ab20f7a49ae92d1ce2b87974cde0d19e65d4a",
 					"mods": [
@@ -208,7 +211,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Blood Magic v0.1.0 for Minecraft 26.1. Sacrifice hearts for powerful temporary buffs. Requires Fabric API."
 		},
 		{
 			"tag": "mc-26.1.1",
@@ -220,7 +224,7 @@
 					"name": "bloodmagic-0.1.0.mc26.1.1.jar",
 					"url": "https://github.com/Aldur13/Blood-magic/releases/download/mc-26.1.1/bloodmagic-0.1.0.mc26.1.1.jar",
 					"size": 36889,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "d1569d9df60d2937808c9353ed70ba4e21b7a56bce0c5e4ee25c33efad80a29a",
 					"mods": [
@@ -256,7 +260,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Blood Magic v0.1.0 for Minecraft 26.1.1. Sacrifice hearts for powerful temporary buffs. Requires Fabric API."
 		},
 		{
 			"tag": "mc-26.1.2",
@@ -268,7 +273,7 @@
 					"name": "bloodmagic-0.1.0.mc26.1.2.jar",
 					"url": "https://github.com/Aldur13/Blood-magic/releases/download/mc-26.1.2/bloodmagic-0.1.0.mc26.1.2.jar",
 					"size": 36890,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "2a82dcad57ff40c0f4cdd91b578f7d1483daa98c06278eaa3496a4ae9322a3e1",
 					"mods": [
@@ -304,7 +309,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Blood Magic v0.1.0 for Minecraft 26.1.2. Sacrifice hearts for 10 powerful temporary buffs: night vision, speed, damage boosts, armor, attack speed, and more. Requires Fabric API."
 		},
 		{
 			"tag": "mc-26.2",
@@ -316,7 +322,7 @@
 					"name": "bloodmagic-0.1.0.mc26.2.jar",
 					"url": "https://github.com/Aldur13/Blood-magic/releases/download/mc-26.2/bloodmagic-0.1.0.mc26.2.jar",
 					"size": 36920,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "a398b8be92dca6e6d136e793e3788a088780ebe83379aadd253b2eb17532f4a8",
 					"mods": [
@@ -352,7 +358,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Blood Magic for Minecraft 26.2 (latest). Sacrifice hearts for 10 powerful temporary buffs: Crimson Sight, Bloodlust, Swift Blood, Iron Blood, Berserker, Hemorrhage, Blood Ward, Life Drain, Blood Fury, and Coagulation."
 		},
 		{
 			"tag": "v0.1.0",
@@ -364,7 +371,7 @@
 					"name": "bloodmagic-0.1.0.jar",
 					"url": "https://github.com/Aldur13/Blood-magic/releases/download/v0.1.0/bloodmagic-0.1.0.jar",
 					"size": 36922,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "5e064a497c2f4adb63fb0747b0a7b868f1e84c6f67651312eb90b7ba775f9efa",
 					"mods": [
@@ -400,11 +407,26 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "the 1.0 version\nThis mod was partially created with the help of claude code"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 5,
+		"more": 0,
+		"people": [
+			{
+				"login": "Aldur13",
+				"commits": 5,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

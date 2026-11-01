@@ -18,7 +18,7 @@
 					"name": "DistantHorizons-VulkanMod-fabric-2.4.0-3.0.0+vm.2-mc1.20.6.jar",
 					"url": "https://github.com/Braffolk/distant-horizons-vulkanmod/releases/download/v2.4.0-3.0.0%2Bvm.2/DistantHorizons-VulkanMod-fabric-2.4.0-3.0.0%2Bvm.2-mc1.20.6.jar",
 					"size": 145232,
-					"downloads": 135,
+					"downloads": 136,
 					"inspection": 2,
 					"sha256": "04ab75283155297d494bc38b4154364acd76bf5f22b64d55d8f863aeace84c09",
 					"mods": [
@@ -65,7 +65,7 @@
 					"name": "DistantHorizons-VulkanMod-fabric-2.4.0-3.0.0+vm.2-mc1.21.11.jar",
 					"url": "https://github.com/Braffolk/distant-horizons-vulkanmod/releases/download/v2.4.0-3.0.0%2Bvm.2/DistantHorizons-VulkanMod-fabric-2.4.0-3.0.0%2Bvm.2-mc1.21.11.jar",
 					"size": 144607,
-					"downloads": 250,
+					"downloads": 254,
 					"inspection": 2,
 					"sha256": "052eced0b9c1fd4b7308bef2f01e775d325ce9d48dfe72291b19b2b7a56b731f",
 					"mods": [
@@ -107,7 +107,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "**Hotfix** — weather effects (rain, snow, particles) now render correctly in front of LODs on all GPUs. Fast clouds no longer render on top of LODs. Previously, the Phase 2 composite was overwriting weather pixels with LOD colors on NVIDIA and potentially other non-MoltenVK drivers.\n\n- **SSAO smoothing** — enabled the bilateral Gaussian blur on SSAO output. Previously the blur was disabled (radius 0), causing visibly grainy/noisy ambient occlusion.\n- **Z-fighting fix (NONE mode)** — added small depth bias to LOD depth output in NONE fade mode, preventing z-fighting at the MC/LOD overlap boundary.\n- **High-altitude LOD gap fix** — LOD clip distance now uses 3D distance instead of XZ-only. Previously, flying high and looking down created a visible gap between MC terrain and LODs because the cylindrical XZ clip didn't match MC's spherical render distance."
 		},
 		{
 			"tag": "v2.4.0-3.0.0+vm.1",
@@ -119,7 +120,7 @@
 					"name": "DistantHorizons-VulkanMod-fabric-2.4.0-3.0.0+vm.1-mc1.20.6.jar",
 					"url": "https://github.com/Braffolk/distant-horizons-vulkanmod/releases/download/v2.4.0-3.0.0%2Bvm.1/DistantHorizons-VulkanMod-fabric-2.4.0-3.0.0%2Bvm.1-mc1.20.6.jar",
 					"size": 143819,
-					"downloads": 17,
+					"downloads": 18,
 					"inspection": 2,
 					"sha256": "c9169e8f5854ab721c0e4b8630bb92e0cec9a8ab3395a3e77eaa2044611dd7f2",
 					"mods": [
@@ -166,7 +167,7 @@
 					"name": "DistantHorizons-VulkanMod-fabric-2.4.0-3.0.0+vm.1-mc1.21.11.jar",
 					"url": "https://github.com/Braffolk/distant-horizons-vulkanmod/releases/download/v2.4.0-3.0.0%2Bvm.1/DistantHorizons-VulkanMod-fabric-2.4.0-3.0.0%2Bvm.1-mc1.21.11.jar",
 					"size": 143210,
-					"downloads": 15,
+					"downloads": 16,
 					"inspection": 2,
 					"sha256": "48af8fd180e4e7d11f463f6f58775b0fae45b584eea83e7e5308d0057486c62e",
 					"mods": [
@@ -208,7 +209,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "**Clouds, weather, and DH 3.0 support.** Clouds now render correctly behind and in front of LOD terrain. Weather effects (rain, snow) are no longer hidden behind LODs. Compatible with both DH 2.4.x and 3.0.x (nightly) from a single jar.\n\n### What's New\n\n- **Cloud rendering** — clouds now render with correct depth against LOD terrain (on 1.21.11). Supports fast and fancy cloud modes.\n- **Weather fixed** — rain, snow, and particles no longer render behind LODs. The rendering pipeline has been reordered so weather effects always appear in front of terrain as expected.\n- **DH 3.0 support** — now works with both Distant Horizons 2.4.x and 3.0.x (nightly).\n- **Smoother camera movement** — camera velocity now dynamically adjusts overdraw to prevent LOD pop-in when moving fast, matching base DH behavior.\n\n### Known Issues\n\n- Cloud rendering is only available on VulkanMod 0.6+ (MC 1.21.11). VM 0.4.2 uses MC's default cloud rendering.\n- Rare LOD flicker when detail level changes during fast camera movement.\n\n### Technical Details\n\n- Custom Vulkan cloud renderer builds cloud geometry as VBO meshes and renders them with MC's projection matrix for accurate depth testing against LOD terrain.\n- `uModelOffset` now uses Vulkan push constants on VM 0.6.1+ instead of per-draw UBO re-uploads, reducing CPU-side overhead.\n- LOD compositing and post-processing (SSAO, fog) moved to `deferredComposite` to execute before MC's weather pass.\n- In NONE fade mode, clouds render before the LOD composite so LODs draw on top (no depth buffer available for comparison).\n- Added `DhFrameProfiler` — lightweight per-frame timing for all rendering phases (disabled by default, zero overhead when off)."
 		},
 		{
 			"tag": "v2.4.0-2.4.6+vm.5",
@@ -220,7 +222,7 @@
 					"name": "DistantHorizons-VulkanMod-fabric-2.4.0-2.4.6+vm.5-mc1.20.6.jar",
 					"url": "https://github.com/Braffolk/distant-horizons-vulkanmod/releases/download/v2.4.0-2.4.6%2Bvm.5/DistantHorizons-VulkanMod-fabric-2.4.0-2.4.6%2Bvm.5-mc1.20.6.jar",
 					"size": 93097,
-					"downloads": 6,
+					"downloads": 7,
 					"inspection": 2,
 					"sha256": "32680a5e9805ad967ab7e9e589bf1b456670f05d25f94242b71a301cd540fef0",
 					"mods": [
@@ -267,7 +269,7 @@
 					"name": "DistantHorizons-VulkanMod-fabric-2.4.0-2.4.6+vm.5-mc1.21.11.jar",
 					"url": "https://github.com/Braffolk/distant-horizons-vulkanmod/releases/download/v2.4.0-2.4.6%2Bvm.5/DistantHorizons-VulkanMod-fabric-2.4.0-2.4.6%2Bvm.5-mc1.21.11.jar",
 					"size": 92432,
-					"downloads": 11,
+					"downloads": 12,
 					"inspection": 2,
 					"sha256": "04f50cdf09763dc70d61692e5287f62dab47e4224c24006a7c5ddf534be526aa",
 					"mods": [
@@ -309,7 +311,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "**Major VRAM fix** — GPU memory now properly cleans up during gameplay. Previously, VRAM would grow indefinitely (easily reaching 7GB+) as you explored or left and rejoined servers. With this fix, VRAM stays stable under normal use and reliably frees up between server sessions. Additionally, rendering at extreme altitudes and high render distances is now more stable, and SSAO performance is improved at long distances.\n\n### Known Issues\n\n- Rare LOD flicker: individual LOD sections may briefly disappear for a frame when their detail level changes (e.g. flying fast towards terrain). Will be further improved in future releases.\n\n### Memory Management (Technical Details)\n\n- **Fixed primary VRAM leak**: VBO destruction (`destroyAsync`/`close`) now schedules cached GPU `VertexBuffer`s for deferred freeing via a thread-safe pending queue. Previously, GPU buffers remained cached permanently — growing proportionally to total LOD churn.\n- GPU buffer frees use an N+1 frame delay with compare-and-remove to prevent LOD transition flicker and identity hash collisions after GC.\n- Fixed static Vulkan resource leak — `depthOnlyView` and `mcDepthCopyImage` were never freed during cleanup.\n- Fixed VRAM leak in `DhDepthReaderPipeline` — cleanup and resize were completely unimplemented, leaking resources on every server join/leave cycle.\n- Fixed native memory leak in `DhCompositePipeline` — four MappedBuffers were never freed during cleanup.\n- Fixed stale resize callbacks — pipeline resize handlers now guard against firing after cleanup, preventing use-after-free across reinit cycles.\n- Added `depthReaderPipeline` to the cleanup chain.\n- Added `vkDeviceWaitIdle` at start of cleanup to ensure GPU is idle before freeing resources.\n- Pre-allocated index buffer to 256K quads (~6MB) to avoid mid-frame grow+defer cycles.\n\n### Rendering\n\n- Switched terrain, SSAO, and fog rendering to use DH's projection matrix instead of MC's, preventing rendering artifacts and NaN propagation at extreme altitudes.\n- Added depth remapping in the composite shader for correct occlusion against Minecraft terrain.\n- SSAO now fades out beyond 1,600 blocks — the occlusion shader early-outs for distant fragments, improving performance at high render distances."
 		},
 		{
 			"tag": "v2.4.0-2.4.6+vm.4",
@@ -321,7 +324,7 @@
 					"name": "DistantHorizons-VulkanMod-fabric-2.4.0-2.4.6+vm.4-mc1.20.6.jar",
 					"url": "https://github.com/Braffolk/distant-horizons-vulkanmod/releases/download/v2.4.0-2.4.6%2Bvm.4/DistantHorizons-VulkanMod-fabric-2.4.0-2.4.6%2Bvm.4-mc1.20.6.jar",
 					"size": 89470,
-					"downloads": 6,
+					"downloads": 7,
 					"inspection": 2,
 					"sha256": "6cc1b85e6ba9f564b12320a180f27c32d8b01c2a250958fbfe35369b96160996",
 					"mods": [
@@ -368,7 +371,7 @@
 					"name": "DistantHorizons-VulkanMod-fabric-2.4.0-2.4.6+vm.4-mc1.21.11.jar",
 					"url": "https://github.com/Braffolk/distant-horizons-vulkanmod/releases/download/v2.4.0-2.4.6%2Bvm.4/DistantHorizons-VulkanMod-fabric-2.4.0-2.4.6%2Bvm.4-mc1.21.11.jar",
 					"size": 88807,
-					"downloads": 13,
+					"downloads": 14,
 					"inspection": 2,
 					"sha256": "f8d5e63bd8aaa9395f484aa1f12d993c61635b466702d9c78c397a65704d7129",
 					"mods": [
@@ -410,7 +413,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "First release as a standalone Fabric extension. Works alongside unmodified Distant Horizons 2.4.0+.\n\n### Added\n\n- Supports MC 1.20.6 (VulkanMod 0.4.2) and MC 1.21.11 (VulkanMod 0.6.1) from a single codebase\n- Ported Vulkan rendering backend from a DH source fork to a mixin-based extension mod\n- All DH interception via mixins, no DH source modifications required\n- Standalone jar installable alongside any compatible DH release\n\n### Included Features (from fork)\n\n- Native Vulkan LOD rendering via VulkanMod\n- DH-owned framebuffer with composite pipeline\n- SSAO post-processing (2-pass, configurable)\n- Fog post-processing (distance + height fog)\n- Noise/dithering on LOD terrain\n- Lightmap integration via VulkanMod's GL emulation\n- Deterministic GPU memory management with buffer cache\n\n### MC Depth Comparison\n\n- Full per-pixel MC depth comparison: LODs are hidden wherever Minecraft terrain has rendered, using MC's actual depth buffer values instead of a fixed clip distance.\n- Shader-based depth reader pipeline (`DhDepthReaderPipeline`) copies MC's swapchain depth into a sampleable R32F texture. This works on all platforms, including NVIDIA Windows where the swapchain depth can't be directly sampled as a texture.\n- MC depth debug visualization (mode 6) shows the actual depth buffer values, useful for diagnosing depth-related rendering issues (debug modes can be enabled via /dh-debug num).\n\n### Overdraw Prevention\n\n- LOD overdraw prevention matches original DH behavior: LODs within MC's render distance are clipped based on the `overdrawPrevention` config setting.\n- Hardware `gl_ClipDistance` clips LOD geometry in the vertex shader, less fragment shader cost for clipped geometry.\n- Dithered fade transition in the fragment shader provides a smooth visual boundary between MC terrain and LODs when dithering is enabled.\n\n### Fade Mode Support\n\n- Respects DH's `vanillaFadeMode` setting (NONE / SINGLE_PASS / DOUBLE_PASS):\n  - **NONE**: LODs composite immediately with optional MC depth for debug mode.\n  - **SINGLE/DOUBLE**: LODs composite first without MC depth, then `deferredComposite` adds MC depth occlusion after terrain renders.\n- Unified rendering path for both MC versions — no version-specific branching in the composite logic.\n\n### Technical Details\n\n- MC 1.20.6 compatibility required resolving mixin conflicts (`DhVulkanMixinPlugin`), preventing GL context poisoning (`MixinLightMapWrapper`), bypassing VM 0.4.2's hardcoded UINT16 index type, wiring custom uniform suppliers, and normalizing config value scaling.\n- All version-specific code centralized in `Compat.java` using Manifold preprocessor directives."
 		},
 		{
 			"tag": "v2.4.6+vm.3",
@@ -422,7 +426,7 @@
 					"name": "DistantHorizons-VulkanMod-fabric-2.4.6+vm.3-mc1.21.11.jar",
 					"url": "https://github.com/Braffolk/distant-horizons-vulkanmod/releases/download/v2.4.6%2Bvm.3/DistantHorizons-VulkanMod-fabric-2.4.6%2Bvm.3-mc1.21.11.jar",
 					"size": 25490585,
-					"downloads": 8,
+					"downloads": 9,
 					"inspection": 2,
 					"sha256": "a80ed56fea3ff296669758702efc8aca883c9bc9ae80e041480d3f506fdeb1e4",
 					"mods": [
@@ -581,11 +585,28 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### Rendering Fixes\n\n- Fixed LODs only rendering on half the screen (diagonal artifact) on NVIDIA GPUs. The fullscreen composite quad's vertex buffer data was read incorrectly by the NVIDIA driver, causing one of two triangles to never draw.\n- Fixed composite depth test failing against uninitialized depth buffer data on NVIDIA. MoltenVK silently clears depth to 1.0, hiding the bug on macOS.\n- Fixed MC terrain not rendering correctly in front of LODs in certain screen regions.\n\n### Rendering Pipeline Changes\n\n- LOD compositing now happens before MC terrain renders, not after. MC's opaque terrain overwrites LODs via depth test, and transparent terrain (water, leaves, glass) renders on top with alpha blending — matching vanilla MC behavior.\n- Reduced LOD clip distance to a fixed 7 blocks. Since MC terrain now renders after LODs, MC's own depth test handles occlusion naturally. The small clip distance only prevents LOD bleed-through at leaf cutout edges and other transparent block boundaries.\n\n### Composite, SSAO, and Fog Pipelines\n\n- All fullscreen passes (composite, SSAO, fog) now use a single oversized triangle with vertex positions generated in the shader, bypassing vertex buffer data entirely. This avoids the NVIDIA issue and is the standard Vulkan best practice for post-processing.\n- Added debug visualization modes to the composite pipeline: depth, SSAO, fog alpha, fog color, and normals.\n\n### Config and UI\n\n- Unsupported settings on the Vulkan path (wireframe, instanced rendering, vanilla fog, OpenGL debug options) are now automatically locked or hidden in the settings UI.\n\n### Technical Details\n\n- Fullscreen triangle vertices at NDC (-1,-1), (3,-1), (-1,3) cover the entire viewport after GPU clipping. Positions are generated from `gl_VertexIndex` in the vertex shader — no vertex buffer data is read.\n- Composite depth function set to `GL_ALWAYS` because MC's depth buffer uses `VK_ATTACHMENT_LOAD_OP_DONT_CARE`, which produces undefined values on NVIDIA but implicit zeros on MoltenVK.\n- Added deferredComposite() to `IVulkanRenderDelegate` for the new render ordering."
 		}
 	],
 	"readme": "Readme.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [
+		"docs/dh-vulkanmod.jpg"
+	],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 108,
+		"more": 0,
+		"people": [
+			{
+				"login": "Braffolk",
+				"commits": 108,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

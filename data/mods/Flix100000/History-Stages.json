@@ -6,8 +6,242 @@
 	"archived": false,
 	"license": "NOASSERTION",
 	"created": "2026-02-26T18:57:12Z",
-	"pushed": "2026-10-26T23:18:46Z",
+	"pushed": "2026-10-30T14:52:01Z",
 	"releases": [
+		{
+			"tag": "6.1.0-1.21.1-fabric",
+			"published": "2026-10-30T14:51:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 692434227,
+					"name": "historystages-fabric-6.1.0-1.21.1-fabric.jar",
+					"url": "https://github.com/Flix100000/History-Stages/releases/download/6.1.0-1.21.1-fabric/historystages-fabric-6.1.0-1.21.1-fabric.jar",
+					"size": 3952320,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "9d91edd366e29aa3bff86f21838b4b7acabf0f7246f556cd1f2be0e3bc2e3b25",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "historystages",
+							"version": "6.1.0-1.21.1-fabric",
+							"name": "History Stages",
+							"description": "Guide your players through the ages. Lock items, recipes, fluids, villager trades, structures, biomes, dimensions, mobs, loot and more behind custom research-based Stages, unlocked server-wide or individual at the Research Pedestal, or automatically from what a player has already done. Ships with a full in-game editor and an API other mods can hook into.",
+							"minecraft": ">=1.21 <1.21.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"lootr"
+							],
+							"provides": [
+								"com_electronwill_night-config_core",
+								"com_electronwill_night-config_toml"
+							],
+							"suggests": [
+								"jade",
+								"emi",
+								"jei",
+								"ftbquests",
+								"accessories",
+								"spell_engine",
+								"bettercombat"
+							]
+						}
+					],
+					"icon": "eb60068b6c16da13cb8ec5348197340eabd623614278198e9f6c08c2249fec31.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Acacia Scroll Shelf",
+								"Bamboo Scroll Shelf",
+								"Birch Scroll Shelf",
+								"Cherry Scroll Shelf",
+								"Crimson Scroll Shelf",
+								"Dark Oak Scroll Shelf",
+								"Jungle Scroll Shelf",
+								"Mangrove Scroll Shelf",
+								"Oak Scroll Shelf",
+								"Research Pedestal",
+								"Research Pedestal Tier II",
+								"Research Pedestal Tier III",
+								"Research Pedestal Tier IV",
+								"Spruce Scroll Shelf",
+								"Warped Scroll Shelf"
+							],
+							"item": [
+								"Creative Scroll",
+								"Open Research Scroll",
+								"Research Scroll"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1554,
+						"jars": [
+							"META-INF/jars/core-3.6.7.jar",
+							"META-INF/jars/toml-3.6.7.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/core-3.6.7.jar!com/electronwill/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/core-3.6.7.jar!com/electronwill/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/core-3.6.7.jar!com/electronwill/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"net/bananemdnsa/historystages/Config$Gameplay.class",
+								"net/bananemdnsa/historystages/Config$Visual.class",
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							],
+							"historystages.github.io": [
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							],
+							"discord.gg": [
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: https://github.com/Flix100000/History-Stages/compare/6.0.0-1.21.1-fabric...6.1.0-1.21.1-fabric\n\nStages can now stand in for each other, block, hide or revoke one another and lock themselves again. Items can be locked by their enchantments and potion effects, locked things can wear a disguise, and the addon API got what it was missing.\n\n### **New**\n\n- Stages: \"Interchangeable\" switch. When several stages lock the same thing, the ones with the switch on stand in for each other, so any one of them is enough. Works for every kind of lock. Tooltip and Jade list them under \"One of:\" (`groupInterchangeableStages` in `visuals` and `jade` turns that off).\n- Stages: Logic blocks, behind the new \"Logic\" button. Conditions look at other stages, and there are four kinds:\n  - \"Blocked while ...\": the stage cannot be unlocked while the condition holds. Commands and the editor still go through.\n  - \"Hidden while ...\": the stage shows as \"???\" (or not at all) in the graph, JEI/EMI and messages, but can still be unlocked.\n  - \"Cheaper/costlier while ...\": scales research time, item and XP costs in percent.\n  - \"Revoke when ...\": takes the stage away the moment the condition becomes true, offline players at their next login.\n- Stages: New mode \"While\" keeps a stage open only while its state triggers hold (biome, dimension, effect, weather, ...). Default and Auto stages can get lock triggers of their own and lock themselves again.\n- Individual stages: \"Share with team\" for FTB Teams. When one player in a party unlocks the stage, the rest of the party gets it too. Options in `team_mods` in gameplay.toml; other team mods can hook in through `registerTeamProviders` in their `historystages` entrypoint.\n- Locks: Enchantments and potion effects as new categories. Locks books, gear, potions and tipped arrows carrying them, and the enchanting table, anvil and brewing stand refuse them. The brewing stand only checks global stages.\n- Locks: Disguises. A locked item or block can look like something else until it is unlocked, like Revelationary but built in: emerald ore can show as stone in the world and in inventories ([#125](https://github.com/Flix100000/History-Stages/issues/125)).\n- Locks: Item, fluid and interaction actions and SpawnControl can be fixed for a whole stage in its settings (right click fixes a value).\n- Locks: `blockExplosions` switch for biome and structure locks, on by default.\n- Locks: Locked ammo is skipped; a bow takes the next arrow it may use.\n- Blocks: Scroll shelves, a chiseled bookshelf for research scrolls in eleven wood types, with hopper, comparator and Jade support.\n- Editor: \"Recipes using this item\" in the right-click menu adds every recipe that takes an item as ingredient ([#132](https://github.com/Flix100000/History-Stages/issues/132)).\n- Graph: Unplaced stages live in the sidebar, several stages can be selected and moved at once, the auto layout is roomier, and there is undo/redo plus keyboard shortcuts (F1 for the list).\n- Graph: Style presets: name a node look once and point stages at it.\n- Open Scroll: Chapters are marked with icons (`open_scroll.tabStyle = \"words\"` for the old look).\n- Research Pedestal: Handing in items by hand counts the booster's discount.\n- Debug report: Written on every start and reload, much shorter (about 100 lines instead of 650), and errors also go to `latest.log`.\n- Addons: The API covers what addons actually need: stage checks per player, unlocks for offline players, events with a cause and a veto, the stage graph, locks at a position and client-side queries. API version 6.1, nothing removed.\n- Compat: EMI can hide locked items and recipes the same way JEI does. It hides exactly what the lock overlay marks, so a recipe locked by its id or by a gated fluid disappears as well, and JER's drop and loot pages are left alone ([#83](https://github.com/Flix100000/History-Stages/issues/83)).\n- Translations: Simplified Chinese (`zh_cn`).\n\n### **Fixes**\n\n\n..."
+		},
+		{
+			"tag": "6.1.1-1.20.1",
+			"published": "2026-10-30T10:42:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 691798173,
+					"name": "historystages-6.1.1-1.20.1.jar",
+					"url": "https://github.com/Flix100000/History-Stages/releases/download/6.1.1-1.20.1/historystages-6.1.1-1.20.1.jar",
+					"size": 4183194,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "30d7d519fb9362009ffd9f63d26697dee1019770cf813645496ec03bde24ac20",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "historystages",
+							"version": "6.1.1-1.20.1",
+							"name": "History Stages",
+							"description": "Guide your players through the ages. Lock items, recipes, fluids, villager trades, structures, biomes, dimensions, mobs, loot and more behind custom research-based Stages, unlocked server-wide or individual at the Research Pedestal, or automatically from what a player has already done. Ships with a full in-game editor, KubeJS and CraftTweaker integration, and an API other mods can hook into.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"lootr"
+							],
+							"suggests": [
+								"jei",
+								"emi",
+								"jade",
+								"ftbquests",
+								"ftbteams",
+								"curios",
+								"accessories",
+								"spell_engine",
+								"bettercombat"
+							]
+						}
+					],
+					"icon": "eb60068b6c16da13cb8ec5348197340eabd623614278198e9f6c08c2249fec31.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Acacia Scroll Shelf",
+								"Bamboo Scroll Shelf",
+								"Birch Scroll Shelf",
+								"Cherry Scroll Shelf",
+								"Crimson Scroll Shelf",
+								"Dark Oak Scroll Shelf",
+								"Jungle Scroll Shelf",
+								"Mangrove Scroll Shelf",
+								"Oak Scroll Shelf",
+								"Research Pedestal",
+								"Research Pedestal Tier II",
+								"Research Pedestal Tier III",
+								"Research Pedestal Tier IV",
+								"Spruce Scroll Shelf",
+								"Warped Scroll Shelf"
+							],
+							"item": [
+								"Creative Scroll",
+								"Open Research Scroll",
+								"Research Scroll"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe",
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1806,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.5.3.jar",
+							"META-INF/jarjar/mixinextras-forge-0.5.3.jar!META-INF/jars/MixinExtras-0.5.3.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jarjar/mixinextras-forge-0.5.3.jar!META-INF/jars/MixinExtras-0.5.3.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.5.3.jar!META-INF/jars/MixinExtras-0.5.3.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"META-INF/jarjar/mixinextras-forge-0.5.3.jar!META-INF/jars/MixinExtras-0.5.3.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class",
+								"net/bananemdnsa/historystages/Config$Gameplay.class",
+								"net/bananemdnsa/historystages/Config$Visual.class",
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							],
+							"historystages.github.io": [
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							],
+							"discord.gg": [
+								"net/bananemdnsa/historystages/client/editor/dialog/CreditsScreen.class",
+								"net/bananemdnsa/historystages/util/ModLinks.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: https://github.com/Flix100000/History-Stages/compare/6.1.0-1.20.1...6.1.1-1.20.1\n\n### **Fixes**\n\n- Compat: Opening a stage in the editor no longer crashes the client under Sinytra Connector. A Fabric mixin on a vanilla trade recipe can fail the first time the recipe runs, and the trade scan did not catch that kind of error. That recipe is now skipped.\n- Stages: Stage files saved by hand in another encoding than UTF-8 (e.g. Windows-1251) no longer show their names as garbled characters. They are read in the system encoding, and a warning in the log asks you to save them again as UTF-8."
+		},
 		{
 			"tag": "6.1.0-1.20.1",
 			"published": "2026-10-26T23:18:46Z",
@@ -18,7 +252,7 @@
 					"name": "historystages-6.1.0-1.20.1.jar",
 					"url": "https://github.com/Flix100000/History-Stages/releases/download/6.1.0-1.20.1/historystages-6.1.0-1.20.1.jar",
 					"size": 4182313,
-					"downloads": 0,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "1ace3f4539481f762886597868306ca55ba4f4ee04b0ca8c0fb26cec7a114d62",
 					"mods": [
@@ -133,7 +367,7 @@
 					"name": "historystages-6.1.0-1.21.1.jar",
 					"url": "https://github.com/Flix100000/History-Stages/releases/download/6.1.0-1.21.1/historystages-6.1.0-1.21.1.jar",
 					"size": 3547739,
-					"downloads": 0,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "573d114049d26ee7a54d6f4aec01c36e12ddac09eaa61977d2bbc5c659a62730",
 					"mods": [
@@ -336,7 +570,7 @@
 					"name": "historystages-6.0.2-1.21.1.jar",
 					"url": "https://github.com/Flix100000/History-Stages/releases/download/6.0.2-1.21.1/historystages-6.0.2-1.21.1.jar",
 					"size": 2861503,
-					"downloads": 2,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "2810d1353d21e7de71e83165c5a44006e8e0e13739e3a8f62cad3b23fc03a157",
 					"mods": [
@@ -532,7 +766,7 @@
 					"name": "historystages-5.4.0-1.21.jar",
 					"url": "https://github.com/Flix100000/History-Stages/releases/download/5.4.0-1.21.1/historystages-5.4.0-1.21.jar",
 					"size": 832529,
-					"downloads": 3,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "62d9d44268050abdbe23d79ba253cd265b5deb3829313803034e9b962c30ff25",
 					"mods": [

@@ -1,0 +1,214 @@
+{
+	"repo": "vortom/czechcraft",
+	"host": "github",
+	"description": "Czech-themed food, drinks and items for Minecraft — a small Fabric mod.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-04-25T10:30:57Z",
+	"pushed": "2026-09-06T11:29:48Z",
+	"releases": [
+		{
+			"tag": "v1.1.0",
+			"published": "2026-09-06T10:22:48Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 547050473,
+					"name": "czechcraft-1.1.0.jar",
+					"url": "https://github.com/vortom/czechcraft/releases/download/v1.1.0/czechcraft-1.1.0.jar",
+					"size": 47174,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "ddf49f91714d8d49890f89b168da349f44e01cfdebf6cc8c917250deeea115e2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "czechcraft",
+							"version": "1.1.0",
+							"name": "CzechCraft",
+							"description": "Czech-themed food, drinks and items for Minecraft. v1 adds the Rohlík — a traditional Czech bread roll. More Czech content coming in future versions.",
+							"minecraft": ">=26.1.2 <26.3-",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "478ce818da34f3d51c9049e28e2d21534e48b3b6922ef7cc8c6d935257a5d68f.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Rohlík"
+							],
+							"group": [
+								"CzechCraft"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 15,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n- **Minecraft 26.2 support.** A single jar now covers 26.1.2 and 26.2 — no second download. Verified by running the published jar as a real mod on a dedicated server for each version: the item registers and resolves via `give`, and an A/B recipe count (mod present vs absent) confirms the recipe and its advancement load on both.\n\n### Fixed\n- **Modrinth no longer advertises versions the mod rejects.** 26.1 and 26.1.1 were listed but never worked — the declared range has always been `>=26.1.2`, so the loader refused them. They are removed from the listing rather than silently handed a jar that cannot start.\n- Declared Fabric API dependency tightened from `*` (any version at all) to a real minimum.\n\n### Changed\n- The supported Minecraft range is now `minecraft_supported_range` in `gradle.properties`, separate from `minecraft_version` (the compile target). Conflating the two produced the original \"requires 26.1.2 but 26.2 is present\" report. The Modrinth game-version list is generated from the same property, and `SupportedVersionsTest` asserts — using Fabric Loader's own `VersionPredicate` — that everything advertised is actually accepted, and that versions known to break stay excluded.\n\n### Not supported\n- **Minecraft 26.3.** The Java code runs there, but 26.3 renamed the `recipe_unlocked` advancement trigger field (`recipe` → `recipes`), so our generated advancement fails to parse and the game **refuses to load its datapacks at all**. Supporting 26.3 requires regenerating datagen against it, not widening a range.\n\n### Fixed\n- `release.yml` now retries the Modrinth version-ID lookup instead of failing on the first miss. Modrinth is not read-your-writes consistent: during the 1.0.1 release the lookup ran ~300 ms after upload, found nothing, and aborted the workflow *after* the jar was already public — skipping GitHub Release creation.\n- `release.yml` refuses to publish a version number that already exists on Modrinth. Re-running a release previously re-uploaded silently, which is how 1.0.0 came to be listed twice."
+		},
+		{
+			"tag": "v1.0.1",
+			"published": "2026-09-06T08:48:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 546956593,
+					"name": "czechcraft-1.0.1.jar",
+					"url": "https://github.com/vortom/czechcraft/releases/download/v1.0.1/czechcraft-1.0.1.jar",
+					"size": 47164,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "8ecb1c1bd2f990dc51d3734055b9e1d14ec8faf44e83223887b8e207a545911a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "czechcraft",
+							"version": "1.0.1",
+							"name": "CzechCraft",
+							"description": "Czech-themed food, drinks and items for Minecraft. v1 adds the Rohlík — a traditional Czech bread roll. More Czech content coming in future versions.",
+							"minecraft": "~26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "478ce818da34f3d51c9049e28e2d21534e48b3b6922ef7cc8c6d935257a5d68f.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Rohlík"
+							],
+							"group": [
+								"CzechCraft"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 15,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Fixed\n- **The mod now actually loads.** v1.0.0 shipped without any of the `common` module's classes (`CzechCraft`, `RegistryHelper`, `ModItems`, `ModItemGroups`, `FoodItems`), so Fabric crashed with `NoClassDefFoundError` on the first line of `CzechCraftFabric.onInitialize()` — on every Minecraft version, for every player. `implementation project(\":common\")` is a compile/runtime dependency and does not bundle classes into the jar; the loader jar now includes common's compiled output.\n\n### Added\n- `JarPackagingTest` — verifies the **built artifact** contains every class compiled into `common`, and that each `cz.czechcraft.*` class links using the jar alone. Runs on every `build`, so a release can no longer ship a jar that cannot start. The existing checks all resolved `common` through the dev classpath and were structurally blind to this."
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-05-01T12:03:52Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 417739994,
+					"name": "czechcraft-1.0.0.jar",
+					"url": "https://github.com/vortom/czechcraft/releases/download/v1.0.0/czechcraft-1.0.0.jar",
+					"size": 41781,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "ab5506c16ce40d236ff62fbcb9b5904441d430fde4ab73ff5a3f37338e6bb113",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "czechcraft",
+							"version": "1.0.0",
+							"name": "CzechCraft",
+							"description": "Czech-themed food, drinks and items for Minecraft. v1 adds the Rohlík — a traditional Czech bread roll. More Czech content coming in future versions.",
+							"minecraft": "~26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "478ce818da34f3d51c9049e28e2d21534e48b3b6922ef7cc8c6d935257a5d68f.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Rohlík"
+							],
+							"group": [
+								"CzechCraft"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 10,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n- **Rohlík** — Czech bread roll. Crafted from 2 wheat placed horizontally adjacent on a crafting table or 2×2 inventory grid. Restores 2 hunger drumsticks (nutrition 4, saturation modifier 0.3).\n- **CzechCraft** creative tab containing all CzechCraft items.\n- English (`en_us`) and Czech (`cs_cz`) translations.\n- Fabric loader support for Minecraft 26.1.x (Java 25, Mojang Mappings).\n- MultiLoader-Template architecture: `common/` module compiles against vanilla Minecraft only; `fabric/` is a thin entry layer. Future loader modules (NeoForge planned for v3) drop in without touching `common/` source.\n- GitHub Actions: `build.yml` runs Spotless + tests + datagen verification on every push/PR; `release.yml` publishes to Modrinth and creates a GitHub Release on `v*` tags.\n\n[Unreleased]: https://github.com/vortom/czech-craft/compare/v1.0.0...HEAD\n[1.0.0]: https://github.com/vortom/czech-craft/releases/tag/v1.0.0"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T22:37:16.645Z",
+	"pictures": [
+		"docs/design/proposed-artwork/kolac.png",
+		"docs/design/proposed-artwork/pivo.png",
+		"docs/design/proposed-artwork/rizek.png",
+		"docs/design/proposed-artwork/smazeny_syr.png",
+		"docs/design/proposed-artwork/spekacek.png",
+		"docs/design/proposed-artwork/svickova.png"
+	],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 21,
+		"more": 0,
+		"people": [
+			{
+				"login": "vortom",
+				"commits": 21,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
+	"history": 1
+}

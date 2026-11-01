@@ -18,7 +18,7 @@
 					"name": "lc2h-omni-4.2.2-LTS.jar",
 					"url": "https://github.com/Admany/LC2H/releases/download/V4_2_2_LTS/lc2h-omni-4.2.2-LTS.jar",
 					"size": 3952991,
-					"downloads": 46,
+					"downloads": 47,
 					"inspection": 2,
 					"sha256": "be8799bda3e56281d38b04e99ae3368bdc64a92181eeae3b84fd700928726614",
 					"mods": [
@@ -84,7 +84,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Fixed the blender’s slow init/role bottleneck stuff. Role and height work now runs through async tiles, duplicate scans are gone, and terrain planning no longer blocks generation workers xd"
 		},
 		{
 			"tag": "V4_2_1_LTS",
@@ -96,7 +97,7 @@
 					"name": "lc2h-omni-4.2.1-LTS.jar",
 					"url": "https://github.com/Admany/LC2H/releases/download/V4_2_1_LTS/lc2h-omni-4.2.1-LTS.jar",
 					"size": 3944657,
-					"downloads": 9,
+					"downloads": 10,
 					"inspection": 2,
 					"sha256": "c81e3fa88561b1b6fae2f4d9b24b869cc3b925470771eb00a00f0eda873d596e",
 					"mods": [
@@ -162,7 +163,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## LC2H V4.2.0-LTS :]\n\nFinally added the NeoForge port and fixed a ton of the remaining V4 worldgen issues.\n\n### Main stuff\n\n- One jar now supports Forge 1.20.1 and NeoForge 1.21.1.\n- Shared code was moved out of the Forge-only folder so both loaders use the same blender, planners, cleanup, tree, and kernel systems.\n- The city blender was reworked properly. It now follows Minecraft's own NoiseChunk/noise path, so mountains and hills keep their normal vanilla look instead of getting chopped into flat walls.\n- City edges now blend over a wider area with better slope handling, edge recovery, and fewer random chunks being skipped.\n- Fixed a bunch of terrain seams, mountain cutoffs, missing city-edge chunks, and concurrent versus serial generation mismatches.\n\n### Trees and buildings\n\n- Fixed large trees being cut at chunk borders.\n- Fixed trees losing their middle while the leaves and branches stayed behind.\n- Deferred trees now keep all touched chunks loaded, wait for the area to settle, and replay their blocks in safe batches.\n- Fixed multi-chunk buildings being treated differently depending on which chunk finished first.\n- Fixed deferred Lost Cities loot handling touching the live world during generation, which could trigger FastChunkGen/C2ME retries.\n\n### Vine and vegetation cleanup\n\n- Fixed cleanup missing normal vines, glow lichen, and Immersive Weathering frost.\n- Added support for hanging roots, chains, modded vine-like blocks, and extra IDs from the config.\n- Registry loading order no longer makes frost or lichen disappear from the cleaner.\n- Large connected clusters are scanned asynchronously instead of freezing the generation worker.\n- Full scans use bounded queues, retries, overflow handling, palette skipping, and adaptive budgets so cleanup does not randomly stop when the world is busy.\n- Actual block changes are still applied safely on the server thread.\n\n### Compatibility and performance\n\n- Improved C2ME and FastChunkGen compatibility.\n- Generation workers no longer wait on unfinished planner, cache, height, or blender work.\n- QAPI scheduling, CPU kernels, GPU paths, and safe fallbacks all remain available.\n- Added more diagnostics for queues, locks, planners, trees, cleanup, caches, and terrain blending.\n\n### Config and debugging\n\n- Fixed the Forge and NeoForge config UI blur, scaling, oversized header, scrollbar overlap, and button layout.\n- Added the LC2H logging toggle, disabled by default.\n- Expanded `/lc2h diagnostics`, `/lc2h whyflat`, blender commands, tree diagnostics, cleanup stats, and chunkdebug exports.\n- Changing blender settings only affects newly generated chunks. Existing chunks are not regenerated automatically.\n\nStill compatible with the current Lost Cities 7.5.4 setup :]"
 		},
 		{
 			"tag": "V4_2_0_LTS",
@@ -174,7 +176,7 @@
 					"name": "lc2h-omni-4.2.0-LTS.jar",
 					"url": "https://github.com/Admany/LC2H/releases/download/V4_2_0_LTS/lc2h-omni-4.2.0-LTS.jar",
 					"size": 3944682,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "fffaf5798f48be5f03154ac10349f11d59e8312d787e79f726ea50c56eadf0c9",
 					"mods": [
@@ -240,11 +242,36 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## LC2H V4.2.0-LTS :]\n\nFinally added the NeoForge port and fixed a ton of the remaining V4 worldgen issues.\n\n### Main stuff\n\n- One jar now supports Forge 1.20.1 and NeoForge 1.21.1.\n- Shared code was moved out of the Forge-only folder so both loaders use the same blender, planners, cleanup, tree, and kernel systems.\n- The city blender was reworked properly. It now follows Minecraft's own NoiseChunk/noise path, so mountains and hills keep their normal vanilla look instead of getting chopped into flat walls.\n- City edges now blend over a wider area with better slope handling, edge recovery, and fewer random chunks being skipped.\n- Fixed a bunch of terrain seams, mountain cutoffs, missing city-edge chunks, and concurrent versus serial generation mismatches.\n\n### Trees and buildings\n\n- Fixed large trees being cut at chunk borders.\n- Fixed trees losing their middle while the leaves and branches stayed behind.\n- Deferred trees now keep all touched chunks loaded, wait for the area to settle, and replay their blocks in safe batches.\n- Fixed multi-chunk buildings being treated differently depending on which chunk finished first.\n- Fixed deferred Lost Cities loot handling touching the live world during generation, which could trigger FastChunkGen/C2ME retries.\n\n### Vine and vegetation cleanup\n\n- Fixed cleanup missing normal vines, glow lichen, and Immersive Weathering frost.\n- Added support for hanging roots, chains, modded vine-like blocks, and extra IDs from the config.\n- Registry loading order no longer makes frost or lichen disappear from the cleaner.\n- Large connected clusters are scanned asynchronously instead of freezing the generation worker.\n- Full scans use bounded queues, retries, overflow handling, palette skipping, and adaptive budgets so cleanup does not randomly stop when the world is busy.\n- Actual block changes are still applied safely on the server thread.\n\n### Compatibility and performance\n\n- Improved C2ME and FastChunkGen compatibility.\n- Generation workers no longer wait on unfinished planner, cache, height, or blender work.\n- QAPI scheduling, CPU kernels, GPU paths, and safe fallbacks all remain available.\n- Added more diagnostics for queues, locks, planners, trees, cleanup, caches, and terrain blending.\n\n### Config and debugging\n\n- Fixed the Forge and NeoForge config UI blur, scaling, oversized header, scrollbar overlap, and button layout.\n- Added the LC2H logging toggle, disabled by default.\n- Expanded `/lc2h diagnostics`, `/lc2h whyflat`, blender commands, tree diagnostics, cleanup stats, and chunkdebug exports.\n- Changing blender settings only affects newly generated chunks. Existing chunks are not regenerated automatically.\n\nStill compatible with the current Lost Cities 7.5.4 setup :]"
 		}
 	],
 	"readme": null,
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 57,
+		"more": 0,
+		"people": [
+			{
+				"login": "Admany",
+				"commits": 56,
+				"funding": []
+			},
+			{
+				"login": "ChaosCraftZ",
+				"commits": 1,
+				"funding": [
+					{
+						"platform": "ko_fi",
+						"url": "https://ko-fi.com/blackrift_studios"
+					}
+				]
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

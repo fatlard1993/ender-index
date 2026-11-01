@@ -1,0 +1,314 @@
+{
+	"repo": "zhuimeng1233/block-durability",
+	"host": "github",
+	"stars": 2,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-07-03T07:36:57Z",
+	"pushed": "2026-10-31T02:13:01Z",
+	"releases": [
+		{
+			"tag": "v2.0.0",
+			"published": "2026-10-30T10:38:54Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 691771100,
+					"name": "blockdurability-1.20.1-2.0.0-forge.jar",
+					"url": "https://github.com/zhuimeng1233/block-durability/releases/download/v2.0.0/blockdurability-1.20.1-2.0.0-forge.jar",
+					"size": 27879,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "38b38dfed46d76a6cfb2cac2a7e18f21218ccf8671919f89936621a8aa6fa840",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "blockdurability",
+							"version": "2.0.0-forge",
+							"name": "Block Durability",
+							"description": "Give blocks durability based on hardness. Shoot glass, wood, and more until they break! Compatible with TaCZ.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"suggests": [
+								"tacz"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 9,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 691771158,
+					"name": "blockdurability-1.21.1-2.0.0-neoforge.jar",
+					"url": "https://github.com/zhuimeng1233/block-durability/releases/download/v2.0.0/blockdurability-1.21.1-2.0.0-neoforge.jar",
+					"size": 26460,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "0c3a25d3a41167302c3be619d190f49a5c0e80f2d26a5997301cbbd100e18f5e",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "blockdurability",
+							"version": "2.0.0-neoforge",
+							"name": "Block Durability",
+							"description": "Give blocks durability based on hardness. Shoot glass, wood, and more until they break! Compatible with TaCZ.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"tacz"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 9,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Block Durability v2.0.0\n\nBlock Durability v2.0.0 将爆炸纳入方块耐久系统。范围内符合白名单的方块不再只有“直接炸碎”或“不受影响”两种结果，而是会按爆炸距离扣除耐久，逐渐开裂并最终破坏。\n\n## 主要更新\n\n### 爆炸耐久\n\n- TaCZ 的 RPG、榴弹等爆炸物会按距离对范围内白名单方块追加耐久伤害。\n- TNT、苦力怕等原版爆炸仍保持原有直接破坏逻辑，未被直接炸碎的范围内方块会继续受到距离衰减的耐久伤害。\n- 实心碰撞体会阻挡爆炸到方块之间的耐久伤害，减少隔墙波及。\n- 爆炸伤害倍率、扫描范围、原版爆炸兼容开关和方块白名单均可配置。\n\n### 耐久计算\n\n方块最大 HP 默认根据原版硬度计算：\n\n`HP = max(minBlockHP, 方块原版硬度 × hardnessMultiplier)`\n\n黑曜石的原版硬度为 `50`。将 `hardnessMultiplier` 设为 `3.0` 后：\n\n`HP = max(1.0, 50 × 3.0) = 150`\n\n在 150 HP 的配置下，大约需要 20～30 发机械动力火炮的高爆弹才能击穿黑曜石。实际数量会受到命中位置、爆炸范围、伤害倍率和其他配置影响。\n\n```toml\n[whitelist]\nblockWhitelist = [\n    \"minecraft:obsidian\"\n]\n\n[hp_calculation]\nminBlockHP = 1.0\nhardnessMultiplier = 3.0\nblockHPOverrides = []\n```\n\n### 自愈与配置\n\n- 受损方块默认在停止受伤 120 秒后恢复。\n- 可通过 `/gamerule blockDurabilityHealSeconds <秒数>` 动态修改恢复时间。\n- 设为 `0` 可以关闭自愈。\n- 白名单支持方块 Tag、精确方块 ID 和 `*` 通配符。\n- 支持配置热重载，以及用 `blockHPOverrides` 为个别方块单独指定 HP。\n\n### 修复与改进\n\n- 修复方块被挖除或替换后，新方块可能继承旧裂纹和损坏状态的问题。\n- 改善方块破坏、放置、区块卸载和空气检测时的损坏状态清理。\n- 改善配置重载后的白名单和 HP 缓存更新。\n\n## 下载\n\n| Minecraft | 加载器 | 文件 |\n| :--- | :--- | :--- |\n| 1.21.1 | NeoForge 21.1.80+ | `blockdurability-2.0.0-neoforge.jar` |\n| 1.20.1 | Forge 47.3.0+ | `blockdurability-1.20.1-2.0.0-forge.jar` |\n\nTaCZ 为可选依赖。未安装 TaCZ 时，模组仍可处理原版及其他模组的爆炸耐久。\n\n## 注意\n\n- 只有加入白名单的方块才会受到这套耐久机制影响。\n- 实际破坏效果取决于方块硬度、HP 覆盖值、爆炸位置和配置倍率。\n- 升级前建议备份世界与现有配置文件。"
+		},
+		{
+			"tag": "v1.1.0",
+			"published": "2026-07-04T18:10:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 466511979,
+					"name": "blockdurability-1.1.0-forge-1.20.1.jar",
+					"url": "https://github.com/zhuimeng1233/block-durability/releases/download/v1.1.0/blockdurability-1.1.0-forge-1.20.1.jar",
+					"size": 17412,
+					"downloads": 16,
+					"inspection": 2,
+					"sha256": "7866137919efd8423a38752c0172994c93b65011650e97c71138fada746e468c",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "blockdurability",
+							"version": "1.1.0-forge",
+							"name": "Block Durability",
+							"description": "Give blocks durability based on hardness. Shoot glass, wood, and more until they break! Compatible with TaCZ.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"suggests": [
+								"tacz"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 466512055,
+					"name": "blockdurability-1.1.0-neoforge-1.21.1.jar",
+					"url": "https://github.com/zhuimeng1233/block-durability/releases/download/v1.1.0/blockdurability-1.1.0-neoforge-1.21.1.jar",
+					"size": 17725,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "11538728449111cca0213962a65e6101105cb683a080c348e87aad951225ea72",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "blockdurability",
+							"version": "1.1.0-neoforge",
+							"name": "Block Durability",
+							"description": "Give blocks durability based on hardness. Shoot glass, wood, and more until they break! Compatible with TaCZ.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"tacz"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 新增\n\n- **栅栏修复**：通过 Mixin 劫持 TACZ 的 `bullet_ignore` 标签，栅栏和栅栏门现在可被子弹命中并破坏。默认开启，可在配置中关闭（`fixBulletIgnore = false`）\n- **配置自动更新**：升级 mod 后，新增的配置项会自动补写到旧配置文件中，无需手动删除重建\n\n### 默认白名单\n\n新增 `tag:minecraft:fences` 和 `tag:minecraft:fence_gates`，栅栏类方块默认纳入可破坏范围\n\n### 下载\n\n| 版本 | 文件 |\n|---|---|\n| NeoForge 1.21.1 | `blockdurability-1.1.0-neoforge.jar` |\n| Forge 1.20.1 | `blockdurability-1.20.1-1.1.0-forge.jar` |\n\n---"
+		},
+		{
+			"tag": "1.20.1-v1.0",
+			"published": "2026-07-03T07:45:54Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 465171159,
+					"name": "blockdurability-1.20.1-1.0.0.jar",
+					"url": "https://github.com/zhuimeng1233/block-durability/releases/download/1.20.1-v1.0/blockdurability-1.20.1-1.0.0.jar",
+					"size": 14781,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "be5489ac16ed766caab1a981630c1d0e479352d519508142226c37be24ecab16",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "blockdurability",
+							"version": "1.0.0",
+							"name": "Block Durability",
+							"description": "Give blocks durability based on hardness. Shoot glass, wood, and more until they break! Compatible with TaCZ.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"suggests": [
+								"tacz"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 6,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Block Durability — Forge 1.20.1 移植版\n\n> ⚠️ **AI 生成声明**：此版本由 AI（Claude）辅助完成 NeoForge 1.21.1 → Forge 1.20.1 的代码移植，已通过人工代码审查和编译验证，但**未经全面游戏内测试**。建议先在测试环境试用。\n\n> ⚠️ **兼容性声明**：本模组依赖 TACZ 内部 API（`AmmoHitBlockEvent` / `EntityKineticBullet`），路径已与 [TACZ 1.20.1 源码](https://github.com/MCModderAnchor/TACZ/tree/1.20.1) 交叉确认一致。若 TACZ 未来版本变更内部 API，可能导致兼容性问题。\n\n---\n\n### 📦 下载\n\n| 文件 | 说明 |\n|---|---|\n| `blockdurability-1.20.1-1.0.0.jar` | 编译版，丢进 `mods` 文件夹即可 |\n| `blockdurability-1.20.1-1.0.0-sources.jar` | 源码版，供开发参考 |\n\n---\n\n### 🎯 功能\n\n- 方块基于硬度自动计算血量（`HP = max(minHP, hardness × multiplier)`）\n- 支持 **Tag** / **通配符** 白名单，默认覆盖玻璃、木板、原木、木门等\n- 裂纹进度条实时显示破坏程度\n- 粒子特效 + 音效反馈（被击中/被破坏）\n- 按方块单独覆盖血量（如 `minecraft:obsidian=20`）\n- TACZ **可选依赖**，未安装时自动静默\n\n---\n\n### 📋 依赖\n\n| 依赖 | 版本 | 必需 |\n|---|---|---|\n| Minecraft Forge | 1.20.1 (47.3+) | ✅ |\n| [TaCZ](https://www.curseforge.com/minecraft/mc-mods/timeless-and-classics-zero) | 1.20.1 (≥1.0.2) | 可选 |\n\n---\n\n### ⚙️ 配置\n\n配置文件：`config/blockdurability-common.toml`\n\n```toml\n[general]\nenabled = true                # 是否启用\ndamagePerHit = 1.0            # 每发子弹固定伤害（useBulletDamage=false 时生效）\nuseBulletDamage = false       # 是否使用子弹实际伤害\nbulletDamageMultiplier = 1.0  # 子弹伤害倍率（useBulletDamage=true 时生效）\n\n[whitelist]\nblockWhitelist = [            # 可破坏方块白名单\n    \"tag:c:glass_blocks\",     #   tag: 开头 = 方块 Tag 匹配\n    \"tag:minecraft:planks\",   #   modid:block_id = 精确匹配\n    \"minecraft:*glass*\"       #   * = 通配符\n]\n\n[hp_calculation]\nhardnessMultiplier = 1.5      # 硬度 → 血量倍率\nminBlockHP = 1.0              # 最低血量\nblockHPOverrides = [          # 按方块覆盖血量（优先于公式）\n    \"minecraft:obsidian=20\",\n    \"minecraft:*glass*=1\"\n]\n\n[effects]\nspawnBreakParticles = true    # 破坏粒子特效\nplayBreakSound = true         # 破坏/击中音效\ndropItems = false             # 破坏后是否掉落物品"
+		},
+		{
+			"tag": "1.21.1-v1.0",
+			"published": "2026-07-03T07:41:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 465167043,
+					"name": "blockdurability-neoforge-1.21.1-1.0.0.jar",
+					"url": "https://github.com/zhuimeng1233/block-durability/releases/download/1.21.1-v1.0/blockdurability-neoforge-1.21.1-1.0.0.jar",
+					"size": 14527,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "3882af358ba640be9e875490023441735843c2c443419c4c14c4ae75660f9d16",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "blockdurability",
+							"version": "1.0.0",
+							"name": "Block Durability",
+							"description": "Give blocks durability based on hardness. Shoot glass, wood, and more until they break! Compatible with TaCZ.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"tacz"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 6,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v1.0.0\n\n首个版本。\n\n## 功能\n\n- 给 Minecraft 方块加上耐久值，用 TaCZ 枪械射击直到打碎\n- **白名单制**：只有配置中列出的方块类型才会被子弹伤害，其余方块毫发无伤\n- **血量 = 硬度 × 倍率**：方块血量根据原版硬度自动计算，可手动覆盖\n- **裂纹进度**：被击中时显示破坏裂纹 overlay（类似玩家挖矿）\n- **Tag 匹配**：支持 `tag:minecraft:planks` 格式，自动兼容其他模组的同类方块\n- 击中播放方块破坏粒子和打击音效\n\n## 默认可破坏方块(**理论上**)\n\n| 类别 | 覆盖范围 |\n|---|---|\n| 玻璃块 / 玻璃板 | 所有模组（Common Tag） |\n| 木板 / 原木 | 所有模组 |\n| 木门 / 木活板门 | 所有模组 |\n| 木楼梯 / 木半砖 | 所有模组 |\n| 木按钮 / 木压力板 | 所有模组 |\n| 告示牌 | 所有模组 |\n\n## 配置示例\n\n首次启动后自动生成 `config/blockdurability-common.toml`：\n\n```toml\n[general]\n    enabled = true\n    damagePerHit = 1.0          # 每发子弹的固定伤害\n\n[whitelist]\n    blockWhitelist = [\n        \"tag:c:glass_blocks\",       # Tag 匹配（推荐，自动兼容所有模组）\n        \"tag:minecraft:planks\",\n        \"minecraft:glass\",          # 精确名字匹配\n        \"minecraft:*stained*\",      # 通配符匹配\n    ]\n\n[hp_calculation]\n    hardnessMultiplier = 1.5    # HP = max(minHP, 硬度 × 倍率)\n    minBlockHP = 1.0\n    blockHPOverrides = []       # \"minecraft:obsidian=50\" 手动覆盖\n\n[effects]\n    spawnBreakParticles = true\n    playBreakSound = true\n    dropItems = false\n\n**Full Changelog**: https://github.com/zhuimeng1233/block-durability-new/compare/1.21.1-v1.0...1.21.1-v1.0"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "给 Minecraft 方块增加耐久值，让枪械和爆炸可以逐步破坏它们。",
+	"funding": [],
+	"fundingChecked": "2026-10-31T22:37:16.645Z",
+	"pictures": [
+		"assets/block-durability-3x3x3-high-explosive.gif",
+		"assets/block-durability-demo.gif",
+		"assets/block-durability-explosion-spray.gif",
+		"assets/block-durability-explosion.gif",
+		"assets/block-durability-rpg.gif"
+	],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 19,
+		"more": 0,
+		"people": [
+			{
+				"login": "zhuimeng1233",
+				"commits": 19,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
+	"history": 1
+}

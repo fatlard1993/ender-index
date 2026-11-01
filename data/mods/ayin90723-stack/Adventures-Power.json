@@ -18,7 +18,7 @@
 					"name": "adventure_power-1.4.9.8.jar",
 					"url": "https://github.com/ayin90723-stack/Adventures-Power/releases/download/v1.4.9.8/adventure_power-1.4.9.8.jar",
 					"size": 586149,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "b105858dde8ae5b863208be2f790fec30ed64d5ac01d1e03d6ea0936c26bffb0",
 					"mods": [
@@ -82,7 +82,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## v1.4.9.8 多代理全面审查 → 逐条证伪复核 → 全量修复\n\n**背景**：本轮做了一次全库审查。第一轮 5 个子代理按域审查（引擎 / Mixin / 事件层 / 外围 / 跨域回归）产出 **40 条**分级发现；第二轮由 **4 条独立复核线**（引擎域 / Mixin 域 / 事件+外围域 / **实机日志实证猎捕**）+ Lead 跨域复核，对**每一条**走「核实事实 → 查历史与设计意图 → 构造反证 → 终裁」。\n\n**收敛结果**：P0 **2→0**、P1 **5→0**、P2 21→**7**、新增 P3 17、**误报 6**。\n\n---\n\n### 一、两条 P0 撤回（本轮最重要的结论）\n\n**① \"dev 下 36 个 Mixin 从未注册\"——事实成立，但只影响开发环境。**\n用户实机 `debug.log` 实证：`Preparing mixins.adventure_power.json (36)` + `Mixing × 36` + `InvalidInjection = 0`；18 份历史日志中 DEBUG 级全部为 `prep=36 mixed=36 fail=0`。生产端一直正常，已重新定级为工具链问题**并顺手修好**（见第四节）。\n\n**② \"4 个裸 SRG 选择器重载歧义会崩服\"——完全推翻。**\n- 生产端选择器保持 **SRG 名**，而 SRG 空间内不存在同名重载：`javap -c` 实证 2 参 `m_135381_` 的字节码完全委托 3 参 `m_276349_`（`iconst_0; invokevirtual`），两条是**不同的 SRG 名**、各自唯一。\n- 更进一步：Mixin 0.8.5 的 `MemberMatcher.getMinMatchCount() = 0`、`getMaxMatchCount() = Integer.MAX_VALUE`——**名字型选择器刻意匹配全部同名重载**，原理上就不存在\"匹配过多报错\"这条路径。\n- 误报根源：本仓库 `build.gradle` 自研的 **dev refmap 重映射兜底**会把 SRG 名替换成官方名，`setPos`/`set` 各有 2 个重载才撞车——**这是 dev 工具链的次生现象，不是产品缺陷**。\n\n### 二、其余 4 条误报（含 1 条编造证据）\n\n- **`isFactuallyDead` \"两份实现\"系凭空编造** —— 报告声称 `PendingVerifyRegistry.java:93-100` 有该实现并附**带精确行号的代码块**；实测该处是 `register(...)`，全库唯一实现在 `TrustedRead.java:93`。已对 5 份报告的全部 **53 个证据块**做脚本化回读。\n- `probeStorageIntel` 对 hidden class 恒失效 —— `defineHiddenClass` JVM 实测：hidden 实例上取 hidden 类声明字段反射**正常**。\n- priority 两级混用\"无注释\" —— `AGENTS.md:486` 有专条（2026-08-29 澄清）逐字解释。\n- Knockback 双名白名单与选择器\"内部反差\" —— 白名单用于 `StackTraceElement.getMethodName()` 运行时比较（生产栈帧 SRG 名、dev 官方名），**必须双名**。\n\n### 三、实机日志实证猎捕（本轮新增的验证手段）\n\n以用户真实通关实例（~200 模组、死亡 ≥30 次、里程碑 10/10）为证据源，**22 份日志全量解压**（约 1.5GB 文本）逐条检验现实可达性。两条**实机反证**：\n\n- `/ap die` 第 1 次调用 7ms 后，同栈检测到第三方 cancel 了死亡并成功走 `compensateDieIntercept`（`2026-10-05-2.log:37987`）→ **\"三能力静默失效\"不成立**。\n- 274 条 `[冻结诊断]` 中有 **6 条**形态为\"玩家已活而第三方死屏仍挂\"——正是 `DeathScreenAutoDismissHandler` ③ 要处理的精确场景，**全部被正确收尾、零误关样本**。\n\n**本模组全程零 ERROR/FATAL**；栈帧内 12 处 AP 引用均为第三方在 `interceptAttackHurt` 下游抛异常的追溯经过；唯一真崩溃根因是 duelcraft+curios 的 attribute modifier 冲突。\n\n### 四、修复内容\n\n**7 条 P2：**\n1. `quench_probe_eps_base` 下限 **0.1→1.0** + `ProbeScales.EPS_FLOOR = 1.0` 硬下界 —— ε<1.0 时探针位移低于 `verifyThreshold`(0.5) 与 `driftTolerance`(1.0)，L1~L5 与清盾**全线静默失效**；`quench-upgrade-proposal.md:96` 早已把该模式判为\"v4 双重错误\"。\n2. `L4MethodProbe.probeOne` 拒绝路径还原 —— **只补已证可逆的两支**（setter / 反向承伤 setter 的二次确认失败分支）；delta 与\"单位歧义型\"写明不可逆论证后保持现状（不为\"看起来修好了\"引入新风险）。\n3. `ContainerAuditHandler` 合法移除理由早退分支补 `WARNED`/`REBUILD_OFF_WARNED` 清理。\n4. `AbilityGate.awakenedAwareValue` 作为觉醒增量取值**唯一入口**，消除 `ResilienceAbility.value(int,boolean)` 这一接口外影子重载。\n5. `ContainerAuditHandler.tickCounter` 注释更正。\n6. `/ap die` 的 `suspendDefenses` 分支补 `syncToClient`（面板不再陈旧）。\n7. `AdventureProgress` 注册表失效判据 `identityHashCode` → `MilestoneRegistry.getVersion()`——**初值必须为 -1**（`getVersion()` 初值 0，沿用默认 0 会让首次查询误判\"版本未变\"→ 缓存停在空集合 → **全能力失效**）。\n\n**dev 工具链修复：让 dev 首次真正跑起 36 个 Mixin**\n`MixinConfigs` 只写在打包 jar 的 MANIFEST，而 dev 的 mod 坐标是目录 → 配置从未注册。实测**排除两条错路**：`-Dfml.modFolders` 在 1.20.1 技术栈不存在（253 个缓存 jar 全字节扫描零命中）；`MOD_CLASSES` 追加额外目录不生效。**最终有效组合** = 清单写进 mod 坐标的第一个根 `build/resources/main/META-INF/MANIFEST.MF`（新增 `devMixinManifest` 任务）+ **在 refmap 为 4 个 SRG 选择器补限定描述符**（`@Inject` 选择器本身**不能**带描述符——注解处理器报 `Unable to locate obfuscation mapping` 硬错误；消融测试证实：抽掉 refmap 条目立刻回到 `Invalid descriptor` FATAL）。\n\n**一处主动回退**：`DeathScreenAutoDismissHandler` 的\"记录/关闭判据收敛\"虽在代码层面成立，但收窄关闭集会**重新引入 v1.4.9.7 刚修好的\"死屏关不掉\"**（玩家无法操作、被怪打死），而它想防的误关在生产日志中**零样本**——代价不对等，裁定回退。\n\n### 五、两条\"待确认\"的定论（均判定不改代码）\n\n1. **`TrueHealthMixin:571` 第三处升血点 —— 条件自否定**：`player.isDeadOrDying()` 是 `invokevirtual`（`Player`/`ServerPlayer` 均不覆写 `m_21224_`），而本类 `:304` 对该方法有 HEAD 注入、`backup>0` 时恒返回 false，故 `:581` 的 `isDeadOrDying() && backup>0` **恒假**。强加门禁反会与 `:108` 读取层口径打架、使兜底在唯一可达场景失效。\n2. **Forge `@OnlyIn` 对 mixin 配置内类是否剥离** —— 未独立证实；但 `client` 数组已提供隔离，故保留注解、注释中不作未证断言。\n\n### 六、验证（由 Lead 亲自执行，未外包）\n\n- `./gradlew build -x test` → **BUILD SUCCESSFUL**\n- `runServer` 实测：`Registering mixin config: mixins.adventure_power.json` + `Preparing ... (36)` + **34 条 `Mixing`** + **注入失败 0** + `Done (4.5s)`\n\n..."
 		},
 		{
 			"tag": "v1.4.9.7",
@@ -94,7 +95,7 @@
 					"name": "adventure_power-1.4.9.7.jar",
 					"url": "https://github.com/ayin90723-stack/Adventures-Power/releases/download/v1.4.9.7/adventure_power-1.4.9.7.jar",
 					"size": 585142,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "e040819bc90c5fbcd967a43c0e2c430680a73e040f45014651201b7ebf18889c",
 					"mods": [
@@ -158,7 +159,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## v1.4.9.7 死亡态内部写血门禁\n\n**背景**：真实整合包（~200 模组 / Forge 47.4.10）报告\"死亡后游戏卡死、本该回重生点却原地复活、周围怪消失、能开方块但挖不了东西\"。同角色连续三次复现，用日志 + 原版字节码逐环节定位到本模组的**一处不该发生的内部回写**。\n\n**根因链**（每环都有字节码或日志实证）：\n\n- **原版行为**：真死 → `LivingEntity.tickDeath`（`deathTime >= 20` → `remove(KILLED)`）把服务端玩家实体移出世界。别人也有这一瞬间，只是他们下一 tick 就重生完成、完全无感。\n- **触发条件（整合包侧）**：死亡画面被 `souloflegends` 用 `ScreenEvent.Opening` 换成自带画面——无重生按钮、`shouldCloseOnEsc` 为 false，唯一出口是 tick 里的 `ticksPassed(300) → LocalPlayer.respawn()`；而它的 `render()` 里**又调了一次 `tick()`** → 计数器按 `(20 + FPS)/s` 累加 → 重生请求延迟 6~9 秒才发出。\n- **本模组的错误写入**：死亡后 5~8 秒「休养生息」首次回血——`onTick` 无任何死亡守卫，且走 `setAllHealthLikeRaw` 直写数据条目，**绕过 `heal()` 的 `if (getHealth() > 0)` 守卫** → 尸体血量被抬离 0（实测首跳恰为 `(amplifier+1) × heal_per_amplifier` = 1.0 / 2.0，两份日志逐一吻合）；随后原版饱食度自然回血接手（约 2 HP/s）。\n- **崩塌**：重生请求到达时血量已 >0 → 原版 `handleClientCommand` 的 `if (player.getHealth() > 0.0F) return;` **静默吞掉请求** → 不回重生点，服务端实体停在已移除态 → 不再被 tick（`ServerPlayer.tick` 首指令 `gameMode.tick()` 是挖掘进度唯一累积处 → **挖不了方块**）、`ChunkMap.removeEntity(player)` 向客户端直发已跟踪实体的移除包（→ **周围怪消失**）；而右键/容器走包处理、不读 `removalReason`（→ **能开方块**）。表现为\"原地复活 + 半死不活\"。\n\n**修复**：\n\n- 新增 `HealthUtil.isHealBlockedByDeath` ——「内部回血是否被死亡态禁止」的**唯一判定源**：`isRemoved() || !(getHealth() > 0)`。判据取**方法读**而非数据层直读，因此**不干扰真血备份 >0 的假死窗口**（假死救场恒由真血链路独占负责）；`!(h > 0)` 写法顺带覆盖 0 / 负数 / NaN。\n- `RecoveryHandler` 三处内部回血入口补守卫：休养生息（根因写入点）/ 嗜血击杀回馈 / 攻击吸血 —— 后两处防\"攻击者自身同 tick 已死（互杀、死亡后落地的延迟伤害结算）\"被回血复活。\n- `PlayerTickDispatcher` 头部补**死亡态整体短路**：30 个能力的 per-tick 处理对死亡态玩家一律不执行 —— 这一整类\"内部写入复活尸体\"事故从入口面根除。\n- `DeathScreenAutoDismissHandler` 新增职责 ③「陈旧死亡画面收尾」：原版重生只关 `DeathScreen` / `DeathScreen$TitleConfirmScreen`（白名单，`m_7992_` 偏移 573-607 字节码实证），被第三方替换的死亡画面不在白名单 → 重生成功后画面残留（按键被屏幕吃掉、`key-up` 亦被吞时人物还会\"粘键\"继续走、无法攻击）。改为\"死亡态记录画面实例 → 同一实例 + 玩家已存活即关闭\"，**不拦开屏**，只把原版对 `DeathScreen` 做的收尾补给它实际使用的画面。\n\n**同型审查**：全库内部写血入口逐一分类核对，其余均不可达（仅降不升 / 受 PVP 开关门控 / 属能力设计的主动复活语义 / 攻击侧写对手）；对尸体的效果施加不改血量，且已被 dispatcher 短路覆盖。\n\n**验证**：`compileJava` / `build -x test` 均 BUILD SUCCESSFUL（仅既存 deprecation 警告）；实机：装入后两次死亡均成功回到出生点、死亡期间尸体血量恒 0（根因修复生效），画面收尾待复测。无 Mixin / refmap 变更、无新配置键。\n\n**实机复测（2026-10-04，用户确认）**：装入本版后死亡 → 成功回到出生点、死亡期间尸体血量恒 0、死亡画面正常收尾且可立即行动，两次测试均正常。\n\n**未结项（不影响本次修复）**：客户端本地实体为何在死后约 1.5 秒被移除（触发既有 ② 自愈）仍未定位到发送方 —— 已排除\"任何模组直接调 `LocalPlayer.respawn()` / 替换 `handleClientCommand` / 直发移除包\"与实体跟踪路径（玩家不追踪自己）。"
 		},
 		{
 			"tag": "v1.4.9.6",
@@ -170,7 +172,7 @@
 					"name": "adventure_power-1.4.9.6.jar",
 					"url": "https://github.com/ayin90723-stack/Adventures-Power/releases/download/v1.4.9.6/adventure_power-1.4.9.6.jar",
 					"size": 584800,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "ede68a930a186417895776ddff0a52510c4a4ad9482bbc1a633e2930891d9202",
 					"mods": [
@@ -234,7 +236,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## v1.4.9.6 全量改动四维复核批\n\n**背景**：本轮把上一版的全部改动重新拉出来，用 4 个子代理按域并行复核——引擎域（`util/probe/**`）、util 非 probe + mixin 域、handler/skill/network/ui/effect/config/资源/文档域，外加一个**专项遗漏猎捕**代理（对每一类改动做全库同型扫描）。\n\n**遗漏猎捕的核心结论**：上一版每一类改动都只改了\"被报告的那一处\"，同型位置大面积留存（三连门禁双行样板 8 处、裸 `Float.isNaN` 3 处、同族 `isAlive()` 2 处、热路径 `LOGGER.error` 9 处、每帧 `Component` 8 处……）。也就是说：**修点式修复必须配一次同型全库扫描**——这是本轮最值得沉淀的教训，本版把它补齐了。\n\n**主要修复**：\n- **死亡抗拒的 tick 兜底钳制会静默失效**：生命上限被外部经 modifier 通道污染成 NaN 时，`Math.max(20, NaN)` 得 NaN，`当前血量 < NaN` 恒为 false → 该层整段空转，而它是\"绕过 setHealth 直接写血量条目\"的唯一防线。已补有限性守卫（与事件层救场同款）。\n- **开门梯（GateOracle）三处收尾漏洞**：①两处\"写完候选后抛异常\"的路径只返回不还原，会把候选的死态/激活态永久留在目标身上；②`tryOpen` 只捕 `Exception`，`NoClassDefFoundError` 一类错误穿透时不会清理开门去重集合 → 该实体之后每次开门都恒 `PENDING`（**影杀善后死锁**）；③遗留的\"轮询型\"预留梯级在成功分支漏清去重集合（将来接线会死锁，本版顺手修好预留）。\n- **多存储合成血（MultiStoreWriter）两处写入残留**：`applyShieldZero` 的方法型分支验证失败时不还原（同函数另两个分支都还原），会在目标上留下一次不可逆的清零；`upgradeCore` 原先没有 try/catch，异常路径的双分量写入无人回滚（其 javadoc 还把另一处的守卫误写成了自己的）。两者都已补齐，并把文档与实现对齐。\n- **两处\"每次空转效果包\"**：全视之眼的夜视刷新与加速的水下祝福，在遇到外部给的**无限时长**效果时，原条件恒真 → 每 tick 都构造实例并调 `addEffect`，而 `addEffect` 对已存在实例的更新判据在无限时长下恒 false（不发包、不更新），纯浪费。已按\"恩赐永驻\"续期的既有惯例补上无限时长守卫；夜视的维度切换重发也已改为直发效果包（不再依赖 `addEffect` 的更新语义，后者在\"现存时长 ≥ 将施加时长\"时不可靠）。\n- **容器守护两处判据补强**：审计的 players 项由\"存在\"升级为\"**计数恰为 1**\"（vanilla 对玩家入表是无条件 add，重复条目原先永远测不出）；重建链去重后补重算睡眠状态列表；\"容器缺失但重建开关关闭\"的告警标记在一级轻修复路径也清了（原先状态翻转后会吞掉本应输出的告警）。\n- **网络包放大面**：技能切换包在\"索引非法 / 索引未变\"时也会回一份含里程碑元数据的全量同步，恶意客户端按限频下限刷同值即可稳定换取 KB 级回包——已按能力开关包同款收口。\n- **健壮性**：破敌之眼攻击入口补顶层异常兜底（它是三个注入点的返回值来源，且内部会经事件总线调用**第三方模组的受击监听器**，异常一旦逃逸会打断原版攻击链）；血量工具的热路径错误日志统一改为一次性（其中一处是**每次数据条目写入都会调用**）；禁疗的追踪清理判据改用容器事实（原先 liveness 覆写型目标既逃过 tick 钳制、又会在两个周期后被清掉追踪数据，使\"不许回血\"承诺静默失效）。\n\n**收束与一致性**：\n- \"冒险者/觉醒 + 能力启用\"三连门禁的**双行样板 8 处**统一收束到公共判定源（另 13 处是纯身份判定，刻意保留；全库已无同型内联拷贝）。\n- 生命上限归位豁免的判据下界由\"**无下界**\"收窄为 `maxHealth > 0`，并把真血侧两处同族裸判据一并收束进同一谓词（消费点 3 → 5）——堵掉\"把生命上限污染成 0 后，把写 0 洗白成合法归位\"的路径（典型形态：先设法把生命上限清零，再据此写入血量，使一次\"写 0\"看起来像合法归位）。属性层的阈值常量改为引用同一来源，并在注释里明确\"与归位豁免的下界**不是同一个东西**\"（早期游戏\"减生命上限\"的诅咒会让上限合法低于 6，归位豁免不能沿用该阈值）。\n- 裸 `Float.isNaN` 等价的特殊浮点判定、`isFinite`/`isSpecialFloat` 的混用统一；多存储复验的异步回调日志补上调用方归属（这条最需要现场证据的路径原先全静默）。\n- 文档/代码注释一致性 12 处（夜视重发机制、\"血量引擎对玩家短路\"的错误表述、容器事实判据的消费点清单、觉醒目标集的友伤排除、槽位路径的步骤描述、以及对 I/J 字段候选失败点的两处互斥口径等）。\n\n**dev 环境修复（实测暴露）**：\n- 开发环境（`runClient`/`runServer`）里 `curios.mixins.json` 一直被**整体跳过**——根因是本项目生成的 SRG 重映射文件里方法行只写了两段，而 Mixin 的 `RemappingReferenceMapper` 对方法行取第三段作为映射值，首个方法行即越界抛异常；该异常逃出了只捕 `IOException` 的读取循环，导致**所有 mixin 配置的重映射实际全部失效**（上一版\"实测全过\"的结论不完整：当时只看了服务端能启动，漏了这条 WARN）。修复后该告警计数 1 → 0。此项仅影响开发环境，发布版 jar 不依赖它。\n- 另附一个**仅在显式传参时生效**的 quickPlay 钩子（`-PquickPlayMp=` / `-PquickPlaySp=`），用于免 GUI 导航地跑通\"玩家真正进服/进世界\"的链路；正常构建与运行完全不受影响。\n\n**配置变更**：无新增配置键；无 Mixin/refmap 变更。\n\n**验证**：\n- `clean build` 通过，产物内版本号 1.4.9.6。\n- **专用服务器实测**：开发环境 `runServer` 启动完成、**0 ERROR**、无 `invalid dist` 类错误；再以 quickPlay 让**玩家真实连入**——加入后零告警，客户端收到首登\"冒险的开始\"提示，优雅关服后玩家数据（gzip NBT）解压含 `ForgeCaps` / `MME_AdventureProgress` / `MME_GotAdventureBegin` / `MME_VerifiedBeginItem` / 10 个里程碑标记（三层备份的第二层实证）。\n- **单人客户端实测**：开发环境 `runClient` 到标题界面 **0 ERROR**，并成功连入上述服务端。\n- `runGameTestServer` 非交互启动自检 exit 0。\n\n**未覆盖（明示）**：能力效果逻辑（淬魂/影杀/禁疗/破敌/审判、容器守护、真实血量对账等）需要\"进世界 + `/ap unlock all` + 打怪\"的场景，本轮两台运行测试只覆盖\"启动 / 连服 / 首登 / 持久化 / 网络同步 / 关服\"这条主干。建议回归点：死亡重生饰品保留、生命提升药水到期后血量归位、影杀斩杀 Boss 流程、P 面板与 HUD 显示。\n\n*构建产物见附件。*"
 		},
 		{
 			"tag": "v1.4.9.5",
@@ -246,7 +249,7 @@
 					"name": "adventure_power-1.4.9.5.jar",
 					"url": "https://github.com/ayin90723-stack/Adventures-Power/releases/download/v1.4.9.5/adventure_power-1.4.9.5.jar",
 					"size": 579303,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "1777d4e02c0159db1a32e3bffef5eb9906fc701c992123acc638b177412d4644",
 					"mods": [
@@ -310,7 +313,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## v1.4.9.5 多代理全库审查修复批\n\n**背景**：本轮以 8 个按域并行审查代理 + 1 个横向一致性专项，对全部 163 个源文件（约 2.6 万行）做了一次全面审查——核对真 bug、与设计约定的一致性、以及可优化点（规范化/收束/集中/扩展）。审查结论：架构与约定落地质量很高（能力 ID 五方对照零差集、写血纪律逐点合规、dist 隔离零违规、网络包防护四件套齐备），但发现 6 个真 bug、2 处数学错误、15 处一致性问题与 30 处可优化点，本版全部处理。修复后又以 5 个审查代理复核了修改本身，抓获并回退了一处基于错误前提的修复（详见下文）。\n\n**主要修复**：\n- **PVP 禁疗强制处决缺口**：禁疗 FORCE_KILL 链（打标→归零+放行死亡→终局裁决）此前只在两处对玩家短路，更早的打标与归零环节漏守卫——PVP 禁疗开关开启时，玩家死亡被复活类效果取消会被本模组强制处决、绕过自身死亡抗拒。现全链路对玩家恒短路（默认配置不受影响）。\n- **生命上限下降血量卡死**：生命提升药水到期等合法降上限后，血量数据层停留在新上限之上直到下次受伤才自纠——根因是 maxHealth 归位豁免只落在三层拦截中的一层。现三层（拒绝篡改方法层/数据层、死亡抗拒层）收束为共享判定源，行为一致且不会再漂移；数据层同时补上 NaN/Infinity 直写拦截。\n- **Boss 血量引擎**：缓存快路径写入验证失败后不再残留污染值（失败出口统一还原条目旧值）；GateAnalyzer 的 hidden 类名剥离修复（此前分析链实际全灭、靠运行时验证兜底）。\n- **面板交互**：修复列表滚动非整行时点击顶部区域会误触被裁剪隐藏的行、误发能力开关包；悬停高亮同步对齐。\n- **夜视刷新公式修正**：自定义夜视时长配在 202~400 tick 区间时会每 2 tick 重发效果包（约 10 包/秒），公式已修正（默认配置行为不变）。\n- **度过首夜追赶判定**：原判定在世界存活约 19 分钟后恒成立，从未过夜的玩家白天也会被补发 first_night；现改读真实过夜标记。\n- **处决收尾顺序**：处决善后的死亡事件与掉落顺序对齐原版（事件先于掉落），墓碑/任务类模组在事件回调里看到的实体状态与原版一致。\n- 其余：审判/破敌致死补完对演出型 Boss 增加容器/读数硬判据（防满血误补死亡）、破敌穿透嵌套攻击基线栈式化（防第三方监听器内攻击导致事件双发）、容器审计换维度冷却时钟源统一、黑名单同步包编码限长按字节对齐、若干反射降级与告警机制打磨。\n\n**配置变更**：新增「能力数值 > 影杀 > shadow_kill_damage_multiple」（斩杀伤害倍率，默认 10，与旧版行为一致）。\n\n**二轮复核说明**：审查代理曾报告“冒险饰品死亡复制”缺陷，修复过程中经 Forge patch 源码与反编译字节码双重实证该结论为误报（新旧实体的持久化数据为引用共享，原实现本就正确）；基于该误报的修复会短路饰品恢复导致物品丢失，已在发布前回退，并留存注释防止未来再犯。\n\n**验证**：全量修复经第二轮 5 个审查代理逐一对照 diff 复核（无新增 P0）；构建通过、产物字节码正常；开发者已完成部分实机测试。剩余建议回归点：死亡重生饰品保留、生命提升药水到期后 /data get entity @s Health 归位、P 面板滚动后顶部点击不误触、影杀斩杀 Boss 流程。\n\n*构建产物见附件。*"
 		},
 		{
 			"tag": "v1.4.9.4",
@@ -322,7 +326,7 @@
 					"name": "adventure_power-1.4.9.4.jar",
 					"url": "https://github.com/ayin90723-stack/Adventures-Power/releases/download/v1.4.9.4/adventure_power-1.4.9.4.jar",
 					"size": 576031,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "869f3b3436ae41c0fe671fd1c5d87c6a56204439f45717509ef0f7c2e8673108",
 					"mods": [
@@ -386,11 +390,28 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## v1.4.9.4 专用服务器加载崩溃修复\n\n**问题**：在专用服务器（纯服务端）安装本模组时模组加载失败：`Attempted to load class net/minecraft/client/gui/screens/Screen for invalid dist DEDICATED_SERVER`。根因是\"同步完成待开面板\"逻辑寄居在双端事件订阅类中，其代码直接引用了客户端专属类——专用服务器上 Forge 在模组加载阶段强制加载该类时被运行时类隔离机制拒绝。单人游戏（客户端内置服务端）加载客户端类合法，故此前从未暴露。\n\n**修复**：客户端逻辑拆出为三个服务端永不加载的专用动作类（开面板 / 网络包客户端应用 / 饰品 tooltip 本地玩家），双端类字节码零客户端类引用；同类形态的其余引用点一并清零。逻辑逐行等价，无 Mixin、无配置变更、能力行为零变化。\n\n**验证**：按生产环境专用服务器（Forge 47.4.16 + Curios 5.14.1）实测——修复前复现同崩溃，修复后完整启动零错误；构建产物字节码复扫确认双端类零客户端引用。\n\n**开发环境附带修复**：dev 运行时（runClient/runServer）此前无法与 Curios 共存（mixin refmap 在 Mojang 映射运行时找不到 SRG 名成员，属构建工具链对依赖 refmap 不重写的缺口）。新增自动转换任务并启用 Mixin 运行时重映射兜底，dev 环境现已完整可用（对本模组自身的 SRG 注入点同样生效）。\n\n*构建产物见附件。*"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [
+		"docs/mod_cover.png"
+	],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 152,
+		"more": 0,
+		"people": [
+			{
+				"login": "ayin90723-stack",
+				"commits": 152,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

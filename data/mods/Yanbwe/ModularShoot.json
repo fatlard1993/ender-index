@@ -1,0 +1,290 @@
+{
+	"repo": "Yanbwe/ModularShoot",
+	"host": "github",
+	"stars": 1,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2026-06-27T02:55:06Z",
+	"pushed": "2026-08-28T06:11:23Z",
+	"releases": [
+		{
+			"tag": "v0.3.1",
+			"published": "2026-08-28T06:13:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 533353360,
+					"name": "modularshoot-0.3.1.jar",
+					"url": "https://github.com/Yanbwe/ModularShoot/releases/download/v0.3.1/modularshoot-0.3.1.jar",
+					"size": 737924,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "b6b686043b0539fe3b9223fda8413d2fc89de34eb56616e995400ccd194588a8",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "modularshoot",
+							"version": "0.3.1",
+							"name": "ModularShoot",
+							"description": "A modular shooting mod for Minecraft.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Gun",
+								"Mod Soul",
+								"Plugin"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 339,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [0.3.1] - 2026-08-27\n\n### 新增 / Added\n\n- **枪械定义支持声明属性挂载点**：`attribute_mount` 可选 `item` / `player`；玩家侧枪械不再携带物品属性修饰符组件，属性由声明方挂载到玩家。\n- **玩家侧提示框属性栏**：从属性持有者读取最终值；无法解析持有者时显示基础值并提示“以持有者为准”。"
+		},
+		{
+			"tag": "v0.2.0",
+			"published": "2026-08-16T08:47:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 516620678,
+					"name": "modularshoot-0.2.0.jar",
+					"url": "https://github.com/Yanbwe/ModularShoot/releases/download/v0.2.0/modularshoot-0.2.0.jar",
+					"size": 719198,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2ecddfef763ae7da2175a2ec32e5977ec43b29b87e9e4f354ae2f9645900ae44",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "modularshoot",
+							"version": "0.2.0",
+							"name": "ModularShoot",
+							"description": "A modular shooting mod for Minecraft.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Gun",
+								"Mod Soul",
+								"Plugin"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 328,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [0.2.0] - 2026-08-14\n\n### 破坏性变更 / Breaking Changes\n\n- **移除 5 个已废弃的 `ModularShootAPI` 重载**：显式 `RegistryAccess` 版本的卸载系列与不刷新属性的 `setPluginLocked` 已删除；请改用无 `RegistryAccess` 的推荐重载，或直接调用 `PluginUninstallService` / `PluginLockService`。\n- **移除 `BulletManager#fireBullet`**：独立发弹请改用 `ModularShootAPI.fireBullet` 或新的 `CreationCoordinator`。\n- **网络协议版本升级到 3**：0.2.0 与旧版客户端/服务端不互通，联机需两端同时升级。\n\n### 性能 / Performance\n\n- **注册表查询全面缓存**：热路径不再重复解析枪械/插件/状态等定义，射击、安装卸载与 tooltip 明显变快。\n- **子弹同步大幅减负**：新增空间索引、位置量化与距离降频，并压缩全量/增量同步，多人高弹量场景带宽与 CPU 显著下降。\n- **状态系统提速**：同值写入短路、快速 NBT 编解码、PlayerState 节流，高频状态累积不再产生无谓拷贝与同步。\n- **渲染与 Tooltip 减帧**：Tooltip 帧级缓存、反向索引、纹理键哈希缓存、描边懒生成、渲染对象复用，降低每帧开销。\n- **Reload 减卡顿**：共享注册表快照与修饰符缓存，大型数据包 reload 不再重复全表解析。\n- **广播聚合**：命中与射击动画按 tick 合并，减少包数量与全玩家扫描。\n\n### 架构 / Architecture\n\n- **公共 API 单向化**：物品识别下沉内部工具，内部服务不再反向依赖门面。\n- **客户端/服务端边界更清晰**：客户端网络处理移入 client 包，common 不再引用 Minecraft 客户端类。\n- **职责拆分**：子弹管理器拆分为存储、创建、网络标记三层；射速公式抽为单一共享来源。\n\n### 健壮性 / Robustness\n\n- 无处理器短路、异常日志节流、网络包防御性解码、状态清除短路、缓存生命周期清理等多项加固。\n\n### 测试 / Testing\n\n- 全量 **673** 个测试通过。"
+		},
+		{
+			"tag": "v0.1.7",
+			"published": "2026-08-14T16:11:08Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 514622005,
+					"name": "modularshoot-0.1.7.jar",
+					"url": "https://github.com/Yanbwe/ModularShoot/releases/download/v0.1.7/modularshoot-0.1.7.jar",
+					"size": 649538,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "b1a3499b8b59f738c8c5c239e07161c8cf0c25c86ac2b1a7cc936a0133c46920",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "modularshoot",
+							"version": "0.1.7",
+							"name": "ModularShoot",
+							"description": "A modular shooting mod for Minecraft.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Gun",
+								"Mod Soul",
+								"Plugin"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 290,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [0.1.7] - 2026-08-14\n\n### 新增 / Added\n\n- **安装 API 支持指定优先种类**：`installPlugin` 新增可选的优先种类参数（如插件面板把插件拖到某个种类安装区时指定该种类），提示命中时直接装入该种类，未命中自动回退原选择逻辑；旧调用方零改动、行为不变。\n- **有效插槽查询门面**：新增 `getEffectiveSlots` API，可直接查询枪械当前各种类的有效容量（含已装插件的加槽效果），UI 渲染安装区不再需要自行拼装。\n\n### 测试 / Testing\n\n- 新增 14 条测试覆盖优先种类命中/未命中回退/满槽回退与全流程传导（含门面透传）；全量 452 条通过。"
+		},
+		{
+			"tag": "v0.1.5",
+			"published": "2026-08-11T03:36:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 509613278,
+					"name": "modularshoot-0.1.5.jar",
+					"url": "https://github.com/Yanbwe/ModularShoot/releases/download/v0.1.5/modularshoot-0.1.5.jar",
+					"size": 642092,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "9fa45c37cbcea29ea5dab1950aa997efd31bed87492f74ba2db328c541e1ba15",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "modularshoot",
+							"version": "0.1.5",
+							"name": "ModularShoot",
+							"description": "A modular shooting mod for Minecraft.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Gun",
+								"Mod Soul",
+								"Plugin"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 289,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [0.1.5] - 2026-08-11\n\n### 修复 / Fixed\n\n- **专用服务器崩溃**：修复专用服务器上枪械/插件物品名称解析抛 `NoClassDefFoundError` 崩服的问题（`/modularshoot stats` 等命令、死亡消息等路径均受保护）。\n- **插件裸键命名空间漂移**：插件定义的 `traits`/`adds_variants` 裸键与枪械一致归入 `modularshoot` 命名空间，枪械与插件同名的特性/变体现在可以正常合并。\n- **零速子弹永不消亡**：速度为 0 的子弹不再永久驻留，立即按过期移除。\n- **reload 校验误报**：插件标签仅部分未匹配时不再误报\"装不上任何枪\"；指向 Java API 注册枪械的合法绑定不再误报\"未找到\"。\n- **第一人称后坐方向修正**：枪口下压修正为微微上抬（后收进屏幕 + 枪口朝观察者上抬）。\n\n### 改进 / Improved\n\n- **卸载超编预检测试**：0.1.4 的超编预检与随机卸载候选过滤补 10 条自动化测试。\n- **健壮性**：非法伤害类型、损坏状态数据、槽位数值溢出、共享可变引用等边界情况不再导致崩溃或异常。\n- **一致性**：卸载流程尊重事件监听器的修改；tooltip 插件栏计数与超编判定口径统一；登出清理节流表；reload 校验补绑定表与 shooters 汇总。\n- **渲染**：3D 子弹光照改用插值位置，高速移动时更准确。\n- **清理**：删除 8 处死代码，修正 7 处过时 javadoc。\n- **测试补强**：出厂数据包 JSON 全量解码断言（45 个文件）；`BulletS2CPacket` 编解码往返测试；全量 414 用例。\n- **本地化补强**：tooltip 计数括号与锁定锚字符改为 lang 键，en_us 下不再显示 CJK 标点。"
+		},
+		{
+			"tag": "v0.1.4",
+			"published": "2026-08-11T02:52:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 509569043,
+					"name": "modularshoot-0.1.4.jar",
+					"url": "https://github.com/Yanbwe/ModularShoot/releases/download/v0.1.4/modularshoot-0.1.4.jar",
+					"size": 641265,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a62505ba3843b093575864d676aa46fcc183e76e6bf010fa11473f6ede084136",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "modularshoot",
+							"version": "0.1.4",
+							"name": "ModularShoot",
+							"description": "A modular shooting mod for Minecraft.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Gun",
+								"Mod Soul",
+								"Plugin"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 290,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [0.1.4] - 2026-08-10\n\n### 新增 / Added\n\n- **动态枪械定义提供者**：`GunRegistry` 新增 `registerGunDefinitionProvider` 通道，`getGun` 查询顺序扩展为 Java API 注册 → 提供者 → 数据包注册表；支持 per-player / 运行时生成的动态定义（\"玩家即枪\"类玩法），框架内所有定义查询点零改动受益。门面 `ModularShootAPI.registerGunDefinitionProvider` 对外暴露；未注册提供者时行为完全一致。\n- **插件定义支持 `adds_slots` 字段**：插件安装后可增加指定槽位数量，甚至创造枪械原本没有的槽位类型（键须为完整命名空间或 `modularshoot:` 裸键，值为任意整数，负数表示占用槽位）。有效容量 = 枪械 slots + 已装插件 adds_slots 聚合；安装匹配、tooltip 插件栏均按有效槽位计算。\n- **卸载超编预检**：非 force 卸载若会导致任意槽位类型在拆卸后仍超编（不限于加槽插件本身——卸载后残留超编即拒绝，返回 `WOULD_OVERFLOW`）；force 卸载可绕过，超编插件滞留保留但该槽位不可再装；随机卸载自动过滤会触发超编的候选。\n- **reload 校验**：`adds_slots` 键引用 `plugin_types` 注册表存在性检查（WARN）。"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "一个基于 NeoForge 1.21.1 的属性驱动、模块化组装的枪械系统框架模组。",
+	"funding": [],
+	"fundingChecked": "2026-10-31T22:37:16.645Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 262,
+		"more": 0,
+		"people": [
+			{
+				"login": "Yanbwe",
+				"commits": 262,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
+	"history": 1
+}

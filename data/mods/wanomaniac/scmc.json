@@ -1,0 +1,345 @@
+{
+	"repo": "wanomaniac/scmc",
+	"host": "github",
+	"description": "A mod that will ensure your players have the necessary client mods to avoid problems & allows server mod menu instances to read mods and download them from your server easily.",
+	"stars": 1,
+	"archived": false,
+	"license": "CC0-1.0",
+	"created": "2024-08-12T23:05:09Z",
+	"pushed": "2026-04-03T14:07:59Z",
+	"releases": [
+		{
+			"tag": "1.20.1-0.9.4.2",
+			"published": "2024-08-26T01:40:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 188280130,
+					"name": "scmc-0.9.4.2.jar",
+					"url": "https://github.com/wanomaniac/scmc/releases/download/1.20.1-0.9.4.2/scmc-0.9.4.2.jar",
+					"size": 66472,
+					"downloads": 13,
+					"inspection": 2,
+					"sha256": "ba93b7e3c94f7db3897658e1d5dc041ee21893dffdbcc30d523308326909ab77",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "scmc",
+							"version": "0.9.4.2",
+							"name": "SCMC",
+							"description": "An server side mode for blocking uninstalled client mods & the server side for ServerModMenu",
+							"minecraft": "~1.20.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "9f0765dda8e9b0b69ff634fc5fda6235cb0f22b807f441807bc5e5f92950b2e2.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 26,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/skellybuilds/SCMC/server/servercmd.class": [
+									"java/net/Socket.getOutputStream"
+								],
+								"com/skellybuilds/SCMC/utils/Network$ServerThread.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/skellybuilds/SCMC/SCMC.class",
+								"com/skellybuilds/SCMC/config/ModMenuConfigManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Should you update?\nIt's a pretty medium update.. Not too big but not too little. You can update if you wish too for bug fixes and trying out the translation api\n\n## Configuration changes!\nUsing SCMC, there will be a config file named SCMC.js generated just for you :)\nWhat does it contain right now?\nThis\n```js\n/* ____    ____              ____      \n/\\  _`\\ /\\  _`\\    /'\\_/`\\/\\  _`\\    \n\\ \\,\\L\\_\\ \\ \\/\\_\\ /\\      \\ \\ \\/\\_\\  \n \\/_\\__ \\\\ \\ \\/_/_\\ \\ \\__\\ \\ \\ \\/_/_ \n   /\\ \\L\\ \\ \\ \\L\\ \\\\ \\ \\_/\\ \\ \\ \\L\\ \\\n   \\ `\\____\\ \\____/ \\ \\_\\\\ \\_\\ \\____/\n    \\/_____/\\/___/   \\/_/ \\/_/\\/___/ \n \n Welcome to the new SCMC configuration file. We recommand you to read the readme.md for more details about using SCMC & it's own integrated configuration system but there are basic summaries for each property below. Becareful on what you do and make sure it doesn't cause any issues for your community \n The readme can be located at https://github.com/SkellyBuilds/scmc \n Please be careful while commenting, if you leave extra commas or data, this mod will go kaboom! So treat it properly! \n\n Config Version: 0.9.6.0-6061017d*/\n\n module.exports = {\n  \"useonlyuniversalmods\": true, /*Universal mods basically are both client side & server side mods. So one for both! \n  If you leave this enabled, server mods will not be used unless you specified otherwise*/\n\n  \"cankickplayerswithnomods\": true, /*This gives you the choice to allow the mod to kick players if they are missing a mod or otherwise \n  If you choose false, it won't kick the player but notify the player about the missing mods so they can be aware!*/\n\n  \"enablescmccrashes\": true, //When something goes critically wrong on sCMC's end, you can change if SCMC can stop your server & make a crash report.\n  \"usethismodsonly\": [], /*This is an array that will only use the mod ids provided for the mod, nothing else. \n  If you leave it empty, All mods will be used by SCMC unless you configurated it otherwise*/\n\n  \"dontusethismods\": [], //This will basically blacklist a mod from being registered in SCMC, if you have it usethismods, the blacklist won't be checked since the whitelist is always checked first.\n  \"usethismods\": [], /*Universal mods basically are both client side & server side mods. So one for both! \n  If you leave this enabled, server mods will not be used unless you specified otherwise*/\n\n  \"optionalmods\": [], //This list of mods won't be required to download, meaning they won't show up in the missing mod screen and there will be a GUI difference for the mod to clarify via servermodmenu\n  \"port\": 27752, //Which port should this mod use for SCMC to Server Mod Menu communication - Changing the port means you require a domain for port compatibility for SCMC, learn how to do this at https://github.com/SkellyBuilds/scmc/wiki/Getting-started-using-SCMC#how-do-i-use-different-ports-properly\n  \"canreadmodtranslations\": true, //If a mod tells SCMC via it's fabric config to read it's texts (Like description, links, names etc) and use it instead. If you are an mod developer, here's how you can integrete it in your mod. https://github.com/SkellyBuilds/scmc/wiki/Integreting-SCMC-to-your-fabric-mod\n  \"translatebydefault\": false //Translate the mod's details anyways even if the mod doesn't add it in it's configuration.\n}\n```\n\nAs stated in the previous update, comments are pretty much now apart of SCMC's config system!\nFeel free to read the notes next to the keys in the json for some info about what they do.\n\n***Experiments are also a new thing in this update, you comment in a experiment codename and it will be ran. You can use this to try out new features that haven't been fleshed out the way i would like it.***\n\n### Available Configuration experiments\n\n..."
+		},
+		{
+			"tag": "1.20.1-0.9.3.6",
+			"published": "2024-08-25T01:54:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 188131018,
+					"name": "scmc-0.9.3.6.jar",
+					"url": "https://github.com/wanomaniac/scmc/releases/download/1.20.1-0.9.3.6/scmc-0.9.3.6.jar",
+					"size": 59813,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "4c7664a65f50593708bbec860c0cd5acc39decebc1153abcde0ca170f86edccc",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "scmc",
+							"version": "0.9.3.6",
+							"name": "SCMC",
+							"description": "An server side mode for blocking uninstalled client mods & the server side for ServerModMenu",
+							"minecraft": "~1.20.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "9f0765dda8e9b0b69ff634fc5fda6235cb0f22b807f441807bc5e5f92950b2e2.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 24,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/skellybuilds/SCMC/server/servercmd.class": [
+									"java/net/Socket.getOutputStream"
+								],
+								"com/skellybuilds/SCMC/utils/Network$ServerThread.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/skellybuilds/SCMC/SCMC.class",
+								"com/skellybuilds/SCMC/config/ModMenuConfigManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Should you update?\nIt's a pretty minor update with a few new things. You don't need to update as there hasn't been any security problems or risks fixed/found in SCMC.\n\n## Configuration changes!\nUsing SCMC, there will be a config file named SCMC.js generated just for you :)\nWhat does it contain right now?\nThis\n```js\n/* ____    ____              ____      \n/\\  _`\\ /\\  _`\\    /'\\_/`\\/\\  _`\\    \n\\ \\,\\L\\_\\ \\ \\/\\_\\ /\\      \\ \\ \\/\\_\\  \n \\/_\\__ \\\\ \\ \\/_/_\\ \\ \\__\\ \\ \\ \\/_/_ \n   /\\ \\L\\ \\ \\ \\L\\ \\\\ \\ \\_/\\ \\ \\ \\L\\ \\\n   \\ `\\____\\ \\____/ \\ \\_\\\\ \\_\\ \\____/\n    \\/_____/\\/___/   \\/_/ \\/_/\\/___/ \n \n Welcome to the new SCMC configuration file. We recommand you to read the readme.md for more details about using SCMC & it's own integrated configuration system but there are basic summaries for each property below. Becareful on what you do and make sure it doesn't cause any issues for your community \n The readme can be located at https://github.com/SkellyBuilds/scmc \n Please be careful while commenting, if you leave extra commas or data, this mod will go kaboom! So treat it properly! \n\n Config Version: 0.9.5.7-8c6b82e2*/\n\n module.exports = {\n  \"useonlyuniversalmods\": true, /*Universal mods basically are both client side & server side mods. So one for both!\nIf you leave this enabled, server mods will not be used unless you specified otherwise*/\n\n  \"cankickplayerswithnomods\": true, /*This gives you the choice to allow the mod to kick players if they are missing a mod or otherwise\nIf you choose false, it won't kick the player but notify the player about the missing mods so they can be aware!*/\n\n  \"enablescmccrashes\": true, //When something goes critically wrong on sCMC's end, you can change if SCMC can stop your server & make a crash report.\n  \"usethismodsonly\": [], /*This is an array that will only use the mod ids provided for the mod, nothing else.\nIf you leave it empty, All mods will be used by SCMC unless you configurated it otherwise*/\n\n  \"dontusethismods\": [], //This will basically blacklist a mod from being registered in SCMC, if you have it usethismods, the blacklist won't be checked since the whitelist is always checked first.\n  \"usethismods\": [], /*Universal mods basically are both client side & server side mods. So one for both!\nIf you leave this enabled, server mods will not be used unless you specified otherwise*/\n\n  \"optionalmods\": [], //This list of mods won't be required to download, meaning they won't show up in the missing mod screen and there will be a GUI difference for the mod to clarify via servermodmenu\n  \"port\": 27752 //Which port should this mod use for SCMC to Server Mod Menu communication - Changing the port means you require a domain for port compatibility for SCMC, learn how to do this at https://github.com/SkellyBuilds/scmc/wiki/Getting-started-using-SCMC#how-do-i-use-different-ports-properly\n}\n```\n\nAs stated in the previous update, comments are pretty much now apart of SCMC's config system!\nFeel free to read the notes next to the keys in the json for some info about what they do.\n\n***Experiments are also a new thing in this update, you comment in a experiment codename and it will be ran. You can use this to try out new features that haven't been fleshed out the way i would like it.***\n\n### Available Configuration experiments\n- Restore Custom (Comments that you write inside the module.exports other than the EXP name) comments which basically add a list of comments you added previously. I will obviously try my best to make this less bad and more seamless but i like a good sleeping schedule. - `EXP-RESTORE-CUSTOM-COMMENTS`\n\n\n## Change Log\n- Added option to disable SCMC crash logs\n- Just some additional code for crash reports for later crash problems\n\n[Github Changelog via Tags](https://github.com/SkellyBuilds/scmc/compare/1.20.1-0.9.3.5...1.20.1-0.9.3.6)"
+		},
+		{
+			"tag": "1.20.1-0.9.3.5",
+			"published": "2024-08-20T01:20:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 187020026,
+					"name": "scmc-0.9.3.5.jar",
+					"url": "https://github.com/wanomaniac/scmc/releases/download/1.20.1-0.9.3.5/scmc-0.9.3.5.jar",
+					"size": 57888,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "3470913403bf8128a0c68b82c84aa9c09b604920e81d6652abaad5e47f581bdc",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "scmc",
+							"version": "0.9.3.5",
+							"name": "SCMC",
+							"description": "An server side mode for blocking uninstalled client mods & the server side for ServerModMenu",
+							"minecraft": "~1.20.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "9f0765dda8e9b0b69ff634fc5fda6235cb0f22b807f441807bc5e5f92950b2e2.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 23,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/skellybuilds/SCMC/server/servercmd.class": [
+									"java/net/Socket.getOutputStream"
+								],
+								"com/skellybuilds/SCMC/utils/Network$ServerThread.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/skellybuilds/SCMC/SCMC.class",
+								"com/skellybuilds/SCMC/config/ModMenuConfigManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Bug fixed previous alpha version**\nIts stable enough for beta release. I don't recommand going to the 0.9.2.7 as it's very buggy and most stuff didn't work.\n\n**Full Changelog**: https://github.com/SkellyBuilds/scmc/compare/1.20.1...1.20.1-0.9.3.5"
+		},
+		{
+			"tag": "1.20.1-0.9.2.7",
+			"published": "2024-08-19T04:00:08Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 186815683,
+					"name": "scmc-0.9.2.7.jar",
+					"url": "https://github.com/wanomaniac/scmc/releases/download/1.20.1-0.9.2.7/scmc-0.9.2.7.jar",
+					"size": 53856,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "81b6778587b25b468b667d2ca3a11117c997012e29eec725fb47b0208ec6b481",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "scmc",
+							"version": "0.9.2.7",
+							"name": "SCMC",
+							"description": "An server side mode for blocking uninstalled client mods & the server side for ServerModMenu",
+							"minecraft": "~1.20.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "9f0765dda8e9b0b69ff634fc5fda6235cb0f22b807f441807bc5e5f92950b2e2.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/skellybuilds/SCMC/server/servercmd.class": [
+									"java/net/Socket.getOutputStream"
+								],
+								"com/skellybuilds/SCMC/utils/Network$ServerThread.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/skellybuilds/SCMC/config/ModMenuConfigManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "***EXPERIMENTAL VERSION***\n\nNo release notes yet, please use readme.md\n\n**Full Changelog**: https://github.com/SkellyBuilds/scmc/compare/1.20.1-0.9.1.2...1.20.1-0.9.2.7"
+		},
+		{
+			"tag": "1.20.1-0.9.1.2",
+			"published": "2024-08-13T00:25:28Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 185572573,
+					"name": "scmc-0.9.1.2.jar",
+					"url": "https://github.com/wanomaniac/scmc/releases/download/1.20.1-0.9.1.2/scmc-0.9.1.2.jar",
+					"size": 42402,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "e681e54a16e856157cb75e64b2f4daf304ea3ab84a548e0321a11cca5bc9747c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "scmc",
+							"version": "0.9.1.2",
+							"name": "SCMC",
+							"description": "An server side mode for blocking uninstalled client mods & the server side for ServerModMenu",
+							"minecraft": "~1.20.1",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "9f0765dda8e9b0b69ff634fc5fda6235cb0f22b807f441807bc5e5f92950b2e2.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 20,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/skellybuilds/SCMC/server/servercmd.class": [
+									"java/net/Socket.getOutputStream"
+								],
+								"com/skellybuilds/SCMC/utils/Network$ServerThread.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# The first version of SCMC\nPlease read the mod's description for more information on using this mod"
+		}
+	],
+	"readme": "readme.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T22:37:16.645Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 14,
+		"more": 0,
+		"people": [
+			{
+				"login": "wanomaniac",
+				"commits": 14,
+				"name": "Munashe Dirwayi",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
+	"history": 1
+}

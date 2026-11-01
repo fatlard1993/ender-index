@@ -1,0 +1,367 @@
+{
+	"repo": "y15173334444/create-schematic-compute",
+	"host": "github",
+	"description": " Create: Schematic Compute is a Create mod addon that introduces 10 programmable blocks + 1 portable terminal with a visual node-based programming system.",
+	"stars": 10,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-06-03T09:55:59Z",
+	"pushed": "2026-10-31T17:56:51Z",
+	"releases": [
+		{
+			"tag": "v1.2.6.2",
+			"published": "2026-10-24T18:52:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 673039321,
+					"name": "create-schematic-compute-1.2.6.2.jar",
+					"url": "https://github.com/y15173334444/create-schematic-compute/releases/download/v1.2.6.2/create-schematic-compute-1.2.6.2.jar",
+					"size": 1325305,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "7240c27c5473b22a0f6e73187b9dcf650fe3d7b4e393ec07c84392855abc29d0",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "create_schematic_compute",
+							"version": "1.2.6.2",
+							"name": "Create: Schematic Compute",
+							"description": "A blueprint visual programming computer for Create",
+							"environment": "*",
+							"depends": []
+						}
+					],
+					"icon": "e4da24e85bdcd278958917069a1c0b8096371a8382fa63ed7055c13faab6ffb7.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Create: Schematic Compute"
+							],
+							"block": [
+								"3D Holographic Radar",
+								"Amplifier Computer",
+								"Attitude Sensor",
+								"Blueprint Computer",
+								"CNC Gearbox",
+								"Control Seat",
+								"Holographic Monitor",
+								"Kinetic Gauge",
+								"Program Computer",
+								"Programmable Transmission",
+								"Speaker",
+								"Speed Proxy Controller"
+							],
+							"item": [
+								"Portable Terminal"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 351,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Create: Schematic Compute 1.2.6.2\n\n### 🐛 Fixes / 修复\n\n- ⏱️ **NBS 编辑器播放间歇延迟**：渲染卡顿导致音频声道欠载停播后重挂时，墙钟锚点冻结在停播时刻——重挂后第一批音符要再等完整段停播时长才响，**停播多久就晚多久**。现停播/冷启动路径把锚点重置到当前混音游标：停播期的乐理时间舍弃不拖欠，停顿后立即赶齐（打开编辑器后隔一阵首播的同病同修）。 / NBS editor playback was sometimes delayed: after a render hitch starved the output queue and the audio channel stopped, the wall anchor stayed frozen at the stop moment — the first batch after re-attach arrived late by exactly the stall. The stopped/cold path now resets the anchor to the current mixer cursor: the stall's musical time is discarded, not owed, and playback catches up immediately (the cold first-play shared the disease and is fixed too).\n- 🔊 **Sable 结构内音响发声**：Sable 把 sub-level 内容宿主在父维度的保留「绘图网格」区，音符包携带的网格本地坐标被父世界原样播放——发声点落在网格保留区、离结构任意远，距离衰减即无声。现客户端经 sub-level 姿态把发声点换算到世界空间（移动中的船也正确）；停止标记键保持网格本地坐标，play/stop 同空间对键。 / Speakers inside Sable structures are audible again: Sable hosts sub-level content in a reserved plot-grid region of the parent dimension, so note packets carried grid-local positions that the parent world played as-is — the voice landed arbitrarily far from the structure and distance attenuation silenced it. The client now resolves the playback position through the sub-level's pose (correct on moving ships); the stop-marker key stays grid-local so play and stop keep keying in the same space.\n- 🧵 **声道拆分布局切换不再「连线回退」**：布局预设点击只手写参数，op 回显被跳过/未变守卫拦下——旧声道 pinId 上的连线成了幽灵线（服务端已剪、本地还画着），权威同步一到整批消失，且此后画的新线可能携旧声道名被服务端静默跳过。现点击瞬间本地镜像服务端的引脚重建：旧线就地剪除、新线按新声道名出线。 / Audio-split (CHANNEL) layout changes no longer revert wires: the layout click wrote params by hand while its op echo never reached the originator, leaving ghost wires on old channel pinIds that the next authoritative sync wiped wholesale (and wires drawn afterwards could carry stale names the server silently skipped). The click now mirrors the server's pin-set rebuild locally: old wires prune in place, fresh wires leave with the new channel names.\n- 🙈 **功放菜单隐藏「音频输出」节点**：「音频输出」只有音响能真正发声——功放图上它只发频段不出声，名字招误导；功放准入黑名单在 SPEAKER_PLAY 之外补上 AUDIO_OUT。对外把音频送到别的方块走音频承载的 BUS_OUT 同一条通路。 / The amplifier menu hides the \"audio output\" node: only a speaker truly emits sound - on the amplifier the node merely publishes a band and the name misleads; the amplifier blacklist gains AUDIO_OUT next to SPEAKER_PLAY. External audio delivery rides the audio-carrying BUS_OUT path.\n\n### 📦 Requirements / 依赖\n\n- **Create 6.0.10+**（必需 / required）\n- **Sable**（可选 / optional，1.2.2 实测；结构内发声需要它 / verified on 1.2.2; required for in-structure playback)\n- NeoForge 21.1.233+ · Minecraft 1.21.1\n\n### 📥 Install / 安装\n\n1. Minecraft 1.21.1 + NeoForge 21.1.233+（或更高） / Minecraft 1.21.1 with NeoForge 21.1.233 or newer\n2. 把 jar 放进 `mods/`，并安装 Create 6.0.10+ / Drop the jar into `mods/` and install Create 6.0.10+\n3. 完整变更日志见 [CHANGELOG.md](https://github.com/y15173334444/create-schematic-compute/blob/main/CHANGELOG.md#v1262) / Full changelog: [CHANGELOG.md](https://github.com/y15173334444/create-schematic-compute/blob/main/CHANGELOG.md#v1262)\n\n**SHA-256** `7240c27c5473b22a0f6e73187b9dcf650fe3d7b4e393ec07c84392855abc29d0` · `create-schematic-compute-1.2.6.2.jar`"
+		},
+		{
+			"tag": "v1.2.6.1",
+			"published": "2026-10-24T15:32:31Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 672620124,
+					"name": "create-schematic-compute-1.2.6.1.jar",
+					"url": "https://github.com/y15173334444/create-schematic-compute/releases/download/v1.2.6.1/create-schematic-compute-1.2.6.1.jar",
+					"size": 1323785,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "d33018896cd8e086af3ff7912fd13d0749f80507b6f61394fc546dc11135b0da",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "create_schematic_compute",
+							"version": "1.2.6.1",
+							"name": "Create: Schematic Compute",
+							"description": "A blueprint visual programming computer for Create",
+							"environment": "*",
+							"depends": []
+						}
+					],
+					"icon": "e4da24e85bdcd278958917069a1c0b8096371a8382fa63ed7055c13faab6ffb7.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Create: Schematic Compute"
+							],
+							"block": [
+								"3D Holographic Radar",
+								"Amplifier Computer",
+								"Attitude Sensor",
+								"Blueprint Computer",
+								"CNC Gearbox",
+								"Control Seat",
+								"Holographic Monitor",
+								"Kinetic Gauge",
+								"Program Computer",
+								"Programmable Transmission",
+								"Speaker",
+								"Speed Proxy Controller"
+							],
+							"item": [
+								"Portable Terminal"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 350,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Create: Schematic Compute 1.2.6.1\n\n### 🐛 Fixes / 修复\n\n- 🚌 **BUS 频道冲突者改名走人误退役**：同名冲突者改名走人不再把 BUS_IN 频段剪光（活候选守退役）；删除路径与 BUS_IN 改名补 owner 门；自愈挂点收口到每 tick 收敛之前（图停止也跑），收敛守卫收紧为「未定义＝空不可证明」、跳过保线。 / A conflicted rename-away no longer retires channels while a claimant lives; owner gates on the delete path and BUS_IN renames; self-heal runs before the per-tick convergence (even while the graph is stopped) and the convergence guard never treats an undefined channel as proven-empty.\n- 🔑 **键位配置重启不加载**（v1.2.6 起）：自定义绑定重启静默回出厂——`CONFIG_PATH` 静态初始化顺序已修，被冲掉的绑定需手动重绑一次。 / Keybindings failed to load at boot since v1.2.6 (a static-init ordering bug); bindings eroded during v1.2.6 need one manual re-bind.\n- 🧵 **删除连线命中几何与画线同源**：「对准了删不掉」（公式/曲线节点 240px 宽的命中漂移）已修，含遮挡与 z 序门控。 / Delete-wire hit geometry now shares the drawn curve (fixes the 240px-wide node hit drift), with occlusion and z-order gating.\n- 🛡️ **音响/雷达设置面板点击与滚轮穿透封口**。 / Speaker & radar settings panels no longer leak clicks and the wheel.\n\n### ✨ New / 新增\n\n- 📻 **功放电脑监听音频节点**：盖子频谱取数源可选（单源、默认图最上方、可指定）。 / Amplifier computer monitor: a selectable single-source node for the lid spectrum.\n- 🎵 **音乐节点播放编辑区**：输入激活 × 起播策略两模式。 / Music node playback edit panel: input activation and start-policy modes.\n- 📐 **角度比对（A-B）**：原「角度解绕」更名，新增双角度差比对 + 折返区间两模式。 / Angle Unwrap renamed Angle Compare (A-B): two-angle delta compare with two fold-range modes.\n- 📁 **NBS 编辑器文件钮**：顶栏导入/导出并成一枚 ▤ 文件钮，点开下拉「新建曲目 / 导入 / 导出」；新建曲目走整曲快照撤销（Ctrl+Z 退回）。 / NBS editor file button: import & export merge into one ▤ button with a new/import/export dropdown; new song is whole-song undoable (Ctrl+Z).\n- ✏️ **NBS 顶栏曲名行内改名**：Enter 或失焦提交、Esc 取消——功放电脑「监听音频节点」列表按曲名显示，手搓/新建的曲子不再是「未命名曲目」。 / Inline song-name rename on the NBS top bar (Enter or blur commits, Esc cancels) — the amplifier monitor list labels by song name.\n- 🔈 **层行音频钮随静音态换字形**：有声 = 扬声器+声波，静音 = 裸扬声器。 / Lane-row audio button swaps speaker glyphs with the mute state.\n- 🖱️ **设置面板点外自动收回**、**功放监听面板滚动条可拖**、**私有信号引脚文本随承载类型**（音频/值）、**子编辑器（NBS/像素）占用锁跨屏幕保活 + 入口软锁**。 / Settings panels collapse on outside click; monitor-panel scrollbar drag; private pin text follows the carried type; sub-editor occupancy-lock keep-alive + entry soft-lock.\n\n### ⚠️ Behaviour changes / 语义变更\n\n- 🗂️ **功放/齿轮箱节点菜单按功能面收敛**：数控齿轮箱 70 → 59（8 类——去高级运算，整类隐藏控制/累计/动力读数），功放 69 → 34（7 类——音频 + 值/输出控制面 + 时序 + 触发逻辑 + 调试）。**已放入图中的节点照常求值，只影响新建菜单**；共享分类体系零改动。 / Amplifier & gearbox add menus curated by functional surface (gearbox 70 → 59, amplifier 69 → 34). Existing graphs are untouched — only the add menu changes; the shared taxonomy is unchanged.\n- 设置面板打开时点击面板外部 = 收回（这一下就地吞掉，不落到画布）。 / An outside click collapses an open settings panel (consumed in place).\n- 双击入口被他人占用时拒绝打开子编辑器（占用框跨屏幕保活）。 / Double-click entries refuse when another player holds the node.\n\n### 📦 Requirements / 依赖\n\n- **Create 6.0.10+**（必需 / required）\n- **Sable**（可选 / optional）\n- NeoForge 21.1.233+ · Minecraft 1.21.1\n\n### 📥 Install / 安装\n\n1. Minecraft 1.21.1 + NeoForge 21.1.233+（或更高） / Minecraft 1.21.1 with NeoForge 21.1.233 or newer\n2. 把 jar 放进 `mods/`，并安装 Create 6.0.10+ / Drop the jar into `mods/` and install Create 6.0.10+\n3. 完整变更日志见 [CHANGELOG.md](https://github.com/y15173334444/create-schematic-compute/blob/main/CHANGELOG.md#v1261) / Full changelog: [CHANGELOG.md](https://github.com/y15173334444/create-schematic-compute/blob/main/CHANGELOG.md#v1261)\n\n**SHA-256** `d33018896cd8e086af3ff7912fd13d0749f80507b6f61394fc546dc11135b0da` · `create-schematic-compute-1.2.6.1.jar`"
+		},
+		{
+			"tag": "v1.2.6",
+			"published": "2026-10-18T04:48:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 652506304,
+					"name": "create-schematic-compute-1.2.6.jar",
+					"url": "https://github.com/y15173334444/create-schematic-compute/releases/download/v1.2.6/create-schematic-compute-1.2.6.jar",
+					"size": 1305827,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "dab6835f4b8e0b16274ca06a5366196107d611f21f4e826331bc0d61a14d06b3",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "create_schematic_compute",
+							"version": "1.2.6",
+							"name": "Create: Schematic Compute",
+							"description": "A blueprint visual programming computer for Create",
+							"environment": "*",
+							"depends": []
+						}
+					],
+					"icon": "e4da24e85bdcd278958917069a1c0b8096371a8382fa63ed7055c13faab6ffb7.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Create: Schematic Compute"
+							],
+							"block": [
+								"3D Holographic Radar",
+								"Amplifier Computer",
+								"Attitude Sensor",
+								"Blueprint Computer",
+								"CNC Gearbox",
+								"Control Seat",
+								"Holographic Monitor",
+								"Kinetic Gauge",
+								"Program Computer",
+								"Programmable Transmission",
+								"Speaker",
+								"Speed Proxy Controller"
+							],
+							"item": [
+								"Portable Terminal"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 346,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Create: Schematic Compute 1.2.6\n\n### ✨ New / 新增\n- 🎵 **功放电脑 + 音响 / Amplifier Computer + Speaker**（`create_schematic_compute:amplifier_computer` / `speaker`）：两个新方块接上 **CSC 混音音频引擎**——服务端排程、音符展开时烘焙层音量/声像、事件带目标时刻由客户端墙钟定点播放（2s 预播吸收服务端停顿）；功放开盖屏 16 频段频谱 + 增益曲线 + 声道拆分（聚合/立体声/4.0/5.1/7.1），音响按世界位置发声、带增益/静音/红石静音。 / Two new blocks on the **CSC mixing audio engine**: server-side scheduling with layer volume/panning baked at note expansion, target-timed events placed on the client's wall clock (a 2 s pre-roll absorbs server stalls); the amplifier's lid screen shows a 16-band spectrum with a gain curve and channel split (mix / stereo / quad / 5.1 / 7.1), and the speaker voices audio at its world position with gain / mute / redstone-mute controls.\n- 🎹 **NBS 钢琴卷帘编辑器 / NBS Piano Roll Editor**：双击 MUSIC 节点打开——钢琴卷帘（点放/擦除/拖拽涂抹）+ 层面板 + 传输条（播放/停止/循环/速度）+ 试听 + .nbs 导入导出（v1–v5 读 / v5 写）；**双样式视图**（卷帘 tick×键 / 层列 tick×层 + 底部钢琴条）；**选择 + 剪贴板**（框选 / Ctrl 点选 / 复制剪切粘贴，与 OpenNBS 等社区编辑器**跨窗互贴**）；**拖移搬移**（拖到新格搬移、同格改音高、选区随拖）；**逐音符力度/声像/细音高**（Set 弹窗 + 悬停微调）；层面板逐行自包含 + 细调弹窗 + 层重排；图标化顶栏、卷帘键位列表与谱面 1:1 对齐、层总览面板、层静音开关、导入弹窗滚动条；13 个 NBS 命令入键位系统（播放/撤销/导入导出等可绑）。 / Double-click a MUSIC node: a piano roll (place / erase / drag-paint) with a layer panel, transport bar and audition, plus .nbs import/export (v1–v5 read / v5 write); **dual views** (roll tick×key / lane tick×layer with a piano strip); **selection & clipboard** (marquee / Ctrl-click / copy-cut-paste with **cross-window pasting** into OpenNBS-style editors); **drag-to-move** (a new cell relocates, the same cell retunes, selections travel); **per-note velocity / panning / fine pitch** (Set dialog + hover micro-adjust); self-contained layer rows with a detail popup and layer reorder; an icon top bar, a roll key list aligned 1:1 with the score, a layer overview picker, per-layer mute and an import-dialog scrollbar; thirteen NBS commands join the key-binding system.\n- 🎛️ **曲线双节点 / Curve duo**：AMP 力度曲线（x = 音符力度、y = 输出力度，拖点/双击加/右键删）+ 新节点 **WSHAPE 波形整形**（逐样本 LUT 骑 AudioRef 下发、起音时固化进采样，恒等曲线 = 真旁路）。 / The AMP dynamics curve (x = note velocity, y = output level) plus the new **WSHAPE wave shaper** (a per-sample LUT riding the AudioRef, baked into the sample at voice start; an identity curve is a true bypass).\n- 🎛️ **新节点：与门 / New node: AND Gate**：与或门完全镜像（2 入 1 出，A、B 都 >0.5 输出 1，NaN 判假），级联可拼多输入。 / A strict mirror of OR (two ins one out, 1 only when both exceed 0.5, NaN counts false); chain gates for more inputs.\n- 🎛️ **闸门 / T 触发器 / 锁存器当前态手动切换 / Manual current-state toggle**：三个时序节点的编辑区可手动拨当前态，调试更顺手。 / The three sequential nodes gain an edit-area toggle for their current state — handier for debugging.\n\n### 🐛 Fixes / 修复\n- 🐛 **NBS 编辑器实测反馈一批 / NBS editor field-feedback batch**：卷帘右键按下在空格上误放音符（改走擦除路径）；右键点空白取消选择；导入换曲后速度框滞留旧值（失焦曾把旧速度写回新曲上传）；钢琴条选中标记两缺陷（画序反写 + F/F# 黑白键身份颠倒，卷帘键行着色同修）；导入弹窗滚轮滚动 + 真滚动条 + 文件计数；层名输入框点别处 / Esc 取消（此前滞留吃按键）。 / RMB press on blank cells placed notes (now erases); right-click on blank clears the selection; the tempo box kept the previous song's value after an import and committed it back on blur; the piano-strip selection marker hid under an inverted draw order and the F/F# black-key identity was swapped (the roll's key-row shading fixed with it); the import dialog gained wheel scrolling, a real scrollbar and a file count; the layer-name box cancels on an outside click / Esc instead of lingering and eating keystrokes.\n\n### ⚠️ Behaviour changes / 语义变更\n- **同列第二笔不再换键挪移**：同一 tick 列画第二笔时第一笔的音符原地不动，新音符落到下一个未锁定空层成和弦（没有空层自动扩一层）；挪音符/改音高只走拖动手势与悬停滚轮。 / The same-column second stroke no longer relocates the first note — it stacks on the next free unlocked layer as a chord (growing the song when none is free); moving and retuning are exclusively the drag gesture and the hover wheel.\n\n..."
+		},
+		{
+			"tag": "v1.2.5.2",
+			"published": "2026-09-27T04:25:34Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 592126812,
+					"name": "create-schematic-compute-1.2.5.2.jar",
+					"url": "https://github.com/y15173334444/create-schematic-compute/releases/download/v1.2.5.2/create-schematic-compute-1.2.5.2.jar",
+					"size": 1054172,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "18a0d7e25e47257326a47d1042bada88f0636c37ed4d0975e2ec907c4f8ef062",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "create_schematic_compute",
+							"version": "1.2.5.2",
+							"name": "Create: Schematic Compute",
+							"description": "A blueprint visual programming computer for Create",
+							"environment": "*",
+							"depends": []
+						}
+					],
+					"icon": "e4da24e85bdcd278958917069a1c0b8096371a8382fa63ed7055c13faab6ffb7.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Create: Schematic Compute"
+							],
+							"block": [
+								"3D Holographic Radar",
+								"Attitude Sensor",
+								"Blueprint Computer",
+								"CNC Gearbox",
+								"Control Seat",
+								"Holographic Monitor",
+								"Kinetic Gauge",
+								"Program Computer",
+								"Programmable Transmission",
+								"Speed Proxy Controller"
+							],
+							"item": [
+								"Portable Terminal"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 263,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Create: Schematic Compute 1.2.5.2\n\n### ✨ New / 新增\n- 🎛️ **变速器代理态显示 / Transmission proxy state**（`create_schematic_compute:programmable_transmission`）：图运行且图中存在 `TX_OUT` 时，滚轮值盒显示「**已应用目标 (代理)**」、悬停提示第一行改为「目标转速 · 由节点控制」，且**滚轮与右键拒收输入**（客户端输入 / 服务端收包 / 剪贴板三处共用同一闸门；想预置停机目标请先停图）。代理态由**服务端判定**并随方块实体包同步（`CscTxProxy`），客户端不按本地图推导。 / While a `TX_OUT` node drives the target, the transmission's scroll value box reads the **applied target as \"(proxy)\"**, its hover tip's first line becomes \"Target speed · Node-controlled\", and the **wheel and right-click refuse input** (client input / server packet handler / clipboard share one gate — stop the graph first if you want to preset a fallback value). The state is **server-decided** and ships in the block-entity packet (`CscTxProxy`); the client never derives it from its local graph.\n- 🎛️ **PID / PID_POWER 积分死区 `deadband`**：新增可编辑/可连线参数（默认 **0.001**）——`|err| ≤ deadband` 时积分**保持**（不增长也不清除），近零误差不再冲掉 I 项；旧节点经 V5→V6 迁移自动补默认值。 / New editable/wire-overridable `deadband` parameter (default **0.001**): inside the band the integral **holds** (neither grows nor clears), so a near-zero error no longer wipes the I term; the V5→V6 migration fills the default on legacy nodes.\n- ✨ **删节点撤销/重做恢复连线 / Node-delete undo/redo restores wires**：删除节点（X 单删 / Delete 多选）现在把触及的连线去重后按**稳定 pinId** 记入同一撤销批，Ctrl+Z 先恢复节点、再按 pinId 接线；pinId 解析不到或输入脚已占用则静默跳过，不覆盖现有连线。 / Deleting nodes (X / multi-select Delete) records the affected wires de-duplicated in the same undo batch by **stable pinId**; Ctrl+Z restores the nodes first and then rewires by pinId. Unresolvable pinIds or occupied input pins are skipped silently rather than clobbering existing wires.\n- ⌨️ **键位系统扩容 + 统一键鼠序列 / Key bindings: more actions, unified key+mouse sequences**：新增 11 个可绑定动作（删除连线、像素编辑器画笔/橡皮/填充/取色/直线/矩形/抓手/网格/笔刷 ±），每个动作一条**键鼠可交错**的触发序列（如 `Tab → 左键 → A → 右键`）；旧配置自动迁移。 / 11 new bindable actions (delete-wire plus the pixel editor's brush/eraser/fill/picker/line/rect/pan/grid/brush-size) — each action holds one **interleaved key+mouse** trigger sequence (e.g. `Tab → left-click → A → right-click`); legacy configs migrate automatically.\n\n### 🐛 Fixes / 修复\n- 🐛 **#10 频道名旧草稿回写 / #10 channel-name stale-draft write-back**：只有用户真正敲键才提交改名，防抖不再把改名前的草稿顶回服务端；未确认的草稿在失焦/关屏/编译时丢弃并提示。 / Only real keystrokes commit a rename — the debounce no longer pushes a pre-rename draft back to the server; unconfirmed drafts are discarded with a hint on blur / screen close / compile.\n- 🐛 **#17 整图保存覆盖 / #17 whole-graph save overwrite**：编译/保存改为**位置请求**，由服务端在自己的权威图上执行（含子图递归 + 环检测），不再用客户端快照整体替换、静默冲掉并发编辑。 / Compile/save is now a **position-only request** executed on the server's own authoritative graph (with sub-graph recursion and cycle detection) instead of replacing it with a client snapshot that silently wiped concurrent edits.\n- 🐛 **封装子图节点数据/展开状态同步 / Sub-graph node data & expansion sync**：子图内公式编辑不再因查错图而静默丢弃；跨玩家展开/折叠状态不再因作用域门控丢失（`n.expanded` 数据半边恒应用）。 / Formula edits inside a sub-graph are no longer silently dropped by a wrong-graph lookup, and cross-player expand/collapse state survives the scope gate (the `n.expanded` data half always applies).\n- 🐛 **参数输入框实时同步 / Live parameter-box sync**：远端回显你正在输入的原文（含空串与半截输入），失焦才归位为规范格式；大数不再被 `ff3` 压成科学计数。 / Peers echo the raw text you are typing (including empty and half-finished input) and only normalise on blur; large magnitudes are no longer squashed into scientific notation by `ff3`.\n- 🐛 **封装子图顶栏合并 / 占用封装禁删 / Sub-graph top bar merge & occupied-encapsulation delete guard**：子图模式标识与 Back 并入同一根顶栏、渲染与命中几何一致；有玩家正在其子图内编辑的封装无法被删除（批量删除跳过它）。 / The sub-graph mode indicator and Back joined one top bar with matching render/hit geometry, and an encapsulation someone is editing inside can no longer be deleted (bulk deletes skip it).\n\n..."
+		},
+		{
+			"tag": "v1.2.5.1",
+			"published": "2026-09-13T04:32:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 560557454,
+					"name": "create-schematic-compute-1.2.5.1.jar",
+					"url": "https://github.com/y15173334444/create-schematic-compute/releases/download/v1.2.5.1/create-schematic-compute-1.2.5.1.jar",
+					"size": 1043793,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "633e486299719a53e3ef1269418f437944c5c29ce8ab619a7335bf8791015e22",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "create_schematic_compute",
+							"version": "1.2.5.1",
+							"name": "Create: Schematic Compute",
+							"description": "A blueprint visual programming computer for Create",
+							"environment": "*",
+							"depends": []
+						}
+					],
+					"icon": "e4da24e85bdcd278958917069a1c0b8096371a8382fa63ed7055c13faab6ffb7.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Create: Schematic Compute"
+							],
+							"block": [
+								"3D Holographic Radar",
+								"Attitude Sensor",
+								"Blueprint Computer",
+								"CNC Gearbox",
+								"Control Seat",
+								"Holographic Monitor",
+								"Kinetic Gauge",
+								"Program Computer",
+								"Programmable Transmission",
+								"Speed Proxy Controller"
+							],
+							"item": [
+								"Portable Terminal"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 257,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Create: Schematic Compute 1.2.5.1\n\n### ✨ New / 新增\n- 🎛️ **动力传感器 / Kinetic Gauge**（`create_schematic_compute:kinetic_gauge`）：Create 应力表/转速表同款三轴放置（贴地贴顶正对玩家、四向可选，竖置可直接放出），贴轴自动对齐；自身沿轴贯通传轴，并读取所在动力网络的转速与应力。\n  - 面板内置读数：转速数字 + 应力条（绿→黄→红，超载闪烁）+ 百分比；图里放 DATA/TEXT 节点则由它们接管显示（服务端求值快照权威）。\n  - 扳手：点**轴端面**或**显示面** → 显示绕轴 90° 循环（轴与传动连接不动，与机械动力一致）；点其余两面 → 整表旋转、轴换向。\n  - 双模型变体：水平轴用讲台面板、竖直轴用平板屏，文字永远直立可读。\n- 📊 **新节点：动力读数 / Kinetic Readings** — **STRESS**（应力状态，4 输出：占比/已用/未用/剩余）与 **RPM**（转速，1 输出，带符号）；动力传感器 / 可编程变速器 / 数控齿轮箱三种动力宿主均可使用。\n\n### 🐛 Fixes / 修复\n- ⌨️ 编辑器输入焦点与选中高亮：输入中途丢焦点、显示编辑器吞键、设置面板点击穿透、选中高亮消失/回弹、编辑框每秒数次整批重建、折叠丢未提交输入、书签对话框加确认/取消按钮、图名软锁。\n- ⚙️ 封装内的齿轮箱节点丢失宿主注入 —— 这是「编码器输出 0」的根因（MOVE/ROTATE/WAIT/CLUTCH 指令与雷达节点同样受影响）。\n- 🚌 总线频段解析改为**服务端唯一权威**（同一个 BUS_IN 在不同客户端显示不同频段图的问题），跨方块频道冲突警告终于显示，冲突的 BUS_OUT 不再充当定义来源，BUS_IN 频段列表收敛为每 tick 服务端不变量。\n- 📉 组合线方块（数控齿轮箱 / 可编程变速器）不再把整张图塞进每个客户端数据包（断动力/启停时编辑器反复整图重建）。\n- 📱 便携终端对未登记路由的设备点「编辑」不再空指针崩溃。\n- 🧩 GUI 巨型文件拆分（步骤 1–3）：HUD 裁剪数学抽出、显示器显示编辑 GUI 脱离、设置界面按 tab 拆分。\n\n### ⚠️ Behaviour changes / 语义变更\n- **编码器只在离合接合时计量**（分离/空闲时位置保持、转速读 0），且积分与指令配额逐 tick 对齐 —— 256 rpm 下每个指令边界 76.8° 的行程不再丢失。\n- **BUS_IN 改名到「无发布方」的频道名**会清空频段并删除其上的连线，且不可撤销（撤销只恢复名字与频段列表）；改名到有定义的频道名不受影响。\n\n### 📦 Requirements / 依赖\n- **Create 6.0.10+**（必需 / required）\n- **Sable**（可选 / optional）\n- NeoForge 21.1.233+ · Minecraft 1.21.1\n\n### 📥 Install / 安装\n1. Minecraft 1.21.1 + NeoForge 21.1.233+（或更高）\n2. 把 jar 放进 `mods/`，并安装 Create 6.0.10+\n3. 完整变更日志见 [CHANGELOG.md](https://github.com/y15173334444/create-schematic-compute/blob/main/CHANGELOG.md#v1251)\n\n**SHA-256** `633e486299719a53e3ef1269418f437944c5c29ce8ab619a7335bf8791015e22` · `create-schematic-compute-1.2.5.1.jar`"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T22:37:16.645Z",
+	"pictures": [
+		"assets-src/amplifier_computer/gf.png",
+		"assets-src/kinetic_gauge/chuangan.png",
+		"assets-src/kinetic_gauge/chuangan_y.png",
+		"assets-src/speaker/yx.png"
+	],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 756,
+		"more": 0,
+		"people": [
+			{
+				"login": "y15173334444",
+				"commits": 755,
+				"name": "StarryNight",
+				"funding": []
+			},
+			{
+				"login": "TronZhong",
+				"commits": 1,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
+	"history": 1
+}

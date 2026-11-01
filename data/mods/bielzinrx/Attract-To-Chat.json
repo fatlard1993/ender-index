@@ -18,7 +18,7 @@
 					"name": "Attract-To-Chat-1.19.2-Fabric-2.1.3.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.3/Attract-To-Chat-1.19.2-Fabric-2.1.3.jar",
 					"size": 243495,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "ab762afacceccba060c24445749ddb49d78d79022edf9607e7ab0566dc175955",
 					"mods": [
@@ -59,7 +59,7 @@
 					"name": "Attract-To-Chat-1.19.2-Forge-2.1.3.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.3/Attract-To-Chat-1.19.2-Forge-2.1.3.jar",
 					"size": 243184,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "4b4a061420dc7a059f25562993959c1cd60b7c32ba42c59707847131f47c3bed",
 					"mods": [
@@ -97,7 +97,7 @@
 					"name": "Attract-To-Chat-1.20.1-Fabric-2.1.3.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.3/Attract-To-Chat-1.20.1-Fabric-2.1.3.jar",
 					"size": 242251,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "8c5f042d81bcf7ce09753e89328a7c7c655c23ac597ee34dc002dc017996d2d6",
 					"mods": [
@@ -138,7 +138,7 @@
 					"name": "Attract-To-Chat-1.20.1-Forge-2.1.3.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.3/Attract-To-Chat-1.20.1-Forge-2.1.3.jar",
 					"size": 244207,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "6b5cba7ec00a442b408887613b2ad1809db6bc4d8d1f9ee826155f2cb3f422e8",
 					"mods": [
@@ -171,7 +171,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Attract to Chat 2.1.3 — Walkie-Chat integration, repaired\n\nEvery message you type makes a sound. Somewhere out there, something heard it.\n\nThis release re-audits the optional Walkie-Chat integration against the reflection\ncontracts real Walkie-Chat builds actually ship — and repairs it end to end. Core\ngameplay (chat attracts mobs, walls muffle, CAPS shout, Troll Mode, presets, vocal\nfatigue, anti-spam) is unchanged and works on both supported Minecraft versions.\n\n## Fixed\n- **Hostile mobs now attack Walkie Block stations** — the attraction entry point\n  deduces the block target, re-enabling station destruction, the \"signal lost\"\n  notification, and block-target behaviors (creeper ignition, enderman teleport).\n- **The station next to you wins** — a hostile already standing near a Walkie Block\n  abandons the march to the message and works that station down instead. Nothing is\n  deleted in one tick any more: every hostile chips at the block with the game's own\n  cracking progress (stages 3 → 6 → 9), a slime hops on top of it, and one mob holds the\n  station at a time so a crowd queues and the progress carries over when the worker dies.\n  A creeper is the exception — its fuse ends the station outright, and the block goes with\n  the blast rather than 1.5 s before it.\n- **Plain chat beside a station was swallowed** — typing within reach of a powered Walkie\n  Block attracted *nothing*. `suppressesStationChat` trusted Walkie-Chat's\n  `findNearbyActiveBlock(ServerPlayer)`, which passes an empty frequency and therefore matches\n  any nearby block — walkie in hand or not — so ATC dropped those messages waiting for a relay\n  that never re-enters the chat pipeline. Confirmed in the Walkie-Chat 1.3.2 bytecode.\n- **A station is a target only when the walkie carried the voice** — the nearby-station detour\n  is gone. The sound source becomes the station's own position only when the player holds a\n  walkie whose frequency matches a nearby active block; otherwise a message means the player.\n- **The wreck costs the network, not a loot roll** — a mob-destroyed station drops nothing.\n- **The signal dies over the walkie** — the \"signal lost\" notice now carries the mod's own\n  channel prefix and receive click and names what destroyed the station, to tuned players\n  only. The dead `WalkieNetworkHandler` / `isPlayerConnectedToAnyBlock` reflection behind\n  the old fallback is gone: neither method exists in Walkie-Chat 1.2.2 or 1.3.2.\n- **1.19.2 Forge heard nothing at all** — its chat listener was registered on\n  `ServerChatEvent.Submitted`, a class that exists in Forge 43.x but is never posted by the\n  1.19.2 chat flow (verified against the runtime jar). Every message was silently ignored on\n  that loader. It listens to the real event now.\n- **1.19.2 Fabric was deaf whenever Walkie-Chat was installed** — ATC listened to Fabric API's\n  chat event, which fires from the vanilla broadcast that Walkie-Chat 1.2.2 cancels in order to\n  deliver chat itself, so the event never happened. ATC now hooks the chat packet directly,\n  before any mod can intercept it.\n- **One documented promise was not implemented** — `/atc walkiechat proximity range|capsbonus`\n  had no caller at all; Walkie-Chat now asks ATC for that floor before it reports a range.\n- **The toggle truly toggles** — `/atc walkiechat compat enable|disable` now gates\n  every part of the integration (chat suppression, station-relayed targets, block\n  behavior) symmetrically in both directions.\n- **Shared gatekeepers** — the Walkie-Chat reflection path now runs the same\n  ignored-players, vocal-fatigue mute and anti-spam checks as normal chat, and\n  records per-player stats and debug feedback for relayed messages.\n- **Forge canceled-chat handling** — while the integration is on, canceled events still\n  reach the engine (Walkie-Chat cancels every event it re-routes); the engine's own\n  guards decide what attracts. With the integration off, other mods' cancellations hold.\n\n..."
 		},
 		{
 			"tag": "v2.1.2",
@@ -183,7 +184,7 @@
 					"name": "Attract-To-Chat-1.19.2-Fabric-2.1.2.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.2/Attract-To-Chat-1.19.2-Fabric-2.1.2.jar",
 					"size": 237208,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "ae4eebbc64cf0a758fe99a0d025199fff4f68d419d07d4a6c8738442b40d344f",
 					"mods": [
@@ -224,7 +225,7 @@
 					"name": "Attract-To-Chat-1.19.2-Forge-2.1.2.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.2/Attract-To-Chat-1.19.2-Forge-2.1.2.jar",
 					"size": 238956,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "34c0c20c9e95a1cdb4f76e0ca3b00096a8341fe1c98bcf99c11b98adcc957ec0",
 					"mods": [
@@ -262,7 +263,7 @@
 					"name": "Attract-To-Chat-1.20.1-Fabric-2.1.2.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.2/Attract-To-Chat-1.20.1-Fabric-2.1.2.jar",
 					"size": 238029,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "58e3c7cb0711fd9119b65beee6d7531a82d07b74aba6ceafeb5989c1842b8aa4",
 					"mods": [
@@ -303,7 +304,7 @@
 					"name": "Attract-To-Chat-1.20.1-Forge-2.1.2.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.2/Attract-To-Chat-1.20.1-Forge-2.1.2.jar",
 					"size": 239830,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "caa120f4db2774927be95e53dc474055513d6e16bfe7ea23de5a94bd4abbb36b",
 					"mods": [
@@ -336,7 +337,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Attract to Chat 2.1.2 — Forge & Fabric 1.19.2 & 1.20.1\n\nOptional Walkie-Chat integration on Minecraft 1.20.1 — proximity chat, walkie block stations and hostile mob attacks — plus per-player investigation particles on both versions.\n\n- **Fabric 2.1.2** — requires Fabric API 0.92.7+ (1.20.1) or 0.76.0+ (1.19.2).\n- **Forge 2.1.2** — no additional dependencies.\n- Requires Java 17.\n- Server-first: installation on clients is optional.\n\n## New in 2.1.2\n\n- Optional Walkie-Chat compatibility (mod id `walkietalkie`) on Minecraft 1.20.1, enabled by default and toggleable in-game with `/atc walkiechat on|off` or through the `walkieChatCompat` config option. Requires Walkie-Chat 1.3.2 or newer.\n- Mobs are attracted to proximity chat spoken through Walkie-Chat, using the effective range Walkie-Chat already resolved; `walkieChatProximityRange` (default 15) and `walkieChatProximityCapsBonus` (default 10) shape the result.\n- Hostile mobs that reach an active Walkie Block station destroy it, and every player tuned to its frequency receives a \"signal lost\" notification in their own language.\n- Chat spoken through a handheld walkie or next to an active Walkie Block is routed by Walkie-Chat and is no longer double-processed by the ATC engine.\n- `/atc status` reports the Walkie-Chat compatibility state when the mod is present.\n- On Minecraft 1.19.2, Walkie-Chat runs side by side without conflicts: walkie talkie chat is never double-processed and normal chat keeps attracting mobs. The walkie talkie integration itself is 1.20.1-only — Walkie-Chat's 1.19.2 builds ship no integration API.\n\n## Changes and fixes\n\n- Removed the server-side `showParticles` master switch: investigation particles are now purely a per-player choice made with `/atc client particles enable|disable`. The `silent` preset no longer touches particles, `/atc status` no longer lists a particle line, and existing configs migrate automatically (schema 17).\n- Forge chat handling now listens at the lowest priority and receives canceled events: mods that cancel chat events while re-implementing delivery (Walkie-Chat does) no longer break attraction — ATC's own guards decide what gets processed.\n- Fabric chat handling relies on registration order (mods initialize alphabetically by mod id), which places ATC's listener before Walkie-Chat's chat veto.\n- Attraction dedupe guard: a message relayed by Walkie-Chat through both its broadcast helper and the block relay attracts mobs only once. The guard keys on message identity and is cleared on server stop, so world reloads never leave it stuck and different messages are never swallowed.\n\nBoth Minecraft 1.19.2 and 1.20.1, Forge and Fabric, receive the same code changes; the full Walkie-Chat integration requires Minecraft 1.20.1.\n\n## Downloads\n\nUse the binary JAR matching your loader and Minecraft version. Files ending in `-sources.jar` contain source code for development/reference and are not the playable mod.\n\n### SHA-256\n\n```text\nae4eebbc64cf0a758fe99a0d025199fff4f68d419d07d4a6c8738442b40d344f  Attract-To-Chat-1.19.2-Fabric-2.1.2.jar\n9edebc2cab0c66a51c06c69352450a4154a8fe9342473e038f24d1e939469a4c  Attract-To-Chat-1.19.2-Fabric-2.1.2-sources.jar\n34c0c20c9e95a1cdb4f76e0ca3b00096a8341fe1c98bcf99c11b98adcc957ec0  Attract-To-Chat-1.19.2-Forge-2.1.2.jar\nf8694a440194244ddc551378d2530108d58f8f88e3a53dbddafa8dea823e0cc9  Attract-To-Chat-1.19.2-Forge-2.1.2-sources.jar\n58e3c7cb0711fd9119b65beee6d7531a82d07b74aba6ceafeb5989c1842b8aa4  Attract-To-Chat-1.20.1-Fabric-2.1.2.jar\naa24c49357e0cd8295dd69b4632367a832fc09f6071028f930ba5b13eef95948  Attract-To-Chat-1.20.1-Fabric-2.1.2-sources.jar\ncaa120f4db2774927be95e53dc474055513d6e16bfe7ea23de5a94bd4abbb36b  Attract-To-Chat-1.20.1-Forge-2.1.2.jar\n8ab3374b11a284939241808e121547166f2010460d3743d97cc372a34c52bada  Attract-To-Chat-1.20.1-Forge-2.1.2-sources.jar\n```"
 		},
 		{
 			"tag": "v2.1.1",
@@ -348,7 +350,7 @@
 					"name": "Attract-To-Chat-1.19.2-Fabric-2.1.1.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.1/Attract-To-Chat-1.19.2-Fabric-2.1.1.jar",
 					"size": 228964,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "2d2c7d8211f95134c3369f55e9de3c21e397cca288edaee4a8555514c47e24b0",
 					"mods": [
@@ -389,7 +391,7 @@
 					"name": "Attract-To-Chat-1.19.2-Forge-2.1.1.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.1/Attract-To-Chat-1.19.2-Forge-2.1.1.jar",
 					"size": 230621,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "483f3851db29848f5633e4bfd0cdc59a19b601cbaaeaa35a16cbb3bc439cdb49",
 					"mods": [
@@ -427,7 +429,7 @@
 					"name": "Attract-To-Chat-1.20.1-Fabric-2.1.1.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.1/Attract-To-Chat-1.20.1-Fabric-2.1.1.jar",
 					"size": 229643,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "0a41eafa057e2fcb44cec360afb298678c14b229330f132a8b43a43e219e45c4",
 					"mods": [
@@ -468,7 +470,7 @@
 					"name": "Attract-To-Chat-1.20.1-Forge-2.1.1.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.1/Attract-To-Chat-1.20.1-Forge-2.1.1.jar",
 					"size": 231046,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "777da1bfa1560b8d2b4feb46b804ab156299d1177fdd1a1a382486be0ac29d45",
 					"mods": [
@@ -501,7 +503,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Attract to Chat 2.1.1 — Forge & Fabric 1.19.2 & 1.20.1\n\nConfiguration transparency update — every option explained in-game and in the config file itself.\n\n- **Fabric 2.1.1** — requires Fabric API 0.92.7+ (1.20.1) or 0.76.0+ (1.19.2).\n- **Forge 2.1.1** — no additional dependencies.\n- Requires Java 17.\n- Server-first: installation on clients is optional.\n\n## New in 2.1.1\n\n- `/atc config list` shows every option with its current value and default, highlighting anything changed from default.\n- `/atc config info <option>` explains any option in plain words: what it does, its unit, default, valid range, and a practical example.\n- The config file (`config/attracttochat-common.json`) now carries detailed `#` comments above every option — what it does, unit, default, range, and example — regenerated by the mod on every save.\n- `/atc client particles` (no arguments) now reports your current particle preference.\n- `/atc help config` documents the new configuration commands.\n\n## Changes and fixes\n\n- Particle preference storage moved from an opt-in UUID list to a per-player on/off map (config schema 15 → 16; existing files migrate automatically on first load).\n- Vocal fatigue alert text now describes hoarseness instead of trauma.\n- Anti-spam status now reports the cooldown in seconds instead of ticks.\n- Removed unused legacy translation keys and dead code paths.\n- Config comments are now written without Unicode escapes (`\\u0027`-style sequences), keeping the file human-readable in any text editor.\n\nBoth Minecraft 1.19.2 and 1.20.1, Forge and Fabric, receive the same changes.\n\n## Downloads\n\nUse the binary JAR matching your loader and Minecraft version. Files ending in `-sources.jar` contain source code for development/reference and are not the playable mod.\n\n### SHA-256\n\n```text\n2d2c7d8211f95134c3369f55e9de3c21e397cca288edaee4a8555514c47e24b0  Attract-To-Chat-1.19.2-Fabric-2.1.1.jar\nbfe5c39bc1404b034689cb7cdea476a8014de9634c3079248a6fbd12ffda8a6e  Attract-To-Chat-1.19.2-Fabric-2.1.1-sources.jar\n483f3851db29848f5633e4bfd0cdc59a19b601cbaaeaa35a16cbb3bc439cdb49  Attract-To-Chat-1.19.2-Forge-2.1.1.jar\n82d59a571e68afc5a5030197739620632642005b3bf7f9fef1e8c6e8c5d12302  Attract-To-Chat-1.19.2-Forge-2.1.1-sources.jar\n0a41eafa057e2fcb44cec360afb298678c14b229330f132a8b43a43e219e45c4  Attract-To-Chat-1.20.1-Fabric-2.1.1.jar\n02bc8774ed24e921d6ed01c9707fe77e73dde5b04961d29fd359ff6a78a7eb73  Attract-To-Chat-1.20.1-Fabric-2.1.1-sources.jar\n777da1bfa1560b8d2b4feb46b804ab156299d1177fdd1a1a382486be0ac29d45  Attract-To-Chat-1.20.1-Forge-2.1.1.jar\ne56beec69d58d01b96971dfe1b124a61431c53b942d2a785e2231afe3ec1e4bd  Attract-To-Chat-1.20.1-Forge-2.1.1-sources.jar\n```"
 		},
 		{
 			"tag": "v2.1.0-mc1.19.2",
@@ -513,7 +516,7 @@
 					"name": "Attract-To-Chat-1.19.2-Fabric-2.1.0.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.0-mc1.19.2/Attract-To-Chat-1.19.2-Fabric-2.1.0.jar",
 					"size": 216755,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "2abda3502f5d1cb35ed848e52fc18418132eb239b3bfa7dafe787300a680a530",
 					"mods": [
@@ -554,7 +557,7 @@
 					"name": "Attract-To-Chat-1.19.2-Forge-2.1.0.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.0-mc1.19.2/Attract-To-Chat-1.19.2-Forge-2.1.0.jar",
 					"size": 218425,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "bfeb0f778a9525aea8241b9dc2b37af0d273a6a83e7ad1f968dfd53d64f1f821",
 					"mods": [
@@ -587,7 +590,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Attract to Chat 2.1.0 for Minecraft 1.19.2\n\nThis release brings the complete Attract to Chat 2.1.0 feature set to Minecraft 1.19.2 on Forge and Fabric.\n\n## Highlights\n\n- Chat-driven mob attraction with configurable hearing range and movement.\n- Dynamic loudness from CAPS and exclamation marks.\n- Terrain Muffling and safe destination resolution.\n- Compatible movement for ground, aquatic, flying, and jumping mobs.\n- Vanilla combat and villager danger priorities remain respected.\n- Ignore rules, Troll Mode, built-in and custom presets.\n- Optional Vocal Fatigue and Anti-Spam systems.\n- Live configuration, autocomplete, and investigation diagnostics.\n- Server-side translations in English, Brazilian Portuguese, and Spanish.\n- Optional per-player investigation-path particles.\n- Server-side operation without requiring Attract to Chat on connecting clients.\n- Forge only reacts to messages after they are submitted; typing and chat previews do not attract mobs.\n\n## Installation\n\n### Fabric 1.19.2\n\nInstall Fabric Loader, Fabric API 0.76.0 or newer, and `Attract-To-Chat-1.19.2-Fabric-2.1.0.jar` on the server. Client installation is optional and enables personal path-particle controls.\n\n### Forge 1.19.2\n\nInstall Forge 43.4.0 or newer and `Attract-To-Chat-1.19.2-Forge-2.1.0.jar` on the server. Client installation is optional and enables personal path-particle controls.\n\nJava 17 is required. Do not mix Forge and Fabric files.\n\n## Client particles\n\nPlayers with the optional matching client can use:\n\n```text\n/atc client particles enable\n/atc client particles disable\n```\n\nParticles are disabled by default and are enabled separately by each player.\n\n## Validation status\n\nBoth loaders compile and pass automated tests. Dedicated Fabric and Forge development servers reached full startup and stopped cleanly. A real Forge 43.5.0 Prism instance confirmed that typing, editing with Backspace, and canceling chat produce zero attraction scans, while one submitted message produces exactly one scan on the server thread.\n\nThe included checklist remains available for broader manual gameplay and mod-compatibility testing.\n\nThis is the independent 2.1.0 release line. It contains no Walkie-Chat integration or 2.1.1 feature."
 		},
 		{
 			"tag": "v2.1.0-r1",
@@ -599,7 +603,7 @@
 					"name": "Attract-To-Chat-1.20.1-Fabric-2.1.0.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.0-r1/Attract-To-Chat-1.20.1-Fabric-2.1.0.jar",
 					"size": 217104,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "8c5460a794bc59f4cc1597da8bee8b7ab7d62b0fa8475f81ccb22c9313b7b5a1",
 					"mods": [
@@ -640,7 +644,7 @@
 					"name": "Attract-To-Chat-1.20.1-Forge-2.1.0-r1.jar",
 					"url": "https://github.com/bielzinrx/Attract-To-Chat/releases/download/v2.1.0-r1/Attract-To-Chat-1.20.1-Forge-2.1.0-r1.jar",
 					"size": 218500,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "8a24b416983034bfc7c91b480a861bfbde2429ef02d472360d3eb41464f4117b",
 					"mods": [
@@ -673,11 +677,14 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Attract to Chat 2.1.0 — Fabric 1.20.1 / Forge 2.1.0-r1\n\nFinal Minecraft 1.20.1 builds:\n\n- **Fabric 2.1.0** — requires Fabric API 0.92.7 or newer.\n- **Forge 2.1.0-r1** — corrected revision that supersedes the previous Forge 2.1.0 build.\n- Requires Java 17.\n- Server-first: installation on clients is optional.\n\n## Fixes\n\n- Ground mobs now resolve a valid standable destination below airborne chat sources across the configured hearing depth.\n- Debug output now reports the heard, attempted, and started movement lifecycle accurately, with readable coordinates.\n- Removed the duplicated particle configuration command and improved feedback when particles are already enabled or disabled.\n- Fabric now uses the Fabric API message events, ignores command-generated `/say` and `/me` messages, and validates the optional client-presence handshake.\n- Declared Fabric API as a required Fabric dependency.\n- Added seven regression tests and completed packaged Fabric and Forge manual QA.\n\n## Downloads\n\nUse the binary JAR matching your loader. Files ending in `-sources.jar` contain source code for development/reference and are not the playable mod.\n\n### SHA-256\n\n```text\n8c5460a794bc59f4cc1597da8bee8b7ab7d62b0fa8475f81ccb22c9313b7b5a1  Attract-To-Chat-1.20.1-Fabric-2.1.0.jar\n8a24b416983034bfc7c91b480a861bfbde2429ef02d472360d3eb41464f4117b  Attract-To-Chat-1.20.1-Forge-2.1.0-r1.jar\n3300c9d6d2040081f6bcd791052503716e20cca2281144594c474994d1c77732  Attract-To-Chat-1.20.1-Fabric-2.1.0-sources.jar\n9a3dda27f9431cbeea28f319bb7b001eb388e8b115b986db3a8977b9c337f180  Attract-To-Chat-1.20.1-Forge-2.1.0-r1-sources.jar\n```"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

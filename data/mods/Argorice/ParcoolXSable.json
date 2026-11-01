@@ -18,7 +18,7 @@
 					"name": "parcoolxsable-1.21.1-1.2.0.jar",
 					"url": "https://github.com/Argorice/ParcoolXSable/releases/download/v1.2.0/parcoolxsable-1.21.1-1.2.0.jar",
 					"size": 147838,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "7c2a4de3cb4965fb8ebbdaee8049a9c55fb392815ae68a27dda2a9a130ded8b4",
 					"mods": [
@@ -57,7 +57,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# GitHub release 1.2.0\n\nTag: `v1.2.0`   Title: `ParCool x Sable 1.2.0 - ParCool 4 support`\nAttach: `build\\libs\\parcoolxsable-1.21.1-1.2.0.jar` (not the `-sources` one)\n\nEverything between the two rules below is the release body. Paste it as is.\n\n---\n\nAdds support for **ParCool 4.0.x**, alongside 3.4.x. One jar — it picks the right\nset of hooks when the game loads, from the ParCool you actually have installed.\n\nParCool 4 is still an alpha, and it is a rewrite rather than an update, so its\ninternals move between builds. This is built against **4.0.0.2**. Nothing here is\npinned: hooks that stop matching simply do not apply, so a later alpha loses\nfeatures rather than breaking the game.\n\n**Requires** [ParCool!](https://modrinth.com/mod/parcool) and\n[Sable](https://modrinth.com/mod/sable). With either missing the mod disables\nitself quietly, so it is safe to leave installed.\n\n### ParCool 4\n\nParCool 4 is a rewrite, not an update, so this is a second set of hooks rather\nthan a port of the first.\n\nMost of what ParCool 4 asks the world is \"is this box clear?\", and correcting\nthose answers is enough. Three actions don't ask that at all — they push a box\nand see where it stops:\n\n- **Hanging** finds the ledge under your hands this way. This is the one that\n  matters: without it, a hull never stops the box, and the grab is refused\n  however good the handhold looks.\n- **HangDown** finds the bar over your head.\n- **Vault** finds the railing.\n\nSo the mod walks the motion itself and reports where the ship first gets in the\nway.\n\n### New on both versions\n\n- **Pole climbing** — masts, chains, runs of fence posts.\n- **Scuff particles** on ParCool 4. Without them a run along a deck threw no dust\n  at all, which reads as the deck not really being there.\n- **Bars point the right way on a turned ship.** A block state carries direction,\n  and ParCool reads it as a world direction — on a yawed hull those disagreed, so\n  a bar swung about the wrong axis. Ship blocks are now turned into world\n  orientation before ParCool sees them.\n- **Jumping off a deck no longer gets caught.** The grip assist reaches further\n  than ParCool does, which is the point of it, but the same reach could grab you\n  on the way out. It now lets go once you're moving away from the hull faster\n  than the new `releaseSpeed` option — measured relative to the ship, so a fall\n  doesn't count and neither does a hull flying past you.\n- **Sloped and banking hulls are handled exactly**, with a separating-axis test\n  instead of the axis-aligned approximation used before. The box drawn around a\n  rotated box is up to 70% fatter at a 45° bank, and a fatter probe reads clear\n  air as solid — felt as a grab that fires early on one side of a listing hull\n  and is refused on the other.\n\n### Worth knowing\n\n- With no ship nearby it does nothing at all, so ParCool on the ground behaves\n  exactly as it does without this installed. A real world wall always wins over a\n  ship one.\n- The `sweptCollision` option is gone. Delete it from your toml or let it be\n  rewritten.\n- Friction from ship blocks is a ParCool 3 feature. ParCool 4 doesn't check wall\n  friction at all, so there is nothing to correct there.\n- [ParCool+ / Compatibility Addon](https://github.com/semillakan6/ParCool-CompatibilityAddon-NeoForge)\n  by **semillakan6** patches some of the same ParCool 3 methods; the two use\n  different injection points and coexist. Its Sable support is gated to ParCool 3,\n  so on ParCool 4 there is nothing to overlap with.\n- If ParCool moves something in a future version, this goes inert rather than\n  crashing the game.\n\nBuilt on top of [ParCool!](https://github.com/alRex-U/ParCool) by **alRex-U** and\n[Sable](https://github.com/ryanhcode/sable) by **ryanhcode**. Neither is\naffiliated with this project — bug reports about it belong here, not there.\n\nTested against ParCool 1.21.1-3.4.3.3 and 1.21.1-4.0.0.2, Sable Companion 1.6.0,\nNeoForge 21.1.233.\n\n\n..."
 		},
 		{
 			"tag": "v1.0.0",
@@ -69,7 +70,7 @@
 					"name": "parcoolxsable-1.21.1-1.0.0.jar",
 					"url": "https://github.com/Argorice/ParcoolXSable/releases/download/v1.0.0/parcoolxsable-1.21.1-1.0.0.jar",
 					"size": 86895,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "a63af69207d2df001875bca8e767214fb823f27af0ae39c306bf6fc73c5defd9",
 					"mods": [
@@ -108,11 +109,14 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "First release. Minecraft 1.21.1, NeoForge.\n\nMakes ParCool parkour work on Sable physics ships. Wall running along a hull,\nwall jumping, wall sliding, grabbing a deck edge, climbing up, vaulting,\nhanging from rigging and diving all work now, including on sloped and curved\nplating and on a hull that is banking or pitching.\n\nSable keeps ship blocks in a hidden area far off the map and only draws them at\nthe ship's position, so ParCool was checking empty air where the ship looked\nlike it was. This projects the player into the ship's coordinate space, runs the\nsame checks there, and rotates the result back.\n\n**Requires** [ParCool!](https://modrinth.com/mod/parcool) and\n[Sable](https://modrinth.com/mod/sable). With either missing the mod disables\nitself quietly, so it is safe to leave installed.\n\n### Worth knowing\n\n- With no ship nearby it does nothing at all, so ParCool on the ground behaves\n  exactly as it does without this installed. A real world wall always wins over\n  a ship one.\n- Hooks use MixinExtras, which stack with other mods' handlers instead of\n  fighting them. ParCool+ / Compatibility Addon uses no mixins at all, so\n  nothing to clash with there.\n- Create's super glue and honey are untouched. The mod only reads blocks; the\n  one thing it writes is the player's own velocity while clinging.\n- If ParCool renames something in a future version, this goes inert rather than\n  crashing the game.\n\nConfig lives in `config/parcoolxsable-common.toml` — reach and slope tolerance\nfor the grip assist are tunable there, and it can be switched back to ParCool's\nstrict flat-wall rules.\n\nBuilt on top of [ParCool!](https://github.com/alRex-U/ParCool) by **alRex-U** and\n[Sable](https://github.com/ryanhcode/sable) by **ryanhcode**. Neither is\naffiliated with this project — bug reports about it belong here, not there.\n\nTested against ParCool 1.21.1-3.4.3.3, Sable Companion 1.6.0, NeoForge 21.1.233.\n\nFull details in the [README](https://github.com/Argorice/ParcoolXSable#readme).\nРусская версия: [README.ru.md](https://github.com/Argorice/ParcoolXSable/blob/main/README.ru.md)."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

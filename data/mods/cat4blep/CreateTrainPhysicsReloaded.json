@@ -6,6 +6,7 @@
 	"license": "LGPL-2.1",
 	"created": "2026-07-11T16:24:24Z",
 	"pushed": "2026-08-17T22:03:22Z",
+	"forkOf": "Szedann/CreateTrainPhysics",
 	"releases": [
 		{
 			"tag": "v0.2.0-beta.4",
@@ -17,7 +18,7 @@
 					"name": "create_train_physics-0.2.0-beta.4.jar",
 					"url": "https://github.com/cat4blep/CreateTrainPhysicsReloaded/releases/download/v0.2.0-beta.4/create_train_physics-0.2.0-beta.4.jar",
 					"size": 122323,
-					"downloads": 30,
+					"downloads": 31,
 					"inspection": 2,
 					"sha256": "6acfb5cbc777e43d304ec7e50a61dd08dcedec5a928af910f48ac69d2a99f3bc",
 					"mods": [
@@ -55,7 +56,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Create Train Physics Reloaded 0.2.0-beta.4\n\n## Fix\n\n- The automatic handbrake applies gradual service braking when manual control\n  ends while a train is moving. Stopped trains remain held on slopes.\n\n## Verification\n\n- A clean build and runtime mixin-load smoke test passed on Minecraft 1.21.1,\n  NeoForge 21.1.217, and Create 6.0.8.\n- 88 regression tests passed.\n- Release JAR SHA-256:\n  `6acfb5cbc777e43d304ec7e50a61dd08dcedec5a928af910f48ac69d2a99f3bc`."
 		},
 		{
 			"tag": "v0.2.0-beta.3",
@@ -67,7 +69,7 @@
 					"name": "create_train_physics-0.2.0-beta.3.jar",
 					"url": "https://github.com/cat4blep/CreateTrainPhysicsReloaded/releases/download/v0.2.0-beta.3/create_train_physics-0.2.0-beta.3.jar",
 					"size": 120499,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "e0514aadc00a83c1a85c9fb9a12c6b2f885c746f7e718c5cd2d9fa2ac21a6ec2",
 					"mods": [
@@ -105,7 +107,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Create Train Physics Reloaded 0.2.0-beta.3\n\nThis beta makes combustion fuel engine-aware and improves compatibility with\nSteam 'n' Rails and Petrochem.\n\n## Player-facing changes\n\n- Different combustion engine types now keep independent fuel supplies. Fuel\n  accepted by one engine can no longer power an incompatible engine elsewhere\n  on the same train.\n- Mixed compatible engines can operate simultaneously without sharing or\n  duplicating fuel.\n- Liquid refills drain the exact selected fluid from one Steam 'n' Rails tank.\n  Liquid and item fuel are not consumed together, and no more than one new\n  portion is acquired per train tick.\n- Item fuel can be restricted to mounted storage with one exact custom name.\n  The filter continues working for automated trains with unloaded carriage\n  entities.\n- Petrochem Gasoline and Diesel Engines are recognized as train motors with\n  separate matching liquid-fuel profiles.\n- Existing beta.2 train fuel is migrated without duplicating it between engine\n  types.\n- The server now synchronizes authoritative train power to clients, keeping the\n  HUD correct in multiplayer when fuel is required.\n\n## Modpack configuration\n\nEngine-specific fluids, items, wildcard fallbacks, and refill priority can be\nconfigured with the `create_train_physics:engine_fuels` NeoForge block data map.\nA copyable example is included in `docs/examples/engine_fuels.json`.\n\nThe new `itemFuelStorageCustomName` common-config option defaults to `*`, which\npreserves unrestricted item-storage selection.\n\n## Verification\n\n- Clean NeoForge build completed.\n- 79 regression tests passed.\n- Data generation and runtime mixin-load smoke test completed.\n- Generated tags, data maps, and bundled resources were validated.\n\nThe Steam 'n' Rails bridge deliberately requires one complete liquid portion\nfrom a single internal tank. Two separate 50 mB remainders are not combined\ninto one 100 mB refill.\n\nThanks to @DadoIrie for PR #2 and the original proposal for per-engine fuel\nrestrictions, named item-fuel storage, and Petrochem support."
 		},
 		{
 			"tag": "v0.2.0-beta.2",
@@ -117,7 +120,7 @@
 					"name": "create_train_physics-0.2.0-beta.2.jar",
 					"url": "https://github.com/cat4blep/CreateTrainPhysicsReloaded/releases/download/v0.2.0-beta.2/create_train_physics-0.2.0-beta.2.jar",
 					"size": 61401,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "e9a2d7e34f0abf51a579adb2de632df680471da23ab1751af22c0eb4518b5f43",
 					"mods": [
@@ -155,7 +158,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### Fuel and Steam 'n' Rails\n\n* Fixed liquid and solid fuels being consumed simultaneously.\n* A train now uses only one fuel source per refueling cycle.\n* When a suitable fluid is available, the first compatible Steam 'n' Rails fuel tank is used. Coal or other item-based fuel is consumed only when no suitable fluid is available.\n* Multiple fuel tanks in different carriages no longer lose fuel simultaneously.\n* A Create steam engine can now be placed directly on a Steam 'n' Rails fuel tank when building a locomotive, without requiring a temporary standard fluid tank.\n* For multiplayer, it is recommended to disable `realisticTrains` in Steam 'n' Rails and control fuel requirements using this mod’s `requireFuel` setting.\n\n### Electric Engines\n\n* Electric engines from Create: Crafts & Additions, Create: Power Grid, and The Factory Must Grow no longer consume coal or liquid fuel.\n* The `requireFuel` setting now applies only to steam engines and internal combustion engines.\n* Actual train power detection is still available only for Create: Electro Energetics. Electric engines from other add-ons are considered powered after the train is assembled because those mods do not provide a way to check their power network while the train is moving.\n\n### Reliability\n\n* Added checks to ensure that only one fuel source is selected and that electric and fuel-powered engines operate independently.\n* Saved trains now automatically update their engine classifications, including while the train is located in an unloaded chunk."
 		},
 		{
 			"tag": "v0.2.0-beta.1",
@@ -167,7 +171,7 @@
 					"name": "create_train_physics-0.2.0-beta.1.jar",
 					"url": "https://github.com/cat4blep/CreateTrainPhysicsReloaded/releases/download/v0.2.0-beta.1/create_train_physics-0.2.0-beta.1.jar",
 					"size": 53698,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "3256fdc9b57f4bf64489fb0e2dd1b943b38af86a150ad10a0f7909bef5ab0082",
 					"mods": [
@@ -205,12 +209,32 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## C:EE integration test build\n\nThis pre-release is intended for runtime testing with Create: Electro Energetics 1.21.1-1.1.1.\n\n### Included fixes\n\n- C:EE electric motors only provide traction while the train has usable catenary, accumulator, or creative power.\n- The `requireFuel` option is enforced for ordinary combustion traction without conflicting with C:EE's short-lived fuel marker.\n- Train physics, curve limits, engine aggregation, handbrake behavior, motor tags, and Steam 'n' Rails compatibility have been repaired.\n- An automatically enabled built-in resource pack silences these loud default C:EE GTO layers:\n  - `electroenergetics:train/gto/async`\n  - `electroenergetics:train/gto/async_decay`\n  - `electroenergetics:train/gto/async_rise`\n  - `electroenergetics:train/gto/p15`\n- `electroenergetics:train/background/wind_static` and `electroenergetics:train/background/wind_rise` remain unchanged.\n\n### Validation\n\n- Minecraft 1.21.1 / NeoForge 21.1.217 / Create 6.0.8\n- `./gradlew build`\n- 44/44 unit tests passed\n- JAR SHA-256: `3256FDC9B57F4BF64489FB0E2DD1B943B38AF86A150AD10A0F7909BEF5AB0082`\n\nSource and review: https://github.com/cat4blep/CreateTrainPhysicsReloaded/pull/1"
 		}
 	],
 	"readme": "README.md",
 	"readmeSummary": "Make Create trains feel heavy, powerful, and believable.",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 7,
+		"more": 0,
+		"people": [
+			{
+				"login": "Szedann",
+				"commits": 6,
+				"funding": []
+			},
+			{
+				"login": "cat4blep",
+				"commits": 1,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

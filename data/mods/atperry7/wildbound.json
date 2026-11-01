@@ -18,7 +18,7 @@
 					"name": "wildbound-1.4.0.jar",
 					"url": "https://github.com/atperry7/wildbound/releases/download/v1.4.0/wildbound-1.4.0.jar",
 					"size": 286048,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "8d00734aa3ebddc5584d9bad8bc9592f51d67ab69e7bbe54e1d1eb44f83680c8",
 					"mods": [
@@ -60,7 +60,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Ports Wildbound to the official **Minecraft 26.3** release.\n\n## Changes\n- Advancement-predicate system update: `ContextAwarePredicate` folded into the loot-condition system\n  (`Optional<Holder<LootItemCondition>>` replaces it on every trigger's `player` field).\n- `LivingEntity.drop` now takes a required `Prediction` arg; the bound-cluster's inventory-full fallback\n  uses `SERVER_ONLY`, matching vanilla's own server-driven give-or-drop call sites.\n- No gameplay changes — same companions, same mechanics as 1.3.0.\n\n## Requirements\nMinecraft 26.3 · Fabric Loader 0.19.5+ · Fabric API · Java 25+\n\nPlay-tested in-client (sheep riding, bat perch) in addition to the headless gametest suite.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)"
 		},
 		{
 			"tag": "v1.3.0",
@@ -72,7 +73,7 @@
 					"name": "wildbound-1.3.0.jar",
 					"url": "https://github.com/atperry7/wildbound/releases/download/v1.3.0/wildbound-1.3.0.jar",
 					"size": 285993,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "61e7b11fd3a65f58ec8047f540148eecd2bc9ea14e0e80b45b45c8c5a01d0f83",
 					"mods": [
@@ -114,7 +115,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "A twelfth companion joins the menagerie: the **Strider**.\n\n## Highlights\n\n- **Strider** — tamed the same way as every other animal (one amethyst shard, no new item), grants **Fire Resistance I** while following. It still shivers and slows down off lava like vanilla, and that's by design: a player who wants a Strider companion is already living near lava, and a **bound cluster** carries it across any dry stretch in between — the same accepted trade-off the aquatic companions (axolotl, turtle) already lean on.\n- The advancement tree grows with it: a new *Fireproof Friendship* advancement, and *The Wild Knows Your Name* now requires all **twelve** kinds.\n- Docs cleanup alongside it: `docs/design.md`'s Scope section now frames hostile/neutral companions as the actively planned next phase rather than a \"maybe someday\" footnote, and calls out client-side code as an accepted cost of a companion's mechanic (as the rideable sheep already is) rather than an exception.\n\n## Requirements\n\n- Minecraft **26.2** · Fabric Loader **0.19.3+** · **Fabric API** · Java **25+**\n- Install on the **server and the client** — riding the sheep needs the client side; everything else works for vanilla clients.\n\n## Verification\n\n- Play-tested in-client: taming, following, and Fire Resistance delivery all confirmed.\n- Headless `runServer` boots clean (`Wildbound initialised with 12 companion type(s)`, no mixin-apply failures).\n- Full `./gradlew build` GameTest suite passes (7/7).\n\n**Full changelog:** https://github.com/atperry7/wildbound/compare/v1.2.0...v1.3.0"
 		},
 		{
 			"tag": "v1.2.0",
@@ -126,7 +128,7 @@
 					"name": "wildbound-1.2.0.jar",
 					"url": "https://github.com/atperry7/wildbound/releases/download/v1.2.0/wildbound-1.2.0.jar",
 					"size": 283935,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "621a6c87241f51b6d756c2182e5aaed0357e9327cf33cc8fcd6b7e1ff191ad05",
 					"mods": [
@@ -168,7 +170,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Wildbound now runs on the official **Minecraft 26.2** release.\n\n### Changes\n- **Ported to MC 26.2.** Internal API moves only — advancement criterion classes, `EntityType` spawn constants, and the `EntityType.create` spawn-request shape. No gameplay changes; saves and bound clusters carry over.\n- Built against the **26.2 floor**: Fabric Loader `0.19.3`, Fabric API `0.152.1+26.2`, Java `25`.\n\n### Install\nDrop the jar in `mods/` on **both server and client** (riding the sheep needs the client; everything else is server-driven and works for vanilla clients). Requires Fabric Loader 0.19.3+ and Fabric API.\n\n**Full changelog:** https://github.com/atperry7/wildbound/compare/v1.1.0...v1.2.0"
 		},
 		{
 			"tag": "v1.1.0",
@@ -180,7 +183,7 @@
 					"name": "wildbound-1.1.0.jar",
 					"url": "https://github.com/atperry7/wildbound/releases/download/v1.1.0/wildbound-1.1.0.jar",
 					"size": 283853,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "7cef67f721c6f669a96cc2c2e6db6d514bf0cccaed1507ed54ef4a5960488f16",
 					"mods": [
@@ -222,7 +225,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Wildbound now runs on **every Minecraft 26.1.x version** — 26.1, 26.1.1, and 26.1.2 — from this one jar (1.0.0 required 26.1.2 exactly). No gameplay changes.\n\n**Requirements**\n- Minecraft 26.1 / 26.1.1 / 26.1.2\n- Fabric Loader 0.19.3+\n- Fabric API (any build for your MC version)\n- Java 25+\n- Install on server and client (sheep riding needs the client side; everything else works for vanilla clients)\n\n**Verification**\n- Booted and verified headlessly on all three game versions (clean mixin apply, full datapack load).\n- New in this release under the hood: an automated behaviour-test suite (taming, mode toggles, milk quiet, passive delivery, capture/release) now runs on a real test server in CI for every change.\n\n**For 26.2 players:** see the [1.2.0-beta.1 pre-release](https://github.com/atperry7/wildbound/releases/tag/v1.2.0-beta.1) built for 26.2-rc-1."
 		},
 		{
 			"tag": "v1.2.0-beta.1",
@@ -234,7 +238,7 @@
 					"name": "wildbound-1.2.0-beta.1.jar",
 					"url": "https://github.com/atperry7/wildbound/releases/download/v1.2.0-beta.1/wildbound-1.2.0-beta.1.jar",
 					"size": 283945,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "976239d3f8eb86922af073d1891b14d99eec9b7edcfdf14e019d4960cb5a6646",
 					"mods": [
@@ -276,11 +280,32 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Pre-release build of the 26.2 port (`port/26.2`, commit ca7d03e + version bump) for play-testing against Minecraft **26.2-rc-1**.\n\n**Requirements**\n- Minecraft 26.2-rc-1 (loader range is `>=26.2-rc.1 <26.3`, so it will also load on 26.2 final)\n- Fabric Loader 0.19.3+\n- Fabric API **0.152.0+26.2** (a 26.1-branch Fabric API will not run on 26.2)\n- Java 25+\n- Install on server and client (sheep riding needs the client side)\n\n**Verification status**\n- All 7 headless gametests pass on 26.2-rc-1: taming, mode toggles, milk quiet, passive delivery, capture/release — mixins apply cleanly.\n- **Not yet play-tested in-client** — that's what this build is for. The items the gametests can't see:\n  - Sheep riding feel (mount on plain right-click, ridden control, jumping)\n  - Bat perch/rest behaviour (settle height on ground perches)\n  - Fox item-fetch\n  - Mode-toggle particle/sound cues, passive HUD icon visibility\n- Known cosmetic-risk item: `Item.appendHoverText` is deprecated in 26.2 (still functional) — check the bound cluster's tooltip renders.\n\n⚠️ Built against a release candidate; worlds touched by an RC may not be safe for your main saves. Test on a throwaway world."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 60,
+		"more": 0,
+		"people": [
+			{
+				"login": "atperry7",
+				"commits": 60,
+				"name": "cadaewen",
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/atperry7"
+					}
+				]
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

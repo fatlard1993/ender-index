@@ -1,0 +1,95 @@
+{
+	"repo": "Vany/ovm",
+	"host": "github",
+	"description": "Veinminer for very very old version of minecraft 1.4.7",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-02-25T10:52:04Z",
+	"pushed": "2026-02-26T10:14:41Z",
+	"releases": [
+		{
+			"tag": "v0.6.1",
+			"published": "2026-02-26T10:11:21Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 362750309,
+					"name": "ovm-0.6.1.jar",
+					"url": "https://github.com/Vany/ovm/releases/download/v0.6.1/ovm-0.6.1.jar",
+					"size": 96896,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "c4f35a6f0be61e4ecc682bd65c3651b6c1e66f5aa71a50aecf5b614a45bf97dd",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 12,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changes\n\n- **Refactored codebase**: Extracted `Reflect.java` (shared reflection utilities) and `McAccessor.java` (cached Minecraft accessors), eliminating duplicate code across 3 files (-432 lines net)\n- **Fixed shears/leaves veinmine**: Insta-break tools (shears on leaves, etc.) now correctly trigger veinmining via crosshair block ID caching\n- **Unified drop delivery**: Origin block drop no longer falls at break site — included in VeinMiner's collected drops, delivered to player inventory\n- **Removed dead code**: Empty `invokeWithFloatArg` varargs overload, duplicate reflection helpers\n\n## Install\nDrop `ovm-0.6.1.jar` into your Forge 1.4.7 `mods/` folder."
+		},
+		{
+			"tag": "v0.6.0",
+			"published": "2026-02-25T21:52:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 362396402,
+					"name": "ovm-0.6.0.jar",
+					"url": "https://github.com/Vany/ovm/releases/download/v0.6.0/ovm-0.6.0.jar",
+					"size": 59108,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "90e27ac9d5dff13a143a5b9256e0ac7aa55c2a5710382dff97933795ba557042",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 10,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's new in v0.6.0\n\n### Bug fixes\n- **Redstone ore** now veinmines correctly — ore (id=73) activates to lit variant (id=74) on touch, so adjacent blocks appeared as a different id. Added equivalent-id matching so both are treated as the same target.\n- **Shears on leaves** now works — instant-break tools caused `PlayerInteractEvent` to fire every tick with the block still present, but the old code waited for it to disappear. Fixed by sending the veinmine packet immediately on first click, reading the block id directly from the world.\n\n### Refactoring\n- Unified reflection helpers: generic `getField<T>` and `invokeNoArg<T>` replace five separate per-type methods\n- `PQEntry` static inner class replaces raw `long[]` in priority queue\n- `tryStackSchema()` helper eliminates repeated Field[3] allocation pattern\n- `invokeHarvestBlock()` delegates special drop logic (shears→leaf blocks, silk touch, etc.) to vanilla's `block.harvestBlock()` instead of custom code\n\n### Download\n- `ovm-0.6.0.jar` — drop into your `mods/` folder for Minecraft 1.4.7 with Forge"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T22:37:16.645Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 23,
+		"more": 0,
+		"people": [
+			{
+				"login": "Vany",
+				"commits": 23,
+				"name": "Vany Serezhkin",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
+	"history": 1
+}

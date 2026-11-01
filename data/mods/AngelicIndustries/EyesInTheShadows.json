@@ -18,7 +18,7 @@
 					"name": "eyesintheshadows-0.0.3.jar",
 					"url": "https://github.com/AngelicIndustries/EyesInTheShadows/releases/download/0.0.3/eyesintheshadows-0.0.3.jar",
 					"size": 770646,
-					"downloads": 9,
+					"downloads": 25,
 					"inspection": 2,
 					"sha256": "28b1d54babf729185e99e277969febd78faa420b04eea21c7e7b750d1116818c",
 					"mods": [],
@@ -41,7 +41,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## 0.0.3\n\n### Fixed\n* Fixed entity preview crashes caused by fake/non-server worlds in packet sync code.\n* Fixed config GUI crash with newer GTNHLib versions.\n* Fixed emissive eye rendering artifacts (including non-uniform transparency/\"square\" clipping cases).\n* Fixed multiple natural spawn logic bugs:\n  * player-nearby cap now checks around each player (not world origin),\n  * per-player failed checks no longer abort the whole spawn cycle,\n  * biome/dimension whitelist-blacklist matching now behaves correctly,\n  * each dimension now has an independent spawn cooldown and cycle state,\n  * cover, light, and biome restrictions are checked at the candidate spawn position,\n  * naturally spawned Eyes now receive normal spawn initialization,\n  * spawn timing is reset correctly after early exits.\n* Fixed spawn-cycle warning timing to use the configured millisecond threshold.\n* Fixed collision behavior so fully hidden/dormant Eyes do not trigger collision disappear effects.\n* Fixed biome-list initialization crashing when biome filters were configured and wiping the dimension lookup table.\n* Fixed the player gaze test being dependent on world coordinates and occasionally detecting intersections behind the player.\n* Fixed disappearance, aggression, and configured mob AI logic running on the client as well as the server.\n* Fixed entity state synchronization flooding clients with full-NBT packets every tick. Eye brightness, aggression, scale, and target state now use vanilla tracked entity data.\n* Fixed packet handlers touching client state from the network thread; jumpscares are now scheduled on the client thread.\n* Fixed configured mobs dealing bonus damage to every target instead of only Eyes, and fixed fleeing behavior being registered as a targeting task.\n* Fixed aggression speed interpolation and made `tickBetweenAttacks` control all Eye attack goals.\n* Fixed horizontal obstacle routing using the vertical axis as a compass direction.\n* Fixed `blinkDuration = -1` and very short blink durations causing invalid animation calculations.\n* Fixed Halloween spawn scaling being cached for the whole session and not activating on October 31.\n* Fixed jumpscare rendering and timing:\n  * animation progress now advances once per client tick,\n  * framebuffer projection and GL state are restored safely after rendering,\n  * jumpscares render correctly at all GUI scales.\n\n### Changed\n* Reworked eye glow rendering and tuning:\n  * default `eye_glow_passes` is now `1`,\n  * default `eye_glow_strength` is now `2`.\n* Dynamic light handling now uses a shared client+server approximation path to keep visuals and AI behavior aligned.\n* Added cave-friendly spawning: vertical candidate sampling is centered around player height and searches nearby valid Y levels.\n* Reworked stalking movement:\n  * Eyes strongly prefer reaching the player's eye level before closing the distance,\n  * Eyes route toward a staging point behind the player and only attack from the rear,\n  * turning to watch an Eye immediately stops its residual movement,\n  * obstacle routing prefers lateral detours instead of climbing above the player.\n* Replaced asymmetric upward acceleration and downward damping with bidirectional altitude steering controlled by `fly`.\n* Blinking is now a client-local visual animation instead of synchronized server state.\n* Adjusted default spawn list behavior:\n  * `biomeListIsWhitelist` default is now `false`,\n  * `dimensionListIsWhitelist` default is now `false`.\n* Updated release automation and CurseForge metadata so artifacts are marked for both client and server use.\n* Expanded the shared development runtime and excluded client-only Angelica, ModularUI2, and Baubles Expanded from dedicated-server launches.\n* Updated the bundled license and attribution material to the complete LGPL-3.0 text.\n\n### Added\n* Added internal dynamic light approximation system (`DynamicLightApproximation`) inspired by Angelica luminance/falloff rules.\n\n..."
 		},
 		{
 			"tag": "52313e1-snapshot",
@@ -53,7 +54,7 @@
 					"name": "eyesintheshadows-52313e1-snapshot.jar",
 					"url": "https://github.com/AngelicIndustries/EyesInTheShadows/releases/download/52313e1-snapshot/eyesintheshadows-52313e1-snapshot.jar",
 					"size": 771148,
-					"downloads": 1,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "8da3398b5b2d378c457be5971e693e99115c74a4c3366b39417be0b14f113786",
 					"mods": [],
@@ -76,7 +77,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "**Full Changelog**: https://github.com/JackOfNoneTrades/EyesInTheShadows/compare/0.0.2...52313e1-snapshot"
 		},
 		{
 			"tag": "0.0.2",
@@ -88,7 +90,7 @@
 					"name": "eyesintheshadows-0.0.2.jar",
 					"url": "https://github.com/AngelicIndustries/EyesInTheShadows/releases/download/0.0.2/eyesintheshadows-0.0.2.jar",
 					"size": 651223,
-					"downloads": 15,
+					"downloads": 17,
 					"inspection": 2,
 					"sha256": "5cb348fd9fe6a06096c4b6ac057d0aa18bc5d7b652b9c8103d19c51cb50167e7",
 					"mods": [],
@@ -107,7 +109,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "**Full Changelog**: https://github.com/JackOfNoneTrades/EyesInTheShadows/compare/0.0.1...0.0.2"
 		},
 		{
 			"tag": "0.0.1",
@@ -119,7 +122,7 @@
 					"name": "eyesintheshadows-0.0.1.jar",
 					"url": "https://github.com/AngelicIndustries/EyesInTheShadows/releases/download/0.0.1/eyesintheshadows-0.0.1.jar",
 					"size": 650957,
-					"downloads": 7,
+					"downloads": 9,
 					"inspection": 2,
 					"sha256": "6cb1902745fad3b8acde08532511bcf753e877770e5b481d89cdb2cb7e9a71ef",
 					"mods": [],
@@ -138,11 +141,41 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "**Full Changelog**: https://github.com/JackOfNoneTrades/EyesInTheShadows/commits/0.0.1"
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [
+		"images/badges/cord.png",
+		"images/badges/curse.png",
+		"images/badges/forge.png",
+		"images/badges/github.png",
+		"images/badges/maven.png",
+		"images/badges/mcmodcn.png",
+		"images/badges/modrinth.png",
+		"images/eyes.gif",
+		"images/icons/curse.png",
+		"images/icons/git.png",
+		"images/icons/modrinth.png",
+		"images/license_small.png",
+		"images/screenshots/cave.png"
+	],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 28,
+		"more": 0,
+		"people": [
+			{
+				"login": "JackOfNoneTrades",
+				"commits": 28,
+				"name": "jack",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

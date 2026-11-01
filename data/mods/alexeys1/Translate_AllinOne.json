@@ -7,6 +7,7 @@
 	"license": "MIT",
 	"created": "2026-02-24T19:10:14Z",
 	"pushed": "2026-10-17T23:59:30Z",
+	"forkOf": "CedarXuesong/Translate_AllinOne",
 	"releases": [
 		{
 			"tag": "5.0.0",
@@ -18,7 +19,7 @@
 					"name": "translate-all-in-one-5.0.0+mc1.20.4.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/5.0.0/translate-all-in-one-5.0.0%2Bmc1.20.4.jar",
 					"size": 2668086,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "9016edae8c66d3f064b3e5f4597f3ad5af349c3417fc4d284cd6c56a496ed687",
 					"mods": [
@@ -92,7 +93,7 @@
 					"name": "translate-all-in-one-5.0.0+mc1.21.11.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/5.0.0/translate-all-in-one-5.0.0%2Bmc1.21.11.jar",
 					"size": 2689553,
-					"downloads": 5,
+					"downloads": 11,
 					"inspection": 2,
 					"sha256": "d1a18f3ea5cfb35231adcd15dbe56b1e6b4569429a5957bac1a6a9f9b2b3fbc4",
 					"mods": [
@@ -166,7 +167,7 @@
 					"name": "translate-all-in-one-5.0.0+mc26.1.2.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/5.0.0/translate-all-in-one-5.0.0%2Bmc26.1.2.jar",
 					"size": 2720560,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "878f4ca62c265ee61c1857f099a4dbc15d5963dfe8d4c5cfce1069188e877763",
 					"mods": [
@@ -240,7 +241,7 @@
 					"name": "translate-all-in-one-5.0.0+mc26.2.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/5.0.0/translate-all-in-one-5.0.0%2Bmc26.2.jar",
 					"size": 2723255,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "8b7f3490878707e55951a824718195f7381d5543d9907cf0cced2f4aac5a8c99",
 					"mods": [
@@ -314,7 +315,7 @@
 					"name": "translate-all-in-one-5.0.0+mc26.3.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/5.0.0/translate-all-in-one-5.0.0%2Bmc26.3.jar",
 					"size": 2728082,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "4df7671472f7b9833a36f865b74c2eb748d859840542494da24a50f6995aef1c",
 					"mods": [
@@ -383,7 +384,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### 新增\n\n- 配置界面新增逐项重置按钮，单个选项可单独恢复默认值。\n- 提示词编辑器新增配置界面翻译条目。\n- 各模型Token用量统计模块\n\n### 改进与优化\n\n- 翻译结果加入内容校验，模型原样回抄原文、只动格式、丢失占位符等无效结果会被拦下。\n- 调整配置界面翻译的请求速率上限。\n- 聊天输出翻译失败会自动重试。\n- DeepSeek / MiMo 模型，在保存时会自动补上 `thinking: disabled`，避免思考消耗时间。\n- 实体翻译不再每帧重建模板。\n- 翻译失败现在能看到具体错误提示，不再一直卡在\"翻译中\"。\n- 改进提示词编辑器\n\n### 修复\n\n- 修复配置界面翻译刷新热键不可用的问题。\n- 修复配置界面翻译重试超出上限后，导致所有配置界面不翻译的问题。\n- 修复配置界面整屏内容被当作玩家输入翻译失败的问题。\n- 修复专有名词不再被当成\"没翻译\"而拒绝。\n- 修复格式标签不再被当作受保护 token 导致整条被拒。\n- 修复语言未知时不再误判回抄。\n- 修复 tooltip 状态行的进度后缀重复叠加的问题。\n- 修复翻译后的配置界面 ClickGUI 的排序混乱问题。\n- 修复聊天输出开启自动翻译时，已有缓存的内容出现第一帧闪现英文原文的问题。\n\n----\n\n### Added\n\n- Added per-option reset buttons to the config screen, so a single option can be restored to its default on its own.\n- Added a screen translation entry to the prompt editor.\n- Added token usage statistics for each model.\n\n### Improvements\n\n- Added content validation for translation results: invalid output such as a verbatim copy of the source, formatting-only changes, or dropped placeholders is now rejected.\n- Adjusted the request rate limit for screen translation.\n- Failed chat output translations now retry automatically.\n- For DeepSeek / MiMo models, `thinking: disabled` is now added automatically on save, so thinking no longer costs time.\n- Entity translation no longer rebuilds templates every frame.\n- Failed translations now show a concrete error message instead of getting stuck on \"translating\".\n- Improved the prompt editor.\n\n### Fixed\n\n- Fixed the screen translation refresh hotkey not working.\n- Fixed all screens stopping translation after the screen translation retry limit was exceeded.\n- Fixed whole screens being treated as player input, which made their translation fail.\n- Fixed proper nouns being rejected as \"untranslated\".\n- Fixed style tags being treated as protected tokens, which caused entire entries to be rejected.\n- Fixed source-echo being misjudged when the language is unknown.\n- Fixed the progress suffix on tooltip status lines being appended repeatedly.\n- Fixed scrambled ClickGUI ordering after the screen was translated.\n- Fixed cached chat content flashing the original English text on the first frame when auto-translation is enabled."
 		},
 		{
 			"tag": "4.6.2",
@@ -395,7 +397,7 @@
 					"name": "translate-all-in-one-4.6.2+mc1.20.4.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.6.2/translate-all-in-one-4.6.2%2Bmc1.20.4.jar",
 					"size": 2670823,
-					"downloads": 17,
+					"downloads": 18,
 					"inspection": 2,
 					"sha256": "9b22fca265aad7e8c6b6ed48d36f5bacacceb046ad7668e1dd91c1e3d90a750b",
 					"mods": [
@@ -469,7 +471,7 @@
 					"name": "translate-all-in-one-4.6.2+mc1.21.11.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.6.2/translate-all-in-one-4.6.2%2Bmc1.21.11.jar",
 					"size": 2689222,
-					"downloads": 25,
+					"downloads": 26,
 					"inspection": 2,
 					"sha256": "f302e2264dd3abf5c70a7a37a7d62cbd4543de9210f6e7e9551c0b1df9fb6f5d",
 					"mods": [
@@ -543,7 +545,7 @@
 					"name": "translate-all-in-one-4.6.2+mc26.1.2.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.6.2/translate-all-in-one-4.6.2%2Bmc26.1.2.jar",
 					"size": 2708917,
-					"downloads": 8,
+					"downloads": 9,
 					"inspection": 2,
 					"sha256": "85ee87605840e25f2b34b9b9f767fa7cf55f6ad86c262584071297b45aa411c2",
 					"mods": [
@@ -617,7 +619,7 @@
 					"name": "translate-all-in-one-4.6.2+mc26.2.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.6.2/translate-all-in-one-4.6.2%2Bmc26.2.jar",
 					"size": 2711560,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "238aa303af0a284f0180002515d160f0b541de90a05d163ca200552c79b46fab",
 					"mods": [
@@ -686,7 +688,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## 修复\n- 严格限制翻译第三方配置界面时的请求上限\n\n----\n\n## Fix\n- Strictly limit the request cap when translating third-party configuration interfaces."
 		},
 		{
 			"tag": "4.6.1",
@@ -698,7 +701,7 @@
 					"name": "translate-all-in-one-4.6.1+mc1.20.4.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.6.1/translate-all-in-one-4.6.1%2Bmc1.20.4.jar",
 					"size": 2669029,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "a03895cc5bd6c84cc4dde953277201d701c8883a37faa1c50be366f0115bfa42",
 					"mods": [
@@ -772,7 +775,7 @@
 					"name": "translate-all-in-one-4.6.1+mc1.21.11.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.6.1/translate-all-in-one-4.6.1%2Bmc1.21.11.jar",
 					"size": 2687433,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "9a2d3eb31a45203d783ad7a7790debea32da1a5524b9905847198f72cf864554",
 					"mods": [
@@ -846,7 +849,7 @@
 					"name": "translate-all-in-one-4.6.1+mc26.1.2.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.6.1/translate-all-in-one-4.6.1%2Bmc26.1.2.jar",
 					"size": 2707182,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "751a5247bc17a2e4256259ad3df7bd08e5b6a7fdccc35108076cef7aae500c77",
 					"mods": [
@@ -920,7 +923,7 @@
 					"name": "translate-all-in-one-4.6.1+mc26.2.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.6.1/translate-all-in-one-4.6.1%2Bmc26.2.jar",
 					"size": 2709828,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "b83da8b0f2e1d3eea239e292d4de5751caef2178dd268853123c039d417b7e42",
 					"mods": [
@@ -989,7 +992,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## API Key 安全性\n\n- API Key 现在会使用UUID+随机密钥进行加密保存，配置文件不再明文存储API Key。\n- 不同UUID可以分别保存并使用已加密的 API Key，切换账号不会互相覆盖。\n- 版本升级备份中的 API Key 也会一并加密，降低备份泄露风险。\n- 如果 API Key 在当前UUID下无法解密：\n  - 在聊天中给出提示；\n  - 阻止相关翻译请求；\n  - 点击提示中的提供商名称可直达对应配置页重新填写。\n\n## 优化与修复\n\n- 修复屏幕翻译会错误翻译聊天框内容的问题\n- 修复 SkyBlock NPC 在嵌套/包装聊天消息中无法被识别的问题\n- 修复批量翻译时单条内容格式异常导致整批失败的问题\n- 优化缓存实体名称、文本显示等翻译渲染结果，减少重复计算\n- 优化缓存文本显示布局拆分结果\n- 优化翻译时动画效果，限制重建频率\n- 优化各模块提示词结构\n\n----\n\n## API Key Security\n\n- API keys are now encrypted and stored using a UUID plus a random secret key; API keys are no longer stored in plaintext in the config file.\n- Different UUIDs can save and use their own encrypted API keys without overwriting each other when switching accounts.\n- API keys in version upgrade backups are also encrypted, reducing the risk of backup leaks.\n- If an API key cannot be decrypted for the current UUID:\n  - A notification is shown in chat;\n  - Related translation requests are blocked;\n  - Clicking the provider name in the notification opens the corresponding config page to re-enter the key.\n\n## Optimized and Fixes\n\n- Fixed screen translation incorrectly translating chat input/chat box content.\n- Fixed SkyBlock NPCs not being detected in nested/wrapped chat messages.\n- Fixed batch translation failures where one malformed item caused the entire batch to fail.\n- Optimized caching for translated rendering results such as entity names and text displays, reducing duplicate computation.\n- Optimized caching of text display layout split results.\n- Optimized translation animations by limiting rebuild frequency.\n- Optimize the prompt structure of each module."
 		},
 		{
 			"tag": "4.5.2",
@@ -1001,7 +1005,7 @@
 					"name": "translate-all-in-one-4.5.2+mc1.20.4.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.5.2/translate-all-in-one-4.5.2%2Bmc1.20.4.jar",
 					"size": 2631350,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "e605a647a8f17f444a0e3a354825d6494af000517c9c8406763cae5cc75b4c2e",
 					"mods": [
@@ -1075,7 +1079,7 @@
 					"name": "translate-all-in-one-4.5.2+mc1.21.11.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.5.2/translate-all-in-one-4.5.2%2Bmc1.21.11.jar",
 					"size": 2649255,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "0680690fa8a50fcec270de57ea98532456b0a42695d013a2b81377bad4faf9d1",
 					"mods": [
@@ -1149,7 +1153,7 @@
 					"name": "translate-all-in-one-4.5.2+mc26.1.2.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.5.2/translate-all-in-one-4.5.2%2Bmc26.1.2.jar",
 					"size": 2669466,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "366309b3e58dff4cf5992c75e098c745836c966b28aac192983081453938c51a",
 					"mods": [
@@ -1223,7 +1227,7 @@
 					"name": "translate-all-in-one-4.5.2+mc26.2.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.5.2/translate-all-in-one-4.5.2%2Bmc26.2.jar",
 					"size": 2672140,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "069dd4c9bd7b53d39f3ebad2dabc0cbafa058914b5e285eaf0006c8ed9b2b8c0",
 					"mods": [
@@ -1292,7 +1296,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### 修复\n- 修复配置翻译会重复请求的问题\n\n----\n\n### Fixed\n- Fixed the issue screen-ui translation would make duplicate requests."
 		},
 		{
 			"tag": "4.5.1",
@@ -1304,7 +1309,7 @@
 					"name": "translate-all-in-one-4.5.1+mc1.20.4.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.5.1/translate-all-in-one-4.5.1%2Bmc1.20.4.jar",
 					"size": 2628198,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "60b4f946c7f35c3557746a1f4f8f45589c6f08df4752e1ac3153cbc9d0125fb0",
 					"mods": [
@@ -1378,7 +1383,7 @@
 					"name": "translate-all-in-one-4.5.1+mc1.21.11.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.5.1/translate-all-in-one-4.5.1%2Bmc1.21.11.jar",
 					"size": 2646095,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "28ed1b190bb4249d89fcfb41a80348c1503014d990f2a24ea651a61d35f9e6cd",
 					"mods": [
@@ -1452,7 +1457,7 @@
 					"name": "translate-all-in-one-4.5.1+mc26.1.2.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.5.1/translate-all-in-one-4.5.1%2Bmc26.1.2.jar",
 					"size": 2666329,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "498c0dbe0155a88644bf8d02e9f078d79e8e6c9a2740868cda49aaf57159d882",
 					"mods": [
@@ -1526,7 +1531,7 @@
 					"name": "translate-all-in-one-4.5.1+mc26.2.jar",
 					"url": "https://github.com/alexeys1/Translate_AllinOne/releases/download/4.5.1/translate-all-in-one-4.5.1%2Bmc26.2.jar",
 					"size": 2669002,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "d88dc014777557446203cb4c82f02993bf48f51f038fa86261fa80636f8f0648",
 					"mods": [
@@ -1595,11 +1600,32 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### 修复\n- 修复聊天输入翻译丢失系统提示词的问题，并拒绝无效模型输出\n- 修复流式响应关闭后仍被访问的问题\n- 修复界面翻译超出显式作用域的问题\n- 修复非翻译状态仍显示动画的问题\n- 修复组件翻译失败后无法自动重试的问题\n- 修复工具提示段落单行失败拖垮整个段落的问题，并清理多余占位符\n\n----\n\n### Fixed\n- Fixed chat input translation dropping the system prompt, and rejected invalid model output.\n- Fixed accessing a closed streaming response after exhaustion.\n- Fixed UI translation running outside its explicit scope.\n- Fixed animation showing even when no translation was in progress.\n- Fixed component translation failures not being retried automatically.\n- Fixed a single failing line causing the whole tooltip paragraph fallback to fail, and cleaned up extra placeholders."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 332,
+		"more": 0,
+		"people": [
+			{
+				"login": "alexeys1",
+				"commits": 290,
+				"name": "Alexeys",
+				"funding": []
+			},
+			{
+				"login": "CedarXuesong",
+				"commits": 42,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

@@ -1,0 +1,519 @@
+{
+	"repo": "wyou25f/toolsmod",
+	"host": "github",
+	"description": "A Minecraft mod Adds a /tools command to enchant items up to level 10 (like Sharpness X) and easily switch between English and Russian languages.",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-06-03T16:13:04Z",
+	"pushed": "2026-06-13T15:06:51Z",
+	"releases": [
+		{
+			"tag": "1.0.2.2",
+			"published": "2026-06-13T08:29:49Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 446439474,
+					"name": "toolsplus-fabric-1.0.2.2+26.1.2.jar",
+					"url": "https://github.com/wyou25f/toolsmod/releases/download/1.0.2.2/toolsplus-fabric-1.0.2.2%2B26.1.2.jar",
+					"size": 46216,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c017adc23a3a76afa86236d2e011515c0b790ebe8a4b98b1b3ecf9a6e9b5a8fc",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "toolsplus",
+							"version": "1.0.2.2",
+							"name": "Tools+",
+							"description": "Admin tools mod — enchant, lore, name, effect, head, music",
+							"minecraft": ">=26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 15,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/toolsmod/music/FfmpegBridge.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 📝 DEVLOG • Version 1.0.2.2\n\n### 🔍 How it works in Singleplayer\n\nYou no longer need a dedicated server to create your own music discs. Minecraft's integrated server will handle everything directly inside your local world.\n\n1. **Initialization:** On the first command execution, the mod **automatically checks for and creates** any missing folders (`toolsplus/music_input/` and `toolsplus/resourcepack/`) in your launcher's root directory (`.minecraft/` or your instance folder).\n2. **Processing:** Drop your `.mp4` file into `toolsplus/music_input/<id>.mp4` and type `/tools music <id>` in the chat.\n3. **Conversion Magic:** The mod calls `ffmpeg/ffprobe` to extract metadata tags (title, artist, album, duration), converts the audio to `.ogg`, and generates two packs on the fly:\n* **Datapack:** Registers the new song via the `jukebox_song` registry (with the correct duration).\n* **Resourcepack:** Generates `sounds.json` and compiles everything into a `.zip` archive.\n\n\n4. **Result:** The mod automatically reloads datapacks (`/reload`) and gives you a vanilla music disc with a custom title and lore generated directly from the track's metadata.\n\n> ⚠️ **Prerequisite:** `ffmpeg` must be installed on your PC and available in your system's PATH. For Linux (Fedora/RHEL): `sudo dnf install ffmpeg`.\n> 🎵 **To hear the audio:** You need to manually move the generated `toolsplus_music.zip` archive from the `toolsplus/resourcepack/` folder into your standard `.minecraft/resourcepacks/` directory and enable it in the game settings.\n\n---\n\n## 🛠 CHANGELOG • v1.0.2.2+26.1.2\n\n```diff\n+ [Added]  * [Changed]  ~ [Fixed]  ! [Important]\n\n```\n\n* **[+]** `MusicCommand.java` — Added the new `/tools music <id>` command. Triggers the full pipeline: metadata reading -> conversion -> music disc generation.\n* **[+]** `FfmpegBridge.java` — Core integration module. A safe wrapper for `ffmpeg` and `ffprobe` using `ProcessBuilder`.\n* **[+]** `MusicMetadata.java` — New `record` class for clean storage of track tags: *Title, Artist, Album, Duration*.\n* **[+]** `MusicPackManager.java` — Pack architect. Automatically creates the required directory structure if missing, generates the datapack layout, and zips the resourcepack.\n* **[*]** `EnchantCommand.java` — Registered the new sub-command within the main dispatcher via `MusicCommand.register(dispatcher)`.\n* **[~]** `LoreCommand.java` — Code cleanup: removed a dead (unused) import of the `Style` class. The `.withStyle()` method is now called correctly without redundant dependencies.\n* **[!]** `Folder Auto-Creation` — If `music_input` or `resourcepack` folders are missing, the mod will create them automatically on the first command run to prevent game crashes.\n* **[!]** `Environment Dependency` — The mod checks for `ffmpeg` presence in the system. If the utility is missing, it will output a clear error message in chat instead of crashing the game.\n\n---\n\n### 📂 Singleplayer Paths:\n\n* **Vanilla Launcher:** `~/.minecraft/toolsplus/music_input/`\n* **Prism / MultiMC:** `instances/<instance_name>/.minecraft/toolsplus/music_input/`\n\n\n\n\n## 📝 DEVLOG (Дневник разработки) • Версия 1.0.2.2\n\n### 🔍 Как это работает в одиночном мире\n\nТеперь для создания своей пластинки не нужен выделенный сервер. Интегрированный сервер Minecraft сделает сам прямо внутри вашего мира.\n\n1. **Инициализация:** При первом вызове команды мод **автоматически проверяет и создаёт** недостающие папки (`toolsplus/music_input/` и `toolsplus/resourcepack/`) в корне твоего лаунчера (`.minecraft/` или папки инстанса).\n2. **Обработка:** Вы кидаете `.mp4` файл в `toolsplus/music_input/<id>.mp4` и пишешь в чат `/tools music <id>`.\n3. **Магия конвертации:** Мод обращается к `ffmpeg/ffprobe`, вытягивает теги (название, артист, альбом, длительность), конвертирует звук в `.ogg` и генерирует на лету два пака:\n* **Datapack:** Регистрирует новую песню через систему `jukebox_song` (с правильной длительностью).\n\n..."
+		},
+		{
+			"tag": "1.0.2.1",
+			"published": "2026-06-09T07:34:57Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 442500910,
+					"name": "toolsplus-fabric-1.0.2.1+26.1.2.jar",
+					"url": "https://github.com/wyou25f/toolsmod/releases/download/1.0.2.1/toolsplus-fabric-1.0.2.1%2B26.1.2.jar",
+					"size": 34786,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "bd964ea772c23dd1d86ad1b3bb7e4cdf2b1778f3d934b37b4b5ace659098d84d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "toolsplus",
+							"version": "1.0.1.2",
+							"name": "Tools+",
+							"description": "Admin tools mod — enchant, lore, name, effect, head",
+							"minecraft": ">=26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 11,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### 🇷🇺 Русский (Russian)\n\n## Что нового в версии 1.0.2.1\n\nКритическое обновление структуры мода, оптимизация размера архива и приведение нейминга в соответствие с регламентом.\n\n**Основные изменения:**\n\n* `[*]` **Ребрендинг:** Идентификатор мода (Mod ID) изменен с `tools` на `toolsplus`. Официальное название теперь **Tools+**.\n* `[*]` **Именование файлов:** Формат готового артефакта приведен к стандарту `toolsplus-fabric-1.0.2.1+26.1.2.jar`.\n* `[-]` **Очистка кода:** Полностью удален неиспользуемый (мертвый) код, оставшийся от прошлых экспериментов (`PlayerFunction.java`, `FunctionCommand.java`, `ServerPlayerGameModeMixin.java` и `tools.mixins.json`). Это позволило облегчить JAR-файл.\n* `[*]` **Сборка (build.gradle):** Логика версионирования обновлена до формата `mod_version+mc_version` для автоматизации правильного именования релизов.\n\n> ⚠️ **Важно для тех, кто обновляется:** Из-за смены Mod ID старые конфигурационные файлы (если они были) могут не подхватиться автоматически. Рекомендуется проверить настройки после перезапуска.\n\n---\n\n### 🇺🇸 Английский (English)\n\n## What's New in v1.0.2.1\n\nA critical maintenance update focusing on refactoring, archive optimization, and compliance with naming conventions.\n\n**Changelog:**\n\n* `[*]` **Rebranding:** Mod ID updated from `tools` to `toolsplus`. The official name is now **Tools+**.\n* `[*]` **Artifact Naming:** Standardized the production JAR filename pattern to `toolsplus-fabric-1.0.2.1+26.1.2.jar`.\n* `[-]` **Code Cleanup:** Completely removed dead code and legacy experimental files (`PlayerFunction.java`, `FunctionCommand.java`, `ServerPlayerGameModeMixin.java`, and `tools.mixins.json`) to reduce JAR bloat.\n* `[*]` **Build System (build.gradle):** Updated the versioning pattern to `mod_version+mc_version` to ensure automated, compliant artifact naming going forward.\n\n> ⚠️ **Note for upgraders:** Due to the Mod ID change, existing config files might not migrate automatically. Please double-check your settings upon the first launch.\n\n---"
+		},
+		{
+			"tag": "1.0.2.1-b3",
+			"published": "2026-06-07T14:20:24Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 440952376,
+					"name": "toolsplus-fabric-1.0.2.1-b3+26.1.2.jar",
+					"url": "https://github.com/wyou25f/toolsmod/releases/download/1.0.2.1-b3/toolsplus-fabric-1.0.2.1-b3%2B26.1.2.jar",
+					"size": 39133,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "26e8f488bc5e869e3b9d87d8f50806811b4aa12664f76914ba8c1e4e9f9772d3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "tools",
+							"version": "1.0.2.1-b3",
+							"name": "Tools",
+							"description": "Admin tools mod",
+							"minecraft": ">=26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 14,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 441555836,
+					"name": "toolsplus-neoforge-1.0.2.1-b3+26.1.2.jar",
+					"url": "https://github.com/wyou25f/toolsmod/releases/download/1.0.2.1-b3/toolsplus-neoforge-1.0.2.1-b3%2B26.1.2.jar",
+					"size": 37913,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "4152eb35a38b433475e95d52d81991d2a9767a8f7500d3a8ecbff3e8159fe510",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "tools",
+							"version": "1.0.2.1-b3",
+							"name": "Tools Mod",
+							"description": "Enchant and language commands for moderators.",
+							"minecraft": "[26.1.2,)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 14,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 🇷🇺 Russian Version / Русская версия\n\n## 📋 Ченджлог (Changelog) — v1.0.2.1-b3\n\n**Версия Fabric:** 26.1.2 (Minecraft)\n\n### Добавлено `[+]`\n\n* **`HeldEffectListener.java`** — Новый слушатель событий. Срабатывает каждые 10 тиков, динамически накладывает или снимает эффекты в зависимости от удерживаемого предмета.\n* **`HeadCommand.java`** — Новая команда `/tools head <ник>` для получения кастомных голов игроков.\n* **Новый синтаксис:** Для команды `/tools head` добавлен необязательный аргумент количества предметов: `/tools head <ник> [количество]`.\n\n### Изменено `[*]`\n\n* **`EffectCommand.java`** — Логика изменена: теперь данные об эффекте записываются напрямую в `CustomData` предмета (без указания фиксированной длительности).\n* **`ToolsMod.java`** — Добавлена регистрация нового слушателя `HeldEffectListener`.\n\n### Удалено `[-]`\n\n* Удалены устаревшие и неиспользуемые компоненты: `PlayerFunction`, `FunctionCommand`, а также связанные с ними миксины (`Mixin`).\n\n---\n\n## 📝 Дневник разработки (Dev Blog)\n\n### Переход на Fabric API 26.1.2 и борьба с ломающими изменениями\n\nВ процессе адаптации мода под новую бету Fabric (версия 26.1.2) мы столкнулись с рядом серьезных изменений в API игры, которые привели к ошибкам компиляции. Ниже описано, как именно решались эти проблемы.\n\n#### 1. Ограничение создания ItemStack до загрузки мира\n\nВ версии 26.1 объект `ItemStack` больше нельзя инициализировать до полной загрузки игрового мира.\n\n* **Решение:** Проблема решилась сама собой, так как наши команды выполняются внутри контекста уже запущенного мира, где все реестры и фабрики доступны.\n\n#### 2. Обновление NBT-контейнеров (CompoundTag)\n\nМетоды `CompoundTag.getString()` и `CompoundTag.getInt()` в текущем API больше не возвращают сырые значения напрямую — теперь они возвращают обёртки `Optional`.\n\n* **Решение:** Код `HeldEffectListener` был обновлен. Везде добавлены безопасные дефолтные значения через `.orElse(\"\")` и `.orElse(1)`.\n\n#### 3. Абстракция класса ResolvableProfile\n\nКласс `ResolvableProfile` стал полностью абстрактным. Прямое создание инстанса через `new` теперь заблокировано, а публичный API для безопасной генерации профилей без ковыряния в исходниках игры отсутствует.\n\n* **Решение:** Вместо того чтобы городить хрупкие костыли через рефлексию, команда `/tools head` была переписана на использование ванильной команды генерации сущностей через сервер:\n`\"give player minecraft:player_head[profile={name:\\\"Notch\\\"}] 1\"`.\nЭто стопроцентно надежный метод, который не сломается при последующих апдейтах Mojang. В качестве бонуса это позволило легко внедрить аргумент количества выдаваемых голов.\n\n#### 4. Миграция системы разрешений (PermissionSet)\n\nПри попытке повысить уровень прав источника команды через `.withPermission(4)` сборщик Gradle выдал ошибку: `incompatible types: int cannot be converted to PermissionSet`. В версии 26.1.2 старая целочисленная (int) система уровней оператора была заменена на объекты `PermissionSet`.\n\n* **Решение:** Тщательный аудит кода показал, что вызов `.withPermission()` здесь был избыточен. Игрок уже проходит валидацию на этапе инициализации через `.requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_MODERATOR))`. Этого уровня модератора (эквивалент OP 2) уже достаточно для выполнения внутренней команды `/give`. Вызов повышения прав до 4-го уровня был просто удален, что исправило ошибку компиляции.\n\n---\n\n---\n\n# 🇺🇸 English Version / Английская версия\n\n## 📋 Changelog — v1.0.2.1-b3\n\n**Fabric Version:** 26.1.2 (Minecraft)\n\n### Added `[+]`\n\n* **`HeldEffectListener.java`** — New event listener. Ticks every 10 ticks to dynamically apply or remove status effects based on the currently held item.\n* **`HeadCommand.java`** — New command `/tools head <nickname>` to obtain custom player heads.\n* **New Syntax:** Added an optional item count argument to the head command: `/tools head <nickname> [amount]`.\n\n### Changed `[*]`\n\n\n..."
+		},
+		{
+			"tag": "1.0.2.1-b2",
+			"published": "2026-06-06T19:32:51Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 440391137,
+					"name": "toolsplus-fabric-1.0.2.1-b2+26.1.2.jar",
+					"url": "https://github.com/wyou25f/toolsmod/releases/download/1.0.2.1-b2/toolsplus-fabric-1.0.2.1-b2%2B26.1.2.jar",
+					"size": 29652,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "bc039ef7cbabb25c075f4dc2c80a1a723508d191b7895d441a8339c26fd10bba",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "tools",
+							"version": "1.0.2.1-b2",
+							"name": "Tools",
+							"description": "Admin tools mod",
+							"minecraft": ">=26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 9,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# ⚠️ ВНИМАНИЕ: ЭТО ЭКСПЕРИМЕНТАЛЬНАЯ БЕТА!\n\nЗдесь могут не работать некоторые фишки, запускаться не с первого раза или вообще сломаться. Ставьте на свой страх и риск!\n\n---\n\n## Список изменений (Changelog) — Версия 1.0.2.1-b2\n\n### 🆕 Нововведения\n\n* **Добавлена команда `/tools effect**` — выдача и управление эффектами игрока.\n* *Синтаксис:* `/tools effect <эффект> <секунды> <уровень>` (например: `/tools effect скорость 60 2`).\n* *Очистка:* `/tools effect clear` — полностью снимает все эффекты.\n* Поддерживает **36 эффектов**, включая самые свежие из версии 1.21+ (порыв ветра, паутина, слизь, заражение, испытание, знамение налёта).\n* Полная поддержка автодополнения (таб-комплит) с кириллицей в кавычках. Язык подстраивается под настройки вашей команды `/tools lang`.\n\n\n\n### 🛠 Изменения и оптимизация\n\n* **LoreCommand & NameCommand** — успешно перенесены, доработаны и включены в эту сборку.\n* **EnchantCommand** — проведена дедупликация кода, теперь использует общий хелпер `LoreCommand.getLang()`. Добавлена проверка (guard) на разделение строк (`split`), что повысит стабильность.\n* Из `LoreCommand` вынесен общий метод-хелпер `getLang()`, убраны лишние громоздкие пути к классам (fully-qualified типы).\n\n### ❌ Удалено\n\n* Полностью удалены устаревшие классы `FunctionCommand` и `PlayerFunction`.\n\nВот англоязычная версия чейнджлога, оформленная специально для Modrinth.\n\n---\n\n# ⚠️ WARNING: EXPERIMENTAL BETA!\n\nSome features might not work as expected, may fail to trigger on the first try, or could break entirely. Use at your own risk!\n\n---\n\n## Changelog — Version 1.0.2.1-b2\n\n### 🆕 New Features\n\n* **Added `/tools effect` command** — allows applying and managing status effects.\n* *Syntax:* `/tools effect <effect> <seconds> <amplifier>` (e.g., `/tools effect speed 60 2` or `/tools effect скорость 60 2`).\n* *Clear effects:* `/tools effect clear` — completely removes all active effects from the player.\n* Supports **36 effects**, including the latest ones from 1.21+ (Wind Charged, Weaving, Oozing, Infested, Trial Omen, Raid Omen).\n* Full tab-completion support for both English and Cyrillic (in quotes). The language automatically adapts to your `/tools lang` settings.\n\n\n\n### 🛠 Changes & Optimizations\n\n* **LoreCommand & NameCommand** — successfully migrated, polished, and included in this build.\n* **EnchantCommand** — refactored to eliminate duplicate code; now utilizes the shared `LoreCommand.getLang()` helper. Added a guard check on string `split` to improve stability.\n* Refactored `LoreCommand` by extracting the `getLang()` helper method and removing redundant fully-qualified class types.\n\n### ❌ Removed\n\n* Completely removed the outdated `FunctionCommand` and `PlayerFunction` classes."
+		},
+		{
+			"tag": "1.0.2.1-b1",
+			"published": "2026-06-06T08:51:52Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 440079073,
+					"name": "tools-neoforge-1.0.2.1-b1+26.1.2.jar",
+					"url": "https://github.com/wyou25f/toolsmod/releases/download/1.0.2.1-b1/tools-neoforge-1.0.2.1-b1%2B26.1.2.jar",
+					"size": 21421,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "14b1034c8eca4c3793ec3772ceed8909b67d86cc0b511ee1a29521441e830ed6",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "tools",
+							"version": "1.0.2.1-b1",
+							"name": "Tools Mod",
+							"description": "Enchant and language commands for moderators.",
+							"minecraft": "[26.1.2,)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 440074517,
+					"name": "toolsplus-farbic-1.0.2.1-b1+26.1.2.jar",
+					"url": "https://github.com/wyou25f/toolsmod/releases/download/1.0.2.1-b1/toolsplus-farbic-1.0.2.1-b1%2B26.1.2.jar",
+					"size": 22014,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "f1982a3bd8b105202734f5cc99f6ddcfc0e478058479d47aca8eda65ff0ece37",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "tools",
+							"version": "1.0.2.1-b1",
+							"name": "Tools",
+							"description": "Admin tools mod",
+							"minecraft": ">=26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 7,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 🇷🇺 Russian Version\n\n### Что нового в 1.0.2.1-b1:\n\n* **[+] Новая команда `/tools name`:**\n* `/tools name \"Экскалибур\" золотой` — переименовывает предмет в руке.\n* `/tools name \"Sword of Doom\" red` — поддерживает те же цвета, что и для лора.\n* `/tools name clear` — сбрасывает название предмета на стандартное.\n* Команда полностью адаптирована под языковые настройки (`/tools lang ru/en`).\n\n\n* **[+] Tab-подсказки для кавычек:** Теперь при нажатии `Tab` на пустом поле текста в командах лора и имени появляется подсказка `\"Текст лора\"` / `\"Название предмета\"` с тултипом *\"Кириллицу — в кавычках\"*. Один клик — и кавычки уже стоят, остается только вписать свой текст.\n\n### Ченджлог разработчика (Dev Changelog):\n\n* `[+]` Создан `NameCommand.java` для реализации логики переименования и сброса названия.\n* `[+]` Добавлена Tab-подсказка с тултипом в `LoreCommand` и `NameCommand`.\n* `[*]` Методы `suggestColors` и `resolveColor` в `LoreCommand` переведены в статус *package-private static* для переиспользования в `NameCommand` (без дублирования кода).\n* `[*]` В `EnchantCommand.register()` добавлен вызов `NameCommand.register(dispatcher)`.\n\n---\n\n> 📢 **Важное объявление:**\n> Друзья, приношу свои извинения, но сейчас я направляю все силы исключительно на **Fabric порты для версии 26.1.2**. Другие загрузчики (лоадеры) появятся чуть позже, так как кодовая база проекта разрастается и требует больше времени на адаптацию.\n> Огромное спасибо всем, кто скачивает и поддерживает мод! ❤️\n\n---\n\n## 🇬🇧 English Version\n\n### What's New in 1.0.2.1-b1:\n\n* **[+] New `/tools name` command:**\n* `/tools name \"Excalibur\" gold` — renames the item in your hand.\n* `/tools name \"Sword of Doom\" red` — supports the same colors as the lore command.\n* `/tools name clear` — resets the item name back to default.\n* Fully integrates with language settings (`/tools lang ru/en`).\n\n\n* **[+] Tab-completions for quotes:** Pressing `Tab` on an empty text field in lore or name commands now suggests `\"Lore text\"` / `\"Item name\"`. For Russian speakers, it includes a tooltip warning to wrap Cyrillic text in quotes. One click/press, and the quotes are ready for your text.\n\n### Developer Changelog:\n\n* `[+]` Created `NameCommand.java` (`/tools name <text> <color>` + `/tools name clear`).\n* `[+]` Added Tab-completion with tooltips to `LoreCommand` and `NameCommand`.\n* `[*]` Refactored `LoreCommand.suggestColors` and `resolveColor` to *package-private static* methods to share them with `NameCommand` without code duplication.\n* `[*]` Added `NameCommand.register(dispatcher)` call inside `EnchantCommand.register()`.\n\n---\n\n> 📢 **Important Notice:**\n> Sorry guys, but right now I am focusing all my efforts on **Fabric ports for 26.1.2**. Other mod loaders will be supported a bit later down the road, as the codebase is getting bigger and requires more time to maintain.\n> Huge thanks to everyone who downloads and supports this mod! ❤️"
+		},
+		{
+			"tag": "1.0.1",
+			"published": "2026-06-03T16:22:55Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 439275997,
+					"name": "toolsplus-fabric-1.0.1+1.16.5.jar",
+					"url": "https://github.com/wyou25f/toolsmod/releases/download/1.0.1/toolsplus-fabric-1.0.1%2B1.16.5.jar",
+					"size": 11486,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "45052781ac67e34809c4504423df69a03870246adfb80603e8dbe9680fa1782b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "tools",
+							"version": "1.0.1+1.16.5",
+							"name": "Tools+",
+							"description": "Admin tools mod",
+							"minecraft": "1.16.5",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 5,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 437428039,
+					"name": "toolsplus-fabric-1.0.1+26.1.2.jar",
+					"url": "https://github.com/wyou25f/toolsmod/releases/download/1.0.1/toolsplus-fabric-1.0.1%2B26.1.2.jar",
+					"size": 12371,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "fafc439521ed92ce8c08c7bde1889b64479ee40568b9c293c3eafce58df77e0f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "tools",
+							"version": "1.0.1",
+							"name": "Tools",
+							"description": "Admin tools mod",
+							"minecraft": ">=26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 5,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 439074575,
+					"name": "toolsplus-forge-1.0.1+1.16.5.jar",
+					"url": "https://github.com/wyou25f/toolsmod/releases/download/1.0.1/toolsplus-forge-1.0.1%2B1.16.5.jar",
+					"size": 11459,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "fe10f79ad27e9f6a4d628df2aa290ad07834ecbfde21b6f322ad9f0b3cd8cb08",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "toolsplus",
+							"version": "1.0.1",
+							"name": "Tools+",
+							"description": "Tools+ provides server enchanting utilities and per-player language settings.",
+							"minecraft": "[1.16.5,1.17)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 5,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 438235769,
+					"name": "toolsplus-neoforge-1.0.1+26.1.2.jar",
+					"url": "https://github.com/wyou25f/toolsmod/releases/download/1.0.1/toolsplus-neoforge-1.0.1%2B26.1.2.jar",
+					"size": 12090,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "1e192fdc978cdb78508de61f7fec56a76132239af9389959cb68548370e1d298",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "tools",
+							"version": "1.0.1",
+							"name": "Tools Mod",
+							"description": "Enchant and language commands for moderators.",
+							"minecraft": "[26.1.2,)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 5,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**English:**\nAdded `/tools lang en `and `/tools lang ru` commands.\nFixed a bug with the Russian localization. Now the command syntax is correctly written with quotes:` /tools enchant \"пример\" 1`.\n\n**Русский:**\nДобавлены команды` /tools lang en` и `/tools lang ru` для смены языка.\nИсправлен баг в русской локализации. Теперь в подсказках синтаксис команды пишется в кавычках:` /tools enchant \"пример\" 1`.\n_Dependencies: [26.1.2] Fabric API 0.150.0+26.1.2_\n_Java 25 and Fabric API 0.150.0+26.1.2 for version 1.0.1 are required_\n<img width=\"361\" height=\"252\" alt=\"Снимок экрана_20260603_190114\" src=\"https://github.com/user-attachments/assets/8e27d0a6-e21b-46e0-b40a-b499410d174f\" />"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T22:37:16.645Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 6,
+		"more": 0,
+		"people": [
+			{
+				"login": "wyou25f",
+				"commits": 6,
+				"name": "romanm",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
+	"history": 1
+}

@@ -18,7 +18,7 @@
 					"name": "fallen-1.5.0.jar",
 					"url": "https://github.com/Andrewwwwwwwwwwwwwww/fallen/releases/download/v1.5.0/fallen-1.5.0.jar",
 					"size": 134650,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "9b421aa194f3f686cf67ad9f47e256d73669ecaf7e3e65c1f6ee2068105043d0",
 					"mods": [
@@ -63,7 +63,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "One jar for every current game version, and nothing borrowed from vanilla that might move again.\n\n- **One jar, three game versions.** `fallen-1.5.0.jar` runs on Minecraft 26.1.2, 26.2 and 26.3. There's no longer a per-version build to pick, and the file name no longer carries a game version.\n- **The body list draws its own status icons.** The tick and cross next to each record used to be taken from vanilla's sprite sheet, and that sprite call changed between game versions. They're now drawn by the mod, so one build looks the same everywhere.\n- **Overflow goes through the shared drop path.** Items that don't fit the inventory when a body is emptied are dropped through the same container drop that chests and hoppers use, rather than a hand-rolled one.\n- **Dependencies.** Fabric Loader 0.19.3 → 0.19.5, Fabric API 0.152.1+26.2 → 0.160.5+26.3, Jade 26.3.0."
 		},
 		{
 			"tag": "v1.3.0",
@@ -75,7 +76,7 @@
 					"name": "fallen-1.3.0+mc26.2.jar",
 					"url": "https://github.com/Andrewwwwwwwwwwwwwww/fallen/releases/download/v1.3.0/fallen-1.3.0%2Bmc26.2.jar",
 					"size": 114924,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "661f244caff4d5114af7d61b08a1ef611c299982671f58e56f43c73055c31fe2",
 					"mods": [
@@ -118,7 +119,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## Fallen 1.3.0\n\nA fix for a rare but severe item-loss bug, diagnostics for missing bodies, and claim-mod support.\n\n- **Fixed: a body that failed to spawn deleted the inventory.** The corpse was added to the world *after* the player's inventory had already been cleared and the vanilla drop cancelled — and the result was never checked. On the rare occasions the world refused the entity (another mod vetoing entity spawning is the usual reason), the player got no body, no drops, and no items at all. The body is now placed **before** anything is taken from the player, and if the world refuses it everything drops the vanilla way instead. Anything the Trinkets/Traveler's Backpack hooks had already collected is handed back too.\n- **A failed body now says so.** It logs the player, the position, the dimension and the likely cause, rather than failing silently.\n- **`/fallen debug <true|false>`** — logs every decision the death handler makes, including each reason it declines to create a body (`keepInventory`, spectator, empty inventory, a lava/void setting, or a refused spawn). A missing body otherwise looks exactly like an ordinary death, so this is the way to find out which check declined it.\n- **Open Parties and Claims support.** Ships an entity tag, `#fallen:corpses`, so bodies can be excluded from claim protection, and prints the exact config line at startup when OPAC is installed. Without it, claims block looting a body inside them.\n\nTo allow it, add this to `forcedEntityProtectionExceptionList` in `<world>/serverconfig/openpartiesandclaims-server.toml` (the server must be stopped to edit the file):\n\n```toml\nforcedEntityProtectionExceptionList = [\"minecraft:minecart\", \"anything$#fallen:corpses\"]\n```\n\nThe `anything$` prefix matters — without it a player holding a sword still can't loot their own body. Fallen's own owner-lock applies regardless, so a body stays locked to its owner either way.\n\nRequires **Fabric API**. **Trinkets** and **Traveler's Backpack** are optional (only needed for their respective item support)."
 		},
 		{
 			"tag": "v1.2.0",
@@ -130,7 +132,7 @@
 					"name": "fallen-1.2.0+mc26.2.jar",
 					"url": "https://github.com/Andrewwwwwwwwwwwwwww/fallen/releases/download/v1.2.0/fallen-1.2.0%2Bmc26.2.jar",
 					"size": 110654,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "c95efd9e3b408a633c86daae09c0897260b4822c0c5b1f599bd911200812ac28",
 					"mods": [
@@ -173,7 +175,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## Fallen 1.2.0\n\nOperator body tools — no death is ever unrecoverable.\n\n- **Respawn** — on the death-history screen, operators see a Respawn button on any record whose body is gone. One click re-creates the body at the recorded death spot from the record's full at-death snapshot: every item in its original slot, the experience, and any stored backpacks or accessories. The restored body is locked to its owner and ages from zero. Refused while the body still exists, so it can never duplicate one.\n- **Move** — records whose body still exists show Move instead: teleport the body to the operator (across dimensions if needed), placed through the normal settle/float logic. The rescue for a body that's stuck somewhere unreachable or invisible.\n- **Lost-body reconciliation** — if Move can't find the body in the world, the record is marked lost and its button flips to Respawn, so the items are recoverable in every scenario.\n- **Wider history screen** — coordinates, dates and item counts read in full, and the panel shrinks automatically to fit small windows.\n\nRequires **Fabric API**. **Trinkets** and **Traveler's Backpack** are optional (only needed for their respective item support)."
 		},
 		{
 			"tag": "v1.1.1",
@@ -185,7 +188,7 @@
 					"name": "fallen-1.1.1+mc26.2.jar",
 					"url": "https://github.com/Andrewwwwwwwwwwwwwww/fallen/releases/download/v1.1.1/fallen-1.1.1%2Bmc26.2.jar",
 					"size": 104217,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "65309e2501821e7b4dc0ca77257e0a0b834043a6fee6580b38fd323363adefef",
 					"mods": [
@@ -228,7 +231,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## Fallen 1.1.1\n\nFlowing fluid, vehicles, knockback, and Traveler's Backpack — all handled properly now.\n\n- **Flowing lava & water** — a body never rides a fall down, never lies hidden under a flow, and is never launched out of one. It settles on the nearest open surface (a dry block or a still-pool surface), searching close first and then wide enough to reach a fall's base.\n- **Knockback** — a resting or floating body that gets yanked (fishing rod, wind charge) re-settles under gravity wherever it ends up instead of hanging in the air.\n- **Fluid currents** — flowing fluid can't drag or jostle a body at all.\n- **Traveler's Backpack support** — a worn backpack goes into the corpse instead of being placed or dropped at the death spot (where a lava death burned it), and returns to your back on recovery. Soft compat; nothing required.\n- **Vehicles** — dying in a boat or minecart no longer breaks the body.\n- **Full-body hitbox** — clicks and hits register along the whole body, not just at the feet, and the box is aligned to the model.\n- **Smoother landings** — no more resting-position jitter.\n\nRequires **Fabric API**. **Trinkets** and **Traveler's Backpack** are optional (only needed for their respective item support)."
 		},
 		{
 			"tag": "v1.1.0",
@@ -240,7 +244,7 @@
 					"name": "fallen-1.1.0+mc26.2.jar",
 					"url": "https://github.com/Andrewwwwwwwwwwwwwww/fallen/releases/download/v1.1.0/fallen-1.1.0%2Bmc26.2.jar",
 					"size": 100253,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "bbcd4fcaeeefa7c4d7c4f8f7ad8b4b74e9d02bae5aeb11ac211dd4dbca8c1a09",
 					"mods": [
@@ -283,11 +287,28 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## Fallen 1.1.0\n\nBodies now behave like real bodies, and loot is never lost to a hazard or a full pack.\n\n- **Gravity** — a body drops and settles on the ground where you died instead of hanging in mid-air.\n- **Lava & water** — the body floats on the surface instead of sinking somewhere unreachable.\n- **The void** — the body is held just inside the world rather than lost.\n- **No spilled loot** — recovery never drops items when your inventory is full; whatever doesn't fit stays in the body until you have room, so it can't fall into lava or the void.\n- **Trinkets support (optional)** — equipped accessories are swept into the body on death and handed back on recovery. Does nothing when Trinkets isn't installed.\n- **Death history** — the listed location tracks where the body actually comes to rest.\n- **Real-day phases** — a body is locked to you for one day, lootable as a skeleton for the next, then it drops its contents.\n\nRequires **Fabric API**. **Trinkets** is optional (only needed for accessory support)."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [
+		"branding/source-original.png"
+	],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 9,
+		"more": 0,
+		"people": [
+			{
+				"login": "Andrewwwwwwwwwwwwwww",
+				"commits": 9,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

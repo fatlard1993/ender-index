@@ -18,7 +18,7 @@
 					"name": "Data.Attributes-3.0.0-fabric.jar",
 					"url": "https://github.com/BareMinimumStudios/data-attributes/releases/download/3.0.0/Data.Attributes-3.0.0-fabric.jar",
 					"size": 244091,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "df1606bf69c9ea445eed4fb4fd2350fb13a43f9d16b8c5076049f62dc7da5c88",
 					"mods": [
@@ -58,7 +58,7 @@
 					"name": "Data.Attributes-3.0.0-neoforge.jar",
 					"url": "https://github.com/BareMinimumStudios/data-attributes/releases/download/3.0.0/Data.Attributes-3.0.0-neoforge.jar",
 					"size": 236668,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "216ad93d3eea503168470da0581b4f3cdf5ac58fb8db32f0be4ba10b87191588",
 					"mods": [
@@ -90,11 +90,53 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Changelog\n\nNotable changes to Data Attributes are documented here, newest release first.\nThe format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).\n\n## [Unreleased]\n\n## [3.0.0] - 2026-10-07\n\nMinecraft 1.21.1 rewrite for Fabric and NeoForge.\n\n### Added\n\n- NeoForge support alongside Fabric for Minecraft 1.21.1.\n- Server-authoritative Fzzy Config JSON5 configuration for both loaders.\n- Live application of accepted in-game configuration changes. Loaded living entities adopt supplier-owned base changes on their next tick.\n- An informational Datapack Baseline Preview for attribute overrides, functions, and entity base values, synchronized from the server and never saved back to configuration or datapacks.\n- Configuration suggestions for registered entity types and Data Attributes' implicit entity groups.\n- Persistent supplier-base tracking so configured base values can update without overwriting deliberate runtime changes, including `/attribute ... base set`.\n- Reattachment to supplier ownership when a live base is set back to its current configured value.\n- Bounded GZIP synchronization of runtime configuration snapshots.\n- Kotlin serialization compiler support for datapack and runtime snapshot serialization.\n\n### Changed\n\n- Attribute Definition Overrides now control bounds, stacking behavior, diminishing smoothness, and display formatting separately from entity base values.\n- Entity Base Attributes are the configuration and datapack layer responsible for assigning entity supplier base values.\n- Entity configuration resolves from vanilla defaults through matching implicit groups to explicit entity entries. Server configuration overrides the datapack baseline.\n- Entity base values remain raw; attribute bounds constrain the calculated result rather than rewriting stored configuration values.\n- Entity entries apply as deltas, avoiding unnecessary supplier rebuilds and preserving inherited values not explicitly overridden.\n- Configuration fields are organized into Bounds, Stacking, and Display groups. Explicit Override Minimum/Maximum switches replace user-facing `NaN` inheritance values.\n- Attribute Function descriptions clarify that the outer key is the parent/source attribute and the nested key is the child/derived attribute.\n- Identifiers belonging to absent optional mods can remain configured.\n- Datapack reloads rebuild configuration once at reload completion and respect normal resource-pack priority.\n- Native Fabric/NeoForge custom-payload networking replaces the OWO network channel, and a loader-neutral event implementation replaces OWO event streams.\n- Loader-specific Fzzy Config integrations use `0.7.7+1.21` on Fabric and `0.7.7+1.21+neoforge` on NeoForge, with shared runtime code consuming loader-neutral snapshots.\n- Disabled server override entries suppress matching datapack overrides.\n- Project metadata and documentation now reference the Bare Minimum Studios repository and the Bare Minimum License (BML) v1.0.\n\n### Removed\n\n- OWO Lib/OOLib, OWO Sentinel, and Endec dependencies and their associated repository declarations.\n- The old `/reload` command-tail hook.\n- Vanilla sword/tool hooks that incorrectly treated durability damage as attack damage.\n- Duplicate mob equipment-comparison injections.\n- Unused OWO interface code and legacy helpers.\n\n### Fixed\n\n- Configuration map additions failing with `Identifier invalid or not allowed`, using valid defaults, identifier validation, and live registry suggestions.\n- NeoForge compilation failures caused by Fabric-mapped Fzzy Config classes entering shared source.\n- Runtime modifiers being lost during live configuration rebuilds.\n- Explicit entity entries resetting unrelated inherited values to vanilla defaults.\n- Attribute dirty/update/synchronization behavior affecting health, absorption, and other stateful attributes after live rebuilds.\n- Resource-stack rebuilding mutating maps during iteration.\n\n..."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [
+		"docs/assets/data-attributes-banner.png",
+		"docs/assets/data-attributes-logo.png"
+	],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 201,
+		"more": 0,
+		"people": [
+			{
+				"login": "karuzumi",
+				"commits": 126,
+				"name": "Karuzumi",
+				"funding": []
+			},
+			{
+				"login": "CleverNucleus",
+				"commits": 55,
+				"funding": []
+			},
+			{
+				"login": "pokesmells",
+				"commits": 16,
+				"name": "Poke",
+				"funding": []
+			},
+			{
+				"login": "OverlordsIII",
+				"commits": 2,
+				"name": "Shrihun Sankepally",
+				"funding": []
+			},
+			{
+				"login": "DataEncoded",
+				"commits": 2,
+				"name": "Data Encoded",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

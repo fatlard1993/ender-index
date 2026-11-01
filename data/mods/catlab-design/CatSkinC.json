@@ -6,7 +6,7 @@
 	"archived": false,
 	"license": "NOASSERTION",
 	"created": "2026-04-19T01:25:35Z",
-	"pushed": "2026-10-23T15:04:23Z",
+	"pushed": "2026-10-28T16:00:34Z",
 	"releases": [
 		{
 			"tag": "v4.1.0-1.21.1",
@@ -18,7 +18,7 @@
 					"name": "catskinc-fabric_1.21.1-4.1.0.jar",
 					"url": "https://github.com/catlab-design/CatSkinC/releases/download/v4.1.0-1.21.1/catskinc-fabric_1.21.1-4.1.0.jar",
 					"size": 300315,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "687ee9193f19ac9ea3063afe371f0bf4df9589c611365fcc98d70374f1c06f5a",
 					"mods": [
@@ -99,7 +99,7 @@
 					"name": "catskinc-neoforge_1.21.1-4.1.0.jar",
 					"url": "https://github.com/catlab-design/CatSkinC/releases/download/v4.1.0-1.21.1/catskinc-neoforge_1.21.1-4.1.0.jar",
 					"size": 301649,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "822cc47a08542540154a3844aef07e18883b3d18b83b503a7f124c379e05ef40",
 					"mods": [
@@ -184,7 +184,7 @@
 					"name": "catskinc-fabric-4.1.0.jar",
 					"url": "https://github.com/catlab-design/CatSkinC/releases/download/v4.1.0/catskinc-fabric-4.1.0.jar",
 					"size": 247763,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "ebafb0e8cb8cdcfa4fc3f0ef33a5a67105393f7d5dcbb577f5c0a5043b312847",
 					"mods": [
@@ -268,7 +268,7 @@
 					"name": "catskinc-forge-4.1.0.jar",
 					"url": "https://github.com/catlab-design/CatSkinC/releases/download/v4.1.0/catskinc-forge-4.1.0.jar",
 					"size": 250207,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "c40af73a3830f9f1631773a0e3708c05fce0bb95ceb9f0a939313eb7cffaf862",
 					"mods": [
@@ -344,7 +344,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Changelog\n\nAll notable changes to this project should be documented in this file.\n\n## [4.1.0] - 2026-09-25\n\n### Fixed\n\n- Skin update events now bypass the short-lived selected-skin cache, so changed\n  skins are fetched immediately instead of waiting for the cache to expire.\n- Force-refresh events received during an active fetch are coalesced into a\n  follow-up fetch; late responses can no longer restore stale cached selections.\n\n## [4.0.0] - 2026-08-29\n\n### Added\n\n- **Myopia skin LOD** for CatSkinC-managed remote skins. When enabled, distant\n  players use lazily cached, pixel-perfect half, quarter, or eighth-resolution\n  copies while GUI, inventory, and tab-list skins retain full resolution.\n- A Myopia settings screen with an enabled toggle, a 4–128 block base-distance\n  control, Normal and Panicked modes, and links to Minecraft's keybinding menu.\n- Default keybindings for increasing and decreasing the Myopia range with the\n  Up and Down arrow keys. All settings are persisted in `catskinc.json`.\n- **WebSocket client** using native `java.net.http.WebSocket` (Java 11+) for high-performance real-time skin sync.\n- **Automatic protocol negotiation** — client sends `x-catskinc-protocol: 3` header on WebSocket handshake.\n- **Resilient connection management**:\n  - Exponential backoff reconnection (1.5s → 60s max).\n  - Shared circuit breaker across REST, SSE, and WebSocket (unified failure tracking).\n  - Automatic fallback to SSE when WebSocket fails or protocol is unsupported.\n- **Session-token authentication** on WebSocket with auto-subscription to local player UUID.\n- **Protocol version verification** in welcome message — closes connection on mismatch.\n- **In-game toast notifications** for WebSocket-originated events (skin updates, server messages).\n\n### Changed\n\n- **Join flow** now attempts WebSocket first, falls back to SSE on failure.\n- **Shared circuit breaker state** between `ServerApiClient` and `WebSocketClient` — REST/SSE/WS failures all contribute to the same breaker.\n- **Heartbeat handling** — application-level JSON ping/pong (30s) replaces binary WebSocket ping frames for consistency.\n- **Managed-skin texture cleanup** now also releases all associated Myopia GPU\n  textures and resets per-player LOD state.\n\n### Fixed\n\n- **Broadcast framing** — WebSocket clients now receive raw JSON (SSE `data: ` prefix stripped server-side).\n- **Handshake protocol header** — added `X-CatSkinC-Protocol` to WebSocket upgrade request.\n- **Auth race** — session token acquired synchronously before WebSocket connection attempt.\n- **Protocol defense** — client verifies `protocol_version` in welcome message, closes on mismatch.\n- **Fallback trigger** — SSE fallback now activates on abnormal post-connect disconnections, not just initial connect failure.\n- **Toast handler** — implemented proper `Toasts.info()` with translatable titles.\n- **Select-Fetch race eliminated**: `selectSkin()` now chains `thenRun(refresh)` so the POST completes before the GET, eliminating the 4-8s skin delay after upload.\n- **Pending selections cache**: `PENDING_SELECTIONS` returns the uploaded skin URL immediately after select, avoiding old-skin flashing.\n- **LAST_CHECK on success only**: failed fetches no longer reset the 5s poll timer, preventing a 15s blackout window.\n- **Fast-retry after null skin**: retries fetch in 2s when the server has no cached skin yet, reducing initial sync from 15s to 2s.\n- **Poll interval reduced**: 15s → 5s for faster periodic sync.\n- **SSE clear-skin handling**: clears `BASE_CACHE`/`TALKING_CACHE` on null URL, so players properly revert to the default skin.\n- **SSE reconnect delay**: added 1.5s–60s exponential backoff on stream close (was instant reconnect), preventing server flooding.\n- **Circuit breaker in SSE**: SSE checks `circuitOpenUntilMs` before connecting, eliminating useless retries during outage.\n- **AtomicInteger**: `consecutiveFailures` switched to `AtomicInteger` for correct failure counting.\n\n..."
 		},
 		{
 			"tag": "v4.0.1-1.21.1",
@@ -356,7 +357,7 @@
 					"name": "catskinc-fabric_1.21.1-4.0.1.jar",
 					"url": "https://github.com/catlab-design/CatSkinC/releases/download/v4.0.1-1.21.1/catskinc-fabric_1.21.1-4.0.1.jar",
 					"size": 298525,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "79a152ca342ba072a98b20777e217c63dde5673d073da5fcc5ec281e4b8d51b5",
 					"mods": [
@@ -437,7 +438,7 @@
 					"name": "catskinc-neoforge_1.21.1-4.0.1.jar",
 					"url": "https://github.com/catlab-design/CatSkinC/releases/download/v4.0.1-1.21.1/catskinc-neoforge_1.21.1-4.0.1.jar",
 					"size": 299853,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "ce1e9ecfffbeb934e9e004ed2a9208e9d45f339bfdc8461d72066386e301cbfa",
 					"mods": [
@@ -522,7 +523,7 @@
 					"name": "catskinc-fabric_1.21.1-4.0.0.jar",
 					"url": "https://github.com/catlab-design/CatSkinC/releases/download/v3.1.1/catskinc-fabric_1.21.1-4.0.0.jar",
 					"size": 298221,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "9b4e49ff9e389045dc70e00314aa0c64e6879d840db99668c33ad06098bd9449",
 					"mods": [
@@ -603,7 +604,7 @@
 					"name": "catskinc-neoforge_1.21.1-4.0.0.jar",
 					"url": "https://github.com/catlab-design/CatSkinC/releases/download/v3.1.1/catskinc-neoforge_1.21.1-4.0.0.jar",
 					"size": 299552,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "3357b0dbde6e29968000afbbbf5334fc4e0a02a892ccd6f37f83b3498c06fb6f",
 					"mods": [
@@ -688,7 +689,7 @@
 					"name": "catskinc-fabric_1.20.1-4.0.0.jar",
 					"url": "https://github.com/catlab-design/CatSkinC/releases/download/v4.0.0/catskinc-fabric_1.20.1-4.0.0.jar",
 					"size": 246178,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "98656c14c9617ad69a1c2930316dfb9bfe08b86d41db7e3d7f1caba79332af5c",
 					"mods": [
@@ -772,7 +773,7 @@
 					"name": "catskinc-fabric_1.21.1-4.0.0.jar",
 					"url": "https://github.com/catlab-design/CatSkinC/releases/download/v4.0.0/catskinc-fabric_1.21.1-4.0.0.jar",
 					"size": 298222,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "aa7860449b6d6dceb0c4a7a7a899f7fa4e223cc031f1509cdaf0e1e88c4e9eac",
 					"mods": [
@@ -853,7 +854,7 @@
 					"name": "catskinc-forge_1.20.1-4.0.0.jar",
 					"url": "https://github.com/catlab-design/CatSkinC/releases/download/v4.0.0/catskinc-forge_1.20.1-4.0.0.jar",
 					"size": 248617,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "34ad96e1e9606e8c36893cc706fd7093c58a7414b07e15aa40d812323157ed8b",
 					"mods": [
@@ -934,7 +935,7 @@
 					"name": "catskinc-neoforge_1.21.1-4.0.0.jar",
 					"url": "https://github.com/catlab-design/CatSkinC/releases/download/v4.0.0/catskinc-neoforge_1.21.1-4.0.0.jar",
 					"size": 299552,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "1df40f31482dbf64b14052a94b5ebfc76f5a432d6d921c596c10130bc7f51284",
 					"mods": [
@@ -1013,5 +1014,43 @@
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 78,
+		"more": 0,
+		"people": [
+			{
+				"login": "NotNiceKun",
+				"commits": 50,
+				"name": "NiceKun",
+				"funding": []
+			},
+			{
+				"login": "SamsVT",
+				"commits": 17,
+				"name": "Sam Su~☕ | แซมซู~☕",
+				"funding": []
+			},
+			{
+				"login": "RimakiTaema",
+				"commits": 9,
+				"name": "Rimaki",
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/RimakiTaema"
+					}
+				]
+			},
+			{
+				"login": "damp11113",
+				"commits": 2,
+				"name": "Dharm Pimsen",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

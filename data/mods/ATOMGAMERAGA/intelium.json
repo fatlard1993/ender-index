@@ -18,7 +18,7 @@
 					"name": "Intelium-v1.3.4-1.21.11.jar",
 					"url": "https://github.com/ATOMGAMERAGA/intelium/releases/download/v1.3.4/Intelium-v1.3.4-1.21.11.jar",
 					"size": 125057,
-					"downloads": 5,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "a84bed58363a5c3d5075738368f8c28538686726c916832aa683efdab56ad5ab",
 					"mods": [
@@ -60,7 +60,7 @@
 					"name": "Intelium-v1.3.4-26.2.jar",
 					"url": "https://github.com/ATOMGAMERAGA/intelium/releases/download/v1.3.4/Intelium-v1.3.4-26.2.jar",
 					"size": 144194,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "565f122399469f30a11e1e308b971739623b80b35cff3e7bebcb89e512c6ef7c",
 					"mods": [
@@ -97,7 +97,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## Intelium 1.3.4\n\nTwo jars, one per Minecraft line. Download the one matching your version:\n\n| Jar | Minecraft | Java | Renderer |\n|---|---|---|---|\n| `Intelium-v1.3.4-1.21.11.jar` | 1.21.11 | 21 | OpenGL |\n| `Intelium-v1.3.4-26.2.jar` | 26.2 | 25 | OpenGL (default) / Vulkan (experimental) |\n\nSHA-256 and SHA-512 checksum files are attached beside each jar.\n\nMade by **ATOMLAND Studios** · <https://modrinth.com/mod/intelium-mod>\n\n---\n\n### Modrinth changelog (copy the block below)\n\n````markdown\n## English\n\n**Intelium 1.3.4 — the OpenGL correctness update.** Minecraft 26.2 ships **OpenGL as its default renderer**, with Vulkan as an experimental opt-in. Intelium's 26.x jar had been written and documented the other way round, and several of its decisions followed from that mistake. This release fixes the premise and everything that rested on it. Vulkan support is unchanged; OpenGL is now the first-class target it should always have been.\n\n### Profiles now do what their names say\n\n- **\"Max FPS\" no longer costs you FPS.** Every profile used to force Sodium's one-frame chunk deferral, so Max FPS and Smooth produced identical upload behaviour and the label was simply wrong. Chunk uploads run on the render thread: forcing them buys faster chunk appearance and pays for it in frame time. Max FPS now uses Sodium's conservative deferral — the same setting Lunar Client's own FPS guidance recommends — while **Smooth** keeps one-frame deferral because streaming terrain ahead of the player is what that profile is for.\n- **Balanced is the only adaptive one.** It uses one-frame deferral while there is headroom and falls back to conservative deferral under sustained, measured pressure, with the existing hysteresis. Max FPS and Smooth are fixed decisions, so the governor is no longer left holding state it will never apply.\n- **Turbo is still exactly what you asked for.** Zero-frame deferral remains a user decision, never adaptively slowed, on any backend under any profile.\n\n### Chunk workers on low-core Intel parts\n\n- **`availableProcessors()` was overstating the machine.** An HD Graphics 520 lives in a two-core, four-thread mobile CPU. The old policy handed two of those four logical processors to chunk meshing on Balanced and three on Smooth, so mesh threads and the render thread contended for the same two physical cores — which is how a mod meant to remove hitches can cause them.\n- On **Gen 9 / Gen 9.5 with at most four logical processors, on OpenGL**, Auto now caps workers at **1 for Max FPS** and **2 for Balanced and Smooth**. It is a ceiling only: a machine that would already have been given fewer keeps its lower number, newer generations and other backends are untouched, and a manual `1–16` value is still honoured exactly.\n\n### Real frame-time measurement\n\n- **A new `FrameTimeTracker`, fed by a verified per-frame hook.** `Minecraft#getFps()` is a trailing whole-second average that cannot represent a 40 ms hitch at all — it reports 58 instead of 60 — and Intelium's adaptive systems were being steered by it. Frame intervals are now measured at `Minecraft.renderFrame`, giving median, p95, p99, 1% low and 0.1% low.\n- **It does not cost the frames it measures.** The hot path is a subtract and two array stores into a preallocated ring buffer, with no allocation. Percentiles are computed at most once per new sample, and only when something actually asks — in normal play the sort never runs.\n- **Bad samples cannot steer anything.** Unfocused frames, menu-capped frames and frames with no world loaded are dropped and restart the warm-up; loading a world restarts it too. VSync and FPS caps are **flagged rather than discarded**, because discarding them would starve the tracker on the majority of machines while throwing away the spikes that matter most.\n\n### Render-path cost and what must never be culled\n\n\n..."
 		},
 		{
 			"tag": "v1.3.3",
@@ -109,7 +110,7 @@
 					"name": "Intelium-v1.3.3-1.21.11.jar",
 					"url": "https://github.com/ATOMGAMERAGA/intelium/releases/download/v1.3.3/Intelium-v1.3.3-1.21.11.jar",
 					"size": 112357,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "cb19815624547250aa55396c20125d9a3235b9c223dd998e9f19ebcae5505d13",
 					"mods": [
@@ -151,7 +152,7 @@
 					"name": "Intelium-v1.3.3-26.x.jar",
 					"url": "https://github.com/ATOMGAMERAGA/intelium/releases/download/v1.3.3/Intelium-v1.3.3-26.x.jar",
 					"size": 117038,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "7d61dd34695504f1b2e8556851a437f48529620b6cb9a101c12960c03e6becb1",
 					"mods": [
@@ -188,7 +189,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## Intelium 1.3.3\n\nTwo jars, one per Minecraft line. Download the one matching your version:\n\n| Jar | Minecraft | Java |\n|---|---|---|\n| `Intelium-v1.3.3-1.21.11.jar` | 1.21.11 | 21 |\n| `Intelium-v1.3.3-26.x.jar` | 26.1, 26.1.1, 26.1.2, 26.2 | 25 |\n\nSHA-256 and SHA-512 checksum files are attached beside each jar.\n\nMade by **ATOMLAND Studios** · <https://modrinth.com/mod/intelium-mod>\n\n---\n\n### Modrinth changelog (copy the block below)\n\n````markdown\n## English\n\n**Intelium 1.3.3 — the OpenGL frame-pacing and chunk-streaming update.** The 26.x line already had Vulkan-aware scheduling; this release gives Minecraft 26.1's OpenGL renderer and the 1.21.11 build their own guarded tuning path. The goal is not a risky renderer replacement or undocumented driver switch: it is less render-thread contention, faster chunk appearance when headroom exists, and steadier frame times when it does not.\n\n### OpenGL performance (26.1.x + Minecraft 1.21.11)\n\n- **Backend-aware `Auto` chunk workers.** With Fast Chunk Loading enabled, the old Balanced policy could use all but one logical processor. OpenGL mesh uploads and substantial Intel driver work also use the render path, so Max FPS and Balanced now preserve two logical processors where possible. Smooth remains the explicit higher-throughput choice, and a manual `1–16` value is still honored exactly.\n- **Adaptive Fast Chunk Loading.** Fast still uses Sodium's one-frame defer for quick chunk appearance. Only after sustained OpenGL FPS pressure does Intelium temporarily use Sodium's conservative defer mode, preventing completed-mesh uploads from amplifying an already struggling frame. A separate severe-collapse path reacts sooner; recovery requires three stable seconds, so the mode does not oscillate near the target.\n- **Turbo stays Turbo.** Zero-frame upload remains an explicit fastest-loading choice and is never adaptively slowed. Off still restores the user's captured Sodium setting. Vulkan keeps its established behavior and does not enter the OpenGL governor.\n- **Bad samples cannot steer chunk pacing.** Background, unfocused, menu-capped, invalid and 1.21.11 A/B benchmark samples pause transition counters. They neither trigger protection nor falsely claim recovery.\n- **OpenGL draw-call tuning.** Intelium's own screen-space thresholds are raised by a modest 10% on OpenGL, the high-count block-entity ceiling is trimmed by 25%, and the extreme particle-burst ceiling by 12.5%. The changes affect distant/tiny objects and overloaded scenes; the 12-block safety radius, players, named entities and disabled budgets remain untouched.\n\n### General FPS and stability improvements\n\n- The particle spawn hook now makes one published-state read instead of two for every spawn. This removes avoidable hot-path overhead during the large bursts the limiter is designed to handle.\n- The rolling FPS tracker now maintains its average in O(1), and its 1% low/minimum distribution is sorted at most once per new sample rather than repeatedly on every overlay frame. Intelium's measurement UI no longer adds needless work to the result it is measuring.\n- The OpenGL governor, backend render policy, worker bounds, recovery hysteresis, unmeasurable-sample behavior, Turbo/Vulkan isolation and rolling-window wraparound all live in shared deterministic logic with regression coverage.\n- Every new path fails in the safe direction: unknown future backends keep the prior policy, disabled budgets stay disabled, invalid FPS readings hold state, and inaccessible Sodium internals still self-disable without crashing the game.\n- No config migration is required. Existing profiles, captured option restoration, compatibility gates and the verified Fabric/Sodium baselines are retained.\n\n\n..."
 		},
 		{
 			"tag": "v1.3.2",
@@ -200,7 +202,7 @@
 					"name": "Intelium-v1.3.2-1.21.11.jar",
 					"url": "https://github.com/ATOMGAMERAGA/intelium/releases/download/v1.3.2/Intelium-v1.3.2-1.21.11.jar",
 					"size": 108934,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "49442c15c7cd64e760ee6e3f53642da8e45d885fb62739df5260c3c6b0761b73",
 					"mods": [
@@ -242,7 +244,7 @@
 					"name": "Intelium-v1.3.2-26.x.jar",
 					"url": "https://github.com/ATOMGAMERAGA/intelium/releases/download/v1.3.2/Intelium-v1.3.2-26.x.jar",
 					"size": 113418,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "4b0c2606a3fa97f7816e8424be3bdad2f67fc2a6a076075df70300e301e4a85a",
 					"mods": [
@@ -279,7 +281,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## Intelium 1.3.2\n\nTwo jars, one per Minecraft line. Download the one matching your version:\n\n| Jar | Minecraft | Java |\n|---|---|---|\n| `Intelium-v1.3.2-1.21.11.jar` | 1.21.11 | 21 |\n| `Intelium-v1.3.2-26.x.jar` | 26.1, 26.1.1, 26.1.2, 26.2 | 25 |\n\nSHA-256 and SHA-512 checksum files are attached beside each jar.\n\nMade by **ATOMLAND Studios** · <https://modrinth.com/mod/intelium-mod>\n\n---\n\n### Modrinth changelog (copy the block below)\n\n````markdown\n## English\n\n**Intelium 1.3.2 — native Vulkan activation and a polished 1.21.11 stable update.** This release fixes the largest remaining 26.x limitation: supported Intel GPUs are now detected and optimized while Minecraft 26.2 is using its Vulkan renderer. It also retunes automatic chunk workers for steadier Vulkan frame pacing and refreshes both build targets to current stable Sodium/Fabric baselines. No experimental renderer replacement or unsafe driver trick is added.\n\n### 26.x / Vulkan\n\n- **Intelium now activates on supported Intel GPUs under Vulkan.** The previous 26.x detector depended on an OpenGL context; Vulkan has none, so Intelium eventually disabled every optimization. Version 1.3.2 reads Blaze3D's selected `DeviceInfo` instead: vendor, device name, backend and driver are obtained from the graphics device Minecraft is actually using.\n- **Hybrid-GPU decisions are safer.** Detection follows the selected Blaze3D device, not an assumed integrated GPU. If Minecraft selected NVIDIA/AMD, or the identity is missing/unrecognized, Intelium still fails closed and Sodium runs unmodified.\n- **26.1 remains fail-soft.** The new device probe is reflection-isolated for cross-version safety. If an older 26.x device API is unavailable, Intelium falls back to guarded OpenGL detection and never calls OpenGL without a current context.\n- **Vulkan-aware `Auto` chunk workers.** Sodium 0.9 runs asynchronous graph culling on its own executor. On Vulkan, Intelium now keeps two logical processors available where possible for the render/main path, Blaze3D submission and culling instead of letting Fast Chunk Loading consume all but one. This targets smoother chunk-streaming frame times, especially on 4–8-thread Intel laptops. A manual `1–16` worker value is still honored exactly.\n- **Current stable 26.2 baseline.** The build target moves to Fabric Loader 0.19.3, Fabric API 0.158.0 and Sodium 0.9.1. Sodium 0.9.1 includes upstream fixes for unsafe async-culling concurrency, Vulkan indirect-buffer sizing, several crashes and avoidable per-frame work.\n\n### Minecraft 1.21.11 polish\n\n- Updated the stable build baseline to Fabric Loader 0.19.3, Fabric API 0.141.6 and Sodium 0.8.13.\n- GPU detection no longer commits to an empty/unknown result if its first render-thread call happens before the OpenGL context is readable; it retries briefly, then still fails closed if no trustworthy identity appears.\n- Sodium 0.8.13 brings its upstream crash, block/fluid tint and compatibility corrections into the tested 1.21.11 baseline.\n\n### Stability and release quality\n\n- **Fast Chunk Loading now respects the selected profile.** Its worker boost previously pushed `Max FPS` toward the same `cpu - 1` target as `Smooth`, undermining the profile whenever the default Fast mode was enabled. `Max FPS` now receives only a bounded one-worker boost and preserves render-thread headroom; Balanced/Smooth keep their higher streaming throughput.\n- Backend detection and Vulkan worker policy live in shared, deterministic logic with regression coverage for Vulkan/OpenGL labels, Intel PCI vendor ID `8086`, blank device vendors, explicit non-Intel vendors, CPU bounds and manual-override behavior.\n- The selected backend is shown in Intelium's live Sodium settings status and written to the log with the device/driver identity for easier troubleshooting.\n- Every compatibility decision remains conservative: unknown future backends or GPU models are never assigned a guessed tuning profile.\n\n..."
 		},
 		{
 			"tag": "v1.3.1",
@@ -291,7 +294,7 @@
 					"name": "Intelium-v1.3.1-1.21.11.jar",
 					"url": "https://github.com/ATOMGAMERAGA/intelium/releases/download/v1.3.1/Intelium-v1.3.1-1.21.11.jar",
 					"size": 106895,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "2cd3c40a2ff6c9f58e5b595b2c27d9b2a627368019a854f6acec137930f13e3f",
 					"mods": [
@@ -333,7 +336,7 @@
 					"name": "Intelium-v1.3.1-26.x.jar",
 					"url": "https://github.com/ATOMGAMERAGA/intelium/releases/download/v1.3.1/Intelium-v1.3.1-26.x.jar",
 					"size": 109375,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "1d94f1ad301f6a6c456339b98188206376eb0a2bc082b741f4c046f1948d69f4",
 					"mods": [
@@ -370,7 +373,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## Intelium 1.3.1\n\nTwo jars, one per Minecraft line. Download the one matching your version:\n\n| Jar | Minecraft | Java |\n|---|---|---|\n| `Intelium-v1.3.1-1.21.11.jar` | 1.21.11 | 21 |\n| `Intelium-v1.3.1-26.x.jar` | 26.1, 26.1.1, 26.1.2, 26.2 | 25 |\n\nMade by **ATOMLAND Studios** · <https://modrinth.com/mod/intelium-mod>\n\n---\n\n### Modrinth changelog (copy the block below)\n\n````markdown\n## English\n\n**Intelium 1.3.1 — the stabilization release.** No new levers this time: every feature that shipped in 1.3.0 got audited end to end, and this release fixes what the audit found — wrong GPU verdicts, an adaptive render distance that could get stuck or over-react, measurement poisoned by alt-tabs, and several ways a future Minecraft/Sodium change could have crashed the game instead of degrading gracefully. Supports Minecraft **1.21.11** and the **26.x** line.\n\n### Fixed — GPU detection tells the truth on more machines\n\n- **\"Intel Corporation\" is Intel.** The AMD check matched the letters \"ati\" inside \"Corpor-ati-on\", so a driver reporting the vendor as \"Intel Corporation\" had Intelium refusing a fully supported Intel GPU with an \"AMD detected\" message. Word-boundary matching fixes it (and \"Microsoft Corporation\" / WARP now reads as unknown, not AMD).\n- **Workstation Xeon iGPUs are supported.** HD Graphics P530, Iris Pro P580 (Gen 9) and HD/UHD Graphics P630 (Gen 9.5) fell through to the \"too old\" rule. They are the same silicon as their consumer twins and are now classified as such.\n- **\"Xeon\" is not \"Xe\".** A CPU model embedded in the renderer string (\"... (Xeon E3-1505M)\") force-classified any iGPU as Gen 12 and handed it a Gen 12 worker budget. The Xe keyword now matches as a whole word only; a bare \"Xe2\" string is also recognised.\n- **Vulkan (26.2) is handled honestly.** The 26.x build used to read the GPU through OpenGL calls unconditionally; under the Vulkan renderer there is no GL context, so detection silently failed with a misleading \"unknown GPU vendor\" — with a native-crash risk if LWJGL's runtime checks were off. Intelium now verifies a GL context exists before touching GL, retries briefly, and otherwise reports plainly that the GPU cannot be identified under Vulkan and stays inactive. No silent wrong answers, no crash path.\n\n### Fixed — Adaptive Render Distance edge cases\n\n- **Pinned at the target no longer means stuck forever.** With VSync or an FPS cap at your target (60 on a 60 Hz display), the \"step back up\" threshold (115% of target) was unreachable — one dip and the reduced distance survived to the end of the session on a machine holding its target perfectly. Sitting at the target now counts as (weaker) evidence of headroom: recovery happens on a doubled hold, still honouring the failure backoff.\n- **Severe drops no longer cascade to the floor.** A two-chunk severe step now needs a full hold spent in the severe band itself, and is followed by a short settle window — so the rebuild churn of one step no longer reads as \"still low\" and feeds the next, shedding half your world for one bad moment.\n- **The A/B benchmark no longer wipes the reduction.** The benchmark toggles Intelium itself; the controller read that as \"feature turned off\", dropped its reduction mid-run (a full chunk re-load, skewing the very measurement in progress) and re-reduced from scratch afterwards. The benchmark is now checked first and the reduction is held through it.\n- **Refocus taint skipped.** The FPS counter is a trailing ~1s average, so the first second after an alt-tab or menu-close still reflects the throttled frames; the controller (and the render-budget pressure signal) now let those age out before measuring again.\n\n### Fixed — the menu FPS limit respects gameplay screens\n\n\n..."
 		},
 		{
 			"tag": "v1.3.0",
@@ -382,7 +386,7 @@
 					"name": "Intelium-v1.3.0-1.21.11.jar",
 					"url": "https://github.com/ATOMGAMERAGA/intelium/releases/download/v1.3.0/Intelium-v1.3.0-1.21.11.jar",
 					"size": 103669,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "6181ac678eed1a82701ccfefbe63a2cfd81ffb44fe3f63897e47a242a53b5f66",
 					"mods": [
@@ -424,7 +428,7 @@
 					"name": "Intelium-v1.3.0-26.x.jar",
 					"url": "https://github.com/ATOMGAMERAGA/intelium/releases/download/v1.3.0/Intelium-v1.3.0-26.x.jar",
 					"size": 105058,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "d3bdd40d729a670662820371ce80b78fb8c6473b648e0a93f6101e30d0b8129c",
 					"mods": [
@@ -461,11 +465,39 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## Intelium 1.3.0\n\nTwo jars, one per Minecraft line. Download the one matching your version:\n\n| Jar | Minecraft | Java |\n|---|---|---|\n| `Intelium-v1.3.0-1.21.11.jar` | 1.21.11 | 21 |\n| `Intelium-v1.3.0-26.x.jar` | 26.1, 26.1.1, 26.1.2, 26.2 | 25 |\n\nMade by **ATOMLAND Studios** · <https://modrinth.com/mod/intelium-mod>\n\n---\n\n### Modrinth changelog (copy the block below)\n\n````markdown\n## English\n\n**Intelium 1.3.0 — the Render Budget Engine.** This release folds together everything since 1.2.3: three brand-new optimizations that live *inside* the render path, the adaptive chunk-reload fix, the menu-blur GPU saver, and the Ice Lake / virtual-GPU detection work that shipped without ever being written up. Supports Minecraft **1.21.11** and the **26.x** line (26.1 → 26.2, including the Vulkan renderer).\n\nUntil now every Intelium lever was a vanilla setting flipped on your behalf — useful, but nothing you could not have flipped yourself. The three systems below are ours, and none of them exists in the vanilla menu.\n\n---\n\n### New — Smart Entity Culling\n\nVanilla's \"Entity Distance\" is a single multiplier applied to everything alike: a dropped item and an ender dragon disappear at the same range. But what costs you frames is draw calls for things you cannot see, and whether you can see something depends on how big it lands **on your screen** — its real size over its distance, scaled by your field of view and your resolution.\n\nSo Intelium culls by apparent size. For every entity it works out how many pixels tall it actually covers and skips the ones below a threshold (Light 6 px, Balanced 12 px, Aggressive 24 px). At 1080p and 70° FOV on Balanced, a dropped item or an XP orb stops drawing past about 16 blocks — where it was three pixels of noise — while a zombie keeps drawing past 100. Small-and-far is exactly the population that is numerous and worthless to draw, and it is the only population this touches.\n\nNothing within 12 blocks is ever culled. Players and name-tagged entities are always drawn, so nothing you needed to read disappears.\n\n### New — Block Entity Budget\n\nChests, signs, banners, beds, skulls and shulker boxes are the one part of the world Sodium cannot bake into the chunk mesh: each is walked and drawn on its own, every single frame. An open field has none of them. A storage room has six hundred — which is why the frame rate falls off a cliff in exactly the base you spent a month building.\n\nIntelium caps how many are drawn per frame (Light 512, Balanced 256, Aggressive 128) and drops the ones far enough away to be a smudge. An ordinary scene has a few dozen and never comes near the ceiling.\n\n### New — Particle Burst Limiter\n\nOrdinary play spawns a handful of particles a tick and never notices this. A TNT chain or a splash-potion volley spawns thousands in a single tick, and every one of them then costs CPU to tick and GPU to draw for its whole lifetime — which is why the frame rate stays down for seconds *after* the bang, not just during it.\n\nIntelium caps new spawns per tick (Light 1024, Balanced 512, Aggressive 256). The explosion still looks like an explosion; the freeze that used to follow it stops happening.\n\n### New — Adaptive Budgets\n\nAll three tighten further when your frame rate falls short of the Adaptive FPS Target, and relax again the moment it recovers — at worst doubling the culling threshold and halving the budgets. While you are holding your target they change nothing at all.\n\n### Where to find it, and what it ships as\n\nSodium's video settings → Intelium → **Render Budget Engine**. Each system has its own Off / Light / Balanced / Aggressive setting, and the master switch stands all three down instantly.\n\nThe engine ships **on**, at **Balanced**, because Balanced is tuned to remove only what you were not going to see anyway. If you would rather opt in deliberately, set the three to Off and raise them one at a time.\n\n---\n\n### Fixed — Adaptive Render Distance no longer re-loads chunks over and over\n\n\n..."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 59,
+		"more": 0,
+		"people": [
+			{
+				"login": "claude",
+				"commits": 36,
+				"name": "Claude",
+				"funding": []
+			},
+			{
+				"login": "ATOMGAMERAGA",
+				"commits": 22,
+				"name": "Atom Gamer Arda A.G.A",
+				"funding": []
+			},
+			{
+				"login": "codex",
+				"commits": 1,
+				"name": "Codex",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

@@ -1,0 +1,1394 @@
+{
+	"repo": "Zefryxis/InOr",
+	"host": "github",
+	"description": "A client-side Fabric mod that sorts your inventory with one button. Assign rules to each slot by category, item type, or exact item. Includes chest sorting, custom item groups, and Fight Mode for anti-cheat safe PvP use. Works on any server, no server install needed.",
+	"stars": 0,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-05-02T17:23:21Z",
+	"pushed": "2026-08-16T10:06:03Z",
+	"releases": [
+		{
+			"tag": "v1.6.4",
+			"published": "2026-08-16T10:06:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 516682171,
+					"name": "inventory-organizer-1.6.4-mc26.2.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.6.4/inventory-organizer-1.6.4-mc26.2.jar",
+					"size": 4223095,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "508ad2a20c5b05875634b9c6bcb80a3f7d29669cca04e7c1f9f4fba0bab1496a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.6.3",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 743,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-26.2.155.jar",
+							"META-INF/jars/cloth-config-fabric-26.2.155.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-26.2.155.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-26.2.155.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "We are working on a long-standing issue. The chest buttons and other things in the inventory are buggy and not working properly. In this update we have only tried to fix this issue."
+		},
+		{
+			"tag": "v1.6.3",
+			"published": "2026-08-06T11:41:06Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 503871474,
+					"name": "inventory-organizer-1.6.3-mc26.2.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.6.3/inventory-organizer-1.6.3-mc26.2.jar",
+					"size": 4221747,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "caafad717b22263e6660e0f8f2a3cd91137c6397ee71669161024859e1508396",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.6.3",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 743,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-26.2.155.jar",
+							"META-INF/jars/cloth-config-fabric-26.2.155.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-26.2.155.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-26.2.155.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Inventory Organizer 1.6.3 — Changelog\n\nA hotfix round on top of 1.6.2: two crashes/bugs found right after release, a security/anti-cheat hardening pass, and a big localization catch-up.\n\n## 🐛 Bug fixes\n\n- **Fixed a hard crash dragging the deposit (\"send item to chest\") slot into a screen corner.** Its position clamp only kept the slot itself on-screen, not the hint text drawn around it (the drag hint to its right, the two-line hint below it at rest) — close enough to an edge, that text rendered past the real screen bounds and crashed. The slot now keeps a wider, edge-aware margin so all of its surrounding text always stays fully on-screen.\n- **Fixed the search box not accepting typing, and the list snapping back to the top, on the Inventory tab and the Trash editor.** Reported in [#6](https://github.com/Zefryxis/InOr/issues/6). The search box was being rebuilt from scratch every time the screen re-laid itself out (e.g. after a window resize), discarding whatever was typed and its focus — unlike the Groups screen, which already reused its search box correctly. Also removed a redundant per-frame search re-check that could re-trigger a scroll reset. The Inventory tab, Trash tab, and Groups screen all now keep the search box and scroll position stable.\n\n## 🔒 Anti-cheat & security hardening\n\n- **Hardened scroll-move against Fight Mode.** It was already blocked during active combat indirectly (via the same \"Free mode only\" check used by other Free-only features), but now has its own explicit, directly-named check — scroll-move is a near-instant item-move method that could otherwise look exactly like a macro to anti-cheat, so this makes sure it can never accidentally start working during combat even if the shared check's logic changes later.\n- **Sustained scroll-move now uses a randomised cooldown gap instead of a fixed one** (55-75ms / 60-80ms instead of a perfectly metronomic 55ms / 60ms) — a fixed-interval packet cadence is exactly the pattern anti-cheat auto-clicker detectors are built to catch.\n- **Added missing per-player rate limits to the warehouse link management packets** (upload/delete a link, view/change OST permissions), which previously had no anti-spam check at all and could be fired as fast as the network allows, forcing repeated disk writes on the server.\n- Added a low-frequency self-heal sweep for an internal server-side bookkeeping ledger (which chest a crafting ingredient was borrowed from) that drops any entry left untouched for 10+ minutes — pure defensive hardening against a hypothetical future bug, doesn't touch any saved settings.\n- Removed an unused, never-registered network payload left over from earlier development.\n\n## 🌍 Localization\n\n- **Localized ~96 previously hardcoded, English-only UI strings across all 9 languages.** Several screens (Kits, Custom Group editor/list, Tier/Sorting Order config, the main Inventory config screen, the Remote Crafting panel, the Item Names screen, and a few screen titles) had labels, status messages, tooltips, and several full \"Guide\" help-text blocks that were never wired into the language system — they always showed in English no matter your language setting. All of it is now properly translated.\n\n## 🎬 Tutorial\n\n- **Pressing Enter now skips the Tutorial's typewriter caption animation**, instantly revealing the full caption text instead of waiting for it to type out — the auto-advance read pad still gives you the same full time to read it afterwards.\n\n---"
+		},
+		{
+			"tag": "v1.6.2",
+			"published": "2026-08-03T15:26:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 500212387,
+					"name": "inventory-organizer-1.6.2-mc26.2realese.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.6.2/inventory-organizer-1.6.2-mc26.2realese.jar",
+					"size": 4194493,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "28b521e65bbf17894cd5645caa12477b8c5e1284686f485e58dda8ae076890ba",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.6.2",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 744,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-26.2.155.jar",
+							"META-INF/jars/cloth-config-fabric-26.2.155.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-26.2.155.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-26.2.155.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Inventory Organizer 1.6.2 — Changelog\n\nA fast community-requested fix: the Remote Crafting panel's layout is now configurable, so it can be moved out of the way of other mods (like JEI) that also dock to the screen's edge, plus a round of GUI-overlap and scroll-behavior fixes reported by players.\n\n## 🧭 Configurable Remote Crafting HUD layout\n\nReported in [#4](https://github.com/Zefryxis/InOr/issues/4): the nearby-chest-contents panel next to the crafting/inventory screen always docked to the right, colliding with JEI's recipe panel. Layout is now configurable across three independent pieces:\n\n- **Materials panel** (the search/qty/scroll controls and the scrollable chest-content list — these move together) — now toggleable between **left** or **right** of the GUI via a small `⇄` button on the panel. Automatically clears the vanilla recipe book (and its category tabs) when it's open on that side.\n- **Quick-action buttons** (the existing K/S/OI/HUD/Wh row on the survival inventory screen) — now cycle between **above**, **below**, or **right** of the GUI via a small `⇅` button. When set to the right, they stack vertically instead of overflowing horizontally.\n- **Deposit (\"send item to chest\") slot** — now **freely draggable anywhere on screen**: click its small move handle, drag, and release to drop it wherever you like.\n- If the Materials panel and the quick-action buttons would both end up on the right at the same time, one is automatically nudged out of the way — no dead-end settings, no overlap.\n- All positions persist per-config and are resolution/GUI-Scale independent.\n- Fully localized in all 9 supported languages.\n\n## 🐛 Bug fixes\n\n- **Remote-crafting deposit now properly OSTs with the chest's real rules.** Depositing an item into a chest (holding an item and clicking the deposit slot, or cancelling a recipe) used to route by a blind \"first chest/slot with room\" check that ignored your configured slot rules entirely (tier, group, specific item, `cg:` custom groups) — so a rule like `cg:blocks` on a linked chest was silently ignored, and items only ever spilled into the \"correct\" chest once the first one filled up completely. It now routes the same way a manual OST/warehouse sort would: best-matching chest first, placed only in a rule-accepting slot.\n- **Fixed placement landing in the wrong slot within the correct chest — for real this time.** An item could land in a designated specific slot, only to have a follow-up \"tidy\" cleanup pass immediately pull it back out and redrop it starting from slot 0, ignoring the rule entirely. Placement now ranks every accepting empty slot by specificity (exact item > type > group > generic) *throughout the whole process, including the final tidy* — this also improves the regular manual OST/warehouse sort, since it shares the same placement logic.\n- Fixed a duplicate OI/K/S/Wh button row that briefly appeared on the crafting table and survival inventory screens alongside the existing one.\n- Fixed the Materials search box (and its other header controls) not moving when the panel's left/right position was flipped — only the list itself used to move.\n- **Fixed chest data bleeding between different worlds/servers.** The mod's config file is a single global JSON shared across every world you've ever played — known chests, per-chest profiles, and local warehouse-group links were stored as bare coordinates with no world/dimension identifier, so a chest at the same coordinates in two different worlds/servers (or even two dimensions on the same server) was treated as the same chest, mixing links and profiles together. All of these now carry a world+dimension tag; existing bindings from before this fix keep working everywhere (no forced reassignment, no data loss) — only newly-added ones are properly scoped going forward.\n\n..."
+		},
+		{
+			"tag": "v1.6.1",
+			"published": "2026-07-22T14:37:49Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 486056364,
+					"name": "inventory-organizer-1.6.1-mc26.2.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.6.1/inventory-organizer-1.6.1-mc26.2.jar",
+					"size": 4172713,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "57516fba3f0af4fbea3e659cab6ea57d42799d828e67dd73b4372a90c536c5a1",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.6.1",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 737,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-26.2.155.jar",
+							"META-INF/jars/cloth-config-fabric-26.2.155.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-26.2.155.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-26.2.155.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Inventory Organizer 1.6.1 — Changelog\n\nA small but meaningful update: a brand-new in-game Tutorial for players who are still finding their footing with the mod, plus a fix for a false-positive bug affecting vanilla containers.\n\n## 🎬 New: interactive Tutorial\n\n- **A short, animated walkthrough** of how Inventory Organizer actually thinks — drawn live on a faux config-panel backdrop (not a video file), with typewriter captions and a real hotbar/slot look throughout.\n- Covers, in order: assigning an exact item to a slot, automatic sorting via Ranks, how the Material → Enchant → Durability priority order decides between two items (with a concrete Netherite vs. Diamond pickaxe example), same-tier slot tie-breaking, linked-chest/Warehouse behaviour, Bundle Profile pairing, potion slot rules, and custom-group member ranking.\n- Includes a **quick-reference cheat-sheet table** near the end covering all three \"which criterion decided\" scenarios at a glance, plus an explicit note that a criterion being first in the priority list does **not** mean the others are ignored — it just gets the first say, and only hands the decision to the next one in line when it's tied.\n- **Auto-plays once on first launch** (right after the complexity-mode picker), and is replayable anytime from a new **\"▶ Tutorial\"** button in the Guide.\n- Ends with an honest disclaimer: this is a helper, not magic — it won't always get everything perfectly right, and bugs may still turn up. Players are pointed to the [issue tracker](https://github.com/Zefryxis/InOr/issues) to report anything they find.\n- Fully localized in all 9 supported languages.\n\n## 🐛 Bug fix\n\n- **Vanilla Dispenser, Dropper, and Hopper were wrongly flagged as \"modded\" containers.** The generic (modded) chest-like container detector only excluded vanilla chests, shulker boxes, and the player/creative/crafting screens — anything else with an unrestricted, storage-sized slot layout got OST/profile buttons and a \"Modded chest — profile may be buggy\" warning slapped on it. Since Dispenser/Dropper/Hopper use their own screen classes rather than the vanilla chest screen, they fell through and got this treatment despite being completely vanilla. They are now correctly excluded and ignored entirely.\n\n---\n\n**Version**: 1.6.1\n**Author**: Zefryxis"
+		},
+		{
+			"tag": "v1.6.0",
+			"published": "2026-07-12T21:22:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 474738310,
+					"name": "inventory-organizer-1.6.0-mc26.2.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.6.0/inventory-organizer-1.6.0-mc26.2.jar",
+					"size": 3684869,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "36a570d3b0bff3ecb25058bbc5ab732ab5b77ab4ce71ce32c51fcde2bc7308e7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.6.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 736,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-26.2.155.jar",
+							"META-INF/jars/cloth-config-fabric-26.2.155.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-26.2.155.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-26.2.155.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Inventory Organizer 1.6.0 — Changelog\n\nA UX and reliability pass: the mod can now start dead simple and grow with you, sorting defaults got a research-backed tune-up, and a long-standing Bundle Profiles bug that made profiles match almost anything is fixed for good.\n\n## 🎚️ Three complexity modes: Simple / Advanced / Expert\n\n- **New global setting** controlling how much of the config is exposed at once:\n  - **Simple** — only slot rules, bundles and basic toggles. Sorting and groups run on sensible built-in defaults. The easiest way to get started.\n  - **Advanced** — adds custom groups and slot-tier (Ranks) editing. You decide what goes where; deep sort tuning stays on defaults.\n  - **Expert** — everything is customizable, the full experience as before.\n- **First-launch picker**: new installs are asked which mode to start in (Simple recommended), with a short explanation of each.\n- **Switch anytime** from Special Settings, behind a confirmation dialog that explains what each level unlocks. Lowering the level only *hides* the advanced options — nothing is ever deleted, and everything reappears the moment you raise it again.\n\n## 🎯 Research-backed sorting defaults\n\n- **Enchantment priority reordered** using community consensus on enchant value (Mending/Unbreaking first, situational picks after, curses last). `fire_protection` — the weakest of the protection enchants — was additionally demoted to just above the curses.\n- **Copper fixed in material ordering.** Copper tools/armor used to fall back to \"unranked/last\" until you opened the Ranks screen once; the runtime default order now includes copper (right after Iron) everywhere.\n- These defaults are applied to **existing configs too**, not just fresh installs — no action needed.\n\n## 🧺 Bundle Profiles — actually work now\n\nThis is the headline fix. Bundle Profiles looked configured but silently didn't behave as expected; both root causes are fixed:\n\n- **Critical matching bug fixed:** saving a bundle profile used to write a literal `\"any\"` rule into every untouched slot of the profile editor grid. Since `\"any\"` means \"matches everything,\" a profile with just one real rule (e.g. \"Pickaxe only\") would *also* silently accept anything else — which is why a \"Pickaxes\" bundle could end up collecting a trident. Only the rules you actually set are saved now, and existing profiles are cleaned up automatically on load.\n- **Empty bundles can now be claimed by a profile.** Previously, a bundle profile could only recognize a bundle that already had at least one matching item inside it — a brand-new, empty bundle would never start filling. Profiles are now also assigned to empty bundles (in profile order) so a fresh bundle starts working immediately.\n- **An unconfigured (empty) profile no longer claims a bundle.** If you haven't set any rules on a profile yet, it's skipped entirely — it won't grab a bundle and eject items that don't match nothing.\n- **Removed the old default \"Bundle\" storage preset** (the third tab under Storage) — it was a leftover, non-functional mechanism from before Bundle Profiles existed. Bundle filling is now driven exclusively by the real Bundle Profiles feature.\n\n## 🖥️ UI fixes and polish\n\n- **Fixed the Storage tab selection highlight** landing on the wrong tab — the indicator's position math had drifted out of sync after the Bundle Profiles button was added and was never updated to match.\n- **Dialogs now defensively size themselves** to the player's actual GUI Scale and window size, so warning/confirm boxes and the mode-picker never overflow the screen or overlap their own buttons, even at small resolutions or high GUI Scale.\n- **Slightly larger text at GUI Scale 3–4** (a subtle, capped +2%/+4% bump) for readability — layout and click areas are unaffected, only the glyphs grow.\n- Filled in 7 previously untranslated strings (Bundle Profiles screen, Switch setup title) that had silently fallen back to English in 8 of the 9 supported languages.\n\n## 📖 Localization\n\n\n..."
+		},
+		{
+			"tag": "v1.5.3",
+			"published": "2026-06-24T12:00:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 456595957,
+					"name": "inventory-organizer-1.5.3-mc26.1.1.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.5.3/inventory-organizer-1.5.3-mc26.1.1.jar",
+					"size": 3636450,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2bcbbeaa2c3a3277ac1d6ff599dee2b0efe1c455a34c229362271d813057d346",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.5.3",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~26.1.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 722,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-26.1.154.jar",
+							"META-INF/jars/cloth-config-fabric-26.1.154.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-26.1.154.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-26.1.154.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 456596016,
+					"name": "inventory-organizer-1.5.3-mc26.1.2.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.5.3/inventory-organizer-1.5.3-mc26.1.2.jar",
+					"size": 3636449,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "0d73f5dc4f34a1274ab2dacbb54816cdb2089a6a323d8869bf1e550bdb68022c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.5.3",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 722,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-26.1.154.jar",
+							"META-INF/jars/cloth-config-fabric-26.1.154.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-26.1.154.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-26.1.154.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 456596040,
+					"name": "inventory-organizer-1.5.3-mc26.1.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.5.3/inventory-organizer-1.5.3-mc26.1.jar",
+					"size": 3636454,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "18defe7d29300f5fb3a8233866496fc3c74c7d65389f9b1ad8e49725ee14bbd1",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.5.3",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~26.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 722,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-26.1.154.jar",
+							"META-INF/jars/cloth-config-fabric-26.1.154.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-26.1.154.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-26.1.154.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 456596058,
+					"name": "inventory-organizer-1.5.3-mc26.2.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.5.3/inventory-organizer-1.5.3-mc26.2.jar",
+					"size": 3634178,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "10b41968bc50c344d2f0d677460d4fa71337124d86b3357fe66d33af6f441908",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.5.3",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 722,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-26.2.155.jar",
+							"META-INF/jars/cloth-config-fabric-26.2.155.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-26.2.155.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-26.2.155.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Inventory Organizer 1.5.3 — Changelog\n\n## 🔧 Bug Fixes & ✨ New Feature\n\n### 🗃️ \"Nothing\" Slot Rule — Now Works Everywhere\n\nThe `EMPTY_LOCKED` (nothing) slot rule was being ignored in several situations. All of them are now fixed.\n\n- **Client-side chest OST:** Items that land in a \"nothing\" slot are now correctly evicted. They are moved to the first free non-nothing slot in the chest; if the chest has no free non-nothing slot (e.g. all slots are set to \"nothing\"), the item is shift-clicked into the player's inventory instead.\n- **Warehouse sort (server-side):** The warehouse engine now fully respects the \"nothing\" rule — it neither reads from nor writes to slots marked as nothing.\n- **Warehouse routing — wrong chest fix:** Items could previously end up in the wrong chest (e.g. a pickaxe landing in an armor chest's `g:armor` slot) when being evicted from a nothing-rule chest. The engine now checks that an empty slot's rule actually accepts the incoming item before placing it there.\n\n### 🔁 Auto Tool Switch — Restore Puts Displaced Item in Its Proper Slot\n\nPreviously, when the auto-switch restored (e.g. you looked away from a block), the item that had been displaced from the switch slot was simply swapped back to wherever the tool came from. It now goes to its **OI-proper slot** (via `findHome`) — the same slot it would land in if you ran Inventory Organizer — both client-side and on servers.\n\n### 🪄 Silk Touch Auto-Priority\n\nWhen you look at a block that drops **nothing** without Silk Touch, the auto-switch now prefers a Silk Touch tool over the raw fastest tool. If you have no Silk Touch tool for that block type, the normal fastest-tool logic applies unchanged.\n\nBlocks that trigger this (drops nothing without Silk Touch):\n- Glass, Tinted Glass, Stained Glass, Glass Pane, Stained Glass Pane\n- Ice, Packed Ice, Blue Ice\n- Small / Medium / Large Amethyst Bud\n- Sculk, Sculk Sensor, Sculk Catalyst, Sculk Shrieker, Sculk Vein\n- Bee Nest\n- Turtle Egg\n\nYou can add extra blocks via the `switch_silk_touch_blocks` config preference.\n\n---\n\n**Version**: 1.5.3\n**Platform**: Modrinth (Fabric) — MC 26.1 / 26.1.1 / 26.1.2 / 26.2\n**Author**: Zefryxis"
+		},
+		{
+			"tag": "For_\"1.20\"_v1.0.1",
+			"published": "2026-05-08T18:26:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 415469141,
+					"name": "inventory-organizer-1.0.1-mc1.20.1.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/For_%221.20%22_v1.0.1/inventory-organizer-1.0.1-mc1.20.1.jar",
+					"size": 1445594,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "74d7360ff41157d79f7937a61a4859a58eab62b91a74f0ea07d4b2ba7a097f56",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~1.20.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 660,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-11.1.118.jar",
+							"META-INF/jars/cloth-config-fabric-11.1.118.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-11.1.118.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-11.1.118.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 415469156,
+					"name": "inventory-organizer-1.0.1-mc1.20.4.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/For_%221.20%22_v1.0.1/inventory-organizer-1.0.1-mc1.20.4.jar",
+					"size": 1435749,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "701177a2f6e99bf2500848c688c79fea1a8709cea914d5660823a8533f0c8e24",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~1.20.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 660,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-13.0.121-fabric.jar",
+							"META-INF/jars/cloth-config-fabric-13.0.121-fabric.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-13.0.121-fabric.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-13.0.121-fabric.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "This release applies exclusively to Minecraft 1.20.1 and 1.20.4.\nOther versions are not affected and do not need this update.\n\n### Fixed\n- **1.20.1 and 1.20.4:** Critical launch crash caused by incorrect Mixin compatibility level (JAVA_21 → JAVA_17)\n- **1.20.1 only:** Config screens incorrectly rendered on top of previous screens — `renderBackground()` now called explicitly in all config screens\n\n### Not affected\n1.20.6, 1.21.1, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11"
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-05-02T19:52:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 410707100,
+					"name": "inventory-organizer-1.0.0-mc1.20.1.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.0.0/inventory-organizer-1.0.0-mc1.20.1.jar",
+					"size": 1445470,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "ae3bc7794796aec8e733f2cae296296379acfb4c074234098024394905b9cae3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~1.20.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 660,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-11.1.118.jar",
+							"META-INF/jars/cloth-config-fabric-11.1.118.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-11.1.118.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-11.1.118.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 410707106,
+					"name": "inventory-organizer-1.0.0-mc1.20.4.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.0.0/inventory-organizer-1.0.0-mc1.20.4.jar",
+					"size": 1435727,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c37350b4e536684e5b007157602096ed753327009b015af6e72609550da32c70",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~1.20.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 660,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-13.0.121-fabric.jar",
+							"META-INF/jars/cloth-config-fabric-13.0.121-fabric.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-13.0.121-fabric.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-13.0.121-fabric.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 410707059,
+					"name": "inventory-organizer-1.0.0-mc1.21.1.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.0.0/inventory-organizer-1.0.0-mc1.21.1.jar",
+					"size": 1437932,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c416320022b778bfcfba2b91baeea3b4d86b75e017d9611e6be06c0695fc32e3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~1.21.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 660,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-15.0.130-fabric.jar",
+							"META-INF/jars/cloth-config-fabric-15.0.130-fabric.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-15.0.130-fabric.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-15.0.130-fabric.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 410707093,
+					"name": "inventory-organizer-1.0.0-mc1.21.10.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.0.0/inventory-organizer-1.0.0-mc1.21.10.jar",
+					"size": 1443782,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "03d08b28d3f0a8cda97e435866fdadf478ee88c980ec82794cf48b379e9784a0",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~1.21.10",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 659,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-20.0.149-fabric.jar",
+							"META-INF/jars/cloth-config-fabric-20.0.149-fabric.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-20.0.149-fabric.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-20.0.149-fabric.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 410707098,
+					"name": "inventory-organizer-1.0.0-mc1.21.11.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.0.0/inventory-organizer-1.0.0-mc1.21.11.jar",
+					"size": 1440624,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "9b8be3bbe086d7199cc6045f5c1069e3d1fc1c8c21aa6d388bf1ded3d7a421f7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 659,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar",
+							"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-21.11.153-fabric.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 410707066,
+					"name": "inventory-organizer-1.0.0-mc1.21.4.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.0.0/inventory-organizer-1.0.0-mc1.21.4.jar",
+					"size": 1445720,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c66a66c898871c75a6f5ff0f262cb199fd96e0806fa660c109fada56205963be",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~1.21.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 659,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar",
+							"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 410707068,
+					"name": "inventory-organizer-1.0.0-mc1.21.5.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.0.0/inventory-organizer-1.0.0-mc1.21.5.jar",
+					"size": 1445721,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "00346eed18baaa32356c8512173f15ce00fdae74bc6021af49c77b00b48912b2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~1.21.5",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 659,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar",
+							"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 410707070,
+					"name": "inventory-organizer-1.0.0-mc1.21.6.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.0.0/inventory-organizer-1.0.0-mc1.21.6.jar",
+					"size": 1445678,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "174e3fcf4022171195a6ff8f3e5de88a32f7079abc99ea28f4841def3ab45ded",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~1.21.6",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 659,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar",
+							"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 410707078,
+					"name": "inventory-organizer-1.0.0-mc1.21.7.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.0.0/inventory-organizer-1.0.0-mc1.21.7.jar",
+					"size": 1445678,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "8ad4e6a0b5c101e5246ab90c74dd8a3c843c8e574c2ec5ba3446735b32a81e92",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~1.21.7",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 659,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar",
+							"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 410707083,
+					"name": "inventory-organizer-1.0.0-mc1.21.8.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.0.0/inventory-organizer-1.0.0-mc1.21.8.jar",
+					"size": 1445676,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "98ba4ad80103cee36db004c1948d8708d0a19ee6afe27206fb86d14fc84bd9d5",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~1.21.8",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 659,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar",
+							"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 410707089,
+					"name": "inventory-organizer-1.0.0-mc1.21.9.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.0.0/inventory-organizer-1.0.0-mc1.21.9.jar",
+					"size": 1446206,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "1e69c20bd767fe89a51a4098704ece44a745b7204c9cf0918c59f21ffc5f343d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~1.21.9",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 659,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar",
+							"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-17.0.144-fabric.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 417672643,
+					"name": "inventory-organizer-1.0.0-mc26.1.1.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.0.0/inventory-organizer-1.0.0-mc26.1.1.jar",
+					"size": 1444885,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a415c6650418ced4c9df484bdb7ed6ed01f9b2d025aada3d05a002dc36d78925",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~26.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 660,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-26.1.154.jar",
+							"META-INF/jars/cloth-config-fabric-26.1.154.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-26.1.154.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-26.1.154.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 417672661,
+					"name": "inventory-organizer-1.0.0-mc26.1.2.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.0.0/inventory-organizer-1.0.0-mc26.1.2.jar",
+					"size": 1444885,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a415c6650418ced4c9df484bdb7ed6ed01f9b2d025aada3d05a002dc36d78925",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~26.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 660,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-26.1.154.jar",
+							"META-INF/jars/cloth-config-fabric-26.1.154.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-26.1.154.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-26.1.154.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 417672665,
+					"name": "inventory-organizer-1.0.0-mc26.1.jar",
+					"url": "https://github.com/Zefryxis/InOr/releases/download/v1.0.0/inventory-organizer-1.0.0-mc26.1.jar",
+					"size": 1444885,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a415c6650418ced4c9df484bdb7ed6ed01f9b2d025aada3d05a002dc36d78925",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "inventory-organizer",
+							"version": "1.0.0",
+							"name": "Inventory Organizer",
+							"description": "A Minecraft mod that organizes your inventory with a button below the crafting table",
+							"minecraft": "~26.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft"
+							],
+							"provides": [
+								"cloth-config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 660,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-26.1.154.jar",
+							"META-INF/jars/cloth-config-fabric-26.1.154.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-26.1.154.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-26.1.154.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Changelog\n1.0.0 — Initial Release\nOI button on player inventory and Creative inventory screens\nRule-based slot configuration: any, group, specific type, specific item, empty locked, bundle content, custom group\nCustom Group Editor with full item palette, search, export and drag-and-drop import\nSorting Order Config screen for tier prioritization within each category\nStorage Sorting (OST button) with configurable presets for different container sizes\nKits system for saving and restoring inventory loadouts\nFight Mode: automatic rate-limiting during PvP with tamper-proof timer and HUD countdown\nStorage Preset system for chests, barrels, shulker boxes\nTranslations: English, Hungarian, German, Spanish, French, Portuguese (BR), Russian, Chinese (Simplified), Japanese\nSupports Minecraft 1.20.1, 1.20.4, 1.20.6, 1.21.1, 1.21.4 through 1.21.11\nKnown Issues\nCustom group export and import may have occasional bugs. If groups do not load correctly after import, recreate them manually or contact support.\n\nWe attempted to port the mod to the Minecraft 26.x line (26.1, 26.1.1, 26.1.2) — Mojang's first Minecraft release that dropped the legacy Yarn mappings and uses only the official Mojang names. Not fully stable yet, and some item icons may be buggy on 26.x inside the config screens (vanilla item icons in normal inventory are unaffected).\n\nWhat works:\n\nAll core features (OI, OST, category/tier sort, Custom Groups, Kits, Fight Mode)\nDraggable scrollbars on all 4 config panels\nDark-theme 3D bevel buttons restored pixel-for-pixel\nGroup Editor ? guide now shows the save / import folder paths\nAll 9 translations\nWhat to watch for:\n\nRule tooltips on Slot / Sorting / Storage Config screens are temporarily disabled (the 26.1 render API has no direct tooltip method — coming back in a future update)\nA few 3D-only items (shield, crossbow, bow, tipped arrow) get approximate flat icons\nAny item showing as barrier / \"?\" is a fallback — please report which one so we can map it"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T22:37:16.645Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 8,
+		"more": 0,
+		"people": [
+			{
+				"login": "Zefryxis",
+				"commits": 8,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
+	"history": 1
+}

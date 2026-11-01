@@ -18,7 +18,7 @@
 					"name": "ami-fabric-1.21.1-1.8.7.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/ashley-2026.10.25-dc5f40f6/ami-fabric-1.21.1-1.8.7.jar",
 					"size": 2719019,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "2f4aad7aca5012470f6da188a7c71d7a474237df0df34c976501d21dd839e74b",
 					"mods": [
@@ -85,7 +85,7 @@
 					"name": "ami-forge-1.20.1-1.8.7.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/ashley-2026.10.25-dc5f40f6/ami-forge-1.20.1-1.8.7.jar",
 					"size": 2636208,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "44c3ef97a5ee3882469d57a66081d102d04db864096237a39b887732ee00a45d",
 					"mods": [
@@ -142,7 +142,7 @@
 					"name": "ami-neoforge-1.21.1-1.8.7.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/ashley-2026.10.25-dc5f40f6/ami-neoforge-1.21.1-1.8.7.jar",
 					"size": 2684822,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "b2d56b46ad2f5ee7cd5298f0aad6dcb8ebba575541e1ac6ca1696fd268db6882",
 					"mods": [
@@ -194,7 +194,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Automated Materials Index\n\nBrowse materials and their uses across installed Minecraft mods.\n\nProvided **AS IS**, without warranty. Support and updates are best effort.\n\nLicense: **MIT**. The original license files, copyright notices, attribution and separate asset terms remain in force.\n\n## Downloads\n\n| Runtime JAR | Loader | Minecraft |\n| --- | --- | --- |\n| `ami-fabric-1.21.1-1.8.7.jar` | Fabric | `~1.21.1` |\n| `ami-forge-1.20.1-1.8.7.jar` | Forge | `[1.20.1, 1.21)` |\n| `ami-neoforge-1.21.1-1.8.7.jar` | NeoForge | `[1.21.1]` |\n\nInstall one matching runtime JAR per mod, with its required dependencies, in `mods/`. Close Minecraft before replacing an existing JAR. Do not install source archives as mods.\n\n## Required dependencies\n\n- **Fabric / ami-fabric-1.21.1-1.8.7.jar**: `fabric-api` *.\n- **Forge / ami-forge-1.20.1-1.8.7.jar**: `forge` [47,).\n- **NeoForge / ami-neoforge-1.21.1-1.8.7.jar**: `neoforge` [21.1.200,).\n\n## Verification and source\n\n- Gradle completed successfully: `build`.\n- This release preparation verified the build and packaged metadata; it does not certify every gameplay path or modpack combination.\n- Published source commit: `dc5f40f661fabf696e552385f6b8e42a99793388`.\n- [Corresponding source at this release](https://github.com/ashleywr/AutomatedMaterialsIndex/tree/ashley-2026.10.25-dc5f40f6). GitHub also provides source ZIP/tar archives below.\n- `SHA256SUMS.txt` records the SHA-256 checksum of every attached runtime JAR."
 		},
 		{
 			"tag": "v1.8.7",
@@ -206,7 +207,7 @@
 					"name": "ami-fabric-1.21.1-1.8.7.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.8.7/ami-fabric-1.21.1-1.8.7.jar",
 					"size": 2718055,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "0f4140c85b6ae156a7ccc642488a4b5b33cbeab53eed0bef95a8e1043322f9b9",
 					"mods": [
@@ -273,7 +274,7 @@
 					"name": "ami-forge-1.20.1-1.8.7.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.8.7/ami-forge-1.20.1-1.8.7.jar",
 					"size": 2635653,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "0699c5775e6592e726f75243464ef38487b7aa21fb98fb5bd1c6543490a06f6f",
 					"mods": [
@@ -330,7 +331,7 @@
 					"name": "ami-neoforge-1.21.1-1.8.7.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.8.7/ami-neoforge-1.21.1-1.8.7.jar",
 					"size": 2684087,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "4bd2ca0fa8ba62be4070f1a3d37fd7a918635fcda82b8113839d5e92248a1f19",
 					"mods": [
@@ -382,7 +383,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## 1.8.7 - 2026-09-03\n\n### Added\n\n- Added a server-side `/ami dump` (`all`, `items`, `recipes`, `loot-tables`, `trades`, `worldgen`) that works from a dedicated server console. The existing dump tree registers through client command events, which do not exist on a dedicated server, so none of it could be produced headlessly - the one place that loads a full mod set with no GPU, no resource packs and no human clicking. Registered at permission level 2 rather than behind `-Dami.debugCommands`, because needing a JVM flag on a server you did not launch yourself makes it unusable in exactly the case it exists for. Search nodes, guide docs, the results tree and recipe-viewer dumps are deliberately not included: they read the client index or a viewer plugin and have no meaning without a client.\n- Added `/ami dump worldgen`, writing every biome, structure and dimension with its tags to `ami_dumps/worldgen/worldgen-dump.json`. This is new data rather than a port: the registry dump has only items. Taking it from the live registry is also the only complete source - modded biomes and structures are datapack JSON and can be scanned from jars, but vanilla's are registered in code, so a data scan silently misses `minecraft:deep_ocean` and every other vanilla entry.\n- Added Fabric and NeoForge `/ami dump trades`, which resolves the active villager and wandering-trader listing factories against a deterministic server-side sample and writes costs, results, limits, XP, listing classes, and unresolved reasons to `ami_dumps/trades/trades_runtime.json`. Map-dependent offers can remain unresolved in an isolated world with no discoverable structures.\n\n### Changed\n\n- Stack snapshots and `CreativeStackVariantExpander.stackIdentityHash` no longer read display names or tooltips on a dedicated server. `getHoverName()` dispatches to `Item#getName(ItemStack)`, which mods routinely override with client code, and the tooltip inputs go through `getTooltipLines` outright; the existing catch guards stopped those from failing but not from being logged, so a single `/ami dump all` over a 333-mod pack emitted 6,306 RuntimeDistCleaner errors and spent most of its runtime producing them. Nothing is lost: mod `assets/` are never loaded on a dedicated server, so those names only ever resolved to raw translation keys. Server and client identity hashes already disagreed for that reason - `exactKey` was never comparable across sides and still is not.\n- `RecipeDumpWriters.writeLootTables` gained an overload taking an explicit `ResourceManager`. The existing no-arg path falls back to `Minecraft.getInstance()`, and merely executing that branch on a dedicated server trips RuntimeDistCleaner.\n\n### Fixed\n\n- Fixed Fabric dedicated servers crashing during AMI startup because `FabricPlatformHelper` eagerly constructed client key mappings from its common static initializer. Key mappings now initialize only when the client accessor is actually used."
 		},
 		{
 			"tag": "v1.8.5",
@@ -394,7 +396,7 @@
 					"name": "ami-fabric-1.21.1-1.8.5.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.8.5/ami-fabric-1.21.1-1.8.5.jar",
 					"size": 2586735,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "b0504122b672764e62b7a9ea836f6db9b851d57b80ea724f344908572b7f8914",
 					"mods": [
@@ -461,7 +463,7 @@
 					"name": "ami-forge-1.20.1-1.8.5.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.8.5/ami-forge-1.20.1-1.8.5.jar",
 					"size": 2566436,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "48aea3dfc8d64c8472791cfe5f09ab79eddb610a0dbe05fdb962a9c7745b0d5b",
 					"mods": [
@@ -518,7 +520,7 @@
 					"name": "ami-neoforge-1.21.1-1.8.5.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.8.5/ami-neoforge-1.21.1-1.8.5.jar",
 					"size": 2601137,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "0f306ef79dd7dd5c01b8a3a965573259ef7786d05a9141f736b76fc0457fd03e",
 					"mods": [
@@ -570,7 +572,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## 1.8.5 - 2026-08-08\n\n### Fixed\n\n- Fixed a real hang after switching gamemode with the inventory closed on large modpacks: the 1.8.3 gamemode-switch prewarm re-checked the full indexed item list every client tick instead of once, and its warmed cache was then discarded right before it would have been used. Both fixed; the background prewarm now only recomputes when the live player state actually changes, and its result is reused on the next inventory open instead of rebuilt cold."
 		},
 		{
 			"tag": "v1.8.4",
@@ -582,7 +585,7 @@
 					"name": "ami-fabric-1.21.1-1.8.4.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.8.4/ami-fabric-1.21.1-1.8.4.jar",
 					"size": 2586672,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "d73ce445b09969f9260bbe50991585b33fc3a6bb361292ab16387ad7ab8a4aaa",
 					"mods": [
@@ -649,7 +652,7 @@
 					"name": "ami-forge-1.20.1-1.8.4.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.8.4/ami-forge-1.20.1-1.8.4.jar",
 					"size": 2566387,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "f81855dcca098c6b8e84bfa685e37735fe842fad76e88135537bb1340d65b67f",
 					"mods": [
@@ -706,7 +709,7 @@
 					"name": "ami-neoforge-1.21.1-1.8.4.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.8.4/ami-neoforge-1.21.1-1.8.4.jar",
 					"size": 2601053,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "8b64492c52a502d53e3c0812071aac828a1e9d64baeb53ae9ce638e8106d7667",
 					"mods": [
@@ -758,7 +761,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## 1.8.4 - 2026-08-08\n\n### Changed\n\n- No functional changes from 1.8.3. Re-published as 1.8.4 after fixing a CurseForge publishing config issue (missing environment/side tag) that blocked the 1.8.3 CurseForge and GitHub releases; 1.8.3 had already published successfully to Modrinth."
 		},
 		{
 			"tag": "v1.8.0",
@@ -770,7 +774,7 @@
 					"name": "ami-fabric-1.21.1-1.8.0.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.8.0/ami-fabric-1.21.1-1.8.0.jar",
 					"size": 2564248,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "fc1a968fb9e6a35074a7507d6bdb5fde4d1133aa873c66824f5d8466bfdc6835",
 					"mods": [
@@ -837,7 +841,7 @@
 					"name": "ami-forge-1.20.1-1.8.0.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.8.0/ami-forge-1.20.1-1.8.0.jar",
 					"size": 2543775,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "9e2612bd9da4d8c57f8e85ba798a30cf2922fffee2d4205ddf1a98f818a3fc4c",
 					"mods": [
@@ -894,7 +898,7 @@
 					"name": "ami-neoforge-1.21.1-1.8.0.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.8.0/ami-neoforge-1.21.1-1.8.0.jar",
 					"size": 2574012,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "5e692fd25c9be25e2f4ebae204f2fa0b684b71dc5d773ff70ae0375145d5cfc7",
 					"mods": [
@@ -946,7 +950,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## 1.8.0 - 2026-06-27\n\n### Added\n\n- Added `/ami dump` command (exports registry dump for override editor) and subcommands: `/ami dump [tree|search-nodes|guide-docs|recipe-viewer-items|all]`.\n- Added pack override layer: drop `config/ami/overrides.json` into a modpack; its edits win over mod-shipped defaults and survive reindex.\n- Added custom tooltip lines to the classification override schema.\n- Added browser-based override editor served via GitHub Pages (`docs/override-editor/`).\n\n### Changed\n\n- Bumped the AMI minor release line to 1.8.0 for upcoming cross-loader feature and compat work."
 		},
 		{
 			"tag": "v1.7.0",
@@ -958,7 +963,7 @@
 					"name": "ami-fabric-1.21.1-1.7.0.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.7.0/ami-fabric-1.21.1-1.7.0.jar",
 					"size": 2383379,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "eefd0e0b62c6768efa80df85aa8b333b45cd49e763b456fdc55d40feb75bf548",
 					"mods": [
@@ -1024,7 +1029,7 @@
 					"name": "ami-forge-1.20.1-1.7.0.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.7.0/ami-forge-1.20.1-1.7.0.jar",
 					"size": 2368249,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "c1fdcf52f2791db47daf0a27762303b81ff9ac104a01faf42f1d984f839c019e",
 					"mods": [
@@ -1081,7 +1086,7 @@
 					"name": "ami-neoforge-1.21.1-1.7.0.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.7.0/ami-neoforge-1.21.1-1.7.0.jar",
 					"size": 2397466,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "f8fabe91867401336b8a7da79f4de6a4dc074e4adaba27176fd810b6e23e770c",
 					"mods": [
@@ -1138,7 +1143,7 @@
 					"name": "ami-neoforge-26.1.2-1.7.0.jar",
 					"url": "https://github.com/ashleywr/AutomatedMaterialsIndex/releases/download/v1.7.0/ami-neoforge-26.1.2-1.7.0.jar",
 					"size": 2396358,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "a8d32379fd977c31323409f0cabaa15eb69e8556acafecb74f4720ef61211adc",
 					"mods": [
@@ -1190,11 +1195,14 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## 1.7.0 - 2026-06-17\n\nAMI 1.7.0 prepares the cross-loader release line with updated release automation and compatibility checks for Fabric, Forge, and NeoForge.\n\n### Changed\n\n- Bumped the release line to 1.7.0 for Fabric, Forge, and NeoForge artifacts.\n- Expanded release verification and publishing automation so all supported loaders are built and uploaded from the release workflow.\n- Added Fabric release publishing through Loom's remapped production jar path and verified Fabric + REI startup in a clean instance.\n- Cleaned up temporary favorites/sidebar diagnostics from the Fabric validation pass.\n\n### Fixed\n\n- Restored the Compat Watch script used by the scheduled dependency-monitoring workflow so it no longer fails immediately on missing script errors.\n- Fixed release publishing task wiring for loader-specific artifact uploads, including Fabric remap output and NeoForge CurseForge artifact resolution.\n- Fixed Fabric + REI overlay ownership so AMI only toggles REI's runtime overlay visibility while AMI is active on REI display screens."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

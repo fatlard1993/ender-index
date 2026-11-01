@@ -17,7 +17,7 @@
 					"name": "createtrainwebapi-fabric-1.1.0+1.20.1.jar",
 					"url": "https://github.com/BeneHenke/CreateTrainWebAPI/releases/download/v1.1.0/createtrainwebapi-fabric-1.1.0%2B1.20.1.jar",
 					"size": 7095528,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "b176c60d9d9fca273aca1e5b034b213765cea2fc311fe63cd03bde55ec87cfb5",
 					"mods": [
@@ -282,7 +282,7 @@
 					"name": "createtrainwebapi-forge-1.20.1-1.1.0.jar",
 					"url": "https://github.com/BeneHenke/CreateTrainWebAPI/releases/download/v1.1.0/createtrainwebapi-forge-1.20.1-1.1.0.jar",
 					"size": 5440461,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "081118d2c06505d92deeb59ee5250c3572c934250eb188edbe2f72ab491f4f8c",
 					"mods": [
@@ -554,7 +554,7 @@
 					"name": "createtrainwebapi-neoforge-1.21.1-1.1.0.jar",
 					"url": "https://github.com/BeneHenke/CreateTrainWebAPI/releases/download/v1.1.0/createtrainwebapi-neoforge-1.21.1-1.1.0.jar",
 					"size": 5442083,
-					"downloads": 8,
+					"downloads": 9,
 					"inspection": 2,
 					"sha256": "32567398720f45c24d72344c89fa3b4a5a78464dfe4de230049200a2872ee38c",
 					"mods": [
@@ -822,7 +822,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Create Train Web API 1.1.0\n\n## Highlights\n\n- Much more train information: speed, destination, schedule, passengers, owner and more\n- Live signal states, occupied signal blocks and upcoming arrivals per station\n- Train cargo on request\n- Config switches to choose which information the API collects and returns\n- The BlueMap overlay (`train.js`) now lives in this repository and gained clickable trains, stations and portals\n\n## New\n\n### API\n- **`/trains` and `/trainsLive`** now include speed, target speed and max speed, derailment, number of passengers, owner name, train icon, Create's map colour index, the network id, navigation (destination, distance, waiting at a signal), schedule (title, current stop, state, paused/completed, wait reason) and the planned route.\n- **`/network`** now includes each network with the colour Create assigns it, the network id on nodes, edges and stations, track length and material per edge, signals, the signal block sections of every edge, and pairs of nodes linked through portals.\n- **`/status` and `/statusLive`** (new, updated every second): occupied and reserved signal blocks, signal states, and for each station the train at the platform, the arriving train and the next arrivals. Arrival times come from the same predictions Create's display boards use; Create updates them every 5 seconds.\n- **`/cargo?train=<id>`** (new): items and fluids per carriage, computed only when requested.\n- **`/features`** (new): which optional data is enabled (see below).\n\n### Config: optional data\nA new `[data]` section turns optional information on or off: `owner`, `trainStatus`, `passengers`, `navigation`, `schedule`, `route`, `stationArrivals`, `signals`, `portals`, `cargo`. Everything is on by default. Disabled data is not collected at all, which saves work on the server, and appears as `null` in the answers. Changes apply without a restart.\n\n- NeoForge / Forge: `config/createtrainwebapi-common.toml`\n- Fabric: `config/createtrainwebapi.toml` (existing files without the section keep everything on)\n\n### BlueMap overlay\n- Click a **train** for its speed (blocks/s), destination and distance, signal wait time, schedule, passengers and cargo.\n- Click a **station** for the train at the platform and the next arrivals with a countdown.\n- Click a **portal** to jump to the map of the other dimension at the portal's position.\n- New layers: stations & portals, signal lights, occupied signal blocks.\n- Tracks are drawn in the colour Create gives each network.\n- Menu entries are now switches that show their state and are remembered in the browser. By default, track lines and \"trains through terrain\" are off.\n- Anything disabled in the API's config is hidden automatically.\n\n## Changes\n- All data is now read from Create on the server thread and cached (trains every 200 ms, status every second, network every 5 s). Requests never touch the game state directly, which avoids errors from reading Create's data while the server is changing it.\n- Existing JSON fields are unchanged; the new data is added alongside, so existing clients keep working.\n- **Fabric:** requires Fabric Loader 0.17.2 or newer (the same requirement as Create Fabric 6.0.8).\n\n## Fixes\n- `stopped` and `backwards` were always `false`.\n- Train names came out as `literal{…}` instead of the plain name.\n- A single carriage with missing data no longer breaks the whole `/trains` answer.\n- Overlay: while a train passed through a portal, its cars could show the wrong model or position.\n\n## Upgrading\nThe overlay script moved from BluemapCreateEntityAddon to this repository, and the API does not serve it:\n1. Copy `bluemap/train.js` into BlueMap's webroot (e.g. `bluemap/web/`).\n2. Set `host` at the top of the file to the address of the API as seen from the browser. If BlueMap is served over https, the API must be reachable over https too.\n3. Add `\"./train.js\"` to `scripts` in BlueMap's `webapp.conf`."
 		},
 		{
 			"tag": "v1.0.1",
@@ -834,7 +835,7 @@
 					"name": "createtrainwebapi-1.20.1-1.0.1_forge.jar",
 					"url": "https://github.com/BeneHenke/CreateTrainWebAPI/releases/download/v1.0.1/createtrainwebapi-1.20.1-1.0.1_forge.jar",
 					"size": 5415429,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "a5557b899e2865a55485bccb29335687c5a09ae4210b4a007ceb456e8fe59d60",
 					"mods": [
@@ -1106,7 +1107,7 @@
 					"name": "createtrainwebapi-1.21.1-1.0.1_neoforge.jar",
 					"url": "https://github.com/BeneHenke/CreateTrainWebAPI/releases/download/v1.0.1/createtrainwebapi-1.21.1-1.0.1_neoforge.jar",
 					"size": 5416980,
-					"downloads": 27,
+					"downloads": 28,
 					"inspection": 2,
 					"sha256": "2b6fa165216046fce917ba3be991320bbb2fe13e2038317b426567e2bb60b9bd",
 					"mods": [
@@ -1379,7 +1380,7 @@
 					"name": "createwebapi-1.0.1+1.20.1_fabric.jar",
 					"url": "https://github.com/BeneHenke/CreateTrainWebAPI/releases/download/v1.0.1/createwebapi-1.0.1%2B1.20.1_fabric.jar",
 					"size": 7069743,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "180c79e77ac8eaada06fa77f3e8dd1b870aafaa6b45d4fa5c430978342e5e708",
 					"mods": [
@@ -1639,7 +1640,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Updated dependencies and merging changes from https://github.com/Lochnair/CreateTrainWebAPI/tree/Webserver"
 		},
 		{
 			"tag": "v1.0.0fabric",
@@ -1651,7 +1653,7 @@
 					"name": "createwebapi-1.0.0+1.20.1_fabric.jar",
 					"url": "https://github.com/BeneHenke/CreateTrainWebAPI/releases/download/v1.0.0fabric/createwebapi-1.0.0%2B1.20.1_fabric.jar",
 					"size": 7069730,
-					"downloads": 5,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "697e3adf393a840d282763fdafed71bd085854bb96dd3e8fbc4ec2d18e7d4d02",
 					"mods": [
@@ -1911,7 +1913,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "port to fabric 1.20.1"
 		},
 		{
 			"tag": "v1.0.0",
@@ -1923,7 +1926,7 @@
 					"name": "createtrainwebapi-1.0.0.jar",
 					"url": "https://github.com/BeneHenke/CreateTrainWebAPI/releases/download/v1.0.0/createtrainwebapi-1.0.0.jar",
 					"size": 5406019,
-					"downloads": 40,
+					"downloads": 41,
 					"inspection": 2,
 					"sha256": "ebeb547f3d5d37f5c125c5efa4afb249ff3193fce10b6d0ecfc05ac0fe83b9b1",
 					"mods": [
@@ -2191,12 +2194,33 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "**Full Changelog**: https://github.com/BeneHenke/CreateTrainWebAPI/commits/v1.0.0"
 		}
 	],
 	"readme": "README.md",
 	"readmeSummary": "This mod adds an endpoint for the postion data of the create trains. To install simply place the jar file into the mods folder. By default it uses port 8080, this can be changed in the config file.",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 30,
+		"more": 0,
+		"people": [
+			{
+				"login": "BeneHenke",
+				"commits": 26,
+				"funding": []
+			},
+			{
+				"login": "Lochnair",
+				"commits": 4,
+				"name": "Nils Andreas Svee",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

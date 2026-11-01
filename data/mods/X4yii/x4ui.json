@@ -1,0 +1,268 @@
+{
+	"repo": "X4yii/x4ui",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2026-08-21T23:52:03Z",
+	"pushed": "2026-09-11T02:54:33Z",
+	"releases": [
+		{
+			"tag": "r1.0b5",
+			"published": "2026-09-11T02:55:05Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 556337617,
+					"name": "x4ui-r1.0b5.jar",
+					"url": "https://github.com/X4yii/x4ui/releases/download/r1.0b5/x4ui-r1.0b5.jar",
+					"size": 2369872,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "1e5fbbe36fc4357171f7022a6501308a32d1c019ba223572caf576866a723550",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1115,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/FFmpegProcessDecoder.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/FFmpegAudioDecoder$AudioDecoderThread.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/DirectMemoryVideoDecoder.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/FFmpegProcessDecoder$DecoderThread.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/DirectMemoryVideoDecoder$DecoderThread.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/MediaPipeline.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"org/jcodec/testing/TestTool.class": [
+									"java/lang/Runtime.exec"
+								]
+							},
+							"network": {
+								"com/x4yi/x4ui/impl/client/media/MediaPipeline.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/x4yi/x4ui/impl/client/resource/network/DownloadManager.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/x4yi/x4ui/impl/client/media/MediaManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog r1.0b5\n\ndate: 2026-09-10\n\n[ES]\n### Abstracción Gráfica (IGraphics)\n- **Capa Gráfica Inmediata:** Introducción de `IGraphics` y `GLGraphics`. Desacopla el renderizado de componentes de llamadas directas a OpenGL y LWJGL.\n- **Pila de Estados:** Gestión jerárquica de transformaciones matriciales, opacidad global (`pushAlpha`/`popAlpha`), tinte de color (`pushColorTint`/`popColorTint`), tipografía activa y recorte por tijera (`pushClip`/`popClip`) mediante `save()` y `restore()`.\n- **Primitivas de Dibujo:** Métodos para rectángulos planos y redondeados, bordes, líneas, círculos y gradientes.\n\n### Sistema de Tipografía (IFont, FontRegistry)\n- **Abstracción `IFont`:** Interfaz unificada de renderizado y métricas de texto independiente de `FontRenderer`.\n- **Motor `TrueTypeFont`:** Rasterización acelerada por hardware para fuentes vectoriales (`.ttf`/`.otf`) y del sistema con anti-aliasing y soporte completo de códigos de formato vanilla (`§0`-`§f`).\n- **`FontRegistry`:** Registro centralizado para carga, resolución y recarga dinámica de fuentes ante eventos de recursos (`F3 + T`).\n- **Integración:** Soporte de fuentes personalizadas propagado mediante `IGraphics.setFont()` y `GuiComponent.withFont()`.\n\n### Arquitectura de Componentes y Ciclo de Vida (GuiComponent)\n- **Ciclo de Vida Estandarizado:** Introducción de hooks `onAttached()`, `onDetached()`, `onDestroy()` y método de actualización por fotograma `update(float deltaTime)`.\n- **Dimensionamiento y Posición Porcentual:** Métodos `withPercentWidth()`, `withPercentHeight()` y `withPercentPosition()` calculados dinámicamente respecto al contenedor padre.\n- **API Fluida Directa:** Configuración encadenable de posición, tamaño, márgenes, padding, capas visuales (`withLayer`), tipografía y temas directamente en `GuiComponent`.\n- **Gestión de Estados Reactivos:** Desvinculación automática de escuchadores de `State<T>` al destruir componentes para prevenir retención de memoria.\n\n### Componentes Visuales\n- **`GuiImage` (9-Slice):** Soporte nativo para escalado de bordes 9-slice mediante `NineSliceConfig`.\n- **`GuiSprite`:** Motor de animación 2D basado en fuentes de fotogramas (`SpriteSheetSource`, `SequenceSource`), control de FPS y modos de reproducción (`LoopMode`).\n- **`GuiSlider`:** Reestructuración modular tipada (`GuiSliderInt`, `GuiSliderFloat`, `GuiSliderDouble`) con soporte para orientación horizontal y vertical.\n- **`GuiTextInput`:** Desplazamiento horizontal para textos largos, selección por arrastre de ratón y atajos de teclado para navegación y borrado por palabras (`Ctrl+Backspace`, `Ctrl+Delete`).\n\n### Superposiciones en GUI (GuiOverlayManager)\n- **Inyección no Intrusiva:** Pipeline para acoplar componentes e interfaces a pantallas vanilla (`GuiContainer`) o de otros mods sin sustituir la clase de pantalla original.\n- **Acoplamiento (`OverlayDockManager`):** Anclaje a bordes de contenedor (`ContainerAnchor`) con apilamiento dinámico entre paneles.\n\n### Integración con JEI (Just Enough Items)\n- **Compatibilidad JEI:** Registro automático de rectángulos de exclusión para contenedores y superposiciones activas de X4UI, evitando solapamiento con la interfaz de JEI.\n- **Interacción:** Soporte para atajos de consulta de recetas (`R`) y usos (`U`) sobre componentes `GuiSlot`.\n\n### Buses y Registros Globales\n- **`UIStateBus`:** Bus centralizado para comunicación desacoplada y reactiva entre interfaces y módulos independientes.\n- **`ThemeRegistry`:** Registro centralizado para registrar, consultar y alternar instancias de `ITheme`.\n\n### Arquitectura de Red y Sidedness\n- **Aislamiento por Proxies (@SidedProxy):** Separación estricta en `ClientProxy` y `CommonProxy`, garantizando cero carga de clases gráficas o multimedia en servidores dedicados.\n- **Conexión Server-Optional (@NetworkCheckHandler):** Compatibilidad cliente-servidor asimétrica que permite conectar clientes con X4UI a servidores sin el mod instalado.\n### Multimedia y Reproducción de Video/Audio Zero-Copy\n\n..."
+		},
+		{
+			"tag": "r1.0b4",
+			"published": "2026-09-04T01:55:20Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 543632179,
+					"name": "x4ui-r1.0b4.jar",
+					"url": "https://github.com/X4yii/x4ui/releases/download/r1.0b4/x4ui-r1.0b4.jar",
+					"size": 2252916,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e8bc299db51e62180b60cd36f229bd510080949a7af95ea6b4e3f9b5595f71f7",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1072,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/FFmpegProcessDecoder.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/DirectMemoryVideoDecoder.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/FFmpegProcessDecoder$DecoderThread.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/DirectMemoryVideoDecoder$DecoderThread.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								],
+								"org/jcodec/testing/TestTool.class": [
+									"java/lang/Runtime.exec"
+								]
+							},
+							"network": {
+								"com/x4yi/x4ui/impl/client/resource/network/DownloadManager.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/x4yi/x4ui/impl/client/media/MediaManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog r1.0b4\n\ndate: 2026-09-03\n\n[ES]\n\n### Arquitectura y Seguridad (Client/Server)\n- **Separación Estricta Cliente/Servidor:** Reestructuración de la jerarquía de paquetes. Interfaces en `api.client.*`, implementaciones en `impl.client.*`. Previene `ClassNotFoundException` en Servidores Dedicados.\n- **State\\<T\\>:** Reubicado en `com.x4yi.x4ui.common` para uso seguro en servidores. Employa `CopyOnWriteArrayList` y deduplicación de valores por `Objects.equals()`.\n- **NetworkSyncHelper:** Permite vincular propiedades de `Container` (vía `IContainerListener`) a objetos `State<Integer>`, `State<Boolean>` y `State<Float>` con escala configurable.\n\n### Assets y Multimedia\n- **RemoteResourceManager:** Sistema de descarga asíncrona de recursos multimedia (imágenes, audio, vídeo) desde URLs HTTP/HTTPS. Caché local aislada por Mod ID con hash SHA-256.\n- **DownloadManager:** Singleton con executor de 2 hilos. Transferencias NIO zero-copy en subprocesos de fondo sin penalizar rendimiento.\n- **Motor de Audio (OpenAL):** `OpenALAudioSink` para reproducción de audio con 8 buffers streaming y tracking de tiempo de reproducción por muestra. Integrado al ciclo de vida de la GUI.\n- **GuiVideo - Decoder Dual:** FFmpegProcessDecoder (nativo) como decodificador primario. JCodecVideoDecoder (pure-Java) como respaldo automático para Android (PojavLauncher) y sistemas sin ejecución de procesos.\n- **GuiImage/GuiVideo:** Soporte para canal alfa (`setAlpha()`) y tintes de color (`setColor(r, g, b)`).\n\n### Interfaz y Componentes\n- **Rediseño de la API Pública:** Métodos renombrados para desvinculación de Mojang: `update()` → `tick(float)`, `drawSelf()` → `renderSelf(int, int, float)`, `mouseClicked` → `onMouseClick`.\n- **Sistema de Layout Optimizado:** Flags `requestLayout()` y `requestRender()` para evitar recálculos costosos al mutar propiedades puramente visuales.\n- **Insets:** Clase inmutable para padding/margin con soporte asimétrico: `new Insets(top, right, bottom, left)`.\n- **ITheme / DefaultTheme:** Sistema de temas inyectable por componente. Estilos no son globales. `DefaultTheme`提供 tema oscuro con colores Material Design.\n- **GuiBuilder\\<T\\>:** API fluent para construcción declarativa de componentes con chainable setters.\n- **Tooltips Nativos:** Sistema de tooltips reescrito utilizando `GuiPanel` directamente. Resolución por cadena de padres. Soporte para texto y componentes personalizados.\n- **GuiDropdown\\<T\\>:** Selector genérico con popup, enlace reactivo a `State<T>`, y renderizado fuera de scissor.\n- **GuiVirtualList\\<T\\>:** Lista virtualizada que solo instancía componentes visibles en el viewport. Ventana/reciclaje automático al hacer scroll.\n\n### Layout y Eventos\n- **FlexLayout:** Motor de layout tipo CSS Flexbox. Direcciones VERTICAL, HORIZONTAL, ABSOLUTE. Soporte para `gap`, `flexWrap`, `padding` y `margin`.\n- **Propagación de Eventos:** Iteración en orden inverso de render (componente de mayor capa primero). Retorno `true` detiene la propagación.\n- **Gestión de Foco:** Modelo de foco único almacenado en el componente raíz. `requestFocus()`, `clearFocus()`, `isFocused()`.\n- **Sistema de Capas:** Componente `layer` entero para orden Z. Los hijos se renderizan en orden ascendente de capa.\n\n### Multimedia y Decodificación\n- **API IMediaService:** Servicio inyectable para pre-carga temprana (`preload`) y evaluación perezosa (`streamAsync`) de medios. Reemplaza accesos estáticos rígidos para mayor escalabilidad.\n- **DirectMemoryVideoDecoder (Zero-Copy):** Decodificador de vídeo que mapea la salida en crudo de FFmpeg directamente a la memoria nativa (`DirectByteBuffer`). Evita la instanciación de fotogramas en el Heap de Java, logrando 0 MB de overhead para el Garbage Collector y permitiendo resoluciones de hasta 1280x720 sin colapsar la RAM de Minecraft.\n\n..."
+		},
+		{
+			"tag": "r1.0b3a",
+			"published": "2026-08-29T00:34:23Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 534556121,
+					"name": "x4ui-r1.0b3a.jar",
+					"url": "https://github.com/X4yii/x4ui/releases/download/r1.0b3a/x4ui-r1.0b3a.jar",
+					"size": 86337,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "89b7914ceef9041b29518f5573ad65ae8ec758f722cdf60199c639751624bc62",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 46,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# X4UI r1.0b3a\ndate: 2026-08-28\n\n[ES]\n\n## Bug Fixes\n\n- **Sliders:** Corregido un bug donde hacer click en el campo de texto de un slider antes del primer frame renderizado no permitía editar el valor. Adicionalmente se ha solucionado el problema de pérdida de foco y escritura cuando existen múltiples sliders en pantalla (ahora sólo puede haber un campo de texto activo globalmente).\n- **Scroll Panels (Estructural):** Se arregló un bug severo en `GuiScrollPanel` donde los eventos de teclado (`keyTyped`) y el arrastre prolongado del ratón (`mouseClickMove` y `mouseReleased`) nunca se propagaban a los hijos del panel interno debido a una lista de renderizado vacía. Esto soluciona por completo la imposibilidad de usar el teclado en los campos de texto o arrastrar correctamente los sliders fuera de los márgenes del scroll.\n\n[/ES]\n\n[EN]\n\n## Bug Fixes\n\n- **Sliders:** Fixed a bug where clicking a slider's text field before the first rendered frame prevented value editing. Additionally, resolved an issue where multiple slider text fields could be focused simultaneously, causing typing input to be redirected to off-screen sliders. Focus is now managed globally.\n- **Scroll Panels (Structural):** Fixed a severe bug in `GuiScrollPanel` where keyboard events (`keyTyped`) and prolonged mouse dragging (`mouseClickMove` and `mouseReleased`) were never propagated to the internal panel's children due to an empty render list. This completely resolves the inability to use the keyboard in text fields or drag sliders correctly outside the scroll margins.\n\n[/EN]"
+		},
+		{
+			"tag": "r1.0b3",
+			"published": "2026-08-26T20:10:35Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 531285770,
+					"name": "x4ui-r1.0b3.jar",
+					"url": "https://github.com/X4yii/x4ui/releases/download/r1.0b3/x4ui-r1.0b3.jar",
+					"size": 85982,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "4e7f36e6d7498bd7711b9e130efb977ddb2a69c6a6189431e9288bc7520c8aed",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 46,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# X4UI r1.0b3\n\n[ES]\n## Resumen de Cambios\nActualización de la arquitectura interna de renderizado y eventos, introduciendo soporte nativo de Z-Index, interpolaciones basadas en DeltaTime, y gestión segura de recortes OpenGL anidados, además de una gran cantidad de nuevos componentes interactivos.\n\n### Arquitectura y Núcleo\n- **Soporte Z-Index:** Implementada la propiedad `layer` para componentes, proporcionando un ordenamiento determinista para el renderizado y la propagación de eventos (bubbling).\n- **Animaciones DeltaTime:** Integrada lógica de DeltaTime en todo el framework para lograr animaciones e interpolaciones independientes de los FPS.\n- **Seguridad de Memoria:** Implementado `FontWidthCache` con política de limpieza LRU para mitigar fugas de memoria durante el análisis de textos complejos (ej. Markdown).\n- **Recorte OpenGL Anidado:** Implementado `ScissorHelper` para gestionar de manera robusta el uso de `GL_SCISSOR_TEST` en componentes anidados.\n- **Construcción Fluida:** Añadida la clase de utilidad `GuiBuilder` que proporciona una API fluida (Fluent API) para facilitar la construcción de interfaces.\n- **Reactividad:** Integrado un sistema de gestión de estado reactivo (`State`).\n\n### Componentes y Funcionalidades\n- **Arrastrar y Soltar (Drag & Drop):** Añadida capacidad de arrastre nativa a `GuiComponent` con límites configurables (`DragConstraint.NONE`, `DragConstraint.PARENT_BOUNDS`).\n- **Tooltips Integrados:** Añadido soporte nativo de renderizado de Tooltips en `GuiBaseScreen` y `GuiBaseContainer` mediante `setTooltip()`.\n- **Diseños FlexWrap:** Añadida la funcionalidad `flexWrap` a `GuiPanel` para el ajuste automático y multilínea de elementos en diseños horizontales y verticales.\n- **Nuevos Componentes:** \n  - `GuiDropdown` para menús desplegables.\n  - `GuiImage` y `GuiSprite` para la renderización flexible de texturas.\n  - `GuiTextInput` para campos de entrada de texto avanzados.\n  - `GuiSlot` para gestionar inventarios y stacks de ítems dentro del DOM.\n  - `GuiSlider` y sus variantes (`GuiSliderDouble`, `GuiSliderFloat`, `GuiSliderInt`).\n  - `GuiModelRender` para soporte de renderizado de entidades 3D e ítems.\n  - `GuiVideo` para reproducción de vídeo in-game.\n\n### Mejoras y Correcciones\n- **Refactorización de GuiScrollPanel:**\n  - Migración a `ScissorHelper` para la resolución adecuada de recortes anidados.\n  - Implementado descarte de componentes (culling) para omitir la renderización y procesamiento de eventos de elementos fuera del área visible.\n  - Resueltos los problemas de jerarquía de propagación de eventos, permitiendo que los paneles de scroll anidados funcionen correctamente y de manera independiente.\n- Solucionada la fuga de memoria en `GuiBaseContainer` causada por la adición duplicada de áreas en `jeiRecipeAreas` al redimensionar la ventana.\n- Refactorizado `GuiMarkdown` para utilizar `FontWidthCache`, mejorando notablemente el rendimiento.\n- Estandarizadas las animaciones en `GuiButton`, `GuiToggle` y `GuiScrollPanel` para escalar con DeltaTime en lugar de ticks en crudo.\n- Expuestos los métodos `getGuiLeft()` y `getGuiTop()` en `GuiBaseContainer`.\n- Reestructurada y completada la documentación técnica en el directorio `Docs/` (Disponible en inglés y español).\n\n[/ES]\n\n[EN]\n## Changelog Summary\nCore rendering and event architecture update, introducing native Z-Index support, DeltaTime-based interpolations, and safe management of nested OpenGL clipping, along with a massive batch of new interactive components.\n\n### Architecture & Core\n- **Z-Index Support:** Implemented the `layer` property for components, providing deterministic sorting for rendering and event bubbling priorities.\n- **DeltaTime Animations:** Integrated DeltaTime logic throughout the framework for FPS-independent animations and transitions.\n- **Memory Safety:** Implemented `FontWidthCache` incorporating an LRU eviction policy to mitigate memory leaks during intensive text parsing tasks (e.g. Markdown rendering).\n\n..."
+		},
+		{
+			"tag": "r1.0b2",
+			"published": "2026-08-22T01:35:40Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 524489996,
+					"name": "x4ui-r1.0b2.jar",
+					"url": "https://github.com/X4yii/x4ui/releases/download/r1.0b2/x4ui-r1.0b2.jar",
+					"size": 44413,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c14623aa092bf411ace0b1563aa83b1f78c4e66f5c589a6dc96a67fdb162634a",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 22,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# X4UI r1.0b2\n\n[ES]\n## Cambios\n- Añadidos métodos `getHeight()` y `getWidth()` en `GuiComponent` para permitir acceso externo a sus atributos de dimensión que estaban protegidos, facilitando la interpolación y creación de animaciones personalizadas desde implementaciones externas."
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "X4UI Framework A modern, high-performance GUI framework for Minecraft Forge 1.12.2. English &bull; Espa&ntilde;ol",
+	"funding": [],
+	"fundingChecked": "2026-10-31T22:37:16.645Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 1,
+		"more": 0,
+		"people": [
+			{
+				"login": "rhoggs-bot-test-account",
+				"commits": 1,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
+	"history": 1
+}

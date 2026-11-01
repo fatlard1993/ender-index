@@ -17,7 +17,7 @@
 					"name": "thai_alphabet_block-v1.1.1-mc26.2+fabric.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.1/thai_alphabet_block-v1.1.1-mc26.2%2Bfabric.jar",
 					"size": 210364,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "3081ee731596498acd9cc11f93bb7eb099aa560b8a4e80885a1fb3036b3b57f7",
 					"mods": [
@@ -133,7 +133,7 @@
 					"name": "thai_alphabet_block-v1.1.1-mc26.2+forge.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.1/thai_alphabet_block-v1.1.1-mc26.2%2Bforge.jar",
 					"size": 206749,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "b955ddb222ba0e9d3bc2b9d907f3fb7ed079fded41884bac82de9389d494f885",
 					"mods": [
@@ -247,7 +247,7 @@
 					"name": "thai_alphabet_block-v1.1.1-mc26.2+neoforge.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.1/thai_alphabet_block-v1.1.1-mc26.2%2Bneoforge.jar",
 					"size": 206084,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "df8323bc38d7c0b797180e84ffa78dd9669b680add080b394cea0bde67b2324e",
 					"mods": [
@@ -356,7 +356,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Version v1.1.1 (Minecraft 26.2) - Forge Bugfixes & Dependency Updates\n\n> 🇬🇧 Version **v1.1.1** is a hotfix and maintenance update specifically targeted for **Minecraft 26.2**, resolving item rendering issues on **Minecraft Forge**, fixing crashes on Linux Wayland environments, and bumping loader and build toolchain dependencies across all platforms.\n\n---\n\n## 🇬🇧 Changes & Fixes (English)\n\n### 1. 🎨 Purple & Black Missing Texture Fix on Forge\n* **Issue:** When holding or placing Thai Alphabet block items on **Minecraft Forge 26.2**, the item model failed to render the proper dyed wood tint, displaying a purple-and-black missing texture checkerboard. This occurred because Minecraft 26.x's `ClientItemInfoLoader` resolves item tint sources before `FMLClientSetupEvent` runs.\n* **Fix:** Migrated custom item tint source registration (`ItemTintSources.ID_MAPPER`) to **Eager Registration** during client mod initialization. This allows Forge's item model baker to correctly decode tinted block item models just like Fabric and NeoForge.\n\n### 2. 🖥️ GLFW Wayland Crash Fix for Forge Client\n* **Issue:** Running the Forge client on Linux Wayland desktop environments crashed immediately with `[0x1000C] Wayland: The platform does not provide the window position`.\n* **Fix:** Configured the Forge client run configuration to automatically declare `environment['XDG_SESSION_TYPE'] = 'x11'` and pass JVM argument `-Dorg.lwjgl.glfw.platform=x11`, providing a reliable X11 fallback for testing.\n\n### 3. 📦 Dependency & Build Toolchain Upgrades\n* **Forge:** Updated to `65.1.0` (official release for Minecraft 26.2).\n* **NeoForge:** Updated to `26.2.0.93` and upgraded `ModDevGradle` to `2.0.148` (resolving AccessTransformer compile issues with `HolderSet`).\n* **Fabric API:** Updated to `0.161.0+26.2`.\n* **Fabric Loader:** Updated to `0.19.5`.\n* **Fabric Loom:** Updated to `1.18-SNAPSHOT` (compatible with Gradle 9.7.0).\n* **Gradle Wrapper:** Upgraded to Gradle `9.7.0` for full compatibility with Java 25 and Loom 1.18-SNAPSHOT.\n\n---\n\n# อัปเดตเวอร์ชัน v1.1.1 (Minecraft 26.2) - การแก้ไขข้อผิดพลาดสำหรับ Forge & Dependency Update\n\n> 🇹🇭 เวอร์ชัน **v1.1.1** นี้เป็นการอัปเดตแก้ไขข้อผิดพลาด (Hotfix & Patch) ที่เกิดขึ้นโดยเฉพาะบน **Minecraft 26.2** โดยเน้นการปรับปรุงระบบเรนเดอร์ไอเทมบน **Minecraft Forge**, แก้ไขปัญหาการแครชบนระบบ Linux Wayland และอัปเกรดเครื่องมือพัฒนาและไลบรารีของทุกตัวโหลดให้เสถียรยิ่งขึ้น\n## 🇹🇭 รายละเอียดการแก้ไขและอัปเดต (Thai)\n\n### 1. 🎨 แก้ไขปัญหาบล็อกกลายเป็นสีม่วง-ดำบน Forge (Purple & Black Missing Texture Fix)\n* **ปัญหาเดิม:** เมื่อผู้เล่นถือไอเทมบล็อกอักษรไทย หรือวางบล็อกลงในโลกบนตัวโหลด **Forge 26.2** โมเดลไอเทมจะแสดงผลผิดพลาดเป็นลายตารางหมากรุกสีม่วงและดำ (Missing Texture) เนื่องจากระบบโมเดลของ Minecraft 26.x (`ClientItemInfoLoader`) พยายามอ่าน tint source ก่อนที่อีเวนต์ `FMLClientSetupEvent` จะทำงาน\n* **การแก้ไข:** ปรับเปลี่ยนการลงทะเบียน custom tint sources (`ItemTintSources.ID_MAPPER`) ให้ทำงานทันทีแบบ **Eager Registration** ตั้งแต่ขั้นตอนการสร้างอินสแตนซ์ของ Client Mod ทำให้ระบบถอดรหัสโมเดลไอเทมของ Forge โหลดและแสดงสีพื้นผิวไม้ย้อมสีได้ถูกต้องสมบูรณ์แบบเดียวกับ Fabric และ NeoForge\n\n### 2. 🖥️ แก้ไขปัญหา GLFW แครชบน Linux Wayland (Forge Client Run Fix)\n* **ปัญหาเดิม:** การรัน Forge Client บนสภาพแวดล้อม Linux ที่ใช้ Wayland แสดงข้อผิดพลาด `[0x1000C] Wayland: The platform does not provide the window position` ส่งผลให้ตัวเกมแครชก่อนเปิดหน้าต่าง\n* **การแก้ไข:** ปรับแต่ง run configurations ใน Forge ให้กำหนด `environment['XDG_SESSION_TYPE'] = 'x11'` และส่ง JVM argument `-Dorg.lwjgl.glfw.platform=x11` โดยอัตโนมัติ ทำให้สามารถเปิดเกมและทดสอบได้อย่างราบรื่น\n\n### 3. 📦 อัปเกรดเวอร์ชัน Dependency และ Build Toolchain\n* **Forge:** อัปเดตเป็น `65.1.0` (รองรับ Minecraft 26.2 อย่างเป็นทางการ)\n* **NeoForge:** อัปเดตเป็น `26.2.0.93` พร้อมอัปเกรด `ModDevGradle` เป็น `2.0.148` เพื่อแก้ไขปัญหาคอมไพล์ AccessTransformer (`HolderSet`)\n* **Fabric API:** อัปเดตเป็น `0.161.0+26.2`\n* **Fabric Loader:** อัปเดตเป็น `0.19.5`\n\n..."
 		},
 		{
 			"tag": "v1.1.0",
@@ -368,7 +369,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc1.20.1+fabric.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc1.20.1%2Bfabric.jar",
 					"size": 200388,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "4312c737930ebb4a8dda34e43cc64ffc753887d28b8a2f9c993f33daa40c8c22",
 					"mods": [
@@ -484,7 +485,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc1.20.1+forge.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc1.20.1%2Bforge.jar",
 					"size": 204783,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "d84e77ef34523fd85d52254462ced4f9ee699f909316835d6e50de31384707ee",
 					"mods": [
@@ -598,7 +599,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc1.21.1+fabric.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc1.21.1%2Bfabric.jar",
 					"size": 201931,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "ce8cffa6b6485be53464b2d8ef08953cc71c3a65d5929930d2de457a305b5dad",
 					"mods": [
@@ -714,7 +715,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc1.21.1+forge.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc1.21.1%2Bforge.jar",
 					"size": 198661,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "8d27e11fd8471af4c05935fb7a8c95074264c3079b87f997e1dac025de0b239d",
 					"mods": [
@@ -828,7 +829,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc1.21.1+neoforge.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc1.21.1%2Bneoforge.jar",
 					"size": 197710,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "6bc3a41ea0f5f8f8b94eea8d5b6ff2cd53e81f5de82e95919759ca3ea088d6c5",
 					"mods": [
@@ -942,7 +943,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc1.21.11+fabric.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc1.21.11%2Bfabric.jar",
 					"size": 208910,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "b4b49d8cf68dcf6ec813727324efb70e05f4a386ad48b721e64cef7b2f0be6e0",
 					"mods": [
@@ -1058,7 +1059,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc1.21.11+forge.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc1.21.11%2Bforge.jar",
 					"size": 205976,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "cccdfb2b3700aac9e308db87341f40adba926a1be8df7c66a43f488075093f38",
 					"mods": [
@@ -1172,7 +1173,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc1.21.11+neoforge.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc1.21.11%2Bneoforge.jar",
 					"size": 205082,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "2332a9cbcb05459e6c33345265c89ab53ac368534eda1369916ad159c0511b44",
 					"mods": [
@@ -1286,7 +1287,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc1.21.4+fabric.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc1.21.4%2Bfabric.jar",
 					"size": 208927,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "d75dfffa452c7d71a83c2793469b41edf759c30689afe5d2a5e88439608cb3fe",
 					"mods": [
@@ -1402,7 +1403,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc1.21.4+forge.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc1.21.4%2Bforge.jar",
 					"size": 205679,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "8aa3781ff61a0df02a41898ffdb1c058280f20b19f84bca6663e126165bc0e66",
 					"mods": [
@@ -1516,7 +1517,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc1.21.4+neoforge.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc1.21.4%2Bneoforge.jar",
 					"size": 204863,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "529844b425cdf325b3a1bf2fcfd124757527d6a9ffdeb02b92f3f6c9b1ce18d6",
 					"mods": [
@@ -1630,7 +1631,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc26.2+fabric.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc26.2%2Bfabric.jar",
 					"size": 211501,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "e07fba311e879cf0517693732c5569f517b700d00014518f1815eeace14726b2",
 					"mods": [
@@ -1746,7 +1747,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc26.2+forge.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc26.2%2Bforge.jar",
 					"size": 206750,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "3c6a97a64f15a17cab78a52962460412710bb4263a1821399d7e84093a0d3495",
 					"mods": [
@@ -1860,7 +1861,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc26.2+neoforge.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc26.2%2Bneoforge.jar",
 					"size": 207205,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "a94d148221887f3131292f1e7cc3cbad17d7257289a17a8ae48959c9f46a7457",
 					"mods": [
@@ -1974,7 +1975,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc26.3+fabric.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc26.3%2Bfabric.jar",
 					"size": 210365,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "f64b7a37bf8b22f45a0341fe788691a09be8083970d4858a26225cc2dbb80a52",
 					"mods": [
@@ -2090,7 +2091,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc26.3+forge.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc26.3%2Bforge.jar",
 					"size": 206750,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "8d642016100d956c7cbe5c012d788d4ee9fcbe1ef350f8955b528c2193b964a8",
 					"mods": [
@@ -2204,7 +2205,7 @@
 					"name": "thai_alphabet_block-v1.1.0-mc26.3+neoforge.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.1.0/thai_alphabet_block-v1.1.0-mc26.3%2Bneoforge.jar",
 					"size": 206084,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "b347a024139bfc0674ef80fba64ada9a4dbd0873158f541c3a041eecbacd6c72",
 					"mods": [
@@ -2313,7 +2314,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# 🇹🇭 Thai Alphabet Block - Release v1.1.0\n\nThis release introduces comprehensive support for modern Minecraft versions and loaders, along with visual improvements and code quality enhancements!\n\n## 🚀 Key Updates & Features\n\n- **Multi-Version Support**: Now compatible with Minecraft **1.20.1**, **1.21.1**, **1.21.4**, **1.21.11**, **26.2**, and **26.3**!\n- **NeoForge Integration**: Native support added for **NeoForge**, alongside existing **Fabric** and **Forge** loaders.\n- **69 Thai Character Blocks**: Features all major consonants (ก-ฮ), vowels, and tone marks as placeable blocks.\n- **Color Customization (Dyeable!)**: Customize your builds by right-clicking blocks with any of the 16 Minecraft Dyes to paint the wooden background.\n- **Sharp Glyph Rendering (1.21.11+)**: Utilizes the modern `CUTOUT` render layer layout, fixing jagged textures and ensuring clean font outlines.\n\n---\n\n## 🆕 What's New in Minecraft 26.2 & 26.3 Support\n\n- **Full Loader Support**: Native builds available across **Fabric**, **Forge**, and **NeoForge** for both Minecraft 26.2 and 26.3.\n- **Upgraded to Java 25**: Configured Java 25 toolchain across all subprojects, matching Mojang's modern runtime specifications.\n- **Modern Data Component API**: Dye color is retrieved via the `DYE` data component (`stack.get(DataComponents.DYE)`) with comprehensive null-safety guards.\n- **BlockTintSource API & Eager Registration**: Rewrote block and item color registration using the modern `BlockTintSource` / `ItemTintSources.ID_MAPPER` architecture. Custom item tint sources are registered eagerly during client initialization to ensure seamless model parsing without missing-texture issues.\n- **Model Baker Compatibility**: Supplied explicit `\"uv\": [0, 0, 16, 16]` on glyph overlays in `thai_tinted_cube.json` to satisfy stricter UV bounds checks in 26.x model bakers while preserving solid block face culling.\n- **ModDevGradle Upgrade**: Upgraded NeoForge toolchain to ModDevGradle 2.0.148, resolving AccessTransformer conflicts during Minecraft 26.3 artifact creation.\n- **Optimized GC Pressure**: Reused static singleton tint source instances across all 69 character blocks.\n\n---\n\n# อัปเดตเวอร์ชัน v1.1.0 - บล็อกตัวอักษรภาษาไทย\n\nอัปเดตครั้งใหญ่นี้มาพร้อมกับการรองรับ Minecraft เวอร์ชันล่าสุด ตัวโหลดม็อดใหม่ ๆ เพื่อเพิ่มความหลากหลายในการสร้างสรรค์ครับ!\n\n## 🚀 ฟีเจอร์ใหม่และการรองรับ\n\n- **รองรับเวอร์ชันหลากหลาย**: สามารถเล่นได้แล้วบน Minecraft เวอร์ชัน **1.20.1**, **1.21.1**, **1.21.4**, **1.21.11**, **26.2** และ **26.3**!\n- **รองรับ NeoForge**: เพิ่มการสนับสนุนตัวโหลด **NeoForge** อย่างเป็นทางการ นอกเหนือจาก **Fabric** และ **Forge** ดั้งเดิม\n- **บล็อกอักษรไทย 69 ตัวอักษร**: ครอบคลุมพยัญชนะ (ก-ฮ) สระ และวรรณยุกต์ทั้งหมดในเกมเป็นบล็อกเต็มตัว\n- **ระบบย้อมสี (Dyeable)**: นำสีย้อม (Dye) 16 สีมาคลิกขวาที่บล็อกเพื่อเปลี่ยนสีพื้นหลังไม้ได้ทันที โดยไม่เสียลวดลายไม้ธรรมชาติ\n- **ปรับปรุง Render Layer (1.21.11+)**: แก้ไขปัญหาบล็อกกลายเป็นสีน้ำตาลทึบหรือขอบตัวอักษรเพี้ยน โดยย้ายมาใช้การเรนเดอร์แบบ `CUTOUT` ทำให้ตัวอักษรคมกริบ สวยงาม ไร้รอยหยัก\n\n---\n\n## 🆕 การพอร์ตสู่ Minecraft 26.2 และ 26.3\n\n- **รองรับครบ 3 ตัวโหลด**: รองรับทั้ง **Fabric**, **Forge**, และ **NeoForge** บน Minecraft 26.2 และ 26.3\n- **อัปเกรดสู่ Java 25**: ปรับ Toolchain สู่ Java 25 และ Gradle 9.5.1 ตามมาตรฐานตัวเกมเวอร์ชันใหม่\n- **ย้ายมาใช้ Data Component API**: ดึงสีย้อมผ่าน `DYE` data component แทนเมธอดเก่า พร้อมระบบ Null-safe ป้องกันเกมแครช\n- **ระบบ BlockTintSource และแก้ปัญหาไอเทมสีม่วง-ดำ (Forge)**: ลงทะเบียน `ItemTintSources` แบบ Eager ตั้งแต่ช่วงเริ่มโหลดโมดูล ทำให้ `ClientItemInfoLoader` ถอดรหัสโมเดลไอเทมได้สมบูรณ์ในทุกตัวโหลด\n- **แก้ไข Model Baker**: เพิ่ม explicit UV บน glyph overlay ในโมเดลเพื่อผ่านการตรวจเช็ก bounds ของเอนจิน 26.x\n- **อัปเกรด ModDevGradle**: ใช้เวอร์ชัน 2.0.148 เพื่อแก้ปัญหา AccessTransformer ซ้อนทับบน NeoForge 26.3\n\n---\n\n## 🛠️ Technical Fixes (ข้อมูลเชิงเทคนิคสำหรับการพอร์ต)\n\n..."
 		},
 		{
 			"tag": "v1.0.0-mc1.21.1",
@@ -2325,7 +2327,7 @@
 					"name": "thai_alphabet_block-fabric-1.0.0.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.0.0-mc1.21.1/thai_alphabet_block-fabric-1.0.0.jar",
 					"size": 240519,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "92efd5cf97b5e19ee6f775c60c60b7d7354847bdc4eb0f8323f48acaf0f83495",
 					"mods": [
@@ -2441,7 +2443,7 @@
 					"name": "thai_alphabet_block-forge-1.0.0.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.0.0-mc1.21.1/thai_alphabet_block-forge-1.0.0.jar",
 					"size": 236579,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "846b143c98e63f72ed5740e22548204974ed53a843edf8d71f433d6e5f064f3f",
 					"mods": [
@@ -2555,7 +2557,7 @@
 					"name": "thai_alphabet_block-neoforge-1.0.0.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.0.0-mc1.21.1/thai_alphabet_block-neoforge-1.0.0.jar",
 					"size": 235801,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "ea47849eebc04b3bf6ac0c31b987de62a9d88e13076542799a539304c36782d5",
 					"mods": [
@@ -2664,7 +2666,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Release v1.0.0 for Minecraft 1.21.1 supporting Fabric, Forge, and NeoForge."
 		},
 		{
 			"tag": "v1.0.0",
@@ -2676,7 +2679,7 @@
 					"name": "thai_alphabet_block-fabric-1.0.0.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.0.0/thai_alphabet_block-fabric-1.0.0.jar",
 					"size": 240960,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "708086b65a254d0ace8fae5b4b4c676b6c3af4ec965dc12f991a6974c12150c5",
 					"mods": [
@@ -2792,7 +2795,7 @@
 					"name": "thai_alphabet_block-forge-1.0.0.jar",
 					"url": "https://github.com/AitShiroKu/Thai-alphabet-block/releases/download/v1.0.0/thai_alphabet_block-forge-1.0.0.jar",
 					"size": 244567,
-					"downloads": 6,
+					"downloads": 7,
 					"inspection": 2,
 					"sha256": "434003c0713e5881190f93a5cd85285239def6d365234e3c7d8d44400945c07f",
 					"mods": [
@@ -2901,12 +2904,27 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Initial release of Thai Alphabet Block for Minecraft 1.20.1"
 		}
 	],
 	"readme": "README.md",
 	"readmeSummary": "A Minecraft mod that adds beautiful Thai alphabet blocks to the game! Perfect for building signs, decorating schools, creating word-guessing games, or designing Thai-themed worlds.",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 76,
+		"more": 0,
+		"people": [
+			{
+				"login": "AitShiroKu",
+				"commits": 76,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

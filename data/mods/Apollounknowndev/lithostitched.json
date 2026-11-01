@@ -17,7 +17,7 @@
 					"name": "lithostitched-1.5.8+biome_layout_beta2-fabric-1.21.1.jar",
 					"url": "https://github.com/Apollounknowndev/lithostitched/releases/download/biome-layout-beta-2/lithostitched-1.5.8%2Bbiome_layout_beta2-fabric-1.21.1.jar",
 					"size": 664597,
-					"downloads": 8,
+					"downloads": 9,
 					"inspection": 2,
 					"sha256": "959a96e356102faf04a84e006668c0cc9f234a6db51afb33ef35a512a3e2f1c4",
 					"mods": [
@@ -56,7 +56,7 @@
 					"name": "lithostitched-1.5.8+biome_layout_beta2-fabric-1.21.11.jar",
 					"url": "https://github.com/Apollounknowndev/lithostitched/releases/download/biome-layout-beta-2/lithostitched-1.5.8%2Bbiome_layout_beta2-fabric-1.21.11.jar",
 					"size": 690435,
-					"downloads": 5,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "2c6c52c0174ff6c266902984407d13382bf35ba6aab4cfb0c7b63acb0eb0ae60",
 					"mods": [
@@ -95,7 +95,7 @@
 					"name": "lithostitched-1.5.8+biome_layout_beta2-neoforge-1.21.1.jar",
 					"url": "https://github.com/Apollounknowndev/lithostitched/releases/download/biome-layout-beta-2/lithostitched-1.5.8%2Bbiome_layout_beta2-neoforge-1.21.1.jar",
 					"size": 670646,
-					"downloads": 5,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "c5de89735fcb8b7026536f9ff52f44bfaf1adce96524365cd7c87749a4a23551",
 					"mods": [
@@ -131,7 +131,7 @@
 					"name": "lithostitched-1.5.8+biome_layout_beta2-neoforge-1.21.11.jar",
 					"url": "https://github.com/Apollounknowndev/lithostitched/releases/download/biome-layout-beta-2/lithostitched-1.5.8%2Bbiome_layout_beta2-neoforge-1.21.11.jar",
 					"size": 697778,
-					"downloads": 6,
+					"downloads": 7,
 					"inspection": 2,
 					"sha256": "bc4e2075897935578ad71f27bca4ba1586a789e5f97ee86a59d3a75a42929781",
 					"mods": [
@@ -162,7 +162,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "This beta brings the bulk of the biome layout injection system. It includes 4 distinct types of injectors, a density-function driven region system, and a `fast_noise` density function type.\n\nThis update + the current 1.5.8 beta will be merged into Lithostitched 1.6.0, which I plan to release next month before the release of 26.1.\n\n## Biome Injectors\nThe format is *completely* different now. All injectors have a `type` field and an optional `priority` field (default value of 1000).\nThe type can be one of the following:\n- `add_points`: Directly appends parameter points into the base biome layout. \n  - `points`: A list of parameter objects, identical in format to dimension files.\n- `force_placement`: Forces a biome to place if certain conditions are met (the beta 1 injector behaviour).\n  - `parameters`: A map of density function ids or hardcoded climate names to a range of accepted values.\n  - `region`: An optional identifier of the required region, explained later.\n- `replace_fully`: Fully swap out a biome.\n  - `targets`: The target biome set.\n  - `replacement`: The replacement biome.\n- `replace_partially`: Swap out a biome based on certain conditions.\n  - `targets`: The target biome set.\n  - `replacement`: The replacement biome.\n  - `parameters`: A map of density function ids or hardcoded climate names to a range of accepted values.\n  - `region`: An optional identifier of the required region, explained later.\n\n## Regions\nThere is an optional regions system you can use to place biomes with. This could mean that in the future, there may be a mod that implements Terrablender's API with Lithostitched internals.\n\nRegions are a datapack registry with just two fields:\n- `dimension`: The dimension id.\n- `weight`: The region's weight relative to other regions.\nAll vanilla dimensions have a default region with a weight of 100.\n\nEach dimension attempts to find a density function for how it gets the region noise.\n- Vanilla dimensions are at `lithostitched:region/<dimension name>`\n- Modded dimensions are at `mod_id:region/<dimension name>`\n\nThe game will automagically map values ouputted from the region density function to region IDs. On Fabric 1.21.11, you can see the region ID in the F3 screen if you turn it on.\n\n## Fast Noise\nThere is now a `fast_noise` density function type.\n- `config`: The `fast_noise_config` file to reference, explained later.\n- `xz_scale`: The noise scale on the x and z-axes. A float value, defaults to 1. \n- `y_scale`: The noise scale on the y-axis. A float value, defaults to 1. \n- `shift_x`: The shift on the x-axis. A density function, defaults to a constant of 0.\n- `shift_y`: The shift on the y-axis. A density function, defaults to a constant of 0.\n- `shift_z`: The shift on the z-axis. A density function, defaults to a constant of 0.\n\n## Fast Noise Configs\nSimilar to how `noise` density functions in vanilla reference noise configs from the `worldgen/noise` registry, `fast_noise` density functions reference fast noise configs from the `lithostitched/fast_noise_config` registry.\n\nAll fast noise configs have a `type` field, a float `frequency`, and an optional int `salt`.\n- `cellular`\n  - `jitter`: How much to jitter the cells. A float between -1 and 1.\n  - `distance_function`: The distance function to use. Accepted values: `euclidean`, `euclidean_squared`, `manhattan`, `hybrid`\n  - `return_type`: The value to return. Accepted values: `cell_value`, `distance`, `distance_2`, `distance_2_add`, `distance_2_sub`, `distance_2_mul`, `distance_2_div`\n- `perlin`\n  - Not sure why you would use this, but it's here lmao\n- `simplex`\n  - `fractal_type`:  The fractal type to use. Accepted values: `none`, `fbm`, `ridged`, `ping_pong`, `domain_warp_progressive`, `domain_warp_independent`\n  - `octaves`: Optional non-negative int.\n  - `lacunarity`: Optional float.\n  - `gain`: Optional float."
 		},
 		{
 			"tag": "biome-layout-beta-1",
@@ -174,7 +175,7 @@
 					"name": "lithostitched-1.5.8+biome_layout_beta1-fabric-1.21.1.jar",
 					"url": "https://github.com/Apollounknowndev/lithostitched/releases/download/biome-layout-beta-1/lithostitched-1.5.8%2Bbiome_layout_beta1-fabric-1.21.1.jar",
 					"size": 574179,
-					"downloads": 7,
+					"downloads": 8,
 					"inspection": 2,
 					"sha256": "56c284f959bbe15aed1298317aea370d7fa7d296e23d3a1c14a6623d568ac979",
 					"mods": [
@@ -213,7 +214,7 @@
 					"name": "lithostitched-1.5.8+biome_layout_beta1-fabric-1.21.11.jar",
 					"url": "https://github.com/Apollounknowndev/lithostitched/releases/download/biome-layout-beta-1/lithostitched-1.5.8%2Bbiome_layout_beta1-fabric-1.21.11.jar",
 					"size": 599282,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "f51d56b901175179e4cf56f61300c83fa3308e32a06aa47c8a719e3c6fb65fd4",
 					"mods": [
@@ -252,7 +253,7 @@
 					"name": "lithostitched-1.5.8+biome_layout_beta1-neoforge-1.21.1.jar",
 					"url": "https://github.com/Apollounknowndev/lithostitched/releases/download/biome-layout-beta-1/lithostitched-1.5.8%2Bbiome_layout_beta1-neoforge-1.21.1.jar",
 					"size": 579667,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "06387d9327dfc75113de56d3898b820737bb33ac89f87aa8df147e7797682650",
 					"mods": [
@@ -288,7 +289,7 @@
 					"name": "lithostitched-1.5.8+biome_layout_beta1-neoforge-1.21.11.jar",
 					"url": "https://github.com/Apollounknowndev/lithostitched/releases/download/biome-layout-beta-1/lithostitched-1.5.8%2Bbiome_layout_beta1-neoforge-1.21.11.jar",
 					"size": 606813,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "67311d1b757f0f5acab3e5af4c2db9f310f120c13fd01453e02a31a9c1739249",
 					"mods": [
@@ -319,11 +320,14 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "This *very* experimental version begins the long process of adding biome layout editing support to Lithostitched. Currently, it includes a `biome_injector` registry for adding biomes if certain specific parameters are met. Unlike in vanilla, injectors allow defining **custom parameters** to be defined, referencing **arbitrary density functions**.\n\nYou can find a biome injector generator tucked away on the Lithostitched generator website [here](https://lithostitched.vercel.app/lithostitched/biome-injector/). If you need help with this, ask in the `#library-help` channel in my discord [here](https://discord.gg/pA9EqZRJzn).\n\nThis version is a fork of `1.5.8+beta1`, for Fabric/Neoforge 1.21.1 and 1.21.11."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

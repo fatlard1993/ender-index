@@ -6,8 +6,124 @@
 	"archived": false,
 	"license": "NOASSERTION",
 	"created": "2026-04-13T02:34:04Z",
-	"pushed": "2026-10-27T06:06:03Z",
+	"pushed": "2026-10-31T04:17:14Z",
 	"releases": [
+		{
+			"tag": "v3.1.0+mc26.2",
+			"published": "2026-10-31T04:17:26Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 694332687,
+					"name": "ultimatecustomgear-26.2-3.1.0-NeoForge.jar",
+					"url": "https://github.com/ArrivedDev593/UltimateCustomGear/releases/download/v3.1.0%2Bmc26.2/ultimatecustomgear-26.2-3.1.0-NeoForge.jar",
+					"size": 2303147,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "566c43e04ea2687da573462513b8ffea164aee7bcbfea26af5e6709d925451a1",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "ultimatecustomgear",
+							"version": "3.1.0",
+							"name": "Ultimate Custom Gear",
+							"description": "Ultimate Custom Gear is a data-driven mod that allows server owners and modpack creators to add custom armor sets, weapons, tools, food items, blocks and fluids via simple JSON files. No coding required. Supports custom stats, held effects, set bonuses, per-piece armor values, layered damage resistances, 3D armor models via GeckoLib, custom textures, transparent armor, mob drops with Looting support, every vanilla recipe type plus passthrough recipes for other mods, tag integration and tag patching, distributable content packs, and multiplayer content verification.",
+							"minecraft": "[26.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"jei",
+								"geckolib",
+								"curios"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Custom Gear"
+							],
+							"item": [
+								"Custom Gear"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 184,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# UltimateCustomGear 3.1.0\n\n*NeoForge 26.2 · 2026-10-28*\n\n> **Change any recipe, from any mod — and your own recipes load again.** Packs written for 3.0.x load unchanged.\n\n## ⚠️ Important Notes\n\n- **Recipes defined in an item's `recipe` field load again.** From 3.0.0 to 3.0.1 none of them did (see Bug Fixes). If you worked around it with a datapack or a `passthrough` copy of the same recipe, remove the copy, or the item will have the recipe twice\n- If your content has two files with the same id, the multiplayer content check now gives a different result than in 3.0.x. Update the server and every client together. Content without duplicate ids checks exactly as before\n\n## ✨ New Features\n\n### Recipe patches\n\n- New content type `recipe_patch`: changes recipes of **any** item — vanilla's, another mod's or yours — in four ways, any of them in one file:\n    - **`add`** — gives an item new recipes, whether it had any or not, in the same format as an item's `recipe` field\n    - **`remove`** — removes recipes by id\n    - **`remove_output`** — removes every recipe that makes an item, from any mod, without knowing their ids. **`recipe_types`** narrows it: `[\"smelting\", \"blasting\"]` stops gold from being smelted in every furnace-like recipe and leaves crafting alone\n    - **`replace`** — swaps a recipe for a new one **under the same id**, so the recipe book and advancements keep working. It keeps the original's output and count unless you change them\n- `remove_output` only matches an item made as a recipe's **main** output. A recipe that gives it as a bonus is never removed by it, since removing a recipe removes all of it\n- Works with other mods' machines through `passthrough`, for any mod that loads its recipes from data\n- Applies while the game runs: add, edit or delete a patch and run `/customgear reload`\n\n### Finding recipes\n\n- New command **`/customgear recipes [item]`**: lists every recipe that makes an item, grouped by type, with the id and the type a patch needs. Click either to copy it\n- Without an item, it uses the one in your hand\n- Recipes where the item is only a secondary output are listed apart, with a reminder that removing one removes the whole recipe\n- Open to every player, not just operators: it only reads\n\n### Recipes\n\n- A recipe that uses another mod's item as an ingredient now only loads when that mod is installed. Without it, the recipe is skipped quietly instead of logging an error, so the same content works in modpacks with and without the mod\n- New documentation page, **Recipe Examples**, with test patches for Applied Energistics 2, Powah and Ender IO machines. Those mods have no 26.2 version yet: the examples come from 26.1.2 and show how a patch is put together; follow the format of the mod you use\n\n## 🐛 Bug Fixes\n\n- **No recipe from an item's `recipe` field ever loaded.** Since 1.21.2 the game writes an ingredient as plain text — `\"minecraft:diamond\"`, `\"#minecraft:planks\"` — and the mod kept building them in the 1.21.1 form, `{\"item\": ...}`. Every `shaped`, `shapeless`, cooking, `stonecutting` and `smithing_transform` recipe was rejected at load with a `Couldn't parse data file` error in the log. `passthrough` recipes were not affected\n- **The content check let a player join with different stats when a duplicate id was involved.** The check compares every JSON regardless of where it lives, but which of two files with the same id is loaded depends on file names and packs. A client and a server with the same files arranged differently passed the check and loaded different versions of the item\n- **With a duplicate id, a Windows client and a Linux server could keep different files.** Content files and pack zips were read in an order that depends on the operating system. They are now read in the same order everywhere\n- **The reload cooldown message was always in English.** It now follows the game language like the rest of the command's messages\n\n## 📝 Documentation\n\n\n..."
+		},
+		{
+			"tag": "v2.1.0+mc26.1.2",
+			"published": "2026-10-28T20:23:31Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 686236208,
+					"name": "ultimatecustomgear-26.1.2-2.1.0-NeoForge.jar",
+					"url": "https://github.com/ArrivedDev593/UltimateCustomGear/releases/download/v2.1.0%2Bmc26.1.2/ultimatecustomgear-26.1.2-2.1.0-NeoForge.jar",
+					"size": 2303212,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "0029345bc2edaad8afdf09fe4d6e4cc1c46ea0283a864feb10bc0657ba24fe07",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "ultimatecustomgear",
+							"version": "2.1.0",
+							"name": "Ultimate Custom Gear",
+							"description": "Ultimate Custom Gear is a data-driven mod that allows server owners and modpack creators to add custom armor sets, weapons, tools, food items, blocks and fluids via simple JSON files. No coding required. Supports custom stats, held effects, set bonuses, per-piece armor values, layered damage resistances, 3D armor models via GeckoLib, custom textures, transparent armor, mob drops with Looting support, every vanilla recipe type plus passthrough recipes for other mods, tag integration and tag patching, distributable content packs, and multiplayer content verification.",
+							"minecraft": "[26.1.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"jei",
+								"geckolib",
+								"curios"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Custom Gear"
+							],
+							"item": [
+								"Custom Gear"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 184,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# UltimateCustomGear 2.1.0\n\n*NeoForge 26.1.2 · 2026-10-28*\n\n> **Change any recipe, from any mod — and your own recipes load again.** Packs written for 2.0.x load unchanged.\n\n## ⚠️ Important Notes\n\n- **Recipes defined in an item's `recipe` field load again.** From 2.0.0 to 2.0.2 none of them did (see Bug Fixes). If you worked around it with a datapack or a `passthrough` copy of the same recipe, remove the copy, or the item will have the recipe twice\n- If your content has two files with the same id, the multiplayer content check now gives a different result than in 2.0.x. Update the server and every client together. Content without duplicate ids checks exactly as before\n\n## ✨ New Features\n\n### Recipe patches\n\n- New content type `recipe_patch`: changes recipes of **any** item — vanilla's, another mod's or yours — in four ways, any of them in one file:\n    - **`add`** — gives an item new recipes, whether it had any or not, in the same format as an item's `recipe` field\n    - **`remove`** — removes recipes by id\n    - **`remove_output`** — removes every recipe that makes an item, from any mod, without knowing their ids. **`recipe_types`** narrows it: `[\"smelting\", \"blasting\"]` stops gold from being smelted in every furnace-like recipe and leaves crafting alone\n    - **`replace`** — swaps a recipe for a new one **under the same id**, so the recipe book and advancements keep working. It keeps the original's output and count unless you change them\n- `remove_output` only matches an item made as a recipe's **main** output. A recipe that gives it as a bonus is never removed by it, since removing a recipe removes all of it\n- Works with other mods' machines through `passthrough`, for any mod that loads its recipes from data\n- Applies while the game runs: add, edit or delete a patch and run `/customgear reload`\n\n### Finding recipes\n\n- New command **`/customgear recipes [item]`**: lists every recipe that makes an item, grouped by type, with the id and the type a patch needs. Click either to copy it\n- Without an item, it uses the one in your hand\n- Recipes where the item is only a secondary output are listed apart, with a reminder that removing one removes the whole recipe\n- Open to every player, not just operators: it only reads\n\n### Recipes\n\n- A recipe that uses another mod's item as an ingredient now only loads when that mod is installed. Without it, the recipe is skipped quietly instead of logging an error, so the same content works in modpacks with and without the mod\n- New documentation page, **Recipe Examples**, with complete patches for Applied Energistics 2, Powah and Ender IO machines\n\n## 🐛 Bug Fixes\n\n- **No recipe from an item's `recipe` field ever loaded.** Since 1.21.2 the game writes an ingredient as plain text — `\"minecraft:diamond\"`, `\"#minecraft:planks\"` — and the mod kept building them in the 1.21.1 form, `{\"item\": ...}`. Every `shaped`, `shapeless`, cooking, `stonecutting` and `smithing_transform` recipe was rejected at load with a `Couldn't parse data file` error in the log. `passthrough` recipes were not affected\n- **The content check let a player join with different stats when a duplicate id was involved.** The check compares every JSON regardless of where it lives, but which of two files with the same id is loaded depends on file names and packs. A client and a server with the same files arranged differently passed the check and loaded different versions of the item\n- **With a duplicate id, a Windows client and a Linux server could keep different files.** Content files and pack zips were read in an order that depends on the operating system. They are now read in the same order everywhere\n- **The reload cooldown message was always in English.** It now follows the game language like the rest of the command's messages\n\n## 📝 Documentation\n\n\n..."
+		},
 		{
 			"tag": "v1.8.0+mc1.21.1",
 			"published": "2026-10-27T05:45:57Z",
@@ -18,7 +134,7 @@
 					"name": "ultimatecustomgear-1.21.1-1.8.0-NeoForge.jar",
 					"url": "https://github.com/ArrivedDev593/UltimateCustomGear/releases/download/v1.8.0%2Bmc1.21.1/ultimatecustomgear-1.21.1-1.8.0-NeoForge.jar",
 					"size": 2311495,
-					"downloads": 0,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "d52e6586591ba2c84159dc367ab867e699f29d46042632b1fc6e95e09c076a63",
 					"mods": [
@@ -63,7 +179,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# UltimateCustomGear 1.8.0\n\n*NeoForge 1.21.1 · 2026-10-26*\n\n> **Change any recipe, from any mod.** Packs written for 1.7.x load unchanged — but NeoForge 21.1.248 is now required.\n\n## ⚠️ Important Notes\n\n- **NeoForge 21.1.248 or newer is required**, up from 21.1.235. Update NeoForge before updating this mod, or the game will refuse to start\n- **With JEI installed, JEI 19.70.0.460 or newer is required.** JEI is still optional; without it nothing changes\n- If your content has two files with the same id, the multiplayer content check now gives a different result than in 1.7.x. Update the server and every client together. Content without duplicate ids checks exactly as before\n\n## ✨ New Features\n\n### Recipe patches\n\n- New content type `recipe_patch`: changes recipes of **any** item — vanilla's, another mod's or yours — in four ways, any of them in one file:\n    - **`add`** — gives an item new recipes, whether it had any or not, in the same format as an item's `recipe` field\n    - **`remove`** — removes recipes by id\n    - **`remove_output`** — removes every recipe that makes an item, from any mod, without knowing their ids. **`recipe_types`** narrows it: `[\"smelting\", \"blasting\"]` stops gold from being smelted by vanilla, Create and Mekanism alike, and leaves crafting alone\n    - **`replace`** — swaps a recipe for a new one **under the same id**, so the recipe book and advancements keep working. It keeps the original's output and count unless you change them\n- `remove_output` only matches an item made as a recipe's **main** output. A recipe that gives it as a bonus — Create's crushing and its experience nuggets — is never removed by it, since removing a recipe removes all of it\n- Works with other mods' machines through `passthrough`: Create, Mekanism, Botania and any mod that loads its recipes from data\n- Applies while the game runs: add, edit or delete a patch and run `/customgear reload`\n\n### Finding recipes\n\n- New command **`/customgear recipes [item]`**: lists every recipe that makes an item, grouped by type, with the id and the type a patch needs. Click either to copy it\n- Without an item, it uses the one in your hand\n- Recipes where the item is only a secondary output are listed apart, with a reminder that removing one removes the whole recipe\n- Open to every player, not just operators: it only reads\n\n### Recipes\n\n- A recipe that uses another mod's item as an ingredient now only loads when that mod is installed. Without it, the recipe is skipped quietly instead of logging an error, so the same content works in modpacks with and without the mod\n- New documentation page, **Recipe Examples**, with complete patches for Create, Mekanism and Botania machines\n\n## 🐛 Bug Fixes\n\n- **The content check let a player join with different stats when a duplicate id was involved.** The check compares every JSON regardless of where it lives, but which of two files with the same id is loaded depends on file names and packs. A client and a server with the same files arranged differently passed the check and loaded different versions of the item\n- **With a duplicate id, a Windows client and a Linux server could keep different files.** Content files and pack zips were read in an order that depends on the operating system. They are now read in the same order everywhere\n- **The reload cooldown message was always in English.** It now follows the game language like the rest of the command's messages\n\n## 🔧 Technical Changes\n\n- `RecipePatchData.java`, `RecipePatchLoader.java`, `RecipePatchHandler.java` — new. Additions are written to the dynamic pack; removals and replacements run on the server's loaded recipes after every datapack load, before they are sent to players\n- `RecipeQueries.java`, `RecipesCommand.java` — new. One lookup decides what makes an item for both the command and `remove_output`: the result a recipe reports, then the output fields of its JSON for recipes that don't report one or have several outputs\n\n..."
 		},
 		{
 			"tag": "v1.7.2+mc1.21.1",
@@ -132,7 +249,7 @@
 					"name": "ultimatecustomgear-26.1.2-2.0.2-NeoForge.jar",
 					"url": "https://github.com/ArrivedDev593/UltimateCustomGear/releases/download/v2.0.2%2Bmc26.1.2/ultimatecustomgear-26.1.2-2.0.2-NeoForge.jar",
 					"size": 2272773,
-					"downloads": 0,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "cd7ce973412f5b80b7f6d846588106be90de578d39494d361264c802dce6dd53",
 					"mods": [
@@ -177,7 +294,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# UltimateCustomGear 2.0.2\n\n*NeoForge 26.1.2 · 2026-09-29*\n\n> **Double chests and container drops.** Three container fixes the 2.0.1 release did not reach, plus one documentation correction.\n\n## ⚠️ Important Notes\n\n**Your content files load unchanged.** Nothing here touches a JSON field.\n\n- A chest that was left alone after its partner broke, in 2.0.1 or earlier, may still believe it is part of a pair. Break it and place it again, or place a second chest beside it and break that one, to reset it\n\n## 🐛 Bug Fixes\n\n- **Breaking one half of a double chest dropped the wrong half.** Breaking the main half spilled the whole pair's contents and left the other half empty; breaking the other half dropped nothing and left the survivor holding both halves. The split that hands each half its own items ran after the game had already removed the inventory, so it never found anything to split\n- **A container with `keeps_contents` still spilled its contents on explosions, pistons and `/setblock`.** 2.0.1 fixed the drop for a player breaking it, and only for that. The drop now runs on every kind of removal, while the inventory still exists, exactly as it did in 1.7.0\n- **Placing a copied chest next to another sometimes did not form a pair.** A chest copied with Ctrl+pick remembered that it had already been merged with its old partner, so depending on the side it was placed on, the new pair skipped the merge: the window showed a single chest and the other half's items were unreachable until it was broken\n- **A chest left alone after its partner was broken never paired again.** It kept believing it was merged, so the next chest placed beside it hit the same problem as above\n\n## 📝 Documentation\n\n- The summary table in **Textures and Models** still gave `othermod:geo/armor/their_armor.geo.json` as the way to reference another mod's GeckoLib model, contradicting the section below it. The form that resolves is `othermod:armor/their_armor`\n\n## 🔧 Technical Changes\n\n- **Container removal moved to `BlockEntity.preRemoveSideEffects`**, the hook that replaced `Block.onRemove`. `affectNeighborsAfterRemoval` runs after the block entity is gone, and `playerWillDestroy` only runs for players; this is the one place that sees every removal with the inventory still there\n- `CustomContainerBlock.onBlockEntityRemoved` — new: the drop logic, called from the block entity. `CustomChestBlock` overrides it to split a pair before anything drops\n- The creative-break flag lives on the block entity instead of being read in `playerWillDestroy`\n- `removeComponentsFromTag` discards `Joined` along with `Contents`, and splitting a pair resets it on the chest that remains\n\n## 📦 Dependencies\n\n- **Minecraft 26.1.2** · **NeoForge 26.1.2** · **Java 25**\n- **JEI 29.29.0.77** — optional, recommended\n- **GeckoLib 5.5.2** — optional, required only for 3D armor models\n- **Curios 15.0.0** — optional, only needed for `curios_slots`\n\n---\n\n<details>\n<summary><b>🇪🇸 Leer en español</b></summary>\n\n> **Cofres dobles y drops de contenedores.** Tres correcciones de contenedores que la 2.0.1 no alcanzó, más una corrección de documentación.\n\n## ⚠️ Notas Importantes\n\n**Tus archivos de contenido cargan sin cambios.** Nada de esto toca un campo del JSON.\n\n- Un cofre que se quedó solo tras romper su pareja, en la 2.0.1 o antes, puede seguir creyéndose parte de una pareja. Rómpelo y colócalo de nuevo, o coloca un segundo cofre a su lado y rompe ese, para reiniciarlo\n\n## 🐛 Correcciones\n\n- **Romper una mitad de un cofre doble soltaba la mitad equivocada.** Romper la mitad principal derramaba el contenido de toda la pareja y dejaba vacía la otra mitad; romper la otra no soltaba nada y dejaba a la superviviente con las dos mitades. El reparto que devuelve a cada mitad sus ítems corría después de que el juego ya hubiera quitado el inventario, así que nunca encontraba nada que repartir\n\n..."
 		},
 		{
 			"tag": "v3.0.1+mc26.2",
@@ -189,7 +307,7 @@
 					"name": "ultimatecustomgear-26.2-3.0.1-NeoForge.jar",
 					"url": "https://github.com/ArrivedDev593/UltimateCustomGear/releases/download/v3.0.1%2Bmc26.2/ultimatecustomgear-26.2-3.0.1-NeoForge.jar",
 					"size": 2272700,
-					"downloads": 0,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "ca1d5a9bb145d0bbfeb7b011ed8984a036100c906a313433ee1ffe40b74c0d82",
 					"mods": [
@@ -234,7 +352,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# UltimateCustomGear 3.0.1\n\n*NeoForge 26.2 · 2026-09-29*\n\n> **Fixes for the 26.2 port.** Eleven things the port broke or brought with it — most of them in containers, and five of them stopped content from working at all.\n\n## ⚠️ Important Notes\n\n**Your content files load unchanged**, references included. Chest and shulker textures accept the folder path as well as the sprite name, `armor_layers` accepts both the old layer texture and the new equipment asset, and `armor_3d` accepts the file path as well as the id GeckoLib caches it under. Where a form changed, both are read.\n\n- **One thing is outside this mod's control: GeckoLib moved its models.** What lived under `geo/` in a 1.21.1 jar is under `geckolib/models/` now, so a reference into another mod's assets needs that segment updated — `\"othermod:geckolib/models/armor/their.geo.json\"`, or the short `\"othermod:armor/their\"`. Both work. `texture` is unaffected and keeps its full path with `.png`\n- Double chests saved before this version may have their contents split across both halves. Opening one shows the same items, in different slots; nothing was lost\n\n## 🐛 Bug Fixes\n\n### Containers\n\n- **Breaking one half of a double chest dropped the wrong half.** Breaking the main half spilled the whole pair's contents and left the other half empty; breaking the other half dropped nothing and left the survivor holding both halves. The split that hands each half its own items ran after the game had already removed the inventory, so it never found anything to split\n- **A container with `keeps_contents` spilled its contents instead of dropping itself** — first on every break, and after a partial fix still on explosions, pistons and `/setblock`. The drop now runs on every kind of removal, while the inventory still exists, exactly as it did in 1.7.0\n- **Placing a copied chest next to another sometimes did not form a pair.** A chest copied with Ctrl+pick remembered that it had already been merged with its old partner, so depending on the side it was placed on, the new pair skipped the merge: the window showed a single chest and the other half's items were unreachable until it was broken\n- **A chest left alone after its partner was broken never paired again.** It kept believing it was merged, so the next chest placed beside it hit the same problem as above\n- **Copying the main half of a double chest with Ctrl+pick duplicated its contents.** The item carried the inventory twice — once as the half this mod writes, once inside the block entity data vanilla attaches — and placing it put one copy inside and dropped the other on the floor\n- **A double chest split its contents across both halves on every world load.** The merge that forms a pair did not record that it had already run, so it ran again on an inventory that was already merged\n- **An empty backpack could be placed inside another backpack.** Nesting is refused for anything that carries an inventory, but the check only ever looked at block-backed containers, and a backpack is a plain item\n- **The container screen had no text.** Its title, the inventory label and the search box were drawn fully transparent: text colours are now read with their alpha channel, and these had none\n\n### Everything else\n\n- **The game crashed on startup unless every piece of gear declared `enchantability`.** The field is optional, so omitting it is the ordinary case: it arrived as `0`, and both material types now reject a value that is not positive. A material's value only grades the offers — whether gear can be enchanted at all is still the `enchantable` flag\n- **Custom blocks and containers showed their raw translation key** instead of their name, and a placed container had no title. An item's key now comes from its own registry entry unless the properties say otherwise, and a `BlockItem` no longer inherits its block's\n\n..."
 		},
 		{
 			"tag": "v2.0.1+mc26.1.2",
@@ -297,5 +416,7 @@
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

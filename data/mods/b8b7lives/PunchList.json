@@ -18,7 +18,7 @@
 					"name": "punchlist-0.8.6+26.2.jar",
 					"url": "https://github.com/b8b7lives/PunchList/releases/download/v0.8.6/punchlist-0.8.6%2B26.2.jar",
 					"size": 62301,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "bc65adcd63f49ccfa6a38320f969b911854c6fca8116b2e496947182e94aa7d0",
 					"mods": [
@@ -55,7 +55,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "- The Enclosed button on the verifier screen now shows just the mode name Show, Hide, or Hide (strict) and is narrower. The tooltip carries the Enclosed title and was reformatted for readability."
 		},
 		{
 			"tag": "v0.8.5",
@@ -67,7 +68,7 @@
 					"name": "punchlist-0.8.5+26.2.jar",
 					"url": "https://github.com/b8b7lives/PunchList/releases/download/v0.8.5/punchlist-0.8.5%2B26.2.jar",
 					"size": 62273,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "6c79e2f74087659b90fb02151c5067cbd7cc2f55bb161c89731d5a2434367437",
 					"mods": [
@@ -104,7 +105,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Everything since 0.8.2.\n\n- The PunchList on/off button on the verifier screen gets the same corner anchored tooltip as the Enclosed button. The anchor logic moved to a shared helper, so any future verifier button joins with one line.\n- Fix, the corner anchored tooltip now splits its text on embedded newlines like the stock draw does. 0.8.3 rendered the whole tooltip as one screen wide line with box characters between the segments.\n- Fix, the Enclosed button tooltip now anchors its top right corner just below the button's bottom right corner, extending down and left, so the button and its mode label stay visible while hovering. The 0.8.2 attempt drew through a path the game never calls for buttons. If the new hook is unavailable the stock cursor tooltip returns."
 		},
 		{
 			"tag": "v0.8.2",
@@ -116,7 +118,7 @@
 					"name": "punchlist-0.8.2+26.2.jar",
 					"url": "https://github.com/b8b7lives/PunchList/releases/download/v0.8.2/punchlist-0.8.2%2B26.2.jar",
 					"size": 59286,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "90464a2a222a3fb1b0950b371bc0aaf52e19256041dea9e1ed6e537e376a6d61",
 					"mods": [
@@ -153,7 +155,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Everything since 0.6.4, the last published build.\n\n**New features**\n\n- The verifier marker window is now filter aware. Enclosure hidden positions are dropped before the closest sort, so the window budget only counts blocks you can work on. The nearest visible work always renders, and an empty screen means everything left in range is enclosed. When fresh enclosure results land, the window refills within half a second.\n- Canopy aware hiding. Interior leaves now count as hidden. The visibility flood still travels through leaves so logs and branches inside a canopy stay visible, but leaves themselves are judged by a second flood that treats leaves as solid. On a large organic tree the leaves counts flip from nearly all visible to nearly all hidden. Hide (strict) is unchanged.\n- All settings now appear in Litematica's config screen under the Generic tab, searchable like any Litematica option, and persist in litematica.json. The old config/punchlist.json is read once and renamed to punchlist.json.migrated.\n\n**Fixes**\n\n- Lowering verifierErrorHilightMaxPositions now takes effect within half a second while standing still. Previously a lowered cap kept the old oversized marker window and its performance cost until a block change or verifier reset forced a re-sort."
 		},
 		{
 			"tag": "v0.6.4",
@@ -165,7 +168,7 @@
 					"name": "punchlist-0.6.4+26.2.jar",
 					"url": "https://github.com/b8b7lives/PunchList/releases/download/v0.6.4/punchlist-0.6.4%2B26.2.jar",
 					"size": 54076,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "45e542863fc0e78135abbc92a47abd4c84406a7ab41694b174fa42b4746e8d0a",
 					"mods": [
@@ -202,7 +205,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Everything since 0.1.2, field tested on a large organic build with over 400k mismatch positions.\n\n### New features\n\n- **Enclosed block hiding.** A cycle button on the verifier screen hides positions that are invisible in the finished build, either fully covered or facing a sealed interior pocket. Leaves only hide other leaves, so canopy hollows stay visible. The modes are Show, Hide, and Hide strict.\n- **Adjusted counts.** Hovering a verifier row shows how many of that material are hidden and how many are visible, so counts reflect the work that actually shows. This works with the filter off.\n- **Follow the player.** The verifier marker window re-centers as you move. Stock Litematica only re-sorts when you place a block or touch the GUI. Default distance is 32 blocks, configurable, and 0 turns it off.\n\n### Performance\n\n- Enclosure results are computed once per placement and memoized, so placing blocks invalidates nothing.\n- Sealed pocket detection runs as a background flood fill with a volume guard, off the render thread.\n- Selection changes re-mesh only the affected chunks instead of the whole schematic, and ghosts refill in real time while placing.\n- The filter working set updates on events instead of being recopied every tick.\n\n### Fixes\n\n- The hover count line no longer overlaps the popup block state properties.\n- An adversarial review found ten defects and all are fixed, covering stale set hashing, stale flood results, atomic cache clears, and retry storm guards.\n\n### Compatibility\n\nTargets MC 26.2 Fabric with Litematica 0.28.4 and MaLiLib 0.29.3 from the sakura-ryoko builds. All mixins fail soft. On an incompatible version the mod disables itself with a chat message instead of crashing."
 		},
 		{
 			"tag": "v0.1.2",
@@ -214,7 +218,7 @@
 					"name": "punchlist-0.1.2+26.2.jar",
 					"url": "https://github.com/b8b7lives/PunchList/releases/download/v0.1.2/punchlist-0.1.2%2B26.2.jar",
 					"size": 18719,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "c97a2b3e63ddd2384781021401f2de388ea7abf10233bd10dd03081e880d8747",
 					"mods": [
@@ -251,11 +255,27 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "First packaged release.\n\nPunchList hides every Litematica schematic ghost block except the mismatch positions selected in the Schematic Verifier, and lets Easy Place / pick-block ray traces pass through the hidden ones — so flagged blocks behind unbuilt ghosts can be targeted directly.\n\n- Verifier-filtered rendering + trace pass-through (Easy Place both modes, pick-block, all schematic trace paths)\n- Toggle via hotkey (Litematica > Hotkeys) or the button on the verifier screen; filter starts off every launch, and with nothing selected it does nothing\n- Fail-open compatibility: on an untested Litematica/MaLiLib version the mod disables itself with a chat message instead of crashing\n- Requires Litematica, MaLiLib, Fabric API. Client-side only. MC 26.2.\n\nSee CHANGELOG.md for the 0.1.0 -> 0.1.2 history."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [
+		"gallery/filter-off.webp",
+		"gallery/filter-on.webp",
+		"gallery/hotkey-config-tooltip.webp",
+		"gallery/verifier-button.webp",
+		"icon/punchlist-icon-16.png",
+		"icon/punchlist-icon-512.png"
+	],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 0,
+		"more": 0,
+		"people": []
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

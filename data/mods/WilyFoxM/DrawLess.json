@@ -6,8 +6,60 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-15T21:45:49Z",
-	"pushed": "2026-10-31T18:43:39Z",
+	"pushed": "2026-10-31T21:05:36Z",
 	"releases": [
+		{
+			"tag": "1.3.0",
+			"published": "2026-10-31T20:25:49Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 696399394,
+					"name": "drawless-1.3.0.jar",
+					"url": "https://github.com/WilyFoxM/DrawLess/releases/download/1.3.0/drawless-1.3.0.jar",
+					"size": 432225,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "a3a717007d1cb78096f48916a6aaf39693e6415d319b079a975c0e1d38c8038b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "drawless",
+							"version": "1.3.0",
+							"name": "DrawLess",
+							"description": "Client-side rendering optimizations for Item Display scenes and particles.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium"
+							]
+						}
+					],
+					"icon": "1880ff639f3c9e9984939b7d131865559b2a30a054339e65ab79b69f685a5d4d.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 193,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**DrawLess 1.3.0 — Items on players on the GPU.**\n\nDrawLess 1.3.0 continues with player rendering. Items that players hold and wear\non their heads now stay on the GPU, sharing their meshes with Item Displays, and\na new benchmark measures the whole of DrawLess on a server spawn with players.\n\n**Players**\n\n- New option **GPU items on players** on the **Players** page, **ON by default**.\n  A configuration that saved this option as OFF keeps it OFF.\n- Items in the hands and on the heads of players and mannequins keep their\n  geometry on the GPU; each frame sends only item poses, lighting and tint.\n  Meshes are shared with Item Displays, so the same model is stored once.\n- Standard enchantment glint on these items stays on the GPU too and draws\n  exactly over its item. Glowing, translucent and specially rendered items, special\n  foil and custom glint shaders use ordinary rendering. Items in menus and your\n  own first-person hands are never affected.\n\n**Memory**\n\n- Item meshes shared by Item Displays and players now have one owner. When the\n  mesh store reaches its capacity, models unused for 30 seconds are evicted and\n  the remaining geometry is compacted; until then new models use ordinary\n  rendering for that frame.\n\n**Measurements**\n\n- Benchmark summaries record the number of rendered players per measured second\n  and add a population-adjusted comparison: a frame-time-per-player slope fitted\n  within phases moves every phase to the series' average player count. The raw\n  paired result stays the headline.\n- Player probes count players outside Sodium's visible sections and players\n  hidden behind blocks from the camera. This measurement prepares a future\n  occlusion optimization; 1.3.0 does not hide any players.\n- Added the `player_items` target for automated comparisons, for example\n  `/drawless benchmark 3 items player_items`.\n\n**Compatibility**\n\nGPU items on players are disabled with Iris, like GPU armor; existing\nImmediatelyFast and Iris exclusions remain in place. Tested with Sodium 0.9.2 and\nImmediatelyFast 1.16.5. These safeguards do not imply validation with every\ncombination of rendering or model mods.\n\n**Performance and limitations**\n\n[Benchmark 03](https://github.com/WilyFoxM/DrawLess/blob/main/benchmarks/README.md)\nmeasured **+29.24% mean paired FPS change** (179.50 → 231.99 FPS) for 1.3.0 with\ndefault settings and Sodium on a busy server spawn **with 8–11 other players in\nview** and about 430 Item Displays. Two more series in the same session measured\n+28.45% and +30.49%. Earlier benchmarks had no other players in the scene, so\nthis is not a version-to-version comparison. It is one scene and one session on\na Ryzen 5 5600H / RTX 3060 Laptop GPU; GPU time was not measured.\n\nIn alternating player profiles on a live server with 15–21 visible players, CPU\ntime for encoding items on players dropped from about 0.53 to 0.15 ms per frame.\nLocal native frame comparisons of held and head items, with and without glint\nand improved transparency, matched ordinary rendering pixel for pixel.\n\n**Requirements**\n\nMinecraft **26.2**, Fabric Loader **0.19.3+**, Fabric API **0.161.0+26.2** and\nJava **25**. Sodium is optional; no server-side installation is needed.\n\nThanks to **fzzyhmstrs and the Particle Core contributors**, alongside\n**RK_01 / RaphiMC**, the **ImmediatelyFast contributors**, **LlamaLad7** and the\n**MixinExtras contributors**. [Attributions and reference links](https://github.com/WilyFoxM/DrawLess#attributions)."
+		},
 		{
 			"tag": "1.2.0",
 			"published": "2026-10-29T19:41:41Z",

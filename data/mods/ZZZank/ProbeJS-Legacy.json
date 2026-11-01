@@ -1,0 +1,496 @@
+{
+	"repo": "ZZZank/ProbeJS-Legacy",
+	"host": "github",
+	"description": "ProbeJS for KubeJS versions abandoned by official ProbeJS",
+	"stars": 4,
+	"archived": false,
+	"license": "LGPL-3.0",
+	"created": "2023-12-29T10:30:51Z",
+	"pushed": "2026-10-29T06:43:46Z",
+	"forkOf": "Prunoideae/ProbeJS-Forge",
+	"releases": [
+		{
+			"tag": "4.2.0",
+			"published": "2024-08-29T08:36:58Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 189054348,
+					"name": "probejs-4.2.0.jar",
+					"url": "https://github.com/ZZZank/ProbeJS-Legacy/releases/download/4.2.0/probejs-4.2.0.jar",
+					"size": 593749,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "3495f01d2da5bbf5e0371b7ba38a25f1e017361ce2e3de674962a4a457f4aae3",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "probejs",
+							"version": "4.2.0",
+							"name": "ProbeJS",
+							"description": "KubeJS data dumper",
+							"environment": "*",
+							"depends": [
+								"kubejs"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 362,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"zzzank/probejs/features/schema/SchemaDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"zzzank/probejs/shaded/java_websocket/AbstractWrappedByteChannel.class": [
+									"java/nio/channels/SocketChannel.isBlocking"
+								],
+								"zzzank/probejs/shaded/java_websocket/SSLSocketChannel.class": [
+									"java/nio/channels/SocketChannel.close",
+									"java/nio/channels/SocketChannel.read",
+									"java/nio/channels/SocketChannel.write",
+									"java/nio/channels/SocketChannel.isBlocking",
+									"java/nio/channels/SocketChannel.isOpen"
+								],
+								"zzzank/probejs/shaded/java_websocket/SSLSocketChannel2.class": [
+									"java/nio/channels/SocketChannel.write",
+									"java/nio/channels/SocketChannel.read",
+									"java/nio/channels/SocketChannel.isConnected",
+									"java/nio/channels/SocketChannel.isOpen",
+									"java/nio/channels/SocketChannel.close",
+									"java/nio/channels/SocketChannel.configureBlocking",
+									"java/nio/channels/SocketChannel.connect",
+									"java/nio/channels/SocketChannel.finishConnect",
+									"java/nio/channels/SocketChannel.socket",
+									"java/nio/channels/SocketChannel.isBlocking"
+								],
+								"zzzank/probejs/shaded/java_websocket/client/WebSocketClient$WebsocketWriteThread.class": [
+									"java/net/Socket.close"
+								],
+								"zzzank/probejs/shaded/java_websocket/client/WebSocketClient.class": [
+									"java/net/Socket.close",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setReuseAddress",
+									"java/net/Socket.isConnected",
+									"java/net/Socket.connect",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.<init>",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.getLocalSocketAddress",
+									"java/net/Socket.getRemoteSocketAddress"
+								],
+								"zzzank/probejs/shaded/java_websocket/server/WebSocketServer.class": [
+									"java/nio/channels/SocketChannel.configureBlocking",
+									"java/nio/channels/SocketChannel.socket",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setKeepAlive",
+									"java/nio/channels/SocketChannel.register",
+									"java/net/Socket.getLocalSocketAddress",
+									"java/net/Socket.getRemoteSocketAddress"
+								]
+							}
+						},
+						"hosts": {
+							"kubejs.com": [
+								"zzzank/probejs/GameEvents.class"
+							],
+							"www.curseforge.com": [
+								"zzzank/probejs/ProbeDumpingThread.class"
+							],
+							"github.com": [
+								"zzzank/probejs/ProbeDumpingThread.class",
+								"zzzank/probejs/features/schema/SchemaDownloader.class",
+								"zzzank/probejs/shaded/java_websocket/AbstractWebSocket.class"
+							],
+							"www.slf4j.org": [
+								"zzzank/probejs/shaded/slf4j/LoggerFactory.class",
+								"zzzank/probejs/shaded/slf4j/MDC.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# ProbeJS Legacy 4.1.0 -> 4.2.0\n\n\"global\" resolving & config rewrite\n\n## What's new?\n\n-   values added to `global` can now be scanned and exported to typings\n    -   e.g. `global.jeiRuntime` (when JEI is installed) will now have typings provided\n    -   this is enabled by default, you can also disable it in config file\n-   config system is now rewritten. Now all available configs are written to `probe-settings.json`, allowing you to change them without in-game commands.\n-   new config system will also provide more information in config file:\n    -   current value, with `$value` as its key\n    -   default value, with `$default` as its key\n    -   comments, with `$comment` as its key\n-   a new config option for not dumping non-public and not referenced classes, disabled by default\n-   make event cache smaller by not storaging event id twice\n-   ProbeJS Legacy will warn players when typing generations failed\n-   recipe doc now also apply to startup events\n-   binding `Types` is removed, import `$Types` instead\n-   smarter scope wrapping, more in line with how CommonJS in VSCode works\n-   fix an edge-case bug where `exportXXXX` will cause scope problem\n-   fix `typeRoots` and `BaseUrl` in jsconfig.json\n\nNote: ProbeJS Legacy 4 is very different from ProbeJS Legacy 3.x and older versions, old typing files are invalid in 4.x version, see [ProbeJS 7 release note](https://github.com/Prunoideae/ProbeJS/releases/tag/v7.0.0) and [another ProbeJS 7 release note](https://github.com/Prunoideae/ProbeJS/releases/tag/v7.0.0-1.21) for more details. If you are unable to use 4.x, or just don't like it, `3.11.0` is the only recommended 3.x version of PJS Legacy.\n\n---\n\n**Full Changelog**: https://github.com/ZZZank/ProbeJS-Legacy/compare/4.1.0...4.2.0"
+		},
+		{
+			"tag": "4.1.0",
+			"published": "2024-08-14T09:34:54Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 185884218,
+					"name": "probejs-4.1.0.jar",
+					"url": "https://github.com/ZZZank/ProbeJS-Legacy/releases/download/4.1.0/probejs-4.1.0.jar",
+					"size": 579717,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "9f462b542d2675bf778cef07f9d0717d5dc2a6ea49bc47ce9ae3a3ba20117786",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "probejs",
+							"version": "4.1.0",
+							"name": "ProbeJS",
+							"description": "KubeJS data dumper",
+							"environment": "*",
+							"depends": [
+								"kubejs"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 355,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"zzzank/probejs/features/schema/SchemaDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"zzzank/probejs/shaded/java_websocket/AbstractWrappedByteChannel.class": [
+									"java/nio/channels/SocketChannel.isBlocking"
+								],
+								"zzzank/probejs/shaded/java_websocket/SSLSocketChannel.class": [
+									"java/nio/channels/SocketChannel.close",
+									"java/nio/channels/SocketChannel.read",
+									"java/nio/channels/SocketChannel.write",
+									"java/nio/channels/SocketChannel.isBlocking",
+									"java/nio/channels/SocketChannel.isOpen"
+								],
+								"zzzank/probejs/shaded/java_websocket/SSLSocketChannel2.class": [
+									"java/nio/channels/SocketChannel.write",
+									"java/nio/channels/SocketChannel.read",
+									"java/nio/channels/SocketChannel.isConnected",
+									"java/nio/channels/SocketChannel.isOpen",
+									"java/nio/channels/SocketChannel.close",
+									"java/nio/channels/SocketChannel.configureBlocking",
+									"java/nio/channels/SocketChannel.connect",
+									"java/nio/channels/SocketChannel.finishConnect",
+									"java/nio/channels/SocketChannel.socket",
+									"java/nio/channels/SocketChannel.isBlocking"
+								],
+								"zzzank/probejs/shaded/java_websocket/client/WebSocketClient$WebsocketWriteThread.class": [
+									"java/net/Socket.close"
+								],
+								"zzzank/probejs/shaded/java_websocket/client/WebSocketClient.class": [
+									"java/net/Socket.close",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setReuseAddress",
+									"java/net/Socket.isConnected",
+									"java/net/Socket.connect",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.<init>",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.getLocalSocketAddress",
+									"java/net/Socket.getRemoteSocketAddress"
+								],
+								"zzzank/probejs/shaded/java_websocket/server/WebSocketServer.class": [
+									"java/nio/channels/SocketChannel.configureBlocking",
+									"java/nio/channels/SocketChannel.socket",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setKeepAlive",
+									"java/nio/channels/SocketChannel.register",
+									"java/net/Socket.getLocalSocketAddress",
+									"java/net/Socket.getRemoteSocketAddress"
+								]
+							}
+						},
+						"hosts": {
+							"kubejs.com": [
+								"zzzank/probejs/GameEvents.class"
+							],
+							"www.curseforge.com": [
+								"zzzank/probejs/ProbeDumpingThread.class"
+							],
+							"github.com": [
+								"zzzank/probejs/ProbeDumpingThread.class",
+								"zzzank/probejs/features/schema/SchemaDownloader.class",
+								"zzzank/probejs/shaded/java_websocket/AbstractWebSocket.class"
+							],
+							"www.slf4j.org": [
+								"zzzank/probejs/shaded/slf4j/LoggerFactory.class",
+								"zzzank/probejs/shaded/slf4j/MDC.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# ProbeJS Legacy 4.0.0 -> 4.1.0\n\nSafer class scanning\n\n## What's new?\n\n-   Largely eliminates the chance of crashing the whole game due to loading critical classes too early\n-   Better doc for `java()` function and `require()` function\n    -   `java()` is now marked as deprecated, please use `require()` :)\n-   And some internal cleanups\n\nNote: ProbeJS Legacy 4 is very different from ProbeJS Legacy 3.x and older versions, old typing files are invalid in 4.x version, see [ProbeJS 7 release note](https://github.com/Prunoideae/ProbeJS/releases/tag/v7.0.0) and [another ProbeJS 7 release note](https://github.com/Prunoideae/ProbeJS/releases/tag/v7.0.0-1.21) for more details. If you are unable to use 4.x, or just don't like it, `3.11.0` is the only recommended 3.x version of PJS Legacy. \n\n---\n\n**Full Changelog**: https://github.com/ZZZank/ProbeJS-Legacy/compare/4.0.0...4.1.0"
+		},
+		{
+			"tag": "4.0.0",
+			"published": "2024-08-07T08:42:03Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 184407254,
+					"name": "probejs-4.0.0.jar",
+					"url": "https://github.com/ZZZank/ProbeJS-Legacy/releases/download/4.0.0/probejs-4.0.0.jar",
+					"size": 584916,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "3f971e6ff22281d53ba8d02d0e1fcbbfa05dfcd62b8094e37667e784a43c2d62",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "probejs",
+							"version": "4.0.0",
+							"name": "ProbeJS",
+							"description": "KubeJS data dumper",
+							"environment": "*",
+							"depends": [
+								"kubejs"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 358,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"zzzank/probejs/features/schema/SchemaDownloader.class": [
+									"java/net/URL.openConnection"
+								],
+								"zzzank/probejs/shaded/java_websocket/AbstractWrappedByteChannel.class": [
+									"java/nio/channels/SocketChannel.isBlocking"
+								],
+								"zzzank/probejs/shaded/java_websocket/SSLSocketChannel.class": [
+									"java/nio/channels/SocketChannel.close",
+									"java/nio/channels/SocketChannel.read",
+									"java/nio/channels/SocketChannel.write",
+									"java/nio/channels/SocketChannel.isBlocking",
+									"java/nio/channels/SocketChannel.isOpen"
+								],
+								"zzzank/probejs/shaded/java_websocket/SSLSocketChannel2.class": [
+									"java/nio/channels/SocketChannel.write",
+									"java/nio/channels/SocketChannel.read",
+									"java/nio/channels/SocketChannel.isConnected",
+									"java/nio/channels/SocketChannel.isOpen",
+									"java/nio/channels/SocketChannel.close",
+									"java/nio/channels/SocketChannel.configureBlocking",
+									"java/nio/channels/SocketChannel.connect",
+									"java/nio/channels/SocketChannel.finishConnect",
+									"java/nio/channels/SocketChannel.socket",
+									"java/nio/channels/SocketChannel.isBlocking"
+								],
+								"zzzank/probejs/shaded/java_websocket/client/WebSocketClient$WebsocketWriteThread.class": [
+									"java/net/Socket.close"
+								],
+								"zzzank/probejs/shaded/java_websocket/client/WebSocketClient.class": [
+									"java/net/Socket.close",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setReuseAddress",
+									"java/net/Socket.isConnected",
+									"java/net/Socket.connect",
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.<init>",
+									"java/net/Socket.isClosed",
+									"java/net/Socket.getLocalSocketAddress",
+									"java/net/Socket.getRemoteSocketAddress"
+								],
+								"zzzank/probejs/shaded/java_websocket/server/WebSocketServer.class": [
+									"java/nio/channels/SocketChannel.configureBlocking",
+									"java/nio/channels/SocketChannel.socket",
+									"java/net/Socket.setTcpNoDelay",
+									"java/net/Socket.setKeepAlive",
+									"java/nio/channels/SocketChannel.register",
+									"java/net/Socket.getLocalSocketAddress",
+									"java/net/Socket.getRemoteSocketAddress"
+								]
+							}
+						},
+						"hosts": {
+							"kubejs.com": [
+								"zzzank/probejs/GameEvents.class"
+							],
+							"www.curseforge.com": [
+								"zzzank/probejs/ProbeDumpingThread.class"
+							],
+							"github.com": [
+								"zzzank/probejs/ProbeDumpingThread.class",
+								"zzzank/probejs/features/schema/SchemaDownloader.class",
+								"zzzank/probejs/shaded/java_websocket/AbstractWebSocket.class"
+							],
+							"www.slf4j.org": [
+								"zzzank/probejs/shaded/slf4j/LoggerFactory.class",
+								"zzzank/probejs/shaded/slf4j/MDC.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "A huge update, see [ProbeJS 7 release note](https://github.com/Prunoideae/ProbeJS/releases/tag/v7.0.0) and [another ProbeJS 7 release note](https://github.com/Prunoideae/ProbeJS/releases/tag/v7.0.0-1.21) for more details.\n\nBut of course PJS Legacy 4 will not be a one to one copy of PJS 7, exact implementations vary a lot, and there can also be differences in features. \n\n**Full Changelog**: https://github.com/ZZZank/ProbeJS-Legacy/compare/3.10.0...4.0.0"
+		},
+		{
+			"tag": "3.11.0",
+			"published": "2024-08-07T08:35:48Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 184406636,
+					"name": "probejs-3.11.0.jar",
+					"url": "https://github.com/ZZZank/ProbeJS-Legacy/releases/download/3.11.0/probejs-3.11.0.jar",
+					"size": 239082,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "f88447f403e730de9a86784d4b21e9b7c9c88adfed49e69a90b55eec1df9cc0c",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "probejs",
+							"version": "3.11.0",
+							"name": "ProbeJS",
+							"description": "KubeJS data dumper",
+							"environment": "*",
+							"depends": [
+								"kubejs"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 130,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"www.curseforge.com": [
+								"com/probejs/ProbeCommands.class"
+							],
+							"github.com": [
+								"com/probejs/ProbeCommands.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "3.11.0 is a patch version that fixes Rhizo remapper compatibility, because Rhizo updated its remapper again after 3.0. \n\n**Full Changelog**: https://github.com/ZZZank/ProbeJS-Legacy/compare/3.10.0...3.11.0"
+		},
+		{
+			"tag": "3.10.0",
+			"published": "2024-06-03T13:16:26Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 171633835,
+					"name": "probejs-3.10.0.jar",
+					"url": "https://github.com/ZZZank/ProbeJS-Legacy/releases/download/3.10.0/probejs-3.10.0.jar",
+					"size": 253794,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "3718206bbfdb9f79b7c48914dd35554b5ebc275e1d39569f2a1cd6448d756b40",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "probejs",
+							"version": "3.10.0",
+							"name": "ProbeJS",
+							"description": "KubeJS data dumper",
+							"environment": "*",
+							"depends": [
+								"kubejs"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 141,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"www.curseforge.com": [
+								"com/probejs/ProbeCommands.class"
+							],
+							"github.com": [
+								"com/probejs/ProbeCommands.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# ProbeJS Legacy 3.9.9 -> 3.10.0\n\nRhizo 3.0 support\n\n## What's new?\n\n-   Use a new way of detecting Remapper, to properly support Rhizo 3.0.\n-   ProbeJS Legacy will now warn users when Rhizo is not installed.\n    -   not installing Rhizo can lead to problems like broken filtering for methods/fields.\n-   Comment handling is further improved.\n-   Excessive setter filtering is now removed, allowing more possible setter to be dumped.\n-   Methods/fields additions from user docs will now show up at the front.\n    -   this allows manually added methods/fields to have the highest priority when being parsed.\n-   Internal cleanups for ProbeJS Legacy 4.0.0.\n-   Doc type parsing for objects and tuples.\n\nNOTE: 4.0.0 is still under development. If you're interested in it, you can see [dev note](https://github.com/ZZZank/ProbeJS-Forge/blob/1.16.5/dev_note.md) for the overall code structure of 4.0.0\n\n---\n\n**Full Changelog**: https://github.com/ZZZank/ProbeJS-Forge/compare/3.9.9...3.10.0"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T22:37:16.645Z",
+	"pictures": [
+		"examples/2.gif",
+		"examples/3.gif"
+	],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 1690,
+		"more": 0,
+		"people": [
+			{
+				"login": "ZZZank",
+				"commits": 1671,
+				"funding": []
+			},
+			{
+				"login": "Prunoideae",
+				"commits": 18,
+				"name": "LI Junyu",
+				"funding": []
+			},
+			{
+				"login": "wagyourtail",
+				"commits": 1,
+				"name": "William Gray",
+				"funding": [
+					{
+						"platform": "ko_fi",
+						"url": "https://ko-fi.com/wagyourtail"
+					},
+					{
+						"platform": "patreon",
+						"url": "https://www.patreon.com/wagyourtail"
+					}
+				]
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
+	"history": 1
+}

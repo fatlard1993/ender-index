@@ -18,7 +18,7 @@
 					"name": "epicysm-1.20.1-1.1.4.jar",
 					"url": "https://github.com/Argorice/EpicYSM/releases/download/v1.1.4-1.20.1/epicysm-1.20.1-1.1.4.jar",
 					"size": 475305,
-					"downloads": 9,
+					"downloads": 11,
 					"inspection": 2,
 					"sha256": "1e2bf697483f99a12dd83d4a09e30ce611f3da60c51499ae76b21247bdb44e17",
 					"mods": [
@@ -53,7 +53,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Minecraft 1.20.1, Forge 47. Requires Epic Fight 20.14+ and Yes Steve Model 2.6+. Client side only.\n\nCompatibility with Epic Fight: Touhou Little Maid, and fixes to how the live skeleton is chosen and kept.\n\n- Maids of Touhou Little Maid dressed in a Yes Steve Model model fight in it. With Epic Fight: Touhou Little Maid, a maid set to fight is drawn by Epic Fight, and the add-on has one mesh for every maid - its own fox maid - so a maid in a Yes Steve Model model came apart into that mesh with the wrong picture on it. She is now drawn by Yes Steve Model, through the entry Touhou Little Maid draws her through, with Epic Fight's pose written into her bones the moment before, the way a player in an encrypted model is; Epic Fight draws the weapon in her hand on the model's own joints. Readable model or not, nothing is decrypted. Maids without a Yes Steve Model model are still the add-on's; a maid not set to fight is Yes Steve Model's alone, as before.\n- A maid's weapon sits on her model's own hand, as a player's does. A renderer that skins its mesh to the body's armature (Nightfall's Yamato, sheath and blade) is given this mod's stand-in armature with the model's joints in it; a maid answered for her armature from the add-on's table by weapon first, and got Epic Fight's own biped, shared by every body, so the blade and the sheath came out at the biped's proportions and on whatever pose that shared skeleton last held. The table is set aside for the length of the draw. Players are untouched.\n- A player and a maid in the same model each get their own live copy of it: the copy is looked for under the object that holds that very entity, and a copy under another body's record is never taken - posed from two overlays at once, a model came apart.\n- Under shaders a body is drawn twice a frame on one write of Yes Steve Model's animation, and the check that says whether the copy being posed is still animated compared one draw with the next; whenever the sample fell in the shadow pass the copy read as no longer drawn, and the model was read again every second, its whole table in the log each time. The sample is now held over a few frames, and a copy that does go still is passed over on the re-read instead of taken again.\n- A third mixin, into Epic Fight's render hook, keeps it out of the draw this mod runs through Yes Steve Model; for a player Epic Fight asks this mod first, for a maid it would have cancelled the inner draw and left nothing on screen. Optional, like the other two; should it not be in place, the event is put back after everyone has spoken and what Epic Fight drew goes nowhere.\n- The log names the entity a skeleton is chosen for and posed on.\n\nThe same changes are on the `main` branch for Minecraft 1.21.1 / NeoForge and go out with its next release."
 		},
 		{
 			"tag": "v1.1.3",
@@ -65,7 +66,7 @@
 					"name": "epicysm-1.1.3.jar",
 					"url": "https://github.com/Argorice/EpicYSM/releases/download/v1.1.3/epicysm-1.1.3.jar",
 					"size": 457250,
-					"downloads": 9,
+					"downloads": 10,
 					"inspection": 2,
 					"sha256": "8d6f62d17393479346f7cc93995c6bbf1742a32a42d8a3bdbf72bc399ee5b3f5",
 					"mods": [
@@ -100,7 +101,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Minecraft 1.21.1, NeoForge. Requires Epic Fight 21.15+ and Yes Steve Model 2.6+. Client side only.\n\nOne fix: an encrypted model put on again with shaders on was no longer posed.\n\n- Encrypted models: after a model had been taken off and put on again with shaders on (Iris on 1.21.1), it was not posed any more. By then Yes Steve Model had built its first-person model - six bones of arms alone - and that rig hangs beside the body under the same texture; the skeleton search took whichever hung closest, found only arms, gave up, and stayed given up until the next change of model. A rig with no trunk and no head is no longer taken for the body: one that has them wins whatever hangs closer, and when arms are all there is, the body is looked for again instead of given up on.\n\nThe same release is available for Minecraft 1.20.1 / Forge from the `1.20.1` branch."
 		},
 		{
 			"tag": "v1.1.3-1.20.1",
@@ -112,7 +114,7 @@
 					"name": "epicysm-1.20.1-1.1.3.jar",
 					"url": "https://github.com/Argorice/EpicYSM/releases/download/v1.1.3-1.20.1/epicysm-1.20.1-1.1.3.jar",
 					"size": 464710,
-					"downloads": 6,
+					"downloads": 7,
 					"inspection": 2,
 					"sha256": "00d70b93ef963b6168cb0909bbc1ea2f421e023e4bacb09aefff08185c7bed92",
 					"mods": [
@@ -147,7 +149,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Minecraft 1.20.1, Forge 47. Requires Epic Fight 20.14+ and Yes Steve Model 2.6+. Client side only.\n\nOne fix: an encrypted model put on again with shaders on was no longer posed.\n\n- Encrypted models: after a model had been taken off and put on again with shaders on (Iris on 1.21.1), it was not posed any more. By then Yes Steve Model had built its first-person model - six bones of arms alone - and that rig hangs beside the body under the same texture; the skeleton search took whichever hung closest, found only arms, gave up, and stayed given up until the next change of model. A rig with no trunk and no head is no longer taken for the body: one that has them wins whatever hangs closer, and when arms are all there is, the body is looked for again instead of given up on.\n\nThe same fix is on the `main` branch for Minecraft 1.21.1 / NeoForge."
 		},
 		{
 			"tag": "v1.1.2",
@@ -159,7 +162,7 @@
 					"name": "epicysm-1.1.2.jar",
 					"url": "https://github.com/Argorice/EpicYSM/releases/download/v1.1.2/epicysm-1.1.2.jar",
 					"size": 456660,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "51b00a67302064c733f3d994351a713e6ae8fb918c5254bf77a1054409ad0982",
 					"mods": [
@@ -194,7 +197,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Minecraft 1.21.1, NeoForge. Requires Epic Fight 21.15+ and Yes Steve Model 2.6+. Client side only.\n\nHeads and arms that stay with the body, straight arms on encrypted models, Nightfall's weapons kept on the model, and two crashes from other mods' hit boxes caught.\n\n- Models built with one trunk bone (an UpBody and no UpperBody inside it - most models) had that bone follow Epic Fight's hip while the head and both arms hang from its chest; every attack that turns the chest, and the plain walk, left the head and the arms behind. The trunk now follows the chest. Readable and encrypted models alike.\n- Encrypted models: the small outward turn most models rest their arms with is no longer kept in every pose. The arms follow Epic Fight's joints straight from the shoulder, as its own skeleton does, and a held weapon sits at the angle the animation gives it instead of tilting with the arm.\n- Sheathing on encrypted models: the left hand goes to the sheath from a blade's length away, and during a finisher or a sheathing the right hand - the blade with it - is placed from the model's own chest, both hands giving way together when one arm cannot reach. A stance or a walk never touches the right arm.\n- Epic Fight: Nightfall's thorn wheel and claws - weapons with a mesh and joints of their own, built on Avalon - no longer put the model away: a skeleton that has every joint of the biped counts as the biped. On encrypted models the weapon's mesh, which nothing drew there before, is drawn at the model's joints.\n- Two crashes on the integrated server (singleplayer, LAN host), both from other mods' hit boxes, no longer end the game: a box whose corners are not numbers (Invincible: DevilMineCraft's Yamato) and a box hung on a joint the skeleton no longer has (the thorn wheel after it leaves the hand) count as no hit for that tick, and the log says so once. These are the mod's first mixins; they are optional and do nothing on a dedicated server.\n- Smaller fixes: a transformation another mod draws (Sin Devil Trigger) handed the model back half a second late; an enchanted item in hand switched the overlay off for the session; encrypted models were read again after every visit to the pause menu; several readable models that share one picture are told apart from Yes Steve Model's own record from the first frame.\n\nThe same release is available for Minecraft 1.20.1 / Forge from the `1.20.1` branch."
 		},
 		{
 			"tag": "v1.1.2-1.20.1",
@@ -206,7 +210,7 @@
 					"name": "epicysm-1.20.1-1.1.2.jar",
 					"url": "https://github.com/Argorice/EpicYSM/releases/download/v1.1.2-1.20.1/epicysm-1.20.1-1.1.2.jar",
 					"size": 464098,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "7a451b1d90efda8d6454a270466227544961576b1112bf84ca99a9e2507c4de3",
 					"mods": [
@@ -241,11 +245,18 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Minecraft 1.20.1, Forge 47. Requires Epic Fight 20.14+ and Yes Steve Model 2.6+. Client side only.\n\nHeads and arms that stay with the body, straight arms on encrypted models, Nightfall's weapons kept on the model, and two crashes from other mods' hit boxes caught.\n\n- Models built with one trunk bone (an UpBody and no UpperBody inside it - most models) had that bone follow Epic Fight's hip while the head and both arms hang from its chest; every attack that turns the chest, and the plain walk, left the head and the arms behind. The trunk now follows the chest. Readable and encrypted models alike.\n- Encrypted models: the small outward turn most models rest their arms with is no longer kept in every pose. The arms follow Epic Fight's joints straight from the shoulder, as its own skeleton does, and a held weapon sits at the angle the animation gives it instead of tilting with the arm.\n- Sheathing on encrypted models: the left hand goes to the sheath from a blade's length away, and during a finisher or a sheathing the right hand - the blade with it - is placed from the model's own chest, both hands giving way together when one arm cannot reach. A stance or a walk never touches the right arm.\n- Epic Fight: Nightfall's thorn wheel and claws - weapons with a mesh and joints of their own, built on Avalon - no longer put the model away: a skeleton that has every joint of the biped counts as the biped. On encrypted models the weapon's mesh, which nothing drew there before, is drawn at the model's joints.\n- Two crashes on the integrated server (singleplayer, LAN host), both from other mods' hit boxes, no longer end the game: a box whose corners are not numbers (Invincible: DevilMineCraft's Yamato) and a box hung on a joint the skeleton no longer has (the thorn wheel after it leaves the hand) count as no hit for that tick, and the log says so once. These are the mod's first mixins; they are optional and do nothing on a dedicated server.\n- Smaller fixes: a transformation another mod draws (Sin Devil Trigger) handed the model back half a second late; an enchanted item in hand switched the overlay off for the session; encrypted models were read again after every visit to the pause menu; several readable models that share one picture are told apart from Yes Steve Model's own record from the first frame.\n\nThe same fixes are on the `main` branch for Minecraft 1.21.1 / NeoForge."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [
+		"branding/character.png",
+		"branding/katana.gif",
+		"branding/scythe.gif"
+	],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

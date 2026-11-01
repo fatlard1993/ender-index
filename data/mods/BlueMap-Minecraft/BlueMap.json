@@ -2,11 +2,11 @@
 	"repo": "BlueMap-Minecraft/BlueMap",
 	"host": "github",
 	"description": "A Minecraft mapping tool that creates 3D models of your Minecraft worlds and displays them in a web viewer.",
-	"stars": 2847,
+	"stars": 2852,
 	"archived": false,
 	"license": "MIT",
 	"created": "2019-11-02T16:25:07Z",
-	"pushed": "2026-10-27T15:21:30Z",
+	"pushed": "2026-10-30T14:27:41Z",
 	"releases": [
 		{
 			"tag": "v5.29",
@@ -18,7 +18,7 @@
 					"name": "bluemap-5.29-cli.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.29/bluemap-5.29-cli.jar",
 					"size": 7339099,
-					"downloads": 1608,
+					"downloads": 1968,
 					"inspection": 2,
 					"sha256": "e830767fa6364b52b9310fb598508ebde7eec5ebe8360a989e240d991af89a3a",
 					"mods": [],
@@ -351,7 +351,7 @@
 					"name": "bluemap-5.29-fabric.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.29/bluemap-5.29-fabric.jar",
 					"size": 7085342,
-					"downloads": 477,
+					"downloads": 547,
 					"inspection": 2,
 					"sha256": "47aade220d75e307342176ca4abc83493a55276f2084835e7ca6880c640c0430",
 					"mods": [
@@ -709,7 +709,7 @@
 					"name": "bluemap-5.29-forge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.29/bluemap-5.29-forge.jar",
 					"size": 7060617,
-					"downloads": 103,
+					"downloads": 122,
 					"inspection": 2,
 					"sha256": "01ac3f022b188827fd3040ce6507ec90face67384be451fb6adf783c1104c682",
 					"mods": [
@@ -1059,7 +1059,7 @@
 					"name": "bluemap-5.29-neoforge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.29/bluemap-5.29-neoforge.jar",
 					"size": 7060044,
-					"downloads": 169,
+					"downloads": 214,
 					"inspection": 2,
 					"sha256": "8938f4453af4b53970c86e43d0bd26b4a88980e4e6639f818fa770d0f61c43df",
 					"mods": [
@@ -1408,7 +1408,7 @@
 					"name": "bluemap-5.29-paper.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.29/bluemap-5.29-paper.jar",
 					"size": 6336407,
-					"downloads": 5318,
+					"downloads": 6320,
 					"inspection": 2,
 					"sha256": "7bf475936c26107d476c63151c76d5b49e865eebeada12c9e7d92155de877b9f",
 					"mods": [],
@@ -1740,7 +1740,7 @@
 					"name": "bluemap-5.29-spigot.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.29/bluemap-5.29-spigot.jar",
 					"size": 7141104,
-					"downloads": 1679,
+					"downloads": 1979,
 					"inspection": 2,
 					"sha256": "8b1fa1d5b86b5db212be1812af904afee90939b57594c849f487b132d5200d29",
 					"mods": [],
@@ -2084,7 +2084,7 @@
 					"name": "bluemap-5.29-sponge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.29/bluemap-5.29-sponge.jar",
 					"size": 6496830,
-					"downloads": 10,
+					"downloads": 12,
 					"inspection": 2,
 					"sha256": "fddc4ed1924d5984e4df05e0128d792e816cc667f92c0d57cf0cc77edfc91ce6",
 					"mods": [],
@@ -2411,7 +2411,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### Highlights / Notes\nMore reliable map-updates and map-storage: BlueMap now also detects world-changes that did not trigger a filesystem event, and writes to the map-storage are now transactional. \nPlus some performance improvements and fixes.\n\n### Upgrading from 5.28\n- Replace the `bluemap.jar`-file with the new one\n- Delete your [`<webroot>/index.html`](<https://bluemap.bluecolored.de/wiki/getting-started/Installation.html#the-webroot>) to make bluemap update the webapp\n- *(Optional)* Add the following lines to your `core.conf`:\n  ```yaml\n  # The interval in minutes at which BlueMap checks all region-files for changes.\n  # This is a relatively cheap check IN ADDITION to watching for file-system events, in case those are not reliable.\n  # For HUGE worlds (> 10000 region-files) you might want to consider increasing the interval or disabling this to reduce cpu and file-read load.\n  # Set to 0 to disable.\n  # Default is 5\n  region-file-check-interval: 5\n  ```\n\n### Changelog since 5.28\n- Added a `region-file-check-interval` option to the `core.conf`, BlueMap now regularly checks all region-files for changes to detect world-changes that failed to trigger a filesystem event\n- Made all writes to the map-storage transactional, errors while writing are now much less likely to corrupt map-files\n- Improved render performance by avoiding some unnecessary allocations for every rendered block (thanks to @Hexay, #881)\n- Updated the Portuguese translation (thanks to @ComanderP, #871)\n- Fixed lowres-tile changes getting lost if a tile was changed while it was being saved (race-condition) (#883)\n- Fixed some live tile-updates in the webapp being loaded from the cache instead of the server\n- Fixed the quality-parameter of `Accept-Encoding` headers not being recognized correctly (#882)\n- Fixed the full-update timer not being stopped correctly on a BlueMap reload\n- Fixed some more streams not being closed correctly\n- Fixed moving files failing sometimes on Windows(-Server)\n\n### Targets:\n**Java**: 25\n**[BlueMapAPI](https://github.com/BlueMap-Minecraft/BlueMapAPI)**: 2.8.2\nFile | Target Version\n--- | ---\nbluemap-5.29-cli.jar | Minecraft 1.13.2 - 26.3\nbluemap-5.29-spigot.jar | Spigot 26.1 - 26.3 *(1.20 - 26.3 with Java 25)*\nbluemap-5.29-paper.jar | Paper/Folia 26.1.1 - 26.3\nbluemap-5.29-fabric.jar | Fabric 26.1 - 26.3\nbluemap-5.29-forge.jar | Forge 26.1 - 26.3\nbluemap-5.29-neoforge.jar | NeoForge 26.1 - 26.3\nbluemap-5.29-sponge.jar | SpongeAPI 17 - 21 *(with Java 25)*"
 		},
 		{
 			"tag": "v5.28",
@@ -2423,7 +2424,7 @@
 					"name": "bluemap-5.28-cli.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.28/bluemap-5.28-cli.jar",
 					"size": 7287266,
-					"downloads": 1648,
+					"downloads": 1674,
 					"inspection": 2,
 					"sha256": "c6868465f8f972a64a3f2acc32112cab8560339045747f81359bdea6959f7ac2",
 					"mods": [],
@@ -2756,7 +2757,7 @@
 					"name": "bluemap-5.28-fabric.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.28/bluemap-5.28-fabric.jar",
 					"size": 7034681,
-					"downloads": 427,
+					"downloads": 430,
 					"inspection": 2,
 					"sha256": "efb07ce31212a9d2d5464a9feab75eb3496ca38cc49f893062d39d0b3c87fbfa",
 					"mods": [
@@ -3114,7 +3115,7 @@
 					"name": "bluemap-5.28-forge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.28/bluemap-5.28-forge.jar",
 					"size": 7009956,
-					"downloads": 97,
+					"downloads": 98,
 					"inspection": 2,
 					"sha256": "beb7ed98858f9d3e246099635b58bb9d0cad5aa57f4d0508ce3e0dd74465e00f",
 					"mods": [
@@ -3464,7 +3465,7 @@
 					"name": "bluemap-5.28-neoforge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.28/bluemap-5.28-neoforge.jar",
 					"size": 7009382,
-					"downloads": 124,
+					"downloads": 125,
 					"inspection": 2,
 					"sha256": "81aa60f8da6e29207712dab2840bb3195fdf972945c33b83a93ce73052e9f757",
 					"mods": [
@@ -3813,7 +3814,7 @@
 					"name": "bluemap-5.28-paper.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.28/bluemap-5.28-paper.jar",
 					"size": 6285353,
-					"downloads": 4439,
+					"downloads": 4466,
 					"inspection": 2,
 					"sha256": "4cfb4a9963132d5be0a9db031a28a98e9df92deed37ebb0756d3a7dd8721ab98",
 					"mods": [],
@@ -4145,7 +4146,7 @@
 					"name": "bluemap-5.28-spigot.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.28/bluemap-5.28-spigot.jar",
 					"size": 7090043,
-					"downloads": 1831,
+					"downloads": 1832,
 					"inspection": 2,
 					"sha256": "5601908281fdf5e0923760b4d54f328c1cccf2427b5f149c93030076a2d3ccdd",
 					"mods": [],
@@ -4489,7 +4490,7 @@
 					"name": "bluemap-5.28-sponge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.28/bluemap-5.28-sponge.jar",
 					"size": 6445776,
-					"downloads": 14,
+					"downloads": 15,
 					"inspection": 2,
 					"sha256": "e49804a72d816f770dcb34ba77788e5728ae89d8476b64ed86d39aefe3a9f9ec",
 					"mods": [],
@@ -4816,7 +4817,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### Highlights / Notes\nImprovements to SQL-storage (especially SQLite performance), general performance improvements and some fixes.\n\n### Upgrading from 5.27\n- Replace the `bluemap.jar`-file with the new one\n- Delete your [`<webroot>/index.html`](<https://bluemap.bluecolored.de/wiki/getting-started/Installation.html#the-webroot>) to make bluemap update the webapp\n- *(Optional)* Update the `additional-headers` in your `webserver.conf` to the new defaults:\n  ```yaml\n  additional-headers: {\n    \"Cache-Control\": \"public, max-age=86400, stale-if-error=604800\"\n    \"CDN-Cache-Control\": \"max-age=60\"\n  }\n  ```\n- *(Optional)* Add the following lines to your SQL storage-configs (e.g. `storages/sql.conf`):\n  ```yaml\n  # SQL-statements that are executed once on every new connection to the database.\n  # Leaving this commented out means that BlueMap uses sensible defaults for the used sql-dialect.\n  #connection-init-sql: [\n  #  \"PRAGMA journal_mode = WAL\"\n  #  \"PRAGMA synchronous = NORMAL\"\n  #  \"PRAGMA busy_timeout = 30000\"\n  #  \"PRAGMA foreign_keys = ON\"\n  #]\n\n  # The prefix that is prepended to the names of all tables BlueMap creates and uses.\n  # Only lowercase letters (a-z), digits (0-9) and underscores (_) are allowed, with a maximum length of 32 characters.\n  # Changing this value on an existing setup will NOT rename existing tables or move data, BlueMap will create new, empty ones instead.\n  # Default is: \"bluemap_\"\n  #table-prefix: \"bluemap_\"\n  ```\n\n### Changelog since 5.27\n- Added a `table-prefix` option to the SQL-storage config to change the names of the tables BlueMap uses (#457)\n- Added a `connection-init-sql` option to the SQL-storage config, and BlueMap now uses sensible defaults for each dialect (e.g. WAL-mode for SQLite)\n- Changed the default webserver `additional-headers` to use the standard `CDN-Cache-Control` header instead of `Cloudflare-CDN-Cache-Control` (thanks to @w00000dy, #870)\n- Improved map-update performance by caching render-state data and parsing block-states faster\n- Improved compatibility with some filesystems\n- Fixed some streams not being closed correctly\n- Fixed another issue with loading saved render-tasks\n- Fixed the time of the last full map-update not being saved, which could cause early full updates after a restart\n- Fixed an error when `full-update-interval` is set to 0 or a negative value\n- Fixed marker colors being displayed in the wrong color-space\n\n### Targets:\n**Java**: 25\n**[BlueMapAPI](https://github.com/BlueMap-Minecraft/BlueMapAPI)**: 2.8.1\nFile | Target Version\n--- | ---\nbluemap-5.28-cli.jar | Minecraft 1.13.2 - 26.3\nbluemap-5.28-spigot.jar | Spigot 26.1 - 26.3 *(1.20 - 26.3 with Java 25)*\nbluemap-5.28-paper.jar | Paper/Folia 26.1.1 - 26.3\nbluemap-5.28-fabric.jar | Fabric 26.1 - 26.3\nbluemap-5.28-forge.jar | Forge 26.1 - 26.3\nbluemap-5.28-neoforge.jar | NeoForge 26.1 - 26.3\nbluemap-5.28-sponge.jar | SpongeAPI 17 - 21 *(with Java 25)*"
 		},
 		{
 			"tag": "v5.27",
@@ -4828,7 +4830,7 @@
 					"name": "bluemap-5.27-cli.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.27/bluemap-5.27-cli.jar",
 					"size": 7278001,
-					"downloads": 835,
+					"downloads": 839,
 					"inspection": 2,
 					"sha256": "d1ea3fab6ade4c88b30cf794f8082a1fe500f3a246957eb69caa94b6ee5d44ed",
 					"mods": [],
@@ -5160,7 +5162,7 @@
 					"name": "bluemap-5.27-fabric.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.27/bluemap-5.27-fabric.jar",
 					"size": 7025635,
-					"downloads": 251,
+					"downloads": 252,
 					"inspection": 2,
 					"sha256": "103fc7fb134a2abf987aca2ef5d797afedf39366293cbc52a7be78e138228c5d",
 					"mods": [
@@ -5517,7 +5519,7 @@
 					"name": "bluemap-5.27-forge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.27/bluemap-5.27-forge.jar",
 					"size": 7000910,
-					"downloads": 51,
+					"downloads": 52,
 					"inspection": 2,
 					"sha256": "2411660a9e921f5ccb82d5968a179827583659e0618e307e17bc352a4dd71f46",
 					"mods": [
@@ -5866,7 +5868,7 @@
 					"name": "bluemap-5.27-neoforge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.27/bluemap-5.27-neoforge.jar",
 					"size": 7000336,
-					"downloads": 112,
+					"downloads": 113,
 					"inspection": 2,
 					"sha256": "fd6776b2a7812b87ed94d342acacfe64b58d974540282a5d3dae17258831e737",
 					"mods": [
@@ -6214,7 +6216,7 @@
 					"name": "bluemap-5.27-paper.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.27/bluemap-5.27-paper.jar",
 					"size": 6276259,
-					"downloads": 2910,
+					"downloads": 2950,
 					"inspection": 2,
 					"sha256": "0e479c9a75de4673e7dcdbc766e3fa9e76245c87341253466b89a6a251e3510b",
 					"mods": [],
@@ -6545,7 +6547,7 @@
 					"name": "bluemap-5.27-spigot.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.27/bluemap-5.27-spigot.jar",
 					"size": 7080949,
-					"downloads": 1147,
+					"downloads": 1149,
 					"inspection": 2,
 					"sha256": "acb141a23815b75654f005813b035b9b65b687bd64b119031cdc60b32976064c",
 					"mods": [],
@@ -6888,7 +6890,7 @@
 					"name": "bluemap-5.27-sponge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.27/bluemap-5.27-sponge.jar",
 					"size": 6436682,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "991d7f48730df81e5e0c41f279c61cd077608957aeb5b8560bfbd1098bf5f622",
 					"mods": [],
@@ -7214,7 +7216,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### Highlights / Notes\nHotfix for 5.26.\n\n### Upgrading from 5.26 or 5.25\n- Replace the `bluemap.jar`-file with the new one\n- Delete your [`<webroot>/index.html`](<https://bluemap.bluecolored.de/wiki/getting-started/Installation.html#the-webroot>) to make bluemap update the webapp\n\n### Upgrading from 5.24\n- Replace the `bluemap.jar`-file with the new one\n- Delete your [`<webroot>/index.html`](<https://bluemap.bluecolored.de/wiki/getting-started/Installation.html#the-webroot>) to make bluemap update the webapp\n- Add the following lines to your `webserver.conf`:\n  ```yaml\n  # Additional headers the webserver should include in the responses it sends.\n  additional-headers: {\n    \"Cache-Control\": \"public, max-age=86400\"\n  }\n  ```\n\n### Changelog since 5.26\n- Fixed the map shifting when the camera crosses 10000-block boundaries\n\n### Targets:\n**Java**: 25\n**[BlueMapAPI](https://github.com/BlueMap-Minecraft/BlueMapAPI)**: 2.8.0\nFile | Target Version\n--- | ---\nbluemap-5.27-cli.jar | Minecraft 1.13.2 - 26.3\nbluemap-5.27-spigot.jar | Spigot 26.1 - 26.3 *(1.20 - 26.3 with Java 25)*\nbluemap-5.27-paper.jar | Paper/Folia 26.1.1 - 26.3\nbluemap-5.27-fabric.jar | Fabric 26.1 - 26.3\nbluemap-5.27-forge.jar | Forge 26.1 - 26.3\nbluemap-5.27-neoforge.jar | NeoForge 26.1 - 26.3\nbluemap-5.27-sponge.jar | SpongeAPI 17 - 21 *(with Java 25)*"
 		},
 		{
 			"tag": "v5.26",
@@ -7226,7 +7229,7 @@
 					"name": "bluemap-5.26-cli.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.26/bluemap-5.26-cli.jar",
 					"size": 7278036,
-					"downloads": 68,
+					"downloads": 69,
 					"inspection": 2,
 					"sha256": "3946686e4005ad17ed2b7ae334dbcc280722310f73de9be880d0dd305d885658",
 					"mods": [],
@@ -7558,7 +7561,7 @@
 					"name": "bluemap-5.26-fabric.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.26/bluemap-5.26-fabric.jar",
 					"size": 7025670,
-					"downloads": 19,
+					"downloads": 20,
 					"inspection": 2,
 					"sha256": "866b8ac123dda75f1cec09c3d6c794bb96f49b30cded1eebe6322020316cf48a",
 					"mods": [
@@ -7915,7 +7918,7 @@
 					"name": "bluemap-5.26-forge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.26/bluemap-5.26-forge.jar",
 					"size": 7000945,
-					"downloads": 9,
+					"downloads": 10,
 					"inspection": 2,
 					"sha256": "3dd2567f1e03538da991dcb3ac02b5721970f4de87a242576c3d1df541ea9af8",
 					"mods": [
@@ -8264,7 +8267,7 @@
 					"name": "bluemap-5.26-neoforge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.26/bluemap-5.26-neoforge.jar",
 					"size": 7000371,
-					"downloads": 8,
+					"downloads": 9,
 					"inspection": 2,
 					"sha256": "2ba9d23d7048cbe5028d9be5d261d21b9c91cdb17c3202d4bfd1aeb23bc943b9",
 					"mods": [
@@ -8612,7 +8615,7 @@
 					"name": "bluemap-5.26-paper.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.26/bluemap-5.26-paper.jar",
 					"size": 6276294,
-					"downloads": 251,
+					"downloads": 293,
 					"inspection": 2,
 					"sha256": "796e53e738f9a27dc533beb719ba3364d6243402fc7e813e51bdbfc21546d480",
 					"mods": [],
@@ -8943,7 +8946,7 @@
 					"name": "bluemap-5.26-spigot.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.26/bluemap-5.26-spigot.jar",
 					"size": 7080983,
-					"downloads": 63,
+					"downloads": 64,
 					"inspection": 2,
 					"sha256": "639b548680721ac11d48a6ee7aac6578d6de18c636841358d3ed1aabc51eee09",
 					"mods": [],
@@ -9286,7 +9289,7 @@
 					"name": "bluemap-5.26-sponge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.26/bluemap-5.26-sponge.jar",
 					"size": 6436717,
-					"downloads": 5,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "47dbfa1666ce6ab3a1128d7f50e5c1037a9d8cdb42553eb6b08dd6ea2fed4b8c",
 					"mods": [],
@@ -9612,7 +9615,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### Highlights / Notes\nHotfix for 5.25.\n\n### Upgrading from 5.25\n- Replace the `bluemap.jar`-file with the new one\n- Delete your [`<webroot>/index.html`](<https://bluemap.bluecolored.de/wiki/getting-started/Installation.html#the-webroot>) to make bluemap update the webapp\n\n### Upgrading from 5.24\n- Replace the `bluemap.jar`-file with the new one\n- Delete your [`<webroot>/index.html`](<https://bluemap.bluecolored.de/wiki/getting-started/Installation.html#the-webroot>) to make bluemap update the webapp\n- Add the following lines to your `webserver.conf`:\n  ```hocon\n  # Additional headers the webserver should include in the responses it sends.\n  additional-headers: {\n    \"Cache-Control\": \"public, max-age=86400\"\n  }\n  ```\n\n### Changelog since 5.25\n- Fixed the line-shader (used for markers/lines on the map) not being compatible with the newer three.js version\n- Fixed the `additional-headers` webserver config also overriding the cache-control headers of live-data and SSE responses\n\n### Targets:\n**Java**: 25\n**[BlueMapAPI](https://github.com/BlueMap-Minecraft/BlueMapAPI)**: 2.8.0\nFile | Target Version\n--- | ---\nbluemap-5.26-cli.jar | Minecraft 1.13.2 - 26.3\nbluemap-5.26-spigot.jar | Spigot 26.1 - 26.3 *(1.20 - 26.3 with Java 25)*\nbluemap-5.26-paper.jar | Paper/Folia 26.1.1 - 26.3\nbluemap-5.26-fabric.jar | Fabric 26.1 - 26.3\nbluemap-5.26-forge.jar | Forge 26.1 - 26.3\nbluemap-5.26-neoforge.jar | NeoForge 26.1 - 26.3\nbluemap-5.26-sponge.jar | SpongeAPI 17 - 21 *(with Java 25)*"
 		},
 		{
 			"tag": "v5.25",
@@ -9624,7 +9628,7 @@
 					"name": "bluemap-5.25-cli.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.25/bluemap-5.25-cli.jar",
 					"size": 7277876,
-					"downloads": 58,
+					"downloads": 61,
 					"inspection": 2,
 					"sha256": "bbdf579d7515ef3c365db18426e3bfa7fef0f14672ac151f91b37d243f3bc005",
 					"mods": [],
@@ -9956,7 +9960,7 @@
 					"name": "bluemap-5.25-fabric.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.25/bluemap-5.25-fabric.jar",
 					"size": 7025508,
-					"downloads": 23,
+					"downloads": 24,
 					"inspection": 2,
 					"sha256": "dd20ee4c3a5fcfbd5cc55b0f30f9a7289fffbecef72eb4aa9ca21023d75be0d0",
 					"mods": [
@@ -10313,7 +10317,7 @@
 					"name": "bluemap-5.25-forge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.25/bluemap-5.25-forge.jar",
 					"size": 7000784,
-					"downloads": 5,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "ec31cca8578b1472d11576416d1c05a74a4205c5ea12c69853c8f7059cbed4f3",
 					"mods": [
@@ -10662,7 +10666,7 @@
 					"name": "bluemap-5.25-neoforge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.25/bluemap-5.25-neoforge.jar",
 					"size": 7000210,
-					"downloads": 10,
+					"downloads": 11,
 					"inspection": 2,
 					"sha256": "a334b2e0ad7046e2817057379c711c17ed7d95a0df2116f061edafcb2a0c3cc3",
 					"mods": [
@@ -11010,7 +11014,7 @@
 					"name": "bluemap-5.25-paper.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.25/bluemap-5.25-paper.jar",
 					"size": 6276134,
-					"downloads": 962,
+					"downloads": 981,
 					"inspection": 2,
 					"sha256": "d93520c1d292f30c7385df7f1042956bb74b8c72988b609b09455f5a10b5b0d2",
 					"mods": [],
@@ -11341,7 +11345,7 @@
 					"name": "bluemap-5.25-spigot.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.25/bluemap-5.25-spigot.jar",
 					"size": 7080824,
-					"downloads": 75,
+					"downloads": 76,
 					"inspection": 2,
 					"sha256": "e72996865a1ac4503ac9d6ae82233f55096c27688a2b88844fa8713725c9aec1",
 					"mods": [],
@@ -11684,7 +11688,7 @@
 					"name": "bluemap-5.25-sponge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.25/bluemap-5.25-sponge.jar",
 					"size": 6436557,
-					"downloads": 5,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "ae13415db7ee7872a74166c05cb3b873561fc8ee205e40878a3dd9671d03a2a8",
 					"mods": [],
@@ -12010,7 +12014,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### Highlights / Notes\nA smaller release focused on fixes and dependency updates, plus improved swamp-colors and a new option to add custom webserver response headers.\n\n### Upgrading from 5.24\n- Replace the `bluemap.jar`-file with the new one\n- Delete your [`<webroot>/index.html`](<https://bluemap.bluecolored.de/wiki/getting-started/Installation.html#the-webroot>) to make bluemap update the webapp\n- Add the following lines to your `webserver.conf`:\n  ```hocon\n  # Additional headers the webserver should include in the responses it sends.\n  additional-headers: {\n    \"Cache-Control\": \"public, max-age=86400\"\n  }\n  ```\n\n### Changelog since 5.24\n- Added an `additional-headers` webserver config option to add custom HTTP headers to served map/file resources (thanks to @iCiaran, #862)\n- Updated a bunch of libraries and dependencies\n- Fixed incorrect swamp grass color (was missing its noise pattern)\n- Fixed default-config generation error on Windows\n- Fixed players sometimes disappearing when `write-players-interval` is used\n\n### Targets:\n**Java**: 25\n**[BlueMapAPI](https://github.com/BlueMap-Minecraft/BlueMapAPI)**: 2.8.0\nFile | Target Version\n--- | ---\nbluemap-5.25-cli.jar | Minecraft 1.13.2 - 26.3\nbluemap-5.25-spigot.jar | Spigot 26.1 - 26.3 *(1.20 - 26.3 with Java 25)*\nbluemap-5.25-paper.jar | Paper/Folia 26.1.1 - 26.3\nbluemap-5.25-fabric.jar | Fabric 26.1 - 26.3\nbluemap-5.25-forge.jar | Forge 26.1 - 26.3\nbluemap-5.25-neoforge.jar | NeoForge 26.1 - 26.3\nbluemap-5.25-sponge.jar | SpongeAPI 17 - 21 *(with Java 25)*"
 		},
 		{
 			"tag": "v5.12",
@@ -12022,7 +12027,7 @@
 					"name": "bluemap-5.12-cli.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.12/bluemap-5.12-cli.jar",
 					"size": 6527609,
-					"downloads": 922,
+					"downloads": 926,
 					"inspection": 2,
 					"sha256": "93eb5222580e8fba3b6873dd2735d25b5cf1c76a59ebb4c1dda27816fed4d293",
 					"mods": [],
@@ -12353,7 +12358,7 @@
 					"name": "bluemap-5.12-fabric.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.12/bluemap-5.12-fabric.jar",
 					"size": 6470946,
-					"downloads": 738,
+					"downloads": 739,
 					"inspection": 2,
 					"sha256": "100cce8a77ac9bfe02d5c562ffe9861adddd275ff48319953986479de6fac7ce",
 					"mods": [
@@ -12707,7 +12712,7 @@
 					"name": "bluemap-5.12-forge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.12/bluemap-5.12-forge.jar",
 					"size": 6366371,
-					"downloads": 253,
+					"downloads": 254,
 					"inspection": 2,
 					"sha256": "d25ef70c8026d4aa1c234b06b62e1acfb6f29ae060605897968d93510eb1474a",
 					"mods": [
@@ -13055,7 +13060,7 @@
 					"name": "bluemap-5.12-mc1.20-6-forge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.12/bluemap-5.12-mc1.20-6-forge.jar",
 					"size": 6419227,
-					"downloads": 473,
+					"downloads": 477,
 					"inspection": 2,
 					"sha256": "27667d09dc943ec1e771a20e2d593675d08352f1f877def199e13236838f43ed",
 					"mods": [
@@ -13403,7 +13408,7 @@
 					"name": "bluemap-5.12-neoforge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.12/bluemap-5.12-neoforge.jar",
 					"size": 6365847,
-					"downloads": 178,
+					"downloads": 179,
 					"inspection": 2,
 					"sha256": "d8a55e04962f5d4aec5a26e196f37e4755d973bc2111d2c2c5c98681c35fcba5",
 					"mods": [
@@ -13751,7 +13756,7 @@
 					"name": "bluemap-5.12-paper.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.12/bluemap-5.12-paper.jar",
 					"size": 5674811,
-					"downloads": 7217,
+					"downloads": 7244,
 					"inspection": 2,
 					"sha256": "63a95f2d73b08a062b0b1c78f9696677781d0f3baf3e20eb031838a11cefd0a2",
 					"mods": [],
@@ -14081,7 +14086,7 @@
 					"name": "bluemap-5.12-spigot.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.12/bluemap-5.12-spigot.jar",
 					"size": 6450823,
-					"downloads": 139469,
+					"downloads": 142086,
 					"inspection": 2,
 					"sha256": "dcf4fff8c399a66fa5fd2c80103e8393983104fcca5cc6e7d61531d38fe298d8",
 					"mods": [],
@@ -14420,7 +14425,7 @@
 					"name": "bluemap-5.12-sponge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.12/bluemap-5.12-sponge.jar",
 					"size": 5834769,
-					"downloads": 23,
+					"downloads": 24,
 					"inspection": 2,
 					"sha256": "87471a1b3dbe63f6a82a0e972680f1486077aaaabe7c8bb9b8c36c711570ce1c",
 					"mods": [],
@@ -14745,7 +14750,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### Highlights / Notes\nFull 1.21.9 support, rework of the integrated webserver and more bugfixes and improvements!\n\n### Upgrading from 5.11\n- Replace the `bluemap.jar`-file with the new one\n\n### Changelog since 5.11\n- Updated fabric-implementation to 1.21.9\n- Rework of the integrated webserver from NIO to using Virtual-Threads, improving performance and maintainability\n- Added remapping `chain` -> `iron_chain` for RP version 67 for improved backwards-compatibility\n- Added support for block-properties in the block-colors config\n- Added support for addon dependencies and soft-dependencies (#730)\n- Pushed BlueMapAPI to 2.7.6\n- Improved logging for region/chunk loading errors\n- Fixed paper reading the wrong minecraft version id when not on a release version (Snapshots,Pre-Releases,RCs)\n- Fixed element default UV calculation, fixing the appearance of the cauldron and cactus-flowerpot\n- Fixed melon- and pumpkin-stems not being colored correctly (#734)\n- Fixed inside-out cubes not working, fixing the appearance of all spawner-blocks\n- Fixed wrong tile coordinates being displayed in `/bluemap debug map ...` command\n- Fixed inheritance of ambient-occlusion property from parent block-model (thanks to Uiniel, #729)\n- Fixed webserver incorrectly handling absolute form of HTTP \"path\" (#737)\n- Fixed legacy config error not showing the problematic config file\n\n### Targets:\n**Java**: 21\n**[BlueMapAPI](https://github.com/BlueMap-Minecraft/BlueMapAPI)**: 2.7.6\nFile | Target Version\n--- | ---\nbluemap-5.12-cli.jar | CLI for Minecraft 1.13.2 - 1.21.10\nbluemap-5.12-spigot.jar | Spigot/Paper 1.20 - 1.21.10\nbluemap-5.12-paper.jar | Paper/Folia 1.20.6 - 1.21.10\nbluemap-5.12-fabric.jar | Fabric 1.21.9 - 1.21.10\nbluemap-5.12-forge.jar | Forge 1.21.6 - 1.21.10\nbluemap-5.12-mc1.20-6-forge.jar | Forge 1.20 - 1.20.4 (with Java 21)\nbluemap-5.12-neoforge.jar | NeoForge 1.21.6 - 1.21.10\nbluemap-5.12-sponge.jar | SpongeAPI 11 - 17"
 		},
 		{
 			"tag": "v5.3",
@@ -14757,7 +14763,7 @@
 					"name": "BlueMap-5.3-cli.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.3/BlueMap-5.3-cli.jar",
 					"size": 5005726,
-					"downloads": 1377,
+					"downloads": 1380,
 					"inspection": 2,
 					"sha256": "a0be9a36325f3caabc6306e9c6dd306aeec464b8abe907e93b6589659c8751f5",
 					"mods": [],
@@ -15061,7 +15067,7 @@
 					"name": "BlueMap-5.3-fabric-1.18.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.3/BlueMap-5.3-fabric-1.18.jar",
 					"size": 4889441,
-					"downloads": 118,
+					"downloads": 119,
 					"inspection": 2,
 					"sha256": "773d726303e131eb8d078a7f9a43d3cd5c283bee90074c34d6d1b3f3b5cdef2f",
 					"mods": [
@@ -15382,7 +15388,7 @@
 					"name": "BlueMap-5.3-fabric-1.19.4.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.3/BlueMap-5.3-fabric-1.19.4.jar",
 					"size": 4889517,
-					"downloads": 75,
+					"downloads": 76,
 					"inspection": 2,
 					"sha256": "7101327a7d967410b0a8c57eccc2c9836a295194fa769820743637184de04445",
 					"mods": [
@@ -15703,7 +15709,7 @@
 					"name": "BlueMap-5.3-fabric-1.20.5.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.3/BlueMap-5.3-fabric-1.20.5.jar",
 					"size": 4829883,
-					"downloads": 109,
+					"downloads": 110,
 					"inspection": 2,
 					"sha256": "f67a0895efd7b80bb753dd6b1a5984e047cfbc61aa5b61c52858d7076b27323d",
 					"mods": [
@@ -16024,7 +16030,7 @@
 					"name": "BlueMap-5.3-fabric-1.20.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.3/BlueMap-5.3-fabric-1.20.jar",
 					"size": 4829808,
-					"downloads": 54058,
+					"downloads": 54060,
 					"inspection": 2,
 					"sha256": "bd23d5bc5cf185e888ff061d127251d2baaad5a28ea2b87ad197f06535a7381c",
 					"mods": [
@@ -16345,7 +16351,7 @@
 					"name": "BlueMap-5.3-fabric.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.3/BlueMap-5.3-fabric.jar",
 					"size": 4829852,
-					"downloads": 783,
+					"downloads": 784,
 					"inspection": 2,
 					"sha256": "e457515f6efbdf380847931048d00ee7695b940e4cf708b9edf8db4127b4a17b",
 					"mods": [
@@ -16666,7 +16672,7 @@
 					"name": "BlueMap-5.3-forge-1.18.1.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.3/BlueMap-5.3-forge-1.18.1.jar",
 					"size": 4780127,
-					"downloads": 188,
+					"downloads": 189,
 					"inspection": 2,
 					"sha256": "63d9bcde53c46a806a33130f3994de698681cad52f4a54f2820c381f8b0bbff7",
 					"mods": [
@@ -16984,7 +16990,7 @@
 					"name": "BlueMap-5.3-forge-1.19.4.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.3/BlueMap-5.3-forge-1.19.4.jar",
 					"size": 4780138,
-					"downloads": 124,
+					"downloads": 125,
 					"inspection": 2,
 					"sha256": "2dcd960fd4eb7b252a8e6837519f93752e3e7206e2e6a0d9f3c824b6bf1466bf",
 					"mods": [
@@ -17302,7 +17308,7 @@
 					"name": "BlueMap-5.3-forge-1.20.6.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.3/BlueMap-5.3-forge-1.20.6.jar",
 					"size": 4732369,
-					"downloads": 106,
+					"downloads": 107,
 					"inspection": 2,
 					"sha256": "9b1b25947ab319af593d6f2b1c657be62dd9edd6b37ae3bedac076ec16c53dce",
 					"mods": [
@@ -17620,7 +17626,7 @@
 					"name": "BlueMap-5.3-forge-1.20.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.3/BlueMap-5.3-forge-1.20.jar",
 					"size": 4780414,
-					"downloads": 2614,
+					"downloads": 2621,
 					"inspection": 2,
 					"sha256": "78de3059422d23b5a5785935294493339110bfdae2e1044aac1baf0a037cf6a5",
 					"mods": [
@@ -17938,7 +17944,7 @@
 					"name": "BlueMap-5.3-forge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.3/BlueMap-5.3-forge.jar",
 					"size": 4732329,
-					"downloads": 173,
+					"downloads": 175,
 					"inspection": 2,
 					"sha256": "2cb3ff41b8428a0db56728305169560cf36c1dd020fbbcab5855ad2d01d1e75c",
 					"mods": [
@@ -18256,7 +18262,7 @@
 					"name": "BlueMap-5.3-neoforge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.3/BlueMap-5.3-neoforge.jar",
 					"size": 4731766,
-					"downloads": 925,
+					"downloads": 927,
 					"inspection": 2,
 					"sha256": "386b5ecd29b09952db752131483e7906f976182b3bf3ab49d1ada91b6cdea0f0",
 					"mods": [
@@ -18574,7 +18580,7 @@
 					"name": "BlueMap-5.3-paper.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.3/BlueMap-5.3-paper.jar",
 					"size": 4845451,
-					"downloads": 3814,
+					"downloads": 3837,
 					"inspection": 2,
 					"sha256": "a5fba7639d1bd38234930adddf37602f4d6c65363885273f8870e66d4c399610",
 					"mods": [],
@@ -18886,7 +18892,7 @@
 					"name": "BlueMap-5.3-spigot.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.3/BlueMap-5.3-spigot.jar",
 					"size": 4842988,
-					"downloads": 6170,
+					"downloads": 6171,
 					"inspection": 2,
 					"sha256": "7cd1dc81ca042ee77c671cb69e6617f5b14b108ab9b299c8937b8c01261f9a22",
 					"mods": [],
@@ -19198,7 +19204,7 @@
 					"name": "BlueMap-5.3-sponge.jar",
 					"url": "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.3/BlueMap-5.3-sponge.jar",
 					"size": 4847242,
-					"downloads": 35,
+					"downloads": 36,
 					"inspection": 2,
 					"sha256": "0745059eaa60a43ce40c0749045be80590cae2dd834e9022cfd7fba6d180b3bb",
 					"mods": [],
@@ -19505,7 +19511,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "### Highlights / Notes\nMostly bugfixes.\n\n### Upgrading from 5.2\nJust replace the .jar-file :)  \nOptionally delete your `<webroot>/index.html` to make bluemap update the webapp.\n\n### Changelog since 5.2\n- Changed lowres-tile saving to be even more robust, reducing the probability of lowres-tiles corrupting even if \n  there are temporary issues when trying to save them (e.g. a short db-connection loss)  \n  This also fixes an occasional tile-save error with databases when bluemap is disabling (or reloading).\n- Reloading the webapp (F5) will now automatically trigger a map-refresh (thanks to @MicLieg)\n- Fixed an error reading chunks that are larger than a certain threshold\n- Fixed an NPE when the region-folder of a dimension isn't present for some time\n- Fixed the debug-dump being named `dump.json.gz` but not being actually compressed -> renamed back to `dump.json`\n- Fixed some leftover debug code spawning a random `teststate.json` on cli\n- Fixed an incompatibility with some fabric/forge mods\n- Fixed cli errors when using ctrl+c to stop\n- Fixed exception when a player joins the server on fabric-1.20\n- Fixed spigot version detection\n- Fixed a `core.conf` typo (thanks to @monke8555)\n\n### Targets:\n**Java**: 16\n**[BlueMapAPI](https://github.com/BlueMap-Minecraft/BlueMapAPI)**: 2.7.2\nFile | Target Version\n--- | ---\nBlueMap-5.3-cli.jar | CLI for Minecraft 1.13.2 - 1.21.1\nBlueMap-5.3-spigot.jar | Spigot/Paper 1.16.5 - 1.21.1\nBlueMap-5.3-paper.jar | Paper/Folia 1.20.1 - 1.21.1\nBlueMap-5.3-fabric.jar | Fabric 1.21 - 1.21.1\nBlueMap-5.3-fabric-1.20.5.jar | Fabric 1.20.5 - 1.20.6\nBlueMap-5.3-fabric-1.20.jar | Fabric 1.20 - 1.20.4\nBlueMap-5.3-fabric-1.19.4.jar | Fabric 1.19.4\nBlueMap-5.3-fabric-1.18.jar | Fabric 1.18 - 1.18.2\nBlueMap-5.3-forge.jar | Forge 1.21 - 1.21.1\nBlueMap-5.3-forge-1.20.6.jar | Forge 1.20.6\nBlueMap-5.3-forge-1.20.jar | Forge 1.20 - 1.20.4\nBlueMap-5.3-forge-1.19.4.jar | Forge 1.19.4\nBlueMap-5.3-forge-1.18.1.jar | Forge 1.18.1 - 1.18.2\nBlueMap-5.3-neoforge.jar | NeoForge 1.21 - 1.21.1\nBlueMap-5.3-sponge.jar | SpongeAPI 11.0.0"
 		},
 		{
 			"tag": "v3.21",
@@ -79386,5 +79393,9 @@
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [
+		"common/webapp/public/assets/steve.png"
+	],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

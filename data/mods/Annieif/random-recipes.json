@@ -17,7 +17,7 @@
 					"name": "random-recipes-1.0.2.jar",
 					"url": "https://github.com/Annieif/random-recipes/releases/download/v1.0.2/random-recipes-1.0.2.jar",
 					"size": 150835,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "722c297631de87e9f22272874caae92a05f5963a70d6180ee84aeede00b13b57",
 					"mods": [
@@ -56,7 +56,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Random Recipes v1.0.2\n\n修复单材料配方不改变材料的问题 + 自动修正重复配方。\n\n## 修复\n\n- **单材料配方不变**：剪刀、重质压力板、铁粒等仅用一种原料的配方，替换永远是自身（无意义）。现在从**全局物品池**（所有配方中出现过的物品）中随机补充最多 5 种候选物，确保配方内容的实质变化。\n- **重复配方**：随机化后检测到同产物+同原料集合的重复配方时，自动对重复项做二次随机化（替换一个原料为全局池中的随机物品），破坏相同性。\n- **洗牌优化**：Fisher-Yates 洗牌只对非空原料槽位操作，不再打乱空槽位位置。\n\n## 功能\n\n- **基于世界种子确定性打乱**：同存档永远相同，不同存档完全不同\n- **遍历所有工作台配方**：原版 + 第三方 Mod 自动纳入\n- **三重随机化**：打乱顺序 → 增减替换 → 重复修正\n- **保护机制**：默认三镐，配置文件可扩展\n- **`/reload` 支持**\n\n## 安装\n\n1. 安装 [Fabric Loader](https://fabricmc.net/use/)\n2. 安装 [Fabric API](https://modrinth.com/mod/fabric-api)\n3. 将本 JAR 放入 `.minecraft/mods/`\n4. 启动游戏（Minecraft 1.20.1）\n\n## 项目\n\n- 源码仓库：<https://github.com/Annieif/random-recipes>\n- Issue / 反馈：<https://github.com/Annieif/random-recipes/issues>\n\n## 许可证\n\nMIT"
 		},
 		{
 			"tag": "v1.0.1",
@@ -68,7 +69,7 @@
 					"name": "random-recipes-1.0.1.jar",
 					"url": "https://github.com/Annieif/random-recipes/releases/download/v1.0.1/random-recipes-1.0.1.jar",
 					"size": 149023,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "e4c55db1b7380906afa31aeba54f1f548c0720772c37144cb4d263740c74550d",
 					"mods": [
@@ -107,7 +108,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Random Recipes v1.0.1\n\n修复 v1.0.0 的启动崩溃问题。\n\n## 修复\n\n- **启动崩溃**：`RecipeManagerAccessor` accessor mixin 被放在 `mixins.randomrecipes.json` 的 `accessors` 下而不是 `mixins` 下，导致 Fabric/Mixin 加载器未能正确应用它。运行到随机化逻辑时触发：\n  > `Illegal classload request for accessor mixin com.randomrecipes.mixin.RecipeManagerAccessor`\n  > `The mixin is missing from mixins.randomrecipes.json`\n\n  现在所有 mixin（包括 accessor 和 inject 类）都统一放在 `mixins` 下，符合 SpongePowered Mixin 的规范。\n\n- **版本号更新为 1.0.1**\n\n## 功能（v1.0.0 基础功能，本次保留）\n\n- **基于世界种子确定性打乱**：用世界 seed 作为随机种子。同一存档永远相同，不同存档完全不同\n- **遍历所有工作台配方**：原版 + 第三方 Mod 注册的所有 `RecipeType.CRAFTING` 配方统一处理\n- **三重随机化**：\n  1. 打乱原料摆放顺序\n  2. 替换原料（仅使用该配方已出现的物品）\n  3. 对无序配方额外增减原料\n- **保护机制**：默认保护木镐/石镐/铁镐；支持在 `config/random-recipes.json` 中按物品 ID 或配方 ID 添加更多保护项\n- **重复检测**：随机化后扫描是否出现相同（产物 + 原料集合）并在日志告警\n- **`/reload` 支持**：修改配置文件后执行 `/reload` 即生效\n\n## 安装\n\n1. 安装 [Fabric Loader](https://fabricmc.net/use/)\n2. 安装 [Fabric API](https://modrinth.com/mod/fabric-api)\n3. 将本 JAR 放入 `.minecraft/mods/`\n4. 启动游戏（Minecraft 1.20.1）\n\n## 依赖\n\n- Minecraft **1.20.1**\n- Fabric Loader **≥ 0.15**\n- Fabric API（任意版本）\n- Java **17**\n\n## 构建源码\n\n```bash\n# Windows\ngradlew.bat build\n\n# Linux / macOS\n./gradlew build\n```\n\n构建产物在 `build/libs/` 目录中。\n\n## 项目\n\n- 源码仓库：<https://github.com/Annieif/random-recipes>\n- Issue / 反馈：<https://github.com/Annieif/random-recipes/issues>\n\n## 许可证\n\nMIT"
 		},
 		{
 			"tag": "v1.0.0",
@@ -119,7 +121,7 @@
 					"name": "random-recipes-1.0.0.jar",
 					"url": "https://github.com/Annieif/random-recipes/releases/download/v1.0.0/random-recipes-1.0.0.jar",
 					"size": 149026,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "d99f80a7766a1400bc682e15438b0c21f799b95cf92783de408e0d39830035ee",
 					"mods": [
@@ -158,12 +160,31 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# Random Recipes v1.0.0\n\n首个发布版本。\n\n## 功能\n\n- **基于世界种子确定性打乱**：用世界 seed 作为随机种子。同一存档永远相同，不同存档完全不同\n- **遍历所有工作台配方**：原版 + 第三方 Mod 注册的所有 `RecipeType.CRAFTING` 配方统一处理\n- **三重随机化**：\n  1. 打乱原料摆放顺序\n  2. 替换原料（仅使用该配方已出现的物品）\n  3. 对无序配方额外增减原料\n- **保护机制**：默认保护木镐/石镐/铁镐；支持在 `config/random-recipes.json` 中按物品 ID 或配方 ID 添加更多保护项\n- **重复检测**：随机化后扫描是否出现相同（产物 + 原料集合）并在日志告警\n- **`/reload` 支持**：修改配置文件后执行 `/reload` 即生效\n\n## 安装\n\n1. 安装 [Fabric Loader](https://fabricmc.net/use/)\n2. 安装 [Fabric API](https://modrinth.com/mod/fabric-api)\n3. 将本 JAR 放入 `.minecraft/mods/`\n4. 启动游戏（Minecraft 1.20.1）\n\n## 依赖\n\n- Minecraft **1.20.1**\n- Fabric Loader **≥ 0.15**\n- Fabric API（任意版本）\n- Java **17**\n\n## 构建源码\n\n```bash\n# Windows\ngradlew.bat build\n\n# Linux / macOS\n./gradlew build\n```\n\n构建产物在 `build/libs/` 目录中。\n\n## 项目\n\n- 源码仓库：<https://github.com/Annieif/random-recipes>\n- Issue / 反馈：<https://github.com/Annieif/random-recipes/issues>\n\n## 许可证\n\nMIT"
 		}
 	],
 	"readme": "README.md",
 	"readmeSummary": "进入世界时，用世界种子码确定性打乱所有工作台（crafting table）配方。同一存档配方永远相同，不同存档则完全不同。",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [
+		"screenshots/木台阶.png",
+		"screenshots/铁斧.png",
+		"screenshots/铁镐.png"
+	],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 9,
+		"more": 0,
+		"people": [
+			{
+				"login": "Annieif",
+				"commits": 9,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

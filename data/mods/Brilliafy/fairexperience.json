@@ -18,7 +18,7 @@
 					"name": "fairexperience-1.0.3.jar",
 					"url": "https://github.com/Brilliafy/fairexperience/releases/download/v1.0.3/fairexperience-1.0.3.jar",
 					"size": 455838,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "76b973de466f1625ce6f064f9ce4c5fdcb7680ca2a9850cb8704575625f95c99",
 					"mods": [],
@@ -37,7 +37,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## Fair Experience v1.0.3 Changelog\n\n### ✨ New Feature: Fair Anvil Combining & Enchantment Scaling\n\nFair Experience now completely overhauls Anvil combining to eliminate vanilla's frustrating Prior Work Penalty (PWP) compounding and order dependencies!\n\n#### 🛠️ Highlights & Improvements:\n\n- **Order-Independent Anvil Combining**:\n  - Adding enchantments from books in any order or combination now yields the **exact same fair total XP cost**.\n  - Adding enchantments one by one costs the exact same total as adding them all from a single pre-combined book.\n  - **Symmetrical Combining**: Swapping the left and right books in the anvil never changes the cost.\n\n- **Fair Progression Scaling for Existing Enchantments**:\n  - Having enchantments already on your weapon or armor naturally makes adding subsequent enchantments cost a fair bit more, matching intuitive RPG progression while remaining **100% mathematically consistent** regardless of order.\n\n- **Fair Equipment Repairing**:\n  - Repairing enchanted weapons/armor with materials (e.g., diamonds on a diamond sword) now scales fairly based on the enchantments on the item (+1 level per enchantment).\n  - Highly enchanted items are more expensive to repair than plain unenchanted items, but use transparent, fair math.\n  - Repairing never doubles exponentially ($15 \\to 31 \\to 63$) and will never permanently lock out your favorite gear with \"Too Expensive!\". You can repair your equipment indefinitely!\n\n- **Fair Book Upgrades**:\n  - Combining books to reach higher enchantment levels (e.g., Sharpness 3 + 3 → 4, and 4 + 4 → 5) produces books with clean prior work penalties.\n  - Applying a crafted high-tier book to your weapon now costs the **exact same fair amount** as using a raw book obtained from a villager or creative mode!\n\n- **Configurable 40-Level \"Too Expensive!\" Limit**:\n  - By default, valid operations are no longer blocked by vanilla's 40-level cap in the anvil GUI or container. If you have the required levels/XP, you can always craft!\n  - Added a toggle (`removeTooExpensiveLimit`) in `config/fairexperience.cfg` so players or modpack creators who still want vanilla's 40-level limit enforced can easily restore it.\n\n---\n\n#### ⚙️ Configuration (`config/fairexperience.cfg`)\n\n```hocon\n# Configuration for Fair Experience\n\ngeneral {\n    # If true, anvil level costs will be converted to fair raw XP costs.\n    B:enableFairAnvils=true\n\n    # If true, anvil enchanting calculations are fair and order-independent: combining books or applying them in any order costs the same, prior work penalties do not penalize combines, and combining books to reach higher levels will not yield higher costs to combine with items.\n    B:enableFairAnvilCombining=true\n\n    # If true, direct experienceLevel subtractions (e.g. by LevelUp2) will be converted to fair raw XP costs.\n    B:enableFairDirectModifications=true\n\n    # If true, enchanting table level costs will be converted to fair raw XP costs.\n    B:enableFairEnchanting=true\n\n    # If true, removes the vanilla 40-level 'Too Expensive!' anvil limit, allowing operations that cost 40 or more levels. If false, operations costing 40+ levels are blocked like in vanilla.\n    B:removeTooExpensiveLimit=true\n}\n```"
 		},
 		{
 			"tag": "v1.0.21",
@@ -49,7 +50,7 @@
 					"name": "fairexperience-1.0.21.jar",
 					"url": "https://github.com/Brilliafy/fairexperience/releases/download/v1.0.21/fairexperience-1.0.21.jar",
 					"size": 446793,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "d650e816b553b7531a61459a37e42ee1dba05a17e4fa3cf39abc771b447d5689",
 					"mods": [],
@@ -68,7 +69,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## Fair Experience v1.0.21 Changelog\n\n### 🛠️ Bug Fixes & Improvements\n\n* **Fixed XP-Tome & Raw XP Storage Duplication Bug**:\n  * Fixed an issue where storing experience in items like the XP-Tome (or mods like Ender IO, OpenBlocks, and Reskillable) caused the player to retain most of their XP while the tome received the full amount, resulting in accidental XP duplication.\n  * Fair Experience now detects intentional raw experience drains, ensuring the exact amount of XP drained is removed and seamlessly preserved.\n\n* **Fixed Enchanting Raw XP Fallbacks**:\n  * Fixed an issue where third-party mod enchantment crafts without direct enchanting table containers fell back to deducting flat levels rather than fair raw XP.\n  * Enchantment crafts now correctly default to standard fair tier raw XP requirements (Tier 1, Tier 2, Tier 3) rather than deducting flat levels from high-level players.\n\n* **Enhanced Server-Authoritative Network Sync**:\n  * Experience updates on dedicated servers now immediately dispatch synchronized packets to client connections, eliminating visual delay or bar desynchronization."
 		},
 		{
 			"tag": "v1.0.2",
@@ -80,7 +82,7 @@
 					"name": "fairexperience-1.0.2.jar",
 					"url": "https://github.com/Brilliafy/fairexperience/releases/download/v1.0.2/fairexperience-1.0.2.jar",
 					"size": 446384,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "6a694ec27eda92fd0b42ba3bda3d21ce5914d6fdd076bc1c31a387bbb6cb4968",
 					"mods": [],
@@ -99,7 +101,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "**Fixed: mod had no effect on dedicated servers** (and in 1.0.1, everywhere).\n\nIn 1.0.1 the mixins never ran: MixinBooter only discovers `IEarlyMixinLoader` implementations from the FML coremod list, so the plain `@MixinLoader`-annotated loader class was silently ignored and the mod fell back to vanilla (flat level) XP costs.\n\n**Changes:**\n- The mod is now an FML coremod (`FairExperienceCoremod`, declared via the `FMLCorePlugin` manifest attribute) that also implements `IEarlyMixinLoader`, so MixinBooter registers `mixins.fairexperience.json` in the early phase — before `EntityPlayer`/`ContainerEnchantment` load. This makes fair raw-XP enchanting/anvil costs work identically in singleplayer and on dedicated servers.\n- Removed the now-redundant `FairExperienceMixinLoader`.\n- `MixinConfigs` manifest attribute stays removed (it caused `DuplicateModsFoundException` on servers via MixinBooter's classloader pre-add).\n\nVerified on a dedicated 1.12.2 server: `Adding [mixins.fairexperience.json] mixin configuration` appears at boot and the server runs clean."
 		},
 		{
 			"tag": "v1.0.1",
@@ -111,7 +114,7 @@
 					"name": "fairexperience-1.0.1.jar",
 					"url": "https://github.com/Brilliafy/fairexperience/releases/download/v1.0.1/fairexperience-1.0.1.jar",
 					"size": 446020,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "f9dd07972c74cb75590c876dce31ffdc51c7a71ddb282c61fade9fbb935beba7",
 					"mods": [],
@@ -130,7 +133,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Fix dedicated-server crashes:\n- Remove MixinConfigs jar-manifest attribute (caused DuplicateModsFoundException: MixinBooter pre-added the jar to the LaunchClassLoader, so FML scanned it twice).\n- Load mixins early via IEarlyMixinLoader (targets are vanilla classes that load during FMLContainer construction; late loading caused MixinTargetAlreadyLoadedException)."
 		},
 		{
 			"tag": "v1.0.0",
@@ -142,7 +146,7 @@
 					"name": "fairexperience-1.0.0.jar",
 					"url": "https://github.com/Brilliafy/fairexperience/releases/download/v1.0.0/fairexperience-1.0.0.jar",
 					"size": 447353,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "e01b3dd0eaa5d5e6a742e17a3260a33a50ac0e6b2bec7ed42057f45f678084f9",
 					"mods": [],
@@ -161,11 +165,27 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Initial release of Fair Experience for Minecraft 1.12.2 Forge."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 11,
+		"more": 0,
+		"people": [
+			{
+				"login": "Brilliafy",
+				"commits": 11,
+				"name": "MICHAIL ANGELOS MESANAGRENOS",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

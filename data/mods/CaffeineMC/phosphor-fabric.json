@@ -18,7 +18,7 @@
 					"name": "phosphor-fabric-mc1.19.x-0.8.1.jar",
 					"url": "https://github.com/CaffeineMC/phosphor-fabric/releases/download/mc1.19.x-0.8.1/phosphor-fabric-mc1.19.x-0.8.1.jar",
 					"size": 88018,
-					"downloads": 58213,
+					"downloads": 58214,
 					"inspection": 2,
 					"sha256": "2d1b8ebd216d5c04356c0bca53899b93d3d602bb1ab611451b0b0f971ac1f1db",
 					"mods": [
@@ -37,7 +37,10 @@
 							"provides": [],
 							"breaks": [
 								"starlight"
-							]
+							],
+							"breaksVersions": {
+								"starlight": "*"
+							}
 						}
 					],
 					"icon": "e3d279ac3f999f6051ed54d42b87622fd006e2e97577ecd3772c1764ce2f1620.png",
@@ -55,7 +58,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "This release contains the compatibility update to 1.19."
 		},
 		{
 			"tag": "mc1.18.x-0.8.1",
@@ -67,7 +71,7 @@
 					"name": "phosphor-fabric-mc1.18.x-0.8.1.jar",
 					"url": "https://github.com/CaffeineMC/phosphor-fabric/releases/download/mc1.18.x-0.8.1/phosphor-fabric-mc1.18.x-0.8.1.jar",
 					"size": 90017,
-					"downloads": 40466,
+					"downloads": 40467,
 					"inspection": 2,
 					"sha256": "42a139df6300340f23cda4457fc0ba7e39124c1bac05d89232b0167bd51e6a75",
 					"mods": [
@@ -104,7 +108,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "This release contains the compatibility update to 1.18.\nAdditionally, a small optimization is added to reduce the workload for the lightmap complexity initialization upon chunk loading added by Phosphor.\n\n### Installation on servers:\nFabric needs to be installed using `fabric-installer >= 0.10.0` on servers in order to properly work with Mixins for Java 17. If the game crashes with error message `The requested compatibility level JAVA_17 could not be set. Level is not supported by the active JRE or ASM version (Java 17.0, ASM 9.0 (ASM10_EXPERIMENTAL))`, please reinstall Fabric."
 		},
 		{
 			"tag": "mc1.17.x-0.8.0",
@@ -116,7 +121,7 @@
 					"name": "phosphor-fabric-mc1.17.x-0.8.0.jar",
 					"url": "https://github.com/CaffeineMC/phosphor-fabric/releases/download/mc1.17.x-0.8.0/phosphor-fabric-mc1.17.x-0.8.0.jar",
 					"size": 90535,
-					"downloads": 15471,
+					"downloads": 15472,
 					"inspection": 2,
 					"sha256": "b92b3f188c7b952b0af3e8c7ab733dc8c6a03a6e7f49bda2091240d93c538cce",
 					"mods": [
@@ -153,7 +158,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "This release contains mainly internal changes and the compatibility update to 1.17.\nThe approach for initial lighting is changed, which should lead to a small speedup. Together with some other changes, this furthermore establishes compatibility with the 1.17 world height changes."
 		},
 		{
 			"tag": "mc1.16.2-0.8.0",
@@ -165,7 +171,7 @@
 					"name": "phosphor-fabric-mc1.16.2-0.8.0.jar",
 					"url": "https://github.com/CaffeineMC/phosphor-fabric/releases/download/mc1.16.2-0.8.0/phosphor-fabric-mc1.16.2-0.8.0.jar",
 					"size": 93350,
-					"downloads": 8309,
+					"downloads": 8310,
 					"inspection": 2,
 					"sha256": "6a985f614c303ce4d67b773844ffcca0ea54feecdb7ee3e5b44e3a09e0609936",
 					"mods": [
@@ -202,7 +208,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "This release contains mainly internal changes.\nThe approach for initial lighting is changed, which should lead to a small speedup. Together with some other changes, this furthermore establishes compatibility with the 1.17 world height changes."
 		},
 		{
 			"tag": "mc1.16.2-v0.7.2",
@@ -214,7 +221,7 @@
 					"name": "phosphor-fabric-mc1.16.3-0.7.2+build.12.jar",
 					"url": "https://github.com/CaffeineMC/phosphor-fabric/releases/download/mc1.16.2-v0.7.2/phosphor-fabric-mc1.16.3-0.7.2%2Bbuild.12.jar",
 					"size": 91335,
-					"downloads": 17518,
+					"downloads": 17519,
 					"inspection": 2,
 					"sha256": "d65ec605ba330db40bbc5caf1f51358c38b41c6d84c4d35f12b496112e515390",
 					"mods": [
@@ -251,7 +258,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "This release fixes a data loss bug present in 0.7.1 and 0.7.0.\n\n### Bug Fix\n* Fixed a concurrency issue that could lead to lightmaps being discarded upon reloading chunks (#49). The fix will only prevent new glitches but will not repair already existing ones. If upgrading an already corrupted world to 0.7.2, you need to erase the light cache once, see the note on [MC-142134](https://bugs.mojang.com/browse/MC-142134) for complete instructions.\n\n### Change\n* Mark `Starlight` as incompatible. Having both `Phosphor` and `Starlight` installed will now lead to a crash instead of loading the game normally and causing unexpected logic errors later on. `Phosphor` and `Starlight` were always incompatible and will always be, as they reimplement the lighting engine to a certain extent, hence modifying the same code in conflicting ways. With this change the game simply shuts down gracefully instead of causing undefined behavior."
 		},
 		{
 			"tag": "mc1.16.1-v0.6.0",
@@ -263,7 +271,7 @@
 					"name": "phosphor-fabric-mc1.16.1-0.6.0+build.7.jar",
 					"url": "https://github.com/CaffeineMC/phosphor-fabric/releases/download/mc1.16.1-v0.6.0/phosphor-fabric-mc1.16.1-0.6.0%2Bbuild.7.jar",
 					"size": 60106,
-					"downloads": 17279,
+					"downloads": 17281,
 					"inspection": 2,
 					"sha256": "293438895970fb9fc09de8551c6fcb278cfd3683de7695c1a495ece9cf6a277b",
 					"mods": [
@@ -295,7 +303,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "This update brings Phosphor up-to-date with Minecraft 1.16.1 and introduces some new optimizations for light array copying that can greatly reduce the memory allocation rate and CPU overhead when light updates are being performed."
 		},
 		{
 			"tag": "mc1.15.2-v0.5.2",
@@ -307,7 +316,7 @@
 					"name": "phosphor-fabric-mc1.15.2-0.5.2+build.6.jar",
 					"url": "https://github.com/CaffeineMC/phosphor-fabric/releases/download/mc1.15.2-v0.5.2/phosphor-fabric-mc1.15.2-0.5.2%2Bbuild.6.jar",
 					"size": 111819,
-					"downloads": 476,
+					"downloads": 477,
 					"inspection": 2,
 					"sha256": "7ed0565facb357b22f8a275200f9f21b7d5c1ce7926c80ec60100541c32b95bd",
 					"mods": [
@@ -349,7 +358,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "This release fixes an issue in Phosphor 0.5.1 where full-block (opaque) light sources would not emit any light in the world."
 		}
 	],
 	"readme": "README.md",
@@ -364,5 +374,54 @@
 		}
 	],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [
+		"doc/patreon.png"
+	],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 178,
+		"more": 0,
+		"people": [
+			{
+				"login": "jellysquid3",
+				"commits": 172,
+				"name": "JellySquid",
+				"funding": []
+			},
+			{
+				"login": "mrmangohands",
+				"commits": 2,
+				"name": "MrMangoHands",
+				"funding": []
+			},
+			{
+				"login": "HandyHat",
+				"commits": 1,
+				"name": "Aniket",
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/HandyHat"
+					}
+				]
+			},
+			{
+				"login": "deltanedas",
+				"commits": 1,
+				"funding": []
+			},
+			{
+				"login": "LucilleTea",
+				"commits": 1,
+				"funding": []
+			},
+			{
+				"login": "Stupefacient",
+				"commits": 1,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

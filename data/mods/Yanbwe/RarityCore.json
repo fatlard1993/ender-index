@@ -1,0 +1,314 @@
+{
+	"repo": "Yanbwe/RarityCore",
+	"host": "github",
+	"description": "Revolutionize Minecraft's rarity system — more tiers, automated assignment, and powerful customization.",
+	"stars": 3,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2026-01-02T02:27:54Z",
+	"pushed": "2026-10-02T02:56:06Z",
+	"releases": [
+		{
+			"tag": "v1211.14.9",
+			"published": "2026-10-02T02:58:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 604674033,
+					"name": "raritycore-1211.14.9.jar",
+					"url": "https://github.com/Yanbwe/RarityCore/releases/download/v1211.14.9/raritycore-1211.14.9.jar",
+					"size": 402536,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "7123afb1b1fce15232bfd214b3d22b41542abd48e3233a5b44a932b1131be371",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "raritycore",
+							"version": "1211.14.9",
+							"name": "RarityCore",
+							"description": "Yanbweeeeeeeeeeeeeee",
+							"minecraft": "[1.21.1,1.21.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 164,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1211.14.9]\n\n### 修复\n- 修复携带附魔等组件的物品堆无法命中 `item_data_matches` 规则的问题（issue #24）\n  - 表现：这类物品的匹配规则被整体跳过，连\"id 存在\"这样的条件也不生效，并且每次显示该物品的工具提示都会打印一条 ERROR 和一条 WARN\n  - 现在读取物品数据时会自动选用当前可用的注册表（取不到则逐级回退），规则恢复正常；编辑模式生成 `FullMatch` 配置、公开 API 的匹配入口一并修复\n  - 物品数据在客户端与服务端的序列化结果保持一致，不会引入两端的稀有度分歧\n- 修复安装灵动提示框（ColorTooltips）时，物品名自带的格式代码与自定义颜色被稀有度名称颜色覆盖的问题（issue #25）\n  - 原因：1.21.1 的兼容只让出了稀有度提示行，物品名染色没有一起让出，同一个提示框被两套着色互相覆盖；因为物品名染色完全不看 ColorTooltips，装与不装它都会复现\n  - 现在装了 ColorTooltips 时不再按稀有度改动物品名颜色，物品名保持自己的格式与颜色；未安装时行为不变，与 1.20.1 一致"
+		},
+		{
+			"tag": "v1201.14.3",
+			"published": "2026-09-13T04:44:01Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 560572422,
+					"name": "raritycore-1201.14.3.jar",
+					"url": "https://github.com/Yanbwe/RarityCore/releases/download/v1201.14.3/raritycore-1201.14.3.jar",
+					"size": 355940,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "a094260281461b9ab689111a8c9a924b02ca18b414b2d02da245518cc4dfd6c4",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "raritycore",
+							"version": "1201.14.3",
+							"name": "Rarity Core",
+							"description": "RarityCore",
+							"minecraft": "[1.20.1,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"suggests": [
+								"kubejs"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 142,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1201.14.3]\n\n### 修复\n- 修复 `client.json` 中的配置项被静默删除、导致手动添加的开关不生效的问题：V14 迁移逻辑 `handleLegacyFiles()` 会把该文件整体重写为\"仅含 `enableCacheSystem`\"，其余键（包括 1201.14.1 新增的 `enableIronSpellsAdapter`）每次启动都被清除，用户手动添加也会被吞掉，因此铁魔法的法术等级动态映射始终无法关闭\n  - 现在改为定向剔除，只移除 `enableItemBorderRendering`、`enableTooltipInsert` 两个已无读取方且默认值一致的死键，文件中其余任何键（本模组开关与用户自定义键）一律原样保留\n  - 加载顺序调整为「先清理旧键 → 加载 RarityStyle → 重新加载客户端配置」，补入的开关当次启动即生效\n- 修复旧版本生成的 `client.json` 缺少新增配置项的问题：加载时会把缺失的已知键按默认值补入文件并记录日志（原文件其余内容保留），存量安装无需手动改配置即可看到开关；用户已显式设置的值不会被覆盖"
+		},
+		{
+			"tag": "v2602.14.1",
+			"published": "2026-09-12T15:47:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 559511887,
+					"name": "raritycore-2602.14.1.jar",
+					"url": "https://github.com/Yanbwe/RarityCore/releases/download/v2602.14.1/raritycore-2602.14.1.jar",
+					"size": 385098,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "1eaa6092ad840d24d60ee9a4238a9fea44526ead8138434bdd6d8c5c9e78a072",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "raritycore",
+							"version": "2602.14.1",
+							"name": "RarityCore",
+							"description": "Yanbweeeeeeeeeeee",
+							"minecraft": "[26.2,26.3)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 156,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: https://github.com/Yanbwe/RarityCore/compare/2601.14.0...v2602.14.1"
+		},
+		{
+			"tag": "v1211.14.7",
+			"published": "2026-09-12T15:47:34Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 559511569,
+					"name": "raritycore-1211.14.7.jar",
+					"url": "https://github.com/Yanbwe/RarityCore/releases/download/v1211.14.7/raritycore-1211.14.7.jar",
+					"size": 396316,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "139a4e58fc874d0fefee754a29dbd9cda73f17cd64e6079b6d50a6b945a0e359",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "raritycore",
+							"version": "1211.14.7",
+							"name": "RarityCore",
+							"description": "Yanbweeeeeeeeeeeeeee",
+							"minecraft": "[1.21.1,1.21.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 161,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1211.14.7]\n\n### 修复\n- 修复等值条件（`equals`）在数值/布尔匹配上的静默失效：NBT 没有布尔类型，原版与多数模组用 `ByteTag` 存储标志位（`getAsString()` 为 `1b`/`0b`），此前 `equals(1)`、`equals(true)` 会因字符串比较而无法命中\n- 等值比较改为类型感知：数值条件仅与数值型标签比较（不再让数字型期望值误匹配 `StringTag(\"32\")` 之类的文本），布尔条件同时兼容 `1b/0b` 与 `1/0`，并兼容 `Double(1.0)` 等数值形式\n- 兼容旧同步包数据：期望值被历史版本字符串化（如 `\"1\"`、`\"true\"`）时仍能正确匹配，无需重连即可自愈"
+		},
+		{
+			"tag": "v2601.14.1",
+			"published": "2026-09-12T15:47:25Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 559511377,
+					"name": "raritycore-2601.14.1.jar",
+					"url": "https://github.com/Yanbwe/RarityCore/releases/download/v2601.14.1/raritycore-2601.14.1.jar",
+					"size": 385098,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "891275cea62a3b3ea7e6b153eaeed700ebfe461a11f280e716b91623ef59e08f",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "raritycore",
+							"version": "2601.14.1",
+							"name": "RarityCore",
+							"description": "Yanbweeeeeeeeeeee",
+							"minecraft": "[26.1,26.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 156,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: https://github.com/Yanbwe/RarityCore/compare/2601.14.0...v2601.14.1"
+		},
+		{
+			"tag": "v1201.5.1",
+			"published": "2026-02-10T09:00:18Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 353519110,
+					"name": "RarityCore-1201.5.1-1.20.1-forge.jar",
+					"url": "https://github.com/Yanbwe/RarityCore/releases/download/v1201.5.1/RarityCore-1201.5.1-1.20.1-forge.jar",
+					"size": 180333,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "7f54cc628f6495c3389d0c58f7bdd7ad8b33621f8acb6899fad9fd72f0cf2d87",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "raritycore",
+							"version": "1201.5.1",
+							"name": "Rarity Core",
+							"description": "Rarity Core",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 54,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- 实现配置文件自动版本控制和升级功能\n- 与神化稀有度联动\n- 兼容精妙背包等模组\n- 完善文档"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T22:37:16.645Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 193,
+		"more": 0,
+		"people": [
+			{
+				"login": "Yanbwe",
+				"commits": 187,
+				"funding": []
+			},
+			{
+				"login": "ddaodan",
+				"commits": 6,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
+	"history": 1
+}

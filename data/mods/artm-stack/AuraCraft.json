@@ -18,7 +18,7 @@
 					"name": "auracraft-1.1.0.jar",
 					"url": "https://github.com/artm-stack/AuraCraft/releases/download/1.1.0-26.1.2/auracraft-1.1.0.jar",
 					"size": 84103,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "518cac1409346bb19e91d66e63e7b1e09e28f52456ae709be0ed12b1eb9d7521",
 					"mods": [
@@ -64,7 +64,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## AuraCraft 1.1.0\n\n**Minecraft** `26.1.2` · **Fabric Loader** `0.19.1+` · **Fabric API** `0.145.4+26.1.2`\n\n---\n\n### New Features\n- **Restoration Queue** - Auras lost to PvP or withdrawn via `/aura withdraw` are now remembered. Using an **Aura Plus** automatically restores the most recently lost aura instead of just granting a point.\n- **`/aura withdraw [amount]`** - Now accepts an optional amount, converting multiple points or auras into Aura Plus items in one command.\n- **`/aura restart [player]`** - New hard-reset command. Returns the player to 1 point, clears all auras and effects, and wipes the restoration queue.\n- **Aura Picker with 0 points** - The picker screen (`Y`) can now be opened at any time. Browsing and reading descriptions always works; the Choose button is disabled until you have a point to spend.\n\n### Balance Changes\n- **Aura Plus** stack size reduced from `16` -> `1`. Each item is a discrete restoration token.\n- **Aura Reset** stack size reduced from `16` -> `8`.\n- **Aura Reset** is now gated - it refuses to activate if the player has never selected an aura, preventing accidental or exploitative use before any points are invested.\n\n### Improvements\n- `max_auras`, `drop_plus_on_kill`, and `enable_heart_recipe` are now proper **GameRules**, configurable in-game via `/gamerule`. The config file now only controls per-aura toggles and upgrade caps.\n- **Aura Plus** is no longer consumed when used in creative mode.\n- `/aura status` now labels the player's name in its output.\n- Version mismatch disconnect message is now fully translatable.\n\n### Bug Fixes\n- Fixed the upgrade confirmation message displaying the old amplifier index instead of the new level (e.g. was showing `+0` on first upgrade).\n\n### Internal / Code Quality\n- Removed the old single-slot `withdrawnAura` tracking system - fully replaced by the restoration queue.\n- `resetPlayer()` now returns the refunded point count; callers handle their own feedback, eliminating duplicate messages.\n- Removed duplicate inline reset logic from `Items.java` - the item now delegates directly to `AuraCraft.resetPlayer()`.\n- Removed orphaned lang key `screen.auracraft.col_max_upg`.\n- Bumped client/server handshake protocol version to reflect payload changes.\n\n---\n\n> **Client mod required.** Clients without AuraCraft or on a mismatched protocol version will be disconnected on join with a descriptive message. Upgrade both sides together."
 		},
 		{
 			"tag": "1.0.3-26.1.2",
@@ -76,7 +77,7 @@
 					"name": "auracraft-1.0.3.jar",
 					"url": "https://github.com/artm-stack/AuraCraft/releases/download/1.0.3-26.1.2/auracraft-1.0.3.jar",
 					"size": 80427,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "9d443e16f599426bb9c74b951812d0027edca8ba7d97828cf568aee6fac26658",
 					"mods": [
@@ -123,11 +124,14 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "## AuraCraft 1.0.3\n\n**Minecraft** `26.1.2` · **Fabric Loader** `0.19.1+` · **Fabric API** `0.145.4+26.1.2`\n\n---\n\n### Bug Fixes\n- Fixed `ClientHelloPayload` never being registered on the server side, which could cause silent packet drops or client disconnects on join.\n- Fixed a client-thread race condition in the config screen where server player data was being accessed from the render thread in singleplayer.\n- Fixed grammar in PvP death messages: *\"You were killed lost...\"* → *\"You were killed and lost...\"*\n- Fixed the effect reset message hardcoding `[Y]` — it now reflects whatever key the player has bound.\n\n### Improvements\n- The enabled effect list is now sent once on join via `UiStatePayload` instead of being bundled into every `SyncEffectPayload`. Reduces unnecessary network traffic on servers with many players.\n- Config screen is now fully **read-only when connected to a dedicated server** — all fields and toggles are disabled and a notice is shown. Previously, changes appeared to save but had no effect on the server.\n- All player-facing messages are now fully translatable.\n\n### Internal / Code Quality\n- Simplified redundant `instanceof` cast pattern in effect application and removal.\n- Replaced private constant getter boilerplate with direct `public static final` field access.\n- Cleaned up last-element iteration over `LinkedHashSet` to use streams.\n- Bumped client/server handshake protocol to version `3` to reflect packet format changes.\n\n---\n\n> Clients on `1.0.2` or older will trigger a protocol mismatch warning in the server log. Upgrade both sides together."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

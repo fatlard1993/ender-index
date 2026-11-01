@@ -6,8 +6,57 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-07-08T22:56:03Z",
-	"pushed": "2026-10-27T22:20:15Z",
+	"pushed": "2026-10-28T02:52:40Z",
 	"releases": [
+		{
+			"tag": "v1.6.1",
+			"published": "2026-10-28T02:54:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 683621788,
+					"name": "borderlesswindow-1.6.1.jar",
+					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.6.1/borderlesswindow-1.6.1.jar",
+					"size": 91846,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b13e427ce61e48c35ac4c2b10035ba05ad0547995fa869d35f0f7412af466857",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "borderlesswindow",
+							"version": "1.6.1",
+							"name": "Borderless Window",
+							"description": "Adds borderless fullscreen to Minecraft with a 3-mode system (Windowed / Borderless / Fullscreen) and configurable F11 behavior, plus a growing set of video and quality-of-life options Minecraft doesn't expose. Every setting defaults to vanilla behavior. Optional Sodium video settings integration. Configurable from the Mods menu, no dependencies required.",
+							"minecraft": "[1.21.1]",
+							"environment": "client",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"sodium"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 47,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.6.1\n\n- Fixed Portal Distortion not applying after crossing a Nether portal. You arrive standing inside the destination portal, but Minecraft ignores that portal until its cooldown runs out, so with a Nausea effect active the distortion switched to the Nausea percentage while you were still in the portal. Stepping out and back in was the only way to get the portal percentage back. Touching a portal now always counts as the portal, cooldown or not\n- Corrected the 1.6.0 notes about the green nausea texture. It is not left to vanilla: Nausea Distortion drives it the same way Minecraft's own Distortion Effects slider does, so lowering Nausea Distortion trades the spinning for the green cue, and at 0% there is no spinning and the texture is at full strength. While a portal is the source, the texture follows Minecraft's slider only. The code always behaved this way; only the notes were wrong\n\n## Internal\n\n- New `EntityMixin` records contact with a Nether portal at the head of `setAsInsidePortal`, before vanilla's cooldown check, and `LocalPlayerMixin` counts that contact as the portal when attributing the distortion source"
+		},
 		{
 			"tag": "v1.6.0",
 			"published": "2026-08-21T22:42:40Z",
@@ -18,7 +67,7 @@
 					"name": "borderlesswindow-1.6.0.jar",
 					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.6.0/borderlesswindow-1.6.0.jar",
 					"size": 90688,
-					"downloads": 5,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "68d492da0bcd8051a9faa3d2febdbfbf4dddcf8f0508d728661c27abcad53e42",
 					"mods": [
@@ -54,7 +103,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# 1.6.0\n\n## Camera overlays\n\n- Added four toggles for the full-screen overlays Minecraft draws over your view: **Pumpkin**, **Freeze**, **Portal** and **Spyglass**\n- **Pumpkin Overlay** removes the blur drawn while wearing a carved pumpkin, so it can be worn against endermen without the visual cost. Helmet overlays added by other mods are never affected\n- **Freeze Overlay** removes the frost border drawn while freezing in powder snow. That border also warns you are taking freeze damage; the frozen hearts on the HUD still show it\n- **Portal Overlay** removes the purple warp drawn while standing inside a Nether portal, which mostly gets in the way while building or aligning them\n- **Spyglass Overlay** removes the scope texture and the black bars. The zoom itself is unchanged — only the frame around it is removed\n- All four live in the existing Screen Overlays section, alongside the water and fire toggles\n- The vignette is deliberately not offered: it doubles as the world border warning, and a plain toggle would delete that warning along with the darkening\n\n## Field of view\n\n- Minecraft has one **FOV Effects** slider for every source at once. It is now split into four: **Speed**, **Flying**, **Bow** and **Fluid**, each 0-100% with 100% being vanilla\n- **Speed FOV** is the one worth having: with Speed potions or a modified movement attribute the FOV never settles, and until now there was no way to soften that without removing the bow zoom too\n- **Flying FOV** covers creative flight only. Elytra gliding is a different thing and is not affected\n- **Bow FOV** keeps the same easing curve and only changes how deep the zoom goes. The spyglass is never touched: its zoom is what the item does, not a visual effect\n- **Fluid FOV** is the squeeze applied underwater and in lava\n- All four sit under Minecraft's own FOV Effects slider rather than replacing it — with that at Off, nothing here has any effect\n\n## Distortion\n\n- Minecraft has one **Distortion Effects** slider covering both the Nether portal and the Nausea effect. It is now split into **Portal Distortion** and **Nausea Distortion**, each 0-100%\n- The two share one accumulator internally, so the source is attributed per tick from the rate vanilla itself picks. Walking into a portal while under a Nausea potion correctly applies the portal percentage, and applies the Nausea one again the moment you step out\n- Both sit under Minecraft's own Distortion Effects slider, same as the FOV options\n- The green nausea texture is left entirely to vanilla. It is Minecraft's accessibility trade — a static cue that replaces the spinning as you lower *its* slider — and driving it from ours turned \"less motion\" into a bright green full-screen overlay, which is the opposite of what the option is for\n\n## Sodium integration\n\n- Two vanilla sliders Sodium's video settings leave out are now available inside the mod's pages: **Distortion Effects (Minecraft)** and **FOV Effects (Minecraft)**, each at the top of the page it governs so the hierarchy reads top-down\n- Both are the same settings found in Minecraft's Accessibility Settings and are saved with Minecraft's options, not the mod's\n- The Sodium section now has nine per-feature pages: General, FPS Overlay, Fog, Clouds, Screen Overlays, Bobbing, FOV, Distortion and Enchantment Style\n- Every option remains fully available without Sodium via the Mods menu Config screen, except the two vanilla sliders above — without Sodium those are one click away in Minecraft's own menus and duplicating them would serve nobody\n\n## Internal\n\n- New `fov/` and `distortion/` packages; `screeneffect/` gains `CameraOverlayFilter`\n- New mixins: `GuiMixin`, `AbstractClientPlayerMixin`, `LocalPlayerMixin`\n- The camera overlays need bytecode rather than an event: NeoForge exposes the whole group as a single `CAMERA_OVERLAYS` GUI layer, so cancelling it would remove all of them at once. The pumpkin and freeze overlays share one vanilla method and are told apart by texture\n\n..."
 		},
 		{
 			"tag": "v1.5.1",
@@ -66,7 +116,7 @@
 					"name": "borderlesswindow-1.5.1.jar",
 					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.5.1/borderlesswindow-1.5.1.jar",
 					"size": 71475,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "e3d2bb4a613cd622f671e67d99c48d821317795d8ccea2b12829bfb87fb7049a",
 					"mods": [
@@ -102,7 +152,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Update cloud height tooltip for clarity and increment version to 1.5.1"
 		},
 		{
 			"tag": "v1.5.0",
@@ -114,7 +165,7 @@
 					"name": "borderlesswindow-1.5.0.jar",
 					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.5.0/borderlesswindow-1.5.0.jar",
 					"size": 71334,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "7c3af8af0856491c08bb9ecf085c42b0c77843afcecbc202f3e758ab2db85c7b",
 					"mods": [
@@ -150,11 +201,14 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "# 1.5.0 — Enchantment level numerals\n\nEnchantment levels above X showed raw text instead of a number: a\nLooting 11 book read \"Looting enchantment.level.11\". Levels are legal\nall the way to 255, but Minecraft only ships names for the first ten.\n\nThis fixes it and adds a style option with three values:\n\n- Mixed (default): Roman numerals up to X, plain numbers past it. This\n  is the fix on its own — nothing you already see changes.\n- Always Roman: generated numerals at every level, XI through CCLV.\n- Always Numbers: plain numbers at every level, including 1-10.\n\nMixed defers to the language file whenever a translation exists, so\nresource packs that do name high levels keep working. The other two are\nexplicit choices and always generate.\n\nImplementation: WrapOperation (MixinExtras) wraps the single\nComponent.translatable call inside Enchantment.getFullname, capturing\nthe target method's own level parameter instead of parsing it back out\nof the key. The guard above that call is untouched, so single-level\nenchantments like Mending still show no number, and returning the\noriginal Operation leaves vanilla's component identical whenever no\noverride applies. One injection covers item tooltips, enchanted books\nand the enchanting table.\n\nNew enchantment/ package (EnchantmentLevelStyle, EnchantmentLevelState,\nEnchantmentLevelFormatter) plus mixin/EnchantmentMixin, wired into both\nUIs, the config file and the three lang files."
 		}
 	],
 	"readme": "README.md",
 	"funding": [],
 	"fundingChecked": "2026-10-27T21:29:37.563Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
 	"history": 1
 }

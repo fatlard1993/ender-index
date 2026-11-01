@@ -1,0 +1,390 @@
+{
+	"repo": "XSY-Team/fuck-sable",
+	"host": "github",
+	"description": "A fix mod targeting Sable and its related issues.",
+	"stars": 15,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-06-09T01:27:35Z",
+	"pushed": "2026-10-28T11:05:09Z",
+	"releases": [
+		{
+			"tag": "v1.7.25",
+			"published": "2026-08-10T04:37:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 508293274,
+					"name": "fuck-sable-1.7.25.jar",
+					"url": "https://github.com/XSY-Team/fuck-sable/releases/download/v1.7.25/fuck-sable-1.7.25.jar",
+					"size": 190366,
+					"downloads": 85,
+					"inspection": 2,
+					"sha256": "a3be4cbc45a694f826102641f5e05edc939ecac01456704d4ebe1adf4862c763",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "fucksable",
+							"version": "1.7.25",
+							"name": "fuck Sable",
+							"description": "Patches Sable sub-level saving to be async and handle corrupted data gracefully",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"sable"
+							]
+						}
+					],
+					"icon": "b8d2874fbf53ded86844100adb20204b2340c22ce0af8ca8c10b024cbb9a77d5.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 60,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/fucksable/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"dev/fucksable/update/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### 测试功能标记机制 / Experimental Fix Tagging Mechanism\n\n在 `FixEntry` 中新增 `experimental` 字段，允许将修复项标记为测试功能。标记后在 `/fucksable` 命令列表和详情中以黄色 `[测试]` / `[Experimental]` 标签显示。已将 `world-height-override` 标记为测试功能。\n\nAdded `experimental` field to `FixEntry`, allowing fixes to be tagged as experimental. Tagged fixes display a yellow `[测试]` / `[Experimental]` label in the `/fucksable` command list and details. `world-height-override` is now tagged as experimental.\n\n### 兼容性 / Compatibility\n\n- Sable 1.x 和 2.x / Sable 1.x and 2.x\n- NeoForge 1.21.1\n- Mohist/Youer 混合服务端 / Mohist/Youer hybrid servers\n- ScalableLux（光照优化）兼容 / ScalableLux (lighting optimization) compatible\n- c2me 兼容 / c2me compatible"
+		},
+		{
+			"tag": "v1.7.24",
+			"published": "2026-08-10T04:37:03Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 508293172,
+					"name": "fuck-sable-1.7.24.jar",
+					"url": "https://github.com/XSY-Team/fuck-sable/releases/download/v1.7.24/fuck-sable-1.7.24.jar",
+					"size": 190076,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "b84200667ce6cf65994969c2036c78a8844df1ceb58288a87bcc375db0269307",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "fucksable",
+							"version": "1.7.24",
+							"name": "fuck Sable",
+							"description": "Patches Sable sub-level saving to be async and handle corrupted data gracefully",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"sable"
+							]
+						}
+					],
+					"icon": "b8d2874fbf53ded86844100adb20204b2340c22ce0af8ca8c10b024cbb9a77d5.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 60,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/fucksable/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"dev/fucksable/update/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### SubLevelStorage storageCache 并发崩溃修复 / SubLevelStorage storageCache Concurrent Crash Fix (Issue #20)\n\n修复 `SubLevelStorage.getRegionStorageFile` 中 `Long2ObjectLinkedOpenHashMap`（storageCache）并发访问导致 `ArrayIndexOutOfBoundsException: Index -1 out of bounds for length N` 崩溃的问题。\n\nFixed `ArrayIndexOutOfBoundsException: Index -1 out of bounds for length N` crash caused by concurrent access to `Long2ObjectLinkedOpenHashMap` (storageCache) in `SubLevelStorage.getRegionStorageFile`.\n\n**问题 / Issue**: 当 `async-save` 修复项启用时，`attemptSaveSubLevel` 在异步线程执行访问 storageCache。若主线程同时通过 `getOrLoadHoldingChunk` → `attemptLoadSubLevel` → `getRegionStorageFile` 访问 storageCache，会导致 FastUtil 链表 map 的 prev/next 指针状态损坏，最终抛出 `ArrayIndexOutOfBoundsException`。\n\nWhen `async-save` fix is enabled, `attemptSaveSubLevel` runs on async thread accessing storageCache. If main thread simultaneously accesses it via `getOrLoadHoldingChunk` → `attemptLoadSubLevel` → `getRegionStorageFile`, the FastUtil linked-map's prev/next pointer state gets corrupted, ultimately throwing `ArrayIndexOutOfBoundsException`.\n\n**修复 / Fix**: 新增 `SubLevelStorageRegionCacheSyncMixin`，用 `synchronized(map)` 保护 `getAndMoveToFirst`、`removeLast`、`putAndMoveToFirst` 三个链表修改操作，确保并发安全。\n\nAdded `SubLevelStorageRegionCacheSyncMixin` to protect `getAndMoveToFirst`, `removeLast`, `putAndMoveToFirst` chain-modification operations with `synchronized(map)`, ensuring concurrent safety.\n\n### 兼容性 / Compatibility\n\n- Sable 1.x 和 2.x / Sable 1.x and 2.x\n- NeoForge 1.21.1\n- Mohist/Youer 混合服务端 / Mohist/Youer hybrid servers\n- ScalableLux（光照优化）兼容 / ScalableLux (lighting optimization) compatible\n- c2me 兼容 / c2me compatible"
+		},
+		{
+			"tag": "v1.7.23",
+			"published": "2026-08-10T04:36:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 508292767,
+					"name": "fuck-sable-1.7.23.jar",
+					"url": "https://github.com/XSY-Team/fuck-sable/releases/download/v1.7.23/fuck-sable-1.7.23.jar",
+					"size": 188917,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "d54b55ca2c077608d3a5d070b147b0ad50adfd58645ac6aeddbdc76bfdffdce0",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "fucksable",
+							"version": "1.7.23",
+							"name": "fuck Sable",
+							"description": "Patches Sable sub-level saving to be async and handle corrupted data gracefully",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"sable"
+							]
+						}
+					],
+					"icon": "b8d2874fbf53ded86844100adb20204b2340c22ce0af8ca8c10b024cbb9a77d5.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 59,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/fucksable/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"dev/fucksable/update/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### async-save 存档卡顿回归修复 / async-save Save Freeze Regression Fix\n\n修复 v1.7.12 起的\"存档时服务器卡顿\"回归。v1.7.12 在 `saveAll` 返回前 join 所有异步磁盘 IO，导致主线程在每次存档时阻塞等待全部磁盘 IO 完成，表现为存档时服务器明显卡顿。\n\nFixed the \"server freezes during saves\" regression introduced in v1.7.12. v1.7.12 joined all async disk IO before `saveAll` returned, blocking the main thread on every save while waiting for all disk IO to finish.\n\n**修复 / Fix**: 改为\"非阻塞提交 + 屏障 drain\"模式：`saveAll` 只把磁盘 IO 提交到异步线程且不在 `saveAll` 内阻塞；任何后续磁盘读取（`getOrLoadHoldingChunk`）以及下一次 `saveAll` / `close` 之前先 drain 未完成的异步 IO，既避免主线程与异步线程并发访问非线程安全的 `regionCache`/`storageCache`，又让磁盘 IO 与主线程序列化流水线重叠。\n\nChanged to a \"non-blocking submit + drain barrier\" model: `saveAll` only submits disk IO to the async thread and never blocks inside `saveAll`; before any later disk read (`getOrLoadHoldingChunk`) and before the next `saveAll` / `close`, pending async IO is drained. This keeps the non-thread-safe `regionCache`/`storageCache` from being accessed concurrently while letting disk IO overlap with main-thread serialization.\n\n**感谢 / Thanks**: 感谢 [Variapolis](https://github.com/Variapolis) 的 PR #19 贡献。/ Thanks to [Variapolis](https://github.com/Variapolis) for the PR #19 contribution.\n\n### 兼容性 / Compatibility\n\n- Sable 1.x 和 2.x / Sable 1.x and 2.x\n- NeoForge 1.21.1\n- Mohist/Youer 混合服务端 / Mohist/Youer hybrid servers\n- ScalableLux（光照优化）兼容 / ScalableLux (lighting optimization) compatible\n- c2me 兼容 / c2me compatible"
+		},
+		{
+			"tag": "v1.7.22",
+			"published": "2026-08-09T13:24:24Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 507535270,
+					"name": "fuck-sable-1.7.22.jar",
+					"url": "https://github.com/XSY-Team/fuck-sable/releases/download/v1.7.22/fuck-sable-1.7.22.jar",
+					"size": 188376,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "32ab918c21a092099afd1539d2214415e55c8084c47de410e2b731a971bf62ee",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "fucksable",
+							"version": "1.7.22",
+							"name": "fuck Sable",
+							"description": "Patches Sable sub-level saving to be async and handle corrupted data gracefully",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"sable"
+							]
+						}
+					],
+					"icon": "b8d2874fbf53ded86844100adb20204b2340c22ce0af8ca8c10b024cbb9a77d5.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 59,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/fucksable/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"dev/fucksable/update/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.7.22 (re-published)\n\n### Bug 修复 / Bug Fixes\n\n- **world-height-override mixin 注入失败修复 / world-height-override mixin injection failure fix**: `world-height-override` 功能经历了两轮修复才最终可用：\n  - **v1.7.21 问题 / v1.7.21 issue**: `WorldHeightOverrideMixin` 拦截 `Level.getMaxBuildHeight()` 失败导致游戏启动崩溃。`getMaxBuildHeight()` 和 `getMinBuildHeight()` 是 `LevelHeightAccessor` 接口的 default 方法，`Level` 类没有 override 它们，所以拦截 `Level` 类找不到目标方法（`Scanned 0 target(s)`）。改为拦截 `LevelHeightAccessor` 接口，通过 `instanceof Level` 检查确保只影响 `Level` 及其子类。\n  - **v1.7.22 原始版本问题（已撤回）/ v1.7.22 original issue (withdrawn)**: 改用 `@Mixin(targets = \"net.minecraft.world.level.LevelHeightAccessor\", remap = false)` 字符串 targets 写法后，mixin 框架在 prepare 阶段无法从字符串推断 target 类型，默认按 Standard (class) SubType 处理，`validateTarget` 时因 target 实际是 interface 报 `@Mixin target type mismatch: net.minecraft.world.level.LevelHeightAccessor is an interface` 错误。改为 `@Mixin(LevelHeightAccessor.class)` 直接引用接口类对象，让 mixin 框架从 Class 对象自动识别为 Interface SubType。\n  - / **v1.7.21**: `WorldHeightOverrideMixin` crashed on startup because `getMaxBuildHeight()` and `getMinBuildHeight()` are default methods of `LevelHeightAccessor` interface, not overridden by `Level`, so injecting into `Level` scanned 0 targets. Changed to target `LevelHeightAccessor` interface with `instanceof Level` guard.\n  - / **v1.7.22 original (withdrawn)**: After switching to `@Mixin(targets = \"...\")` string syntax, mixin framework could not infer target type from string at prepare phase, defaulted to Standard (class) SubType, and `validateTarget` failed with `@Mixin target type mismatch: ... is an interface`. Changed to `@Mixin(LevelHeightAccessor.class)` direct class reference so mixin framework auto-detects Interface SubType from Class object."
+		},
+		{
+			"tag": "v1.7.21",
+			"published": "2026-08-09T11:24:43Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 507442717,
+					"name": "fuck-sable-1.7.21.jar",
+					"url": "https://github.com/XSY-Team/fuck-sable/releases/download/v1.7.21/fuck-sable-1.7.21.jar",
+					"size": 188369,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "8f9ebf7dff6aa28b9637a2b71719305a2f5ad975078517eabb870cbb4962202e",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "fucksable",
+							"version": "1.7.21",
+							"name": "fuck Sable",
+							"description": "Patches Sable sub-level saving to be async and handle corrupted data gracefully",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"sable"
+							]
+						}
+					],
+					"icon": "b8d2874fbf53ded86844100adb20204b2340c22ce0af8ca8c10b024cbb9a77d5.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 59,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/fucksable/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"dev/fucksable/update/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.7.21\n\n### 新增 / New Features\n\n- **实验性世界高度覆盖 / Experimental world height override**: 新增 `world-height-override` 修复项（默认关闭），通过拦截 `Level.getMaxBuildHeight()` 和 `Level.getMinBuildHeight()` 允许自定义世界构建高度范围。配置选项 `maxBuildHeight`（默认 320）和 `minBuildHeight`（默认 -64）。/ Added `world-height-override` fix (disabled by default), overrides vanilla world build height limits via `Level.getMaxBuildHeight()` and `Level.getMinBuildHeight()`. Configurable options `maxBuildHeight` (default 320) and `minBuildHeight` (default -64).\n  - **注意 / Warning**: 实验性功能，可能与依赖原版高度的其他 mod 不兼容。启用前请充分测试。/ Experimental, may be incompatible with other mods that depend on vanilla height. Test thoroughly before enabling."
+		},
+		{
+			"tag": "v1.7.10",
+			"published": "2026-07-31T14:24:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 496780309,
+					"name": "fuck-sable-1.7.10.jar",
+					"url": "https://github.com/XSY-Team/fuck-sable/releases/download/v1.7.10/fuck-sable-1.7.10.jar",
+					"size": 182141,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "c70eab15a2e0de4c5f15c8cb77dcb473e31cb57c9a3afa64b4182b8c364d7d94",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "fucksable",
+							"version": "1.7.10",
+							"name": "fuck Sable",
+							"description": "Patches Sable sub-level saving to be async and handle corrupted data gracefully",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"sable"
+							]
+						}
+					],
+					"icon": "b8d2874fbf53ded86844100adb20204b2340c22ce0af8ca8c10b024cbb9a77d5.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 56,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/fucksable/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"dev/fucksable/update/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.7.10\n\n### ScalableLux 不兼容声明绕过 / ScalableLux Incompatibility Declaration Bypass\n\n使用 NeoForge 官方的 `fml.toml` 依赖覆盖（`[dependencyOverrides]`）机制，绕过 Sable 对 ScalableLux 的 `type = \"incompatible\"` 声明，避免 NeoForge ModSorter 在启动阶段直接拒绝加载。fs 启动时自动检查并写入 `fml.toml`，无需用户手动配置。\n\nUses NeoForge's official `fml.toml` dependency override (`[dependencyOverrides]`) mechanism to bypass Sable's `type = \"incompatible\"` declaration against ScalableLux, preventing NeoForge ModSorter from aborting startup. fs automatically checks and writes `fml.toml` on startup, no manual configuration required.\n\n**如何让 NeoForge 忽略 Sable 对 ScalableLux 的不兼容检查 / How to make NeoForge ignore Sable's incompatibility with ScalableLux**:\n\nfs 启动时会自动在 `<游戏目录>/config/fml.toml` 写入以下配置（若不存在）：\n\nfs automatically writes the following to `<game_dir>/config/fml.toml` on startup (if not present):\n\n```toml\n[dependencyOverrides]\nsable = [\"-scalablelux\"]\n```\n\n如果你想手动配置，在 `config/fml.toml` 末尾添加上述两行即可。`-scalablelux` 表示移除 Sable 对 ScalableLux 的所有依赖约束（包括 INCOMPATIBLE 声明）。\n\nTo configure manually, add the above two lines to the end of `config/fml.toml`. `-scalablelux` removes all dependency constraints from Sable against ScalableLux (including the INCOMPATIBLE declaration).\n\n**注意 / Note**: 如果 fs 和 ScalableLux 同时首次安装，fs 没有机会执行自动写入（游戏在 ModSorter 阶段就崩溃）。此时请先单独启动一次 fs，再安装 ScalableLux。/ If fs and ScalableLux are installed simultaneously for the first time, fs has no chance to auto-write (game crashes at ModSorter stage). In this case, launch the game with fs alone first, then install ScalableLux.\n\n### ScalableLux 兼容性修复项 / ScalableLux Compatibility Fixes\n\nfs 提供两个与 ScalableLux 相关的修复项：\n\nfs provides two ScalableLux-related fixes:\n\n1. **`sable-scalablelux-incompat-bypass`**（默认不启用 / disabled by default）: 绕过 Sable 的 `neoforge.mods.toml` 中对 ScalableLux 的 `type = \"incompatible\"` 声明，防止 NeoForge ModSorter 在启动阶段报 `Mod sable is incompatible with scalablelux` 并拒绝启动。fs 启动时自动写入 `fml.toml` 的 `[dependencyOverrides]` 配置。/ Bypasses Sable's `type = \"incompatible\"` declaration against ScalableLux, preventing NeoForge ModSorter from aborting startup with `Mod sable is incompatible with scalablelux`. fs automatically writes the `[dependencyOverrides]` config to `fml.toml` on startup.\n\n2. **`scalablelux-compat`**（默认启用 / enabled by default）: 修复 ScalableLux 存在时 Sable SubLevel 光照完全失效的问题。ScalableLux 清空了主世界 `LevelLightEngine` 的 `blockEngine`/`skyEngine` 字段，导致 Sable 误判 SubLevel 无方块光、无天空光。本修复拦截 `ServerLevelPlot` 构造函数中的 `new LevelLightEngine(...)` 调用，通过 `StarLightInterface.hasBlockLight()/hasSkyLight()` 重新计算正确的光照参数。/ Fixes Sable SubLevel lighting being completely disabled when ScalableLux is installed. ScalableLux clears the `blockEngine`/`skyEngine` fields of the main world `LevelLightEngine`, causing Sable to misjudge SubLevel as having no block light and no sky light. This fix intercepts `new LevelLightEngine(...)` in `ServerLevelPlot` constructor and recalculates correct light parameters via `StarLightInterface.hasBlockLight()/hasSkyLight()`.\n\n**前置依赖关系 / Prerequisite dependency**:\n\n`scalablelux-compat` 依赖 `sable-scalablelux-incompat-bypass`。如果 `scalablelux-compat` 启用但 `sable-scalablelux-incompat-bypass` 未启用，fs 会在日志中输出警告，提醒用户先启用 `sable-scalablelux-incompat-bypass` 并重启服务器。\n\n`scalablelux-compat` depends on `sable-scalablelux-incompat-bypass`. If `scalablelux-compat` is enabled but `sable-scalablelux-incompat-bypass` is not, fs will log a warning reminding the user to enable `sable-scalablelux-incompat-bypass` and restart the server.\n\n**使用步骤 / Usage steps**:\n\n1. 在配置中启用 `sable-scalablelux-incompat-bypass`，重启服务器（fs 会自动写入 `fml.toml` 的依赖覆盖配置）/ Enable `sable-scalablelux-incompat-bypass` in config, restart server (fs will auto-write the `fml.toml` dependency override)\n2. 确认 ScalableLux 正常加载后，`scalablelux-compat` 会自动生效（默认已启用）/ After confirming ScalableLux loads correctly, `scalablelux-compat` will work automatically (enabled by default)\n\n### ScalableLux 兼容性 mixin 注入修复 / ScalableLux Compat Mixin Injection Fix\n\n\n..."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-10-31T22:37:16.645Z",
+	"pictures": [],
+	"picturesChecked": "2026-10-31T22:37:16.645Z",
+	"contributors": {
+		"commits": 30,
+		"more": 0,
+		"people": [
+			{
+				"login": "OLKMO",
+				"commits": 27,
+				"funding": []
+			},
+			{
+				"login": "XSY-HYH",
+				"commits": 2,
+				"name": "XSY_xiaoqi",
+				"funding": []
+			},
+			{
+				"login": "Variapolis",
+				"commits": 1,
+				"name": "Vari",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-10-31T22:37:16.645Z",
+	"history": 1
+}
