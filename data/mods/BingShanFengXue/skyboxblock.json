@@ -6,8 +6,122 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-23T13:49:13Z",
-	"pushed": "2026-10-31T09:43:33Z",
+	"pushed": "2026-11-01T13:58:07Z",
 	"releases": [
+		{
+			"tag": "v1.0.5-test.1-r38",
+			"published": "2026-11-01T13:58:26Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 698499535,
+					"name": "skybox-validation-probe-r38.jar",
+					"url": "https://github.com/BingShanFengXue/skyboxblock/releases/download/v1.0.5-test.1-r38/skybox-validation-probe-r38.jar",
+					"size": 82416,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "bb174f12a9c2df672838c2c919d6c09df6584965fd06d4a98538eae92cc10d95",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "skybox_r30_probe",
+							"version": "0.1.0-r34.2",
+							"name": "Sky Box R30 Owned Validation Probe",
+							"description": "Explicit isolated-fixture dynamic DH and performance measurements; not a production dependency.",
+							"minecraft": "~1.21.1",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"skyboxblock"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 17,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 698498541,
+					"name": "skyboxblock-1.0.5-test.1-r38.jar",
+					"url": "https://github.com/BingShanFengXue/skyboxblock/releases/download/v1.0.5-test.1-r38/skyboxblock-1.0.5-test.1-r38.jar",
+					"size": 17115285,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "2904bb8d35e93b2d0effefd625c60d348ac2cfe6e9783ae11fc8f3ed94110817",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "skyboxblock",
+							"version": "1.0.5-test.1-r38",
+							"name": "Sky Box Block",
+							"description": "天空盒方块：原版独立天空、纯白、纯黑及六套连续全景天空。Minecraft 1.21.1 Fabric；各环境验证范围见项目交付记录。新增用户提供素材的来源声明见 THIRD_PARTY_NOTICES.md。",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"iris",
+								"immersive_portals",
+								"distanthorizons"
+							]
+						}
+					],
+					"icon": "67d01353d782c5dc82d19a77d29504c63720c142ee3ec5e69c353ece049442d3.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Sky Box Blocks"
+							],
+							"block": [
+								"Sky Box Block (Apocalypse Land)",
+								"Sky Box Block (Clear Sky A)",
+								"Sky Box Block (Clear Sky B)",
+								"Sky Box Block (Dusk)",
+								"Sky Box Block (Lush Planet)",
+								"Sky Box Block (Milky Way)",
+								"Sky Box Block (Pure Black)",
+								"Sky Box Block (Pure White)",
+								"Sky Box Block (Vanilla)"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 106,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Minecraft 1.21.1 / Fabric 天空盒方块 —— **1.0.5-test.1-r38**（有范围测试版，Pre-release；基线 R36）。\n\n## 本版新增\n\n**自定义天空盒**\n- 在 `config/skyboxblock/skyboxes/` 里放 `.conf` + `.png` 就能定义自己的天空盒方块，启动时注册\n- 只读、不递归、只收 `.conf` 与 `.png`；单文件 ≤64 KB、≤64 个配置、≤64 种风格、单图 ≤4096×2048 / 16 MB\n- 首次运行生成 `00_example.conf`（`enable = false`）与两张示例全景；`enable = false` 时完全不扫描、不注册，与纯原版一致\n- 载入时对左右边缘做 8 像素羽化，避免手作素材出现竖缝；自动生成 32×32 物品栏图标\n- 资源通过 `CustomSkyPackMixin` 注入 `MultiPackResourceManager` 构造点，**不写 `options.txt`、不改玩家设置**\n- manifest hash = 排序后的 `id + picture`（语言名不参与）；客户端/服务端集合不一致时给出明确差异提示，而不是 missing registry 报错\n\n**按玩家设置**\n- `/skyboxblock player <targets> show | set <attribute> <value> | reset <attribute|all> | time set|reset`（权限等级 2）\n- 存储在 `world/serverconfig/skyboxblock-players.properties`，按键 `player.<uuid>.<key>`\n- 生效值 = 全局属性 + 玩家覆盖，再走同一套校验；同步改为逐个玩家发送他自己的快照\n- 默认跟随服务器，只有显式 `set` 才有独立值\n\n**客户端指令**\n- `/skyboxcustom` 打开 `config/skyboxblock/skyboxes/` 并在聊天里给出可点击路径\n- `/skyboxcustom list` 列出已加载风格与被跳过的文件及原因\n\n## 验证\n\n| 项目 | 结果 |\n|---|---|\n| 配置解析回归 | 186 断言 PASS（含 14 组畸形用例、BOM、转义、语言回退）|\n| 服务端后端回归 | 105 检查 PASS（新增 14 条：合并、隔离、落盘、重启、reset）|\n| 指令树序列化 | 通过（`EntityArgument` 已加入 vanilla 可序列化允许集合）|\n| 既有全量回归 | 782 + 42,257 + 284 + 389,385 + 68,012 全 PASS |\n| 实机 | 自定义风格方块在游戏内渲染出配置的全景 |\n\n交付包 SHA-256：`2904bb8d35e93b2d0effefd625c60d348ac2cfe6e9783ae11fc8f3ed94110817`\n\n## ⚠ 已知限制\n\n1. 自定义方块在**启动时**注册，改配置必须重启游戏（不做热加载）\n2. 客户端与服务端的 `skyboxes/` 内容必须一致，否则按 manifest 差异拒绝并提示\n3. 存档里已有的自定义方块，若从配置删除对应 id，会变成空气（MC 对未知 palette 项的处理）\n4. 资源注入依赖 `MultiPackResourceManager` 构造点，未来 MC 版本若改该流程需要重新适配\n5. 按玩家设置只影响**显示**：模组从不写 `setDayTime` / `setWeatherParameters`，光照与刷怪仍按真实世界状态\n\n## 安装\n\n1. Minecraft 1.21.1 + Fabric Loader 0.16.14+ + Fabric API + Java 21\n2. **客户端与服务端都要装本版**；未安装的客户端不会收到同步、也看不到方块\n3. 把 `skyboxblock-1.0.5-test.1-r38.jar` 放进 `mods/`，只保留一个版本\n4. 首次进游戏后到 `config/skyboxblock/skyboxes/` 编辑配置，重启生效\n\n## 许可与署名\n\n- 项目代码 **MIT**（`LICENSE`），第三方归属在 `NOTICE` 与 `THIRD_PARTY_NOTICES.md`\n- 内置六套全景素材按各自上游协议分发：CC0 1.0（Poly Haven / Screaming Brain Studios / VertexZero）与 **CC BY 4.0（Solar System Scope，必须署名）**\n- 授权原文与素材清单随仓库分发：`docs/third-party-evidence/`\n- 你自己放进 `skyboxes/` 的素材由你自行负责其授权；本仓库不对其做许可声明\n\n## 附件\n\n- `skyboxblock-1.0.5-test.1-r38.jar` — 模组本体\n- `skyboxblock-1.0.5-test.1-r38-sources.jar` — 源码包\n- `skybox-validation-probe-r38.jar` — 验证探针（回归/诊断用，非玩法必需）\n- `skybox-r38-source-and-evidence.zip` — 源码／工具／选定证据快照（476 条目）"
+		},
 		{
 			"tag": "v1.0.4-test.2-r36",
 			"published": "2026-10-31T09:43:51Z",
@@ -132,7 +246,7 @@
 					"name": "skyboxblock-1.0.3-test.4-r34.2.jar",
 					"url": "https://github.com/BingShanFengXue/skyboxblock/releases/download/v1.0.3-test.4-r34.2/skyboxblock-1.0.3-test.4-r34.2.jar",
 					"size": 16998907,
-					"downloads": 24,
+					"downloads": 25,
 					"inspection": 2,
 					"sha256": "55337b11fb3e268cb972bf9873bbd77aa25fc8481ddb8054d057224e6f61c022",
 					"mods": [

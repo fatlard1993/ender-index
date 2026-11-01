@@ -243,6 +243,52 @@
 				}
 			],
 			"notes": "## [0.2.1] — 2026-05-01\n\n### Fixed\n- **Chunks disappearing during new-chunk generation** — new tiles are now rendered with `loadChunks=true` so chunks are read from disk before the debounce fires and they get unloaded.\n- **Existing tile erased by blank re-render** — the renderer now always composites over the previously saved tile, not only when chunks were explicitly unloaded.\n- **All-transparent tile written to disk** — if the rendered image has no opaque pixels (all chunks unloaded and no existing tile), the write is skipped to prevent overwriting a good tile with an empty one.\n- **Height-shading seam artifacts** — height shading from a neighbor chunk now only applies when that neighbor's data is confirmed loaded; unloaded neighbors no longer contribute a spurious height of 64.\n\n### Changed\n- Synchronized Forge implementation and metadata with the Fabric port so both loaders ship the same 0.2.1 feature set."
+		},
+		{
+			"tag": "2.0forge",
+			"published": "2026-04-30T22:11:26Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 409406827,
+					"name": "forgewebmap-0.2.0.jar",
+					"url": "https://github.com/sqwiziiy/World-Web-Map/releases/download/2.0forge/forgewebmap-0.2.0.jar",
+					"size": 63805,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "dba064bd50b35c4d604d6cc84150ccbd50938a1f7110433d3a723cbee5c1f0d6",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "forgewebmap",
+							"version": "0.2.0",
+							"name": "ForgeWebMap",
+							"description": "A server-side Forge web map mod for Minecraft 1.20.1.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 25,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [0.2.0] — 2026-04-30\n\n### Added\n\n#### Biome display\n- New API endpoint `GET /api/biome?dim=overworld&x=100&z=200` — returns biome name and registry ID for any block coordinate\n- Biome name shown on desktop toolbar next to coordinates (🌳 Dark Forest)\n- Biome name shown on mobile bottom bar below coordinates\n- Biome updates instantly as the cursor moves to a different block (no artificial delay)\n- Vanilla biomes formatted as human-readable names (`minecraft:dark_forest` → `Dark Forest`)\n- Modded biomes prefixed with mod name (`somemod:custom_biome` → `[somemod] Custom Biome`)\n\n### Fixed\n- Biome label was not updating during mouse movement (only after a 150 ms debounce that kept resetting). Now updates on every block change without delay."
 		}
 	],
 	"readme": "README.md",

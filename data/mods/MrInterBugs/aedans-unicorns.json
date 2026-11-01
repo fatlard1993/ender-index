@@ -6,8 +6,69 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2025-12-31T16:38:22Z",
-	"pushed": "2026-10-23T21:15:58Z",
+	"pushed": "2026-11-01T10:08:07Z",
 	"releases": [
+		{
+			"tag": "v1.2.4+mc1.21.1",
+			"published": "2026-11-01T09:48:07Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 697918574,
+					"name": "aedans-unicorn-1.2.4+mc1.21.1.jar",
+					"url": "https://github.com/MrInterBugs/aedans-unicorns/releases/download/v1.2.4%2Bmc1.21.1/aedans-unicorn-1.2.4%2Bmc1.21.1.jar",
+					"size": 1245998,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "04c03687a751202605bbf176788894a6f0e0f68845564e986676880fbddcd54e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "unicorn",
+							"version": "1.2.4+mc1.21.1",
+							"name": "Aedans Unicorns",
+							"description": "Adds a shiny new unicorn horn to your world to save your horses from an untimely demise.",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"ryoamiclights",
+								"obsidianui",
+								"roughlyenoughitems"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Unicorn Horn"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 17,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Minecraft 1.21.1 changelog\n\n## 1.2.4 — Horseshoes compatibility\n\n- Fix the horn and Horseshoes equipment slots drawing on top of each other.\n- Fix shift-click transfers for horns, horseshoes, and chested-donkey cargo.\n- Fix the inventory accessor conflict with Horseshoes, including legacy-save migration.\n- Run all 16 GameTests both with and without Horseshoes 1.3.3 before publishing.\n\n## 1.2.3 — Backported fixes\n\nBased on `origin/1.21.1` (`74277a7`), in branch `MrInterBugs/backport-1.21.1`.\n\n## Backported fixes\n\n- Store the horn in a dedicated one-slot inventory, separate from the saddle, armor, and chest cargo. Adding a chest no longer moves or unequips the horn.\n- Synchronize horn state on inventory mutations and use the inventory as the authoritative server value. Removing a horn immediately removes its protection.\n- Correct shift-click boundaries for equipment, cargo, all 36 player slots, and the horn slot.\n- Save horns under `UnicornHornItem` for every horse type. Recover horns from the extra chest-inventory slot used by previous 1.21.1 versions, without duplicating them into cargo.\n- Drop separately stored horns once on forced death. Respect `bypasses_invulnerability` damage, including `/kill` and the void.\n- Filter vanilla unicorn potion and arrow variants out of both creative-tab and creative-search lists. Supply fallback translations for vanilla variants already in inventories.\n- Keep potion creation and conversions exclusively in the brewing stand. Remove the obsolete potion-crafting definitions and invalid horn recipe. Migrate only the eight tipped arrows recipe and its unlock to the current resource directory/format, using a component ingredient to require the correct potion.\n- Restrict unicorn bottles to the valid gunpowder/dragon-breath conversions. Reject unrelated vanilla effect ingredients and avoid turning no-op mixes of legacy vanilla unicorn bottles into fake conversion recipes.\n- Let REI discover the real arrow recipe instead of adding a duplicate manual display. Keep all five valid brewing paths visible, including Awkward splash/lingering potion + horn.\n- Render a tapered 3D horn on the forehead while retaining the inventory icon. On 1.21.1 this uses a custom-model-data override on a temporary render-only stack; saved/equipped stacks are unchanged.\n- Position the horn slot below the other equipment and move its background to match.\n- Register both environment source sets with Loom and remove the duplicate unremapped Fabric API client dependency so the development/GameTest runtime loads remapped dependencies correctly.\n\n## Version-specific behavior retained\n\nMinecraft 1.21.1 stays on Java 21 and Yarn mappings. The existing REI and optional RyoamicLights integrations remain enabled; it does not use the 26.1.2 JEI integration or client-item JSON format. Native 1.21.1 potion items already handle drinking, bottle returns, and lingering/arrow duration scaling, so the newer consumable/duration components are not copied into this version.\n\nThe release workflow already selects Java 21 and Minecraft 1.21.1 and retains those values.\n\n## Validation\n\n`./gradlew build` compiles the common/client code, packages remapped release/source jars, and runs 16 Minecraft GameTests on Java 21. Tests cover lethal damage, immediate removal, chest attachment, horse/donkey saves, old chest-slot migration, horn and ordinary shift-clicking, brewing, rejection of crafting-table potion conversions, eight-arrow crafting, drinking/bottle returns, `/kill`/death drops, creative-search duplicates, and item translation keys.\n\nThe report is `build/reports/gametest/results.xml`; logs are in `build/run/gameTest/logs/`. The integration suite also runs against the actual Horseshoes 1.3.3 mod; the minimal Prism 1.21.1 test instance includes both mods. The existing 26.1.2 test installation is unaffected by the backport.\n\n## Horseshoes compatibility follow-up\n\n- Restore the horn slot to `(26, 18)` beside the saddle; Horseshoes keeps its\n\n..."
+		},
 		{
 			"tag": "v1.2.3+mc1.21.1",
 			"published": "2026-10-23T21:17:56Z",
@@ -18,7 +79,7 @@
 					"name": "aedans-unicorn-1.2.3+mc1.21.1.jar",
 					"url": "https://github.com/MrInterBugs/aedans-unicorns/releases/download/v1.2.3%2Bmc1.21.1/aedans-unicorn-1.2.3%2Bmc1.21.1.jar",
 					"size": 1245775,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "5a45e250baf146de73acca0ceea759aa98b1866e9e0376a5708def63e942d40b",
 					"mods": [
@@ -79,7 +140,7 @@
 					"name": "aedans-unicorn-1.2.3+mc26.1.2.jar",
 					"url": "https://github.com/MrInterBugs/aedans-unicorns/releases/download/v1.2.3%2Bmc26.1.2/aedans-unicorn-1.2.3%2Bmc26.1.2.jar",
 					"size": 1254157,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "03569638984f6f1d28f4206974c117e3af017ba843657fc08e8d3828fae11307",
 					"mods": [
@@ -138,7 +199,7 @@
 					"name": "aedans-unicorn-1.2.2.jar",
 					"url": "https://github.com/MrInterBugs/aedans-unicorns/releases/download/v1.2.2/aedans-unicorn-1.2.2.jar",
 					"size": 1245135,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "e4344aa03221fbce862214d2b5548f1e785fd04bdd8fd0438a63dd8e4c0f47ff",
 					"mods": [
@@ -199,7 +260,7 @@
 					"name": "aedans-unicorn-1.2.1.jar",
 					"url": "https://github.com/MrInterBugs/aedans-unicorns/releases/download/v1.2.1/aedans-unicorn-1.2.1.jar",
 					"size": 1244971,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "16ba13446ec1e67ee5e3538f601556ddd0e306b7c3467ff4f3dc4a18af41dd3f",
 					"mods": [

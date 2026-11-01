@@ -6,8 +6,57 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-27T14:45:07Z",
-	"pushed": "2026-10-27T15:29:54Z",
+	"pushed": "2026-11-01T09:57:20Z",
 	"releases": [
+		{
+			"tag": "v1.0.0+26.3",
+			"published": "2026-11-01T09:57:31Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 697814298,
+					"name": "xaero-enhance-1.0.0+26.3.jar",
+					"url": "https://github.com/Kelvinlby/xaero-enhance/releases/download/v1.0.0%2B26.3/xaero-enhance-1.0.0%2B26.3.jar",
+					"size": 48037,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "056e8c5f348abca2cbaa69100ef63a3f1a89b8430c04a08d8eaa44736ea76fa4",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "xaero-enhance",
+							"version": "1.0.0+26.3",
+							"name": "Xaero Enhance",
+							"description": "Performance enhancement for Xaero's World Map: builds map chunk textures in parallel off the render thread.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"xaeroworldmap"
+							],
+							"provides": []
+						}
+					],
+					"icon": "439926ec0c0ff010df1448c97b3512c0142ec8f76967d1219d029e34e61070d8.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 28,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Xaero Enhance 1.0.0 for Minecraft 26.3. Same features as [1.0.0](https://github.com/Kelvinlby/xaero-enhance/releases/tag/v1.0.0), ported to 26.3.\n\n**Requires:** Minecraft 26.3, Fabric Loader 0.20.1+, Java 25, Xaero's World Map 1.47.2 for 26.3. XaeroPlus 2.37.2 for 26.3 is optional; its optimizations turn on only when it's installed.\n\n### What it does\n- **Builds map chunk textures in parallel on worker threads** instead of one chunk at a time on the render thread. Regions being mapped around the player keep Xaero's immediate path.\n- **Keeps Xaero's per-frame upload budget**, which Xaero normally lifts when the camera stops, stalling zoomed-out maps.\n- **Loads regions faster:** the map screen requests 4 regions per round. Xaero's limit on regions in flight still applies.\n- **XaeroPlus chunk highlights** are built on worker threads and point-sampled to about one quad per screen pixel when zoomed out.\n- **XaeroPlus highlight cache:** scans for entries that left the map window run on a worker; cache changes are spread over frames on the render thread.\n\nEverything runs only while the world map screen is open. Closing it cancels all background work, after which Xaero, XaeroPlus and the minimap behave exactly as without this mod.\n\n### Changes from the 1.21.11 build\n- Built against the 26.3 releases of Xaero's World Map 1.47.2 and XaeroPlus 2.37.2, using Mojang names (26.x is unobfuscated).\n- Checked with a client stress test: 25 rounds of opening, zooming, panning and closing the map with ~180k XaeroPlus highlights showed no crash, flat heap, memory and VRAM, and no background work left after closing."
+		},
 		{
 			"tag": "v1.0.0",
 			"published": "2026-10-27T15:29:55Z",
@@ -18,7 +67,7 @@
 					"name": "xaero-enhance-1.0.0.jar",
 					"url": "https://github.com/Kelvinlby/xaero-enhance/releases/download/v1.0.0/xaero-enhance-1.0.0.jar",
 					"size": 48826,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "29e3cb0dd8f0a61132dcf4ec2ff1930bdd4d189c27fda34a52ed189665b5d090",
 					"mods": [

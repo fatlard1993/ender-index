@@ -6,8 +6,72 @@
 	"archived": false,
 	"license": "NOASSERTION",
 	"created": "2026-10-26T11:55:13Z",
-	"pushed": "2026-10-31T17:16:56Z",
+	"pushed": "2026-11-01T16:13:02Z",
 	"releases": [
+		{
+			"tag": "2.2.0",
+			"published": "2026-11-01T16:06:39Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 698801426,
+					"name": "shaderboard-2.2.0+fn-26.3.jar",
+					"url": "https://github.com/TheCSDev/shaderboard/releases/download/2.2.0/shaderboard-2.2.0%2Bfn-26.3.jar",
+					"size": 138584,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "a13aaec1e539c60e975a5e132f6d72f8bb52d450f86c085546ed002e2b5d3448",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "shaderboard",
+							"version": "2.2.0+fabric-26.3",
+							"name": "Shaderboard",
+							"description": "Exposes client-side scoreboard values to post-effect shaders via named bindings",
+							"minecraft": ">=26.3- <26.4",
+							"environment": "*",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"fabric-api",
+								"tcdcommons"
+							],
+							"provides": []
+						},
+						{
+							"loader": "neoforge",
+							"id": "shaderboard",
+							"version": "2.2.0+neoforge-26.3",
+							"name": "Shaderboard",
+							"description": "Exposes client-side scoreboard values to post-effect shaders via named bindings.",
+							"minecraft": "[26.3-, 26.4)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"tcdcommons"
+							]
+						}
+					],
+					"icon": "6820d077429105b4346cd93fca606b26d3c053e50d492e15fc95fb96d9bce147.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 59,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "This update brings in even more bindings that give post-effect shaders more information about the game environment.\n\nA proper documentation is planned once I implemnet and release all the features I have planned (which I have not yet done).\n\n### Configuration system\nThis mod now has a dedicated configuration file with currently only one configurable property. To configure it, create the following file: `[profile_dir]/config/shaderboard.json`, and inside, write the following baseline JSON:\n```json\n{\n\t\"client-logLoadingWarnings\": true\n}\n```\nMore info will be made available once I finally write a proper documentation.\n\n### `shaderboard:local_player_attribute`\nExposes the entity attribute system to post-effect shaders. Please note that some attributes are entirely server-sided and thus reading them from client-sided post-effect shaders may produce unreliable results.\n\nExample JSON:\n```json\n{\n\t\"uniform_name\": \"u_MyChonkiness\",\n\t\"type\": \"shaderboard:local_player_attribute\"\n\t\"attribute\": \"minecraft:scale\"\n}\n```\nExample GLSL:\n```glsl\nlayout(std140) uniform u_MyChonkiness {\n\tfloat baseValue;\n\tfloat value;\n};\n```\n\n### `shaderboard:local_player_status_effect`\nLets post-effect shaders know if the local player has a specific status effect alongside how long it lasts and of what amplifier.  \nWhen `duration` reads `0` then the status effect is not present. When `duration` reads `-1`, then the status effect's duration is infinite. When `duration` is greater than 0, then the effect is present and lasts for a given amount of time.\n\nExample JSON:\n```json\n{\n\t\"uniform_name\": \"u_MyNightVision\",\n\t\"type\": \"shaderboard:local_player_status_effect\"\n\t\"effect\": \"minecraft:night_vision\"\n}\n```\nExample GLSL:\n```glsl\nlayout(std140) uniform u_MyNightVision {\n\tint duration; //can be -1, and -1 means \"infinite duration\"\n\tint amplifier;\n\tint isInfinite; //0 = finite, 1 = infinite duration.\n};\n```\n\n### `shaderboard:local_player_motion_state`\nGives post-effect shaders general information about what the local player's character is currently doing movement-wise.\n\nExample JSON:\n```json\n{\n\t\"uniform_name\": \"u_MyMoves\",\n\t\"type\": \"shaderboard:local_player_motion_state\"\n}\n```\nExample GLSL:\n```glsl\nlayout(std140) uniform u_MyMoves {\n\t//these are integers posing as booleans; 0 = no, 1 = yes.\n\tint isOnGround;\n\tint isCrouching;\n\tint isSprinting;\n\tint isSwimming;\n\tint isUnderwater;\n\tint isFlying;\n\tint isGliding;\n\tint isRiding;\n};\n```"
+		},
 		{
 			"tag": "2.1.0",
 			"published": "2026-10-29T10:32:54Z",

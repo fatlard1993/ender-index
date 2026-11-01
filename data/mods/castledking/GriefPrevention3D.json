@@ -6,9 +6,82 @@
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2025-07-20T07:11:54Z",
-	"pushed": "2026-10-31T12:19:03Z",
+	"pushed": "2026-11-01T20:21:12Z",
 	"forkOf": "GriefPrevention/GriefPrevention",
 	"releases": [
+		{
+			"tag": "v19.0.5",
+			"published": "2026-11-01T20:21:13Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 699425687,
+					"name": "GriefPrevention3D.jar",
+					"url": "https://github.com/castledking/GriefPrevention3D/releases/download/v19.0.5/GriefPrevention3D.jar",
+					"size": 2393984,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2fa9cfbbbeac7984e30c041d200e74674bd6341a1c047285371840c6146a1390",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "griefprevention3d",
+							"version": "19.0.5",
+							"name": "GriefPrevention3D",
+							"description": "Native Fabric adapter for GriefPrevention3D claim protection.",
+							"minecraft": ">=26.1 <26.4- || >=1.21.2 <1.21.12-",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api-base",
+								"fabric-command-api-v2",
+								"fabric-events-interaction-v0",
+								"fabric-lifecycle-events-v1",
+								"fabric-networking-api-v1",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 942,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/griefprevention/metrics/Metrics$MetricsBase.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"yaml.org": [
+								"com/griefprevention/internal/lib/snakeyaml/DumperOptions.class"
+							],
+							"bstats.org": [
+								"com/griefprevention/metrics/Metrics$MetricsBase.class",
+								"com/griefprevention/metrics/Metrics.class"
+							],
+							"github.com": [
+								"me/ryanhamshire/GriefPrevention/Alias.class"
+							],
+							"dev.bukkit.org": [
+								"me/ryanhamshire/GriefPrevention/GriefPrevention.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# GriefPrevention3D v19.0.5\n\n**Wiki:** https://github.com/castledking/GriefPrevention3D/wiki\n\nBack up `GriefPreventionData` before updating.\n\n## Faster large shaped claims\n\nLarge shaped edits could stall the server or consume excessive memory while extending a path\naround an existing claim. Several calculations scanned every block column inside the shape's\nbounding rectangle, even when most of that rectangle was outside the claim.\n\n- **Shape unions, cuts, overlap checks and containment checks use compact ranges.** They no longer\n  need to allocate a point for every claimed column or walk the entire bounding rectangle.\n- **Path extensions and claim merges use the same optimized geometry on Bukkit/Paper and Fabric.**\n  Merge-corridor width and connectivity checks also avoid block-by-block flood fills.\n- **Shaped subdivision checks remain exact.** Concave gaps stay outside the claim, and rectangular\n  subdivisions only one block wide still work inside shaped parents.\n- **Claims already at their minimum depth skip the automatic depth scan on Bukkit/Paper.** This\n  avoids collecting potentially thousands of chunk snapshots when no downward extension is possible.\n\nA regression benchmark uses a real 427-corner coastline covering about 1.56 million block columns.\nJoining it to a large rectangle took approximately **15 ms** with the new geometry; the previous\nroutine exhausted the same **192 MiB test heap**. This measures the geometry calculation, not a\ncomplete live-server interaction or the work performed by other plugins.\n\n## Editable tutorial links\n\nThe survival, creative and subdivision tutorial links can now be changed separately from their\nsurrounding messages. All 16 bundled message files include these entries:\n\n```yaml\nMessages:\n  SurvivalVideoURL: '&3&nbit.ly/mcgpuser&r'\n  CreativeVideoURL: '&3&nbit.ly/mcgpcrea&r'\n  SubdivisionVideoURL: '&3&nbit.ly/mcgpsub&r'\n```\n\nOn Bukkit/Paper, edit the active file in `plugins/GriefPreventionData/Lang/messages_<locale>.yml`.\nOn Fabric, edit `plugins/GriefPreventionData/messages.yml`. Replace the default links with your own\nURLs and run `/gpreload` after saving. Color codes are supported.\n\nThe configured links are used by the corresponding tutorial prompts and, on Bukkit/Paper, the\nsurvival welcome book. With per-player locales enabled on Bukkit/Paper, the URL follows the\nplayer's language file. Existing books already in inventories are not rewritten.\n\nKeep `{0}` in `SurvivalBasicsVideo2`, `CreativeBasicsVideo2`, `SubdivisionVideo2` and `BookLink`\nwhere the link should appear. Existing customized help text is preserved.\n\n## Upstream cleanup\n\nSynced upstream's removal of obsolete config, numeric material-ID and claim-filename migration\nhelpers. Unrecognized files in `ClaimData` are now skipped and logged rather than deleted or\nautomatically renamed. Very old installations that still need those conversions should first\nupgrade through a release that provides them.\n\n## Upgrade notes\n\n- Restart the server after replacing the jar. `/gpreload` applies later message-file edits.\n- The new message keys are added with the existing tutorial URLs as defaults. No new config\n  options or permission nodes are required.\n- Current claim files keep the same format; existing shaped claims benefit without being redrawn.\n- Both platforms continue to ship in one universal `GriefPrevention3D.jar`. Fabric requires Fabric API."
+		},
 		{
 			"tag": "v19.0.4",
 			"published": "2026-10-31T12:19:04Z",

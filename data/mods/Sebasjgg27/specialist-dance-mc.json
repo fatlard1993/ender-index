@@ -6,8 +6,91 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-11T19:34:19Z",
-	"pushed": "2026-10-29T02:30:31Z",
+	"pushed": "2026-11-01T18:11:00Z",
 	"releases": [
+		{
+			"tag": "v1.5.0",
+			"published": "2026-11-01T17:56:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 699074630,
+					"name": "specialist-dance-1.5.0.jar",
+					"url": "https://github.com/Sebasjgg27/specialist-dance-mc/releases/download/v1.5.0/specialist-dance-1.5.0.jar",
+					"size": 1993562,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "7f2b670cdb64aaa090309820482fb53f8f3a7010e25a5cc84b720e77571bc0b9",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "specialist-dance",
+							"version": "1.5.0",
+							"name": "Specialist Dance",
+							"description": "Celebrate valuable items with a Specialist dance animation in your screen.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [
+								"com_tianscar_javasound_javasound-flac",
+								"com_tianscar_javasound_javasound-mp3",
+								"com_googlecode_soundlibs_tritonus-share"
+							]
+						}
+					],
+					"icon": "1822b52b4796e2b92ff6b809150fced4a14b26ac5f3bfbe6f2b163d857b905ab.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 257,
+						"jars": [
+							"META-INF/jars/javasound-flac-1.4.1.jar",
+							"META-INF/jars/javasound-mp3-1.9.8.jar",
+							"META-INF/jars/tritonus-share-0.3.7.4.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/javasound-flac-1.4.1.jar!org/kc7bfi/jflac/sound/spi/FlacAudioFileReader.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/javasound-mp3-1.9.8.jar!javazoom/spi/mpeg/sampled/file/MpegAudioFileReader.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/javasound-mp3-1.9.8.jar!javazoom/spi/mpeg/sampled/file/tag/IcyInputStream.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/tritonus-share-0.3.7.4.jar!org/tritonus/share/sampled/file/TAudioFileReader.class": [
+									"java/net/URL.openStream",
+									"java/net/URL.openConnection"
+								]
+							},
+							"exec": {
+								"com/sebas/specialistdance/config/menu/SpecialistDanceConfigScreen.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"www.tritonus.org": [
+								"META-INF/jars/tritonus-share-0.3.7.4.jar!org/tritonus/share/GlobalInfo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Specialist Dance 1.5.0 — Animation Control + Dance Packages\n\nThe dance now respects the music's end, and raw GIFs can be imported directly in-game. You can hold the last frame, loop until the track finishes, or clear the overlay when the animation ends. Drop a GIF in the dances folder and the mod converts it to a playable pack with its own timing and audio.\n\n## Added\n\n- `stop`, `hold` and `loop` animation end behaviors are consumed by the HUD — `stop` plays one pass and clears the overlay, `hold` keeps the last frame, `loop` wraps around until the music ends.\n- `MusicManager.isPlaying()`, so the animation can tell when its track has finished instead of guessing from a timer.\n- One diagnostic line when a dance ends, naming the reason, the configured behavior, `musicEnabled` and whether music was driving the end (`debug: true`).\n- Drop a `.gif` into `config/specialist-dance/dances/` and press **Rescan** — the mod composites the GIF frames, writes a `frame_NNN.png` pack, reads the GIF's frame delay into `pack.json`, and treats the result as a new dance.\n- Optional sidecar files next to a dropped GIF — `<name>.ogg` (or another supported audio format) and `<name>.json` (copied as `pack.json`).\n- `pack.json` with `frameDurationMs` and `track` — per-pack timing overrides the global `frameDurationMs`, and a pack's own audio is used while the track selector is on `default`.\n- Pack audio appears in the music selector as `<pack>/<track>`.\n- New dance packs open the **Position dance** editor once, both at startup and after **Rescan**. The list of packs already shown is persisted in `seenDances`; on upgrade, packs already in the folder are marked seen so they do not all pop at once.\n- **Fit** now uses the current frame's aspect ratio, and the layout editor previews the middle frame instead of a possibly blank frame 0.\n\n## Changed\n\n- With `musicEnabled: false`, or when no audio device is available, there is no end signal for `hold` and `loop`, so both fall back to `stop` — one finite pass — instead of cancelling on the first frame.\n- World change, player death, an invalid pack and a missing frame now end the animation through the same path, which also stops the music.\n- An invalid dance pack says why — unreadable, no `frame_NNN.png` files, or a frame run with gaps — instead of the same silent `-1` for all three.\n- **Rescan** releases cached pack textures so a replaced GIF or pack reloads.\n- **Play preview** in the K menu plays the track the active pack would use, including its own audio, instead of always previewing the global selection.\n- A `pack.json` larger than 1 MB is ignored; the pack still plays with the global timing. Unsupported pack audio formats (`.opus`, `.m4a`, …) are logged and skipped instead of failing silently.\n- A pack folder named `specialist` is rejected because it would shadow the bundled dance.\n\n## Fixed\n\n- `hold` and `loop` with music off drew nothing at all; the animation was cancelled while rendering frame 0.\n- Raw `.gif` files in the dances root were ignored by the scanner.\n\n## Installation\n\n- **Minecraft:** Java Edition 1.21.11\n- **Loader:** Fabric 0.18.1\n- **API:** Fabric API 0.141.5+1.21.11\n- **Client-side only**; not required on the server\n\nDownload `specialist-dance-1.5.0.jar` and place it in your `mods/` folder.\n\n## Known limitations\n\n- PNG is the only loadable frame format — `NativeImage.read` rejects anything without a PNG header, so GIF, JPEG and WebP must be converted first (the mod does this automatically for dropped GIFs).\n- Pack folders and files must be lowercase with no spaces (`frame_000.png`, …).\n- Ogg Opus and ALAC music are not supported.\n- GIF decode runs on the render thread — importing a large GIF may freeze the game briefly.\n- `tools/GifToFrames.java` diverged from the in-game importer and is not updated for `pack.json`.\n- Layout is global (per-pack layout is not yet implemented)."
+		},
 		{
 			"tag": "v1.4.0",
 			"published": "2026-10-29T02:10:58Z",
