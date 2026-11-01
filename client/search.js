@@ -2,6 +2,8 @@ import { HOSTS, fit, ownerOf } from 'ender-launcher/rank';
 import { specFor } from 'ender-launcher/spec';
 import { supportOf } from 'ender-launcher/support';
 
+import { hrefOf } from './route';
+
 export const INDEX = 'https://raw.githubusercontent.com/fatlard1993/ender-index/main/data';
 
 export const MANIFEST = 'https://piston-meta.mojang.com/mc/game/version_manifest_v2.json';
@@ -41,10 +43,10 @@ const authorOf = value => {
 };
 
 /** Where the page lists every mod the index gave a theme. */
-export const tagPath = tag => `${writeQuery({ tag })}#/`;
+export const tagPath = tag => `${hrefOf('/')}${writeQuery({ tag })}`;
 
 /** Where the page lists every mod an entry's owner has in the index. */
-export const authorPath = entry => `${writeQuery({ author: ownerOf(entry) })}#/`;
+export const authorPath = entry => `${hrefOf('/')}${writeQuery({ author: ownerOf(entry) })}`;
 
 export const readQuery = search => {
 	const params = new URLSearchParams(search);
@@ -474,7 +476,7 @@ export const sortPacks = (packs, sort = 'stars') =>
 	packs.toSorted((a, b) => PACK_ORDERS[sort](a, b) || a.repo.localeCompare(b.repo));
 
 /** Where a pack's own page is. */
-export const packPath = pack => `#/pack/${pack.host ?? 'github'}/${pack.repo}`;
+export const packPath = pack => hrefOf(`/pack/${pack.host ?? 'github'}/${pack.repo}`);
 
 /** Where a pack's mod comes from: the index, when it has it, or else where its jar is. */
 export const kindOf = mod => (mod.key ? 'indexed' : mod.jar);

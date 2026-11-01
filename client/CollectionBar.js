@@ -6,6 +6,7 @@ import { local } from './local';
 import { packDialog } from './packMaker';
 import { installAllCommand, modPath } from './search';
 import { Command, Row, Stack, copyCommand } from './ui';
+import { hrefOf } from './route';
 
 const Bar = styled.Component(
 	({ colors, space }) => `
@@ -99,7 +100,7 @@ export default class CollectionBar extends Bar {
 													tooltip: `Take ${item.title ?? item.repo} out`,
 													onPointerPress: () => collection.toggle(item),
 												}),
-												new Link({ href: `#${modPath(item)}`, textContent: item.title ?? item.repo }),
+												new Link({ href: hrefOf(modPath(item)), textContent: item.title ?? item.repo }),
 												new Component({ tag: 'span', textContent: item.repo, style: { opacity: 0.6 } }),
 											],
 										}),

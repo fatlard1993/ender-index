@@ -7,6 +7,10 @@ on:
   # The ranking is ender-launcher's, bundled at build time; a daily build takes up its changes
   schedule:
     - cron: '47 3 * * *'
+  # Each mod has a page of its own, so a crawl's new mods are built in once it has listed them
+  workflow_run:
+    workflows: [crawl]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -40,7 +44,7 @@ jobs:
           bun-download-url: https://github.com/oven-sh/bun/releases/download/bun-v1.4.0/bun-linux-x64.zip
       - run: bun install
         working-directory: ender-index
-      - run: bun run build:site
+      - run: bun run build:site --pages https://fatlard1993.github.io/ender-index/
         working-directory: ender-index
       - uses: actions/upload-pages-artifact@v3
         with:

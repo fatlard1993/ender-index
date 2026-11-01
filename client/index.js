@@ -9,14 +9,33 @@ import ModPage from './ModPage';
 import PackPage from './PackPage';
 import PacksPage from './PacksPage';
 import SearchPage from './SearchPage';
+import { addressOf, followLinks, hashRoute, navigate, routeOf } from './route';
 
 import '@vanilla-bean/components/app/reloadOnBuild';
+
+/** The router of a site served under a base: its path is the page's below the base. */
+class SiteRouter extends Router {
+	get path() {
+		return routeOf(location);
+	}
+
+	set path(route) {
+		navigate(route);
+	}
+}
+
+const shared = hashRoute(location.hash);
+
+if (shared) history.replaceState(null, '', addressOf(shared));
+
+followLinks();
 
 new Page({
 	appendTo: document.body,
 	append: new View({
 		append: [
-			new Router({
+			new SiteRouter({
+				mode: 'history',
 				views: {
 					'/': SearchPage,
 					'/packs': PacksPage,

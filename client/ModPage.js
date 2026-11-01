@@ -92,6 +92,7 @@ import {
 	TILES,
 	tiles,
 } from './ui';
+import { hrefOf } from './route';
 
 const Heading = styled.Component(
 	() => `
@@ -358,7 +359,7 @@ const sharedBy = (title, shot, byKey) => {
 			...(shot.at ? [`, ${date(shot.at)}`] : []),
 			...others.flatMap((entry, at) => [
 				at === 0 ? '. It shows ' : ', ',
-				new Link({ href: `#${modPath(entry)}`, textContent: titleOf(entry) }),
+				new Link({ href: hrefOf(modPath(entry)), textContent: titleOf(entry) }),
 				...(at === others.length - 1 ? [' too'] : []),
 			]),
 		],
@@ -672,7 +673,7 @@ const forkedFrom = entry => {
 			'a fork of ',
 			new Link(
 				entry.forkOf.listed
-					? { href: `#${modPath(original)}`, textContent: original.repo }
+					? { href: hrefOf(modPath(original)), textContent: original.repo }
 					: { href: repositoryUrl(original), target: '_blank', textContent: original.repo },
 			),
 		],

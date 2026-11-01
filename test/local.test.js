@@ -1,3 +1,6 @@
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { describe, expect, test } from 'bun:test';
 
 import { SPEC, allowed, handle } from '../scripts/local';
@@ -41,6 +44,21 @@ describe('the local server', () => {
 	test('names an instance only by a plain name, never a path', async () => {
 		expect((await handle(request('/api/instances/.hidden'))).status).toBe(400);
 		expect((await handle(request('/api/instances/%2e%2e'))).status).toBe(404);
+	});
+
+	test("answers a page's path with the site, whose script shows it, and a missing file with nothing", async () => {
+		const root = await mkdtemp(join(tmpdir(), 'ender-index-site-'));
+
+		try {
+			await Bun.write(join(root, 'index.html'), '<!doctype html><title>index</title>');
+
+			expect(await (await handle(request('/mod/github/a/b'), { root })).text()).toBe(
+				'<!doctype html><title>index</title>',
+			);
+			expect((await handle(request('/missing.js'), { root })).status).toBe(404);
+		} finally {
+			await rm(root, { recursive: true });
+		}
 	});
 
 	test('serves nothing outside the build', async () => {

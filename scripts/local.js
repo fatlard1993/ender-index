@@ -1,4 +1,4 @@
-import { join } from 'node:path';
+import { extname, join } from 'node:path';
 
 import { serve, serveStatic } from '@vanilla-bean/components/app';
 import { REFUSED, allowed, collect, webApi } from 'ender-launcher/web';
@@ -20,11 +20,16 @@ const api = webApi({ command });
  * vbc's serve refuses a write whose origin is not its host, but a name rebound to this address is its own host, and
  * this server runs ender: allowed holds the host to this machine first.
  */
-export const handle = async request => {
+export const handle = async (request, { root = BUILD } = {}) => {
 	if (!allowed(request, PORT)) return new Response(REFUSED, { status: 403 });
 
 	return (
-		(await api(request)) ?? (await serveStatic(request, { root: BUILD })) ?? new Response('Not found', { status: 404 })
+		(await api(request)) ??
+		(await serveStatic(request, { root })) ??
+		(extname(new URL(request.url).pathname) === ''
+			? await serveStatic(new Request(new URL('/', request.url)), { root })
+			: undefined) ??
+		new Response('Not found', { status: 404 })
 	);
 };
 

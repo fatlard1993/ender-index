@@ -70,6 +70,7 @@ import {
 	loadJson,
 	screenshots,
 } from './ui';
+import { hrefOf } from './route';
 
 const PAGE_SIZE = 25;
 
@@ -162,7 +163,7 @@ const needs = (entry, record, entries, fits) => {
 		const provider = providerOf(id, entries, entry, fits);
 
 		return provider
-			? new Link({ href: `#${modPath(provider)}`, textContent: titleOf(provider), tooltip: provider.repo })
+			? new Link({ href: hrefOf(modPath(provider)), textContent: titleOf(provider), tooltip: provider.repo })
 			: missingName(entry, id);
 	});
 
@@ -210,7 +211,7 @@ const cardDetails = (entry, entries, { minecraft, loader }, cautions) => {
 						.join(' · '),
 				}),
 				...needs(entry, record, entries, { minecraft, loader }),
-				new Link({ href: `#${modPath(entry)}`, textContent: `Everything about ${title}` }),
+				new Link({ href: hrefOf(modPath(entry)), textContent: `Everything about ${title}` }),
 			]),
 		)
 		.catch(error => details.content(new Warning({ textContent: `${title}'s record did not load: ${error.message}` })));
@@ -305,7 +306,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 					append: [
 						new Row({
 							append: [
-								new Link({ href: `#${modPath(entry)}`, append: new Title({ textContent: title }) }),
+								new Link({ href: hrefOf(modPath(entry)), append: new Title({ textContent: title }) }),
 								repositoryLinks(entry),
 								new Meta({
 									textContent: [
@@ -667,7 +668,7 @@ export default class SearchPage extends View {
 			localBar.content([new Meta({ textContent: 'Installing into' }), instancePicker()]);
 			local.loadAccount().then(() => {
 				if (local.login && !this.signal.aborted)
-					localBar.append(new Link({ href: '#/mine', textContent: 'Your mods' }));
+					localBar.append(new Link({ href: hrefOf('/mine'), textContent: 'Your mods' }));
 			});
 
 			// Filters follow the instance, so what is offered is what it can load

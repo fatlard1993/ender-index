@@ -31,6 +31,7 @@ module.exports = {
 		'hasher',
 		'homebrew',
 		'iat',
+		'og',
 		'ies',
 		'iex',
 		'irm',

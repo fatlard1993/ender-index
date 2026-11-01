@@ -41,6 +41,7 @@ import {
 	stat,
 	tiles,
 } from './ui';
+import { hrefOf, navigate } from './route';
 
 const Heading = styled.Component(
 	() => `
@@ -212,7 +213,7 @@ const importButton = pack =>
 				try {
 					await local.importPack(pack.install.replace(/^ender import /, ''));
 					new Notify({ intent: 'success', content: `Importing ${pack.name}; it is followed on Instances` });
-					location.hash = '#/instances';
+					navigate('/instances');
 				} catch (error) {
 					new Notify({ intent: 'danger', content: `ender could not import ${pack.name}: ${error.message}` });
 				}
@@ -238,7 +239,7 @@ export default class PackPage extends View {
 						new EmptyState({
 							icon: 'magnifying-glass',
 							title: `${repo} is not a pack the index lists`,
-							action: { textContent: 'Every pack', onPointerPress: () => (location.hash = '#/packs') },
+							action: { textContent: 'Every pack', onPointerPress: () => navigate('/packs') },
 						}),
 					);
 
@@ -304,7 +305,7 @@ export default class PackPage extends View {
 											pack.host === 'gist' ? `a gist of ${owner}'s` : `${pack.repo} on ${HOSTS[pack.host] ?? 'GitHub'}`,
 									}),
 									new Link({
-										href: `#/packs${writePackQuery({ query: owner })}`,
+										href: `${hrefOf('/packs')}${writePackQuery({ query: owner })}`,
 										textContent: `Every pack of ${owner}'s`,
 									}),
 									...(pack.version ? [new Meta({ textContent: `version ${pack.version}` })] : []),

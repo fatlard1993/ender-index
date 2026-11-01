@@ -13,6 +13,7 @@ import {
 
 import { local } from './local';
 import { REPOSITORY, aboutOf, modPath, pictureUrl, readmeSources, titleOf } from './search';
+import { hrefOf } from './route';
 
 export const count = number => number.toLocaleString('en-US');
 
@@ -199,10 +200,10 @@ const Places = styled.Component(
 );
 
 /** Where the index says how to get ender, the launcher that installs what it lists. */
-export const LAUNCHER = '#/get';
+export const LAUNCHER = hrefOf('/get');
 
 /** Where the index tells mod authors what it reads from their repositories, or one part of that. */
-export const authorsPath = part => (part ? `#/authors/${part}` : '#/authors');
+export const authorsPath = part => hrefOf(part ? `/authors/${part}` : '/authors');
 
 /**
  * Shown only on a page ender is not serving: there it is the launcher's own, and the way to get ender is no news.
@@ -228,9 +229,9 @@ export const forLocal = component => {
 };
 
 const PLACES = {
-	mods: { label: 'Mods', href: '#/' },
-	packs: { label: 'Packs', href: '#/packs' },
-	instances: { label: 'Instances', href: '#/instances', local: true },
+	mods: { label: 'Mods', href: hrefOf('/') },
+	packs: { label: 'Packs', href: hrefOf('/packs') },
+	instances: { label: 'Instances', href: hrefOf('/instances'), local: true },
 };
 
 const Trail = styled.Component(
@@ -312,14 +313,17 @@ export const siteBar = (at, ...steps) => {
 			new Trail({
 				tag: 'nav',
 				attributes: { 'aria-label': 'Breadcrumb' },
-				append: [new Link({ addClass: 'site', href: `${location.search}#/`, textContent: 'ender index' }), shown],
+				append: [
+					new Link({ addClass: 'site', href: `${hrefOf('/')}${location.search}`, textContent: 'ender index' }),
+					shown,
+				],
 			}),
 			new Places({
 				tag: 'nav',
 				append: Object.entries(PLACES).map(([place, { label, href, local: localOnly }]) => {
 					const link = new Link({
 						variant: 'flat',
-						href: place === 'mods' ? `${location.search}${href}` : href,
+						href: place === 'mods' ? `${href}${location.search}` : href,
 						textContent: label,
 						...(place === at ? { attributes: { 'aria-current': steps.length > 0 ? 'location' : 'page' } } : {}),
 					});
@@ -426,7 +430,7 @@ export const TILES = 6;
 /** A mod in a few lines, leading to its page. */
 const modTile = other =>
 	new Card(
-		{ tag: 'a', attributes: { href: `#${modPath(other)}` }, interactive: true },
+		{ tag: 'a', attributes: { href: hrefOf(modPath(other)) }, interactive: true },
 		new Row({
 			style: { flexWrap: 'nowrap', alignItems: 'flex-start' },
 			append: [

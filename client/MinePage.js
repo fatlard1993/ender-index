@@ -5,6 +5,7 @@ import { local } from './local';
 import { yourMods } from './mine';
 import { modPath, pictureUrl, titleOf } from './search';
 import { Meta, Row, Stack, Title, Warning, authorsPath, avatar, count, date, siteBar } from './ui';
+import { hrefOf } from './route';
 
 /** What each lack costs a mod, said to its author, with the part of the guide that says how to mend it. */
 const LACKS = {
@@ -38,7 +39,7 @@ const modCard = ({ entry, needs }) =>
 					append: [
 						new Row({
 							append: [
-								new Link({ href: `#${modPath(entry)}`, append: new Title({ textContent: titleOf(entry) }) }),
+								new Link({ href: hrefOf(modPath(entry)), append: new Title({ textContent: titleOf(entry) }) }),
 								new Meta({
 									textContent: [
 										entry.repo,
