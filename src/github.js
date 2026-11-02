@@ -96,7 +96,6 @@ export const kindOf = path => {
 	if (path.includes('/releases')) return 'releases';
 	if (path.endsWith('/readme')) return 'readmes';
 	if (path.includes('/contributors')) return 'contributors';
-	if (path.startsWith('/gists/')) return 'gists';
 
 	return 'repository';
 };
@@ -353,7 +352,19 @@ export const searchRepositories = (query, page = 1) =>
 	request(`/search/repositories?${new URLSearchParams({ q: query, per_page: '100', page: String(page) })}`);
 
 /** A gist, with each of its files' contents: a file over a megabyte comes truncated, with a raw_url to the whole of it. */
-export const gist = id => request(`/gists/${id}`);
+/**
+ * A public gist, asked for with no token: GitHub refuses an App's installation token the gists API, and an answer
+ * without one counts against an allowance apart from the crawl's, so it is kept out of what the crawl has spent.
+ */
+export const gist = async id => {
+	const path = `/gists/${id}`;
+	const response = await fetchSteady(`${API}${path}`, { headers: { accept: 'application/vnd.github+json' } });
+
+	if (!response.ok)
+		throw Object.assign(new Error(`GitHub ${response.status} for ${path}`), { status: response.status });
+
+	return response.json();
+};
 
 /** Every file path in a repository at its default branch, in one request. */
 export const filesOf = async fullName =>

@@ -161,6 +161,34 @@ describe('releases switched off', () => {
 	});
 });
 
+describe('a gist', () => {
+	test('is asked for with no token, which an App installation is refused for gists', async () => {
+		const original = globalThis.fetch;
+		const token = process.env.GITHUB_TOKEN;
+		const asked = [];
+
+		globalThis.fetch = async (url, init) => {
+			asked.push({ url: String(url), headers: new Headers(init?.headers) });
+
+			return Response.json({ id: 'abc', files: {} });
+		};
+		process.env.GITHUB_TOKEN = 'test';
+
+		try {
+			const { gist } = await import('../src/github');
+
+			expect(await gist('abc')).toEqual({ id: 'abc', files: {} });
+			expect(asked.map(({ url, headers }) => [url, headers.has('authorization')])).toEqual([
+				['https://api.github.com/gists/abc', false],
+			]);
+		} finally {
+			globalThis.fetch = original;
+			process.env.GITHUB_TOKEN = token;
+			if (token === undefined) delete process.env.GITHUB_TOKEN;
+		}
+	});
+});
+
 describe('a readme', () => {
 	const answering = (body, status = 200) => {
 		const original = globalThis.fetch;
@@ -344,7 +372,6 @@ describe('the rate limit', () => {
 		expect(kindOf('/search/code?q=x')).toBe('code search');
 		expect(kindOf('/repos/a/b/readme')).toBe('readmes');
 		expect(kindOf('/repos/a/b/contributors?per_page=100')).toBe('contributors');
-		expect(kindOf('/gists/abc')).toBe('gists');
 
 		expect(
 			spendingLine({
