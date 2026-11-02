@@ -4,9 +4,11 @@ import {
 	DATA,
 	NO_JARS,
 	RECHECK_DAYS,
+	currentLines,
 	parseLine,
 	readModrinthRepos,
 	readNoJars,
+	readRenames,
 	readRepos,
 	recordPath,
 	restingOn,
@@ -127,7 +129,8 @@ export const writeNoJars = async noJars =>
 	);
 
 /** Every line a triage looks through: those found on their hosts, and those known only from Modrinth. */
-export const triageLines = async () => [...(await readRepos()), ...(await readModrinthRepos({ resting: true }))];
+export const triageLines = async () =>
+	currentLines([...(await readRepos()), ...(await readModrinthRepos({ resting: true }))], await readRenames());
 
 if (import.meta.main) {
 	const minutes = Number(process.env.TRIAGE_MINUTES ?? Infinity);

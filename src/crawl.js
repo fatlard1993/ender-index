@@ -161,6 +161,9 @@ export const renamedLine = (renames, line) => {
 	return current;
 };
 
+/** Lines as their hosts now name them, each repository once: a line followed to its record's name is not read twice. */
+export const currentLines = (lines, renames) => uniqueRepositories(lines.map(line => renamedLine(renames, line)));
+
 export const recordPath = ({ host, name }) => join(DATA, 'mods', DIRECTORIES[host], `${name}.json`);
 
 /**
@@ -937,8 +940,9 @@ export const writeLists = async () => {
 
 export const crawl = async ({ only } = {}) => {
 	const now = new Date().toISOString();
-	const found = only ?? (await readRepos());
-	const fromModrinth = only ? [] : await readModrinthRepos({ resting: true });
+	const known = await readRenames();
+	const found = currentLines(only ?? (await readRepos()), known);
+	const fromModrinth = only ? [] : currentLines(await readModrinthRepos({ resting: true }), known);
 	const ages = new Map(
 		await Promise.all(
 			[...found, ...fromModrinth].map(async line => [
@@ -1028,14 +1032,15 @@ export const crawl = async ({ only } = {}) => {
 
 	const { asked, failed } = github.batchesAsked();
 
-	if (asked > 0) console.log(`GraphQL answered ${asked - failed} of ${asked} batches of repositories; the rest went to REST`);
+	if (asked > 0)
+		console.log(`GraphQL answered ${asked - failed} of ${asked} batches of repositories; the rest went to REST`);
 
 	if (renames.size > 0) {
-		const known = { ...(await readRenames()), ...Object.fromEntries(renames) };
-
 		await writeJson(
 			join(DATA, RENAMES),
-			Object.fromEntries(Object.entries(known).sort(([a], [b]) => a.localeCompare(b))),
+			Object.fromEntries(
+				Object.entries({ ...known, ...Object.fromEntries(renames) }).sort(([a], [b]) => a.localeCompare(b)),
+			),
 		);
 		console.log(`${renames.size === 1 ? 'One repository was' : `${renames.size} repositories were`} found renamed`);
 	}

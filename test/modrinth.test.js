@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { renamedLine } from '../src/crawl';
+import { currentLines, renamedLine } from '../src/crawl';
 import { donationsOf, lineOf, renamedSources } from '../src/modrinth';
 
 describe("a Modrinth project's source link", () => {
@@ -56,6 +56,16 @@ describe('a renamed repository', () => {
 		expect(renamedLine(renames, 'a/old')).toBe('a/new');
 		expect(renamedLine(renames, 'c/same')).toBe('c/same');
 		expect(renamedLine(renames, 'b/x')).toBe('b/y');
+	});
+
+	test('is crawled once, by its new name, however many lines still name it by an old one', () => {
+		const renames = { 'un-nubivago/burning': 'NubivagoZero/burning', 'a/old': 'a/new' };
+
+		expect(currentLines(['NubivagoZero/burning', 'a/old', 'un-nubivago/burning', 'c/same'], renames)).toEqual([
+			'NubivagoZero/burning',
+			'a/new',
+			'c/same',
+		]);
 	});
 
 	test("carries a Modrinth project's slug, id and donation links to its new name", () => {
