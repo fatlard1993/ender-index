@@ -87,6 +87,7 @@ describe('the crawl reading repositories in batches', () => {
 	afterEach(() => {
 		globalThis.fetch = original;
 		github.planRepositories([]);
+		github.holdSteady(new Map());
 		github.forgetCache();
 	});
 
@@ -170,6 +171,26 @@ describe('the crawl reading repositories in batches', () => {
 		await github.releases('a/here');
 
 		expect(rest).toEqual(['/repos/a/here/releases?per_page=30']);
+	});
+
+	test('answers a repository held steady from its details and the releases read before, asking GitHub nothing', async () => {
+		const { ask } = answering();
+
+		globalThis.fetch = async url => {
+			throw new Error(`REST was asked for ${url}`);
+		};
+		github.planRepositories(['a/steady'], { ask });
+		const before = await github.releases('a/steady');
+
+		github.planRepositories([], {
+			ask: async () => {
+				throw new Error('GraphQL was asked');
+			},
+		});
+		github.holdSteady(new Map([['A/Steady', { full_name: 'a/steady', stargazers_count: 99 }]]));
+
+		expect((await github.repository('a/steady')).stargazers_count).toBe(99);
+		expect(await github.releases('a/steady')).toEqual(before);
 	});
 
 	test('leaves to REST a repository GraphQL found nothing for, a page past the first, and one not planned', async () => {

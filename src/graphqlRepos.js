@@ -30,33 +30,52 @@ export const assetIdOf = nodeId => {
 	return (bytes[0] & 0xf0) === 0x90 ? last : undefined;
 };
 
-/** One GraphQL query for each repository's details and its newest releases, as many as REST gives on a page. */
-export const repositoriesQuery = (names, releases) =>
+const DETAILS =
+	'nameWithOwner description stargazerCount isArchived isFork parent { nameWithOwner } licenseInfo { spdxId } createdAt pushedAt';
+
+const queryEach = (names, fields) =>
 	`query { ${names
 		.map((name, at) => {
 			const [owner, repository] = name.split('/');
 
-			return `r${at}: repository(owner: ${JSON.stringify(owner)}, name: ${JSON.stringify(repository)}) { nameWithOwner description stargazerCount isArchived isFork parent { nameWithOwner } licenseInfo { spdxId } createdAt pushedAt releases(first: ${releases}, orderBy: { field: CREATED_AT, direction: DESC }) { nodes { tagName publishedAt isPrerelease isDraft description releaseAssets(first: ${ASSETS}) { nodes { id name size downloadUrl downloadCount } } } } }`;
+			return `r${at}: repository(owner: ${JSON.stringify(owner)}, name: ${JSON.stringify(repository)}) { ${fields} }`;
 		})
 		.join(' ')} }`;
+
+/** One GraphQL query for each repository's details and its newest releases, as many as REST gives on a page. */
+export const repositoriesQuery = (names, releases) =>
+	queryEach(
+		names,
+		`${DETAILS} releases(first: ${releases}, orderBy: { field: CREATED_AT, direction: DESC }) { nodes { tagName publishedAt isPrerelease isDraft description releaseAssets(first: ${ASSETS}) { nodes { id name size downloadUrl downloadCount } } } }`,
+	);
+
+/** One GraphQL query for each repository's details, and its newest release's tag and how many assets it has. */
+export const detailsQuery = names =>
+	queryEach(
+		names,
+		`${DETAILS} releases(first: 1, orderBy: { field: CREATED_AT, direction: DESC }) { nodes { tagName releaseAssets { totalCount } } }`,
+	);
+
+/** A repository's details as GraphQL answers them, in the shape the REST repository request keeps them in. */
+export const repoOf = node => ({
+	full_name: node.nameWithOwner,
+	description: node.description,
+	stargazers_count: node.stargazerCount,
+	archived: node.isArchived,
+	// REST names a license it cannot match NOASSERTION, where GraphQL leaves it null
+	license: node.licenseInfo && { spdx_id: node.licenseInfo.spdxId ?? 'NOASSERTION' },
+	created_at: node.createdAt,
+	pushed_at: node.pushedAt,
+	parent: node.parent ? { full_name: node.parent.nameWithOwner } : undefined,
+	fork: node.isFork,
+});
 
 /**
  * A repository as GraphQL answers it, in the shapes REST answers it in: its details as the repository request keeps
  * them, and its releases as the first page of the releases request does, notes trimmed by `notes`.
  */
 export const fromGraphql = (node, notes) => ({
-	repo: {
-		full_name: node.nameWithOwner,
-		description: node.description,
-		stargazers_count: node.stargazerCount,
-		archived: node.isArchived,
-		// REST names a license it cannot match NOASSERTION, where GraphQL leaves it null
-		license: node.licenseInfo && { spdx_id: node.licenseInfo.spdxId ?? 'NOASSERTION' },
-		created_at: node.createdAt,
-		pushed_at: node.pushedAt,
-		parent: node.parent ? { full_name: node.parent.nameWithOwner } : undefined,
-		fork: node.isFork,
-	},
+	repo: repoOf(node),
 	releases: node.releases.nodes.map(release => ({
 		tag_name: release.tagName,
 		published_at: release.publishedAt,

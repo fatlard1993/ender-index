@@ -83,9 +83,21 @@ export const saveCache = async () => {
 /** When a cached response for this path was last fetched or confirmed, or 0 for never. */
 export const lastFetched = async path => (await cache())[path]?.fetched ?? 0;
 
-/** The tags of a repository's releases as the crawl last read them, newest first, or undefined when it never has. */
-export const cachedReleaseTags = async fullName =>
-	(await cache())[releasesPath(fullName)]?.body?.map(release => release.tag_name);
+/**
+ * A repository's releases as the crawl last read them: their tags, newest first, how many assets the newest has, and
+ * when they were read; undefined when they never have been.
+ */
+export const cachedReleases = async fullName => {
+	const kept = (await cache())[releasesPath(fullName)];
+
+	if (!kept?.body) return undefined;
+
+	return {
+		tags: kept.body.map(release => release.tag_name),
+		newestAssets: kept.body[0]?.assets.length ?? 0,
+		fetched: kept.fetched ?? 0,
+	};
+};
 
 /** What a path costs is filed under: deep history pages are read once, the rest on every crawl. */
 export const kindOf = path => {
@@ -297,13 +309,13 @@ const askInHalves = async names => {
 	}
 };
 
-/** A batch's answer, waiting out a limit that resets within GRAPHQL_WAIT, with every other batch. */
-const askWaiting = async names => {
+/** What `attempt` asks of GraphQL, waiting out a limit that resets within GRAPHQL_WAIT, with every other query. */
+export const waitingOut = async (attempt, sleep = Bun.sleep) => {
 	for (let tries = 1; ; ++tries) {
-		await planned.sleep(Math.max(graphqlResumes - Date.now(), 0));
+		await sleep(Math.max(graphqlResumes - Date.now(), 0));
 
 		try {
-			return await askInHalves(names);
+			return await attempt();
 		} catch (error) {
 			if (!(error instanceof RateLimited) || error.resetAt - Date.now() > GRAPHQL_WAIT || tries === GRAPHQL_TRIES)
 				throw error;
@@ -320,7 +332,7 @@ const loadBatch = async at => {
 	++batched.asked;
 
 	try {
-		const data = await askWaiting(names);
+		const data = await waitingOut(() => askInHalves(names), planned.sleep);
 		const found = new Map();
 
 		for (const [index, name] of names.entries()) {
@@ -355,14 +367,42 @@ const prefetched = async fullName => {
 	return (await planned.loads[at]).get(fullName.toLowerCase());
 };
 
+let steady = new Map();
+
+/**
+ * Hold these repositories' details, each by its name, as read by a check that found their releases as the crawl last
+ * read them: each is answered from them and its kept releases, asking GitHub nothing.
+ */
+export const holdSteady = details => {
+	steady = new Map([...details].map(([name, repo]) => [name.toLowerCase(), repo]));
+};
+
+const held = async fullName => {
+	const repo = steady.get(fullName.toLowerCase());
+
+	if (repo === undefined) return undefined;
+
+	const kept = await cache();
+
+	kept[repositoryPath(fullName)] = { ...kept[repositoryPath(fullName)], fetched: Date.now(), body: repo };
+
+	return { repo, releases: kept[releasesPath(fullName)].body };
+};
+
 export const repository = async fullName =>
-	(await prefetched(fullName))?.repo ?? request(repositoryPath(fullName), repositoryFields, kept => !('fork' in kept));
+	(await held(fullName))?.repo ??
+	(await prefetched(fullName))?.repo ??
+	request(repositoryPath(fullName), repositoryFields, kept => !('fork' in kept));
 
 /** The first page is kept and asked about conditionally each crawl; a deeper page is read once, so it is not kept. */
 export const releases = async (fullName, page = 1) => {
 	if (page !== 1) return releaseFields(await request(`/repos/${fullName}/releases?per_page=30&page=${page}`));
 
-	return (await prefetched(fullName))?.releases ?? request(releasesPath(fullName), releaseFields);
+	return (
+		(await held(fullName))?.releases ??
+		(await prefetched(fullName))?.releases ??
+		request(releasesPath(fullName), releaseFields)
+	);
 };
 
 /** The path of the readme GitHub shows for a repository, or null when it has none. */

@@ -6,6 +6,7 @@ import { afterEach, describe, expect, setSystemTime, test } from 'bun:test';
 import {
 	DATA,
 	RELEASE_BATCH,
+	checkReleases,
 	crawlEach,
 	crawlOrder,
 	parseLine,
@@ -13,7 +14,6 @@ import {
 	recordPath,
 	spendingLine,
 	waitForReset,
-	withNewReleases,
 	writeJsonLines,
 } from '../src/crawl';
 import { RateLimited } from '../src/fetch';
@@ -642,50 +642,117 @@ describe("a personal token's allowance", () => {
 	});
 });
 
-describe('a release the index has not read', () => {
-	const tags = { 'a/same': ['1.0'], 'a/newer': ['1.0'], 'a/gone': ['1.0'] };
-	const answering = newest => async query =>
+describe("the check on each repository's releases", () => {
+	const DAY = 24 * 60 * 60 * 1000;
+	const now = Date.parse('2026-11-02T00:00:00Z');
+	const cached = (tags, newestAssets = 1, age = DAY) => ({ tags, newestAssets, fetched: now - age });
+	const known = {
+		'a/same': cached(['1.0', '0.9']),
+		'a/newer': cached(['1.0']),
+		'a/more-assets': cached(['1.0']),
+		'a/stale': cached(['1.0'], 1, 8 * DAY),
+		'a/moved': cached(['1.0']),
+		'a/deleted-newest': cached(['1.1', '1.0']),
+		'a/none': cached([], 0),
+		'a/gone': cached(['1.0']),
+	};
+	const newest = {
+		'a/same': ['1.0', 1],
+		'a/newer': ['2.0', 1],
+		'a/more-assets': ['1.0', 2],
+		'a/stale': ['1.0', 1],
+		'a/moved': ['1.0', 1],
+		'a/deleted-newest': ['1.0', 1],
+		'a/none': undefined,
+		'a/gone': null,
+	};
+	const node = name => ({
+		nameWithOwner: name === 'a/moved' ? 'b/moved' : name.toUpperCase(),
+		description: `${name} described`,
+		stargazerCount: 7,
+		isArchived: false,
+		isFork: false,
+		parent: null,
+		licenseInfo: { spdxId: 'MIT' },
+		createdAt: '2026-01-01T00:00:00Z',
+		pushedAt: '2026-10-01T00:00:00Z',
+		releases: {
+			nodes: newest[name] ? [{ tagName: newest[name][0], releaseAssets: { totalCount: newest[name][1] } }] : [],
+		},
+	});
+	const answer = query =>
 		Object.fromEntries(
 			[...query.matchAll(/(r\d+): repository\(owner: "([^"]+)", name: "([^"]+)"\)/g)].map(([, alias, owner, name]) => [
 				alias,
-				newest[`${owner}/${name}`] === null ? null : { releases: { nodes: [{ tagName: newest[`${owner}/${name}`] }] } },
+				newest[`${owner}/${name}`] === null ? null : node(`${owner}/${name}`),
 			]),
 		);
 
-	test("is a repository whose newest release on GitHub is not among those the crawl read; others' hosts are not asked", async () => {
+	test('crawls first what has a release the index has not read, and refreshes from itself alone what has not changed', async () => {
 		const asked = [];
-		const changed = await withNewReleases({
-			lines: ['a/same', 'a/newer', 'a/gone', 'a/never-read', 'codeberg:b/c'],
-			knownTags: async line => tags[line],
+		const { changed, steady } = await checkReleases({
+			lines: [...Object.keys(known), 'a/never-read', 'codeberg:b/c'],
+			known: async line => known[line],
 			ask: async query => {
 				asked.push(query);
 
-				return answering({ 'a/same': '1.0', 'a/newer': '2.0', 'a/gone': null })(query);
+				return answer(query);
 			},
 			log: () => {},
+			now,
 		});
 
 		expect([...changed]).toEqual(['a/newer']);
+		expect([...steady.keys()]).toEqual(['a/same', 'a/none']);
+		expect(steady.get('a/same')).toMatchObject({
+			full_name: 'A/SAME',
+			stargazers_count: 7,
+			license: { spdx_id: 'MIT' },
+		});
 		expect(asked).toHaveLength(1);
 		expect(asked[0]).not.toContain('never-read');
 	});
 
-	test('is left to its turn when GitHub fails, and the rest are asked no more once the limit is reached', async () => {
+	test('waits out a limit that resets within a minute or two', async () => {
+		const slept = [];
+		let limited = 1;
+		const { steady } = await checkReleases({
+			lines: ['a/same'],
+			known: async line => known[line],
+			ask: async query => {
+				if (limited-- > 0) throw new RateLimited('slow down', Date.now() + 60_000);
+
+				return answer(query);
+			},
+			sleep: async ms => slept.push(ms),
+			log: () => {},
+			now,
+		});
+
+		expect([...steady.keys()]).toEqual(['a/same']);
+		expect(Math.max(...slept)).toBeGreaterThan(55_000);
+	});
+
+	test('leaves each to be read in full when GitHub fails, and asks no more once the limit is spent', async () => {
 		const lines = Array.from({ length: RELEASE_BATCH * 12 }, (_, at) => `a/r${at}`);
 		let asked = 0;
 		const logged = [];
-		const changed = await withNewReleases({
+		const { changed, steady } = await checkReleases({
 			lines,
-			knownTags: async () => ['1.0'],
+			known: async () => cached(['1.0']),
 			ask: async () => {
 				asked += 1;
 
-				throw asked === 1 ? new Error('GitHub GraphQL answered 502') : new RateLimited('limited', Date.now());
+				throw asked === 1
+					? new Error('GitHub GraphQL answered 502')
+					: new RateLimited('spent', Date.now() + 60 * 60_000);
 			},
+			sleep: async () => {},
 			log: line => logged.push(line),
+			now,
 		});
 
-		expect(changed.size).toBe(0);
+		expect(changed.size + steady.size).toBe(0);
 		expect(asked).toBeLessThan(12);
 		expect(logged.filter(line => line.startsWith('Left'))).toHaveLength(asked);
 	});

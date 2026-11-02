@@ -10,6 +10,7 @@ import * as codeberg from './codeberg';
 import { fetchSteady, RateLimited } from './fetch';
 import * as github from './github';
 import * as gitlab from './gitlab';
+import { ASSETS, detailsQuery, repoOf } from './graphqlRepos';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
 import { GIST_LINE, buildPacks, crawlPack, packDemand, packPage } from './packs';
 import { buildSearch, latestAssets, themesOf } from './search';
@@ -629,59 +630,78 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, peo
 	return result.events;
 };
 
-/** Repositories asked about in one GraphQL query; a hundred with their newest release costs one point. */
+/** Repositories asked about in one GraphQL query; a hundred with their details and newest release cost a point or two. */
 export const RELEASE_BATCH = 100;
 
 /** Queries asked at once: each takes seconds, and tens of thousands of repositories make hundreds of them. */
 const RELEASE_QUERIES = 4;
 
-export const newestReleasesQuery = names =>
-	`query { ${names
-		.map((name, at) => {
-			const [owner, repository] = name.split('/');
-
-			return `r${at}: repository(owner: ${JSON.stringify(owner)}, name: ${JSON.stringify(repository)}) { releases(first: 1, orderBy: { field: CREATED_AT, direction: DESC }) { nodes { tagName } } }`;
-		})
-		.join(' ')} }`;
+/** How long a repository whose releases look unchanged goes before they are read in full anyway. */
+export const FULL_READ_DAYS = 7;
 
 /**
- * Of the GitHub repositories the crawl has read releases of, those whose newest release it has not: asked a hundred at
- * a time over GraphQL, so a new version is crawled in the next run rather than when its repository's turn comes. A
- * query that fails leaves its repositories to their turn.
+ * Whether a repository's releases are as the crawl last read them: the same newest release with as many assets, read
+ * in full within FULL_READ_DAYS, and the repository still under this name. An asset added to an older release, or
+ * downloads counted since, wait for the full read.
  */
-export const withNewReleases = async ({
+export const isSteady = (node, line, cached, now = Date.now()) => {
+	const newest = node.releases.nodes[0];
+
+	return (
+		node.nameWithOwner.toLowerCase() === line.toLowerCase() &&
+		now - cached.fetched < FULL_READ_DAYS * DAY &&
+		newest?.tagName === cached.tags[0] &&
+		Math.min(newest?.releaseAssets.totalCount ?? 0, ASSETS) === Math.min(cached.newestAssets, ASSETS)
+	);
+};
+
+/**
+ * Each GitHub repository the crawl has read releases of, checked a hundred at a time over GraphQL: those whose newest
+ * release it has not read are `changed`, crawled first, rather than when their turn comes; those whose releases are as
+ * it read them are `steady`, by their details as the check read them, and are refreshed from those alone. A query that
+ * fails leaves its repositories to be read in full in their turn.
+ */
+export const checkReleases = async ({
 	lines,
-	knownTags = github.cachedReleaseTags,
+	known = github.cachedReleases,
 	ask = github.graphql,
+	sleep = Bun.sleep,
 	log = console.log,
+	now = Date.now(),
 }) => {
-	const known = [];
+	const checking = [];
 
 	for (const line of lines) {
 		if (line.includes(':')) continue;
 
-		const tags = await knownTags(line);
+		const cached = await known(line);
 
-		if (tags) known.push({ line, tags: new Set(tags) });
+		if (cached) checking.push({ line, cached });
 	}
 
-	log(`Asking GitHub for the newest release of ${known.length} repositories, ${RELEASE_BATCH} to a query`);
+	log(`Asking GitHub about the newest release of ${checking.length} repositories, ${RELEASE_BATCH} to a query`);
 
 	const changed = new Set();
+	const steady = new Map();
 	const batches = [];
 	let limited = false;
 
-	for (let at = 0; at < known.length; at += RELEASE_BATCH) batches.push(known.slice(at, at + RELEASE_BATCH));
+	for (let at = 0; at < checking.length; at += RELEASE_BATCH) batches.push(checking.slice(at, at + RELEASE_BATCH));
 
 	const work = async () => {
 		for (let batch = batches.shift(); batch && !limited; batch = batches.shift()) {
 			try {
-				const data = await ask(newestReleasesQuery(batch.map(({ line }) => line)));
+				const data = await github.waitingOut(() => ask(detailsQuery(batch.map(({ line }) => line))), sleep);
 
-				batch.forEach(({ line, tags }, index) => {
-					const newest = data[`r${index}`]?.releases.nodes[0]?.tagName;
+				batch.forEach(({ line, cached }, index) => {
+					const node = data[`r${index}`];
 
-					if (newest !== undefined && !tags.has(newest)) changed.add(line);
+					if (!node) return;
+
+					const newest = node.releases.nodes[0]?.tagName;
+
+					if (newest !== undefined && !cached.tags.includes(newest)) changed.add(line);
+					else if (isSteady(node, line, cached, now)) steady.set(line, repoOf(node));
 				});
 			} catch (error) {
 				log(`Left ${batch.length} repositories to their turn: ${error.message}`);
@@ -693,9 +713,11 @@ export const withNewReleases = async ({
 
 	await Promise.all(Array.from({ length: RELEASE_QUERIES }, work));
 
-	log(`${changed.size} have a release the index has not read; they are crawled first`);
+	log(
+		`${changed.size} have a release the index has not read, crawled first; ${steady.size} have releases as it read them, refreshed from this check alone`,
+	);
 
-	return changed;
+	return { changed, steady };
 };
 
 /** How long to wait for the rate limit to reset, or undefined when the reset comes too late to crawl on. */
@@ -953,7 +975,9 @@ export const crawl = async ({ only } = {}) => {
 	);
 	const modrinthIds = await readJson(join(DATA, 'modrinth-ids.json'), {});
 	const demand = packDemand(await readPacks(), modrinthIds);
-	const changed = only ? new Set() : await withNewReleases({ lines: [...found, ...fromModrinth] });
+	const { changed, steady } = only
+		? { changed: new Set(), steady: new Map() }
+		: await checkReleases({ lines: [...found, ...fromModrinth] });
 	const noJars = only ? {} : await readNoJars();
 	const notResting = line => !restingOn(noJars[line]) || changed.has(line);
 	const repos = crawlOrder(
@@ -964,7 +988,8 @@ export const crawl = async ({ only } = {}) => {
 		changed,
 	);
 
-	github.planRepositories(repos.filter(line => !line.includes(':')));
+	github.holdSteady(steady);
+	github.planRepositories(repos.filter(line => !line.includes(':') && !steady.has(line)));
 	const knownBad = new Map(
 		(await readJson(join(DATA, 'known-bad.json'), [])).map(entry => [entry.sha256, entry.reason]),
 	);
