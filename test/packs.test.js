@@ -347,4 +347,16 @@ describe('a pack read again', () => {
 		expect(await crawling('2026-10-29T00:00:00Z', read)).toBeUndefined();
 		expect(asked).toContain('pack.toml');
 	});
+
+	test('is read for what else it has when a file its author wrote does not parse, rather than failing the crawl', async () => {
+		const files = {
+			'ender.pack.json': JSON.stringify({ minecraft: '1.21.1', loader: 'fabric', mods: ['sodium'] }),
+			'pack.toml': 'name = "No versions"\n',
+		};
+		const read = async (name, path) => files[path];
+
+		expect((await crawling('2026-10-29T00:00:00Z', read)).formats).toEqual({
+			ender: { minecraft: '1.21.1', loader: 'fabric', mods: [{ spec: 'sodium' }] },
+		});
+	});
 });

@@ -223,17 +223,32 @@ export const describeMods = async (mods, { projectsByHash: byHash, projectsById:
 	}
 };
 
+/**
+ * A file the pack's author wrote, parsed, or undefined when it does not parse: that is the pack's to fix, not a crawl
+ * that failed, so it is said by name and the pack is read for what else it has.
+ */
+const authored = (name, file, parse) => {
+	try {
+		return parse();
+	} catch (error) {
+		console.error(`unread  ${name} ${file} :: ${error.message}`);
+
+		return undefined;
+	}
+};
+
 /** The formats read from the head of a pack's default branch: an ender pack, and a packwiz pack with its mods. */
 const readHeadFormats = async (name, read) => {
 	const formats = {};
 	const enderSource = await read(name, ENDER_PACK);
+	const ender = enderSource === undefined ? undefined : authored(name, ENDER_PACK, () => parseEnderPack(enderSource));
 
-	if (enderSource !== undefined) formats.ender = parseEnderPack(enderSource);
+	if (ender) formats.ender = ender;
 
 	const packwizSource = await read(name, 'pack.toml');
+	const pack = packwizSource === undefined ? undefined : authored(name, 'pack.toml', () => packwizPack(packwizSource));
 
-	if (packwizSource !== undefined) {
-		const pack = packwizPack(packwizSource);
+	if (pack) {
 		const index = (await read(name, pack.index)) ?? '';
 
 		formats.packwiz = {
