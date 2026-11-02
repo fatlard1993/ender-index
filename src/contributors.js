@@ -81,6 +81,8 @@ export const contributorsOf = async ({
 		return known;
 	}
 
+	const inReadme = ranked.people.length > 0 ? readmeSupport(await readme()) : [];
+
 	const asking = ranked.people.map(({ login }) => login).filter(login => !people.has(login));
 
 	if (asking.length > 0) {
@@ -96,8 +98,6 @@ export const contributorsOf = async ({
 			),
 		);
 	}
-
-	const inReadme = ranked.people.length > 0 ? readmeSupport(await readme()) : [];
 
 	try {
 		return {

@@ -161,6 +161,37 @@ describe('reading contributors in a crawl', () => {
 		expect(asked).toBe(2);
 	});
 
+	test('leave no failed funding query unheard while the readme is still being read', async () => {
+		const unheard = [];
+		const hear = reason => unheard.push(reason);
+		const ask = async () => {
+			throw new RateLimited('limited', Date.now());
+		};
+		const readme = async () => {
+			await Bun.sleep(20);
+
+			return '';
+		};
+
+		process.on('unhandledRejection', hear);
+
+		try {
+			await contributorsOf({
+				name: 'a/b',
+				now,
+				people: new Map(),
+				list: async () => rankContributors(listed),
+				ask,
+				readme,
+			});
+			await Bun.sleep(0);
+		} finally {
+			process.off('unhandledRejection', hear);
+		}
+
+		expect(unheard).toEqual([]);
+	});
+
 	test("pass on the REST rate limit, so the crawl sets the repository aside, and keep what was known on GitHub's other failures", async () => {
 		const limited = async () => {
 			throw new RateLimited('limited', Date.now());
