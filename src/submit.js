@@ -90,7 +90,7 @@ export const submitPack = async (body, { now = new Date().toISOString(), scratch
 
 	return {
 		listed: true,
-		say: `Listed: ${pageUrl(pack)}\n\nThe index reads it again with every crawl, four times a day, so changes to it show within hours.`,
+		say: `Listed: ${pageUrl(pack)}\n\nThe index reads it again with every crawl, each hour, so changes to it show within the hour.`,
 	};
 };
 
@@ -167,7 +167,7 @@ export const submitMod = async (
 
 	return {
 		listed: true,
-		say: `Listed: ${modUrl(entry)}\n\nThe index checks for new releases with every crawl, four times a day, so a new version shows within hours.`,
+		say: `Listed: ${modUrl(entry)}\n\nThe index checks for new releases with every crawl, each hour, so a new version shows within the hour.`,
 	};
 };
 

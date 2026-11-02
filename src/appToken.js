@@ -20,7 +20,7 @@ export const appJwt = (appId, key, now = Date.now()) => {
 
 /**
  * Tokens of a GitHub App's installation on an account, each asked for when the last is near its expiry: an
- * installation token lasts an hour, and a crawl runs for four. Its rate limit is the App's, apart from any person's,
+ * installation token lasts an hour, and a crawl can run past one. Its rate limit is the App's, apart from any person's,
  * and it reads public repositories whichever of the account's repositories the installation was given.
  */
 export const appTokens = ({ appId, key, account, fetcher = fetch, now = () => Date.now() }) => {

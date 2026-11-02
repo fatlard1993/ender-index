@@ -15,7 +15,7 @@ export const BATCH = 10;
 
 const DAY = 24 * 60 * 60 * 1000;
 
-/** A run's share of the nightly job, which the crawl after it needs the most of. */
+/** A run's share of the crawl job, which the crawl after it needs the most of. */
 const MINUTES = 15;
 
 /** How long a source is left before it is looked at again: one that builds moves on, one that does not rarely starts. */

@@ -1,14 +1,11 @@
 name: crawl
 
 on:
-  # Four crawls a day, six hours apart: the crawl spends the token's hourly limit, which refills each hour, so each
-  # run's four hours go as far as one night's did, and the hours between leave the token's owner all of it. Only the
-  # first discovers
+  # A crawl an hour: each spends the App's hourly limit and commits it, so a crawl lost costs an hour. Only the 04:17
+  # crawl discovers
   schedule:
     - cron: '17 4 * * *'
-    - cron: '17 10 * * *'
-    - cron: '17 16 * * *'
-    - cron: '17 22 * * *'
+    - cron: '17 0-3,5-23 * * *'
   workflow_dispatch:
     inputs:
       discover:
@@ -24,9 +21,9 @@ concurrency: crawl
 jobs:
   crawl:
     runs-on: ubuntu-latest
-    # The crawl's own budget is 240 minutes, after a discovery of up to forty and a source check of up to twenty; a job
+    # The crawl's own budget is 45 minutes, after a discovery of up to forty and a source check of up to twenty; a job
     # the runner stops commits nothing
-    timeout-minutes: 360
+    timeout-minutes: 150
     steps:
       - uses: actions/checkout@v4
         with:
@@ -63,12 +60,12 @@ jobs:
         run: bun src/triage.js
         working-directory: ender-index
         continue-on-error: true
-        timeout-minutes: 25
+        timeout-minutes: 15
         env:
           GITHUB_TOKEN: ${{ secrets.CRAWL_TOKEN || secrets.GITHUB_TOKEN }}
           CRAWL_APP_ID: ${{ vars.CRAWL_APP_ID }}
           CRAWL_APP_KEY: ${{ secrets.CRAWL_APP_KEY }}
-          TRIAGE_MINUTES: 20
+          TRIAGE_MINUTES: 10
       # The repositories found with no release, looked at for a source that builds; each is due weekly or monthly
       - name: sources
         run: bun run sources
@@ -85,7 +82,7 @@ jobs:
         run: bun run crawl
         working-directory: ender-index
         continue-on-error: true
-        timeout-minutes: 300
+        timeout-minutes: 60
         env:
           GITHUB_TOKEN: ${{ secrets.CRAWL_TOKEN || secrets.GITHUB_TOKEN }}
           CRAWL_APP_ID: ${{ vars.CRAWL_APP_ID }}
@@ -94,7 +91,7 @@ jobs:
           # the crawl's alone
           CRAWL_RESERVE: ${{ !vars.CRAWL_APP_ID && secrets.CRAWL_TOKEN && '1000' || '0' }}
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
-          CRAWL_MINUTES: 240
+          CRAWL_MINUTES: 45
       # Again from what is on disk: a crawl stopped by its step's limit wrote records but never listed them
       - name: lists
         if: always() && steps.crawl.outcome != 'success'
