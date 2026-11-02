@@ -111,11 +111,14 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "Crawl $(date -u +%F)"
           # A pack listed while the crawl ran rebuilt the same lists: the crawl's records win, and the lists are built
-          # again from both
+          # again from both, only when the pull brought data
+          base=$(git rev-parse HEAD~1)
           git pull --rebase -X theirs
-          bun run lists
-          git add data
-          git diff --cached --quiet || git commit --amend --no-edit
+          if ! git diff --quiet "$base" HEAD~1 -- data; then
+            bun run lists
+            git add data
+            git diff --cached --quiet || git commit --amend --no-edit
+          fi
           git push
       - uses: actions/cache/save@v4
         if: always()
