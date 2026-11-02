@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from 'bun:test';
 
+import { RateLimited } from '../src/fetch';
 import * as github from '../src/github';
 import { assetIdOf, fromGraphql, repositoriesQuery } from '../src/graphqlRepos';
 import { notesOf } from '../src/record';
@@ -127,6 +128,48 @@ describe('the crawl reading repositories in batches', () => {
 				.flat()
 				.sort(),
 		).toEqual([...names].sort());
+	});
+
+	test('waits out a limit that resets within a minute or two, every batch together, rather than spending REST', async () => {
+		const names = Array.from({ length: github.REPOSITORY_BATCH * 5 }, (_, at) => `a/m${at}`);
+		const { ask: answer } = answering();
+		const slept = [];
+		let limited = 1;
+		const ask = async query => {
+			if (limited-- > 0) throw new RateLimited('slow down', Date.now() + 60_000);
+
+			return answer(query);
+		};
+
+		globalThis.fetch = async url => {
+			throw new Error(`REST was asked for ${url}`);
+		};
+		github.planRepositories(names, { ask, keep: async () => {}, sleep: async ms => slept.push(ms) });
+
+		expect((await github.repository('a/m0')).full_name).toBe('a/m0');
+		expect((await github.repository(`a/m${github.REPOSITORY_BATCH}`)).full_name).toBe(`a/m${github.REPOSITORY_BATCH}`);
+		expect((await github.repository(`a/m${github.REPOSITORY_BATCH * 4}`)).full_name).toBe(
+			`a/m${github.REPOSITORY_BATCH * 4}`,
+		);
+		expect(slept.filter(ms => ms > 55_000)).toHaveLength(2);
+	});
+
+	test('reads a batch over REST when the limit resets later than is worth waiting for', async () => {
+		const rest = [];
+		const ask = async () => {
+			throw new RateLimited('spent', Date.now() + github.GRAPHQL_WAIT + 60_000);
+		};
+
+		globalThis.fetch = async url => {
+			rest.push(String(url).replace('https://api.github.com', ''));
+
+			return new Response('[]', { status: 200 });
+		};
+		github.planRepositories(['a/here'], { ask, keep: async () => {}, sleep: async () => {} });
+
+		await github.releases('a/here');
+
+		expect(rest).toEqual(['/repos/a/here/releases?per_page=30']);
 	});
 
 	test('leaves to REST a repository GraphQL found nothing for, a page past the first, and one not planned', async () => {

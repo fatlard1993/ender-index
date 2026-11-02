@@ -1030,10 +1030,12 @@ export const crawl = async ({ only } = {}) => {
 
 	console.log(spendingLine(github.spent()));
 
-	const { asked, failed } = github.batchesAsked();
+	const { asked, failed, waits } = github.batchesAsked();
 
 	if (asked > 0)
-		console.log(`GraphQL answered ${asked - failed} of ${asked} batches of repositories; the rest went to REST`);
+		console.log(
+			`GraphQL answered ${asked - failed} of ${asked} batches of repositories, waiting out its short limit ${waits} times; the rest went to REST`,
+		);
 
 	if (renames.size > 0) {
 		await writeJson(

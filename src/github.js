@@ -228,19 +228,25 @@ export const REPOSITORY_BATCH = 10;
 /** Batches asked for ahead of the one the crawl is reading, so the next is there when it gets to it. */
 const AHEAD = 3;
 
-let planned = { batches: [], batchOf: new Map(), loads: [], ask: undefined, keep: undefined };
+let planned = { batches: [], batchOf: new Map(), loads: [], ask: undefined, keep: undefined, sleep: Bun.sleep };
 
-const batched = { asked: 0, failed: 0 };
-
-/** How many GraphQL batches the crawl asked for, and how many of those fell back to REST. */
-export const batchesAsked = () => ({ ...batched });
+const batched = { asked: 0, failed: 0, waits: 0 };
 
 /**
- * Read these repositories' details and first page of releases over GraphQL, REPOSITORY_BATCH to a query, as the
- * crawl comes to them in this order: GraphQL's limit is counted apart from REST's, and one query answers for many
- * repositories. Each answer is kept as the REST requests would keep it, so the crawl's order by when each was read
- * holds, and a batch GitHub will not answer leaves its repositories to REST.
+ * The longest GraphQL limit a batch waits out rather than reading its repositories over REST. GitHub's limit on how
+ * fast queries come resets in a minute; reading a batch over REST instead spends twenty of the hour's requests.
  */
+export const GRAPHQL_WAIT = 2 * 60 * 1000;
+
+/** Tries a batch gets at a short limit before it goes to REST after all. */
+const GRAPHQL_TRIES = 5;
+
+/** When GraphQL may be asked again: every batch waits for a short limit together, not only the one that met it. */
+let graphqlResumes = 0;
+
+/** How many GraphQL batches the crawl asked for, how many of those fell back to REST, and how often one waited. */
+export const batchesAsked = () => ({ ...batched });
+
 /** A repository's answers kept as its REST requests would keep them, as read now. */
 const keepAnswers = async (name, repo, listed) => {
 	const kept = await cache();
@@ -250,7 +256,13 @@ const keepAnswers = async (name, repo, listed) => {
 	kept[releasesPath(name)] = { ...kept[releasesPath(name)], fetched: now, body: listed };
 };
 
-export const planRepositories = (names, { ask = graphql, keep = keepAnswers } = {}) => {
+/**
+ * Read these repositories' details and first page of releases over GraphQL, REPOSITORY_BATCH to a query, as the
+ * crawl comes to them in this order: GraphQL's limit is counted apart from REST's, and one query answers for many
+ * repositories. Each answer is kept as the REST requests would keep it, so the crawl's order by when each was read
+ * holds, and a batch GitHub will not answer leaves its repositories to REST.
+ */
+export const planRepositories = (names, { ask = graphql, keep = keepAnswers, sleep = Bun.sleep } = {}) => {
 	const batches = [];
 
 	for (let at = 0; at < names.length; at += REPOSITORY_BATCH) batches.push(names.slice(at, at + REPOSITORY_BATCH));
@@ -261,7 +273,9 @@ export const planRepositories = (names, { ask = graphql, keep = keepAnswers } = 
 		loads: [],
 		ask,
 		keep,
+		sleep,
 	};
+	graphqlResumes = 0;
 };
 
 const TOO_HEAVY = /Resource limits for this query exceeded/;
@@ -283,13 +297,30 @@ const askInHalves = async names => {
 	}
 };
 
+/** A batch's answer, waiting out a limit that resets within GRAPHQL_WAIT, with every other batch. */
+const askWaiting = async names => {
+	for (let tries = 1; ; ++tries) {
+		await planned.sleep(Math.max(graphqlResumes - Date.now(), 0));
+
+		try {
+			return await askInHalves(names);
+		} catch (error) {
+			if (!(error instanceof RateLimited) || error.resetAt - Date.now() > GRAPHQL_WAIT || tries === GRAPHQL_TRIES)
+				throw error;
+
+			++batched.waits;
+			graphqlResumes = Math.max(graphqlResumes, error.resetAt + 1000);
+		}
+	}
+};
+
 const loadBatch = async at => {
 	const names = planned.batches[at];
 
 	++batched.asked;
 
 	try {
-		const data = await askInHalves(names);
+		const data = await askWaiting(names);
 		const found = new Map();
 
 		for (const [index, name] of names.entries()) {
@@ -351,10 +382,10 @@ export const searchCode = (query, page = 1) =>
 export const searchRepositories = (query, page = 1) =>
 	request(`/search/repositories?${new URLSearchParams({ q: query, per_page: '100', page: String(page) })}`);
 
-/** A gist, with each of its files' contents: a file over a megabyte comes truncated, with a raw_url to the whole of it. */
 /**
- * A public gist, asked for with no token: GitHub refuses an App's installation token the gists API, and an answer
- * without one counts against an allowance apart from the crawl's, so it is kept out of what the crawl has spent.
+ * A gist, with each of its files' contents: a file over a megabyte comes truncated, with a raw_url to the whole of it.
+ * It is asked for with no token: GitHub refuses an App's installation token the gists API, and an answer without one
+ * counts against an allowance apart from the crawl's, so it is kept out of what the crawl has spent.
  */
 export const gist = async id => {
 	const path = `/gists/${id}`;
