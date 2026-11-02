@@ -125,19 +125,32 @@ export const coalesce = tagged => {
 	const named = new Map(kept.map(tag => [tag, tag]));
 	const themeOf = tag => (named.get(tag) === tag ? tag : themeOf(named.get(tag)));
 
+	const keptOf = new Map();
+
 	for (const [at, tag] of kept.entries()) {
-		for (const other of kept.slice(0, at)) {
-			const [a, b] = [holders.get(tag), holders.get(other)];
-			let both = 0;
+		for (const key of holders.get(tag)) {
+			if (!keptOf.has(key)) keptOf.set(key, []);
 
-			for (const key of a) if (b.has(key)) ++both;
-
-			if (both / (a.size + b.size - both) >= TOGETHER) {
-				named.set(themeOf(tag), themeOf(other));
-
-				break;
-			}
+			keptOf.get(key).push(at);
 		}
+	}
+
+	for (const [at, tag] of kept.entries()) {
+		const shared = new Map();
+
+		for (const key of holders.get(tag)) {
+			for (const other of keptOf.get(key)) if (other < at) shared.set(other, (shared.get(other) ?? 0) + 1);
+		}
+
+		const size = holders.get(tag).size;
+		let first;
+
+		for (const [other, both] of shared) {
+			if ((first === undefined || other < first) && both / (size + holders.get(kept[other]).size - both) >= TOGETHER)
+				first = other;
+		}
+
+		if (first !== undefined) named.set(themeOf(tag), themeOf(kept[first]));
 	}
 
 	const themes = new Map();
