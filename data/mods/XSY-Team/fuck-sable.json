@@ -6,8 +6,66 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-06-09T01:27:35Z",
-	"pushed": "2026-10-28T11:05:09Z",
+	"pushed": "2026-11-02T14:38:23Z",
 	"releases": [
+		{
+			"tag": "v1.8.0",
+			"published": "2026-11-02T14:38:23Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 702056563,
+					"name": "fuck-sable-1.8.0.jar",
+					"url": "https://github.com/XSY-Team/fuck-sable/releases/download/v1.8.0/fuck-sable-1.8.0.jar",
+					"size": 203063,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "7104ad0d3823b02ea047c7043103987476dcbe3230ce323bf2c68d11781bc13d",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "fucksable",
+							"version": "1.8.0",
+							"name": "fuck Sable",
+							"description": "Patches Sable sub-level saving to be async and handle corrupted data gracefully",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"sable"
+							]
+						}
+					],
+					"icon": "b8d2874fbf53ded86844100adb20204b2340c22ce0af8ca8c10b024cbb9a77d5.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 66,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/fucksable/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.github.com": [
+								"dev/fucksable/update/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Sable 2.0.6 适配 / Sable 2.0.6 support\nUpdated to sable-neoforge-1.21.1-2.0.6 and the matching sable_rapier dependency.\n依赖更新为 sable-neoforge-1.21.1-2.0.6 及对应的 sable_rapier。\n\n## 子结构磁盘 I/O 重构 / Sub-level I/O rework\nAll sub-level disk operations (save, flush, pruneCache) now run on a single FIFO queue per storage, removing concurrent access to non-thread-safe caches.\n所有子结构磁盘操作（保存、flush、pruneCache）改为每个存储实例单线程 FIFO 队列，消除对非线程安全缓存的并发访问。修复存档时卡住、pruneCache 长时间阻塞 tick 以及保存子结构时的 NPE。\n\n## Vista 5.5+/5.6 兼容 / Vista 5.5+/5.6 compatibility\nVista moved chunk force-loading to `setZoneChunksForced`. fs now projects the zone center out of sub-levels there and keeps the legacy injection with `require = 0`.\nVista 将区块 force-load 统一到 `setZoneChunksForced`，fs 在该入口将区域中心投影出子结构，并为旧版注入加上 `require = 0`。修复 Vista 5.5.0+ 进服崩溃。\n\n## 高度传感器渲染 NPE / Altitude sensor render NPE\nFixed an NPE in Simulated's altitude sensor rendering on Create contraptions when `MovementContext.position` is null.\n修复 Simulated 高度传感器在动态结构上渲染时 `MovementContext.position` 为空导致的 NPE。\n\n## 跨坐标系射线防护 / Cross-coordinate ray guard\nRaycasts longer than 1024 blocks now return a miss, preventing Sable's mixed world/layout coordinate rays from stalling the client tick for seconds.\n超过 1024 格的射线直接返回未命中，避免 Sable 跨坐标系射线导致客户端 tick 卡住数秒。"
+		},
 		{
 			"tag": "v1.7.25",
 			"published": "2026-08-10T04:37:15Z",
@@ -18,7 +76,7 @@
 					"name": "fuck-sable-1.7.25.jar",
 					"url": "https://github.com/XSY-Team/fuck-sable/releases/download/v1.7.25/fuck-sable-1.7.25.jar",
 					"size": 190366,
-					"downloads": 88,
+					"downloads": 89,
 					"inspection": 2,
 					"sha256": "a3be4cbc45a694f826102641f5e05edc939ecac01456704d4ebe1adf4862c763",
 					"mods": [
@@ -76,7 +134,7 @@
 					"name": "fuck-sable-1.7.24.jar",
 					"url": "https://github.com/XSY-Team/fuck-sable/releases/download/v1.7.24/fuck-sable-1.7.24.jar",
 					"size": 190076,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "b84200667ce6cf65994969c2036c78a8844df1ceb58288a87bcc375db0269307",
 					"mods": [
@@ -134,7 +192,7 @@
 					"name": "fuck-sable-1.7.23.jar",
 					"url": "https://github.com/XSY-Team/fuck-sable/releases/download/v1.7.23/fuck-sable-1.7.23.jar",
 					"size": 188917,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "d54b55ca2c077608d3a5d070b147b0ad50adfd58645ac6aeddbdc76bfdffdce0",
 					"mods": [
@@ -192,7 +250,7 @@
 					"name": "fuck-sable-1.7.22.jar",
 					"url": "https://github.com/XSY-Team/fuck-sable/releases/download/v1.7.22/fuck-sable-1.7.22.jar",
 					"size": 188376,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "32ab918c21a092099afd1539d2214415e55c8084c47de410e2b731a971bf62ee",
 					"mods": [
@@ -308,7 +366,7 @@
 					"name": "fuck-sable-1.7.10.jar",
 					"url": "https://github.com/XSY-Team/fuck-sable/releases/download/v1.7.10/fuck-sable-1.7.10.jar",
 					"size": 182141,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "c70eab15a2e0de4c5f15c8cb77dcb473e31cb57c9a3afa64b4182b8c364d7d94",
 					"mods": [

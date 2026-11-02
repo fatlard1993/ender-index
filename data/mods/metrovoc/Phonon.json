@@ -6,8 +6,1116 @@
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2025-12-01T13:40:22Z",
-	"pushed": "2026-07-15T09:33:39Z",
+	"pushed": "2026-11-02T19:01:11Z",
 	"releases": [
+		{
+			"tag": "v0.3.0-beta.2+mc1.21.1",
+			"published": "2026-11-02T19:00:08Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 702833129,
+					"name": "phonon-neoforge-1.21.1-0.3.0-beta.2+mc1.21.1.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-beta.2%2Bmc1.21.1/phonon-neoforge-1.21.1-0.3.0-beta.2%2Bmc1.21.1.jar",
+					"size": 258039,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "3e10f682bc9fe5fcf1fb0a9a5d877563421cd8f849f8f8eb3f36135056b3382e",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-beta.2+mc1.21.1",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Speaker"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 84,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/AudioTools.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/AudioTools.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/metrovoc/phonon/server/AudioToolManifest.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-beta.2\n\nFirst published beta, for Minecraft 26.2 and 1.21.1. Other targets stay at\n`0.3.0-alpha.3`. The `0.3.0-beta.1` tags pointed at the wrong commits, so the\nrelease checks rejected them. They produced no release and remain reserved. The\nonly change since the tested commit is this version number and these notes.\n\n### Test evidence\n\n- Target: Minecraft 1.21.1, NeoForge 21.1.235, Java 21, commit `65f0555`, tested on macOS on Apple Silicon.\n- Automated tests and the scripted checklist (`neoforge/driver/checklist`) pass in\n  the real client and on a dedicated server: play, pause, resume, seek, stop,\n  volume, several speakers, automatic stop, resource reload, rejoin, server\n  restart, and a player without operator permission.\n- Sync between two clients on one machine: a late joiner's playback clock was\n  within 10 ms of the first player's, and 5 ms after a seek. This compares\n  playback clocks, not the sound itself.\n- In-game tool install, YouTube link and music folder import pass on this target.\n\n### Not tested\n\n- Nobody has listened to this build, including the volume slider change.\n- Windows and Linux, including the tool downloads on those systems.\n- Two computers over a real network, and multi-hour sessions.\n- `/phonon tools update`, `allowToolInstall=false`, and non-default `audioQuality`.\n\n### Known issues\n\n- Pausing a singleplayer game may leave audio behind the playback clock. This is\n  suspected from the code and hasn't been measured.\n- On 1.21.1, resource reload can log `Stop: Invalid name parameter`. Playback\n  recovers.\n\n### Getting started\n\n- List the Speaker in the creative menu, unlock its recipe on picking up a\n  jukebox, and add a first advancement.\n- Offer to install yt-dlp, FFmpeg and Deno from chat when an operator needs them,\n  using pinned builds with verified checksums, then retry the add. Turn this off\n  with `allowToolInstall`. Add `/phonon tools` to see what was found and update\n  yt-dlp.\n- Import audio files from `phonon_music` in the world folder on startup and on\n  `/phonon reload`.\n- `/phonon add` no longer needs a name or quotes: it can use the video's title.\n\n### Playback\n\n- Follow the Jukebox/Note Blocks volume slider instead of Blocks.\n- Show the vanilla \"Now Playing\" line when a nearby speaker starts a new track.\n\n### Messages\n\n- Say why adding audio failed and what to do about it, instead of always blaming\n  yt-dlp.\n- Translate all GUI and command text, and add Simplified Chinese.\n\n### Fixes and settings\n\n- Save the track list on every change, so `/phonon reload` no longer forgets\n  tracks added since the server started.\n- Add the `audioQuality` server setting.\n\n## 0.3.0-alpha.3\n\nThis alpha fixes bugs reported by players. It passes compilation and automated\ntests on every target. Manual gameplay testing is still outstanding, so this\nbuild remains alpha.\n\n### Fixes\n\n- Restore speaker and config screen text on targets where the game skips\n  colours with zero alpha.\n- Run yt-dlp directly instead of probing it with a 5 second limit, which could\n  report a slow start as \"not found\" and block the server thread.\n- Log yt-dlp's output when it fails, and the `PATH` when it cannot start.\n- Keep the track list highlight inside the selection box on Minecraft 1.21.1\n  through 1.21.8.\n\n## 0.3.0-alpha.1\n\nThis is an alpha build. Every target passes compilation and automated tests,\nand selected targets pass server or client startup smoke tests, but each\npublished Minecraft target still requires manual in-game validation before\npromotion to beta.\n\n### Performance\n\n- Move OGG page indexing from whole-file reads to bounded sequential channel\n  reads.\n- Move server audio reads off the tick thread, keep file channels open per\n  transfer, prefetch two chunks, and schedule players fairly under global and\n  per-player byte budgets.\n- Remove repeated packet splitting and full-buffer cache assembly from client\n  streaming.\n\n..."
+		},
+		{
+			"tag": "v0.3.0-beta.2+mc26.2",
+			"published": "2026-11-02T18:59:24Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 702830850,
+					"name": "phonon-neoforge-26.2-0.3.0-beta.2+mc26.2.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-beta.2%2Bmc26.2/phonon-neoforge-26.2-0.3.0-beta.2%2Bmc26.2.jar",
+					"size": 259240,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "93d6783871144fc877c590472a0b026f1ee421a9c3f63377e67e78fffef35b81",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-beta.2+mc26.2",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[26.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Speaker"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 84,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/AudioTools.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/AudioTools.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/metrovoc/phonon/server/AudioToolManifest.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-beta.2\n\nFirst published beta, for Minecraft 26.2 and 1.21.1. Other targets stay at\n`0.3.0-alpha.3`. The `0.3.0-beta.1` tags pointed at the wrong commits, so the\nrelease checks rejected them. They produced no release and remain reserved. The\nonly change since the tested commit is this version number and these notes.\n\n### Test evidence\n\n- Target: Minecraft 26.2, NeoForge 26.2.0.93, Java 25, commit `ed93699`, tested on macOS on Apple Silicon.\n- Automated tests and the scripted checklist (`neoforge/driver/checklist`) pass in\n  the real client and on a dedicated server: play, pause, resume, seek, stop,\n  volume, several speakers, automatic stop, resource reload, rejoin, server\n  restart, and a player without operator permission.\n- Sync between two clients on one machine: a late joiner's playback clock was\n  within 21 ms of the first player's, and 16 ms after a seek. This compares\n  playback clocks, not the sound itself.\n- In-game tool install, YouTube link and music folder import pass on this target.\n\n### Not tested\n\n- Nobody has listened to this build, including the volume slider change.\n- Windows and Linux, including the tool downloads on those systems.\n- Two computers over a real network, and multi-hour sessions.\n- `/phonon tools update`, `allowToolInstall=false`, and non-default `audioQuality`.\n\n### Known issues\n\n- Pausing a singleplayer game may leave audio behind the playback clock. This is\n  suspected from the code and hasn't been measured.\n- On 1.21.1, resource reload can log `Stop: Invalid name parameter`. Playback\n  recovers.\n\n### Getting started\n\n- List the Speaker in the creative menu, unlock its recipe on picking up a\n  jukebox, and add a first advancement.\n- Offer to install yt-dlp, FFmpeg and Deno from chat when an operator needs them,\n  using pinned builds with verified checksums, then retry the add. Turn this off\n  with `allowToolInstall`. Add `/phonon tools` to see what was found and update\n  yt-dlp.\n- Import audio files from `phonon_music` in the world folder on startup and on\n  `/phonon reload`.\n- `/phonon add` no longer needs a name or quotes: it can use the video's title.\n\n### Playback\n\n- Follow the Jukebox/Note Blocks volume slider instead of Blocks.\n- Show the vanilla \"Now Playing\" line when a nearby speaker starts a new track.\n\n### Messages\n\n- Say why adding audio failed and what to do about it, instead of always blaming\n  yt-dlp.\n- Translate all GUI and command text, and add Simplified Chinese.\n\n### Fixes and settings\n\n- Save the track list on every change, so `/phonon reload` no longer forgets\n  tracks added since the server started.\n- Add the `audioQuality` server setting.\n\n## 0.3.0-alpha.3\n\nThis alpha fixes bugs reported by players. It passes compilation and automated\ntests on every target. Manual gameplay testing is still outstanding, so this\nbuild remains alpha.\n\n### Fixes\n\n- Restore speaker and config screen text on targets where the game skips\n  colours with zero alpha.\n- Run yt-dlp directly instead of probing it with a 5 second limit, which could\n  report a slow start as \"not found\" and block the server thread.\n- Log yt-dlp's output when it fails, and the `PATH` when it cannot start.\n- Keep the track list highlight inside the selection box on Minecraft 1.21.1\n  through 1.21.8.\n\n## 0.3.0-alpha.2\n\nThis Minecraft 26.2 replacement build contains no runtime changes. It corrects\nthe GitHub Actions tag filter so the validated artifact can be published. The\n`v0.3.0-alpha.1+mc26.2` tag produced no GitHub, Modrinth, or CurseForge release\nand remains reserved rather than being moved or reused. Manual gameplay testing\nis still outstanding, so this build remains alpha.\n\n## 0.3.0-alpha.1\n\nThis is an alpha build. Every target passes compilation and automated tests,\nand selected targets pass server or client startup smoke tests, but each\npublished Minecraft target still requires manual in-game validation before\npromotion to beta.\n\n### Performance\n\n\n..."
+		},
+		{
+			"tag": "v0.3.0-alpha.3+mc1.21.9",
+			"published": "2026-11-02T06:36:00Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 700784100,
+					"name": "phonon-neoforge-1.21.9-0.3.0-alpha.3+mc1.21.9.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-alpha.3%2Bmc1.21.9/phonon-neoforge-1.21.9-0.3.0-alpha.3%2Bmc1.21.9.jar",
+					"size": 219538,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "958a975e57aeb98bc6cb02dafe4e950972691b4386715fd6a5ebd687111f54c1",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-alpha.3+mc1.21.9",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[1.21.9]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Speaker"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 71,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-alpha.3\n\nThis alpha fixes bugs reported by players. It passes compilation and automated\ntests on every target. Manual gameplay testing is still outstanding, so this\nbuild remains alpha.\n\n### Fixes\n\n- Restore speaker and config screen text on targets where the game skips\n  colours with zero alpha.\n- Run yt-dlp directly instead of probing it with a 5 second limit, which could\n  report a slow start as \"not found\" and block the server thread.\n- Log yt-dlp's output when it fails, and the `PATH` when it cannot start.\n- Keep the track list highlight inside the selection box on Minecraft 1.21.1\n  through 1.21.8.\n\n## 0.3.0-alpha.1\n\nThis is an alpha build. Every target passes compilation and automated tests,\nand selected targets pass server or client startup smoke tests, but each\npublished Minecraft target still requires manual in-game validation before\npromotion to beta.\n\n### Performance\n\n- Move OGG page indexing from whole-file reads to bounded sequential channel\n  reads.\n- Move server audio reads off the tick thread, keep file channels open per\n  transfer, prefetch two chunks, and schedule players fairly under global and\n  per-player byte budgets.\n- Remove repeated packet splitting and full-buffer cache assembly from client\n  streaming.\n- Decode PCM directly into OpenAL-bound buffers and retain partial Vorbis frames\n  without reallocating native scratch memory on every fill.\n- Share compressed cached OGG bytes across speakers while keeping independent\n  decoder state.\n- Replace repeated collision ray clips with staggered block traversal for\n  acoustic occlusion.\n- Cache sorted audio metadata snapshots and normalized client search keys.\n\n### Reliability and security\n\n- Add explicit stream IDs, ordered chunks, cancellation, reference-counted\n  shared downloads, and safe forward-only stream reuse.\n- Use monotonic local playback clocks and latency-adjusted state snapshots\n  instead of comparing wall clocks across machines.\n- Validate speaker interaction distance, resource IDs, actions, seek bounds,\n  volume, packet collection sizes, strings, headers, chunks, and sample rates.\n- Validate OGG Vorbis files before registration and bound direct downloads and\n  converted file sizes.\n- Save metadata and cached streams through temporary files with atomic\n  replacement where supported.\n- Enforce the configured client cache limit and clean incomplete cache files.\n- Reset server and client streaming state across disconnects, resource reloads,\n  and repeated integrated-server lifecycles.\n\n### Build and release management\n\n- Add exact-target release branches for Minecraft 1.21.1 through 1.21.11, 26.1,\n  26.1.1, 26.1.2, and 26.2; `main` targets 26.2.\n- Pin each branch to its matching NeoForge release. Minecraft 1.21.x uses Java\n  21, while Minecraft 26.x uses Java 25.\n- Remove unused Mixin declarations and replace the optional Cloth Config screen\n  with a dependency-free vanilla screen.\n- Add unit tests for OGG indexing, seek lookup, segmented buffering, playback\n  clocks, metadata indexes, persistence, and stream sharing.\n- Add explicit alpha, beta, and release channel mapping with version-qualified\n  Minecraft tags and guarded GitHub publishing environments.\n- Pass dedicated-server startup smoke tests on 1.21.1, 1.21.2, 1.21.4, 1.21.9,\n  26.1, and 26.2, plus a 26.2 client resource and audio-engine startup smoke\n  test. The full multiplayer and playback checklist remains untested.\n\n\n**Full Changelog**: https://github.com/metrovoc/Phonon/compare/v0.3.0-alpha.1+mc1.21.9...v0.3.0-alpha.3+mc1.21.9"
+		},
+		{
+			"tag": "v0.3.0-alpha.3+mc1.21.7",
+			"published": "2026-11-02T06:35:59Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 700784053,
+					"name": "phonon-neoforge-1.21.7-0.3.0-alpha.3+mc1.21.7.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-alpha.3%2Bmc1.21.7/phonon-neoforge-1.21.7-0.3.0-alpha.3%2Bmc1.21.7.jar",
+					"size": 219389,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "f3b044b30be1600807e13aaa937dd2688c1a83945c089dba10801f25c847f04a",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-alpha.3+mc1.21.7",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[1.21.7]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Speaker"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 71,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-alpha.3\n\nThis alpha fixes bugs reported by players. It passes compilation and automated\ntests on every target. Manual gameplay testing is still outstanding, so this\nbuild remains alpha.\n\n### Fixes\n\n- Restore speaker and config screen text on targets where the game skips\n  colours with zero alpha.\n- Run yt-dlp directly instead of probing it with a 5 second limit, which could\n  report a slow start as \"not found\" and block the server thread.\n- Log yt-dlp's output when it fails, and the `PATH` when it cannot start.\n- Keep the track list highlight inside the selection box on Minecraft 1.21.1\n  through 1.21.8.\n\n## 0.3.0-alpha.1\n\nThis is an alpha build. Every target passes compilation and automated tests,\nand selected targets pass server or client startup smoke tests, but each\npublished Minecraft target still requires manual in-game validation before\npromotion to beta.\n\n### Performance\n\n- Move OGG page indexing from whole-file reads to bounded sequential channel\n  reads.\n- Move server audio reads off the tick thread, keep file channels open per\n  transfer, prefetch two chunks, and schedule players fairly under global and\n  per-player byte budgets.\n- Remove repeated packet splitting and full-buffer cache assembly from client\n  streaming.\n- Decode PCM directly into OpenAL-bound buffers and retain partial Vorbis frames\n  without reallocating native scratch memory on every fill.\n- Share compressed cached OGG bytes across speakers while keeping independent\n  decoder state.\n- Replace repeated collision ray clips with staggered block traversal for\n  acoustic occlusion.\n- Cache sorted audio metadata snapshots and normalized client search keys.\n\n### Reliability and security\n\n- Add explicit stream IDs, ordered chunks, cancellation, reference-counted\n  shared downloads, and safe forward-only stream reuse.\n- Use monotonic local playback clocks and latency-adjusted state snapshots\n  instead of comparing wall clocks across machines.\n- Validate speaker interaction distance, resource IDs, actions, seek bounds,\n  volume, packet collection sizes, strings, headers, chunks, and sample rates.\n- Validate OGG Vorbis files before registration and bound direct downloads and\n  converted file sizes.\n- Save metadata and cached streams through temporary files with atomic\n  replacement where supported.\n- Enforce the configured client cache limit and clean incomplete cache files.\n- Reset server and client streaming state across disconnects, resource reloads,\n  and repeated integrated-server lifecycles.\n\n### Build and release management\n\n- Add exact-target release branches for Minecraft 1.21.1 through 1.21.11, 26.1,\n  26.1.1, 26.1.2, and 26.2; `main` targets 26.2.\n- Pin each branch to its matching NeoForge release. Minecraft 1.21.x uses Java\n  21, while Minecraft 26.x uses Java 25.\n- Remove unused Mixin declarations and replace the optional Cloth Config screen\n  with a dependency-free vanilla screen.\n- Add unit tests for OGG indexing, seek lookup, segmented buffering, playback\n  clocks, metadata indexes, persistence, and stream sharing.\n- Add explicit alpha, beta, and release channel mapping with version-qualified\n  Minecraft tags and guarded GitHub publishing environments.\n- Pass dedicated-server startup smoke tests on 1.21.1, 1.21.2, 1.21.4, 1.21.9,\n  26.1, and 26.2, plus a 26.2 client resource and audio-engine startup smoke\n  test. The full multiplayer and playback checklist remains untested.\n\n\n**Full Changelog**: https://github.com/metrovoc/Phonon/compare/v0.3.0-alpha.1+mc1.21.7...v0.3.0-alpha.3+mc1.21.7"
+		},
+		{
+			"tag": "v0.3.0-alpha.3+mc26.1.2",
+			"published": "2026-11-02T06:35:58Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 700784007,
+					"name": "phonon-neoforge-26.1.2-0.3.0-alpha.3+mc26.1.2.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-alpha.3%2Bmc26.1.2/phonon-neoforge-26.1.2-0.3.0-alpha.3%2Bmc26.1.2.jar",
+					"size": 219698,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "683e12b15760331abc179ec3dea4e2f1743932f787011ba75b99b03d74ca32e5",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-alpha.3+mc26.1.2",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[26.1.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Speaker"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 71,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-alpha.3\n\nThis alpha fixes bugs reported by players. It passes compilation and automated\ntests on every target. Manual gameplay testing is still outstanding, so this\nbuild remains alpha.\n\n### Fixes\n\n- Restore speaker and config screen text on targets where the game skips\n  colours with zero alpha.\n- Run yt-dlp directly instead of probing it with a 5 second limit, which could\n  report a slow start as \"not found\" and block the server thread.\n- Log yt-dlp's output when it fails, and the `PATH` when it cannot start.\n- Keep the track list highlight inside the selection box on Minecraft 1.21.1\n  through 1.21.8.\n\n## 0.3.0-alpha.1\n\nThis is an alpha build. Every target passes compilation and automated tests,\nand selected targets pass server or client startup smoke tests, but each\npublished Minecraft target still requires manual in-game validation before\npromotion to beta.\n\n### Performance\n\n- Move OGG page indexing from whole-file reads to bounded sequential channel\n  reads.\n- Move server audio reads off the tick thread, keep file channels open per\n  transfer, prefetch two chunks, and schedule players fairly under global and\n  per-player byte budgets.\n- Remove repeated packet splitting and full-buffer cache assembly from client\n  streaming.\n- Decode PCM directly into OpenAL-bound buffers and retain partial Vorbis frames\n  without reallocating native scratch memory on every fill.\n- Share compressed cached OGG bytes across speakers while keeping independent\n  decoder state.\n- Replace repeated collision ray clips with staggered block traversal for\n  acoustic occlusion.\n- Cache sorted audio metadata snapshots and normalized client search keys.\n\n### Reliability and security\n\n- Add explicit stream IDs, ordered chunks, cancellation, reference-counted\n  shared downloads, and safe forward-only stream reuse.\n- Use monotonic local playback clocks and latency-adjusted state snapshots\n  instead of comparing wall clocks across machines.\n- Validate speaker interaction distance, resource IDs, actions, seek bounds,\n  volume, packet collection sizes, strings, headers, chunks, and sample rates.\n- Validate OGG Vorbis files before registration and bound direct downloads and\n  converted file sizes.\n- Save metadata and cached streams through temporary files with atomic\n  replacement where supported.\n- Enforce the configured client cache limit and clean incomplete cache files.\n- Reset server and client streaming state across disconnects, resource reloads,\n  and repeated integrated-server lifecycles.\n\n### Build and release management\n\n- Add exact-target release branches for Minecraft 1.21.1 through 1.21.11, 26.1,\n  26.1.1, 26.1.2, and 26.2; `main` targets 26.2.\n- Pin each branch to its matching NeoForge release. Minecraft 1.21.x uses Java\n  21, while Minecraft 26.x uses Java 25.\n- Remove unused Mixin declarations and replace the optional Cloth Config screen\n  with a dependency-free vanilla screen.\n- Add unit tests for OGG indexing, seek lookup, segmented buffering, playback\n  clocks, metadata indexes, persistence, and stream sharing.\n- Add explicit alpha, beta, and release channel mapping with version-qualified\n  Minecraft tags and guarded GitHub publishing environments.\n- Pass dedicated-server startup smoke tests on 1.21.1, 1.21.2, 1.21.4, 1.21.9,\n  26.1, and 26.2, plus a 26.2 client resource and audio-engine startup smoke\n  test. The full multiplayer and playback checklist remains untested.\n\n\n**Full Changelog**: https://github.com/metrovoc/Phonon/compare/v0.3.0-alpha.1+mc26.1.2...v0.3.0-alpha.3+mc26.1.2"
+		},
+		{
+			"tag": "v0.3.0-alpha.3+mc1.21.11",
+			"published": "2026-11-02T06:35:58Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 700783921,
+					"name": "phonon-neoforge-1.21.11-0.3.0-alpha.3+mc1.21.11.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-alpha.3%2Bmc1.21.11/phonon-neoforge-1.21.11-0.3.0-alpha.3%2Bmc1.21.11.jar",
+					"size": 219604,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "636bcc0811fbba1c2af53f14676f38be92baec23e2287701c789d688a38f94ba",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-alpha.3+mc1.21.11",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[1.21.11]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Speaker"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 71,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-alpha.3\n\nThis alpha fixes bugs reported by players. It passes compilation and automated\ntests on every target. Manual gameplay testing is still outstanding, so this\nbuild remains alpha.\n\n### Fixes\n\n- Restore speaker and config screen text on targets where the game skips\n  colours with zero alpha.\n- Run yt-dlp directly instead of probing it with a 5 second limit, which could\n  report a slow start as \"not found\" and block the server thread.\n- Log yt-dlp's output when it fails, and the `PATH` when it cannot start.\n- Keep the track list highlight inside the selection box on Minecraft 1.21.1\n  through 1.21.8.\n\n## 0.3.0-alpha.1\n\nThis is an alpha build. Every target passes compilation and automated tests,\nand selected targets pass server or client startup smoke tests, but each\npublished Minecraft target still requires manual in-game validation before\npromotion to beta.\n\n### Performance\n\n- Move OGG page indexing from whole-file reads to bounded sequential channel\n  reads.\n- Move server audio reads off the tick thread, keep file channels open per\n  transfer, prefetch two chunks, and schedule players fairly under global and\n  per-player byte budgets.\n- Remove repeated packet splitting and full-buffer cache assembly from client\n  streaming.\n- Decode PCM directly into OpenAL-bound buffers and retain partial Vorbis frames\n  without reallocating native scratch memory on every fill.\n- Share compressed cached OGG bytes across speakers while keeping independent\n  decoder state.\n- Replace repeated collision ray clips with staggered block traversal for\n  acoustic occlusion.\n- Cache sorted audio metadata snapshots and normalized client search keys.\n\n### Reliability and security\n\n- Add explicit stream IDs, ordered chunks, cancellation, reference-counted\n  shared downloads, and safe forward-only stream reuse.\n- Use monotonic local playback clocks and latency-adjusted state snapshots\n  instead of comparing wall clocks across machines.\n- Validate speaker interaction distance, resource IDs, actions, seek bounds,\n  volume, packet collection sizes, strings, headers, chunks, and sample rates.\n- Validate OGG Vorbis files before registration and bound direct downloads and\n  converted file sizes.\n- Save metadata and cached streams through temporary files with atomic\n  replacement where supported.\n- Enforce the configured client cache limit and clean incomplete cache files.\n- Reset server and client streaming state across disconnects, resource reloads,\n  and repeated integrated-server lifecycles.\n\n### Build and release management\n\n- Add exact-target release branches for Minecraft 1.21.1 through 1.21.11, 26.1,\n  26.1.1, 26.1.2, and 26.2; `main` targets 26.2.\n- Pin each branch to its matching NeoForge release. Minecraft 1.21.x uses Java\n  21, while Minecraft 26.x uses Java 25.\n- Remove unused Mixin declarations and replace the optional Cloth Config screen\n  with a dependency-free vanilla screen.\n- Add unit tests for OGG indexing, seek lookup, segmented buffering, playback\n  clocks, metadata indexes, persistence, and stream sharing.\n- Add explicit alpha, beta, and release channel mapping with version-qualified\n  Minecraft tags and guarded GitHub publishing environments.\n- Pass dedicated-server startup smoke tests on 1.21.1, 1.21.2, 1.21.4, 1.21.9,\n  26.1, and 26.2, plus a 26.2 client resource and audio-engine startup smoke\n  test. The full multiplayer and playback checklist remains untested.\n\n\n**Full Changelog**: https://github.com/metrovoc/Phonon/compare/v0.3.0-alpha.1+mc1.21.11...v0.3.0-alpha.3+mc1.21.11"
+		},
+		{
+			"tag": "v0.3.0-alpha.3+mc26.1.1",
+			"published": "2026-11-02T06:35:55Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 700783823,
+					"name": "phonon-neoforge-26.1.1-0.3.0-alpha.3+mc26.1.1.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-alpha.3%2Bmc26.1.1/phonon-neoforge-26.1.1-0.3.0-alpha.3%2Bmc26.1.1.jar",
+					"size": 219703,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "ec926ce7c1dff1d34722e095b33247b82a3b8207e777973889f460fb0d2c1a30",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-alpha.3+mc26.1.1",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[26.1.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Speaker"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 71,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-alpha.3\n\nThis alpha fixes bugs reported by players. It passes compilation and automated\ntests on every target. Manual gameplay testing is still outstanding, so this\nbuild remains alpha.\n\n### Fixes\n\n- Restore speaker and config screen text on targets where the game skips\n  colours with zero alpha.\n- Run yt-dlp directly instead of probing it with a 5 second limit, which could\n  report a slow start as \"not found\" and block the server thread.\n- Log yt-dlp's output when it fails, and the `PATH` when it cannot start.\n- Keep the track list highlight inside the selection box on Minecraft 1.21.1\n  through 1.21.8.\n\n## 0.3.0-alpha.1\n\nThis is an alpha build. Every target passes compilation and automated tests,\nand selected targets pass server or client startup smoke tests, but each\npublished Minecraft target still requires manual in-game validation before\npromotion to beta.\n\n### Performance\n\n- Move OGG page indexing from whole-file reads to bounded sequential channel\n  reads.\n- Move server audio reads off the tick thread, keep file channels open per\n  transfer, prefetch two chunks, and schedule players fairly under global and\n  per-player byte budgets.\n- Remove repeated packet splitting and full-buffer cache assembly from client\n  streaming.\n- Decode PCM directly into OpenAL-bound buffers and retain partial Vorbis frames\n  without reallocating native scratch memory on every fill.\n- Share compressed cached OGG bytes across speakers while keeping independent\n  decoder state.\n- Replace repeated collision ray clips with staggered block traversal for\n  acoustic occlusion.\n- Cache sorted audio metadata snapshots and normalized client search keys.\n\n### Reliability and security\n\n- Add explicit stream IDs, ordered chunks, cancellation, reference-counted\n  shared downloads, and safe forward-only stream reuse.\n- Use monotonic local playback clocks and latency-adjusted state snapshots\n  instead of comparing wall clocks across machines.\n- Validate speaker interaction distance, resource IDs, actions, seek bounds,\n  volume, packet collection sizes, strings, headers, chunks, and sample rates.\n- Validate OGG Vorbis files before registration and bound direct downloads and\n  converted file sizes.\n- Save metadata and cached streams through temporary files with atomic\n  replacement where supported.\n- Enforce the configured client cache limit and clean incomplete cache files.\n- Reset server and client streaming state across disconnects, resource reloads,\n  and repeated integrated-server lifecycles.\n\n### Build and release management\n\n- Add exact-target release branches for Minecraft 1.21.1 through 1.21.11, 26.1,\n  26.1.1, 26.1.2, and 26.2; `main` targets 26.2.\n- Pin each branch to its matching NeoForge release. Minecraft 1.21.x uses Java\n  21, while Minecraft 26.x uses Java 25.\n- Remove unused Mixin declarations and replace the optional Cloth Config screen\n  with a dependency-free vanilla screen.\n- Add unit tests for OGG indexing, seek lookup, segmented buffering, playback\n  clocks, metadata indexes, persistence, and stream sharing.\n- Add explicit alpha, beta, and release channel mapping with version-qualified\n  Minecraft tags and guarded GitHub publishing environments.\n- Pass dedicated-server startup smoke tests on 1.21.1, 1.21.2, 1.21.4, 1.21.9,\n  26.1, and 26.2, plus a 26.2 client resource and audio-engine startup smoke\n  test. The full multiplayer and playback checklist remains untested.\n\n\n**Full Changelog**: https://github.com/metrovoc/Phonon/compare/v0.3.0-alpha.1+mc26.1.1...v0.3.0-alpha.3+mc26.1.1"
+		},
+		{
+			"tag": "v0.3.0-alpha.3+mc1.21.10",
+			"published": "2026-11-02T06:35:51Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 700783655,
+					"name": "phonon-neoforge-1.21.10-0.3.0-alpha.3+mc1.21.10.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-alpha.3%2Bmc1.21.10/phonon-neoforge-1.21.10-0.3.0-alpha.3%2Bmc1.21.10.jar",
+					"size": 219505,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "8f1bfa3e2660c2aef02c0bf5d2c3405bf09b60c9879758ea88165c393a9eb0de",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-alpha.3+mc1.21.10",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[1.21.10]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Speaker"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 71,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-alpha.3\n\nThis alpha fixes bugs reported by players. It passes compilation and automated\ntests on every target. Manual gameplay testing is still outstanding, so this\nbuild remains alpha.\n\n### Fixes\n\n- Restore speaker and config screen text on targets where the game skips\n  colours with zero alpha.\n- Run yt-dlp directly instead of probing it with a 5 second limit, which could\n  report a slow start as \"not found\" and block the server thread.\n- Log yt-dlp's output when it fails, and the `PATH` when it cannot start.\n- Keep the track list highlight inside the selection box on Minecraft 1.21.1\n  through 1.21.8.\n\n## 0.3.0-alpha.1\n\nThis is an alpha build. Every target passes compilation and automated tests,\nand selected targets pass server or client startup smoke tests, but each\npublished Minecraft target still requires manual in-game validation before\npromotion to beta.\n\n### Performance\n\n- Move OGG page indexing from whole-file reads to bounded sequential channel\n  reads.\n- Move server audio reads off the tick thread, keep file channels open per\n  transfer, prefetch two chunks, and schedule players fairly under global and\n  per-player byte budgets.\n- Remove repeated packet splitting and full-buffer cache assembly from client\n  streaming.\n- Decode PCM directly into OpenAL-bound buffers and retain partial Vorbis frames\n  without reallocating native scratch memory on every fill.\n- Share compressed cached OGG bytes across speakers while keeping independent\n  decoder state.\n- Replace repeated collision ray clips with staggered block traversal for\n  acoustic occlusion.\n- Cache sorted audio metadata snapshots and normalized client search keys.\n\n### Reliability and security\n\n- Add explicit stream IDs, ordered chunks, cancellation, reference-counted\n  shared downloads, and safe forward-only stream reuse.\n- Use monotonic local playback clocks and latency-adjusted state snapshots\n  instead of comparing wall clocks across machines.\n- Validate speaker interaction distance, resource IDs, actions, seek bounds,\n  volume, packet collection sizes, strings, headers, chunks, and sample rates.\n- Validate OGG Vorbis files before registration and bound direct downloads and\n  converted file sizes.\n- Save metadata and cached streams through temporary files with atomic\n  replacement where supported.\n- Enforce the configured client cache limit and clean incomplete cache files.\n- Reset server and client streaming state across disconnects, resource reloads,\n  and repeated integrated-server lifecycles.\n\n### Build and release management\n\n- Add exact-target release branches for Minecraft 1.21.1 through 1.21.11, 26.1,\n  26.1.1, 26.1.2, and 26.2; `main` targets 26.2.\n- Pin each branch to its matching NeoForge release. Minecraft 1.21.x uses Java\n  21, while Minecraft 26.x uses Java 25.\n- Remove unused Mixin declarations and replace the optional Cloth Config screen\n  with a dependency-free vanilla screen.\n- Add unit tests for OGG indexing, seek lookup, segmented buffering, playback\n  clocks, metadata indexes, persistence, and stream sharing.\n- Add explicit alpha, beta, and release channel mapping with version-qualified\n  Minecraft tags and guarded GitHub publishing environments.\n- Pass dedicated-server startup smoke tests on 1.21.1, 1.21.2, 1.21.4, 1.21.9,\n  26.1, and 26.2, plus a 26.2 client resource and audio-engine startup smoke\n  test. The full multiplayer and playback checklist remains untested.\n\n\n**Full Changelog**: https://github.com/metrovoc/Phonon/compare/v0.3.0-alpha.1+mc1.21.10...v0.3.0-alpha.3+mc1.21.10"
+		},
+		{
+			"tag": "v0.3.0-alpha.3+mc26.1",
+			"published": "2026-11-02T06:35:43Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 700783324,
+					"name": "phonon-neoforge-26.1-0.3.0-alpha.3+mc26.1.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-alpha.3%2Bmc26.1/phonon-neoforge-26.1-0.3.0-alpha.3%2Bmc26.1.jar",
+					"size": 219699,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "99f8ad00ed4675b6dc61de5677d25a0c90e7e19dbb331ffd19d644e322de9866",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-alpha.3+mc26.1",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[26.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Speaker"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 71,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-alpha.3\n\nThis alpha fixes bugs reported by players. It passes compilation and automated\ntests on every target. Manual gameplay testing is still outstanding, so this\nbuild remains alpha.\n\n### Fixes\n\n- Restore speaker and config screen text on targets where the game skips\n  colours with zero alpha.\n- Run yt-dlp directly instead of probing it with a 5 second limit, which could\n  report a slow start as \"not found\" and block the server thread.\n- Log yt-dlp's output when it fails, and the `PATH` when it cannot start.\n- Keep the track list highlight inside the selection box on Minecraft 1.21.1\n  through 1.21.8.\n\n## 0.3.0-alpha.1\n\nThis is an alpha build. Every target passes compilation and automated tests,\nand selected targets pass server or client startup smoke tests, but each\npublished Minecraft target still requires manual in-game validation before\npromotion to beta.\n\n### Performance\n\n- Move OGG page indexing from whole-file reads to bounded sequential channel\n  reads.\n- Move server audio reads off the tick thread, keep file channels open per\n  transfer, prefetch two chunks, and schedule players fairly under global and\n  per-player byte budgets.\n- Remove repeated packet splitting and full-buffer cache assembly from client\n  streaming.\n- Decode PCM directly into OpenAL-bound buffers and retain partial Vorbis frames\n  without reallocating native scratch memory on every fill.\n- Share compressed cached OGG bytes across speakers while keeping independent\n  decoder state.\n- Replace repeated collision ray clips with staggered block traversal for\n  acoustic occlusion.\n- Cache sorted audio metadata snapshots and normalized client search keys.\n\n### Reliability and security\n\n- Add explicit stream IDs, ordered chunks, cancellation, reference-counted\n  shared downloads, and safe forward-only stream reuse.\n- Use monotonic local playback clocks and latency-adjusted state snapshots\n  instead of comparing wall clocks across machines.\n- Validate speaker interaction distance, resource IDs, actions, seek bounds,\n  volume, packet collection sizes, strings, headers, chunks, and sample rates.\n- Validate OGG Vorbis files before registration and bound direct downloads and\n  converted file sizes.\n- Save metadata and cached streams through temporary files with atomic\n  replacement where supported.\n- Enforce the configured client cache limit and clean incomplete cache files.\n- Reset server and client streaming state across disconnects, resource reloads,\n  and repeated integrated-server lifecycles.\n\n### Build and release management\n\n- Add exact-target release branches for Minecraft 1.21.1 through 1.21.11, 26.1,\n  26.1.1, 26.1.2, and 26.2; `main` targets 26.2.\n- Pin each branch to its matching NeoForge release. Minecraft 1.21.x uses Java\n  21, while Minecraft 26.x uses Java 25.\n- Remove unused Mixin declarations and replace the optional Cloth Config screen\n  with a dependency-free vanilla screen.\n- Add unit tests for OGG indexing, seek lookup, segmented buffering, playback\n  clocks, metadata indexes, persistence, and stream sharing.\n- Add explicit alpha, beta, and release channel mapping with version-qualified\n  Minecraft tags and guarded GitHub publishing environments.\n- Pass dedicated-server startup smoke tests on 1.21.1, 1.21.2, 1.21.4, 1.21.9,\n  26.1, and 26.2, plus a 26.2 client resource and audio-engine startup smoke\n  test. The full multiplayer and playback checklist remains untested.\n\n\n**Full Changelog**: https://github.com/metrovoc/Phonon/compare/v0.3.0-alpha.1+mc26.1...v0.3.0-alpha.3+mc26.1"
+		},
+		{
+			"tag": "v0.3.0-alpha.3+mc1.21.8",
+			"published": "2026-11-02T06:35:40Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 700783220,
+					"name": "phonon-neoforge-1.21.8-0.3.0-alpha.3+mc1.21.8.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-alpha.3%2Bmc1.21.8/phonon-neoforge-1.21.8-0.3.0-alpha.3%2Bmc1.21.8.jar",
+					"size": 219386,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "cc85ebab15b2fd5baf0f7064e34293baef575c8809195e5d07ac718fb3cde263",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-alpha.3+mc1.21.8",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[1.21.8]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Speaker"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 71,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-alpha.3\n\nThis alpha fixes bugs reported by players. It passes compilation and automated\ntests on every target. Manual gameplay testing is still outstanding, so this\nbuild remains alpha.\n\n### Fixes\n\n- Restore speaker and config screen text on targets where the game skips\n  colours with zero alpha.\n- Run yt-dlp directly instead of probing it with a 5 second limit, which could\n  report a slow start as \"not found\" and block the server thread.\n- Log yt-dlp's output when it fails, and the `PATH` when it cannot start.\n- Keep the track list highlight inside the selection box on Minecraft 1.21.1\n  through 1.21.8.\n\n## 0.3.0-alpha.1\n\nThis is an alpha build. Every target passes compilation and automated tests,\nand selected targets pass server or client startup smoke tests, but each\npublished Minecraft target still requires manual in-game validation before\npromotion to beta.\n\n### Performance\n\n- Move OGG page indexing from whole-file reads to bounded sequential channel\n  reads.\n- Move server audio reads off the tick thread, keep file channels open per\n  transfer, prefetch two chunks, and schedule players fairly under global and\n  per-player byte budgets.\n- Remove repeated packet splitting and full-buffer cache assembly from client\n  streaming.\n- Decode PCM directly into OpenAL-bound buffers and retain partial Vorbis frames\n  without reallocating native scratch memory on every fill.\n- Share compressed cached OGG bytes across speakers while keeping independent\n  decoder state.\n- Replace repeated collision ray clips with staggered block traversal for\n  acoustic occlusion.\n- Cache sorted audio metadata snapshots and normalized client search keys.\n\n### Reliability and security\n\n- Add explicit stream IDs, ordered chunks, cancellation, reference-counted\n  shared downloads, and safe forward-only stream reuse.\n- Use monotonic local playback clocks and latency-adjusted state snapshots\n  instead of comparing wall clocks across machines.\n- Validate speaker interaction distance, resource IDs, actions, seek bounds,\n  volume, packet collection sizes, strings, headers, chunks, and sample rates.\n- Validate OGG Vorbis files before registration and bound direct downloads and\n  converted file sizes.\n- Save metadata and cached streams through temporary files with atomic\n  replacement where supported.\n- Enforce the configured client cache limit and clean incomplete cache files.\n- Reset server and client streaming state across disconnects, resource reloads,\n  and repeated integrated-server lifecycles.\n\n### Build and release management\n\n- Add exact-target release branches for Minecraft 1.21.1 through 1.21.11, 26.1,\n  26.1.1, 26.1.2, and 26.2; `main` targets 26.2.\n- Pin each branch to its matching NeoForge release. Minecraft 1.21.x uses Java\n  21, while Minecraft 26.x uses Java 25.\n- Remove unused Mixin declarations and replace the optional Cloth Config screen\n  with a dependency-free vanilla screen.\n- Add unit tests for OGG indexing, seek lookup, segmented buffering, playback\n  clocks, metadata indexes, persistence, and stream sharing.\n- Add explicit alpha, beta, and release channel mapping with version-qualified\n  Minecraft tags and guarded GitHub publishing environments.\n- Pass dedicated-server startup smoke tests on 1.21.1, 1.21.2, 1.21.4, 1.21.9,\n  26.1, and 26.2, plus a 26.2 client resource and audio-engine startup smoke\n  test. The full multiplayer and playback checklist remains untested.\n\n\n**Full Changelog**: https://github.com/metrovoc/Phonon/compare/v0.3.0-alpha.1+mc1.21.8...v0.3.0-alpha.3+mc1.21.8"
+		},
+		{
+			"tag": "v0.3.0-alpha.3+mc1.21.6",
+			"published": "2026-11-02T06:35:32Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 700782870,
+					"name": "phonon-neoforge-1.21.6-0.3.0-alpha.3+mc1.21.6.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-alpha.3%2Bmc1.21.6/phonon-neoforge-1.21.6-0.3.0-alpha.3%2Bmc1.21.6.jar",
+					"size": 219375,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "111a2d606ec542869383feb3ce8d2834905a83e951eb4b41f66cfa89c6ce0757",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-alpha.3+mc1.21.6",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[1.21.6]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Speaker"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 71,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-alpha.3\n\nThis alpha fixes bugs reported by players. It passes compilation and automated\ntests on every target. Manual gameplay testing is still outstanding, so this\nbuild remains alpha.\n\n### Fixes\n\n- Restore speaker and config screen text on targets where the game skips\n  colours with zero alpha.\n- Run yt-dlp directly instead of probing it with a 5 second limit, which could\n  report a slow start as \"not found\" and block the server thread.\n- Log yt-dlp's output when it fails, and the `PATH` when it cannot start.\n- Keep the track list highlight inside the selection box on Minecraft 1.21.1\n  through 1.21.8.\n\n## 0.3.0-alpha.1\n\nThis is an alpha build. Every target passes compilation and automated tests,\nand selected targets pass server or client startup smoke tests, but each\npublished Minecraft target still requires manual in-game validation before\npromotion to beta.\n\n### Performance\n\n- Move OGG page indexing from whole-file reads to bounded sequential channel\n  reads.\n- Move server audio reads off the tick thread, keep file channels open per\n  transfer, prefetch two chunks, and schedule players fairly under global and\n  per-player byte budgets.\n- Remove repeated packet splitting and full-buffer cache assembly from client\n  streaming.\n- Decode PCM directly into OpenAL-bound buffers and retain partial Vorbis frames\n  without reallocating native scratch memory on every fill.\n- Share compressed cached OGG bytes across speakers while keeping independent\n  decoder state.\n- Replace repeated collision ray clips with staggered block traversal for\n  acoustic occlusion.\n- Cache sorted audio metadata snapshots and normalized client search keys.\n\n### Reliability and security\n\n- Add explicit stream IDs, ordered chunks, cancellation, reference-counted\n  shared downloads, and safe forward-only stream reuse.\n- Use monotonic local playback clocks and latency-adjusted state snapshots\n  instead of comparing wall clocks across machines.\n- Validate speaker interaction distance, resource IDs, actions, seek bounds,\n  volume, packet collection sizes, strings, headers, chunks, and sample rates.\n- Validate OGG Vorbis files before registration and bound direct downloads and\n  converted file sizes.\n- Save metadata and cached streams through temporary files with atomic\n  replacement where supported.\n- Enforce the configured client cache limit and clean incomplete cache files.\n- Reset server and client streaming state across disconnects, resource reloads,\n  and repeated integrated-server lifecycles.\n\n### Build and release management\n\n- Add exact-target release branches for Minecraft 1.21.1 through 1.21.11, 26.1,\n  26.1.1, 26.1.2, and 26.2; `main` targets 26.2.\n- Pin each branch to its matching NeoForge release. Minecraft 1.21.x uses Java\n  21, while Minecraft 26.x uses Java 25.\n- Remove unused Mixin declarations and replace the optional Cloth Config screen\n  with a dependency-free vanilla screen.\n- Add unit tests for OGG indexing, seek lookup, segmented buffering, playback\n  clocks, metadata indexes, persistence, and stream sharing.\n- Add explicit alpha, beta, and release channel mapping with version-qualified\n  Minecraft tags and guarded GitHub publishing environments.\n- Pass dedicated-server startup smoke tests on 1.21.1, 1.21.2, 1.21.4, 1.21.9,\n  26.1, and 26.2, plus a 26.2 client resource and audio-engine startup smoke\n  test. The full multiplayer and playback checklist remains untested.\n\n\n**Full Changelog**: https://github.com/metrovoc/Phonon/compare/v0.3.0-alpha.1+mc1.21.6...v0.3.0-alpha.3+mc1.21.6"
+		},
+		{
+			"tag": "v0.3.0-alpha.3+mc1.21.4",
+			"published": "2026-11-02T06:35:22Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 700782423,
+					"name": "phonon-neoforge-1.21.4-0.3.0-alpha.3+mc1.21.4.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-alpha.3%2Bmc1.21.4/phonon-neoforge-1.21.4-0.3.0-alpha.3%2Bmc1.21.4.jar",
+					"size": 219103,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "f19619fd76f90065a6d4ee22a0436cd1a6beea6d3760e1e472a31ada6ea9ab46",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-alpha.3+mc1.21.4",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[1.21.4]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Speaker"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 71,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-alpha.3\n\nThis alpha fixes bugs reported by players. It passes compilation and automated\ntests on every target. Manual gameplay testing is still outstanding, so this\nbuild remains alpha.\n\n### Fixes\n\n- Restore speaker and config screen text on targets where the game skips\n  colours with zero alpha.\n- Run yt-dlp directly instead of probing it with a 5 second limit, which could\n  report a slow start as \"not found\" and block the server thread.\n- Log yt-dlp's output when it fails, and the `PATH` when it cannot start.\n- Keep the track list highlight inside the selection box on Minecraft 1.21.1\n  through 1.21.8.\n\n## 0.3.0-alpha.1\n\nThis is an alpha build. Every target passes compilation and automated tests,\nand selected targets pass server or client startup smoke tests, but each\npublished Minecraft target still requires manual in-game validation before\npromotion to beta.\n\n### Performance\n\n- Move OGG page indexing from whole-file reads to bounded sequential channel\n  reads.\n- Move server audio reads off the tick thread, keep file channels open per\n  transfer, prefetch two chunks, and schedule players fairly under global and\n  per-player byte budgets.\n- Remove repeated packet splitting and full-buffer cache assembly from client\n  streaming.\n- Decode PCM directly into OpenAL-bound buffers and retain partial Vorbis frames\n  without reallocating native scratch memory on every fill.\n- Share compressed cached OGG bytes across speakers while keeping independent\n  decoder state.\n- Replace repeated collision ray clips with staggered block traversal for\n  acoustic occlusion.\n- Cache sorted audio metadata snapshots and normalized client search keys.\n\n### Reliability and security\n\n- Add explicit stream IDs, ordered chunks, cancellation, reference-counted\n  shared downloads, and safe forward-only stream reuse.\n- Use monotonic local playback clocks and latency-adjusted state snapshots\n  instead of comparing wall clocks across machines.\n- Validate speaker interaction distance, resource IDs, actions, seek bounds,\n  volume, packet collection sizes, strings, headers, chunks, and sample rates.\n- Validate OGG Vorbis files before registration and bound direct downloads and\n  converted file sizes.\n- Save metadata and cached streams through temporary files with atomic\n  replacement where supported.\n- Enforce the configured client cache limit and clean incomplete cache files.\n- Reset server and client streaming state across disconnects, resource reloads,\n  and repeated integrated-server lifecycles.\n\n### Build and release management\n\n- Add exact-target release branches for Minecraft 1.21.1 through 1.21.11, 26.1,\n  26.1.1, 26.1.2, and 26.2; `main` targets 26.2.\n- Pin each branch to its matching NeoForge release. Minecraft 1.21.x uses Java\n  21, while Minecraft 26.x uses Java 25.\n- Remove unused Mixin declarations and replace the optional Cloth Config screen\n  with a dependency-free vanilla screen.\n- Add unit tests for OGG indexing, seek lookup, segmented buffering, playback\n  clocks, metadata indexes, persistence, and stream sharing.\n- Add explicit alpha, beta, and release channel mapping with version-qualified\n  Minecraft tags and guarded GitHub publishing environments.\n- Pass dedicated-server startup smoke tests on 1.21.1, 1.21.2, 1.21.4, 1.21.9,\n  26.1, and 26.2, plus a 26.2 client resource and audio-engine startup smoke\n  test. The full multiplayer and playback checklist remains untested.\n\n\n**Full Changelog**: https://github.com/metrovoc/Phonon/compare/v0.3.0-alpha.1+mc1.21.4...v0.3.0-alpha.3+mc1.21.4"
+		},
+		{
+			"tag": "v0.3.0-alpha.3+mc1.21.5",
+			"published": "2026-11-02T06:35:18Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 700782248,
+					"name": "phonon-neoforge-1.21.5-0.3.0-alpha.3+mc1.21.5.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-alpha.3%2Bmc1.21.5/phonon-neoforge-1.21.5-0.3.0-alpha.3%2Bmc1.21.5.jar",
+					"size": 219314,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "df680fd7b55b846ed194cedceee38926edbdd4424642404442baccbd55dba756",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-alpha.3+mc1.21.5",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[1.21.5]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Speaker"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 71,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-alpha.3\n\nThis alpha fixes bugs reported by players. It passes compilation and automated\ntests on every target. Manual gameplay testing is still outstanding, so this\nbuild remains alpha.\n\n### Fixes\n\n- Restore speaker and config screen text on targets where the game skips\n  colours with zero alpha.\n- Run yt-dlp directly instead of probing it with a 5 second limit, which could\n  report a slow start as \"not found\" and block the server thread.\n- Log yt-dlp's output when it fails, and the `PATH` when it cannot start.\n- Keep the track list highlight inside the selection box on Minecraft 1.21.1\n  through 1.21.8.\n\n## 0.3.0-alpha.1\n\nThis is an alpha build. Every target passes compilation and automated tests,\nand selected targets pass server or client startup smoke tests, but each\npublished Minecraft target still requires manual in-game validation before\npromotion to beta.\n\n### Performance\n\n- Move OGG page indexing from whole-file reads to bounded sequential channel\n  reads.\n- Move server audio reads off the tick thread, keep file channels open per\n  transfer, prefetch two chunks, and schedule players fairly under global and\n  per-player byte budgets.\n- Remove repeated packet splitting and full-buffer cache assembly from client\n  streaming.\n- Decode PCM directly into OpenAL-bound buffers and retain partial Vorbis frames\n  without reallocating native scratch memory on every fill.\n- Share compressed cached OGG bytes across speakers while keeping independent\n  decoder state.\n- Replace repeated collision ray clips with staggered block traversal for\n  acoustic occlusion.\n- Cache sorted audio metadata snapshots and normalized client search keys.\n\n### Reliability and security\n\n- Add explicit stream IDs, ordered chunks, cancellation, reference-counted\n  shared downloads, and safe forward-only stream reuse.\n- Use monotonic local playback clocks and latency-adjusted state snapshots\n  instead of comparing wall clocks across machines.\n- Validate speaker interaction distance, resource IDs, actions, seek bounds,\n  volume, packet collection sizes, strings, headers, chunks, and sample rates.\n- Validate OGG Vorbis files before registration and bound direct downloads and\n  converted file sizes.\n- Save metadata and cached streams through temporary files with atomic\n  replacement where supported.\n- Enforce the configured client cache limit and clean incomplete cache files.\n- Reset server and client streaming state across disconnects, resource reloads,\n  and repeated integrated-server lifecycles.\n\n### Build and release management\n\n- Add exact-target release branches for Minecraft 1.21.1 through 1.21.11, 26.1,\n  26.1.1, 26.1.2, and 26.2; `main` targets 26.2.\n- Pin each branch to its matching NeoForge release. Minecraft 1.21.x uses Java\n  21, while Minecraft 26.x uses Java 25.\n- Remove unused Mixin declarations and replace the optional Cloth Config screen\n  with a dependency-free vanilla screen.\n- Add unit tests for OGG indexing, seek lookup, segmented buffering, playback\n  clocks, metadata indexes, persistence, and stream sharing.\n- Add explicit alpha, beta, and release channel mapping with version-qualified\n  Minecraft tags and guarded GitHub publishing environments.\n- Pass dedicated-server startup smoke tests on 1.21.1, 1.21.2, 1.21.4, 1.21.9,\n  26.1, and 26.2, plus a 26.2 client resource and audio-engine startup smoke\n  test. The full multiplayer and playback checklist remains untested.\n\n\n**Full Changelog**: https://github.com/metrovoc/Phonon/compare/v0.3.0-alpha.1+mc1.21.5...v0.3.0-alpha.3+mc1.21.5"
+		},
+		{
+			"tag": "v0.3.0-alpha.3+mc1.21.3",
+			"published": "2026-11-02T06:35:10Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 700782026,
+					"name": "phonon-neoforge-1.21.3-0.3.0-alpha.3+mc1.21.3.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-alpha.3%2Bmc1.21.3/phonon-neoforge-1.21.3-0.3.0-alpha.3%2Bmc1.21.3.jar",
+					"size": 218690,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "4b40b067c6c338a5391fa654be28b828256536ff4e65aa3e7c8e32632b5b01da",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-alpha.3+mc1.21.3",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[1.21.3]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Speaker"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 71,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-alpha.3\n\nThis alpha fixes bugs reported by players. It passes compilation and automated\ntests on every target. Manual gameplay testing is still outstanding, so this\nbuild remains alpha.\n\n### Fixes\n\n- Restore speaker and config screen text on targets where the game skips\n  colours with zero alpha.\n- Run yt-dlp directly instead of probing it with a 5 second limit, which could\n  report a slow start as \"not found\" and block the server thread.\n- Log yt-dlp's output when it fails, and the `PATH` when it cannot start.\n- Keep the track list highlight inside the selection box on Minecraft 1.21.1\n  through 1.21.8.\n\n## 0.3.0-alpha.1\n\nThis is an alpha build. Every target passes compilation and automated tests,\nand selected targets pass server or client startup smoke tests, but each\npublished Minecraft target still requires manual in-game validation before\npromotion to beta.\n\n### Performance\n\n- Move OGG page indexing from whole-file reads to bounded sequential channel\n  reads.\n- Move server audio reads off the tick thread, keep file channels open per\n  transfer, prefetch two chunks, and schedule players fairly under global and\n  per-player byte budgets.\n- Remove repeated packet splitting and full-buffer cache assembly from client\n  streaming.\n- Decode PCM directly into OpenAL-bound buffers and retain partial Vorbis frames\n  without reallocating native scratch memory on every fill.\n- Share compressed cached OGG bytes across speakers while keeping independent\n  decoder state.\n- Replace repeated collision ray clips with staggered block traversal for\n  acoustic occlusion.\n- Cache sorted audio metadata snapshots and normalized client search keys.\n\n### Reliability and security\n\n- Add explicit stream IDs, ordered chunks, cancellation, reference-counted\n  shared downloads, and safe forward-only stream reuse.\n- Use monotonic local playback clocks and latency-adjusted state snapshots\n  instead of comparing wall clocks across machines.\n- Validate speaker interaction distance, resource IDs, actions, seek bounds,\n  volume, packet collection sizes, strings, headers, chunks, and sample rates.\n- Validate OGG Vorbis files before registration and bound direct downloads and\n  converted file sizes.\n- Save metadata and cached streams through temporary files with atomic\n  replacement where supported.\n- Enforce the configured client cache limit and clean incomplete cache files.\n- Reset server and client streaming state across disconnects, resource reloads,\n  and repeated integrated-server lifecycles.\n\n### Build and release management\n\n- Add exact-target release branches for Minecraft 1.21.1 through 1.21.11, 26.1,\n  26.1.1, 26.1.2, and 26.2; `main` targets 26.2.\n- Pin each branch to its matching NeoForge release. Minecraft 1.21.x uses Java\n  21, while Minecraft 26.x uses Java 25.\n- Remove unused Mixin declarations and replace the optional Cloth Config screen\n  with a dependency-free vanilla screen.\n- Add unit tests for OGG indexing, seek lookup, segmented buffering, playback\n  clocks, metadata indexes, persistence, and stream sharing.\n- Add explicit alpha, beta, and release channel mapping with version-qualified\n  Minecraft tags and guarded GitHub publishing environments.\n- Pass dedicated-server startup smoke tests on 1.21.1, 1.21.2, 1.21.4, 1.21.9,\n  26.1, and 26.2, plus a 26.2 client resource and audio-engine startup smoke\n  test. The full multiplayer and playback checklist remains untested.\n\n\n**Full Changelog**: https://github.com/metrovoc/Phonon/compare/v0.3.0-alpha.1+mc1.21.3...v0.3.0-alpha.3+mc1.21.3"
+		},
+		{
+			"tag": "v0.3.0-alpha.3+mc1.21.2",
+			"published": "2026-11-02T06:35:08Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 700781958,
+					"name": "phonon-neoforge-1.21.2-0.3.0-alpha.3+mc1.21.2.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-alpha.3%2Bmc1.21.2/phonon-neoforge-1.21.2-0.3.0-alpha.3%2Bmc1.21.2.jar",
+					"size": 218690,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "ae3df08748d91c2789c6d069fecb06cf1eceb21e4083539f3035af75e1a881c5",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-alpha.3+mc1.21.2",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[1.21.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Speaker"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 71,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-alpha.3\n\nThis alpha fixes bugs reported by players. It passes compilation and automated\ntests on every target. Manual gameplay testing is still outstanding, so this\nbuild remains alpha.\n\n### Fixes\n\n- Restore speaker and config screen text on targets where the game skips\n  colours with zero alpha.\n- Run yt-dlp directly instead of probing it with a 5 second limit, which could\n  report a slow start as \"not found\" and block the server thread.\n- Log yt-dlp's output when it fails, and the `PATH` when it cannot start.\n- Keep the track list highlight inside the selection box on Minecraft 1.21.1\n  through 1.21.8.\n\n## 0.3.0-alpha.1\n\nThis is an alpha build. Every target passes compilation and automated tests,\nand selected targets pass server or client startup smoke tests, but each\npublished Minecraft target still requires manual in-game validation before\npromotion to beta.\n\n### Performance\n\n- Move OGG page indexing from whole-file reads to bounded sequential channel\n  reads.\n- Move server audio reads off the tick thread, keep file channels open per\n  transfer, prefetch two chunks, and schedule players fairly under global and\n  per-player byte budgets.\n- Remove repeated packet splitting and full-buffer cache assembly from client\n  streaming.\n- Decode PCM directly into OpenAL-bound buffers and retain partial Vorbis frames\n  without reallocating native scratch memory on every fill.\n- Share compressed cached OGG bytes across speakers while keeping independent\n  decoder state.\n- Replace repeated collision ray clips with staggered block traversal for\n  acoustic occlusion.\n- Cache sorted audio metadata snapshots and normalized client search keys.\n\n### Reliability and security\n\n- Add explicit stream IDs, ordered chunks, cancellation, reference-counted\n  shared downloads, and safe forward-only stream reuse.\n- Use monotonic local playback clocks and latency-adjusted state snapshots\n  instead of comparing wall clocks across machines.\n- Validate speaker interaction distance, resource IDs, actions, seek bounds,\n  volume, packet collection sizes, strings, headers, chunks, and sample rates.\n- Validate OGG Vorbis files before registration and bound direct downloads and\n  converted file sizes.\n- Save metadata and cached streams through temporary files with atomic\n  replacement where supported.\n- Enforce the configured client cache limit and clean incomplete cache files.\n- Reset server and client streaming state across disconnects, resource reloads,\n  and repeated integrated-server lifecycles.\n\n### Build and release management\n\n- Add exact-target release branches for Minecraft 1.21.1 through 1.21.11, 26.1,\n  26.1.1, 26.1.2, and 26.2; `main` targets 26.2.\n- Pin each branch to its matching NeoForge release. Minecraft 1.21.x uses Java\n  21, while Minecraft 26.x uses Java 25.\n- Remove unused Mixin declarations and replace the optional Cloth Config screen\n  with a dependency-free vanilla screen.\n- Add unit tests for OGG indexing, seek lookup, segmented buffering, playback\n  clocks, metadata indexes, persistence, and stream sharing.\n- Add explicit alpha, beta, and release channel mapping with version-qualified\n  Minecraft tags and guarded GitHub publishing environments.\n- Pass dedicated-server startup smoke tests on 1.21.1, 1.21.2, 1.21.4, 1.21.9,\n  26.1, and 26.2, plus a 26.2 client resource and audio-engine startup smoke\n  test. The full multiplayer and playback checklist remains untested.\n\n\n**Full Changelog**: https://github.com/metrovoc/Phonon/compare/v0.3.0-alpha.1+mc1.21.2...v0.3.0-alpha.3+mc1.21.2"
+		},
 		{
 			"tag": "v0.3.0-alpha.1+mc1.21.9",
 			"published": "2026-07-15T09:31:42Z",

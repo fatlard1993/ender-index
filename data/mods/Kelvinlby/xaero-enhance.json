@@ -6,8 +6,106 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-27T14:45:07Z",
-	"pushed": "2026-11-01T09:57:20Z",
+	"pushed": "2026-11-02T06:21:24Z",
 	"releases": [
+		{
+			"tag": "v1.0.2+26.3",
+			"published": "2026-11-02T06:21:24Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 700745936,
+					"name": "xaero-enhance-1.0.2+26.3.jar",
+					"url": "https://github.com/Kelvinlby/xaero-enhance/releases/download/v1.0.2%2B26.3/xaero-enhance-1.0.2%2B26.3.jar",
+					"size": 54957,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "e7ac4cbc1ae3b5ea9690fea4e1c7959e235b17fe0676b4b25522475401b122bc",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "xaero-enhance",
+							"version": "1.0.2+26.3",
+							"name": "Xaero Enhance",
+							"description": "Performance enhancement for Xaero's World Map: builds map chunk textures in parallel off the render thread.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"xaeroworldmap"
+							],
+							"provides": []
+						}
+					],
+					"icon": "439926ec0c0ff010df1448c97b3512c0142ec8f76967d1219d029e34e61070d8.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 34,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Xaero Enhance 1.0.2 for Minecraft 26.3. Faster loading, smoother frames, and quicker closing of the world map.\n\n**Requires:** Minecraft 26.3, Fabric Loader 0.20.1+, Java 25, Xaero's World Map 1.47.2 for 26.3. XaeroPlus 2.37.2 for 26.3 is optional.\n\n### Changes\n- **Regions load faster.** Xaero's map thread waited for the map screen's lock before every region it loaded, for a limit check that does nothing until you have more regions loaded than your \"max loaded regions\" setting. Profiling showed it blocked about 34 ms per wait, so regions loaded at roughly one per frame. That wait is now skipped. Once the limit is reached, Xaero's unloading works as before.\n- **Smoother frames with the map open.** The screen's per-frame lookup of every visible region now uses a cache for the top-level lookup instead of three locks and two hash map lookups per region. The rest of the lookup still uses Xaero's live data, and the cache is cleared whenever Xaero adds or removes top-level regions.\n- **Less per-frame work from this mod.** XaeroPlus highlight cache updates now use at most 0.5 ms per frame (down from 2 ms) and can't overrun it. Highlights may fill in a little more slowly.\n- **Closing the map after viewing a lot is quicker.** Pending XaeroPlus highlights are only inserted near the player when the map closes. XaeroPlus would drop the rest on its next tick anyway.\n\nChecked with the client stress test (25 rounds of opening, zooming, panning and closing the map with ~180k XaeroPlus highlights): no errors, flat heap, and no background work left after closing."
+		},
+		{
+			"tag": "v1.0.1+26.3",
+			"published": "2026-11-02T05:16:03Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 700606217,
+					"name": "xaero-enhance-1.0.1+26.3.jar",
+					"url": "https://github.com/Kelvinlby/xaero-enhance/releases/download/v1.0.1%2B26.3/xaero-enhance-1.0.1%2B26.3.jar",
+					"size": 48143,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "8da38fb18dc7e72e0c2d204a4b622636f03bb496c1d8e0eb991e34818ca312e7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "xaero-enhance",
+							"version": "1.0.1+26.3",
+							"name": "Xaero Enhance",
+							"description": "Performance enhancement for Xaero's World Map: builds map chunk textures in parallel off the render thread.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"xaeroworldmap"
+							],
+							"provides": []
+						}
+					],
+					"icon": "439926ec0c0ff010df1448c97b3512c0142ec8f76967d1219d029e34e61070d8.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 28,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Xaero Enhance 1.0.1 for Minecraft 26.3. Bug fix release.\n\n**Requires:** Minecraft 26.3, Fabric Loader 0.20.1+, Java 25, Xaero's World Map 1.47.2 for 26.3. XaeroPlus 2.37.2 for 26.3 is optional.\n\n### Fixed\n- **Game froze when closing the world map after zooming far out with XaeroPlus.** Highlights loaded for a large map window were added to XaeroPlus's cache in hash order. If the cache shrank in between, which removals can trigger, those insertions became extremely slow, and closing the map ran all of them at once. They are now added in a scrambled order: 3 million entries now take about 0.2 s, down from 13 s, and much larger sets no longer hang.\n- `fabric.mod.json` now lists the license as MIT, matching the LICENSE file."
+		},
 		{
 			"tag": "v1.0.0+26.3",
 			"published": "2026-11-01T09:57:31Z",
