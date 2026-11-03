@@ -6,7 +6,7 @@
 	"archived": false,
 	"license": "gpl-3.0+",
 	"created": "2026-09-24T12:20:35.388Z",
-	"pushed": "2026-10-24T20:35:42.408Z",
+	"pushed": "2026-10-29T23:00:24.719Z",
 	"releases": [
 		{
 			"tag": "v7.18.8",
@@ -55,9 +55,15 @@
 						"unreadable": []
 					},
 					"icon": "8c0c7f7b715d778fba19da9c5227975552f57197a8318a404229c49d1857a056.webp",
-					"funding": []
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					}
 				}
-			]
+			],
+			"notes": "## Venomous 7.18.8\n\nHighlights across **7.18.5 – 7.18.8**. Full details in `CHANGELOG.md`.\n\n### Fixed\n\n- **The quit hang.** Clicking Quit froze the client for twenty seconds and ended in a\n  `ClientShutdownWatchdog` crash report (exit -8). Baritone's cache workers are non-daemon\n  threads parked in a loop that swallows interrupts and `Throwable`, so nothing could release\n  them; a shutdown reaper now forces a clean exit the moment `main()` returns.\n- **Scaffold rotation grid** (7.18.4). The staged pitch is snapped onto the verified 26.2\n  sensitivity grid (`f³ × 1.2` per mouse count, checked against `MouseHandler.turnPlayer` and\n  `Entity.turn` bytecode) at both staging sites, so Grim's `RotationPlace` no longer sees steps\n  no mouse could produce.\n\n### New modules\n\n- **rod-aimbot** (combat) — right click with an uncast rod is intercepted and the cast is staged\n  against where the target will be, with both rotation axes grid-snapped. The camera is never\n  taken.\n- **fake-lag** (network) — delays outbound packets, inbound packets, or both, with hard flushes\n  on teleport, damage and disconnect; keep-alives and chunk traffic always pass.\n- **lag-range** (network) — the same hold, engaged only while closing on a target inside the\n  reach band, flushed the moment the exchange changes shape.\n- **backtrack** (network) — holds one target's movement packets while the withheld position is\n  the better one to swing at, decided by a pure ray/box reach-band table.\n- **no-slow** (movement) — overrides 26.2's data-driven using-item slowdown at its single\n  client seam, with per-item filters and vanilla parity as the default.\n- **keep-sprint** (combat) — captures the motion going into your swing and restores it after\n  vanilla's 0.6 penalty, sprint re-raised.\n\n### Removed\n\n- Fourteen dead modules: twelve 1.8-era packet relics (`more-carry`, `bungeecord-spoof`, `kick`,\n  `portal-exploits`, `reset-vl`, `sleep-walker`, `chorus-exploit`, `v-click-tp`,\n  `vehicle-one-hit`, `v-ghost-hand`, `time-shift`, `v-anti-hunger`) plus three the repo's own\n  audit proved wired to nothing (`text-field-protect`, `extended-firework`, `v-ghost-hand`).\n\nEvery port states its deviations and its anticheat cost honestly — see `CHANGELOG.md`."
 		},
 		{
 			"tag": "hotfix-1",
@@ -106,7 +112,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Hotfix 1 release."
 		},
 		{
 			"tag": "v7.0.1",
@@ -155,7 +162,8 @@
 						"unreadable": []
 					}
 				}
-			]
+			],
+			"notes": "Venomous 7.0.1\n\nExperimental release for Minecraft 26.2, Meteor Client 26.2, Fabric, and Java 25.\n\nHighlights:\n- Reworked Scaffold and bridging profiles\n- Moved gameplay actions away from post-tick execution\n- Restored clean compilation with explicit setting builders\n- Improved Aimbot and AntiProjectile input ownership\n- Removed the Dupe module\n- Simplified project documentation\n\nThis remains a work-in-progress release. Test only where you have permission."
 		}
 	],
 	"readme": "README.md",

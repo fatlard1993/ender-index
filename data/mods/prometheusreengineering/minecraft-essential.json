@@ -6,8 +6,101 @@
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2024-12-27T20:28:06Z",
-	"pushed": "2026-10-15T17:03:51Z",
+	"pushed": "2026-11-03T05:59:21Z",
 	"releases": [
+		{
+			"tag": "1.7.2",
+			"published": "2026-11-03T05:59:21Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 704501314,
+					"name": "prometheus-1.7.2-essential.jar",
+					"url": "https://github.com/prometheusreengineering/minecraft-essential/releases/download/1.7.2/prometheus-1.7.2-essential.jar",
+					"size": 156808,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "368d6e6de98e1a421d352b136ef5824a54df7121d601d34d6783a0c81f7ac714",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "prometheus_essential",
+							"version": "1.7.2-essential",
+							"name": "Prometheus",
+							"description": "The Prometheus' patch for Essential Mod.",
+							"minecraft": ">=1.16.5",
+							"environment": "client",
+							"depends": [
+								"minecraft",
+								"java",
+								"essential-loader"
+							],
+							"provides": [],
+							"suggests": [
+								"essential-container"
+							],
+							"breaks": [
+								"essential"
+							],
+							"breaksVersions": {
+								"essential": "<=1.5.0"
+							}
+						},
+						{
+							"loader": "neoforge",
+							"id": "prometheus_essential",
+							"version": "0.0.0",
+							"name": "Prometheus",
+							"description": "The Prometheus' patch for Essential Mod.",
+							"environment": "client",
+							"depends": [
+								"minecraft"
+							],
+							"suggests": [
+								"essential"
+							]
+						},
+						{
+							"loader": "forge",
+							"id": "prometheus_essential",
+							"version": "0.0.0",
+							"name": "Prometheus",
+							"description": "The Prometheus' patch for Essential Mod.",
+							"minecraft": "[1.13,)",
+							"environment": "client",
+							"depends": [
+								"minecraft"
+							]
+						}
+					],
+					"icon": "521c8e08333b4ddd16a14d550e2b316a06bc74cc4e168a39840c65e3fd98663f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 19,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"studio/dreamys/prometheus/essential/serial/EssentialCosmeticsFileData.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"raw.githubusercontent.com": [
+								"studio/dreamys/prometheus/essential/serial/EssentialCosmeticsFileData.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Highlights\n\n- **Works with Essential 1.5.2.** Essential 1.5.2 removed a method this patch used to check whether it was connected to Essential's servers before requesting legacy cosmetics. 1.7.2 uses the method Essential's own code now uses. Legacy cosmetics unlock again on 1.5.2.\n- **Fabric now refuses old Essential versions.** Before, running this patch with Essential 1.5.0 or older crashed the game. Now the Fabric mod manifest declares that it breaks with those versions, so Fabric reports the incompatibility instead.\n\n> [!NOTE]\n> 1.7.2 still requires **Essential 1.5.1 or newer**, the same as 1.7.1, and works on both 1.5.1 and 1.5.2. If Essential hasn't updated to 1.5.1 for your Minecraft version yet, stay on [1.7.0](https://github.com/prometheusreengineering/minecraft-essential/releases/tag/1.7.0).\n\n## What's Changed\n\n* fix: change connection check method call for Essential 1.5.2\n  * `ConnectionManager#isAuthenticated` was removed; the patch now uses `ConnectionManager#isOpen`, which exists in every supported Essential build\n* manifest: mark minimum essential version (`breaks: essential <=1.5.0` in `fabric.mod.json`)\n\n**Full Changelog**: https://github.com/prometheusreengineering/minecraft-essential/compare/1.7.1...1.7.2"
+		},
 		{
 			"tag": "1.7.1",
 			"published": "2026-10-15T16:36:39Z",
@@ -84,7 +177,7 @@
 						"unreadable": []
 					},
 					"icon": "521c8e08333b4ddd16a14d550e2b316a06bc74cc4e168a39840c65e3fd98663f.webp",
-					"downloads": 882,
+					"downloads": 907,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -164,7 +257,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 223
+					"downloads": 228
 				}
 			],
 			"notes": "## Highlights\n\n- **Legacy cosmetics now stay equipped after a restart.** The server drops legacy cosmetics and their settings from saved outfits. Changes you make to outfits on this client are now saved locally (`outfits.json`) and applied on top of what the server sends. Each saved change is dropped once the server matches it, and deleted along with its outfit.\n- **Legacy cosmetics unlock reliably on startup.** Before, some legacy cosmetics weren't unlocked in time to be equipped. Each cosmetic is now unlocked as soon as it arrives.\n- **Much less stutter when connecting.** Cosmetic dumps and config files are now written on a background thread, and unlocks are batched once per tick. Before, every (re)connect could freeze the game briefly with 1000+ cosmetics.\n\n## What's Changed\n\n* fix(cosmetics): reliably unlock legacy cosmetics on startup\n  * legacy IDs are requested through Essential, so cosmetics only count as loaded once they arrive\n  * IDs added by the background GitHub update of `cosmetics.json` are requested right away\n  * downloads now time out, and the bundled list is used instead of crashing if `cosmetics.json` can't be read\n* perf(dumps): write cosmetic dumps off the main thread\n  * unchanged dumps are skipped\n  * a problem setting up the config folder is now logged instead of crashing the game\n* feat(outfits): keep legacy cosmetics equipped across restarts\n* fix(cosmetics): batch unlocks and only request legacy cosmetics when logged in to Essential\n* perf(outfits): save `outfits.json` on the IO thread\n* chore: mark runtime-provided dependencies as `provided`\n* docs: add `CLAUDE.md`\n\n## A note on AI\n\nThis is the first release made with help from Claude (Claude Code). Claude co-authored the commits in this release, and those commits carry a `Co-Authored-By` trailer. I reviewed every change, and the release follows the project's [AI policy](https://github.com/prometheusreengineering/minecraft-essential/blob/main/CONTRIBUTING.md#ai). I tested it in-game and I'm responsible for it like any other release. The new `CLAUDE.md` holds the project notes we built up along the way, such as which mixin targets are safe across Essential builds. It's useful for anyone working on the codebase, with or without AI.\n\n**Full Changelog**: https://github.com/prometheusreengineering/minecraft-essential/compare/1.6.1...1.7.0"
@@ -238,7 +331,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 19
+					"downloads": 21
 				}
 			],
 			"notes": "## What's Changed\n* fix: reunlock cosmetics upon reconnection by @abhijeetnardele24-hash in https://github.com/prometheusreengineering/minecraft-essential/pull/50\n\n## New Contributors\n* @abhijeetnardele24-hash made their first contribution in https://github.com/prometheusreengineering/minecraft-essential/pull/50\n\n**Full Changelog**: https://github.com/prometheusreengineering/minecraft-essential/compare/1.6.0...1.6.1"
@@ -312,7 +405,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 2676
+					"downloads": 2678
 				}
 			],
 			"notes": "## What's Changed\n* cosmetics: Add new cosmetics by @BehaviorPack in https://github.com/prometheusreengineering/minecraft-essential/pull/43\n* docs: readme update + contributing note by @cootshk in https://github.com/prometheusreengineering/minecraft-essential/pull/36\n* feat: Support 1.16-1.17 forge by @cootshk in https://github.com/prometheusreengineering/minecraft-essential/pull/45\n\n\n**Full Changelog**: https://github.com/prometheusreengineering/minecraft-essential/compare/1.5.0...1.6.0"
