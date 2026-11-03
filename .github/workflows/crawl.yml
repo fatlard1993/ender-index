@@ -128,10 +128,11 @@ jobs:
         with:
           path: ender-index/.cache
           key: crawl-${{ github.run_id }}
-      # Not after a cancelled crawl, so cancelling one stops the chain
+      # Not after a cancelled crawl, so cancelling one stops the chain. The one started in the 04:00 UTC hour discovers,
+      # as the schedule's 04:17 crawl is as often skipped
       - name: start the next crawl
         if: always() && (steps.crawl.outcome == 'success' || steps.crawl.outcome == 'failure')
-        run: gh workflow run crawl.yml --repo ${{ github.repository }} --ref main -f discover=false
+        run: gh workflow run crawl.yml --repo ${{ github.repository }} --ref main -f discover=$([ "$(date -u +%H)" = 04 ] && echo true || echo false)
         env:
           GH_TOKEN: ${{ github.token }}
       - name: report a failed crawl
