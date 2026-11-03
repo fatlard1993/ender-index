@@ -881,17 +881,23 @@ export const packRecordPath = name => join(PACKS, `${name.replace(GIST_LINE, 'gi
  */
 const PACK_SHARE = 1 / 6;
 
+/** The pack repositories the crawl reads: those found or submitted, and those known only from Modrinth. */
+const readPackLines = async () => {
+	const onGitHub = line => !line.includes(':') || GIST_LINE.test(line);
+
+	return {
+		found: [...new Set([...(await readLines('packs.txt')), ...(await readLines(SUBMITTED_PACKS))])].filter(onGitHub),
+		fromModrinth: (await readLines('modrinth-packs.txt')).filter(onGitHub),
+	};
+};
+
 /**
  * Read each pack repository once, before the mods and within PACK_SHARE of the time budget: those found on GitHub before any
  * known only from Modrinth, and within each the least recently read first. A repository with no pack left loses its
  * record. Packs are read from GitHub alone, where nearly all of them are kept.
  */
 const crawlPacks = async ({ deadline, scratch, now, parallel }) => {
-	const onGitHub = line => !line.includes(':') || GIST_LINE.test(line);
-	const found = [...new Set([...(await readLines('packs.txt')), ...(await readLines(SUBMITTED_PACKS))])].filter(
-		onGitHub,
-	);
-	const fromModrinth = (await readLines('modrinth-packs.txt')).filter(onGitHub);
+	const { found, fromModrinth } = await readPackLines();
 	const ages = new Map(
 		await Promise.all(
 			[...found, ...fromModrinth].map(async line => [
@@ -977,7 +983,7 @@ export const crawl = async ({ only } = {}) => {
 	const demand = packDemand(await readPacks(), modrinthIds);
 	const { changed, steady } = only
 		? { changed: new Set(), steady: new Map() }
-		: await checkReleases({ lines: [...found, ...fromModrinth] });
+		: await checkReleases({ lines: uniqueRepositories([...found, ...fromModrinth, ...Object.values(await readPackLines()).flat()]) });
 	const noJars = only ? {} : await readNoJars();
 	const notResting = line => !restingOn(noJars[line]) || changed.has(line);
 	const repos = crawlOrder(

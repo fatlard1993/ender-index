@@ -3,6 +3,7 @@ import { afterEach, describe, expect, test } from 'bun:test';
 import { RateLimited } from '../src/fetch';
 import * as github from '../src/github';
 import { assetIdOf, fromGraphql, repositoriesQuery } from '../src/graphqlRepos';
+import { crawlPack } from '../src/packs';
 import { notesOf } from '../src/record';
 
 const node = (name, extra = {}) => ({
@@ -211,6 +212,36 @@ describe('the crawl reading repositories in batches', () => {
 
 		expect((await github.repository('A/Steady')).stargazers_count).toBe(99);
 		expect(await github.releases('A/STEADY')).toEqual(before);
+	});
+
+	test('reads a pack held steady and not pushed to from its record, asking GitHub nothing', async () => {
+		const { ask } = answering();
+
+		globalThis.fetch = async url => {
+			throw new Error(`REST was asked for ${url}`);
+		};
+		github.planRepositories(['a/pack'], { ask });
+		await github.releases('a/pack');
+		github.planRepositories([], {
+			ask: async () => {
+				throw new Error('GraphQL was asked');
+			},
+		});
+		github.holdSteady(
+			new Map([['a/pack', { full_name: 'a/pack', stargazers_count: 7, pushed_at: '2026-10-01T00:00:00Z' }]]),
+		);
+		const ender = { name: 'Pack', mods: [] };
+
+		const pack = await crawlPack('A/Pack', {
+			recorded: { pushed: '2026-10-01T00:00:00Z', formats: { ender } },
+			now: 'now',
+			modrinth: { projectsByHash: async () => new Map(), projectsById: async () => new Map() },
+			read: async path => {
+				throw new Error(`${path} was read`);
+			},
+		});
+
+		expect(pack).toMatchObject({ repo: 'a/pack', stars: 7, fetched: 'now', formats: { ender } });
 	});
 
 	test('leaves to REST a repository GraphQL found nothing for, a page past the first, and one not planned', async () => {
