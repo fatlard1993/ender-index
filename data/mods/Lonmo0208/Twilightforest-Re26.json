@@ -6,8 +6,726 @@
 	"archived": false,
 	"license": "NOASSERTION",
 	"created": "2026-07-10T17:56:11Z",
-	"pushed": "2026-11-03T19:34:14Z",
+	"pushed": "2026-11-03T20:53:43Z",
 	"releases": [
+		{
+			"tag": "Fabric-26.4-snapshot-7-4.8.4211-dev",
+			"published": "2026-11-03T20:53:43Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 707058657,
+					"name": "twilightforest.re26-26.4-snapshot-7-4.8.4211-dev-fabric.jar",
+					"url": "https://github.com/Lonmo0208/Twilightforest-Re26/releases/download/Fabric-26.4-snapshot-7-4.8.4211-dev/twilightforest.re26-26.4-snapshot-7-4.8.4211-dev-fabric.jar",
+					"size": 23999294,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "c259676dfa1143d41b96b7dc0ffd335e5f40b59992c028bdcd4f2c51747fbbd9",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "twilightforest",
+							"version": "4.8.4211-dev",
+							"name": "The Twilight Forest:Re26",
+							"description": "Unofficial port of Twilight Forest from Minecraft 1.21.1 to Minecraft 26.1.x and 26.2.x, adapting the mod's dimension, biomes, structures, bosses, items, and mechanics to the latest Minecraft version for modern gameplay.",
+							"minecraft": "*",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"forgeconfigapiport"
+							],
+							"provides": [
+								"forgeconfigapiport"
+							],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "8d438a6ecc1277cdde6e23ec926fdfecfe9e7f531638bf0c70ad2ec96597e2c3.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement",
+							"dimension",
+							"enchantment",
+							"loot_table",
+							"recipe",
+							"structure",
+							"worldgen"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 2426,
+						"jars": [
+							"META-INF/jars/forge-config-api-port-26.2.1-patched.jar",
+							"META-INF/jars/forge-config-api-port-26.2.1-patched.jar!META-INF/jars/core-3.8.4.jar",
+							"META-INF/jars/forge-config-api-port-26.2.1-patched.jar!META-INF/jars/toml-3.8.4.jar"
+						],
+						"capabilities": {
+							"unsafe": {
+								"twilightforest/compat/c2me/OpenclFallbackEnabler.class": [
+									"sun/misc/Unsafe.staticFieldOffset",
+									"sun/misc/Unsafe.putBoolean"
+								]
+							},
+							"network": {
+								"META-INF/jars/forge-config-api-port-26.2.1-patched.jar!META-INF/jars/core-3.8.4.jar!com/electronwill/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/forge-config-api-port-26.2.1-patched.jar!META-INF/jars/core-3.8.4.jar!com/electronwill/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/forge-config-api-port-26.2.1-patched.jar!META-INF/jars/core-3.8.4.jar!com/electronwill/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"minecraft.wiki": [
+								"twilightforest/config/ConfigComments.class",
+								"twilightforest/config/TFCommonConfig.class"
+							],
+							"benimatic.com": [
+								"twilightforest/config/ConfigComments.class",
+								"twilightforest/config/TFCommonConfig.class"
+							],
+							"discord.experiment115.com": [
+								"twilightforest/events/EntityEvents.class",
+								"twilightforest/mixin/PlayerAdvancementsMixin.class"
+							],
+							"github.com": [
+								"twilightforest/item/travellers_gear/modifiers/TransferableComponentModifier.class",
+								"twilightforest/client/OptifineWarningScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Beta build for Minecraft 26.4-snapshot-7\n\nThis is a **beta** build for a Minecraft snapshot. Please back up your worlds; expect rough edges and APIs that may still change before 26.4 stable.\n\n### Changes in 4.8.4211-dev\n- Fixed the Ominous Fire not converting mobs that die in it: the Fabric port left the entity transformation data-map lookup as a TODO stub, so only players were converted. Horses now become zombie horses, piglins become zombified piglins and villagers become zombie villagers, matching upstream\n- Fixed the server crash \"Requested chunk unavailable during world generation\": snapshot-7 no longer allows feature-stage world-gen regions to resolve neighbour chunks at the biomes status, so chunk blanket biome sampling (dark forest canopy, glacier) now clamps into the generating chunk\n\n### Snapshot-7 port\n- `Level.isDebug` removed → world data `isDebugWorld`\n- `TreeGrower` lost its name parameter\n- Slot construction takes a `Slot.Section` (INPUT / INVENTORY / HOTBAR)\n- Ingredient.of() overload ambiguity resolved\n- `BlockSetType.OAK` → `DEFAULT_WOOD`; Fabric wood-type builders use `build()` instead of `register()`\n- Uncrafting screen migrated to the `SlotWidget` tooltip model and the new ghost recipe extraction hook\n\n## Prerequisite (Important)\nThis mod requires Forge Config API Port to run properly:\n- CurseForge: `https://www.curseforge.com/minecraft/mc-mods/forge-config-api-port`\n- Modrinth: `https://modrinth.com/mod/forge-config-api-port`\n\nRequires Fabric Loader `0.20.1+` and Fabric API `0.165.4+26.4`."
+		},
+		{
+			"tag": "Fabric-26w14a-4.8.4211.af",
+			"published": "2026-11-03T20:47:03Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 707036925,
+					"name": "twilightforest.re26-26w14a-4.8.4211.af-fabric.jar",
+					"url": "https://github.com/Lonmo0208/Twilightforest-Re26/releases/download/Fabric-26w14a-4.8.4211.af/twilightforest.re26-26w14a-4.8.4211.af-fabric.jar",
+					"size": 23418496,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "124e8b8ef75a084e0f262255e90085d719c1d56b4d81deac95ff62029c8b768b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "twilightforest",
+							"version": "4.8.4211.af",
+							"name": "The Twilight Forest:Re26",
+							"description": "Unofficial port of Twilight Forest from Minecraft 1.21.1 to Minecraft 26.1.x and 26.2.x, adapting the mod's dimension, biomes, structures, bosses, items, and mechanics to the latest Minecraft version for modern gameplay.",
+							"minecraft": "26.1.1-alpha.26.14.a",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"forgeconfigapiport"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "8d438a6ecc1277cdde6e23ec926fdfecfe9e7f531638bf0c70ad2ec96597e2c3.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"biome": [
+								"Dark Forest",
+								"Dark Forest Center",
+								"Dense Forest",
+								"Dense Mushroom Forest",
+								"Enchanted Forest",
+								"Final Plateau",
+								"Fire Swamp",
+								"Firefly Forest",
+								"Mushroom Forest",
+								"Oak Savanna",
+								"Snowy Forest",
+								"Spooky Forest",
+								"Thornlands",
+								"Troll Caves",
+								"Twilight Clearing",
+								"Twilight Forest",
+								"Twilight Glacier",
+								"Twilight Highlands",
+								"Twilight Lake",
+								"Twilight Stream",
+								"Twilight Swamp",
+								"Underground"
+							],
+							"block": [
+								"Acacia Banister",
+								"Acacia Drying Rack",
+								"Alpha Yeti Boss Spawner",
+								"Alpha Yeti Trophy",
+								"Antibuilder",
+								"Antibuilt Block",
+								"Aurora Block",
+								"Aurora Pillar",
+								"Aurora Slab",
+								"Auroralized Glass",
+								"Bamboo Banister",
+								"Bamboo Drying Rack",
+								"Beanstalk Leaves",
+								"Birch Banister",
+								"Birch Drying Rack",
+								"Block of Arctic Fur",
+								"Block of Carminite",
+								"Blue Castle Door",
+								"Blue Castle Rune Brick",
+								"Blue Force Field",
+								"Bold Castle Brick Pillar",
+								"Bold Castle Brick Stairs",
+								"Bold Castle Brick Tile",
+								"Bold Stone Pillar",
+								"Brazier",
+								"Built Block",
+								"Burnt Thorns",
+								"Candelabra",
+								"Canopy Banister",
+								"Canopy Bookshelf",
+								"Canopy Button",
+								"Canopy Chest",
+								"Canopy Door",
+								"Canopy Drying Rack",
+								"Canopy Fence",
+								"Canopy Fence Gate",
+								"Canopy Hanging Sign",
+								"Canopy Planks",
+								"Canopy Pressure Plate",
+								"Canopy Sign",
+								"Canopy Slab",
+								"Canopy Stairs",
+								"Canopy Trapdoor",
+								"Canopy Tree Leaves",
+								"Canopy Tree Log",
+								"Canopy Tree Sapling",
+								"Canopy Tree Wood",
+								"Canopy Window",
+								"Canopy Window Pane",
+								"Carminite Builder",
+								"Carminite Reactor",
+								"Castle Brick",
+								"Castle Brick Stairs",
+								"Castle Roof Tile",
+								"Cherry Banister",
+								"Cherry Drying Rack",
+								"Chipped Keepsake Casket",
+								"Chiseled Canopy Bookshelf",
+								"Cicada",
+								"Cicada Jar",
+								"Cinder Furnace",
+								"Cinder Log",
+								"Cinder Wood",
+								"Clover Patch",
+								"Coronation Carpet",
+								"Cracked Castle Brick",
+								"Cracked Castle Brick Stairs",
+								"Cracked Deadrock",
+								"Cracked Etched Nagastone",
+								"Cracked Mazestone Brick",
+								"Cracked Nagastone Pillar",
+								"Cracked Nagastone Stairs (Left)",
+								"Cracked Nagastone Stairs (Right)",
+								"Cracked Towerwood Planks",
+								"Cracked Underbrick",
+								"Creeper Skull Candle",
+								"Crimson Banister",
+								"Crimson Drying Rack",
+								"Cut Mazestone",
+								"Damaged Keepsake Casket",
+								"Dark Oak Banister",
+								"Dark Oak Drying Rack",
+								"Darkwood Banister",
+								"Darkwood Button",
+								"Darkwood Chest",
+								"Darkwood Door",
+								"Darkwood Drying Rack",
+								"Darkwood Fence",
+								"Darkwood Fence Gate",
+								"Darkwood Hanging Sign",
+								"Darkwood Leaves",
+								"Darkwood Log",
+								"Darkwood Planks",
+								"Darkwood Pressure Plate",
+								"Darkwood Sign",
+								"Darkwood Slab",
+								"Darkwood Stairs",
+								"Miniature Dark Tower",
+								"Thorns",
+								"Trapped Canopy Chest"
+							],
+							"effect": [
+								"Frosted"
+							],
+							"enchantment": [
+								"Chill Aura",
+								"Destruction",
+								"Fire React",
+								"Renewal"
+							],
+							"entity": [
+								"Adherent",
+								"Alpha Yeti",
+								"Armored Giant",
+								"Bighorn Sheep",
+								"Block and Chain",
+								"Block and Chain Goblin",
+								"Boar",
+								"Canopy Boat",
+								"Canopy Boat with Chest",
+								"Carminite Broodling",
+								"Carminite Ghastguard",
+								"Carminite Ghastling",
+								"Carminite Golem",
+								"Charm Effect",
+								"Cube of Annihilation",
+								"Darkwood Boat",
+								"Darkwood Boat with Chest",
+								"Death Tome",
+								"Death Tome Bolt",
+								"Deer",
+								"Dwarf Rabbit",
+								"Explosive Lich Bolt",
+								"Falling Ice",
+								"Fire Beetle",
+								"Giant Miner",
+								"Harbinger Cube",
+								"Hedge Spider",
+								"Helmet Crab",
+								"Hostile Wolf",
+								"Hydra",
+								"Hydra Mortar",
+								"Ice Arrow",
+								"Ice Bomb",
+								"Ice Crystal",
+								"Ice Snowball",
+								"King Spider",
+								"Knight Phantom",
+								"Kobold",
+								"Lich Bolt",
+								"Lich Minion",
+								"Lower Goblin Knight",
+								"Loyal Zombie",
+								"Magic Painting",
+								"Mangrove Boat",
+								"Mangrove Boat with Chest",
+								"Maze Slime",
+								"Minewood Boat",
+								"Minewood Boat with Chest",
+								"Minoshroom",
+								"Minotaur",
+								"Mist Wolf",
+								"Moonworm",
+								"Mosquito Swarm",
+								"Moving Slide Trap",
+								"Naga",
+								"Nature Bolt",
+								"Penguin",
+								"Pinch Beetle",
+								"Progression Protection Box",
+								"Questing Ram",
+								"Raven",
+								"Redcap",
+								"Redcap Sapper",
+								"Roving Cube",
+								"Seeker Arrow",
+								"Skeleton Druid",
+								"Slime Beetle",
+								"Slime Blob",
+								"Snow Guardian",
+								"Snow Queen",
+								"Sortingwood Boat",
+								"Sortingwood Boat with Chest",
+								"Squirrel",
+								"Stable Ice Core",
+								"Swarm Spider",
+								"Thrown Block",
+								"Thrown Weapon",
+								"Timewood Boat",
+								"Timewood Boat with Chest",
+								"Tiny Bird",
+								"Towerwood Borer",
+								"Transwood Boat",
+								"Transwood Boat with Chest",
+								"Troll",
+								"Twilight Lich",
+								"Twilight Oak Boat",
+								"Twilight Oak Boat with Chest",
+								"Twilight Scepter Bolt",
+								"Unstable Ice Core",
+								"Upper Goblin Knight",
+								"Ur-Ghast",
+								"Winter Wolf",
+								"Wraith",
+								"Yeti",
+								"Zombie"
+							],
+							"item": [
+								"Adherent Spawn Egg",
+								"Alpha Yeti Fur",
+								"Alpha Yeti Spawn Egg",
+								"Arctic Boots",
+								"Arctic Fur",
+								"Arctic Hood",
+								"Arctic Jacket",
+								"Arctic Leggings",
+								"Armor Shard",
+								"Armor Shard Cluster",
+								"Armored Giant Spawn Egg",
+								"Banner Pattern",
+								"Beef Jerky",
+								"Berry Medley",
+								"Bighorn Sheep Spawn Egg",
+								"Blackberry",
+								"Blightberry",
+								"Block and Chain",
+								"Block and Chain Goblin Spawn Egg",
+								"Blueberry",
+								"Boar Spawn Egg",
+								"Borer Essence",
+								"Brittle Potion Flask",
+								"Canopy Boat",
+								"Canopy Boat with Chest",
+								"Carminite",
+								"Carminite Broodling Spawn Egg",
+								"Carminite Ghastguard Spawn Egg",
+								"Carminite Ghastling Spawn Egg",
+								"Carminite Golem Spawn Egg",
+								"Charm of Keeping I",
+								"Charm of Keeping II",
+								"Charm of Keeping III",
+								"Charm of Life I",
+								"Charm of Life II",
+								"Chicken Jerky",
+								"Cod Jerky",
+								"Concentrated Essence Berry",
+								"Copper Nugget",
+								"Copper Oreberry",
+								"Crown Splinter",
+								"Crumble Horn",
+								"Cube of Annihilation",
+								"Darkwood Boat",
+								"Darkwood Boat with Chest",
+								"Death Tome Spawn Egg",
+								"Deer Spawn Egg",
+								"Diamond Minotaur Axe",
+								"Duskberry",
+								"Dwarf Rabbit Spawn Egg",
+								"Emperor's Cloth",
+								"Ender Bow",
+								"Exanimate Essence",
+								"Fiery Blood",
+								"Fiery Boots",
+								"Fiery Chestplate",
+								"Fiery Helmet",
+								"Fiery Ingot",
+								"Fiery Leggings",
+								"Fiery Pickaxe",
+								"Fiery Sword",
+								"Fiery Tears",
+								"Fire Beetle Spawn Egg",
+								"Four-Leaf Clover",
+								"Fugu Jerky",
+								"Gelatinous Maze Slime Drop",
+								"Gelatinous Slime Drop",
+								"Giant Miner Spawn Egg",
+								"Giant's Pickaxe",
+								"Giant's Sword",
+								"Glass Sword",
+								"Gold Oreberry",
+								"Golden Minotaur Axe",
+								"Greater Potion Flask",
+								"Harbinger Cube Spawn Egg",
+								"Hedge Spider Spawn Egg",
+								"Helmet Crab Spawn Egg",
+								"Hostile Wolf Spawn Egg",
+								"Hydra Chop",
+								"Hydra Spawn Egg",
+								"Ice Bomb",
+								"Ice Bow",
+								"Ice Crystal Spawn Egg",
+								"Ice Sword",
+								"Iron Oreberry",
+								"Ironwood Axe",
+								"Ironwood Boots",
+								"Ironwood Chestplate",
+								"Ironwood Helmet",
+								"Ironwood Hoe",
+								"Ironwood Ingot",
+								"Ironwood Leggings",
+								"Magic Map",
+								"Maze Map",
+								"Maze/Ore Map",
+								"Meef Steak",
+								"Raw Boarkchop",
+								"Scepter of Fortification",
+								"Talisman of the Cube",
+								"Venison Steak"
+							],
+							"group": [
+								"Twilight Forest: Blocks",
+								"Twilight Forest: Equipment",
+								"Twilight Forest: Food",
+								"Twilight Forest: Items",
+								"Twilight Forest: Work in Progress"
+							]
+						},
+						"data": [
+							"advancement",
+							"dimension",
+							"enchantment",
+							"loot_table",
+							"recipe",
+							"structure",
+							"worldgen"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 2088,
+						"jars": [],
+						"capabilities": {
+							"unsafe": {
+								"twilightforest/compat/c2me/OpenclFallbackEnabler.class": [
+									"sun/misc/Unsafe.staticFieldOffset",
+									"sun/misc/Unsafe.putBoolean"
+								]
+							}
+						},
+						"hosts": {
+							"minecraft.wiki": [
+								"twilightforest/config/ConfigComments.class",
+								"twilightforest/config/TFCommonConfig.class"
+							],
+							"benimatic.com": [
+								"twilightforest/config/ConfigComments.class",
+								"twilightforest/config/TFCommonConfig.class"
+							],
+							"discord.experiment115.com": [
+								"twilightforest/events/EntityEvents.class",
+								"twilightforest/mixin/PlayerAdvancementsMixin.class"
+							],
+							"github.com": [
+								"twilightforest/item/travellers_gear/modifiers/TransferableComponentModifier.class",
+								"twilightforest/client/OptifineWarningScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changes in 4.8.4211\n- Fixed the Ominous Fire not converting mobs that die in it: the Fabric port left the entity transformation data-map lookup as a TODO stub, so only players were converted. Horses now become zombie horses, piglins become zombified piglins and villagers become zombie villagers, matching upstream\n\n## Prerequisite (Important)\nThis mod requires Forge Config API Port to run properly:\n- CurseForge: `https://www.curseforge.com/minecraft/mc-mods/forge-config-api-port`\n- Modrinth: `https://modrinth.com/mod/forge-config-api-port`\n\nRequires Fabric Loader `0.19.3+` and Fabric API for 26w14a."
+		},
+		{
+			"tag": "Fabric-26.2-4.8.4211",
+			"published": "2026-11-03T20:45:38Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 707031940,
+					"name": "twilightforest.re26-26.2-4.8.4211-fabric.jar",
+					"url": "https://github.com/Lonmo0208/Twilightforest-Re26/releases/download/Fabric-26.2-4.8.4211/twilightforest.re26-26.2-4.8.4211-fabric.jar",
+					"size": 23430751,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "c6144f89fbf02b223e50d6ea3d35896a166c2751bfe1f25e47a03acbf64769a2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "twilightforest",
+							"version": "4.8.4211",
+							"name": "The Twilight Forest:Re26",
+							"description": "Unofficial port of Twilight Forest from Minecraft 1.21.1 to Minecraft 26.1.x and 26.2.x, adapting the mod's dimension, biomes, structures, bosses, items, and mechanics to the latest Minecraft version for modern gameplay.",
+							"minecraft": "26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"forgeconfigapiport"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "8d438a6ecc1277cdde6e23ec926fdfecfe9e7f531638bf0c70ad2ec96597e2c3.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement",
+							"dimension",
+							"enchantment",
+							"loot_table",
+							"recipe",
+							"structure",
+							"worldgen"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 2077,
+						"jars": [],
+						"capabilities": {
+							"unsafe": {
+								"twilightforest/compat/c2me/OpenclFallbackEnabler.class": [
+									"sun/misc/Unsafe.staticFieldOffset",
+									"sun/misc/Unsafe.putBoolean"
+								]
+							}
+						},
+						"hosts": {
+							"minecraft.wiki": [
+								"twilightforest/config/ConfigComments.class",
+								"twilightforest/config/TFCommonConfig.class"
+							],
+							"benimatic.com": [
+								"twilightforest/config/ConfigComments.class",
+								"twilightforest/config/TFCommonConfig.class"
+							],
+							"discord.experiment115.com": [
+								"twilightforest/events/EntityEvents.class",
+								"twilightforest/mixin/PlayerAdvancementsMixin.class"
+							],
+							"github.com": [
+								"twilightforest/item/travellers_gear/modifiers/TransferableComponentModifier.class",
+								"twilightforest/client/OptifineWarningScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changes in 4.8.4211\n- Fixed the Ominous Fire not converting mobs that die in it: the Fabric port left the entity transformation data-map lookup as a TODO stub, so only players were converted. Horses now become zombie horses, piglins become zombified piglins and villagers become zombie villagers, matching upstream\n\n## Prerequisite (Important)\nThis mod requires Forge Config API Port to run properly:\n- CurseForge: `https://www.curseforge.com/minecraft/mc-mods/forge-config-api-port`\n- Modrinth: `https://modrinth.com/mod/forge-config-api-port`\n\nRequires Fabric Loader `0.20.0+` and Fabric API `0.163.0+26.2`."
+		},
+		{
+			"tag": "Fabric-26.3-4.8.4211",
+			"published": "2026-11-03T20:43:25Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 707026183,
+					"name": "twilightforest.re26-26.3-4.8.4211-fabric.jar",
+					"url": "https://github.com/Lonmo0208/Twilightforest-Re26/releases/download/Fabric-26.3-4.8.4211/twilightforest.re26-26.3-4.8.4211-fabric.jar",
+					"size": 23994366,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "ccda157bbfc7cfc50091afd77a4d97f63f621dc8f508f507a08f23b7b037c68c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "twilightforest",
+							"version": "4.8.4211",
+							"name": "The Twilight Forest:Re26",
+							"description": "Unofficial port of Twilight Forest from Minecraft 1.21.1 to Minecraft 26.1.x and 26.2.x, adapting the mod's dimension, biomes, structures, bosses, items, and mechanics to the latest Minecraft version for modern gameplay.",
+							"minecraft": "26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"forgeconfigapiport"
+							],
+							"provides": [
+								"forgeconfigapiport"
+							],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "8d438a6ecc1277cdde6e23ec926fdfecfe9e7f531638bf0c70ad2ec96597e2c3.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement",
+							"dimension",
+							"enchantment",
+							"loot_table",
+							"recipe",
+							"structure",
+							"worldgen"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 2426,
+						"jars": [
+							"META-INF/jars/forge-config-api-port-26.2.1-patched.jar",
+							"META-INF/jars/forge-config-api-port-26.2.1-patched.jar!META-INF/jars/core-3.8.4.jar",
+							"META-INF/jars/forge-config-api-port-26.2.1-patched.jar!META-INF/jars/toml-3.8.4.jar"
+						],
+						"capabilities": {
+							"unsafe": {
+								"twilightforest/compat/c2me/OpenclFallbackEnabler.class": [
+									"sun/misc/Unsafe.staticFieldOffset",
+									"sun/misc/Unsafe.putBoolean"
+								]
+							},
+							"network": {
+								"META-INF/jars/forge-config-api-port-26.2.1-patched.jar!META-INF/jars/core-3.8.4.jar!com/electronwill/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/forge-config-api-port-26.2.1-patched.jar!META-INF/jars/core-3.8.4.jar!com/electronwill/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/forge-config-api-port-26.2.1-patched.jar!META-INF/jars/core-3.8.4.jar!com/electronwill/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"minecraft.wiki": [
+								"twilightforest/config/ConfigComments.class",
+								"twilightforest/config/TFCommonConfig.class"
+							],
+							"benimatic.com": [
+								"twilightforest/config/ConfigComments.class",
+								"twilightforest/config/TFCommonConfig.class"
+							],
+							"discord.experiment115.com": [
+								"twilightforest/events/EntityEvents.class",
+								"twilightforest/mixin/PlayerAdvancementsMixin.class"
+							],
+							"github.com": [
+								"twilightforest/item/travellers_gear/modifiers/TransferableComponentModifier.class",
+								"twilightforest/client/OptifineWarningScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Changes in 4.8.4211\n- Fixed the Ominous Fire not converting mobs that die in it: the Fabric port left the entity transformation data-map lookup as a TODO stub, so only players were converted. Horses now become zombie horses, piglins become zombified piglins and villagers become zombie villagers, matching upstream\n\n## Prerequisite (Important)\nThis mod requires Forge Config API Port to run properly:\n- CurseForge: `https://www.curseforge.com/minecraft/mc-mods/forge-config-api-port`\n- Modrinth: `https://modrinth.com/mod/forge-config-api-port`\n\nRequires Fabric Loader `0.20.0+` and Fabric API `0.163.0+26.3`."
+		},
 		{
 			"tag": "Fabric-26.3-4.8.4210",
 			"published": "2026-10-27T05:28:25Z",
@@ -18,7 +736,7 @@
 					"name": "twilightforest.re26-26.3-4.8.4210-fabric.jar",
 					"url": "https://github.com/Lonmo0208/Twilightforest-Re26/releases/download/Fabric-26.3-4.8.4210/twilightforest.re26-26.3-4.8.4210-fabric.jar",
 					"size": 23994241,
-					"downloads": 22,
+					"downloads": 32,
 					"inspection": 2,
 					"sha256": "adbacccd4216d174d0ec80b679797b8abd87a2fd6942bd66fd1487a52420a083",
 					"mods": [
@@ -731,7 +1449,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 185
+					"downloads": 186
 				}
 			],
 			"notes": "## Prerequisite (Important)\nThis mod requires Forge Config API Port to run properly:\n- CurseForge: `https://www.curseforge.com/minecraft/mc-mods/forge-config-api-port`\n- Modrinth: `https://modrinth.com/mod/forge-config-api-port`\n\n## Combat Fixes\n- Fixed the Hydra's head attacks and breath attacks failing to work\n- Fixed all boss health bars showing as white: each boss now has its own matching health bar color\n\n## Item Fixes\n- Fixed the Lifedrain Scepter not being able to drain through walls: you can now drain enemies behind walls again (this fix is unverified)\n- Fixed the Uncrafting Table crashing with an error when used\n\n## World Generation Fixes\n- Fixed terrain sinking and clipping around large structures (courtyards, strongholds, etc.)\n- Fixed some biomes failing to generate properly\n- Fixed abnormal generation of structures such as the Lich Tower and Dark Tower\n- Fixed courtyard mazes generating incompletely / with broken fragments\n\n## Visuals & Details\n- Fixed multiple block models showing as pink missing-texture blocks (Mushgloom, Torchberry Plant, Trollber, etc.)\n- Added 9 trophy item models (Naga, Lich, Hydra, Snow Queen, etc.)\n- Fixed the Twilight Forest dimension lighting being abnormally too dark\n\n## Other\n- Fixed config files failing to load properly (this fix is unverified)\n- Removed unused code for better stability"

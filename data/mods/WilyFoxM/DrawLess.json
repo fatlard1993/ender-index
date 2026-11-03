@@ -6,8 +6,97 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-15T21:45:49Z",
-	"pushed": "2026-11-03T19:41:26Z",
+	"pushed": "2026-11-03T20:48:36Z",
 	"releases": [
+		{
+			"tag": "1.5.0",
+			"published": "2026-11-03T20:48:36Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 707041078,
+					"name": "drawless-1.5.0.jar",
+					"url": "https://github.com/WilyFoxM/DrawLess/releases/download/1.5.0/drawless-1.5.0.jar",
+					"size": 269134,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "0ed5f47a86dee4d9874a49616c66a5024d57f8110967f07738f25f113bf2ef61",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "drawless",
+							"version": "1.5.0",
+							"name": "DrawLess",
+							"description": "Client-side rendering optimizations for busy multiplayer scenes: Item Displays, players and particles.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium"
+							]
+						}
+					],
+					"icon": "1880ff639f3c9e9984939b7d131865559b2a30a054339e65ab79b69f685a5d4d.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 125,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 707041415,
+					"name": "drawless-dev-1.5.0.jar",
+					"url": "https://github.com/WilyFoxM/DrawLess/releases/download/1.5.0/drawless-dev-1.5.0.jar",
+					"size": 224273,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "cdc4472666998aac886542656feffcdb11743da0ec9aeac27b7bc1b2910f8627",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "drawless-dev",
+							"version": "1.5.0",
+							"name": "DrawLess Dev",
+							"description": "Diagnostics, profiles and benchmark reports for DrawLess. Not needed to play.",
+							"environment": "client",
+							"depends": [
+								"drawless"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 95,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**DrawLess 1.5.0 — Lighter: diagnostics moved to a separate add-on.**\n\nDrawLess 1.5.0 adds no new optimizations. It removes what playing does not need:\nmeasurement code now lives in an optional add-on, and old test modes are gone.\n\n**Lighter**\n\n- The JAR is about 39% smaller than in 1.4.0 (441 → 269 KB), with a third of its\n  mixin hooks (151 → 50). The removed hooks served only measurements and test modes.\n- Diagnostics, profiles, benchmark reports and all `/drawless` commands, including\n  `/drawless status`, moved to the optional **DrawLess Dev** add-on. Playing does not\n  need it. It is attached to this GitHub release, is not on Modrinth, and requires\n  exactly the same DrawLess version.\n\n**Settings**\n\n- The **Diagnostics** page is gone. Its only option, **All Item Displays**, is now on\n  the **Advanced** page.\n- Removed the test modes **Freeze models**, **Hide models** and **Pause ticks**, and the\n  **Pause ticks with frozen models** option. They were experiments for estimating how\n  much frame time Item Displays take. A configuration saved with a removed mode now\n  loads with Live geometry.\n\n**Fixes**\n\n- Leaving a server ran cleanup from the network thread, which could change render data\n  and close GPU buffers from a thread without a graphics context. Cleanup now runs on\n  the client thread. No crash was reproduced before the fix; the problem was found from\n  the thread the event runs on.\n- With default settings, Item Displays are now checked in place instead of walking all\n  entities of the world once per game tick. This is a cleanup: the scan cost only\n  microseconds per tick, so don't expect a change in FPS.\n\n**Measurements (DrawLess Dev)**\n\n- Benchmark and probe reports now include frame time tails and slow frames.\n- New passive recording for long sessions: `/drawless record <label>`, `stop` and\n  `status`. Time in menus, unfocused and with a lowered frame limit is left out.\n\n**Performance**\n\nI didn't re-measure performance for this release. The rendering path has no new\noptimizations, so the benchmark on the mod page is still Benchmark 04, measured on 1.4.0.\nThat benchmark had the diagnostic hooks inside the JAR; I didn't measure whether removing\nthem changes FPS. I checked the game without the add-on and with it, and everything looked\nnormal, including `/drawless status` with the add-on and no `/drawless` commands without\nit. That is an observation, not pixel parity.\n\n**Compatibility**\n\nLocal client tests passed standalone, with Sodium 0.9.2 + ImmediatelyFast 1.16.5, and\nwith Sodium + Iris 1.11.4 with shaders off. These safeguards do not imply validation\nwith every combination of rendering or model mods.\n\n**Requirements**\n\nMinecraft **26.2**, Fabric Loader **0.19.3+**, Fabric API **0.161.0+26.2** and\nJava **25**. Sodium is optional; no server-side installation is needed.\n\nThanks to **fzzyhmstrs and the Particle Core contributors**, alongside\n**RK_01 / RaphiMC**, the **ImmediatelyFast contributors**, **LlamaLad7** and the\n**MixinExtras contributors**. [Attributions and reference links](https://github.com/WilyFoxM/DrawLess#attributions)."
+		},
 		{
 			"tag": "1.4.0",
 			"published": "2026-11-01T15:27:39Z",
