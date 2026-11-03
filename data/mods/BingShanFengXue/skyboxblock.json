@@ -6,8 +6,79 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-23T13:49:13Z",
-	"pushed": "2026-11-01T13:58:07Z",
+	"pushed": "2026-11-03T10:50:35Z",
 	"releases": [
+		{
+			"tag": "v1.0.6-test.1-port.2-mc26.2",
+			"published": "2026-11-03T10:50:52Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 705259531,
+					"name": "skyboxblock-1.0.6-test.1-port.2-mc26.2.jar",
+					"url": "https://github.com/BingShanFengXue/skyboxblock/releases/download/v1.0.6-test.1-port.2-mc26.2/skyboxblock-1.0.6-test.1-port.2-mc26.2.jar",
+					"size": 17015597,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "45c256728cdac6a75f3e71b1a1b6af1335de53e753702aa3dee79aa450c5daa8",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "skyboxblock",
+							"version": "1.0.6-test.1-port.2",
+							"name": "Sky Box Block",
+							"description": "天空盒方块：原版独立天空、纯白、纯黑及六套连续全景天空。Minecraft 26.2 Fabric；各环境验证范围见项目交付记录。新增用户提供素材的来源声明见 THIRD_PARTY_NOTICES.md。",
+							"minecraft": "26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"iris",
+								"distanthorizons"
+							]
+						}
+					],
+					"icon": "67d01353d782c5dc82d19a77d29504c63720c142ee3ec5e69c353ece049442d3.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Sky Box Blocks"
+							],
+							"block": [
+								"Sky Box Block (Apocalypse Land)",
+								"Sky Box Block (Clear Sky A)",
+								"Sky Box Block (Clear Sky B)",
+								"Sky Box Block (Dusk)",
+								"Sky Box Block (Lush Planet)",
+								"Sky Box Block (Milky Way)",
+								"Sky Box Block (Pure Black)",
+								"Sky Box Block (Pure White)",
+								"Sky Box Block (Vanilla)"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 95,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Minecraft **26.2** / Fabric 天空盒方块 —— **1.0.6-test.1-port.2**（移植测试版，Pre-release）。\n\n本包是 [1.21.1 主线](https://github.com/BingShanFengXue/skyboxblock) 的 26.2 移植，源码位于仓库 `mc26.2/`。\n\n## port.2 做了什么\n\n- `BlockItem` 注册显式使用 `useBlockDescriptionPrefix()`，中英 `block.*` 键与 1.21.1 主线一致，不再靠重复的 `item.*` 翻译掩盖问题\n- 撤掉 `START_MAIN` 里重入原版 `SkyRenderer` 的做法：私有天空不再触发 Iris 天空 phase 或未注册管线覆盖\n- 方块实体只收集几何；在所属视图的不透明阶段写入天空颜色与真实深度，Iris final 之后按**材质归属 + 当前世界深度**恢复窗口颜色，保留前景与透明叠加\n- 全景方向在片元里用完整逆 VP 的两个有限深度点重建，消除逐顶点 UV 的透视拉伸、分块与走动摇晃\n- 用原生天空状态与资源绘制日月星、晨昏、雾与体积云，恢复云贴图 ARGB、透明裁剪、smoothstep 淡出与原生月纹 UV\n- 恢复 256 格可见距离与共享网格端点的 double-before-float 精度；恢复服务端／逐玩家环境与私有时钟消费，修正「锁定当前时间」的 ticks/相位单位混用\n- 对已审计的 ITRP 0.8.31 / Iris 1.11.4，按包哈希、程序与纹理归属补齐真实 HDR 折射 scene input；暗风格只替换测光采样 atlas，原曝光 compute 与场景／泛光 RGB 不动\n- 新增可选的 DH 当前视图深度观察与门户视图隔离\n\n## 环境要求\n\n| 项 | 要求 |\n|---|---|\n| Minecraft | **26.2** |\n| Java | **25** |\n| Fabric Loader | **0.20.1+** |\n| Fabric API | 对应 26.2 版本（`0.161.0+26.2` 为开发基线）|\n| 渲染 | **OpenGL**；Vulkan、26.1、26.3 未标记为已适配 |\n| 可选 | Iris / Distant Horizons（版本与边界见验证记录）|\n\n## 验收（`port2-validation-summary.json`）\n\n- `overallStatus: accepted`；交付包 SHA-256 `45c256728cdac6a75f3e71b1a1b6af1335de53e753702aa3dee79aa450c5daa8`\n- 矩阵：core 145 场景、advanced 14、rejoin 1、DH-off 4、DH-ITRP 4，全部 passed\n- 负对照、前后景深度连续性、全景 CPU oracle 与真实移动／旋转／bob 变换均有记录\n\n## 已知边界\n\n- 这是 **26.2 的移植测试版**，不是 1.21.1 主线的等价发布；两套工程可并存但互不影响\n- 移植线目前以 OpenGL 为准；26.1／26.3 仅做过 API 面记录，不作为已适配结论\n- 26.2 jar **自身未内嵌 NOTICE 文件**：归属文本在仓库 `mc26.2/NOTICE`、`mc26.2/THIRD_PARTY_NOTICES.md` 与本页说明中提供\n- 性能长测与旧严格恢复项不因本版宣称通过\n\n## 许可与署名\n\n- 代码 **MIT**（`LICENSE`），第三方归属见 `NOTICE` / `THIRD_PARTY_NOTICES.md`\n- 内置全景素材按上游协议：CC0 1.0（Poly Haven / Screaming Brain Studios / VertexZero）与 **CC BY 4.0（Solar System Scope，必须署名）**；逐件证据在 `docs/third-party-evidence/`\n- 你自行放入 `skyboxes/` 的素材，授权由你负责\n\n## 附件\n\n- `skyboxblock-1.0.6-test.1-port.2-mc26.2.jar` — 模组本体（MC 26.2 / Java 25）\n- `skyboxblock-1.0.6-test.1-port.2-mc26.2.jar.sha256.txt` — 校验值\n- `skybox-mc26.2-port.2-source-and-evidence.zip` — 源码、工具、审计文档与验收摘要（384 条目）"
+		},
 		{
 			"tag": "v1.0.5-test.1-r38",
 			"published": "2026-11-01T13:58:26Z",
