@@ -983,7 +983,9 @@ export const crawl = async ({ only } = {}) => {
 	const demand = packDemand(await readPacks(), modrinthIds);
 	const { changed, steady } = only
 		? { changed: new Set(), steady: new Map() }
-		: await checkReleases({ lines: uniqueRepositories([...found, ...fromModrinth, ...Object.values(await readPackLines()).flat()]) });
+		: await checkReleases({
+				lines: uniqueRepositories([...found, ...fromModrinth, ...Object.values(await readPackLines()).flat()]),
+			});
 	const noJars = only ? {} : await readNoJars();
 	const notResting = line => !restingOn(noJars[line]) || changed.has(line);
 	const repos = crawlOrder(
