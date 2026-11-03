@@ -1,8 +1,9 @@
 name: crawl
 
 on:
-  # A crawl an hour: each spends the App's hourly limit and commits it, so a crawl lost costs an hour. Only the 04:17
-  # crawl discovers
+  # Each crawl starts the next as it ends, since GitHub runs a schedule hours late or not at all; the schedule restarts
+  # the chain should a crawl not get as far as starting it. Each spends the App's hourly limit and commits it, so a
+  # crawl lost costs an hour. Only the 04:17 crawl discovers
   schedule:
     - cron: '17 4 * * *'
     - cron: '17 0-3,5-23 * * *'
@@ -15,6 +16,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency: crawl
 
@@ -126,6 +128,12 @@ jobs:
         with:
           path: ender-index/.cache
           key: crawl-${{ github.run_id }}
+      # Not after a cancelled crawl, so cancelling one stops the chain
+      - name: start the next crawl
+        if: always() && (steps.crawl.outcome == 'success' || steps.crawl.outcome == 'failure')
+        run: gh workflow run crawl.yml --repo ${{ github.repository }} --ref main -f discover=false
+        env:
+          GH_TOKEN: ${{ github.token }}
       - name: report a failed crawl
         if: steps.crawl.outcome == 'failure'
         run: exit 1
