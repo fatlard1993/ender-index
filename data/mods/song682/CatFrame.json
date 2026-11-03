@@ -6,8 +6,86 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2022-12-22T15:32:20Z",
-	"pushed": "2026-10-24T17:05:05Z",
+	"pushed": "2026-11-03T11:47:51Z",
 	"releases": [
+		{
+			"tag": "v0.10.11",
+			"published": "2026-11-03T11:47:51Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 705414839,
+					"name": "CatFrame-0.10.11-deobf.jar",
+					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.11/CatFrame-0.10.11-deobf.jar",
+					"size": 1542066,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "95c794f743d0d4a0307f59a33a95f95e9f9e742ec01b07f77df9d8ce5c2056b8",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Bingo Plushy",
+								"Bluey Plushy"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 660,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/resources/builtin/BuiltinResourcePack.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 705414834,
+					"name": "CatFrame-0.10.11.jar",
+					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.11/CatFrame-0.10.11.jar",
+					"size": 1563016,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "76d9be92c5011cd4680f345d62a918f3d16d343ebecb54714709606760209676",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Bingo Plushy",
+								"Bluey Plushy"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 660,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/resources/builtin/BuiltinResourcePack.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CatFrame - 0.10.11\n\n## What is changed?\nChange version number from previous to `0.10.11`\n\n### ➕Add:\n- Implement blockstate uvlock. Parse path already existed (BlockstateJson.Variant.uvlock); now threaded through the bake pipeline. JsonModelBake.applyUvLock re-derives each rotated quad's UV from its world position per the final facing (mirrors vanilla FaceBakery.lockVertexUv), so geometry turns but the texture stays world-locked. UnbakedModel gains a default bake(...,uvlock) overload; ModelJsonUnbakedAdapter applies the lock only when a non-zero rotation is present. uvlock is plumbed through ModelBaker/BakingCore and encoded into the BakedModelCache key via a trailing '!' marker (lazy-baked; async pre-bake keeps plain keys). Consumers (ResidentStateModel, RenderDispatcher, StateProviderBlockModel) pass variant.uvlock.\n- Add chunk-boundary render refresh on chunk load (IWorldAccess notification bypass). Vanilla 1.7.10 only re-marks neighbour sections on chunk UNLOAD (WorldClient.doPreChunk false branch); both client chunk handlers (NetHandlerPlayClient.handleChunkData S21 / handleMapChunkBulk S26) mark only the received chunk's own range after fillChunk, so connection geometry across chunk seams stays stale until an unrelated block update. New client-only MixinNetHandlerPlayClient injects at the handler TAILs (block data already filled, deferred rebuild reads it next render pass) and emits four one-block-wide World.markBlockRangeForRenderUpdate strips hugging the loaded column; the +/-1 section dilation is vanilla's own RenderGlobal.markBlocksForUpdate behaviour, and the unload path is skipped. Registered under Mixins.RENDERING.\n- Add unit tests for the joinCode staticization work: stateIndexOf injectivity/domain/-1 bypass and static-property participation, MultipartWhen precomputed split with fallback equivalence, BakedModelCache generation bump, ResidentStateModel memo identity/exclusion/rebuild; set compileTestJava UTF-8 encoding\n- Memoize merged blockstate parts by full cartesian-product state index (joinCode): add BlockStateDefinition.stateIndexOf with -1 bypass, ResidentStateModel per-target part memo with weighted-array exclusion, and BakedModelCache generation counter to invalidate memos on reload\n   - WorldTranslucentPasses (new): marks blocks whose BLOCK_WORLD part contains force-translucent quads, maintains a per-thread chunk-tessellation scope, sequence-pairs getRenderBlockPass -> canRenderInPass -> render to carry the current tessellation pass (0 solid / 1 alpha), and coalesces first-time discoveries into a deferred loadRenderers rebuild on client tick end. clear() drops marks on model re-registration so a hijack never outlives its model.\n   - MixinBlock (new): base-only, narrow-gate injections. getRenderBlockPass returns 1 for marked blocks (so the pass loop compiles an alpha mesh); canRenderInPass(opts the solid pass 0 back in for the paired block). Blocks overriding these themselves (native glass, GTNH-style multi-pass) dispatch to their subclass body first and stay untouched. canRenderInPass is a Forge-patched method (no SRG name in prod), so it is targeted with remap=false rather than an extraMappings srg entry.\n   - JsonModelBake: add per-quad BakedQuad.forceTranslucent; new bakeElement overload taking a force-variable set; an element is force-translucent as a whole when any face references a flagged variable (element granularity per spec). deepCopyQuad copies the flag.\n   - BlockStateModelPart: add translucentSplit() (solid vs force-translucent sub-parts, zero-allocation when homogeneous), mirroring atlasSplit.\n   - Add canonicalKey(): bare paths default to the minecraft namespace, builtin/ passes through.\n\n### 🔧Fix:\n\n..."
+		},
 		{
 			"tag": "v0.10.10",
 			"published": "2026-10-24T17:05:06Z",
@@ -18,7 +96,7 @@
 					"name": "CatFrame-0.10.10-deobf.jar",
 					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.10/CatFrame-0.10.10-deobf.jar",
 					"size": 1515234,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "e08d0e032c28d7254b887c9ed09dbd63393994972470f2b7645c670e783c5275",
 					"mods": [],
@@ -53,7 +131,7 @@
 					"name": "CatFrame-0.10.10.jar",
 					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.10/CatFrame-0.10.10.jar",
 					"size": 1535935,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "df16a99cbe368a82de7e06e27c04d3ab7cf2e5d92d9a2972dab8bd71c0698089",
 					"mods": [],
@@ -96,7 +174,7 @@
 					"name": "CatFrame-0.10.9-deobf.jar",
 					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.9/CatFrame-0.10.9-deobf.jar",
 					"size": 1502149,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "25be61772676204120226168a8036a1189f11067956af7a2f524fbc34ad27c7c",
 					"mods": [],
@@ -131,7 +209,7 @@
 					"name": "CatFrame-0.10.9.jar",
 					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.9/CatFrame-0.10.9.jar",
 					"size": 1522892,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "14ef9d511ba5db2554c691e6c59bb07ef8e36c97d9a26f77d26933663af91c49",
 					"mods": [],
@@ -174,7 +252,7 @@
 					"name": "CatFrame-0.10.8-deobf.jar",
 					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.8/CatFrame-0.10.8-deobf.jar",
 					"size": 1499560,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "9d4c2164644e8b53ac01d6f13ed0ea881e2ad601e49873e66e91d570fd0a3412",
 					"mods": [],
@@ -209,7 +287,7 @@
 					"name": "CatFrame-0.10.8.jar",
 					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.8/CatFrame-0.10.8.jar",
 					"size": 1520287,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "3cee19b32c65e152e8164223f15fa1aa57144f69425c3f485905c79aa4963248",
 					"mods": [],
@@ -252,7 +330,7 @@
 					"name": "CatFrame-0.10.4-deobf.jar",
 					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.4/CatFrame-0.10.4-deobf.jar",
 					"size": 1397831,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "8a955e5e578e9bdc0071df142661185cc4d4287b0cc027655323f12461b30ad1",
 					"mods": [],
@@ -287,7 +365,7 @@
 					"name": "CatFrame-0.10.4.jar",
 					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.4/CatFrame-0.10.4.jar",
 					"size": 1418985,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "b77eea9109e4ae6ba4ffafc1efc7cda610d82d6ee93c2b6c7db65712863b3ae7",
 					"mods": [],
