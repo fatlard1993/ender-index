@@ -187,10 +187,30 @@ describe('the crawl reading repositories in batches', () => {
 				throw new Error('GraphQL was asked');
 			},
 		});
-		github.holdSteady(new Map([['A/Steady', { full_name: 'a/steady', stargazers_count: 99 }]]));
+		github.holdSteady(new Map([['a/steady', { full_name: 'a/steady', stargazers_count: 99 }]]));
 
 		expect((await github.repository('a/steady')).stargazers_count).toBe(99);
 		expect(await github.releases('a/steady')).toEqual(before);
+	});
+
+	test('answers a repository held steady when asked by another spelling of its name, as a pack names it', async () => {
+		const { ask } = answering();
+
+		globalThis.fetch = async url => {
+			throw new Error(`REST was asked for ${url}`);
+		};
+		github.planRepositories(['a/steady'], { ask });
+		const before = await github.releases('a/steady');
+
+		github.planRepositories([], {
+			ask: async () => {
+				throw new Error('GraphQL was asked');
+			},
+		});
+		github.holdSteady(new Map([['a/steady', { full_name: 'a/steady', stargazers_count: 99 }]]));
+
+		expect((await github.repository('A/Steady')).stargazers_count).toBe(99);
+		expect(await github.releases('A/STEADY')).toEqual(before);
 	});
 
 	test('leaves to REST a repository GraphQL found nothing for, a page past the first, and one not planned', async () => {

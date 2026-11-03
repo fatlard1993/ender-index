@@ -374,19 +374,19 @@ let steady = new Map();
  * read them: each is answered from them and its kept releases, asking GitHub nothing.
  */
 export const holdSteady = details => {
-	steady = new Map([...details].map(([name, repo]) => [name.toLowerCase(), repo]));
+	steady = new Map([...details].map(([name, repo]) => [name.toLowerCase(), { name, repo }]));
 };
 
 const held = async fullName => {
-	const repo = steady.get(fullName.toLowerCase());
+	const hold = steady.get(fullName.toLowerCase());
 
-	if (repo === undefined) return undefined;
+	if (hold === undefined) return undefined;
 
 	const kept = await cache();
 
-	kept[repositoryPath(fullName)] = { ...kept[repositoryPath(fullName)], fetched: Date.now(), body: repo };
+	kept[repositoryPath(hold.name)] = { ...kept[repositoryPath(hold.name)], fetched: Date.now(), body: hold.repo };
 
-	return { repo, releases: kept[releasesPath(fullName)].body };
+	return { repo: hold.repo, releases: kept[releasesPath(hold.name)].body };
 };
 
 export const repository = async fullName =>
