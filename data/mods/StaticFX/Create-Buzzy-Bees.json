@@ -5,8 +5,158 @@
 	"stars": 8,
 	"archived": false,
 	"created": "2026-02-05T17:06:08Z",
-	"pushed": "2026-11-03T12:13:41Z",
+	"pushed": "2026-11-03T13:02:25Z",
 	"releases": [
+		{
+			"tag": "v1.6.0",
+			"published": "2026-11-03T13:02:25Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 705636080,
+					"name": "cbbees-1.6.0.jar",
+					"url": "https://github.com/StaticFX/Create-Buzzy-Bees/releases/download/v1.6.0/cbbees-1.6.0.jar",
+					"size": 2813656,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "592caf0c9091e9701569c26256defec68937995d1c3552b12200cefb96744cb1",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "cbbees",
+							"version": "1.6.0",
+							"name": "Create Buzzy Beez",
+							"description": "Autonomous mechanical bees for construction and logistics. A Create mod addon.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create",
+								"geckolib"
+							],
+							"suggests": [
+								"sable-companion",
+								"ae2",
+								"refinedstorage"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"entity": [
+								"Drone"
+							],
+							"group": [
+								"Buzzy Bees",
+								"Create Addon"
+							],
+							"item": [
+								"Construction Planner",
+								"Copy Planner",
+								"Deconstruction Planner",
+								"Drone Range",
+								"Drone View",
+								"Drop Items",
+								"Honey Efficiency",
+								"Honey Tank",
+								"Incomplete Mechanical Bee",
+								"Incomplete Mechanical Beehive",
+								"Incomplete Mechanical Bumble Bee",
+								"Inventory Access",
+								"Master-Planner",
+								"Mechanical Bee",
+								"Mechanical Bee Chassis",
+								"Mechanical Bumble Bee",
+								"Mechanical Bumble Bee Chassis",
+								"Pickup Planner",
+								"Portable Beehive",
+								"Programmed Schematic",
+								"Rapid Wings",
+								"Reinforced Plating",
+								"Schematic Zapper",
+								"Soft Touch",
+								"Swarm Intelligence",
+								"Upgrade Template"
+							],
+							"block": [
+								"Cargo Port",
+								"Dock Port",
+								"Logistics Port",
+								"Mechanical Apiary",
+								"Mechanical Beehive",
+								"Schematic Deployer",
+								"Waggle Port"
+							],
+							"effect": [
+								"Hive Speed"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe",
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1150,
+						"jars": [
+							"META-INF/jarjar/common-image-3.15.3.jar",
+							"META-INF/jarjar/common-io-3.15.3.jar",
+							"META-INF/jarjar/imageio-core-3.15.3.jar",
+							"META-INF/jarjar/imageio-webp-3.15.3.jar",
+							"META-INF/jarjar/common-lang-3.15.3.jar"
+						],
+						"capabilities": {
+							"network": {
+								"de/devin/cbbees/content/schematics/external/CreateModSchematicSource.class": [
+									"java/net/http/HttpClient.newHttpClient",
+									"java/net/http/HttpClient.send"
+								],
+								"de/devin/cbbees/content/schematics/client/ThumbnailCache.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newHttpClient"
+								],
+								"META-INF/jarjar/imageio-core-3.15.3.jar!com/twelvemonkeys/imageio/stream/URLImageInputStreamSpi.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jarjar/common-lang-3.15.3.jar!com/twelvemonkeys/util/service/ServiceRegistry.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"exec": {
+								"META-INF/jarjar/common-io-3.15.3.jar!com/twelvemonkeys/io/FileSystem.class": [
+									"java/lang/Runtime.exec"
+								]
+							}
+						},
+						"hosts": {
+							"createmod.com": [
+								"de/devin/cbbees/content/schematics/external/CreateModSchematicSource.class"
+							],
+							"www.twelvemonkeys.com": [
+								"META-INF/jarjar/common-io-3.15.3.jar!com/twelvemonkeys/xml/XMLSerializer.class"
+							],
+							"more.com": [
+								"META-INF/jarjar/common-io-3.15.3.jar!com/twelvemonkeys/xml/XMLSerializer.class"
+							],
+							"www.w3.org": [
+								"META-INF/jarjar/common-io-3.15.3.jar!com/twelvemonkeys/xml/XMLSerializer.class"
+							],
+							"bugs.openjdk.java.net": [
+								"META-INF/jarjar/imageio-core-3.15.3.jar!com/twelvemonkeys/imageio/color/ProfileDeferralActivator.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Create: Buzzy Beez 1.6.0\n\n## New\n- **Optional block removal**: When placing a schematic where blocks already exist, you now get a choice what todo with those (break, replace, keep)\n- **AE2 and Refined Storage cable buses** in schematics are now built correctly.\n- **See what's out of reach**: parts of a job no hive can reach get a pulsing red box, and the job tells you how far the nearest hive falls short and what RPM it needs.\n- **Smarter material ordering**.\n\n## Performance\n- Rewrote how bees get their work increasing performance\n- Bees now use spare server tick time for placing blocks (**adaptive block budget**). Large builds go much faster on smaller servers and back off automatically when the server gets laggy.\n- Ghost blocks are now uploaded to the GPU once instead of rebuilt every frame, and only the part of the ghost that changed is updated.\n- Bees off screen or beyond the render distance are no longer drawn, and the number of bees drawn can be capped.\n- Many smaller server-side fixes\n\n## Changes\n- A job no longer stalls completely when part of it is out of range. The bees build everything they can reach and pick up the rest as soon as a hive can reach it.\n- Fluids are always removed first and placed last, including when undoing and redoing.\n- The next build phase now starts as soon as the previous phase's blocks are placed or removed, without waiting for bees to finish delivering items.\n- Stuck reasons now only appear once a problem lasts a couple of seconds, so they no longer flash briefly when joining a world.\n- Missing-material messages now show item names in your own language.\n\n## Fixes\n- Bees no longer hover for minutes over water or lava they're removing.\n- Removing a built schematic now also removes the fluids it placed (for schematics built from 1.6.0 on).\n- Zapper placements no longer try to place a block before the old one is removed.\n- Fixed a missing-texture error with some icons.\n\n## Config\n- New config options added for performance"
+		},
 		{
 			"tag": "v1.5.1",
 			"published": "2026-10-30T18:20:59Z",
@@ -17,7 +167,7 @@
 					"name": "cbbees-1.5.1.jar",
 					"url": "https://github.com/StaticFX/Create-Buzzy-Bees/releases/download/v1.5.1/cbbees-1.5.1.jar",
 					"size": 2728979,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "a1a300b6fc071555ea0a3c67f3491ba183e458b9f5826c897f09ee4ccda6f908",
 					"mods": [
