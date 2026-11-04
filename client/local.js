@@ -142,6 +142,12 @@ const track = shown => {
 
 const start = async (method, path, body) => track((await call(method, path, body)).job);
 
+/** ender web started from its desktop icon stops 15 minutes after the last request, so an open page asks well within that. */
+export const STILL_HERE_EVERY = 5 * 60_000;
+
+export const keepAlive = (ask = () => fetch('./api/ender').catch(() => undefined), every = STILL_HERE_EVERY) =>
+	setInterval(ask, every);
+
 /** Whether the page is served by ender web: the hosted page has no api to answer, so it never offers to change anything. */
 const detect = async () => {
 	const response = await fetch('./api/ender').catch(() => undefined);
@@ -153,6 +159,8 @@ const detect = async () => {
 	const jobs = await call('GET', 'jobs').catch(() => []);
 
 	for (const job of jobs.filter(each => each.state === 'running').toReversed()) track(job);
+
+	keepAlive();
 
 	return true;
 };

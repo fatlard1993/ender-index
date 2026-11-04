@@ -82,3 +82,16 @@ describe('the players panel', () => {
 		expect(panel.playerChoice({ name: 'suite' })).toEqual([]);
 	});
 });
+
+describe('an open page', () => {
+	test('keeps asking ender while it is open, well inside the 15 minutes ender web waits before stopping', async () => {
+		let asked = 0;
+		const timer = local.keepAlive(() => ++asked, 20);
+
+		await new Promise(resolve => setTimeout(resolve, 70));
+		clearInterval(timer);
+
+		expect(asked).toBeGreaterThanOrEqual(2);
+		expect(local.STILL_HERE_EVERY).toBeLessThan(15 * 60_000);
+	});
+});
