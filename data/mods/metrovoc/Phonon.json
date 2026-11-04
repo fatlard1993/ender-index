@@ -6,8 +6,210 @@
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2025-12-01T13:40:22Z",
-	"pushed": "2026-11-04T06:06:11Z",
+	"pushed": "2026-11-04T08:49:09Z",
 	"releases": [
+		{
+			"tag": "v0.3.0-beta.4+mc26.2",
+			"published": "2026-11-04T08:50:13Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 708864143,
+					"name": "phonon-neoforge-26.2-0.3.0-beta.4+mc26.2.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-beta.4%2Bmc26.2/phonon-neoforge-26.2-0.3.0-beta.4%2Bmc26.2.jar",
+					"size": 433519,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "2d14f46e5b8fef799c0541b2431ef0fabde7472afaf9c4a50e28a9fe68b90053",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-beta.4+mc26.2",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[26.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Boombox",
+								"Speaker"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 137,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/AudioTools.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/metrovoc/phonon/server/TitleSearch.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/AudioTools.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/metrovoc/phonon/server/TitleSearch.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/metrovoc/phonon/server/AudioToolManifest.class"
+							],
+							"i.ytimg.com": [
+								"com/metrovoc/phonon/server/SearchResult.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-beta.4\n\nFor Minecraft 26.2 and 1.21.1. Other targets stay at `0.3.0-alpha.3`. The only change since the\ntested commits is this version number and these notes.\n\n### Finding tracks\n\n- Find tracks by title in the game. On the Tracks tab, type a title, press Enter, and add a result\n  with its **+** or a double click. Results show pictures, uploader and length.\n- `/phonon add <title>` adds the first YouTube result.\n- Search YouTube, SoundCloud or Bilibili from the list beside the results. Bilibili often refuses,\n  so it says so and offers another try.\n- The server does the searching and fetches the pictures, so players never contact the sites.\n\n### Speaker screen\n\n- One search box. Typing filters your library, and a green row offers to find it online or add a pasted link.\n- Playlists: add songs by typing, without leaving the playlist. Drag to reorder, and rename in place.\n- Add a song to playlists from the Tracks tab, with ticks showing where it already is.\n- Once tuned in, the screen says who a button affects. Locked controls go grey and say why, instead of a chat error.\n- Tuning in pauses your own music, and leaving brings it back where it was.\n- Starting a station shares what's playing, so the music carries on.\n- The main button only pauses and resumes. Songs play from their row: double-click or the play icon.\n- Long names run under Now Playing, one way and wrapping around. Lists stay still and keep their tooltips.\n\n### Permissions\n\n- Stations answer to whoever created them and operators. `anyoneCanControlStations` opens them up.\n- Deleting a track is for operators and whoever added it, even with `anyoneCanAddTracks` on.\n- `anyoneCanAddTracks` now also shows the search to the players it allows.\n- Redstone on a speaker tuned to a station only works if that speaker's owner created the station,\n  unless `anyoneCanControlStations` is on.\n- A speaker or boombox can only be tuned to a shared station, never to another speaker's own music.\n\n### Download tools\n\n- Failures say what happened and offer what could help, including \"Update yt-dlp and try again\" for operators.\n- `/phonon tools` shows versions and age, and which sites last worked or were blocked. `/phonon tools help` covers blocked servers.\n- Operators are told on joining if yt-dlp is over 30 days old. Updating installs Phonon's own copy if it's only on the system.\n- New server settings: `downloadProxy`, `cookiesFile` and `autoUpdateYtDlp`, all off by default.\n\n### Test evidence\n\n- Targets: Minecraft 26.2, NeoForge 26.2.0.93, Java 25, and Minecraft 1.21.1, NeoForge 21.1.235,\n  Java 21, both tested on macOS on Apple Silicon.\n- Automated tests and the scripted checklist pass on both, in the real client and on a dedicated server.\n- Two clients on a dedicated server, on both: locked controls and tooltips for a player who doesn't\n  own a speaker or station, deleting only your own track, a boombox resuming its own music after\n  leaving a station, playlist reorder and rename, and all of it after a server restart.\n- Redstone on someone else's speaker left a station alone, and on the creator's own speaker paused\n  and resumed it.\n- Real searches on YouTube and SoundCloud returned results with pictures, and adding a YouTube result\n  worked. Bilibili refused the search in-game, and showed its message and Try again.\n- \"Update yt-dlp and try again\" installed and ran Phonon's own copy.\n\n### Not tested\n\n- Nobody has listened to this build, and no new player has tried the screen.\n- A successful Bilibili search in the game. Tests outside the game with a login worked 5 times in 9,\n  and without one 1 time in 7, on one home connection.\n- A real YouTube block, and `downloadProxy` or `cookiesFile` against a real site. A bad proxy address\n  did reach yt-dlp and fail as expected.\n- A cloud server, Windows and Linux, and two computers over a real network.\n- Very long names on the Chinese translation, and long playlist menus.\n\n### Known issues\n\n\n..."
+		},
+		{
+			"tag": "v0.3.0-beta.4+mc1.21.1",
+			"published": "2026-11-04T08:48:39Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 708859798,
+					"name": "phonon-neoforge-1.21.1-0.3.0-beta.4+mc1.21.1.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-beta.4%2Bmc1.21.1/phonon-neoforge-1.21.1-0.3.0-beta.4%2Bmc1.21.1.jar",
+					"size": 432134,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "9f2adcf71c9a2518bb8d83e1f4e8735d93add4ebdfabfe51c2308d0c334fa21b",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0-beta.4+mc1.21.1",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "8539c3562b83bf616792116e051aa9d50b34f104baa9a84b32c4bcd02fa72ad2.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Boombox",
+								"Speaker"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 137,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/AudioTools.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/metrovoc/phonon/server/TitleSearch.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/AudioTools.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/metrovoc/phonon/server/TitleSearch.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/metrovoc/phonon/server/AudioToolManifest.class"
+							],
+							"i.ytimg.com": [
+								"com/metrovoc/phonon/server/SearchResult.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\n## 0.3.0-beta.4\n\nFor Minecraft 26.2 and 1.21.1. Other targets stay at `0.3.0-alpha.3`. The only change since the\ntested commits is this version number and these notes.\n\n### Finding tracks\n\n- Find tracks by title in the game. On the Tracks tab, type a title, press Enter, and add a result\n  with its **+** or a double click. Results show pictures, uploader and length.\n- `/phonon add <title>` adds the first YouTube result.\n- Search YouTube, SoundCloud or Bilibili from the list beside the results. Bilibili often refuses,\n  so it says so and offers another try.\n- The server does the searching and fetches the pictures, so players never contact the sites.\n\n### Speaker screen\n\n- One search box. Typing filters your library, and a green row offers to find it online or add a pasted link.\n- Playlists: add songs by typing, without leaving the playlist. Drag to reorder, and rename in place.\n- Add a song to playlists from the Tracks tab, with ticks showing where it already is.\n- Once tuned in, the screen says who a button affects. Locked controls go grey and say why, instead of a chat error.\n- Tuning in pauses your own music, and leaving brings it back where it was.\n- Starting a station shares what's playing, so the music carries on.\n- The main button only pauses and resumes. Songs play from their row: double-click or the play icon.\n- Long names run under Now Playing, one way and wrapping around. Lists stay still and keep their tooltips.\n\n### Permissions\n\n- Stations answer to whoever created them and operators. `anyoneCanControlStations` opens them up.\n- Deleting a track is for operators and whoever added it, even with `anyoneCanAddTracks` on.\n- `anyoneCanAddTracks` now also shows the search to the players it allows.\n- Redstone on a speaker tuned to a station only works if that speaker's owner created the station,\n  unless `anyoneCanControlStations` is on.\n- A speaker or boombox can only be tuned to a shared station, never to another speaker's own music.\n\n### Download tools\n\n- Failures say what happened and offer what could help, including \"Update yt-dlp and try again\" for operators.\n- `/phonon tools` shows versions and age, and which sites last worked or were blocked. `/phonon tools help` covers blocked servers.\n- Operators are told on joining if yt-dlp is over 30 days old. Updating installs Phonon's own copy if it's only on the system.\n- New server settings: `downloadProxy`, `cookiesFile` and `autoUpdateYtDlp`, all off by default.\n\n### Test evidence\n\n- Targets: Minecraft 26.2, NeoForge 26.2.0.93, Java 25, and Minecraft 1.21.1, NeoForge 21.1.235,\n  Java 21, both tested on macOS on Apple Silicon.\n- Automated tests and the scripted checklist pass on both, in the real client and on a dedicated server.\n- Two clients on a dedicated server, on both: locked controls and tooltips for a player who doesn't\n  own a speaker or station, deleting only your own track, a boombox resuming its own music after\n  leaving a station, playlist reorder and rename, and all of it after a server restart.\n- Redstone on someone else's speaker left a station alone, and on the creator's own speaker paused\n  and resumed it.\n- Real searches on YouTube and SoundCloud returned results with pictures, and adding a YouTube result\n  worked. Bilibili refused the search in-game, and showed its message and Try again.\n- \"Update yt-dlp and try again\" installed and ran Phonon's own copy.\n\n### Not tested\n\n- Nobody has listened to this build, and no new player has tried the screen.\n- A successful Bilibili search in the game. Tests outside the game with a login worked 5 times in 9,\n  and without one 1 time in 7, on one home connection.\n- A real YouTube block, and `downloadProxy` or `cookiesFile` against a real site. A bad proxy address\n  did reach yt-dlp and fail as expected.\n- A cloud server, Windows and Linux, and two computers over a real network.\n- Very long names on the Chinese translation, and long playlist menus.\n\n### Known issues\n\n\n..."
+		},
 		{
 			"tag": "v0.3.0-beta.3+mc26.2",
 			"published": "2026-11-04T03:24:42Z",
