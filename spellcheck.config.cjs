@@ -57,6 +57,7 @@ module.exports = {
 		'modpack',
 		'modpacks',
 		'modrinth',
+		'microsoft',
 		'mojang',
 		'mr',
 		'mrpack',

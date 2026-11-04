@@ -20,6 +20,7 @@ import { loadVersions } from './data';
 import { lastSaid, local } from './local';
 import { listingButton } from './controls';
 import { instanceNameOf, packDialog } from './packMaker';
+import { playerChoice, playersPanel } from './playersPanel';
 import { LOADERS } from './search';
 import { Chip, Command, LAUNCHER, Meta, Row, Stack, Title, Warning, siteBar } from './ui';
 
@@ -209,6 +210,7 @@ const instanceCard = (instance, signal) => {
 									checkbox('update first', open.updateFirst, ({ target: { checked } }) => {
 										open.updateFirst = checked;
 									}),
+									...playerChoice(instance),
 								]
 							: []),
 						action({
@@ -448,7 +450,7 @@ export default class InstancesPage extends View {
 		let cards;
 		/** Drawn again only when the instances change, so a card keeps what it shows while its job runs. */
 		const drawList = () => {
-			const shape = JSON.stringify([local.error, local.all]);
+			const shape = JSON.stringify([local.error, local.all, local.players?.accounts]);
 
 			if (shape === drawn) return;
 
@@ -484,7 +486,12 @@ export default class InstancesPage extends View {
 				return;
 			}
 
-			body.content([new Title({ tag: 'h1', textContent: 'Instances' }), newInstance(this.signal), list]);
+			body.content([
+				new Title({ tag: 'h1', textContent: 'Instances' }),
+				playersPanel(this.signal),
+				newInstance(this.signal),
+				list,
+			]);
 			drawList();
 			local.subscribe(drawList, this.signal);
 		});

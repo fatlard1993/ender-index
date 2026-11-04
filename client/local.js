@@ -24,6 +24,8 @@ const state = {
 	starsError: undefined,
 	login: undefined,
 	accountError: undefined,
+	players: undefined,
+	playersError: undefined,
 };
 
 const notify = () => {
@@ -214,6 +216,29 @@ const loadAccount = () =>
 		})
 		.finally(notify));
 
+let playersAsked;
+
+/** Who can play: ender's accounts, offline and Microsoft; null from an ender too old to say, which answers 404. */
+const loadPlayers = () =>
+	(playersAsked ??= call('GET', 'players')
+		.then(players => {
+			state.players = players;
+		})
+		.catch(error => {
+			if (error.status === 404) state.players = null;
+			else state.playersError = error.message;
+		})
+		.finally(notify));
+
+/** Each change answers with the accounts ender holds afterwards, which the page then shows. */
+const changePlayers = async (method, path, body) => {
+	state.players = await call(method, path, body);
+	state.playersError = undefined;
+	notify();
+};
+
+const playerPath = name => `players/${encodeURIComponent(name)}`;
+
 const starPath = entry => `stars/${entry.repo.split('/').map(encodeURIComponent).join('/')}`;
 
 export const local = {
@@ -277,6 +302,30 @@ export const local = {
 		return state.accountError;
 	},
 	loadAccount,
+	/** ender's accounts as { signIn, fallback, accounts }; undefined until it has said, null when it is too old to. */
+	get players() {
+		return state.players;
+	},
+	get playersError() {
+		return state.playersError;
+	},
+	loadPlayers,
+	/** Asks again, as after a sign in finishes outside these calls. */
+	refreshPlayers: () => {
+		playersAsked = undefined;
+
+		return loadPlayers();
+	},
+	addPlayer: name => changePlayers('POST', 'players', { name }),
+	usePlayer: name => changePlayers('POST', `${playerPath(name)}/use`),
+	removePlayer: name => changePlayers('DELETE', playerPath(name)),
+	/** Microsoft's device code sign in, as a job whose lines carry the code to type. */
+	signIn: () => start('POST', 'sign-in'),
+	/** One instance plays as this player; null returns it to the active one. */
+	assignPlayer: async (name, player) => {
+		await call('PUT', `${named(name)}/player`, { player });
+		await reload();
+	},
 	/** Each files an issue on the index as that account, and answers its link. */
 	ask: (entry, kind) => call('POST', 'asks', { kind, mod: collectionKey(entry) }),
 	listPack: pack => call('POST', 'listings', { pack }),
