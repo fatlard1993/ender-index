@@ -6,8 +6,62 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-08-07T13:01:28Z",
-	"pushed": "2026-10-26T21:05:24Z",
+	"pushed": "2026-11-04T17:58:12Z",
 	"releases": [
+		{
+			"tag": "v1.0.4",
+			"published": "2026-11-04T17:59:34Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 710400963,
+					"name": "sablecat-1.0.4.jar",
+					"url": "https://github.com/eviesaurr/SableCat/releases/download/v1.0.4/sablecat-1.0.4.jar",
+					"size": 218238,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "a5bce395cf666048e729222dea707bebc2efc30f8c194970a4ff60ab99772771",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "sablecat",
+							"version": "1.0.4",
+							"name": "Sable Cat",
+							"description": "Reliability fixes and a recovery toolkit for Sable sub-level saving/loading - async saves, corrupted-data handling, rescue/purge/forcepurge commands, offline sub-level import, and automatic backups",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"sable"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 87,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"eviesaurr/sablecat/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# SableCat 1.0.4\n\n## Fixed\n- Server crash caused by the Frogport extract limit fix once the config had been saved. The option was read back from config.json as the wrong number type and crashed the first time a Frogport ticked. All numeric fix options are now converted to the right type when loaded. If you are crashing on an older version, set \"frogport-extract-limit\" to false in config/sablecat/config.json (or delete its entry under fixParams) and update.\n- Autosave could fail with ClosedChannelException when async-save was on. Queued sub-level writes are now finished before Sable flushes its storage, so writes are no longer lost.\n- write-flush no longer replaces Sable's header write unless it is enabled.\n- The startup log now shows the real SableCat version.\n- Dependency ranges corrected: requires Sable 2.0.6 or newer and NeoForge 21.1.0 or newer.\n\n## Notes\n- Sable saves all sub-levels on a single thread. Worlds with a very large number of sub-levels will still see long autosaves, which is a limit in Sable itself. async-save moves the writes to another thread but the server still waits for them to finish.\n- write-flush is off by default. Turning it on forces to disk after every write and makes saving slower on worlds with many sub-levels."
+		},
 		{
 			"tag": "v1.0.3",
 			"published": "2026-10-26T21:09:27Z",
@@ -18,7 +72,7 @@
 					"name": "sablecat-1.0.3.jar",
 					"url": "https://github.com/eviesaurr/SableCat/releases/download/v1.0.3/sablecat-1.0.3.jar",
 					"size": 217261,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "e73b33740030a2197a7a3b1790d62ea6b2d1f9c946d9c26a0f2f9669a1c2b63b",
 					"mods": [
@@ -72,7 +126,7 @@
 					"name": "sablecat-1.0.2.jar",
 					"url": "https://github.com/eviesaurr/SableCat/releases/download/v1.0.2/sablecat-1.0.2.jar",
 					"size": 214190,
-					"downloads": 6,
+					"downloads": 7,
 					"inspection": 2,
 					"sha256": "672ad64ee254b125c7365598707eafcfc2f0dee85126742a1898f37f79479e85",
 					"mods": [
@@ -126,7 +180,7 @@
 					"name": "sablecat-1.0.1.jar",
 					"url": "https://github.com/eviesaurr/SableCat/releases/download/v1.0.1/sablecat-1.0.1.jar",
 					"size": 195306,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "62f2a719b8ccd270615dc4ad346013efc991291af87cd64e07a0549eeced436e",
 					"mods": [
