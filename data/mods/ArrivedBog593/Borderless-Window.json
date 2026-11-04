@@ -6,8 +6,57 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-07-08T22:56:03Z",
-	"pushed": "2026-10-28T02:52:40Z",
+	"pushed": "2026-11-04T07:31:41Z",
 	"releases": [
+		{
+			"tag": "v1.7.0",
+			"published": "2026-11-04T07:32:13Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 708655881,
+					"name": "borderlesswindow-1.7.0.jar",
+					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.7.0/borderlesswindow-1.7.0.jar",
+					"size": 106538,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "36ab69a6320ebc73e6c4dd2da5eb758c29fa7fdffc1eef095afd38d607c17a93",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "borderlesswindow",
+							"version": "1.7.0",
+							"name": "Borderless Window",
+							"description": "Adds borderless fullscreen to Minecraft with a 3-mode system (Windowed / Borderless / Fullscreen) and configurable F11 behavior, plus a growing set of video and quality-of-life options Minecraft doesn't expose. Every setting defaults to vanilla behavior. Optional Sodium video settings integration. Configurable from the Mods menu, no dependencies required.",
+							"minecraft": "[1.21.1]",
+							"environment": "client",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"sodium"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 53,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.7.0\n\n## Unfocused FPS limit\n\n- New **Unfocused FPS Limit**: caps the frame rate while the game window is not focused — after Alt+Tab, while minimized, or with another window or monitor in front. Off by default, then 5 to 60 FPS in steps of 5\n- Minecraft 1.21.1 keeps rendering at full speed in the background, burning GPU power and heat on frames nobody sees. 1.21.2 later added its own limit; this brings the same idea to 1.21.1\n- It can only lower the frame rate: a regular Max Framerate that is already lower still wins, and menus with no world loaded keep Minecraft's own 60 FPS. The cap lifts on the very next frame after you click back into the game\n- With **Dynamic FPS** installed the option steps aside and is greyed out, with a tooltip saying why. Both mods hook the same methods, and two settings fighting over one behavior would only be confusing — Dynamic FPS covers this and more\n\n## Draw distances\n\n- Four new sliders that stop drawing things past a distance you choose: **Dropped Items**, **Experience Orbs**, **Armor Stands** and **Particles**. Every slider starts at **Default** on the left, which keeps Minecraft's own distance\n- Minecraft draws items up to 16 blocks away and orbs up to 32 (both scaled by its Entity Distance option), armor stands as far as the server sends them, and spawns particles up to 32 blocks away. These sliders can only lower those numbers\n- It is purely visual: items and orbs are only hidden, never removed. Items can still be picked up, orbs still fly to you, and nothing changes for the server or other players\n- **Glowing** entities are always drawn, since the outline is information meant to be seen from afar\n- **Armor stands with a visible name** are always drawn: servers and adventure maps use them as floating text and holograms\n- Particles are refused when they would spawn, which is where their cost is, rather than hidden while they already exist. Particles the game marks as always visible are left alone, exactly as Minecraft does with its own 32-block limit\n\n## Sodium integration\n\n- The mod's section went from nine pages to four: **General** (F11, FPS overlay and unfocused limit, enchantment numerals), **Visual Effects** (fog, clouds, screen overlays), **Camera** (bobbing, FOV, distortion) and **Distances**. Inside each page the features are split into groups, the same way Sodium's own General page does it\n- Every option keeps its ID, so existing settings carry over untouched\n- The no-Sodium config screen follows the same order, keeping its per-feature headers\n\n## Internal\n\n- New `distance/` package; `fps/` gains `UnfocusedFpsState`\n- New mixins: `MinecraftMixin` (`getFramerateLimit`), `EntityRenderDispatcherMixin` (`shouldRender`) and `LevelRendererMixin` (`addParticleInternal`). Sodium's entity culling wraps the frustum test one call deeper, inside `EntityRenderer.shouldRender`, so the two stack cleanly\n- New generic `IntOptionSlider` for the no-Sodium screen: a stepped integer slider with the label supplied by the caller. Arrow keys move one whole step instead of vanilla's one pixel\n- New `build.yml` workflow: builds every push and pull request to `master` and keeps the jar as an artifact for 14 days. A commit message containing `[curseforge]` also uploads that build to CurseForge\n- Dependabot now keeps the workflow actions up to date"
+		},
 		{
 			"tag": "v1.6.1",
 			"published": "2026-10-28T02:54:15Z",
@@ -18,7 +67,7 @@
 					"name": "borderlesswindow-1.6.1.jar",
 					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.6.1/borderlesswindow-1.6.1.jar",
 					"size": 91846,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "b13e427ce61e48c35ac4c2b10035ba05ad0547995fa869d35f0f7412af466857",
 					"mods": [
@@ -67,7 +116,7 @@
 					"name": "borderlesswindow-1.6.0.jar",
 					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.6.0/borderlesswindow-1.6.0.jar",
 					"size": 90688,
-					"downloads": 6,
+					"downloads": 7,
 					"inspection": 2,
 					"sha256": "68d492da0bcd8051a9faa3d2febdbfbf4dddcf8f0508d728661c27abcad53e42",
 					"mods": [
@@ -116,7 +165,7 @@
 					"name": "borderlesswindow-1.5.1.jar",
 					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.5.1/borderlesswindow-1.5.1.jar",
 					"size": 71475,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "e3d2bb4a613cd622f671e67d99c48d821317795d8ccea2b12829bfb87fb7049a",
 					"mods": [
@@ -165,7 +214,7 @@
 					"name": "borderlesswindow-1.5.0.jar",
 					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.5.0/borderlesswindow-1.5.0.jar",
 					"size": 71334,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "7c3af8af0856491c08bb9ecf085c42b0c77843afcecbc202f3e758ab2db85c7b",
 					"mods": [
