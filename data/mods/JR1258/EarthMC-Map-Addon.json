@@ -6,8 +6,472 @@
 	"archived": false,
 	"license": "Apache-2.0",
 	"created": "2026-05-26T10:54:37Z",
-	"pushed": "2026-11-03T22:48:44Z",
+	"pushed": "2026-11-04T14:30:23Z",
 	"releases": [
+		{
+			"tag": "v1.4.11-26.3",
+			"published": "2026-11-04T14:30:24Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 709801700,
+					"name": "earthmc-map-addon-26.3-1.4.11.jar",
+					"url": "https://github.com/JR1258/EarthMC-Map-Addon/releases/download/v1.4.11-26.3/earthmc-map-addon-26.3-1.4.11.jar",
+					"size": 1396206,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "6c3c1cb5331eef5027ff789465a133c2bd6a65a3ec4f8811d85a3e1ebf370a76",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "townymapaddon",
+							"version": "1.4.11",
+							"name": "EarthMC Map Addon",
+							"description": "Overlays EarthMC Towny town borders and online players on Xaero's WorldMap.",
+							"minecraft": ">=26.3 <26.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaerominimap",
+								"xaeroworldmap"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "71f9803596b6e9933241f8efe345f86d9c32ceb36a0166d948bc910a17509898.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 148,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"net/townymap/api/AllianceClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/ArchiveClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/BlocklistClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/EarthMcApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/SquaremapApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/integration/CustomOverlayManager.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/PlayerHeadImages.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/SquaremapTileRenderer.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"map.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"api.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/EarthMcApiClient.class"
+							],
+							"breakthebot.sparked.network": [
+								"net/townymap/api/AllianceClient.class"
+							],
+							"web.archive.org": [
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"raw.githubusercontent.com": [
+								"net/townymap/api/BlocklistClient.class",
+								"net/townymap/integration/CustomOverlayManager.class"
+							],
+							"discord.com": [
+								"net/townymap/gui/BlockedScreen.class"
+							],
+							"mc-heads.net": [
+								"net/townymap/render/PlayerHeadImages.class"
+							],
+							"discord.gg": [
+								"net/townymap/util/DiscordUrl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.4.11\n\n**Waypoints**\n- Xaero's waypoints are visible on the world map again. With the Squaremap layer on, the EarthMC imagery painted straight over every marker on the map, so the addon now draws them back on top itself, at Xaero's own size and in Xaero's own colours. Hovering one still raises Xaero's tooltip and right-clicking one still opens Xaero's menu, because those were never covered.\n- Right-clicking empty map opens Xaero's own menu again, so you can add a waypoint, teleport or share a location from the map. Right-clicking a town still opens the town panel; unclaimed ground is Xaero's, and so is any waypoint or tracked player under the cursor, so a waypoint standing inside a town can be edited, moved or deleted again. Settings -> World Map -> Wilderness Town Info puts the old behaviour back if you preferred it.\n- Waypoints no longer disappear from the enlarged minimap, or on frames where the EarthMC layer drew nothing.\n- On 1.21.11 only: your waypoints, the player arrow and the waypoint set name no longer show up on a map of a world you are not standing in, usually the Moon. The three hooks that suppress them named the method using the newer Minecraft versions' name for it, so on that build they had never once run.\n\n**Nations**\n- Every nation reported \"No capital\". The capital and king fields stopped being requested in 1.4.10, which took the capital stars, the \"Capital of\" tag, the capital circle in join range, the Capital and King rows and every nation jump with them.\n- Searching a nation now goes to its capital, framed and flashed like any other town, instead of trying to fit the whole nation on screen.\n\n**Ice highways**\n- The ice highway network is built in, as mode 7 on the Map button. It is XiLeF2211's community-maintained map, fetched live so it stays current, and only downloaded once you switch the layer on.\n\n**Fixes**\n- A Moon outpost is no longer wiped out by an Earth claim refresh. Every Moon town shares a name with an Earth one, and the two were being confused: the Moon claim vanished and right-clicking it said wilderness.\n- Leaving the map in Planning mode survives a restart. It silently came back as None every time.\n- The chunk counter's Reset button sits beside the counter instead of a row above it.\n\n**Search flash**\n- A searched town now blinks its own border rather than tracing a second outline a pixel or two beside it, and it works again while a map mode is on. The freeze when the blink stopped is gone.\n\n**Behind the scenes**\n- The live player feed now reads EarthMC's new endpoint, which replaced the file the mod used to fetch. No visible difference, beyond it revalidating properly: most polls now transfer nothing instead of a few KB.\n\nAvailable for Minecraft **1.21.11**, **26.1.x**, **26.2** and **26.3**."
+		},
+		{
+			"tag": "v1.4.11-26.2",
+			"published": "2026-11-04T14:30:19Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 709801390,
+					"name": "earthmc-map-addon-26.2-1.4.11.jar",
+					"url": "https://github.com/JR1258/EarthMC-Map-Addon/releases/download/v1.4.11-26.2/earthmc-map-addon-26.2-1.4.11.jar",
+					"size": 1395891,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "cb83b524f8a912edb978323cde447a2a6dcac4918a907b2a14622e0327bd49f5",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "townymapaddon",
+							"version": "1.4.11",
+							"name": "EarthMC Map Addon",
+							"description": "Overlays EarthMC Towny town borders and online players on Xaero's WorldMap.",
+							"minecraft": ">=26.2 <26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaerominimap",
+								"xaeroworldmap"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "71f9803596b6e9933241f8efe345f86d9c32ceb36a0166d948bc910a17509898.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 148,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"net/townymap/api/AllianceClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/ArchiveClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/BlocklistClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/EarthMcApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/SquaremapApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/integration/CustomOverlayManager.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/PlayerHeadImages.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/SquaremapTileRenderer.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"map.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"api.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/EarthMcApiClient.class"
+							],
+							"breakthebot.sparked.network": [
+								"net/townymap/api/AllianceClient.class"
+							],
+							"web.archive.org": [
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"raw.githubusercontent.com": [
+								"net/townymap/api/BlocklistClient.class",
+								"net/townymap/integration/CustomOverlayManager.class"
+							],
+							"discord.com": [
+								"net/townymap/gui/BlockedScreen.class"
+							],
+							"mc-heads.net": [
+								"net/townymap/render/PlayerHeadImages.class"
+							],
+							"discord.gg": [
+								"net/townymap/util/DiscordUrl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.4.11\n\n**Waypoints**\n- Xaero's waypoints are visible on the world map again. With the Squaremap layer on, the EarthMC imagery painted straight over every marker on the map, so the addon now draws them back on top itself, at Xaero's own size and in Xaero's own colours. Hovering one still raises Xaero's tooltip and right-clicking one still opens Xaero's menu, because those were never covered.\n- Right-clicking empty map opens Xaero's own menu again, so you can add a waypoint, teleport or share a location from the map. Right-clicking a town still opens the town panel; unclaimed ground is Xaero's, and so is any waypoint or tracked player under the cursor, so a waypoint standing inside a town can be edited, moved or deleted again. Settings -> World Map -> Wilderness Town Info puts the old behaviour back if you preferred it.\n- Waypoints no longer disappear from the enlarged minimap, or on frames where the EarthMC layer drew nothing.\n- On 1.21.11 only: your waypoints, the player arrow and the waypoint set name no longer show up on a map of a world you are not standing in, usually the Moon. The three hooks that suppress them named the method using the newer Minecraft versions' name for it, so on that build they had never once run.\n\n**Nations**\n- Every nation reported \"No capital\". The capital and king fields stopped being requested in 1.4.10, which took the capital stars, the \"Capital of\" tag, the capital circle in join range, the Capital and King rows and every nation jump with them.\n- Searching a nation now goes to its capital, framed and flashed like any other town, instead of trying to fit the whole nation on screen.\n\n**Ice highways**\n- The ice highway network is built in, as mode 7 on the Map button. It is XiLeF2211's community-maintained map, fetched live so it stays current, and only downloaded once you switch the layer on.\n\n**Fixes**\n- A Moon outpost is no longer wiped out by an Earth claim refresh. Every Moon town shares a name with an Earth one, and the two were being confused: the Moon claim vanished and right-clicking it said wilderness.\n- Leaving the map in Planning mode survives a restart. It silently came back as None every time.\n- The chunk counter's Reset button sits beside the counter instead of a row above it.\n\n**Search flash**\n- A searched town now blinks its own border rather than tracing a second outline a pixel or two beside it, and it works again while a map mode is on. The freeze when the blink stopped is gone.\n\n**Behind the scenes**\n- The live player feed now reads EarthMC's new endpoint, which replaced the file the mod used to fetch. No visible difference, beyond it revalidating properly: most polls now transfer nothing instead of a few KB.\n\nAvailable for Minecraft **1.21.11**, **26.1.x**, **26.2** and **26.3**."
+		},
+		{
+			"tag": "v1.4.11-26.1.x",
+			"published": "2026-11-04T14:30:13Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 709801160,
+					"name": "earthmc-map-addon-26.1.2-1.4.11.jar",
+					"url": "https://github.com/JR1258/EarthMC-Map-Addon/releases/download/v1.4.11-26.1.x/earthmc-map-addon-26.1.2-1.4.11.jar",
+					"size": 1395663,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "e4fdf175156ebf2d64f6104d784c2a1558f99ac9d66618d2d45051ead0d02f0e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "townymapaddon",
+							"version": "1.4.11",
+							"name": "EarthMC Map Addon",
+							"description": "Overlays EarthMC Towny town borders and online players on Xaero's WorldMap.",
+							"minecraft": ">=26.1 <26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaerominimap",
+								"xaeroworldmap"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "71f9803596b6e9933241f8efe345f86d9c32ceb36a0166d948bc910a17509898.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 148,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"net/townymap/api/AllianceClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/ArchiveClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/BlocklistClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/EarthMcApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/SquaremapApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/integration/CustomOverlayManager.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/PlayerHeadImages.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/SquaremapTileRenderer.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"map.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"api.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/EarthMcApiClient.class"
+							],
+							"breakthebot.sparked.network": [
+								"net/townymap/api/AllianceClient.class"
+							],
+							"web.archive.org": [
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"raw.githubusercontent.com": [
+								"net/townymap/api/BlocklistClient.class",
+								"net/townymap/integration/CustomOverlayManager.class"
+							],
+							"discord.com": [
+								"net/townymap/gui/BlockedScreen.class"
+							],
+							"mc-heads.net": [
+								"net/townymap/render/PlayerHeadImages.class"
+							],
+							"discord.gg": [
+								"net/townymap/util/DiscordUrl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.4.11\n\n**Waypoints**\n- Xaero's waypoints are visible on the world map again. With the Squaremap layer on, the EarthMC imagery painted straight over every marker on the map, so the addon now draws them back on top itself, at Xaero's own size and in Xaero's own colours. Hovering one still raises Xaero's tooltip and right-clicking one still opens Xaero's menu, because those were never covered.\n- Right-clicking empty map opens Xaero's own menu again, so you can add a waypoint, teleport or share a location from the map. Right-clicking a town still opens the town panel; unclaimed ground is Xaero's, and so is any waypoint or tracked player under the cursor, so a waypoint standing inside a town can be edited, moved or deleted again. Settings -> World Map -> Wilderness Town Info puts the old behaviour back if you preferred it.\n- Waypoints no longer disappear from the enlarged minimap, or on frames where the EarthMC layer drew nothing.\n- On 1.21.11 only: your waypoints, the player arrow and the waypoint set name no longer show up on a map of a world you are not standing in, usually the Moon. The three hooks that suppress them named the method using the newer Minecraft versions' name for it, so on that build they had never once run.\n\n**Nations**\n- Every nation reported \"No capital\". The capital and king fields stopped being requested in 1.4.10, which took the capital stars, the \"Capital of\" tag, the capital circle in join range, the Capital and King rows and every nation jump with them.\n- Searching a nation now goes to its capital, framed and flashed like any other town, instead of trying to fit the whole nation on screen.\n\n**Ice highways**\n- The ice highway network is built in, as mode 7 on the Map button. It is XiLeF2211's community-maintained map, fetched live so it stays current, and only downloaded once you switch the layer on.\n\n**Fixes**\n- A Moon outpost is no longer wiped out by an Earth claim refresh. Every Moon town shares a name with an Earth one, and the two were being confused: the Moon claim vanished and right-clicking it said wilderness.\n- Leaving the map in Planning mode survives a restart. It silently came back as None every time.\n- The chunk counter's Reset button sits beside the counter instead of a row above it.\n\n**Search flash**\n- A searched town now blinks its own border rather than tracing a second outline a pixel or two beside it, and it works again while a map mode is on. The freeze when the blink stopped is gone.\n\n**Behind the scenes**\n- The live player feed now reads EarthMC's new endpoint, which replaced the file the mod used to fetch. No visible difference, beyond it revalidating properly: most polls now transfer nothing instead of a few KB.\n\nAvailable for Minecraft **1.21.11**, **26.1.x**, **26.2** and **26.3**."
+		},
+		{
+			"tag": "v1.4.11",
+			"published": "2026-11-04T14:30:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 709800666,
+					"name": "earthmc-map-addon-1.21.11-1.4.11.jar",
+					"url": "https://github.com/JR1258/EarthMC-Map-Addon/releases/download/v1.4.11/earthmc-map-addon-1.21.11-1.4.11.jar",
+					"size": 1402898,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "6468921a5cc959efad758d71646d962bfa62f86fbc429ccd966b4e2dacb29d81",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "townymapaddon",
+							"version": "1.4.11",
+							"name": "EarthMC Map Addon",
+							"description": "Overlays EarthMC Towny town borders and online players on Xaero's WorldMap.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaerominimap",
+								"xaeroworldmap"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "71f9803596b6e9933241f8efe345f86d9c32ceb36a0166d948bc910a17509898.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 150,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"net/townymap/api/AllianceClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/ArchiveClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/BlocklistClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/EarthMcApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/SquaremapApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/integration/CustomOverlayManager.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/PlayerHeadImages.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/SquaremapTileRenderer.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/EarthMcApiClient.class"
+							],
+							"map.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"breakthebot.sparked.network": [
+								"net/townymap/api/AllianceClient.class"
+							],
+							"web.archive.org": [
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"raw.githubusercontent.com": [
+								"net/townymap/api/BlocklistClient.class",
+								"net/townymap/integration/CustomOverlayManager.class"
+							],
+							"discord.com": [
+								"net/townymap/gui/BlockedScreen.class"
+							],
+							"mc-heads.net": [
+								"net/townymap/render/PlayerHeadImages.class"
+							],
+							"discord.gg": [
+								"net/townymap/util/DiscordUrl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.4.11\n\n**Waypoints**\n- Xaero's waypoints are visible on the world map again. With the Squaremap layer on, the EarthMC imagery painted straight over every marker on the map, so the addon now draws them back on top itself, at Xaero's own size and in Xaero's own colours. Hovering one still raises Xaero's tooltip and right-clicking one still opens Xaero's menu, because those were never covered.\n- Right-clicking empty map opens Xaero's own menu again, so you can add a waypoint, teleport or share a location from the map. Right-clicking a town still opens the town panel; unclaimed ground is Xaero's, and so is any waypoint or tracked player under the cursor, so a waypoint standing inside a town can be edited, moved or deleted again. Settings -> World Map -> Wilderness Town Info puts the old behaviour back if you preferred it.\n- Waypoints no longer disappear from the enlarged minimap, or on frames where the EarthMC layer drew nothing.\n- On 1.21.11 only: your waypoints, the player arrow and the waypoint set name no longer show up on a map of a world you are not standing in, usually the Moon. The three hooks that suppress them named the method using the newer Minecraft versions' name for it, so on that build they had never once run.\n\n**Nations**\n- Every nation reported \"No capital\". The capital and king fields stopped being requested in 1.4.10, which took the capital stars, the \"Capital of\" tag, the capital circle in join range, the Capital and King rows and every nation jump with them.\n- Searching a nation now goes to its capital, framed and flashed like any other town, instead of trying to fit the whole nation on screen.\n\n**Ice highways**\n- The ice highway network is built in, as mode 7 on the Map button. It is XiLeF2211's community-maintained map, fetched live so it stays current, and only downloaded once you switch the layer on.\n\n**Fixes**\n- A Moon outpost is no longer wiped out by an Earth claim refresh. Every Moon town shares a name with an Earth one, and the two were being confused: the Moon claim vanished and right-clicking it said wilderness.\n- Leaving the map in Planning mode survives a restart. It silently came back as None every time.\n- The chunk counter's Reset button sits beside the counter instead of a row above it.\n\n**Search flash**\n- A searched town now blinks its own border rather than tracing a second outline a pixel or two beside it, and it works again while a map mode is on. The freeze when the blink stopped is gone.\n\n**Behind the scenes**\n- The live player feed now reads EarthMC's new endpoint, which replaced the file the mod used to fetch. No visible difference, beyond it revalidating properly: most polls now transfer nothing instead of a few KB.\n\nAvailable for Minecraft **1.21.11**, **26.1.x**, **26.2** and **26.3**."
+		},
 		{
 			"tag": "v1.4.10-26.3",
 			"published": "2026-10-25T00:06:31Z",
@@ -18,7 +482,7 @@
 					"name": "earthmc-map-addon-26.3-1.4.10.jar",
 					"url": "https://github.com/JR1258/EarthMC-Map-Addon/releases/download/v1.4.10-26.3/earthmc-map-addon-26.3-1.4.10.jar",
 					"size": 1391499,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "716f245b523f9b0fef0c0882d600cc1d9af8c7b2b5f610ab89f8c67aaa6a07c7",
 					"mods": [

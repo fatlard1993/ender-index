@@ -6,8 +6,85 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-06-28T06:46:27Z",
-	"pushed": "2026-10-15T15:41:51Z",
+	"pushed": "2026-11-04T14:57:28Z",
 	"releases": [
+		{
+			"tag": "v1.4.9.9",
+			"published": "2026-11-04T14:57:43Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 709887873,
+					"name": "adventure_power-1.4.9.9.jar",
+					"url": "https://github.com/ayin90723-stack/Adventures-Power/releases/download/v1.4.9.9/adventure_power-1.4.9.9.jar",
+					"size": 586751,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "42cb078f2241818642ba844f939abd71af26a510596baf9614826a5e044e6006",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "adventure_power",
+							"version": "1.4.9.9",
+							"name": "Adventure's Power",
+							"description": "Adventure's Power — 冒险的力量。以冒险旅程驱动成长的 Minecraft 模组。\n经历 10 个里程碑，解锁 30 种内在能力。力量属于冒险者自身，而非装备。",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"curios"
+							]
+						}
+					],
+					"icon": "45db89860237abde79222de019b7388af4ae40da1ba16093ee67ed82e0c24503.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Adventure's Power"
+							],
+							"item": [
+								"Adventure's Beginning",
+								"Adventure's End",
+								"◇ The journey has just begun. Complete adventures to unlock more..."
+							],
+							"effect": [
+								"Healing Block"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 240,
+						"jars": [],
+						"capabilities": {
+							"unsafe": {
+								"com/ayin90723/adventure_power/util/ClassPointerGuard.class": [
+									"sun/misc/Unsafe.getInt",
+									"sun/misc/Unsafe.getLong",
+									"sun/misc/Unsafe.putLong"
+								],
+								"com/ayin90723/adventure_power/util/probe/jvm/JvmSnapshotService.class": [
+									"sun/misc/Unsafe.staticFieldBase",
+									"sun/misc/Unsafe.staticFieldOffset",
+									"sun/misc/Unsafe.putBoolean"
+								]
+							},
+							"network": {
+								"com/ayin90723/adventure_power/util/probe/jvm/JvmSnapshotService.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 修复：冒险的开始 / 冒险的终点无法戴到饰品栏\n\n### 根因（实机存档 + Curios 5.14.1 字节码双证）\n- Curios 5.x 只内置槽位**类型**（`data/curios/curios/slots/*.json`），**不内置**“哪个实体有哪些槽”的数据；`CuriosEntityManager.getEntitySlots(EntityType)` 对未声明的实体类型直接返回空 Map（无兜底）。\n- 玩家可用槽位 = 整合包内各模组 `data/<ns>/curios/entities/*.json` 的**并集**（`apply` 里 `computeIfAbsent(...).putAll(...)`，只有 `replace:true` 才清空重建）。\n- 实测存档 `curios:inventory` 只有 `head / back / charm / feet`（pigking ∪ 超越维度）——没人声明 `body`，body 槽根本不存在，`isStackValid` 的候选槽集为空，两件饰品无处可放。本模组此前只提供了物品标签 `data/curios/tags/items/body.json`，缺的正是“玩家 → body”这一环。\n\n### 改动\n新增 `data/adventure_power/curios/entities/player.json`：\n\n```json\n{\"entities\": [\"minecraft:player\"], \"slots\": [\"body\"]}\n```\n\n- 槽位类型沿用 Curios 内置 `body`（`size` 缺省按 1、validator `curios:tag`），无需自建 `curios/slots/*.json`。\n- 物品类不改：`DynamicStackHandler.isItemValid` 对非 `ICurioItem` 物品走 `orElse(true)`，入槽与是否实现 `ICurioItem` 无关。\n- 并集合并、未使用 `replace:true`，不影响整合包里其他模组已有的槽。\n\n### 升级说明\n直接替换 `mods` 里的旧 jar 即可。**旧存档无需迁移**：`CurioInventoryWrapper.readTag` 会在登录时按 `CuriosApi.getEntitySlots(entity)` 为 NBT 中缺失的槽位补建 handler，进游戏后饰品栏会多出 body 槽（预期 4 → 5 个）。\n\n### 验证\n- `gradlew build -x test` BUILD SUCCESSFUL；构件 `adventure_power-1.4.9.9.jar`（586,751 B，SHA-256 `42CB078F2241818642BA844F939ABD71AF26A510596BAF9614826A5E044E6006`）内含 `data/adventure_power/curios/entities/player.json` 与 `mods.toml version=\"1.4.9.9\"`。\n- 实机：待装包确认；若饰品栏仍未出现 body 槽，请回传 `logs/latest.log` 里 `Loaded N curio slots / M curio entities` 两行。"
+		},
 		{
 			"tag": "v1.4.9.8",
 			"published": "2026-10-15T15:42:26Z",
@@ -18,7 +95,7 @@
 					"name": "adventure_power-1.4.9.8.jar",
 					"url": "https://github.com/ayin90723-stack/Adventures-Power/releases/download/v1.4.9.8/adventure_power-1.4.9.8.jar",
 					"size": 586149,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "b105858dde8ae5b863208be2f790fec30ed64d5ac01d1e03d6ea0936c26bffb0",
 					"mods": [
@@ -95,7 +172,7 @@
 					"name": "adventure_power-1.4.9.7.jar",
 					"url": "https://github.com/ayin90723-stack/Adventures-Power/releases/download/v1.4.9.7/adventure_power-1.4.9.7.jar",
 					"size": 585142,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "e040819bc90c5fbcd967a43c0e2c430680a73e040f45014651201b7ebf18889c",
 					"mods": [
@@ -172,7 +249,7 @@
 					"name": "adventure_power-1.4.9.6.jar",
 					"url": "https://github.com/ayin90723-stack/Adventures-Power/releases/download/v1.4.9.6/adventure_power-1.4.9.6.jar",
 					"size": 584800,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "ede68a930a186417895776ddff0a52510c4a4ad9482bbc1a633e2930891d9202",
 					"mods": [
@@ -249,7 +326,7 @@
 					"name": "adventure_power-1.4.9.5.jar",
 					"url": "https://github.com/ayin90723-stack/Adventures-Power/releases/download/v1.4.9.5/adventure_power-1.4.9.5.jar",
 					"size": 579303,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "1777d4e02c0159db1a32e3bffef5eb9906fc701c992123acc638b177412d4644",
 					"mods": [
