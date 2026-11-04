@@ -6,8 +6,109 @@
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2025-12-01T13:40:22Z",
-	"pushed": "2026-11-04T16:37:02Z",
+	"pushed": "2026-11-04T16:49:37Z",
 	"releases": [
+		{
+			"tag": "v0.3.0+mc26.2",
+			"published": "2026-11-04T16:51:23Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 710207552,
+					"name": "phonon-neoforge-26.2-0.3.0+mc26.2.jar",
+					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0%2Bmc26.2/phonon-neoforge-26.2-0.3.0%2Bmc26.2.jar",
+					"size": 437845,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "7e3687279df69f22a1658536f828cf1ed348adb9f9d4abd49d1da5d00cf198e5",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "phonon",
+							"version": "0.3.0+mc26.2",
+							"name": "Phonon",
+							"description": "A custom audio system designed to orchestrate an immersive soundscape in your game.",
+							"minecraft": "[26.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Speaker"
+							],
+							"item": [
+								"Boombox",
+								"Speaker"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 138,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/metrovoc/phonon/server/AudioTools.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/metrovoc/phonon/server/FFmpegHelper.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/metrovoc/phonon/server/TitleSearch.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"com/metrovoc/phonon/server/AudioTools.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/metrovoc/phonon/server/ServerAudioStorage.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/metrovoc/phonon/server/TitleSearch.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/metrovoc/phonon/server/AudioToolManifest.class"
+							],
+							"i.ytimg.com": [
+								"com/metrovoc/phonon/server/SearchResult.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 0.3.0\n\nFor Minecraft 26.2. This release promotes the 0.3 beta line, including stations,\nplaylists, portable boomboxes, in-game track search, and speaker controls.\nMinecraft 1.21.1 remains on 0.3.0-beta.4; other targets retain their existing releases.\n\n### Fixes and performance\n\n- Fix native memory growth during extended playback on Minecraft 26.2.\n- Hovering a stopped boombox no longer crashes the client.\n- Private speakers save their current playback position when their chunk unloads.\n- Selecting a track beyond the first 2,000 library entries plays the selected track.\n- Concurrent audio transfers share bandwidth, so one track no longer waits for\n  another track's entire download.\n- Capacity rejections retry with bounded backoff; failed transfers leave buffering\n  and show the playback error state.\n- Station edits coalesce disk saves, and playback changes synchronize only the\n  station view that changed.\n\nClients and servers must both update because the audio transfer protocol changed.\n\n### Validation\n\n- Tested on November 4, 2026: Minecraft 26.2, NeoForge 26.2.0.93, Java 25.0.3,\n  macOS on Apple Silicon; functional source commit `e41eb02`.\n- All 62 automated tests passed, with a successful [CI build](https://github.com/metrovoc/Phonon/actions/runs/41869111599).\n- A 68-minute dedicated-server soak passed 384 live assertions, followed by a\n  successful server restart with shared playback, paused position, and volume preserved.\n- Checks covered concurrent streaming, retry limits, cache eviction, chunk unload,\n  pause/resume/seek, resource reloads, reconnects, and the stopped-boombox tooltip.\n- PCM buffers were repeatedly reclaimed during extended playback.\n- Soaked artifact SHA-256: `656566e88680e3751ca91c859a844cd2ca5e743260e96525aec995d410215c97`."
+		},
 		{
 			"tag": "v0.3.0-beta.4+mc26.2",
 			"published": "2026-11-04T08:50:13Z",
@@ -18,7 +119,7 @@
 					"name": "phonon-neoforge-26.2-0.3.0-beta.4+mc26.2.jar",
 					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-beta.4%2Bmc26.2/phonon-neoforge-26.2-0.3.0-beta.4%2Bmc26.2.jar",
 					"size": 433519,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "2d14f46e5b8fef799c0541b2431ef0fabde7472afaf9c4a50e28a9fe68b90053",
 					"mods": [
@@ -119,7 +220,7 @@
 					"name": "phonon-neoforge-1.21.1-0.3.0-beta.4+mc1.21.1.jar",
 					"url": "https://github.com/metrovoc/Phonon/releases/download/v0.3.0-beta.4%2Bmc1.21.1/phonon-neoforge-1.21.1-0.3.0-beta.4%2Bmc1.21.1.jar",
 					"size": 432134,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "9f2adcf71c9a2518bb8d83e1f4e8735d93add4ebdfabfe51c2308d0c334fa21b",
 					"mods": [
