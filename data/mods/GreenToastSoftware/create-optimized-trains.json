@@ -6,8 +6,66 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-04-04T11:21:37Z",
-	"pushed": "2026-11-04T22:02:14Z",
+	"pushed": "2026-11-04T22:57:02Z",
 	"releases": [
+		{
+			"tag": "v1.4.0",
+			"published": "2026-11-04T22:57:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 711237333,
+					"name": "create-optimized-trains-1.4.0.jar",
+					"url": "https://github.com/GreenToastSoftware/create-optimized-trains/releases/download/v1.4.0/create-optimized-trains-1.4.0.jar",
+					"size": 835622,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "9aff28c34af86a03f06e2ad91d035926cf60e4055726de64923b8288f458e8c8",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "create_optimized_trains",
+							"version": "1.4.0",
+							"name": "Create Optimized Trains",
+							"description": "Performance optimization addon for Create Mod trains.\nIncludes LOD rendering, carriage grouping, safe multi-threading,\ntick throttling, render optimization, proxy entities,\nsmart chunk management, physics & networking optimization,\npriority system and dynamic performance monitor.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"create"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 98,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"discord.com": [
+								"com/createoptimizedtrains/profiler/PerfCommand.class",
+								"com/createoptimizedtrains/profiler/PerfReportWriter.class",
+								"com/createoptimizedtrains/profiler/client/CotConfigScreen.class",
+								"com/createoptimizedtrains/profiler/client/PerfAnalyzerScreen.class"
+							],
+							"github.com": [
+								"com/createoptimizedtrains/profiler/PerfReportWriter.class",
+								"com/createoptimizedtrains/profiler/client/CotConfigScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.4.0\n\n### Focus\n\n- Fixes leaked force-loaded chunks (#8), server lag from synchronous chunk loading, and slow chunk loading for players on foot\n- Adds an in-game **Performance Analyzer** to make reporting problems easy\n\n### Bug Fixes\n\n#### Leaked force-loaded chunks (#8)\n- The rate-limited unload loop removed *all* pending chunks from tracking, even the ones it had not released yet — those chunks stayed force-loaded forever with no owner, retaining thousands of ChunkHolders over time\n- Fix: only chunks that were actually released are removed from tracking; the rest are released on the next ticks\n- Chunks of trains that are removed or disassembled are now released too\n- **Existing worlds:** older versions used vanilla `/forceload`, which is saved in the world. If you used v1.3.2 or older, run `/forceload remove all` once in each dimension (this also removes any forceloads you created yourself)\n\n#### Chunk tickets\n- Train chunks now use the mod's own region tickets instead of vanilla `/forceload`: they are not saved to the world, never conflict with player forceloads, and two trains in the same chunk no longer release it for each other\n\n#### Server lag spikes while trains move\n- Forcing a chunk loaded/generated it **synchronously** on the server thread (12–180 ms per train update). Chunks are now requested asynchronously\n\n#### Slow chunk loading for players on foot\n- Trains that had entities kept their chunks force-loaded wherever they went, so after a while every train on the map was loading chunks and the server tick had no spare time left for the player's chunks (pausing the game \"fixed\" it)\n- Unoccupied trains far from every player (beyond `ghostDistance`, min. view distance + 4 chunks) now release their chunks and keep running on the track without entities\n\n#### Multi-dimension trains\n- Trains in the Nether or other dimensions were handled as if they were in the Overworld (chunks forced in the wrong dimension, wrong distances)\n\n#### Leaving and re-entering a world\n- All optimization systems were shut down on the first world exit and never restarted in singleplayer\n\n#### Carriages appearing with stutter\n- New carriages had movement interpolation disabled for 5 ticks, making them jump at 20 Hz when entering view; interpolation is now only skipped on real position corrections\n- Stress immunity now also covers carriages that just appeared, so their alignment no longer stops the train\n\n#### Other\n- Collision checks between trains are no longer skipped at high speed (trains could pass through each other)\n- Directional chunk loading no longer leaves permanent holes when you leave the train or it turns\n- LOD is computed on the main thread only (it read non-thread-safe Create state)\n- `chunks.maxChunkWaitTicks` now actually works\n- The mod version shown in the mods list is now correct\n\n### New Features\n\n#### Performance Analyzer\n- Open it from the Esc menu, from Mods → Create Optimized Trains → Config, or with a key (Options → Controls, unbound by default)\n- Records FPS, frame times, server MSPT, trains, chunk loading and memory while you play (max 5 minutes), then saves a JSON report to `.minecraft/cot-reports/`\n- One-click buttons to open the folder, copy the report to Downloads, open a pre-filled GitHub issue, or join the Discord\n- No personal data is recorded (no name, UUID, IP, seed or coordinates)\n- Server owners: `/cot profiler start | stop | discard | status` (operators only)\n\n#### Create-style config screen\n- The mod's config can now be edited in-game with the same screen as Create\n\n#### Chunk prewarming\n- Chunks entering the view of a player riding a train are loaded ahead of time, bypassing vanilla's limit of 4 player chunks at a time. New `prewarm` config section\n- Never more than `prewarm.maxPending` (default 24) prewarmed chunks waiting to load/generate at once, and prewarming pauses while the server is lagging, so it can't flood world generation and stall the server tick\n\n### Config\n\n..."
+		},
 		{
 			"tag": "v1.3.2",
 			"published": "2026-09-07T14:51:33Z",
@@ -18,7 +76,7 @@
 					"name": "create-optimized-trains-1.3.2.jar",
 					"url": "https://github.com/GreenToastSoftware/create-optimized-trains/releases/download/v1.3.2/create-optimized-trains-1.3.2.jar",
 					"size": 765222,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "25907502919bb6c511afafb825e09986bd5f78376a0619888feee28a1eb45b9c",
 					"mods": [
