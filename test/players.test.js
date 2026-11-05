@@ -200,7 +200,7 @@ describe('the Settings page', () => {
 		expect(text).toContain('Players');
 
 		sent.length = 0;
-		[...page.elem.querySelectorAll('button')].find(button => button.textContent.includes('Check again')).click();
+		[...page.elem.querySelectorAll('button')].find(button => button.textContent.includes('Check for updates')).click();
 		await settle(() => sent.some(([, address]) => address.endsWith('upgrade?again')));
 		expect(sent.map(([, address]) => address)).toContain('./api/upgrade?again');
 

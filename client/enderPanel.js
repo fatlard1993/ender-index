@@ -90,7 +90,7 @@ export const enderPanel = signal => {
 					new Button({
 						icon: 'rotate',
 						variant: 'flat',
-						textContent: 'Check again',
+						textContent: 'Check for updates',
 						title: 'Ask GitHub for the newest release now',
 						onPointerPress: () => local.loadUpgrade({ again: true }),
 					}),
