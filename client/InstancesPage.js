@@ -40,9 +40,43 @@ const checkbox = (text, checked, onChange) =>
 		],
 	});
 
+const STEP = /^:: (.+)$/;
+
+const COUNTED = /^\s+(\S.*?)\s+(\d+)\/(\d+)\s*$/;
+
+/**
+ * Where a job is, from ender's lines: its latest step, the count it has printed since (a download's files), and
+ * whether that step started the game, after which the lines are the game's own log.
+ */
+export const jobProgress = (lines = []) => {
+	const at = lines.findLastIndex(line => STEP.test(line));
+	const step = at === -1 ? undefined : lines[at].match(STEP)[1];
+	const counted = lines
+		.slice(at + 1)
+		.map(line => line.match(COUNTED))
+		.findLast(Boolean);
+
+	return {
+		step,
+		playing: step?.startsWith('Launching ') ?? false,
+		counted:
+			counted && !step?.startsWith('Launching ')
+				? { label: counted[1], done: Number(counted[2]), total: Number(counted[3]) }
+				: undefined,
+	};
+};
+
 export const jobLine = job => {
 	if (job === undefined) return '';
+
+	const { step, playing, counted } = jobProgress(job.lines);
+
+	if (job.state === 'running' && playing)
+		return `Playing ${step.replace(/^Launching /, '')}; closing the game ends this`;
+	if (job.state === 'running' && step)
+		return `${job.title}: ${step}${counted ? `, ${counted.label} ${counted.done} of ${counted.total}` : ''}`;
 	if (job.state === 'running') return `${job.title}: ${lastSaid(job.lines) || 'starting'}`;
+	if (job.state === 'done' && playing) return lastSaid(job.lines) || `${job.title}: done`;
 	if (job.state === 'done') return `${job.title}: done`;
 
 	const said = lastSaid(job.lines);
@@ -55,6 +89,20 @@ const outputView = () =>
 		tag: 'pre',
 		style: { display: 'none', maxHeight: '260px', overflow: 'auto', whiteSpace: 'pre-wrap', margin: 0 },
 	});
+
+const progressView = () => new Component({ tag: 'progress', style: { display: 'none', width: '100%' } });
+
+/** A bar for the count a running job last printed, hidden when it has none. */
+const showProgress = (view, job) => {
+	const counted = job?.state === 'running' ? jobProgress(job.lines).counted : undefined;
+
+	view.elem.style.display = counted ? '' : 'none';
+
+	if (counted) {
+		view.elem.max = counted.total;
+		view.elem.value = counted.done;
+	}
+};
 
 const showOutput = (view, job, open) => {
 	view.elem.style.display = open && job ? '' : 'none';
@@ -98,6 +146,7 @@ const modList = (manifest, onDrop) =>
 const instanceCard = (instance, signal) => {
 	const open = openedFor(instance.name);
 	const status = new Meta();
+	const bar = progressView();
 	const output = outputView();
 	const mods = new Stack({ style: { display: open.mods ? '' : 'none', gap: theme.space.xs } });
 	const actions = [];
@@ -115,6 +164,7 @@ const instanceCard = (instance, signal) => {
 		for (const button of actions) button.elem.disabled = working;
 
 		status.elem.textContent = jobLine(job);
+		showProgress(bar, job);
 		showOutput(output, job, open.output);
 	};
 	const runJob = async (starting, { done, quietWhenDone = false } = {}) => {
@@ -265,6 +315,7 @@ const instanceCard = (instance, signal) => {
 					],
 				}),
 				status,
+				bar,
 				output,
 				mods,
 			],

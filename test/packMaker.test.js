@@ -59,6 +59,38 @@ describe('what the instances page says of a job', () => {
 		expect(instances.jobLine(undefined)).toBe('');
 	});
 
+	test('counts a long download as ender prints it, and says when the game is open rather than echo its log', () => {
+		const installing = {
+			title: 'Launching survival',
+			state: 'running',
+			lines: [':: Installing Minecraft 26.3 with fabric 0.20.1', '   assets     64/5147', '   assets     126/5147'],
+		};
+
+		expect(instances.jobProgress(installing.lines).counted).toEqual({ label: 'assets', done: 126, total: 5147 });
+		expect(instances.jobLine(installing)).toBe(
+			'Launching survival: Installing Minecraft 26.3 with fabric 0.20.1, assets 126 of 5147',
+		);
+
+		const playing = {
+			...installing,
+			lines: [
+				...installing.lines,
+				':: Launching survival as Chase (offline)',
+				'[12:00:01] [Render thread/INFO]: Setting user: Chase',
+			],
+		};
+
+		expect(instances.jobProgress(playing.lines)).toEqual({
+			step: 'Launching survival as Chase (offline)',
+			playing: true,
+			counted: undefined,
+		});
+		expect(instances.jobLine(playing)).toBe('Playing survival as Chase (offline); closing the game ends this');
+		expect(instances.jobLine({ ...playing, state: 'done', lines: [...playing.lines, 'ok survival closed'] })).toBe(
+			'survival closed',
+		);
+	});
+
 	test('is how it failed, in its own last words, when it did', () => {
 		const failed = {
 			title: 'Playing family',
