@@ -405,7 +405,7 @@ export const local = {
 	get ender() {
 		return state.ender;
 	},
-	/** Links Ender.app's ender into a Mac's Terminal, which asks for the user's password. */
+	/** Asks ender to link Ender.app's ender into a Mac's Terminal, which macOS asks the user's password for, and keeps how Terminal then stands. */
 	linkTerminal: async () => {
 		state.ender = { ...state.ender, terminal: await call('POST', 'terminal') };
 		notify();

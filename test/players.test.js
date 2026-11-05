@@ -92,6 +92,10 @@ describe('the players panel', () => {
 			]),
 		).toEqual({ link: 'https://www.microsoft.com/link', code: 'ABCD1234' });
 		expect(panel.signInLink([':: Sign in to Microsoft'])).toBeUndefined();
+		expect(panel.signInLink(['  link https://www.microsoft.com/link'])).toEqual({
+			link: 'https://www.microsoft.com/link',
+			code: undefined,
+		});
 	});
 
 	test('once sign in is set up, offers it and a way to change the client id it uses', async () => {
@@ -230,6 +234,29 @@ describe("a Mac's Terminal on the Settings page", () => {
 			'drag Ender into Applications',
 		);
 		expect(text(enderPanel.terminalRow({ linked: false, line, refused: 'x' }))).not.toContain('Add ender');
+	});
+
+	test('names another ender already at the link and offers nothing that would replace it', () => {
+		const rows = enderPanel.terminalRow({ linked: false, line, occupied: '/usr/local/Cellar/ender/0.2.3/bin/ender' });
+
+		expect(text(rows)).toContain(
+			"Terminal's ender is /usr/local/Cellar/ender/0.2.3/bin/ender; Ender leaves it in place",
+		);
+		expect(text(rows)).not.toContain('Add ender');
+	});
+
+	test('says so when macOS answers but the link is still not this ender, and offers the button again', async () => {
+		responses['/api/terminal'] = { linked: false, line };
+
+		const [row] = enderPanel.terminalRow({ linked: false, line });
+		const button = [...row.elem.querySelectorAll('button')].find(each => each.textContent.includes('Add ender'));
+
+		document.body.append(row.elem);
+		button.click();
+		await settle(() => !button.disabled && document.body.textContent.includes('still not this one'));
+
+		expect(button.disabled).toBe(false);
+		expect(document.body.textContent).toContain('still not this one');
 	});
 
 	test('shows nothing for an ender installed some other way', () => {

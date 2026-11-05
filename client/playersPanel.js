@@ -1,7 +1,7 @@
 import { Button, Card, Component, Dialog, Input, Link, Notify, Select, theme } from '@vanilla-bean/components';
 
 import { lastSaid, local } from './local';
-import { Chip, Command, Meta, Row, Stack, Title, Warning } from './ui';
+import { Chip, Command, Meta, Row, Stack, Title, Warning, copyCommand } from './ui';
 
 const told = (intent, content) => new Notify({ intent, content });
 
@@ -116,14 +116,13 @@ const clientIdForm = ({ open = false } = {}) => {
 
 const said = (lines, key) => lines.map(line => line.match(new RegExp(`^\\s*${key} (\\S+)`))?.[1]).find(Boolean);
 
-/** The page Microsoft's code is typed into, and the code, from the lines ender prints for them. */
+/** The page Microsoft's code is typed into, and the code, from the lines ender prints for them; no code from an ender too old to print one. */
 export const signInLink = lines => {
 	const link = said(lines, 'link');
-	const code = said(lines, 'code');
 
-	if (!link?.startsWith('https:') || !code) return undefined;
+	if (!link?.startsWith('https:')) return undefined;
 
-	return { link, code };
+	return { link, code: said(lines, 'code') };
 };
 
 /** Microsoft's sign in waits on a code typed in another tab, so the code and its page are shown as soon as ender has them. */
@@ -141,21 +140,29 @@ const signInRow = (players, signal) => {
 
 			try {
 				const job = await local.signIn();
-				let shownLink;
+				let shownCode;
 				const show = () => {
 					const found = signInLink(job.lines);
+
+					if (found && !found.code) {
+						status.elem.textContent =
+							'This ender prints no code for the page; update ender, or sign in with ender account add';
+
+						return;
+					}
 
 					const waiting = found ? 'Waiting for you to finish in that tab' : 'Asking Microsoft for a code';
 
 					status.elem.textContent = job.state === 'running' ? waiting : '';
 
-					if (!found || found.link === shownLink) return;
+					if (!found || found.code === shownCode) return;
 
-					shownLink = found.link;
+					shownCode = found.code;
 					prompt.elem.style.display = '';
 					prompt.content([
 						new Meta({ textContent: 'Your code' }),
 						new Command({ tag: 'code', textContent: found.code, style: { fontSize: '1.3em', letterSpacing: '0.1em' } }),
+						new Button({ icon: 'copy', variant: 'flat', title: 'Copy', onPointerPress: () => copyCommand(found.code) }),
 						new Button({
 							icon: 'arrow-up-right-from-square',
 							textContent: "Open Microsoft's page",

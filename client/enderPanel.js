@@ -1,7 +1,7 @@
 import { Button, Card, Link, Notify, theme } from '@vanilla-bean/components';
 
 import { local, updateReady } from './local';
-import { Command, Meta, Row, Stack, Title } from './ui';
+import { Command, Meta, Row, Stack, Title, copyCommand } from './ui';
 
 const updateButton = upgrade => {
 	const status = new Meta();
@@ -72,29 +72,36 @@ const placeRow = (label, path) =>
 
 const terminalLabel = () => new Meta({ textContent: 'Terminal' });
 
-/** Whether a Mac's Terminal has Ender.app's ender, and the button or the line that gives it, when it does not. */
+const saying = text => new Row({ append: [terminalLabel(), new Meta({ textContent: text })] });
+
+/**
+ * Whether /usr/local/bin/ender is Ender.app's ender: once it is, why it cannot be linked from where Ender runs, what
+ * other ender is there, or the button and the line to paste that link it.
+ */
 export const terminalRow = terminal => {
 	if (!terminal) return [];
+	if (terminal.linked) return [saying('ender works in Terminal')];
+	if (terminal.refused) return [saying(terminal.refused)];
+	if (terminal.occupied) return [saying(`Terminal's ender is ${terminal.occupied}; Ender leaves it in place`)];
 
-	if (terminal.linked) {
-		return [new Row({ append: [terminalLabel(), new Meta({ textContent: 'ender works in Terminal' })] })];
-	}
-
-	if (terminal.refused) return [new Row({ append: [terminalLabel(), new Meta({ textContent: terminal.refused })] })];
-
+	const status = new Meta();
 	const button = new Button({
 		icon: 'terminal',
 		variant: 'flat',
 		textContent: 'Add ender to Terminal',
-		title: 'macOS asks for your password to link it into /usr/local/bin',
 		onPointerPress: async () => {
 			button.elem.disabled = true;
+			status.elem.textContent = "Waiting for your password in macOS's dialog";
 
 			try {
 				await local.linkTerminal();
+
+				if (!local.ender?.terminal?.linked)
+					throw new Error('macOS answered, but /usr/local/bin/ender is still not this one');
 			} catch (error) {
 				new Notify({ intent: 'danger', content: `ender was not added to Terminal: ${error.message}` });
 				button.elem.disabled = false;
+				status.elem.textContent = '';
 			}
 		},
 	});
@@ -102,12 +109,14 @@ export const terminalRow = terminal => {
 	return [
 		new Row({
 			style: { flexWrap: 'wrap' },
+			append: [terminalLabel(), new Meta({ textContent: 'ender is not a command there yet' }), button, status],
+		}),
+		new Row({
+			style: { flexWrap: 'wrap' },
 			append: [
-				terminalLabel(),
-				new Meta({ textContent: 'ender is not a command there yet' }),
-				button,
 				new Meta({ textContent: 'or paste' }),
 				new Command({ tag: 'code', textContent: terminal.line }),
+				new Button({ icon: 'copy', variant: 'flat', title: 'Copy', onPointerPress: () => copyCommand(terminal.line) }),
 			],
 		}),
 	];
