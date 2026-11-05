@@ -6,8 +6,97 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-15T21:45:49Z",
-	"pushed": "2026-11-05T18:50:08Z",
+	"pushed": "2026-11-05T19:50:13Z",
 	"releases": [
+		{
+			"tag": "1.6.0",
+			"published": "2026-11-05T19:50:13Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 714607130,
+					"name": "drawless-1.6.0.jar",
+					"url": "https://github.com/WilyFoxM/DrawLess/releases/download/1.6.0/drawless-1.6.0.jar",
+					"size": 275734,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "3036d1b9e40f1cf682d7c87ec991926e9566f9d988b559fb6e6b2c513b41a33d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "drawless",
+							"version": "1.6.0",
+							"name": "DrawLess",
+							"description": "Client-side rendering optimizations for busy multiplayer scenes: Item Displays, players and particles.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium"
+							]
+						}
+					],
+					"icon": "1880ff639f3c9e9984939b7d131865559b2a30a054339e65ab79b69f685a5d4d.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 126,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 714607179,
+					"name": "drawless-dev-1.6.0.jar",
+					"url": "https://github.com/WilyFoxM/DrawLess/releases/download/1.6.0/drawless-dev-1.6.0.jar",
+					"size": 224427,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "bca17c13cf1884b6aeaaeb72c92ddef9b1670e98f1e5b11e9f8e03f1748fce21",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "drawless-dev",
+							"version": "1.6.0",
+							"name": "DrawLess Dev",
+							"description": "Diagnostics, profiles and benchmark reports for DrawLess. Not needed to play.",
+							"environment": "client",
+							"depends": [
+								"drawless"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 95,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**DrawLess 1.6.0 — Less work for Item Displays you can't see, and faster animated poses.**\n\nDrawLess 1.6.0 adds two optimizations for Item Display models, both ON by default. How much they help depends on how many of these models are around you.\n\n**Item Displays**\n\n- New option **Skip displays outside the view** on the **Rendering** page. Parts already on the GPU that are outside the camera view are skipped for the frame. Their ticks and animation keep running. A part moving very quickly into view may appear a moment late.\n- New option **Fast poses for animated displays** on the **Rendering** page. Interpolating parts get their pose computed directly instead of going through vanilla submission every frame. A part must first predict a vanilla pose; one that doesn't keeps the ordinary path. The pose an animation ends on still comes from vanilla, so models at rest look exactly as before.\n- A configuration that saved these options as OFF keeps them OFF; older configurations get the new default ON.\n\n**Measurements (DrawLess Dev)**\n\n- Added the `live_culling` and `live_poses` targets for automated comparisons.\n- The Live geometry diagnostic now counts skipped parts and direct poses.\n\n**Performance and limitations**\n\nI measured both on a live server spawn with Sodium, a stationary camera and no other players in view, in one session on a Ryzen 5 5600H / RTX 3060 Laptop GPU. This is not a published benchmark; the benchmark on the mod page is still Benchmark 04, measured on 1.4.0.\n\n- Skipping displays: +3.54% mean paired FPS change at FOV 110 and +3.62% at FOV 70, with the OFF phases varying by 2.71% and 4.87%. 34% and 44% of the parts were skipped. Read this as roughly 3 to 4% on this scene.\n- Fast poses, with skipping on: pose work fell from 0.124 to 0.064 ms in sampled frames, and vanilla submissions from about 95 to 9 per frame, with no part rejected. The series itself measured +4.20%, but the OFF phases varied by 7.96%, so that figure is not reliable. From the saved work I'd expect about 2%.\n\nThese two results come from separate series and should not be added together. Scenes with few Item Displays, or with many players, will likely gain less. GPU time was not measured, and I didn't test these options on other hardware.\n\nI turned the camera quickly between ModelEngine NPCs and looked at animated models up close, and didn't notice anything unusual. That is an observation, not pixel parity. Local tests compare pixels only on simple models.\n\n**Compatibility**\n\nThe full local client test suite ran standalone, with Sodium 0.9.2 + ImmediatelyFast 1.16.5, and with Sodium + Iris 1.11.4 with shaders off. It found a resting model drawn two edge pixels off by the fast pose path; that is fixed, and the affected tests pass in all three. With an Iris shader pack active, Live geometry and both new options pause, as before. These safeguards do not imply validation with every combination of rendering or model mods.\n\n**Requirements**\n\nMinecraft **26.2**, Fabric Loader **0.19.3+**, Fabric API **0.161.0+26.2** and Java **25**. Sodium is optional; no server-side installation is needed.\n\nThanks to **fzzyhmstrs and the Particle Core contributors**, alongside **RK_01 / RaphiMC**, the **ImmediatelyFast contributors**, **LlamaLad7** and the **MixinExtras contributors**. [Attributions and reference links](https://github.com/WilyFoxM/DrawLess#attributions)."
+		},
 		{
 			"tag": "1.5.0",
 			"published": "2026-11-03T20:48:36Z",
@@ -18,7 +107,7 @@
 					"name": "drawless-1.5.0.jar",
 					"url": "https://github.com/WilyFoxM/DrawLess/releases/download/1.5.0/drawless-1.5.0.jar",
 					"size": 269134,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "0ed5f47a86dee4d9874a49616c66a5024d57f8110967f07738f25f113bf2ef61",
 					"mods": [
@@ -62,7 +151,7 @@
 					"name": "drawless-dev-1.5.0.jar",
 					"url": "https://github.com/WilyFoxM/DrawLess/releases/download/1.5.0/drawless-dev-1.5.0.jar",
 					"size": 224273,
-					"downloads": 1,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "cdc4472666998aac886542656feffcdb11743da0ec9aeac27b7bc1b2910f8627",
 					"mods": [
