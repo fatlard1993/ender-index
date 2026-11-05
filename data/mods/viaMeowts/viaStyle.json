@@ -52,22 +52,14 @@
 					"size": 252694,
 					"downloads": 10,
 					"inspection": 2,
-					"sha256": "b13d11478d9222b597eb22bee6f9ef4adf673dcde4e71356938eee5467878a26",
-					"metadataError": "JSON Parse error: Unrecognized token '﻿'",
-					"icon": null,
-					"funding": [],
-					"content": {
-						"names": {},
-						"data": [],
-						"shaders": false
-					},
-					"scan": {
-						"classes": 63,
-						"jars": [],
-						"capabilities": {},
-						"hosts": {},
-						"unreadable": []
-					}
+					"error": "download answered 504",
+					"replaced": [
+						{
+							"id": 459297007,
+							"sha256": "b13d11478d9222b597eb22bee6f9ef4adf673dcde4e71356938eee5467878a26",
+							"until": "2026-11-05T15:01:14.619Z"
+						}
+					]
 				}
 			],
 			"notes": "## Added\n\n### Broadcast System\n- New `/bc` command with configurable sound, cooldown, header/message formats, console sender support.\n- Config section `[broadcast]` in viaStyle.toml (broadcastEnabled, cooldownSeconds, sound settings, format strings).\n- ViaStylePanelProvider: Broadcast section with all broadcast fields.\n- `BroadcastCommand.java` — full command implementation (`/bc <message>`, cooldown tracking, sound playback, console support).\n\n### Chat Share Placeholders\n- Players can type `[item]`, `[pos]`, `[inv]`, `[ec]` in chat to share held item, coordinates, inventory, or ender chest.\n- Configurable cooldown (default 10s), max per message (default 4), inventory snapshot expiry (default 180s).\n- Per-placeholder permission nodes (`viastyle.placeholder.item`, `.pos`, `.inv`, `.ec`).\n- Localized hover/display text (EN/RU).\n- `ChatSharePlaceholders.java` — full implementation with inventory/enderchest GUI viewers.\n- New config fields in `[chat_placeholders]` section.\n\n### Join/Leave System\n- Per-player and per-group join/leave format overrides.\n- Persisted to `config/viaStyle/joinleave-users.json`.\n- `/joinleave` command to manage overrides in-game.\n- viaPanel sections for Join/Leave and Join/Leave Overrides.\n- `JoinLeaveManager.java` — data management with JSON persistence.\n- `JoinLeaveCommand.java` — command with subcommands.\n\n### PM Sound System\n- Per-player PM sound toggle (`/msound`) — preference persists across restarts in `config/viaStyle/pm-sound.json`.\n- `PmSoundCommand.java` — `/msound`, `/msound on|off`, `/msound status`.\n- `viaStyle.playerPmSoundDisabled` set with JSON persistence (load/save helpers).\n\n### AFK System\n- Full automatic AFK detection with configurable timeout.\n- Movement detection via player input state (`PlayerInput` record) — only WASD/jump/sneak resets AFK.\n- AFK suffix appended to nametag, tab list, and chat.\n- Configurable suffix content, colors, exempt players, bypass permission.\n- `AfkManager.java` — tick-based idle tracking, player activity hooks.\n- `AfkCommand.java` — `/afk`, `/afk <player>`, `/afk bypass <player>`, `/afk bypass list`.\n- Config section `[afk]` with `afkSuffixEnabled`, `afkTimeout`, `afkSuffix`, `afkNameColor`, etc.\n\n### Chat MiniMessage\n- Players can use MiniMessage tags in chat (`<red>`, `<gradient:#ff0000:#ffaa00>`, etc.).\n- Config toggle and optional permission gate (`viastyle.chat.minimessage`).\n- `ChatMiniMessageParser.java` — lightweight MiniMessage tag parser for chat context.\n\n### Placeholder View Command\n- `/placeholders` command shows available chat placeholder tokens to the player.\n- `PlaceholderViewCommand.java`\n\n### ViaStylePanelProvider — New Sections\nAdded 19 viaPanel sections total, including new: Chat Formatting, Timestamp, Broadcast, Join/Leave, Join/Leave Overrides, viaSuper, AFK.\n\n### Language System\n- Expanded `Lang.java` with +311 lines — localized strings for all new features (broadcasts, placeholders, join/leave, AFK, PM sound, etc.).\n- New `getRaw()` and `getColored()` methods for flexible text construction.\n- Broadcast format localization (EN/RU templates).\n\n## Changed\n\n### Config Overhaul\n- `ViaStyleConfig.java` reorganised with clear section separators and consistent field naming.\n- Added config fields for: chat MiniMessage, PM sound/color/ban-hammer-mute, mention color/style, chat placeholders (all sub-fields), broadcast (all fields), join/leave (format strings), AFK (all fields), viaSuper (title/subtitle formats).\n- New `applyLocalizedPlaceholderDefaults()` method for language-aware default templates.\n\n### ChatHandler\n- Removed ScarpetHelper integration.\n- Added AFK activity reset on chat message send.\n- Permission checks use new `checkPlayerPermission()` with proper precedence.\n- Local chat delivers to a recipient list for mention radius filtering.\n- Message processing pipeline now includes `ChatSharePlaceholders.processMessage()`.\n- SocialSpy relay refactored to accept sender name string + optional exclude player.\n\n### MentionHandler\n\n..."
