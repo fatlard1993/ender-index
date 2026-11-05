@@ -5,8 +5,66 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-04-25T15:11:25Z",
-	"pushed": "2026-11-05T00:14:36Z",
+	"pushed": "2026-11-05T01:41:00Z",
 	"releases": [
+		{
+			"tag": "v0.3.0",
+			"published": "2026-11-05T01:41:03Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 711640376,
+					"name": "arcadiatweaks-0.3.0.jar",
+					"url": "https://github.com/Team-Arcadia/arcadia-tweaks/releases/download/v0.3.0/arcadiatweaks-0.3.0.jar",
+					"size": 487298,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "1cea2b70d365d89f8c457f81c38d9df7c1b0da3b6526422b329087f4afed3d8d",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "arcadiatweaks",
+							"version": "0.3.0",
+							"name": "ArcadiaTweaks",
+							"description": "Umbrella mod-patch for the Arcadia modpack. Non-invasive, Mixin-based optimizations and fixes for BotanyPots, Refined Storage, Mekanism, Waystones, Simply Swords and Copycats+, plus server and client safety guards.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"botanypots",
+								"refinedstorage",
+								"mekanism",
+								"waystones",
+								"ftbteams",
+								"simplyswords",
+								"cosmeticweaponsmod",
+								"cosmeticarmoursmod",
+								"accessories",
+								"copycats"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 109,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## ArcadiaTweaks 0.3.0\n\nOne jar for every module: `arcadiatweaks-0.3.0.jar`. Replace the previous `arcadiatweaks-*.jar` with it, on the server and on every client; configs carry over and the new switches are added on first start. The Refined Storage patches apply on dedicated servers.\n\n### Performance: Refined Storage\n- **Autocrafting requests that cannot be crafted no longer cost a full copy of the network (A1).** Every autocrafting calculation started by copying the whole network content, and an exporter, interface or constructor with an autocrafting upgrade runs at least two of them per filter and work cycle when the item is missing and cannot be crafted. Calculations on the server thread now read the network directly through a read-only view (nothing can change it while they run); crafting previews keep the copy.\n  - Bench (16 exporters with 3 speed upgrades and an autocrafting upgrade, 9 missing filters each, 3549 resources): 22.7 ms to 0.29 ms per tick.\n  - A differential GameTest compares 3600 task plans, previews and craftable amounts over 5 random pattern graphs: all equal with A1 off and on.\n  - Kill switch `[refinedstorage] autocrafting_live_storage_view_enabled`.\n- **Idle importers, exporters and crafting steps refused by their machine try less often (B1 to B3).** A node whose attempts move nothing tried again on every work cycle (every tick with speed upgrades). It now waits 2, 4, 8... up to `idle_backoff_max_ticks` ticks (10 by default) and works on every cycle again as soon as something moves. Energy use is unchanged; any change of filters, upgrades, facing or network resets it; a node without speed upgrades is never slowed down.\n  - Bench (72 waiting nodes and 12 waiting crafting tasks, 4 speed upgrades each): 5.06 ms to 0.72 ms per tick, p95 7.3 ms to 2.7 ms, same results. The busy bench loop moves the same items with and without.\n  - GameTests: after an idle period the first item moves within 10 ticks (1 tick in plain Refined Storage).\n  - Kill switches `[refinedstorage] importer_idle_backoff_enabled`, `exporter_idle_backoff_enabled`, `autocrafting_sink_backoff_enabled`, maximum `idle_backoff_max_ticks`. New admin menu row \"Refined Storage IO\".\n\n### Also in this release (0.2.2, never published before)\n- **Copycats+: client crash while building chunk meshes** (NullPointerException in `isCTEnabled`). Kill switch `[safety] copycatsKeepMaterialsOnRemove`.\n- **Client: block entity maps of client chunks changed from another thread** (ConcurrentModificationException in `LevelChunk.updateBlockEntityTicker`, ArrayIndexOutOfBoundsException in `rehash`). Kill switch `[safety] clientBlockEntityThreadGuard`, in each player's own config.\n\nBuilt against Refined Storage 2.0.9 for Minecraft 1.21.1 / NeoForge. Checked on the Arcadia serverpack (404 mods, NeoForge 21.1.264). See CHANGELOG.md for the details."
+		},
 		{
 			"tag": "v0.2.1",
 			"published": "2026-11-01T14:49:06Z",
