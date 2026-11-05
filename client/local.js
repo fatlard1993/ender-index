@@ -378,7 +378,7 @@ export const local = {
 		return state.accountError;
 	},
 	loadAccount,
-	/** ender's accounts as { signIn, fallback, accounts }; undefined until it has said, null when it is too old to. */
+	/** ender's accounts as { fallback, accounts }; undefined until it has said, null when it is too old to. */
 	get players() {
 		return state.players;
 	},
@@ -397,7 +397,6 @@ export const local = {
 	removePlayer: name => changePlayers('DELETE', playerPath(name)),
 	/** Microsoft's device code sign in, as a job whose lines carry the code to type. */
 	signIn: () => start('POST', 'sign-in'),
-	setClientId: clientId => changePlayers('PUT', 'sign-in/client-id', { clientId }),
 	get upgrade() {
 		return state.upgrade;
 	},
