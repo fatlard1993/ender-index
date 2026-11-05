@@ -212,3 +212,36 @@ describe('the Settings page', () => {
 		page.destroy();
 	});
 });
+
+describe("a Mac's Terminal on the Settings page", () => {
+	const line = "sudo ln -sf '/Applications/Ender.app/Contents/MacOS/ender' /usr/local/bin/ender";
+	const text = rows => rows.map(row => row.elem.textContent).join('');
+
+	test('offers to add ender, with the line to paste instead', () => {
+		const rows = enderPanel.terminalRow({ linked: false, line });
+
+		expect(text(rows)).toContain('Add ender to Terminal');
+		expect(text(rows)).toContain(line);
+	});
+
+	test('says once ender is there, and why when it cannot be linked from where Ender runs', () => {
+		expect(text(enderPanel.terminalRow({ linked: true, line }))).toContain('ender works in Terminal');
+		expect(text(enderPanel.terminalRow({ linked: false, line, refused: 'drag Ender into Applications' }))).toContain(
+			'drag Ender into Applications',
+		);
+		expect(text(enderPanel.terminalRow({ linked: false, line, refused: 'x' }))).not.toContain('Add ender');
+	});
+
+	test('shows nothing for an ender installed some other way', () => {
+		expect(enderPanel.terminalRow(undefined)).toEqual([]);
+	});
+
+	test('asks ender to link it, and takes how Terminal then stands', async () => {
+		responses['/api/terminal'] = { linked: true, line };
+		sent.length = 0;
+		await local.local.linkTerminal();
+
+		expect(sent).toContainEqual(['POST', './api/terminal', undefined]);
+		expect(local.local.ender.terminal).toEqual({ linked: true, line });
+	});
+});

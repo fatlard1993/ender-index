@@ -401,9 +401,14 @@ export const local = {
 	get upgrade() {
 		return state.upgrade;
 	},
-	/** Which ender serves the page, where it is installed, and where it keeps its data. */
+	/** Which ender serves the page, where it is installed, where it keeps its data, and whether Terminal has it. */
 	get ender() {
 		return state.ender;
+	},
+	/** Links Ender.app's ender into a Mac's Terminal, which asks for the user's password. */
+	linkTerminal: async () => {
+		state.ender = { ...state.ender, terminal: await call('POST', 'terminal') };
+		notify();
 	},
 	loadUpgrade,
 	upgradeEnder,

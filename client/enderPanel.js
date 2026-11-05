@@ -70,6 +70,49 @@ const placeRow = (label, path) =>
 		append: [new Meta({ textContent: label }), new Command({ tag: 'code', textContent: path })],
 	});
 
+const terminalLabel = () => new Meta({ textContent: 'Terminal' });
+
+/** Whether a Mac's Terminal has Ender.app's ender, and the button or the line that gives it, when it does not. */
+export const terminalRow = terminal => {
+	if (!terminal) return [];
+
+	if (terminal.linked) {
+		return [new Row({ append: [terminalLabel(), new Meta({ textContent: 'ender works in Terminal' })] })];
+	}
+
+	if (terminal.refused) return [new Row({ append: [terminalLabel(), new Meta({ textContent: terminal.refused })] })];
+
+	const button = new Button({
+		icon: 'terminal',
+		variant: 'flat',
+		textContent: 'Add ender to Terminal',
+		title: 'macOS asks for your password to link it into /usr/local/bin',
+		onPointerPress: async () => {
+			button.elem.disabled = true;
+
+			try {
+				await local.linkTerminal();
+			} catch (error) {
+				new Notify({ intent: 'danger', content: `ender was not added to Terminal: ${error.message}` });
+				button.elem.disabled = false;
+			}
+		},
+	});
+
+	return [
+		new Row({
+			style: { flexWrap: 'wrap' },
+			append: [
+				terminalLabel(),
+				new Meta({ textContent: 'ender is not a command there yet' }),
+				button,
+				new Meta({ textContent: 'or paste' }),
+				new Command({ tag: 'code', textContent: terminal.line }),
+			],
+		}),
+	];
+};
+
 /** Which ender serves this page, a way to the newest when there is one, and where it lives on this machine. */
 export const enderPanel = signal => {
 	const body = new Stack({ style: { gap: theme.space.sm } });
@@ -84,6 +127,7 @@ export const enderPanel = signal => {
 		body.content([
 			...versionLine(upgrade),
 			...(ender?.installed ? [placeRow('Installed at', ender.installed)] : []),
+			...terminalRow(ender?.terminal),
 			...(ender?.data ? [placeRow('Keeps instances, worlds and downloads in', ender.data)] : []),
 			new Row({
 				append: [
