@@ -5,7 +5,7 @@
 	"stars": 2,
 	"archived": false,
 	"created": "2026-07-04T07:46:09Z",
-	"pushed": "2026-11-05T17:58:27Z",
+	"pushed": "2026-11-05T18:54:54Z",
 	"releases": [
 		{
 			"tag": "v2.6-beta-bf",
@@ -13,13 +13,13 @@
 			"prerelease": true,
 			"assets": [
 				{
-					"id": 714299278,
+					"id": 714409100,
 					"name": "starlightdlc-2.6-beta-bf-no-youtube.jar",
 					"url": "https://github.com/Anmuzzz/StarlightDLC-Src/releases/download/v2.6-beta-bf/starlightdlc-2.6-beta-bf-no-youtube.jar",
-					"size": 23943044,
+					"size": 23938715,
 					"downloads": 0,
 					"inspection": 2,
-					"sha256": "44077bad43f79f8bd0175f3844d2f8e9adbb45d7824723936f0715bf635f56eb",
+					"sha256": "72d99a6c41a4dad27cc0f703d5607132ccd2d86ed195b983a0871e771cac3452",
 					"mods": [
 						{
 							"loader": "fabric",
@@ -168,16 +168,23 @@
 							]
 						},
 						"unreadable": []
-					}
+					},
+					"replaced": [
+						{
+							"id": 714299278,
+							"sha256": "44077bad43f79f8bd0175f3844d2f8e9adbb45d7824723936f0715bf635f56eb",
+							"until": "2026-11-05T18:25:16.928Z"
+						}
+					]
 				},
 				{
-					"id": 714298765,
+					"id": 714408459,
 					"name": "starlightdlc-2.6-beta-bf.jar",
 					"url": "https://github.com/Anmuzzz/StarlightDLC-Src/releases/download/v2.6-beta-bf/starlightdlc-2.6-beta-bf.jar",
-					"size": 112723311,
+					"size": 112718982,
 					"downloads": 0,
 					"inspection": 2,
-					"sha256": "1ef1c26f820955e71da351322ff84c4fb6e2c4979d238439b4ba2593a8d6b3c0",
+					"sha256": "08faa3d3b36da57453d383c633c2accda5f0d2be1f76955ec620ad8b52b47204",
 					"mods": [
 						{
 							"loader": "fabric",
@@ -548,7 +555,14 @@
 							]
 						},
 						"unreadable": []
-					}
+					},
+					"replaced": [
+						{
+							"id": 714298765,
+							"sha256": "1ef1c26f820955e71da351322ff84c4fb6e2c4979d238439b4ba2593a8d6b3c0",
+							"until": "2026-11-05T18:25:16.928Z"
+						}
+					]
 				}
 			],
 			"notes": "### Исправлено\n- **KillAura**: фликер между целями (гистерезис удержания цели), двойной raycast за тик (кэш на тик), прицел вне радиуса при пустых кандидатах, спам-пакеты отключения щита (один раз), мгновенный первый удар после входа в мир, удалены мёртвые поля (airTicks, attackWatch)\n- **Автобай**: мёртвые проверки атрибутов/зачарований (неверный NBT-тип 9 → 10) — покупался любой тотем/талисман игнорируя требования (6 мест); цена соседнего слота-ценника была no-op; спам-матчинг пустых имён слотов (покупались денежные стаки); SpookyTime-парсер никогда не запускался (пустой резолвер); SpookyTime-хендлер игнорировал задержку обновления (двойные покупки); перекрытие цифр в Watermark\n- **YouTube/плеер**: в jar не был вложен модуль `javafx-swing` — причина «JavaFX не найден» при загруженном JavaFX (добавлены нативы Windows и Linux); off-by-one в парсере `youtu.be`-ссылок (краш на коротких id); утечка GL-текстур превью; JFXPanel создаётся на EDT; Tab в Lua IDE вставлялся дважды (8 пробелов вместо 4)\n- **Второй проход аудита**: цветовые каналы HitFX/TargetESP/JumpCircle (двойное масштабирование 0..255), утечка шейдера после эффекта «Взрыв», коллизии widthCache шрифтов (хеш-ключ), диагностический лог JavaFX с версией Java\n\n### Оптимизировано\n- MineStatus: два полных обхода всех сущностей мира за кадр → кэш скана на 500 мс, статический regex, без format→split→parse кругов\n- DynamicIsland.statuses(): stream→toList→reversed несколько раз за кадр → кэш на 250 мс\n- Часы островка: SimpleDateFormat каждый кадр → кэш на секунду\n- ESP: GL-состояние и буферы один раз на кадр вместо раза на сущность; TNTTimer: один обход мира + кэш стека\n- Кэши: модулей по имени и классу (getModule без stream по 110 модулям), строк KeyBinds, элементов HUD, обёрток шрифтов, статические regex (EntityUtility, EventStatus)\n\n### Сборки\n- `starlightdlc-2.6-beta-bf.jar` — полный (встроенный YouTube, JavaFX вшит)\n- `starlightdlc-2.6-beta-bf-no-youtube.jar` — лёгкая (23 МБ, без плеера; YouTube открывается в браузере)\n\nПолный список прошлых версий — в [CHANGELOG.md](https://github.com/Anmuzzz/StarlightDLC-Src/blob/main/CHANGELOG.md)\n\n### Установка\nFabric Loader 1.21.4 + Fabric API → jar в `.minecraft/mods`. Меню — RSHIFT / Y."

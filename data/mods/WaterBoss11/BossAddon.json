@@ -6,8 +6,107 @@
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2026-07-13T02:04:17Z",
-	"pushed": "2026-10-30T18:44:17Z",
+	"pushed": "2026-11-05T18:34:25Z",
 	"releases": [
+		{
+			"tag": "v2-pre.2",
+			"published": "2026-11-05T18:34:57Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 714398321,
+					"name": "bossaddon-2-pre.2+client5.0.jar",
+					"url": "https://github.com/WaterBoss11/BossAddon/releases/download/v2-pre.2/bossaddon-2-pre.2%2Bclient5.0.jar",
+					"size": 535062,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "1ed622709f292c653f1e7ce2cfa16636a21f5cb90dad56e31f72ed08335ab729",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "bossaddon",
+							"version": "2-pre.2+client5.0",
+							"name": "BossAddon",
+							"description": "PvP + utility addon for 2b2t — the merged home of Boss's PVP and BossUtility | @WaterBoss11",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"fabric-api",
+								"autism"
+							],
+							"provides": [
+								"boss-pvp"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 197,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/boss/pvp/flag/FlagReporter.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/boss/pvp/relay/HealthProbe.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/boss/pvp/relay/MojangAuth.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/boss/pvp/relay/RelayClient.class": [
+									"java/net/http/HttpClient.newWebSocketBuilder",
+									"java/net/http/HttpClient.newHttpClient"
+								],
+								"com/boss/pvp/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"com/boss/utility/flag/FlagReporter.class": [
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							},
+							"exec": {
+								"com/boss/pvp/module/automation/SelfDestructModule.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"raw.githubusercontent.com": [
+								"com/boss/pvp/flag/FlagReporter.class",
+								"com/boss/utility/flag/FlagReporter.class"
+							],
+							"sessionserver.mojang.com": [
+								"com/boss/pvp/relay/MojangAuth.class"
+							],
+							"api.github.com": [
+								"com/boss/pvp/update/UpdateChecker.class"
+							],
+							"github.com": [
+								"com/boss/pvp/update/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# BossAddon v2-pre.2 — Item Render Cap\n\n**Prerelease • November 5, 2026 • Minecraft 26.2 • Client 5.0 / API3 only**\n\n## Download / compatibility\n\n- Install **`bossaddon-2-pre.2+client5.0.jar`** with AUTISM Client **5.0 (API3)**, Fabric API **0.152.2+26.2**, and Java **25**.\n- Install only one BossAddon jar and back up your configuration before replacing the old jar.\n- **No API4 binary is included.** The matching 5.1/API4 local dependency was unavailable for verification. API4 users should retain the previous `v2-pre.1` API4 jar; it does not contain this optimization.\n- The default source selector remains 5.1/API4. The verified API3 build uses explicit Gradle properties instead of temporarily editing the version catalog.\n\n## Optimization port\n\nAdded **BossUtility → Item Render Cap**, ported from `WaterBoss11/boss-optimizations` revision `6707d67b15741fe9c36d94a1356e7c78ef9d9780` under its preserved MIT license.\n\n- **Disabled by default.** Enable it manually in BossUtility. Existing module IDs, settings and enabled-state persistence are preserved.\n- Default cap: **5 dropped items per 4-block grid cube**. Configure **0–128 items** and **0.5–128-block cell width**.\n- Highest entity IDs win, favoring newer drops while IDs increase normally. The aimed-at item can add one extra render, including when the cap is zero.\n- Selection/settings are fixed for an extraction frame. Disabling the module/utility half immediately stops capping; lifecycle changes and world replacement clear stale selection.\n- Rejects excess items before render-state extraction. No entity mutation/removal, packets, ticking, picking, pickup, merging or despawn changes are introduced.\n- When standalone mod **`bossoptimizations`** is installed, the addon cap is inert even if the standalone cap is disabled. It never reads or changes donor configuration, avoiding double-capping.\n- Fixed an inherited donor bug where mirrored positive/negative grid cells shared a lossy hash and could hide an entire separate pile. Buckets now compare full coordinate tuples, not just hashes. The new regression failed before the fix and passes with it.\n- Additional guards reject nonfinite selector widths and ignore crosshair IDs absent from the current frame.\n\nBossAddon now registers **53 modules: 41 PvP + 12 utility**, plus the existing eight HUD providers. No combat behavior is changed in this release.\n\n## Verification performed for this release\n\n- Unchanged-source API3 baseline: **430 unit tests passed** and existing game-test sources compiled.\n- Release API3 build: **463 unit tests passed**, **0 failures/errors/skips**, across **57 suites**; `build` and `compileGametestJava` succeeded under JDK **25.0.3**.\n- Added **33 tests**: 22 donor/selector regressions and edge cases, 10 frame/lifecycle policy tests, and one utility-half restoration regression.\n- Covered highest-ID/new-drop selection, static-scene stability, residual cell-boundary churn, crosshair exemptions, independent cells, reset/history, empty frames, negative coordinates, offer order, numeric validation, once-per-frame collection, changed settings, world/ID reuse, immediate inactive gates, donor precedence, and unrelated-half isolation.\n- Packaged metadata/version, all entrypoint and mixin classes, Java 25 bytecode, complete license/notice texts, and dependency/test/config exclusions passed `scripts/verify-release.py`.\n- Both new hook descriptors were checked against the actual Minecraft **26.2** classes. This is **not** a runtime mixin application test.\n- The focused `item-render-cap` client-world adapter game-test batch was **compiled, not executed**. Historical v2-pre.1 gameplay evidence was not rerun or relabeled as a new result.\n\nBuild command:\n\n```powershell\n.\\gradlew.bat --offline --no-daemon -PhostClientVersion=5.0-26.2-dev -PaddonVersion=2-pre.2+client5.0 build compileGametestJava\n```\n\nArtifact check (Python 3; optional `--minecraft-jar` also checks hook descriptors using `JAVA_HOME/bin/javap`):\n\n```powershell\n\n..."
+		},
 		{
 			"tag": "v2-pre.1",
 			"published": "2026-10-30T18:42:17Z",
@@ -18,7 +117,7 @@
 					"name": "bossaddon-2-pre.1+client5.0.jar",
 					"url": "https://github.com/WaterBoss11/BossAddon/releases/download/v2-pre.1/bossaddon-2-pre.1%2Bclient5.0.jar",
 					"size": 522261,
-					"downloads": 5,
+					"downloads": 7,
 					"inspection": 2,
 					"sha256": "f760255b6829d32cc5436e9137605179fe62270e38001281f33dace75725dde0",
 					"mods": [
@@ -196,7 +295,7 @@
 					}
 				}
 			],
-			"notes": "## Which jar do I download?\n\n| Jar | AUTISM Client | API |\n|---|---|---|\n| `bossaddon-2-pre.1.jar` | V4 / 5.1 | v4 |\n| `bossaddon-2-pre.1+client5.0.jar` | 5.0 public release | v3 |\n\n**Install only one jar.** Both require Minecraft **26.2**, Java **25+**, Fabric Loader, Fabric API **0.152.2+26.2**, and the matching AUTISM Client. Host-client dependency jars are not included.\n\n## BossAddon v2-pre.1\n\nThis is an experimental prerelease of the BossAddon rework, published from `prerelease/v2-pre.1`. Its source has also been merged into `master`; the release remains marked as a prerelease.\n\n### Changes\n\n- Add 19 disabled-by-default modules: AutoMace, ten movement helpers, and eight combat/defense/ranged helpers.\n- Upgrade AutoWeapon, AutoHook, AutoShoot, and InvManager.\n- Remove overlapping addon modules in favor of the host client's native modules; retain AutoClutch explicitly.\n- Share friend/team protection, hotbar/input ownership, and updated HUD observations across the retained module lineup.\n- Support separate builds for AUTISM Client 5.0 and V4/5.1; include source attribution and license notices.\n\nSee the [versioned README](https://github.com/WaterBoss11/BossAddon/blob/v2-pre.1/README.md) for the module lineup, changed behavior, and retired modules. Back up your configuration and remove the previous BossAddon jar before installing.\n\n### Verification and limitations\n\n- Both client-specific builds passed `build test --rerun compileGametestJava --offline --console=plain` on Java 25.\n- **430 unit tests passed per build**, with zero failures, errors, or skips.\n- Each build's 55 checked host-member references resolved on both local host versions.\n- Both packaged jars passed metadata, entrypoint/mixin completeness, license-notice, credential-literal, and dependency/test-artifact exclusion checks. SHA-256 checksums are attached.\n- Native gameplay was **not rerun for this publication**. Earlier targeted gameplay checks do not establish complete module/mode coverage; full in-world API4 QA remains unverified because of the host authentication gate. UI, performance, and clean-install gameplay are not newly verified.\n- Experimental movement and timing-sensitive behavior may be corrected or rejected by servers. No anticheat compatibility is promised."
+			"notes": "## Which jar do I download?\n\n| Jar | AUTISM Client | API |\n|---|---|---|\n| `bossaddon-2-pre.1.jar` | V4 / 5.1 (called v6) | v4 |\n| `bossaddon-2-pre.1+client5.0.jar` | 5.0 public release | v3 |\n\n**Install only one jar.** Both require Minecraft **26.2**, Java **25+**, Fabric Loader, Fabric API **0.152.2+26.2**, and the matching AUTISM Client. Host-client dependency jars are not included.\n\n## BossAddon v2-pre.1\n\nThis is an experimental prerelease of the BossAddon rework, published from `prerelease/v2-pre.1`. Its source has also been merged into `master`; the release remains marked as a prerelease.\n\n### Changes\n\n- Add 19 disabled-by-default modules: AutoMace, ten movement helpers, and eight combat/defense/ranged helpers.\n- Upgrade AutoWeapon, AutoHook, AutoShoot, and InvManager.\n- Remove overlapping addon modules in favor of the host client's native modules; retain AutoClutch explicitly.\n- Share friend/team protection, hotbar/input ownership, and updated HUD observations across the retained module lineup.\n- Support separate builds for AUTISM Client 5.0 and V4/5.1; include source attribution and license notices.\n\nSee the [versioned README](https://github.com/WaterBoss11/BossAddon/blob/v2-pre.1/README.md) for the module lineup, changed behavior, and retired modules. Back up your configuration and remove the previous BossAddon jar before installing.\n\n### Verification and limitations\n\n- Both client-specific builds passed `build test --rerun compileGametestJava --offline --console=plain` on Java 25.\n- **430 unit tests passed per build**, with zero failures, errors, or skips.\n- Each build's 55 checked host-member references resolved on both local host versions.\n- Both packaged jars passed metadata, entrypoint/mixin completeness, license-notice, credential-literal, and dependency/test-artifact exclusion checks. SHA-256 checksums are attached.\n- Native gameplay was **not rerun for this publication**. Earlier targeted gameplay checks do not establish complete module/mode coverage; full in-world API4 QA remains unverified because of the host authentication gate. UI, performance, and clean-install gameplay are not newly verified.\n- Experimental movement and timing-sensitive behavior may be corrected or rejected by servers. No anticheat compatibility is promised."
 		},
 		{
 			"tag": "v1.14.5",
