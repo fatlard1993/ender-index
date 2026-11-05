@@ -11,7 +11,7 @@ import {
 	theme,
 } from '@vanilla-bean/components';
 
-import { local } from './local';
+import { local, updateReady } from './local';
 import { REPOSITORY, aboutOf, modPath, pictureUrl, readmeSources, titleOf } from './search';
 import { hrefOf } from './route';
 
@@ -219,6 +219,20 @@ export const forStrangers = component => {
 };
 
 /** Shown only when ender serves the page: what only this machine's ender can do. */
+/** A dot on the link to Settings once a newer ender is out, so the update is found without going looking. */
+const markWhenUpdateReady = link => {
+	local.ready().then(async served => {
+		if (!served) return;
+
+		await local.loadUpgrade();
+
+		if (!updateReady(local.upgrade)) return;
+
+		link.elem.textContent = `${link.elem.textContent} \u2022`;
+		link.elem.title = `ender ${local.upgrade.latest} is out`;
+	});
+};
+
 export const forLocal = component => {
 	component.elem.style.display = 'none';
 	local.ready().then(served => {
@@ -232,6 +246,7 @@ const PLACES = {
 	mods: { label: 'Mods', href: hrefOf('/') },
 	packs: { label: 'Packs', href: hrefOf('/packs') },
 	instances: { label: 'Instances', href: hrefOf('/instances'), local: true },
+	settings: { label: 'Settings', href: hrefOf('/settings'), local: true, marked: true },
 };
 
 const Trail = styled.Component(
@@ -320,13 +335,15 @@ export const siteBar = (at, ...steps) => {
 			}),
 			new Places({
 				tag: 'nav',
-				append: Object.entries(PLACES).map(([place, { label, href, local: localOnly }]) => {
+				append: Object.entries(PLACES).map(([place, { label, href, local: localOnly, marked }]) => {
 					const link = new Link({
 						variant: 'flat',
 						href: place === 'mods' ? `${href}${location.search}` : href,
 						textContent: label,
 						...(place === at ? { attributes: { 'aria-current': steps.length > 0 ? 'location' : 'page' } } : {}),
 					});
+
+					if (marked) markWhenUpdateReady(link);
 
 					return localOnly ? forLocal(link) : link;
 				}),

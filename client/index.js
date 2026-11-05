@@ -9,6 +9,7 @@ import ModPage from './ModPage';
 import PackPage from './PackPage';
 import PacksPage from './PacksPage';
 import SearchPage from './SearchPage';
+import SettingsPage from './SettingsPage';
 import { addressOf, followLinks, hashRoute, navigate, routeOf } from './route';
 
 import '@vanilla-bean/components/app/reloadOnBuild';
@@ -44,6 +45,7 @@ new Page({
 					'/authors': AuthorsPage,
 					'/authors/:part': AuthorsPage,
 					'/instances': InstancesPage,
+					'/settings': SettingsPage,
 					'/mine': MinePage,
 					'/mod/:host/:owner/:name': ModPage,
 				},

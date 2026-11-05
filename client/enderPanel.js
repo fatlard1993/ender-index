@@ -1,19 +1,7 @@
-import { Button, Card, Notify, theme } from '@vanilla-bean/components';
+import { Button, Card, Link, Notify, theme } from '@vanilla-bean/components';
 
-import { local } from './local';
-import { Command, Meta, Row, Stack } from './ui';
-
-/** Whether release `latest` is past `current`, by their dotted numbers. */
-export const isNewer = (latest, current) => {
-	const parts = version => version.split(/[.+-]/).slice(0, 3).map(Number);
-	const [a, b] = [parts(latest), parts(current)];
-
-	for (let index = 0; index < 3; ++index) {
-		if ((a[index] ?? 0) !== (b[index] ?? 0)) return (a[index] ?? 0) > (b[index] ?? 0);
-	}
-
-	return false;
-};
+import { local, updateReady } from './local';
+import { Command, Meta, Row, Stack, Title } from './ui';
 
 const updateButton = upgrade => {
 	const status = new Meta();
@@ -48,57 +36,65 @@ const howTo = {
 	],
 };
 
-/** Which ender serves this page, and a way to the newest when there is one. */
+const RELEASES = 'https://github.com/fatlard1993/ender-launcher/releases';
+
+const versionLine = upgrade => {
+	if (!upgrade) return [];
+
+	if (upgrade.error || !upgrade.latest) {
+		return [
+			new Meta({
+				tag: 'p',
+				textContent: `ender ${upgrade.current ?? ''}; could not ask GitHub for a newer one: ${upgrade.error}`,
+			}),
+		];
+	}
+
+	if (!updateReady(upgrade))
+		return [new Meta({ tag: 'p', textContent: `ender ${upgrade.current}, the newest release` })];
+
+	return [
+		new Row({
+			style: { flexWrap: 'wrap' },
+			append: [
+				new Meta({ textContent: `ender ${upgrade.latest} is out; this is ${upgrade.current}.` }),
+				...(howTo[upgrade.how] ?? howTo.checkout)(upgrade),
+			],
+		}),
+	];
+};
+
+const placeRow = (label, path) =>
+	new Row({
+		style: { flexWrap: 'wrap' },
+		append: [new Meta({ textContent: label }), new Command({ tag: 'code', textContent: path })],
+	});
+
+/** Which ender serves this page, a way to the newest when there is one, and where it lives on this machine. */
 export const enderPanel = signal => {
-	const body = new Stack({ style: { gap: theme.space.xs } });
+	const body = new Stack({ style: { gap: theme.space.sm } });
 	let drawn;
 	const draw = () => {
-		const { upgrade } = local;
-		const shape = JSON.stringify(upgrade);
+		const { upgrade, ender } = local;
+		const shape = JSON.stringify([upgrade, ender]);
 
 		if (shape === drawn) return;
 
 		drawn = shape;
-
-		if (!upgrade) {
-			body.content([]);
-
-			return;
-		}
-
-		if (upgrade.error || !upgrade.latest) {
-			body.content(
-				new Meta({
-					textContent: `ender ${upgrade.current ?? ''}; could not ask GitHub for a newer one: ${upgrade.error}`,
-				}),
-			);
-
-			return;
-		}
-
-		if (!isNewer(upgrade.latest, upgrade.current)) {
-			body.content(new Meta({ textContent: `ender ${upgrade.current}, the newest release` }));
-
-			return;
-		}
-
-		body.content(
-			new Card(
-				{},
-				new Row({
-					style: { flexWrap: 'wrap' },
-					append: [
-						new Meta({ textContent: `ender ${upgrade.latest} is out; this is ${upgrade.current}.` }),
-						...(howTo[upgrade.how] ?? howTo.checkout)(upgrade),
-					],
-				}),
-			),
-		);
+		body.content([
+			...versionLine(upgrade),
+			...(ender?.installed ? [placeRow('Installed at', ender.installed)] : []),
+			...(ender?.data ? [placeRow('Keeps instances, worlds and downloads in', ender.data)] : []),
+			new Link({ href: RELEASES, target: '_blank', textContent: 'What each release changed' }),
+		]);
 	};
 
 	draw();
 	local.subscribe(draw, signal);
 	local.loadUpgrade();
 
-	return body;
+	return new Card(
+		{},
+		new Stack({ style: { gap: theme.space.md }, append: [new Title({ textContent: 'ender' }), body] }),
+	);
 };

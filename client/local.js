@@ -27,6 +27,7 @@ const state = {
 	players: undefined,
 	playersError: undefined,
 	upgrade: undefined,
+	ender: undefined,
 };
 
 const notify = () => {
@@ -155,6 +156,8 @@ const detect = async () => {
 
 	if (!response?.ok || !response.headers.get('content-type')?.includes('json')) return false;
 
+	state.ender = await response.json();
+
 	await reload();
 
 	const jobs = await call('GET', 'jobs').catch(() => []);
@@ -246,6 +249,22 @@ const changePlayers = async (method, path, body) => {
 	notify();
 };
 
+/** Whether release `latest` is past `current`, by their dotted numbers. */
+export const isNewer = (latest, current) => {
+	const parts = version => version.split(/[.+-]/).slice(0, 3).map(Number);
+	const [a, b] = [parts(latest), parts(current)];
+
+	for (let index = 0; index < 3; ++index) {
+		if ((a[index] ?? 0) !== (b[index] ?? 0)) return (a[index] ?? 0) > (b[index] ?? 0);
+	}
+
+	return false;
+};
+
+/** Whether a newer ender is out than the one serving the page. */
+export const updateReady = upgrade =>
+	Boolean(upgrade?.latest && upgrade.current && isNewer(upgrade.latest, upgrade.current));
+
 let upgradeAsked;
 
 /** Which ender serves the page, the newest release, and who upgrades it; null from an ender too old to say. */
@@ -292,6 +311,11 @@ const starPath = entry => `stars/${entry.repo.split('/').map(encodeURIComponent)
 
 export const local = {
 	ready: () => (detected ??= detect().catch(() => false)),
+	/** Forgets whether ender web serves the page, so the next ready() asks again. */
+	askAgain: () => {
+		detected = undefined;
+		upgradeAsked = undefined;
+	},
 	get instances() {
 		return state.instances;
 	},
@@ -373,6 +397,10 @@ export const local = {
 	setClientId: clientId => changePlayers('PUT', 'sign-in/client-id', { clientId }),
 	get upgrade() {
 		return state.upgrade;
+	},
+	/** Which ender serves the page, where it is installed, and where it keeps its data. */
+	get ender() {
+		return state.ender;
 	},
 	loadUpgrade,
 	upgradeEnder,

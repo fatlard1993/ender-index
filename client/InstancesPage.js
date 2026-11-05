@@ -20,8 +20,7 @@ import { loadVersions } from './data';
 import { lastSaid, local } from './local';
 import { listingButton } from './controls';
 import { instanceNameOf, packDialog } from './packMaker';
-import { enderPanel } from './enderPanel';
-import { playerChoice, playersPanel } from './playersPanel';
+import { playerChoice } from './playersPanel';
 import { LOADERS } from './search';
 import { Chip, Command, LAUNCHER, Meta, Row, Stack, Title, Warning, siteBar } from './ui';
 
@@ -487,13 +486,8 @@ export default class InstancesPage extends View {
 				return;
 			}
 
-			body.content([
-				new Title({ tag: 'h1', textContent: 'Instances' }),
-				enderPanel(this.signal),
-				playersPanel(this.signal),
-				newInstance(this.signal),
-				list,
-			]);
+			body.content([new Title({ tag: 'h1', textContent: 'Instances' }), newInstance(this.signal), list]);
+			local.loadPlayers();
 			drawList();
 			local.subscribe(drawList, this.signal);
 		});

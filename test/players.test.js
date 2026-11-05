@@ -149,10 +149,10 @@ describe('an open page', () => {
 
 describe('bringing ender up to date', () => {
 	test('a release is newer by its numbers, not its spelling', () => {
-		expect(enderPanel.isNewer('0.2.1', '0.2.0')).toBe(true);
-		expect(enderPanel.isNewer('0.10.0', '0.9.9')).toBe(true);
-		expect(enderPanel.isNewer('0.2.0', '0.2.0')).toBe(false);
-		expect(enderPanel.isNewer('0.1.14', '0.2.0')).toBe(false);
+		expect(local.isNewer('0.2.1', '0.2.0')).toBe(true);
+		expect(local.isNewer('0.10.0', '0.9.9')).toBe(true);
+		expect(local.isNewer('0.2.0', '0.2.0')).toBe(false);
+		expect(local.isNewer('0.1.14', '0.2.0')).toBe(false);
 	});
 
 	test('offers the update when a newer ender is out and ender can replace itself', async () => {
@@ -172,5 +172,37 @@ describe('bringing ender up to date', () => {
 		await expect(local.servedBy('0.2.0', { seconds: 1, ask: async () => ({ version: '0.2.0' }) })).rejects.toThrow(
 			'did not come back',
 		);
+	});
+});
+
+describe('the Settings page', () => {
+	test('shows the ender serving it, where it lives, and who plays, and marks Settings in the bar when an update is out', async () => {
+		responses['/api/ender'] = {
+			version: '0.2.0',
+			installed: '/Applications/Ender.app',
+			data: '/Users/me/.local/share/ender-launcher',
+		};
+		responses['/api/instances'] = [];
+		responses['/api/jobs'] = [];
+
+		local.local.askAgain();
+
+		const { default: SettingsPage } = await import('../client/SettingsPage');
+		const page = new SettingsPage({ appendTo: document.body });
+
+		await settle(() => page.elem.textContent.includes('Players') && page.elem.textContent.includes('Ender.app'));
+
+		const text = page.elem.textContent;
+
+		expect(text).toContain('Installed at/Applications/Ender.app');
+		expect(text).toContain('Keeps instances, worlds and downloads in/Users/me/.local/share/ender-launcher');
+		expect(text).toContain('ender 0.2.1 is out; this is 0.2.0.');
+		expect(text).toContain('Players');
+
+		const settings = [...page.elem.querySelectorAll('nav a')].find(link => link.textContent.startsWith('Settings'));
+
+		await settle(() => settings.textContent.includes('\u2022'));
+		expect(settings.textContent).toBe('Settings \u2022');
+		page.destroy();
 	});
 });
