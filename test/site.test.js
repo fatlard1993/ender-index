@@ -357,15 +357,26 @@ describe('a collection', () => {
 });
 
 describe('the Get ender page', () => {
-	test("offers first the line for the visitor's own system", async () => {
-		const { INSTALLS, systemOf } = await import('../client/GetPage');
+	test("offers first what the visitor's own system installs from", async () => {
+		const { DOWNLOADS, installFor, systemOf } = await import('../client/GetPage');
 
 		expect(systemOf('Mozilla/5.0 (Windows NT 10.0; Win64; x64)')).toBe('windows');
-		expect(systemOf('Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0)')).toBe('unix');
-		expect(systemOf('Mozilla/5.0 (X11; Linux x86_64)')).toBe('unix');
-		expect(INSTALLS.unix.command).toBe(
+		expect(systemOf('Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0)')).toBe('mac');
+		expect(systemOf('Mozilla/5.0 (X11; Linux x86_64)')).toBe('linux');
+		expect(installFor('mac').command).toBe(
 			'curl -fsSL https://raw.githubusercontent.com/fatlard1993/ender-launcher/main/install.sh | sh',
 		);
+		expect(installFor('windows').command).toContain('install.ps1 | iex');
+		expect(DOWNLOADS.linux).toBeUndefined();
+	});
+
+	test('downloads the files a release carries, both Mac chips, each saying what its first open asks', async () => {
+		const { DOWNLOADS } = await import('../client/GetPage');
+		const files = Object.values(DOWNLOADS).flatMap(download => download.files.map(file => file.href.split('/').at(-1)));
+
+		expect(files).toEqual(['Ender-mac-arm64.dmg', 'Ender-mac-x64.dmg', 'Ender-Setup.exe']);
+		expect(DOWNLOADS.mac.steps).toContain('Open Anyway');
+		expect(DOWNLOADS.windows.steps).toContain('Run anyway');
 	});
 });
 
