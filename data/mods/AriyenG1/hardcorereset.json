@@ -1,0 +1,300 @@
+{
+	"repo": "AriyenG1/hardcorereset",
+	"host": "github",
+	"description": "Restarts hardcore world on Minecraft Server.",
+	"stars": 0,
+	"archived": false,
+	"created": "2026-11-02T23:01:57Z",
+	"pushed": "2026-11-04T17:42:04Z",
+	"releases": [
+		{
+			"tag": "v1.0.6",
+			"published": "2026-11-04T17:42:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 710354236,
+					"name": "hardcorereset-1.0.6.jar",
+					"url": "https://github.com/AriyenG1/hardcorereset/releases/download/v1.0.6/hardcorereset-1.0.6.jar",
+					"size": 112552,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "d48489d481d2c850a6a471c1b268c235a5a9596432bc0f49464163264f763af2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hardcorereset",
+							"version": "1.0.6",
+							"name": "Hardcore Reset",
+							"description": "One player's death starts a 10-second countdown and creates a new run without stopping the server or disconnecting players.",
+							"minecraft": "26.3",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fantasy"
+							],
+							"provides": [
+								"fantasy"
+							]
+						}
+					],
+					"icon": "0b9e2fbcc445460dd91abd6675f0a0710e8f2dd5670dfa0993108f9b2b670391.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 54,
+						"jars": [
+							"META-INF/jars/fantasy-0.8.4+26.3.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Persistent death counter and operator scoreboard shortcuts for Minecraft 26.3.\n\nCommands (operator level 2+ or console):\n- `/scoreboard show` / `/scoreboard hide`: control the sidebar; hidden scores still count.\n- `/scoreboard reset`: reset all tracked death counts, including offline players, to zero.\n- `/scoreboard reset <player>`: reset one literal username.\n- `/scoreboard set <player> <count>`: set a nonnegative count.\n- `/scoreboard get <player>` / `/scoreboard list` / `/scoreboard help`.\n\nThe counter uses vanilla deathCount, persists across run resets and server restarts,\nand begins tracking upon installation. New joins get a zero entry. Other objectives\nand vanilla scoreboard commands are preserved. The sidebar appears automatically\non first setup if it is free. Show replaces the sidebar selection; hide only clears\nit when the Hardcore Reset counter is displayed. No extra death-counter mod is needed.\n\nUpdate: back up, stop the server once, replace the old JAR with hardcorereset-1.0.6.jar,\nand restart. Keep world/player files. Requires Minecraft 26.3, Java 25+, Fabric Loader\n0.20.1+, and Fabric API 0.165.0+26.3 or newer for Minecraft 26.3. Fantasy is bundled.\n\nValidation: build, 21 controller/state tests, four next-seed command checks, and a\nMinecraft scoreboard/dispatcher integration test covering death increments, permissions,\noffline and single-player resets, hidden counting, other-objective isolation, vanilla\ncommand merging, and invalid negative input. No additional live-server session was run."
+		},
+		{
+			"tag": "v1.0.5",
+			"published": "2026-11-03T18:21:54Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 706626649,
+					"name": "hardcorereset-1.0.5.jar",
+					"url": "https://github.com/AriyenG1/hardcorereset/releases/download/v1.0.5/hardcorereset-1.0.5.jar",
+					"size": 108050,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "4c65f8288231edcbf6417d6c35f668801da3243e2b3fdeb01e45a01e927db9be",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hardcorereset",
+							"version": "1.0.5",
+							"name": "Hardcore Reset",
+							"description": "One player's death starts a 10-second countdown and creates a new run without stopping the server or disconnecting players.",
+							"minecraft": "26.3",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fantasy"
+							],
+							"provides": [
+								"fantasy"
+							]
+						}
+					],
+					"icon": "0b9e2fbcc445460dd91abd6675f0a0710e8f2dd5670dfa0993108f9b2b670391.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 53,
+						"jars": [
+							"META-INF/jars/fantasy-0.8.4+26.3.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "One-shot map seeds and a quieter reset completion for Minecraft 26.3.\n\nOperators can run `/nextseed <seed>` during an active run. The next reset uses\nthat seed for all three dimensions. Later resets use random seeds unless the\ncommand is run again. Numeric seeds (including zero and negatives) and text seeds\nfollow Minecraft's world-creation rules. The last queued value wins.\n\nThe command requires operator permission level 1 or higher and also works from\nthe server console. Set the seed before the countdown starts; generation is\nalready in progress during a reset. Generation/transfer retries retain the\nselected seed. Queued seeds are held in memory and clear on server restart.\n\nThe \"New world ready!\" title is removed. Existing reset titles clear when players\narrive in the new map; countdown and failure titles remain.\n\nUpdate: stop the server, replace the old mod JAR with hardcorereset-1.0.5.jar,\nand restart. Keep existing world/player files. Requires exactly Minecraft 26.3,\nJava 25+, Fabric Loader 0.20.1+, and Fabric API 0.165.0+26.3 or newer for Minecraft\n26.3. Fantasy remains bundled; the server bundle includes Fabric API 0.165.2+26.3.\n\nValidation: Java 25 builds with both supported Fabric API versions, 21 controller/state\ntests, and four command integration checks using Minecraft's dispatcher and permission\nAPIs. No new live-server or graphical-client session was run."
+		},
+		{
+			"tag": "v1.0.4",
+			"published": "2026-11-03T18:00:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 706566024,
+					"name": "hardcorereset-1.0.4.jar",
+					"url": "https://github.com/AriyenG1/hardcorereset/releases/download/v1.0.4/hardcorereset-1.0.4.jar",
+					"size": 105553,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "d756ff173911945816ff8c440dfebf2487fd1ec4e583815bc04d0a581a241b44",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hardcorereset",
+							"version": "1.0.4",
+							"name": "Hardcore Reset",
+							"description": "One player's death starts a 10-second countdown and creates a new run without stopping the server or disconnecting players.",
+							"minecraft": "26.3",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fantasy"
+							],
+							"provides": [
+								"fantasy"
+							]
+						}
+					],
+					"icon": "0b9e2fbcc445460dd91abd6675f0a0710e8f2dd5670dfa0993108f9b2b670391.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 52,
+						"jars": [
+							"META-INF/jars/fantasy-0.8.4+26.3.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Fabric compatibility update for Minecraft 26.3.\n\nHardcore Reset 1.0.4 accepts Fabric API 0.165.0+26.3 and newer releases for\nMinecraft 26.3, including 0.165.2+26.3. The previous exact version requirement\nrejected newer Fabric API installations. Fabric Loader remains 0.20.1 or newer;\nMinecraft remains exactly 26.3 and Java 25 or newer is required.\n\nThe build dependency is pinned separately from the runtime minimum. Routine\nFabric updates no longer require a new mod JAR solely because the version\nnumber changed. Future breaking API changes may still need an update.\n\nUpdate: stop the server, replace the old mod JAR with hardcorereset-1.0.4.jar,\nand restart. Keep existing world/player files. Install one Fabric API JAR for\nMinecraft 26.3; the optional bundle includes 0.165.2+26.3. Fantasy remains bundled.\n\nValidation: Java 25 builds with Fabric API 0.165.0+26.3 and 0.165.2+26.3,\n14 existing controller/state tests, and packaged version constraints checked\nusing Fabric Loader's version matcher. No new live-server session was run."
+		},
+		{
+			"tag": "v1.0.3",
+			"published": "2026-11-03T14:17:39Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 705863661,
+					"name": "hardcorereset-1.0.3.jar",
+					"url": "https://github.com/AriyenG1/hardcorereset/releases/download/v1.0.3/hardcorereset-1.0.3.jar",
+					"size": 105553,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "7090f2f13e2ac123d8d2d8f501f3d085320bbc504cd24b32578776ec904e6b09",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hardcorereset",
+							"version": "1.0.3",
+							"name": "Hardcore Reset",
+							"description": "One player's death starts a 10-second countdown and creates a new run without stopping the server or disconnecting players.",
+							"minecraft": "26.3",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fantasy"
+							],
+							"provides": [
+								"fantasy"
+							]
+						}
+					],
+					"icon": "0b9e2fbcc445460dd91abd6675f0a0710e8f2dd5670dfa0993108f9b2b670391.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 52,
+						"jars": [
+							"META-INF/jars/fantasy-0.8.4+26.3.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Stable 1.0.3: adds the mod icon and on-screen reset/countdown titles showing the dying player’s username. The tested functionality is unchanged from 1.0.3-preview.\n\nRequires Minecraft 26.3, Java 25, Fabric Loader 0.20.1+, and Fabric API 0.165.0+26.3. The server bundle includes Fabric API.\n\nBuild and 14 controller tests passed."
+		},
+		{
+			"tag": "v1.0.2",
+			"published": "2026-11-03T14:01:13Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 705812498,
+					"name": "hardcorereset-1.0.2.jar",
+					"url": "https://github.com/AriyenG1/hardcorereset/releases/download/v1.0.2/hardcorereset-1.0.2.jar",
+					"size": 93396,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "046a4d76dd0eaf19a7d89161179a06a8f9d9f352d265b0a063bd26f836c4b828",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hardcorereset",
+							"version": "1.0.2",
+							"name": "Hardcore Reset",
+							"description": "One player's death starts a 10-second countdown and creates a new run without stopping the server or disconnecting players.",
+							"minecraft": "26.3",
+							"environment": "server",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fantasy"
+							],
+							"provides": [
+								"fantasy"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 52,
+						"jars": [
+							"META-INF/jars/fantasy-0.8.4+26.3.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Focused spectator-location fix for Minecraft 26.3.\n\nThe dying player now respawns as a spectator at their death position and facing\ndirection in the **same run and dimension**, instead of vanilla's default spawn\nin the infrastructure world. Other players stay at their existing locations.\nOnly when the countdown finishes does everyone move into the new run.\n\nThe complete vanilla respawn handler and login recovery from 1.0.1 are retained.\n\n**Update:** stop the server once, replace the previous mod JAR with\n`hardcorereset-1.0.2.jar`, and restart. Keep existing world/player files.\nRequires Java 25, Fabric Loader 0.20.1+, Minecraft 26.3, and Fabric API\n0.165.0+26.3. Fantasy is bundled; the ZIP also includes Fabric API.\n\nValidation: build and the existing 14 controller tests. This focused patch has\nnot undergone another extended live-server test; the in-game spectator-location\ncheck is left to the user."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-11-05T05:46:08.973Z",
+	"pictures": [],
+	"picturesChecked": "2026-11-05T05:46:08.973Z",
+	"contributors": {
+		"commits": 1,
+		"more": 0,
+		"people": [
+			{
+				"login": "AriyenG1",
+				"commits": 1,
+				"name": "Ariyen",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-11-05T05:46:08.973Z",
+	"history": 1
+}
