@@ -114,13 +114,16 @@ const clientIdForm = ({ open = false } = {}) => {
 	});
 };
 
-/** The page Microsoft's code is typed into, with the code filled in, from the line ender prints for it. */
+const said = (lines, key) => lines.map(line => line.match(new RegExp(`^\\s*${key} (\\S+)`))?.[1]).find(Boolean);
+
+/** The page Microsoft's code is typed into, and the code, from the lines ender prints for them. */
 export const signInLink = lines => {
-	const link = lines.map(line => line.match(/^\s*link (https:\S+)/)?.[1]).find(Boolean);
+	const link = said(lines, 'link');
+	const code = said(lines, 'code');
 
-	if (!link) return undefined;
+	if (!link?.startsWith('https:') || !code) return undefined;
 
-	return { link, code: new URL(link).searchParams.get('otc') ?? '' };
+	return { link, code };
 };
 
 /** Microsoft's sign in waits on a code typed in another tab, so the code and its page are shown as soon as ender has them. */

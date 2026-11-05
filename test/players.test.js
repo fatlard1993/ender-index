@@ -73,23 +73,24 @@ describe('the players panel', () => {
 
 	test("saves an Azure app's client id, which makes signing in ready", async () => {
 		sent.length = 0;
-		await local.local.setClientId('c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb').catch(() => {});
+		await local.local.setClientId('1a2b3c4d-0000-4000-8000-000000000000').catch(() => {});
 
 		expect(sent).toContainEqual([
 			'PUT',
 			'./api/sign-in/client-id',
-			JSON.stringify({ clientId: 'c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb' }),
+			JSON.stringify({ clientId: '1a2b3c4d-0000-4000-8000-000000000000' }),
 		]);
 	});
 
-	test("shows Microsoft's code and its page from the line ender prints for them", () => {
+	test("shows Microsoft's code and its page from the lines ender prints for them", () => {
 		expect(
 			panel.signInLink([
 				':: Sign in to Microsoft',
 				'  and enter ABCD1234',
-				'  link https://www.microsoft.com/link?otc=ABCD1234',
+				'  link https://www.microsoft.com/link',
+				'  code ABCD1234',
 			]),
-		).toEqual({ link: 'https://www.microsoft.com/link?otc=ABCD1234', code: 'ABCD1234' });
+		).toEqual({ link: 'https://www.microsoft.com/link', code: 'ABCD1234' });
 		expect(panel.signInLink([':: Sign in to Microsoft'])).toBeUndefined();
 	});
 
