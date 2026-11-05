@@ -234,14 +234,13 @@ describe('the crawl reading repositories in batches', () => {
 
 		const pack = await crawlPack('A/Pack', {
 			recorded: { pushed: '2026-10-01T00:00:00Z', formats: { ender } },
-			now: 'now',
 			modrinth: { projectsByHash: async () => new Map(), projectsById: async () => new Map() },
 			read: async path => {
 				throw new Error(`${path} was read`);
 			},
 		});
 
-		expect(pack).toMatchObject({ repo: 'a/pack', stars: 7, fetched: 'now', formats: { ender } });
+		expect(pack).toMatchObject({ repo: 'a/pack', stars: 7, formats: { ender } });
 	});
 
 	test('leaves to REST a repository GraphQL found nothing for, a page past the first, and one not planned', async () => {

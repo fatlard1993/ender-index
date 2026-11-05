@@ -896,13 +896,13 @@ const readPackLines = async () => {
  * known only from Modrinth, and within each the least recently read first. A repository with no pack left loses its
  * record. Packs are read from GitHub alone, where nearly all of them are kept.
  */
-const crawlPacks = async ({ deadline, scratch, now, parallel }) => {
+const crawlPacks = async ({ deadline, scratch, parallel }) => {
 	const { found, fromModrinth } = await readPackLines();
 	const ages = new Map(
 		await Promise.all(
 			[...found, ...fromModrinth].map(async line => [
 				line,
-				Date.parse((await readJson(packRecordPath(line)))?.fetched) || 0,
+				line.includes(':') ? 0 : await github.lastFetched(github.repositoryPath(line)),
 			]),
 		),
 	);
@@ -916,7 +916,7 @@ const crawlPacks = async ({ deadline, scratch, now, parallel }) => {
 		beforeWait: () => github.saveCache(),
 		crawlRepo: async name => {
 			const recorded = await readJson(packRecordPath(name));
-			const pack = await crawlPack(name, { recorded, scratch: join(scratch, 'packs'), now });
+			const pack = await crawlPack(name, { recorded, scratch: join(scratch, 'packs') });
 
 			if (pack) await writeJson(packRecordPath(name), pack);
 			else if (recorded) await rm(packRecordPath(name), { force: true });
@@ -1027,7 +1027,6 @@ export const crawl = async ({ only } = {}) => {
 			packOutcome = await crawlPacks({
 				deadline: packsOnly ? deadline : Math.min(deadline, Date.now() + minutes * PACK_SHARE * 60_000),
 				scratch,
-				now,
 				parallel,
 			});
 		}

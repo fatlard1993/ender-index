@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, setSystemTime, test } from 'bun:test';
 
 import { packsFrom } from '../src/discover';
 import { randomBytes } from 'node:crypto';
@@ -236,15 +236,21 @@ describe('the pack listing', () => {
 			files: { 'ender.pack.json': { truncated: true, raw_url: 'https://gist.example/raw' } },
 		};
 		const read = async url => (url === 'https://gist.example/raw' ? JSON.stringify(pack) : '');
-		const recorded = await gistPack(body, { now: 'now', read });
+		const recorded = await gistPack(body, { read });
 
-		expect(await gistPack({ ...body, files: { 'notes.md': { content: '' } } }, { now: 'now' })).toBeUndefined();
+		setSystemTime(new Date('2026-11-06T00:00:00Z'));
+
+		try {
+			expect(await gistPack(body, { read })).toEqual(recorded);
+		} finally {
+			setSystemTime();
+		}
+
+		expect(await gistPack({ ...body, files: { 'notes.md': { content: '' } } })).toBeUndefined();
 		expect(recorded).toMatchObject({ repo: 'p/abc123', host: 'gist' });
 		expect(recorded).not.toHaveProperty('stars');
 		expect(recorded.description).toBeUndefined();
-		expect((await gistPack({ ...body, description: 'Our server' }, { now: 'now', read })).description).toBe(
-			'Our server',
-		);
+		expect((await gistPack({ ...body, description: 'Our server' }, { read })).description).toBe('Our server');
 
 		const [listed] = buildPacks([recorded], entries, records);
 
@@ -306,7 +312,7 @@ test('a pack repository gone from GitHub has no pack, so its record is dropped r
 		throw Object.assign(new Error(`GitHub 404 for /repos/${name}`), { status: 404 });
 	};
 
-	expect(await crawlPack('gone/pack', { scratch: tmpdir(), now: '', repository: gone })).toBeUndefined();
+	expect(await crawlPack('gone/pack', { scratch: tmpdir(), repository: gone })).toBeUndefined();
 });
 
 describe('a pack read again', () => {
@@ -323,7 +329,6 @@ describe('a pack read again', () => {
 		crawlPack('a/pack', {
 			recorded,
 			scratch: tmpdir(),
-			now: '',
 			modrinth: quiet,
 			repository: async () => ({ full_name: 'a/pack', pushed_at: pushed }),
 			releases: async () => [],

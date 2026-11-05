@@ -278,7 +278,6 @@ export const crawlPack = async (
 	{
 		recorded,
 		scratch,
-		now,
 		modrinth = { projectsByHash, projectsById },
 		repository = github.repository,
 		releases = github.releases,
@@ -287,7 +286,7 @@ export const crawlPack = async (
 ) => {
 	const gistId = name.match(GIST_LINE)?.[1];
 
-	if (gistId) return gistPack(await github.gist(gistId), { now });
+	if (gistId) return gistPack(await github.gist(gistId));
 
 	const repo = await repository(name).catch(error => {
 		if (error.status === 404) return undefined;
@@ -345,7 +344,6 @@ export const crawlPack = async (
 		description: repo.description ?? undefined,
 		stars: repo.stargazers_count,
 		pushed: repo.pushed_at,
-		fetched: now,
 		formats,
 	};
 };
@@ -360,7 +358,7 @@ const ENDER_DESCRIPTION = /^ender pack: /;
  * A gist's ender pack as the index keeps it, or undefined when the gist holds none. A gist has no star count GitHub
  * will tell, so it has none here.
  */
-export const gistPack = async (body, { now, read = url => fetchSteady(url).then(response => response.text()) }) => {
+export const gistPack = async (body, { read = url => fetchSteady(url).then(response => response.text()) } = {}) => {
 	const file = body.files?.[ENDER_PACK];
 
 	if (!file) return undefined;
@@ -373,7 +371,6 @@ export const gistPack = async (body, { now, read = url => fetchSteady(url).then(
 		host: 'gist',
 		description: description && description !== pack.name ? description : undefined,
 		pushed: body.updated_at,
-		fetched: now,
 		formats: { ender: pack },
 	};
 };
