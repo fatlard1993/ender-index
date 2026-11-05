@@ -5,7 +5,7 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2025-10-12T15:26:06Z",
-	"pushed": "2026-11-05T14:04:10Z",
+	"pushed": "2026-11-05T16:12:15Z",
 	"releases": [
 		{
 			"tag": "v4.0.0-beta",
@@ -13,13 +13,13 @@
 			"prerelease": true,
 			"assets": [
 				{
-					"id": 706130548,
+					"id": 713962336,
 					"name": "lock-end-4.0.0.jar",
 					"url": "https://github.com/vwtfafa/lock-end/releases/download/v4.0.0-beta/lock-end-4.0.0.jar",
-					"size": 181526,
+					"size": 309116,
 					"downloads": 0,
 					"inspection": 2,
-					"sha256": "abbc9095eb01ecb7c64780079ebd1268de57acdeff739b33b9989b45a5e0d10b",
+					"sha256": "e97d81e95de6ea691c3dfefc38201f37a9a9a9e78bd626541a53d87978f7d53c",
 					"mods": [],
 					"icon": null,
 					"funding": [],
@@ -29,7 +29,7 @@
 						"shaders": false
 					},
 					"scan": {
-						"classes": 68,
+						"classes": 143,
 						"jars": [],
 						"capabilities": {
 							"network": {
@@ -40,6 +40,13 @@
 								],
 								"org/vwtfafa/MetricsBase.class": [
 									"java/net/URL.openConnection"
+								],
+								"dev/faststats/SimpleFeatureFlagService.class": [
+									"java/net/http/HttpClient.sendAsync"
+								],
+								"dev/faststats/SubmissionService.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
 								]
 							}
 						},
@@ -54,19 +61,36 @@
 								"org/vwtfafa/bukkit/Metrics.class",
 								"org/vwtfafa/MetricsBase.class",
 								"org/vwtfafa/config/MetricsConfig.class"
+							],
+							"faststats.dev": [
+								"dev/faststats/config/SimpleConfig.class"
+							],
+							"metrics.faststats.dev": [
+								"dev/faststats/SimpleErrorTrackerService.class",
+								"dev/faststats/SimpleMetrics.class"
+							],
+							"flags.faststats.dev": [
+								"dev/faststats/SimpleFeatureFlagService.class"
 							]
 						},
 						"unreadable": []
-					}
+					},
+					"replaced": [
+						{
+							"id": 706130548,
+							"sha256": "abbc9095eb01ecb7c64780079ebd1268de57acdeff739b33b9989b45a5e0d10b",
+							"until": "2026-11-05T15:54:14.248Z"
+						}
+					]
 				},
 				{
-					"id": 706130546,
+					"id": 713985875,
 					"name": "lock-end-fabric-4.0.0.jar",
 					"url": "https://github.com/vwtfafa/lock-end/releases/download/v4.0.0-beta/lock-end-fabric-4.0.0.jar",
-					"size": 27829,
+					"size": 254924,
 					"downloads": 0,
 					"inspection": 2,
-					"sha256": "7314d00c40956d2f6c1aa246db053f72f8b3b0ed79fc270431a1f6abd53c9a73",
+					"sha256": "a0d4e30435f043df77a07f763acea8dfacde0f4578f6104c7ebce3c939295c43",
 					"mods": [
 						{
 							"loader": "fabric",
@@ -82,7 +106,9 @@
 								"minecraft",
 								"java"
 							],
-							"provides": []
+							"provides": [
+								"faststats"
+							]
 						}
 					],
 					"icon": null,
@@ -93,12 +119,43 @@
 						"shaders": false
 					},
 					"scan": {
-						"classes": 19,
-						"jars": [],
-						"capabilities": {},
-						"hosts": {},
+						"classes": 142,
+						"jars": [
+							"META-INF/jars/fabric-0.31.0+mc26.3.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/fabric-0.31.0+mc26.3.jar!dev/faststats/SimpleFeatureFlagService.class": [
+									"java/net/http/HttpClient.sendAsync"
+								],
+								"META-INF/jars/fabric-0.31.0+mc26.3.jar!dev/faststats/SubmissionService.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"faststats.dev": [
+								"META-INF/jars/fabric-0.31.0+mc26.3.jar!dev/faststats/screen/onboarding/ConsentText.class",
+								"META-INF/jars/fabric-0.31.0+mc26.3.jar!dev/faststats/config/SimpleConfig.class"
+							],
+							"metrics.faststats.dev": [
+								"META-INF/jars/fabric-0.31.0+mc26.3.jar!dev/faststats/SimpleErrorTrackerService.class",
+								"META-INF/jars/fabric-0.31.0+mc26.3.jar!dev/faststats/SimpleMetrics.class"
+							],
+							"flags.faststats.dev": [
+								"META-INF/jars/fabric-0.31.0+mc26.3.jar!dev/faststats/SimpleFeatureFlagService.class"
+							]
+						},
 						"unreadable": []
-					}
+					},
+					"replaced": [
+						{
+							"id": 706130546,
+							"sha256": "7314d00c40956d2f6c1aa246db053f72f8b3b0ed79fc270431a1f6abd53c9a73",
+							"until": "2026-11-05T15:54:14.248Z"
+						}
+					]
 				},
 				{
 					"id": 706130549,
@@ -212,10 +269,11 @@
 							]
 						},
 						"unreadable": []
-					}
+					},
+					"gone": "2026-11-05T15:54:14.248Z"
 				}
 			],
-			"notes": "## 🔒 Lock-End v4.0.0-beta\n\n⚠️ **This is a BETA / DEVELOPMENT release.** Use it for testing and report any bugs you find.\n\n**Requirements:** Paper or Folia 26.3+, Java 25 — plus Fabric (Loader 0.20.1+, Fabric API) or NeoForge 26.3.0.101+ mods, or a vanilla server for the datapack\n\n### 📋 Changes since the last stable release (`v3.1.0`)\n\n- docs: escape pipes in the command reference tables\n- fix(ci): restore the checkout action in the release workflow\n- fix: update checkout action in release workflow and add Neoforge launch configuration\n- docs: publish the changelog and readme for the 4.0.0 multiplatform release\n- docs: retire the migrated-out migration plan and keep the record in the agent docs\n- ci(release): create beta releases from the migration branch\n- docs(release): describe the multiplatform artifacts in the template and modrinth page\n- fix(release): ship all platform artifacts and fix the version source\n- ci: gate the server smoke suite on the main-line branches\n- ci: rename the quality job to build\n- docs(migration): record the phase 8 follow-up work\n- docs(migration): tick the phase 7 and 8 tasks and update the agent instructions\n- docs: document the multiplatform targets in readme and changelog\n- ci: extend the workflow for the multiplatform modules\n- feat(datapack): add vanilla datapack implementation\n- docs(migration): tick the neoforge half of phase 6\n- feat(neoforge): add initial neoforge integration\n- docs(migration): mark the fabric phase verified in singleplayer\n- fix(fabric): load the mod on clients so singleplayer works\n- docs: record the initial fabric adapter in the agent instructions\n- docs(migration): tick completed plan phases 1-5\n- feat(fabric): add initial fabric integration\n- refactor(paper): migrate paper adapter to shared core\n- refactor(core): extract scheduling logic\n- refactor(core): extract lock state management\n- feat(api): introduce shared platform-independent API\n- refactor: prepare multi-module gradle structure\n- feat(migration): introduce multiplatform migration plan and architecture direction\n\n### 📜 Commands\n\n| Command | Description | Permission |\n| ------- | ----------- | ---------- |\n| `/endlock` | Toggle the End lock | `endlock.toggle` |\n| `/endlock lock` | Lock the End | `endlock.admin` |\n| `/endlock unlock` | Unlock the End | `endlock.admin` |\n| `/endlock unlockin <time>` | Schedule unlock (e.g. 7d, 12h) | `endlock.toggle` |\n| `/endlock unlockat <date> <time>` | Schedule unlock (e.g. `2026-07-01 18:00`) | `endlock.toggle` |\n| `/endlock lockin <minutes>` | Schedule a future lock | `endlock.toggle` |\n| `/endlock lockat <date> <time>` | Schedule a future lock at specific time | `endlock.toggle` |\n| `/endlock lock in <duration>` / `unlock in <duration>` | Admin schedule aliases (e.g. `5m`, `7d`) | `endlock.admin` |\n| `/endlock status` | Show current lock status | — |\n| `/endlock stats` | Show plugin statistics | — |\n| `/endlock test` | Test if portal blocking works | `endlock.admin` |\n| `/endlock schedule status` | Show active scheduled action | `endlock.admin` |\n| `/endlock schedule clear` | Clear the active schedule | `endlock.admin` |\n| `/endlock history` | View recent lock/unlock history | `endlock.history` |\n| `/endlock history <page> [player\\|action <value>]` | Filter history by player or action | `endlock.history` |\n| `/endlock undo` | Undo the last lock/unlock action | `endlock.undo` |\n| `/endlock validateconfig` | Validate configuration file | `endlock.validate` |\n| `/endlock pause` | Pause scheduled timers | `endlock.admin` |\n| `/endlock resume` | Resume paused scheduled timers | `endlock.admin` |\n| `/lock` | Alias for `/endlock` | `endlock.toggle` |\n| `/el` | Short alias for `/endlock` (mobile-friendly) | `endlock.toggle` |\n\nCommands `/endlock lock`, `/endlock unlock`, and `/endlock status` (the subset\ncommand surface) also exist on the Fabric and NeoForge mods; the vanilla\ndatapack offers the same three as `/function lockend:lock|unlock|status` plus\n\n..."
+			"notes": "## 🔒 Lock-End v4.0.0-beta\n\n⚠️ **This is a BETA / DEVELOPMENT release.** Use it for testing and report any bugs you find.\n\n**Requirements:** Paper or Folia 26.3+, Java 25 — plus Fabric (Loader 0.20.1+, Fabric API) or NeoForge 26.3.0.101+ mods, or a vanilla server for the datapack\n\n### 📋 Changes since the last stable release (`v3.1.0`)\n\n- docs: turn Client chart into badge\n- docs: show client support as badges only\n- docs: remove optional client and required server badges from documentation\n- docs: tick sections 3 and 4 for the mods with open live smokes\n- docs: embed FastStats client chart\n- feat(neoforge): reach Paper parity for history and player behavior\n- docs: add platform and GitHub badges\n- feat(fabric): add broadcasts, grace period, sounds, and evacuation\n- feat(fabric): wire history, stats, undo, and messages to parity\n- refactor(core): decouple the audit writer from java.util.logging\n- feat(core): add message keys, grace period, and sound key primitives\n- feat(core): add history, statistics, undo, and audit primitives\n- docs: shorten multiplatform project pages\n- fix(dependencies): update Paper API version to 26.3.build.242-stable\n- feat(metrics): add FastStats to Paper\n- feat(metrics): enable public FastStats token by default\n- ci: enable FastStats for mod smoke servers\n- docs(changelog): include FastStats in 4.0 notes\n- feat(metrics): add FastStats to Fabric and NeoForge\n- fix(schedule): clear pending timer when target state is active\n- feat(schedule): full scheduling parity for the Fabric and NeoForge mods\n- feat(core): finish access-rule and administration parity for the mods\n- feat(commands): add reason set/clear to the mod commands\n- feat(core): add mod bypass rules on Fabric and NeoForge\n- fix(build): keep game classes out of mod jars\n- docs: add multiplatform feature parity roadmap\n- docs: rewrite MODRINTH documentation to enhance clarity and detail on features and commands\n- docs: shorten the Modrinth page and lead with per-platform capabilities\n- docs: escape pipes in the command reference tables\n- fix(ci): restore the checkout action in the release workflow\n- fix: update checkout action in release workflow and add Neoforge launch configuration\n- docs: publish the changelog and readme for the 4.0.0 multiplatform release\n- docs: retire the migrated-out migration plan and keep the record in the agent docs\n- ci(release): create beta releases from the migration branch\n- docs(release): describe the multiplatform artifacts in the template and modrinth page\n- fix(release): ship all platform artifacts and fix the version source\n- ci: gate the server smoke suite on the main-line branches\n- ci: rename the quality job to build\n- docs(migration): record the phase 8 follow-up work\n- docs(migration): tick the phase 7 and 8 tasks and update the agent instructions\n- docs: document the multiplatform targets in readme and changelog\n- ci: extend the workflow for the multiplatform modules\n- feat(datapack): add vanilla datapack implementation\n- docs(migration): tick the neoforge half of phase 6\n- feat(neoforge): add initial neoforge integration\n- docs(migration): mark the fabric phase verified in singleplayer\n- fix(fabric): load the mod on clients so singleplayer works\n- docs: record the initial fabric adapter in the agent instructions\n- docs(migration): tick completed plan phases 1-5\n- feat(fabric): add initial fabric integration\n- refactor(paper): migrate paper adapter to shared core\n- refactor(core): extract scheduling logic\n- refactor(core): extract lock state management\n- feat(api): introduce shared platform-independent API\n- refactor: prepare multi-module gradle structure\n- feat(migration): introduce multiplatform migration plan and architecture direction\n\n### 📜 Commands\n\n| Command | Description | Permission |\n| ------- | ----------- | ---------- |\n| `/endlock` | Toggle the End lock | `endlock.toggle` |\n| `/endlock lock` | Lock the End | `endlock.admin` |\n| `/endlock unlock` | Unlock the End | `endlock.admin` |\n\n..."
 		},
 		{
 			"tag": "v3.1.0",
@@ -227,7 +285,7 @@
 					"name": "lock-end-3.1.0.jar",
 					"url": "https://github.com/vwtfafa/lock-end/releases/download/v3.1.0/lock-end-3.1.0.jar",
 					"size": 167641,
-					"downloads": 2,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "c41516b175237012023ae95716d91101a973f8a5a9581daa58e1747376842a0e",
 					"mods": [],
@@ -282,7 +340,7 @@
 					"name": "lock-end-3.0.2.jar",
 					"url": "https://github.com/vwtfafa/lock-end/releases/download/v3.0.2/lock-end-3.0.2.jar",
 					"size": 163489,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "b160379a6a68be645ea8879f6f6717cc95bb65504ad176a62d6b81f6e52be93d",
 					"mods": [],
@@ -337,7 +395,7 @@
 					"name": "lock-end-3.0.1.jar",
 					"url": "https://github.com/vwtfafa/lock-end/releases/download/v3.0.1/lock-end-3.0.1.jar",
 					"size": 260046,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "ed83211c9ec9dd89f4cd4883a6d10e11aeda66be281e6195cf8bf3e447d14d28",
 					"mods": [],
@@ -409,7 +467,7 @@
 					"name": "lock-end-3.0.0.jar",
 					"url": "https://github.com/vwtfafa/lock-end/releases/download/v3.0.0/lock-end-3.0.0.jar",
 					"size": 154375,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "bf28cd63ed500328b664f63425c4005745dac0cc97a85d40cca8835f60ae663e",
 					"mods": [],
