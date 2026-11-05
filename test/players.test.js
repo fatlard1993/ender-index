@@ -11,7 +11,7 @@ const listing = {
 	],
 };
 
-const responses = { '/api/players': listing };
+const responses = { '/api/players': listing, '/api/upgrade': { current: '0.2.0', latest: '0.2.1', how: 'self' } };
 const sent = [];
 
 const settle = async (until, tries = 50) => {
@@ -21,6 +21,7 @@ const settle = async (until, tries = 50) => {
 let restore;
 let local;
 let panel;
+let enderPanel;
 
 beforeAll(async () => {
 	restore = browser({ responses });
@@ -35,6 +36,7 @@ beforeAll(async () => {
 
 	local = await import('../client/local');
 	panel = await import('../client/playersPanel');
+	enderPanel = await import('../client/enderPanel');
 });
 
 afterAll(() => restore());
@@ -142,5 +144,33 @@ describe('an open page', () => {
 
 		expect(asked).toBeGreaterThanOrEqual(2);
 		expect(local.STILL_HERE_EVERY).toBeLessThan(15 * 60_000);
+	});
+});
+
+describe('bringing ender up to date', () => {
+	test('a release is newer by its numbers, not its spelling', () => {
+		expect(enderPanel.isNewer('0.2.1', '0.2.0')).toBe(true);
+		expect(enderPanel.isNewer('0.10.0', '0.9.9')).toBe(true);
+		expect(enderPanel.isNewer('0.2.0', '0.2.0')).toBe(false);
+		expect(enderPanel.isNewer('0.1.14', '0.2.0')).toBe(false);
+	});
+
+	test('offers the update when a newer ender is out and ender can replace itself', async () => {
+		const shown = enderPanel.enderPanel(new AbortController().signal);
+
+		document.body.append(shown.elem);
+		await settle(() => shown.elem.textContent.includes('0.2.1'));
+
+		expect(shown.elem.textContent).toContain('ender 0.2.1 is out; this is 0.2.0.');
+		expect(shown.elem.textContent).toContain('Update to 0.2.1');
+	});
+
+	test('waits for the restarted ender to answer as another version before the page reloads', async () => {
+		const answers = [undefined, { version: '0.2.0' }, { version: '0.2.1' }];
+
+		expect(await local.servedBy('0.2.0', { seconds: 3, ask: async () => answers.shift() })).toBe('0.2.1');
+		await expect(local.servedBy('0.2.0', { seconds: 1, ask: async () => ({ version: '0.2.0' }) })).rejects.toThrow(
+			'did not come back',
+		);
 	});
 });

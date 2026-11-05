@@ -26,6 +26,7 @@ const state = {
 	accountError: undefined,
 	players: undefined,
 	playersError: undefined,
+	upgrade: undefined,
 };
 
 const notify = () => {
@@ -245,6 +246,46 @@ const changePlayers = async (method, path, body) => {
 	notify();
 };
 
+let upgradeAsked;
+
+/** Which ender serves the page, the newest release, and who upgrades it; null from an ender too old to say. */
+const loadUpgrade = () =>
+	(upgradeAsked ??= call('GET', 'upgrade')
+		.then(upgrade => {
+			state.upgrade = upgrade;
+		})
+		.catch(error => {
+			state.upgrade = error.status === 404 ? null : { error: error.message };
+		})
+		.finally(notify));
+
+/** Waits until the page is served by an ender other than `before`, asking every half second, for up to `seconds`. */
+export const servedBy = async (before, { seconds = 30, ask = () => call('GET', 'ender') } = {}) => {
+	for (let waited = 0; waited < seconds * 2; ++waited) {
+		await new Promise(resolve => setTimeout(resolve, 500));
+
+		const answer = await ask().catch(() => undefined);
+
+		if (answer?.version && answer.version !== before) return answer.version;
+	}
+
+	throw new Error(`ender did not come back as a new version within ${seconds} seconds; open Ender again`);
+};
+
+/**
+ * Upgrades ender as a job, then asks it to restart as the new binary and reloads the page once that answers, so the
+ * page and every job after are the new ender's.
+ */
+const upgradeEnder = async () => {
+	const before = state.upgrade?.current;
+	const job = await start('POST', 'upgrade');
+
+	await finished(job, { reloading: false });
+	await call('POST', 'restart');
+	await servedBy(before);
+	window.location.reload();
+};
+
 const playerPath = name => `players/${encodeURIComponent(name)}`;
 
 const starPath = entry => `stars/${entry.repo.split('/').map(encodeURIComponent).join('/')}`;
@@ -330,6 +371,11 @@ export const local = {
 	/** Microsoft's device code sign in, as a job whose lines carry the code to type. */
 	signIn: () => start('POST', 'sign-in'),
 	setClientId: clientId => changePlayers('PUT', 'sign-in/client-id', { clientId }),
+	get upgrade() {
+		return state.upgrade;
+	},
+	loadUpgrade,
+	upgradeEnder,
 	/** One instance plays as this player; null returns it to the active one. */
 	assignPlayer: async (name, player) => {
 		await call('PUT', `${named(name)}/player`, { player });
