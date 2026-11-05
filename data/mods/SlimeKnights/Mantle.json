@@ -6,8 +6,120 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2013-10-19T13:02:13Z",
-	"pushed": "2026-11-04T23:55:13Z",
+	"pushed": "2026-11-05T00:54:02Z",
 	"releases": [
+		{
+			"tag": "v1.12.35",
+			"published": "2026-11-05T00:54:02Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 711516152,
+					"name": "Mantle-1.21.1-1.12.35.jar",
+					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.12.35/Mantle-1.21.1-1.12.35.jar",
+					"size": 1811498,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "0507117bd46f04966de131035ae400517ac87b9fe1d02108d2daea8a8d46b659",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "mantle",
+							"version": "1.12.35",
+							"name": "Mantle",
+							"description": "Shared code for Slime Knights mods and others.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"jei"
+							]
+						}
+					],
+					"icon": "2bd122cdd01702c7df842f88d5f75e21c3c2a29976466a47cab61bf23061ed4d.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Beetroot Soup Bucket",
+								"Honey Bucket",
+								"Mushroom Stew Bucket",
+								"Rabbit Stew Bucket",
+								"Uncraftable Potion Bucket"
+							],
+							"block": [
+								"Beetroot Soup",
+								"Honey",
+								"Mushroom Stew",
+								"Rabbit Stew"
+							]
+						},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 845,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "This release was created in parallel with [1.11.128 for 1.20](https://github.com/SlimeKnights/Mantle/releases/tag/v1.11.128). Any new features included in both releases is just listed just under the changelog for 1.11.128.\n\n## General\n\n* Added tag translations for all Mantle added tags.\n* Rename `IdAwareObject#getId` to `IdAwareObject#id` to make it easier to implement in records.\n\n## JSON\n\n* Added `JsonHelper#processConditions` to replace the now removed `CraftingHelper#processConditions`. Neo switched all their condition parsing to codecs which we often choose not to use.\n* Added `JsonHelper#parse` and `JsonHelper#serialize` overloads that take a `DynamicOps<JsonElement>` argument, for using things such as `RegistryOps`.\n* Added `JsonHelper#serializeArray` and `JsonHelper#serializeList` to make it easier to save `JsonArray` elements (such as condition arrays).\n* `ResourceLocationSerializer` now expects a two argument constructor instead of a one argument constructor.\n* Updated the common namespace for tags and alike to `c` instead of `forge`.\n* Removed several JSON serializer and byte buffer methods on utilities that have loadable instances.\n* Removed `JsonHelper#convertToEnum` and `JsonHelper#getAsEnum` in favor of `EnumLoadable`.\n* Removed `JsonHelper#getAsBlockState`, `JsonHelper.convertToBlockState`, and `JsonHelper#serializeBlockState` in favor of `BlockStateLoadable`.\n* Removed `BlockEntityHelper#get` in favor of pattern matching cast `level.getBlockEntity(pos) instanceof YourBlockEntity be`.\n* Removed `MobTypePredicate` as `MobType` is now gone. Most usecases can use tags.\n* Removed `ConditionSerializer` and `ConditionDeserializer` in favor of `CodecSerializer#CONDITION`\n\n### Loadable\n\n* Loadable list methods now return a type of `ArrayLoadable`, allowing access to methods such as `emptyField`.\n* Remove deprecated predicate registry constructors which lacked the none field. None is still nullable but you now need to explicately choose to skip it.\n* `Streamable` now uses `RegistryFriendlyByteBuffer` instead of `FriendlyByteBuffer` as I don't feel like dealing with the double generics like `StreamCodec`.\n  * Every usage of `Loadable` we have has access to registries so this should only affect implementing the interface directly\n  * On the chance you need a different buffer implementation, use `StreamCodec`.\n* Moved `BaseRegistryLoadable`, `LazyRegisitryLoadable`, and `RegistryLoadable` classes to `slimeknights.mantle.data.loadable.registry`.\n* Added `HolderLoadable`\n  * `RegistryHolderLoadable` is for built in registries when you want the type to be `Holder<T>` instead of `T` in object fields. Notably used by attributes and mob effects.\n  * `DatapackRegistryLoadable` is for data registries such as enchantments or damage types. Still usage in datapacks but will fail if the registry access lacks them such as in client usages.\n* `CodecLoadable` now optionally takes a `StreamCodec` for network instead of using the codec directly.\n  * Can pass `null` to throw on attempts to serialize to network, which may be useful for loot table or resource pack usages.\n  * The constructor that takes just a `Codec` will use the codec to create a stream codec.\n* `CodecLoadable` is now instantiated through one of two subclasses:\n  * `CodecLoadable.Direcet`: parses the codec without requiring registry access, though will still pass it along if present.\n  * `CodecLoadable.Registry` parses the with required registry access, throwing if its missing.\n* Serializing and writing to the packet buffer both now have `TypedMap context` parameters, in case we need registry access to serialize.\n* Moved `IngredientLoadable` to fields in `Loadables` using their new codecs.\n* Replaced `DisplayContextLoadable` with `Loadables#ITEM_DISPLAY_CONTEXT` since its no longer a weird Forge registry.\n\n..."
+		},
+		{
+			"tag": "v1.11.128",
+			"published": "2026-11-05T00:51:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 711515440,
+					"name": "Mantle-1.20.1-1.11.128.jar",
+					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.11.128/Mantle-1.20.1-1.11.128.jar",
+					"size": 1668148,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "7006205556fef70b0d8c3dc96f6bc98707168e0b74f580d83a97857580d0c49d",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "mantle",
+							"version": "1.11.128",
+							"name": "Mantle",
+							"description": "Shared code for Slime Knights mods and others.",
+							"minecraft": "[1.20.1,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"suggests": [
+								"jei"
+							]
+						}
+					],
+					"icon": "2bd122cdd01702c7df842f88d5f75e21c3c2a29976466a47cab61bf23061ed4d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 792,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Updated the project URL to point to https://slimeknights.github.io/projects/#mantle which includes links for CurseForge, Modrinth, and GitHub.\n\n## Utility\n\n* Make it easier to extend faucet fluids loader for upcoming upsidedown channels in tinkers.\n* Allow a block to specify it has no faucet fluids using a height of 16.\n* Improve contract on `LogicHelper#getOrDefault` to make it easier to use a nullable default value.\n* Allow the `/mantle tags for targeted fluid` command to read a fluid capability from the targeted block.\n* Added `EntityIngredient#getDisplayEggs` to create a list of display egg stacks for the newer JEI API versions.\n* Added `FluidOutput#copyWithAmount` as a shorthand for `new FluidStack(fluid.get(), amount)`.\n* Make `EdibleItem` use tooltips like `ContainerFoodItem`. This is partly for consistency, and partly because the two will be merged in 1.21.\n* Added use animation argument to the edible item constructor.\n* Fix wrong damage source being used for sweep attacks in CombatHelper.\n* Fix extra sound playing during sweep attacks in CombatHelper.\n* Fix remove recipes command not removing recipe advancements, causing log spam.\n* Deprecated two unused menu slots that will be removed in 1.21.\n\n### Loadable\n\n* Added `StringLoadable#NON_EMPTY` for parsing non-empty strings, along with `StringLoadable#length` for more specific string length ranges.\n* Renamed `Loadable#xmap` to `Loadable#mapChecked` and `Loadable#flatXmap` to `Loadable#map`.\n  * This was partly done as I cannot keep the names straight and wanted more sane names, and partly done as the names were backwards compared to codec.\n  * The old names still exist as deprecated for removal in 1.21.\n* Deprecate `Loadable#comapFlatMap` and `Loadable#flatComap` for removal in 1.21 as they were not too useful compared to the other two map methods\n\n### Datagen\n\n* Added helper to abstract recipe builder to make it easier to get the casted builder. This may cause compile errors in mods that added a helper with the same name, but does not appear to cause any runtime errors.\n* CookingRecipeBuilder now uses the vanilla constructors when serializing a non-tag recipe output unless told to use the Mantle recipes. This allows using it as a far cleaner builder for vanilla cooking recipes (since you often want multiple of those).\n* CookingRecipeBuilder now automatically sets the category based on the result for non-tag results.\n* Fix CookingRecipeBuilder not including a setter for category.\n* Fix model builders requiring you to pass the loader ID.\n* Fix retextured model builder allowing you to save without setting texture keys.\n\n## Resource Packs\n\n* Added `assets/<domain>/mantle/textures` to allow NBTKeyModel extra textures to be specified outside of Java. This will notably allow Tinkers' Construct addons to add new modifier slot icons in a JSON addon. See [this Tinkers' commit](https://github.com/SlimeKnights/TinkersConstruct/commit/e3220f906a00ded65d09341ebc8d72a8db8a382f) for an example of how to use this. Note no Tinkers' update is needed to leverage the new system.\n* Added our preferred fluid texture folder to the block atlas.\n* Ensure a fluid texture failing to parse does not cause other fluid textures to be skipped.\n* Remove deprecation warning on luminosity for colored block model as the Forge alternative is just less ideal in a few cases we use.\n* Remove unused mantle book model, has not been updated in awhile anyways.\n\n## Book\n\n* Optimize book page lookup parsing of resource locations.\n* Added component to the default book loader deserializers. Previously it was registered by Tinkers so other Mantle mods did not benefit.\n* Fix wrong arguments for book scrolling super call. I am not sure if this caused any issues but it was wrong.\n\n### Export\n\n* Added helpers for adding tooltips from an item stack or fluid stack.\n* Page title HTML now has a title class to make it easier to modify with CSS.\n\n..."
+		},
 		{
 			"tag": "v1.11.117",
 			"published": "2026-09-04T08:07:41Z",
@@ -18,7 +130,7 @@
 					"name": "Mantle-1.20.1-1.11.117.jar",
 					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.11.117/Mantle-1.20.1-1.11.117.jar",
 					"size": 1652715,
-					"downloads": 42,
+					"downloads": 44,
 					"inspection": 2,
 					"sha256": "bcb9681f78dde0da7e63e92abb341dc0dc09503fc1ab78c96f9d40571edc240d",
 					"mods": [
@@ -67,7 +179,7 @@
 					"name": "Mantle-1.20.1-1.11.104.jar",
 					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.11.104/Mantle-1.20.1-1.11.104.jar",
 					"size": 1625005,
-					"downloads": 81,
+					"downloads": 82,
 					"inspection": 2,
 					"sha256": "6052e47c3981064bd5213728eaa3c5418289f6f85b07a1cd4dd1505239248838",
 					"mods": [
@@ -113,7 +225,7 @@
 					"name": "Mantle-1.20.1-1.11.97.jar",
 					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.11.97/Mantle-1.20.1-1.11.97.jar",
 					"size": 1580683,
-					"downloads": 39,
+					"downloads": 40,
 					"inspection": 2,
 					"sha256": "67c79f7cbea8f4d2be8987a7ee83d7a341b841de89c3c09acd2edbf7e539e61e",
 					"mods": [
@@ -251,7 +363,7 @@
 					"name": "Mantle-1.19.2-1.10.48.jar",
 					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.10.48/Mantle-1.19.2-1.10.48.jar",
 					"size": 1212496,
-					"downloads": 26,
+					"downloads": 27,
 					"inspection": 2,
 					"sha256": "74e32d2689787d169ba27871688b0a9e6e9ffe08133a5cf5e269788b234d4e04",
 					"mods": [
@@ -297,7 +409,7 @@
 					"name": "Mantle-1.18.2-1.9.54.jar",
 					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.9.54/Mantle-1.18.2-1.9.54.jar",
 					"size": 1017823,
-					"downloads": 14,
+					"downloads": 15,
 					"inspection": 2,
 					"sha256": "6d3845b4a835c19552ea7052ea26570c8c92d70b29451c35978b2f48cca156e2",
 					"mods": [
@@ -343,7 +455,7 @@
 					"name": "Mantle-1.18.1-1.8.37.jar",
 					"url": "https://github.com/SlimeKnights/Mantle/releases/download/v1.8.37/Mantle-1.18.1-1.8.37.jar",
 					"size": 861969,
-					"downloads": 101,
+					"downloads": 102,
 					"inspection": 2,
 					"sha256": "36364caefe8001e1ea180832cab87c7500cea2253f39edf81a90b14c4913435f",
 					"mods": [
