@@ -892,23 +892,49 @@ const readPackLines = async () => {
 };
 
 /**
+ * When GitHub was last asked for a repository's details, from the request cache kept between crawls: 0 for a line on
+ * another host or a gist, which that cache does not keep, and for any line when the cache was lost. A read that failed
+ * after GitHub answered still counts as asked.
+ */
+const lastAsked = async line => (line.includes(':') ? 0 : await github.lastFetched(github.repositoryPath(line)));
+
+const agesOf = async lines => new Map(await Promise.all(lines.map(async line => [line, await lastAsked(line)])));
+
+/**
+ * The pack records no listed line writes: a repository dropped from every list, and a record spelled in another case
+ * than the line the crawl keeps, unless the disk does not tell case apart and the variant is that line's own file.
+ */
+export const orphanedPacks = (files, kept) => {
+	const present = new Set(files);
+	const listed = new Map(kept.map(path => [path.toLowerCase(), path]));
+
+	return files.filter(file => {
+		const path = listed.get(file.toLowerCase());
+
+		return path === undefined || (path !== file && present.has(path));
+	});
+};
+
+/**
  * Read each pack repository once, before the mods and within PACK_SHARE of the time budget: those found on GitHub before any
- * known only from Modrinth, and within each the least recently read first. A repository with no pack left loses its
- * record. Packs are read from GitHub alone, where nearly all of them are kept.
+ * known only from Modrinth, and within each the one GitHub was least recently asked about first. A repository with no
+ * pack left loses its record, and so does one no list names any more. Packs are read from GitHub alone, where nearly all
+ * of them are kept.
  */
 const crawlPacks = async ({ deadline, scratch, parallel }) => {
 	const { found, fromModrinth } = await readPackLines();
-	const ages = new Map(
-		await Promise.all(
-			[...found, ...fromModrinth].map(async line => [
-				line,
-				line.includes(':') ? 0 : await github.lastFetched(github.repositoryPath(line)),
-			]),
-		),
-	);
+	const ages = await agesOf([...found, ...fromModrinth]);
 	const lines = crawlOrder(found, fromModrinth, line => ages.get(line));
 
-	if (lines.length > 0) console.log(`Reading ${lines.length} pack repositories`);
+	if (lines.length > 0) {
+		const orphans = orphanedPacks(await packFiles(), lines.map(packRecordPath));
+
+		await Promise.all(orphans.map(file => rm(file, { force: true })));
+
+		if (orphans.length > 0) console.log(`Removed ${orphans.length} pack records no list names`);
+
+		console.log(`Reading ${lines.length} pack repositories`);
+	}
 
 	return crawlEach(lines, {
 		deadline,
@@ -971,14 +997,7 @@ export const crawl = async ({ only } = {}) => {
 	const known = await readRenames();
 	const found = currentLines(only ?? (await readRepos()), known);
 	const fromModrinth = only ? [] : currentLines(await readModrinthRepos({ resting: true }), known);
-	const ages = new Map(
-		await Promise.all(
-			[...found, ...fromModrinth].map(async line => [
-				line,
-				line.includes(':') ? 0 : await github.lastFetched(github.repositoryPath(line)),
-			]),
-		),
-	);
+	const ages = await agesOf([...found, ...fromModrinth]);
 	const modrinthIds = await readJson(join(DATA, 'modrinth-ids.json'), {});
 	const demand = packDemand(await readPacks(), modrinthIds);
 	const { changed, steady } = only

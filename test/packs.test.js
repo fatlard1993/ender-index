@@ -6,6 +6,7 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
+import { orphanedPacks } from '../src/crawl';
 import { RateLimited } from '../src/fetch';
 import {
 	buildPacks,
@@ -343,6 +344,21 @@ describe('a pack read again', () => {
 		expect((await crawling(PUSHED, read)).formats).toEqual({ packwiz });
 	});
 
+	test('is recorded the same whenever it is read, so an unchanged pack leaves its file as it was', async () => {
+		const read = async path => {
+			throw new Error(`read ${path}`);
+		};
+		const first = await crawling(PUSHED, read);
+
+		setSystemTime(new Date('2026-12-25T00:00:00Z'));
+
+		try {
+			expect(await crawling(PUSHED, read)).toEqual(first);
+		} finally {
+			setSystemTime();
+		}
+	});
+
 	test('reads its head again once it has been pushed to', async () => {
 		const asked = [];
 		const read = async (name, path) => {
@@ -363,5 +379,20 @@ describe('a pack read again', () => {
 		expect((await crawling('2026-10-29T00:00:00Z', read)).formats).toEqual({
 			ender: { minecraft: '1.21.1', loader: 'fabric', mods: [{ spec: 'sodium' }] },
 		});
+	});
+});
+
+describe('pack records no list names', () => {
+	test('are a repository dropped from every list, and a record spelled in another case than the line kept', () => {
+		const files = ['p/a/Storm.json', 'p/a/storm.json', 'p/b/Gone.json', 'p/c/Kept.json', 'p/gist/abc.json'];
+
+		expect(orphanedPacks(files, ['p/a/Storm.json', 'p/c/Kept.json', 'p/gist/abc.json'])).toEqual([
+			'p/a/storm.json',
+			'p/b/Gone.json',
+		]);
+	});
+
+	test("keep the listed line's own file on a disk that does not tell case apart, where it reads back in another case", () => {
+		expect(orphanedPacks(['p/a/storm.json'], ['p/a/Storm.json'])).toEqual([]);
 	});
 });

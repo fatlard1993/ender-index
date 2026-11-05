@@ -55,7 +55,7 @@ export const pageUrl = pack => `${SITE}/#/pack/${pack.host}/${pack.repo}`;
  * Read the pack an issue submits and, when there is one, list it: its line kept in submitted-packs.txt for every
  * crawl after, its record written, and the site's lists rebuilt. Answers what to tell the issue, and whether it is done.
  */
-export const submitPack = async (body, { now = new Date().toISOString(), scratch, crawl = crawlPack } = {}) => {
+export const submitPack = async (body, { scratch, crawl = crawlPack } = {}) => {
 	const answer = answerOf(body, 'Pack');
 	const line = answer && packLineOf(answer);
 
@@ -66,7 +66,7 @@ export const submitPack = async (body, { now = new Date().toISOString(), scratch
 		};
 	}
 
-	const pack = await crawl(line, { now, scratch });
+	const pack = await crawl(line, { scratch });
 
 	if (!pack) {
 		return {
