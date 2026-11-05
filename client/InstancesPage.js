@@ -20,6 +20,7 @@ import { loadVersions } from './data';
 import { lastSaid, local } from './local';
 import { listingButton } from './controls';
 import { instanceNameOf, packDialog } from './packMaker';
+import { packOrMods, readPasted } from './pasted';
 import { playerChoice } from './playersPanel';
 import { LOADERS } from './search';
 import { Chip, Command, LAUNCHER, Meta, Row, Stack, Title, Warning, siteBar } from './ui';
@@ -352,7 +353,7 @@ const runInto = async (status, starting) => {
 const newInstance = signal => {
 	const status = new Meta({ style: { whiteSpace: 'pre-wrap' } });
 	const source = new Input({
-		placeholder: 'A gist link, gh:owner/repo, or an https link to a pack',
+		placeholder: "A pack's index page or ender import line, a gist link, gh:owner/repo, or an https link to a pack",
 		style: { flex: '1' },
 	});
 	const choice = { name: '', minecraft: '', loader: 'fabric', withCollected: false };
@@ -365,9 +366,28 @@ const newInstance = signal => {
 	});
 	const specs = new Input({
 		tag: 'textarea',
-		placeholder: 'More mods, one to a line: gh:owner/repo, mr:sodium',
+		placeholder: 'More mods: their index pages, ender add lines, gh:owner/repo or mr:sodium, as many as you like',
 		attributes: { rows: 3 },
 	});
+
+	const importPasted = () => {
+		const { pack, mods, said } = packOrMods(source.elem.value);
+
+		if (pack) {
+			runInto(status, () => local.importPack(pack));
+
+			return;
+		}
+
+		if (mods) {
+			const listed = specs.elem.value.trim();
+
+			specs.elem.value = [listed, ...mods].filter(Boolean).join('\n');
+			source.elem.value = '';
+		}
+
+		status.elem.textContent = said;
+	};
 
 	const withCollected = new Component({ tag: 'span' });
 	const packOfCollected = new Component({ tag: 'span' });
@@ -415,7 +435,7 @@ const newInstance = signal => {
 							new Button({
 								icon: 'download',
 								textContent: 'Import',
-								onPointerPress: () => runInto(status, () => local.importPack(source.elem.value.trim())),
+								onPointerPress: () => importPasted(),
 							}),
 						],
 					}),
@@ -456,14 +476,22 @@ const newInstance = signal => {
 												return;
 											}
 
+											const pasted = readPasted(specs.elem.value, { bare: 'mod' });
+
+											if (pasted.packs.length > 0 || pasted.unread.length > 0) {
+												status.elem.textContent =
+													pasted.packs.length > 0
+														? `${pasted.packs.join(', ')} is a pack; it goes in From a pack above`
+														: `Not a mod ender can read: ${pasted.unread.join(' ')}`;
+
+												return;
+											}
+
 											const listed = [
 												...(choice.withCollected
 													? collection.items.map(item => specFor(item.host ?? 'github', item.repo))
 													: []),
-												...specs.elem.value
-													.split('\n')
-													.map(line => line.trim())
-													.filter(Boolean),
+												...pasted.mods,
 											];
 
 											runInto(status, () =>
