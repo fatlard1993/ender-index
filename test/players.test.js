@@ -51,7 +51,9 @@ describe('the players panel', () => {
 		expect(text).toContain('Chase');
 		expect(text).toContain('instances play as this one unless given another');
 		expect(text).toContain('Play as');
-		expect(text).toContain('needs an app registration of your own');
+		expect(text).toContain('needs an Azure app registration of your own');
+		expect(text).toContain('Application (client) ID');
+		expect(text).toContain('Set up Microsoft sign in');
 		expect(text).not.toContain('Sign in to Microsoft');
 	});
 
@@ -65,6 +67,53 @@ describe('the players panel', () => {
 			['Kid_2', 'plays as Kid_2'],
 		]);
 		expect(choice.elem.querySelector('select')?.value ?? choice.elem.value).toBe('Kid_2');
+	});
+
+	test("saves an Azure app's client id, which makes signing in ready", async () => {
+		sent.length = 0;
+		await local.local.setClientId('c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb').catch(() => {});
+
+		expect(sent).toContainEqual([
+			'PUT',
+			'./api/sign-in/client-id',
+			JSON.stringify({ clientId: 'c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb' }),
+		]);
+	});
+
+	test("shows Microsoft's code and its page from the line ender prints for them", () => {
+		expect(
+			panel.signInLink([
+				':: Sign in to Microsoft',
+				'  and enter ABCD1234',
+				'  link https://www.microsoft.com/link?otc=ABCD1234',
+			]),
+		).toEqual({ link: 'https://www.microsoft.com/link?otc=ABCD1234', code: 'ABCD1234' });
+		expect(panel.signInLink([':: Sign in to Microsoft'])).toBeUndefined();
+	});
+
+	test('once sign in is set up, offers it and a way to change the client id it uses', async () => {
+		responses['/api/players'] = { ...listing, signIn: true };
+		await local.local.refreshPlayers();
+
+		const card = panel.playersPanel(new AbortController().signal);
+
+		document.body.append(card.elem);
+		await settle(() => card.elem.textContent.includes('Sign in to Microsoft'));
+
+		expect(card.elem.textContent).not.toContain('Application (client) ID');
+
+		const change = [...card.elem.querySelectorAll('button')].find(button =>
+			button.textContent.includes('Change client id'),
+		);
+
+		change.click();
+		await settle(() => card.elem.textContent.includes('Application (client) ID'));
+
+		expect(card.elem.textContent).toContain('Application (client) ID');
+		expect(card.elem.querySelector('details').hasAttribute('open')).toBe(true);
+
+		responses['/api/players'] = listing;
+		await local.local.refreshPlayers();
 	});
 
 	test('adds an offline player by name and shows what ender answers', async () => {

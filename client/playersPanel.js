@@ -1,4 +1,4 @@
-import { Button, Card, Dialog, Input, Notify, Select, theme } from '@vanilla-bean/components';
+import { Button, Card, Component, Dialog, Input, Link, Notify, Select, theme } from '@vanilla-bean/components';
 
 import { lastSaid, local } from './local';
 import { Chip, Command, Meta, Row, Stack, Title, Warning } from './ui';
@@ -49,18 +49,86 @@ const playerRow = player =>
 		],
 	});
 
-/** Microsoft's sign in waits on a code typed in another tab, so its lines are shown as they come: they carry the code. */
+/** The steps to an Azure app of one's own, which Microsoft requires of a launcher before it may sign anyone in. */
+export const REGISTRATION_STEPS = [
+	[
+		'Register an application at ',
+		{
+			href: 'https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade',
+			text: 'the Azure portal',
+		},
+		' (Microsoft Entra ID, App registrations).',
+	],
+	['Under Authentication, add a "Mobile and desktop applications" platform and allow public client flows.'],
+	[
+		'Apply for Minecraft API access for it at ',
+		{ href: 'https://aka.ms/mce-reviewappid', text: "Microsoft's review form" },
+		'; approval can take days.',
+	],
+	['Paste its Application (client) ID here.'],
+];
+
+const stepItem = parts =>
+	new Component({
+		tag: 'li',
+		append: parts.map(part =>
+			typeof part === 'string' ? part : new Link({ href: part.href, target: '_blank', textContent: part.text }),
+		),
+	});
+
+/** Where a player without a registration says which one to use: Microsoft signs no one in through a launcher without one. */
+const clientIdForm = ({ open = false } = {}) => {
+	const field = new Input({ placeholder: 'Application (client) ID, like 1a2b3c4d-...' });
+	const save = () =>
+		attempt(async () => {
+			await local.setClientId(field.elem.value.trim());
+			told('success', 'Saved; signing in to Microsoft is ready');
+		}, 'The client id was not saved');
+
+	field.elem.addEventListener('keydown', event => {
+		if (event.key === 'Enter') save();
+	});
+
+	return new Component({
+		tag: 'details',
+		attributes: open ? { open: '' } : {},
+		append: [
+			new Meta({ tag: 'summary', textContent: 'Set up Microsoft sign in', style: { cursor: 'pointer' } }),
+			new Stack({
+				style: { gap: theme.space.xs, marginTop: theme.space.xs },
+				append: [
+					new Meta({
+						tag: 'p',
+						textContent:
+							'Signing in to Microsoft needs an Azure app registration of your own, approved for Minecraft. Offline players need none of this.',
+					}),
+					new Meta({
+						tag: 'ol',
+						style: { margin: 0, paddingInlineStart: '1.5em' },
+						append: REGISTRATION_STEPS.map(stepItem),
+					}),
+					new Row({ append: [field, new Button({ icon: 'floppy-disk', textContent: 'Save', onPointerPress: save })] }),
+				],
+			}),
+		],
+	});
+};
+
+/** The page Microsoft's code is typed into, with the code filled in, from the line ender prints for it. */
+export const signInLink = lines => {
+	const link = lines.map(line => line.match(/^\s*link (https:\S+)/)?.[1]).find(Boolean);
+
+	if (!link) return undefined;
+
+	return { link, code: new URL(link).searchParams.get('otc') ?? '' };
+};
+
+/** Microsoft's sign in waits on a code typed in another tab, so the code and its page are shown as soon as ender has them. */
 const signInRow = (players, signal) => {
-	if (!players.signIn) {
-		return new Meta({
-			tag: 'p',
-			textContent:
-				'Signing in to Microsoft needs an app registration of your own; "ender account add" in a terminal says how. Offline players need nothing.',
-		});
-	}
+	if (!players.signIn) return clientIdForm();
 
 	const status = new Meta();
-	const output = new Command({ tag: 'pre', style: { display: 'none', whiteSpace: 'pre-wrap', margin: 0 } });
+	const prompt = new Row({ style: { display: 'none', flexWrap: 'wrap' } });
 	const button = new Button({
 		icon: 'right-to-bracket',
 		variant: 'flat',
@@ -70,10 +138,28 @@ const signInRow = (players, signal) => {
 
 			try {
 				const job = await local.signIn();
+				let shownLink;
 				const show = () => {
-					output.elem.style.display = '';
-					output.elem.textContent = job.lines.join('\n');
-					status.elem.textContent = job.state === 'running' ? 'Waiting for the sign in to finish' : '';
+					const found = signInLink(job.lines);
+
+					const waiting = found ? 'Waiting for you to finish in that tab' : 'Asking Microsoft for a code';
+
+					status.elem.textContent = job.state === 'running' ? waiting : '';
+
+					if (!found || found.link === shownLink) return;
+
+					shownLink = found.link;
+					prompt.elem.style.display = '';
+					prompt.content([
+						new Meta({ textContent: 'Your code' }),
+						new Command({ tag: 'code', textContent: found.code, style: { fontSize: '1.3em', letterSpacing: '0.1em' } }),
+						new Button({
+							icon: 'arrow-up-right-from-square',
+							textContent: "Open Microsoft's page",
+							title: found.link,
+							onPointerPress: () => window.open(found.link, '_blank', 'noopener'),
+						}),
+					]);
 				};
 
 				show();
@@ -84,12 +170,25 @@ const signInRow = (players, signal) => {
 				told('danger', `The sign in did not finish: ${error.message}`);
 			} finally {
 				button.elem.disabled = false;
+				prompt.elem.style.display = 'none';
+				status.elem.textContent = '';
 				await local.refreshPlayers();
 			}
 		},
 	});
 
-	return new Stack({ style: { gap: theme.space.xs }, append: [new Row({ append: [button, status] }), output] });
+	const stack = new Stack({ style: { gap: theme.space.xs } });
+	const change = new Button({
+		icon: 'pen',
+		variant: 'flat',
+		textContent: 'Change client id',
+		title: 'Use another Azure app registration',
+		onPointerPress: () => stack.content([new Row({ append: [button, status] }), prompt, clientIdForm({ open: true })]),
+	});
+
+	stack.content([new Row({ append: [button, change, status] }), prompt]);
+
+	return stack;
 };
 
 const addOffline = () => {

@@ -329,6 +329,7 @@ export const local = {
 	removePlayer: name => changePlayers('DELETE', playerPath(name)),
 	/** Microsoft's device code sign in, as a job whose lines carry the code to type. */
 	signIn: () => start('POST', 'sign-in'),
+	setClientId: clientId => changePlayers('PUT', 'sign-in/client-id', { clientId }),
 	/** One instance plays as this player; null returns it to the active one. */
 	assignPlayer: async (name, player) => {
 		await call('PUT', `${named(name)}/player`, { player });
