@@ -268,8 +268,10 @@ export const updateReady = upgrade =>
 let upgradeAsked;
 
 /** Which ender serves the page, the newest release, and who upgrades it; null from an ender too old to say. */
-const loadUpgrade = () =>
-	(upgradeAsked ??= call('GET', 'upgrade')
+const loadUpgrade = ({ again = false } = {}) => {
+	if (again) upgradeAsked = undefined;
+
+	return (upgradeAsked ??= call('GET', again ? 'upgrade?again' : 'upgrade')
 		.then(upgrade => {
 			state.upgrade = upgrade;
 		})
@@ -277,6 +279,7 @@ const loadUpgrade = () =>
 			state.upgrade = error.status === 404 ? null : { error: error.message };
 		})
 		.finally(notify));
+};
 
 /** Waits until the page is served by an ender other than `before`, asking every half second, for up to `seconds`. */
 export const servedBy = async (before, { seconds = 30, ask = () => call('GET', 'ender') } = {}) => {

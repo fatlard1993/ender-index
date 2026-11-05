@@ -199,6 +199,11 @@ describe('the Settings page', () => {
 		expect(text).toContain('ender 0.2.1 is out; this is 0.2.0.');
 		expect(text).toContain('Players');
 
+		sent.length = 0;
+		[...page.elem.querySelectorAll('button')].find(button => button.textContent.includes('Check again')).click();
+		await settle(() => sent.some(([, address]) => address.endsWith('upgrade?again')));
+		expect(sent.map(([, address]) => address)).toContain('./api/upgrade?again');
+
 		const settings = [...page.elem.querySelectorAll('nav a')].find(link => link.textContent.startsWith('Settings'));
 
 		await settle(() => settings.textContent.includes('\u2022'));

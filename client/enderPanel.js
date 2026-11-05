@@ -85,7 +85,18 @@ export const enderPanel = signal => {
 			...versionLine(upgrade),
 			...(ender?.installed ? [placeRow('Installed at', ender.installed)] : []),
 			...(ender?.data ? [placeRow('Keeps instances, worlds and downloads in', ender.data)] : []),
-			new Link({ href: RELEASES, target: '_blank', textContent: 'What each release changed' }),
+			new Row({
+				append: [
+					new Button({
+						icon: 'rotate',
+						variant: 'flat',
+						textContent: 'Check again',
+						title: 'Ask GitHub for the newest release now',
+						onPointerPress: () => local.loadUpgrade({ again: true }),
+					}),
+					new Link({ href: RELEASES, target: '_blank', textContent: 'What each release changed' }),
+				],
+			}),
 		]);
 	};
 
