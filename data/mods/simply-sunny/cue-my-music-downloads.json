@@ -6,8 +6,102 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-26T04:35:42Z",
-	"pushed": "2026-11-04T03:32:01Z",
+	"pushed": "2026-11-06T08:29:06Z",
 	"releases": [
+		{
+			"tag": "v1.1.0",
+			"published": "2026-11-06T08:09:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 716402919,
+					"name": "cue-my-music-downloads-26.3-1.1.0.jar",
+					"url": "https://github.com/simply-sunny/cue-my-music-downloads/releases/download/v1.1.0/cue-my-music-downloads-26.3-1.1.0.jar",
+					"size": 111162,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "79a5c5e7148a17586683c0d4a2dcda4bfb453f324e3f5928c34a0f39ec42a2ee",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "cuemymusic_downloads",
+							"version": "1.1.0",
+							"name": "Cue My Music: Downloads",
+							"description": "Search for songs and download them into Cue My Music.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cuemymusic"
+							],
+							"provides": []
+						}
+					],
+					"icon": "11a754ec6a8eaa15131012e8a86fe90831afb7c213ced0b57a31fbee5755a69a.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 29,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"mix/cuemymusic/downloads/Browse.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"mix/cuemymusic/downloads/Covers.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"mix/cuemymusic/downloads/Search.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							},
+							"exec": {
+								"mix/cuemymusic/downloads/Downloader.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"mix/cuemymusic/downloads/Search.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"music.youtube.com": [
+								"mix/cuemymusic/downloads/Browse.class",
+								"mix/cuemymusic/downloads/DownloadsPanel.class",
+								"mix/cuemymusic/downloads/Search$Artist.class",
+								"mix/cuemymusic/downloads/Search.class"
+							],
+							"itunes.apple.com": [
+								"mix/cuemymusic/downloads/Covers.class"
+							],
+							"i.ytimg.com": [
+								"mix/cuemymusic/downloads/Covers.class",
+								"mix/cuemymusic/downloads/Search.class"
+							],
+							"www.youtube.com": [
+								"mix/cuemymusic/downloads/Search.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Requires Cue My Music 1.4.0 or newer.\n\n### Added\n\n- **Artist downloads**: a YouTube channel or artist link, or an **Artist → Download all** card in search results, downloads the whole channel (up to 1000 songs). Songs already in the pack are skipped, so running it again only adds what's new. Cue My Music already groups them by artist, so no playlist is made.\n- **Spotify links**, through spotdl: songs, albums, playlists and artists. spotdl only reads the Spotify metadata; the audio comes from a YouTube Music match. Spotify playlists and albums make a Cue My Music playlist named after them. Install spotdl with `pipx install spotdl`; it's optional, and only Spotify links need it.\n- **Check uncertain matches**: when a Spotify song's YouTube match isn't clear (a remix, a live version, a different length), the Downloads page shows both and asks **Keep**, **Skip**, or **Skip all** before continuing.\n- **Tabs on the Downloads page**, styled as the player's Mode switch: **Find songs** for search, links and progress, and **Downloaded** for the songs already saved, with a box to filter them by title or artist.\n- **Song covers**: every song gets its own cover, shown in Cue My Music: its album's cover from iTunes where it has the song, otherwise its YouTube thumbnail cut square. Songs downloaded before get theirs in the background, a few a minute, and thumbnails are swapped for album covers where one is found.\n- **More search tools**: sort results by relevance, plays, length or title; **Show more** for up to 30 results; and recent searches as buttons.\n\n### Changed\n\n- Shorter, plainer text: the Downloads page help, chat messages while downloading, and the mod list description.\n- Songs are converted to Ogg as each one finishes, not after the whole link, so long artist and playlist downloads use less disk and cancelling keeps the finished songs.\n- Spotify songs already in the pack are skipped, like artist downloads.\n- The Downloads pack has no picture any more: it looked like a player and stood in as every song's cover.\n- Downloading or deleting songs no longer reloads every resource: only the song list is read again, so it's quick and the song that's on keeps playing instead of skipping.\n\n### Fixed\n\n- Downloading outside Add-ons mode says to switch to Add-ons to play the songs.\n- The README no longer says downloads play from the player only: Add-ons mode picks them.\n- Downloading an artist no longer saves the same song twice when it's on both a single and an album, or is already downloaded."
+		},
 		{
 			"tag": "v1.0.0",
 			"published": "2026-10-27T22:40:12Z",
@@ -18,7 +112,7 @@
 					"name": "cue-my-music-downloads-26.3-1.0.0.jar",
 					"url": "https://github.com/simply-sunny/cue-my-music-downloads/releases/download/v1.0.0/cue-my-music-downloads-26.3-1.0.0.jar",
 					"size": 70586,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "23f084e3c546047478b0e3837df4783373e295725bde525040b33ec8da28887c",
 					"mods": [
