@@ -5,8 +5,69 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-04-25T15:11:25Z",
-	"pushed": "2026-11-06T01:53:59Z",
+	"pushed": "2026-11-06T03:05:15Z",
 	"releases": [
+		{
+			"tag": "v0.3.1",
+			"published": "2026-11-06T03:05:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 715708344,
+					"name": "arcadiatweaks-0.3.1.jar",
+					"url": "https://github.com/Team-Arcadia/arcadia-tweaks/releases/download/v0.3.1/arcadiatweaks-0.3.1.jar",
+					"size": 517329,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2c4fad72a2477dfe8de01c3b01009e6c1bdc106b36bf402d0c8ad592c2048b13",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "arcadiatweaks",
+							"version": "0.3.1",
+							"name": "ArcadiaTweaks",
+							"description": "Umbrella mod-patch for the Arcadia modpack. Non-invasive, Mixin-based optimizations and fixes for BotanyPots, Refined Storage, Mekanism, Waystones, Simply Swords, Copycats+, FastSuite, Crabber's Delight and Macaw's Doors, plus server and client safety guards.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"botanypots",
+								"refinedstorage",
+								"mekanism",
+								"waystones",
+								"ftbteams",
+								"simplyswords",
+								"cosmeticweaponsmod",
+								"cosmeticarmoursmod",
+								"accessories",
+								"copycats",
+								"fastsuite",
+								"crabbersdelight",
+								"mcwdoors"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 126,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## English\n\n| Loader | Minecraft | Java | File |\n|---|---|---|---|\n| NeoForge | 1.21.1 | 21 | `arcadiatweaks-0.3.1.jar` |\n\n### Fixed\n\n- **Macaw's Doors: a double garage door no longer crashes the client** — clicking a garage door next to another one, in a chunk Bobby shows from its cache before the server has sent it, crashed the client with a `StackOverflowError` in `GarageDoor.toggleDoor` (2026-11-06): Bobby's chunks refuse every block write, so the two doors called each other without end. A door whose write was refused no longer toggles its neighbours; when writes go through, every call is unchanged. Players get the fix with the client jar. Pinned to Macaw's Doors 1.1.5, switch `[safety] macawsGarageDoorGuard`.\n- **Macaw's Doors: closing a garage door above the void no longer freezes the game** — the fill below a closing door went on past the bottom of the world for about four billion positions, on the server as on the client, long enough for the watchdog to stop a server. It now stops at the bottom of the world. Found while fixing the crash above, not seen on the live servers. Same pin and switch.\n\n### Performance\n\n- **New `sparework` module: work the pack repeats for nothing, skipped with the same results** — found with Spark on the live servers. Same answers at the same moments, dedicated server only, one kill switch per patch under `[sparework]` and the whole module under `[modules] sparework`. The times below are per call, measured on a copy of the server pack.\n- **FastSuite: no thread pool for a recipe type without parallel recipes** — FastSuite only parallelizes vanilla recipe classes, so every lookup of a mod's recipe type (all of Create's) submitted a task to stream an empty list, and the server thread waited for it. The lookup now goes straight to the serial recipes (30 µs to 3 µs for a lookup without a match on `create:milling`). Pinned to FastSuite 6.0.7. Switch `fastsuite_skip_empty_parallel_lookup`.\n- **Simply Swords: a read of a chest slot no longer allocates a stack** — Simply Swords hooks `unpackLootTable`, which vanilla calls on every read of a chest slot, and each call created a deque and a thread local entry for its pity loot, then removed them. The deque stays on the server thread (80 ns to 10 ns per read). The pairing of nested calls is kept, so chests roll their pity loot as before. Pinned to Simply Swords 1.70.2. Switch `simplyswords_reuse_pity_stack`.\n- **Structure lookups read a loaded chunk directly** — Twilight Forest looks up structures for every natural spawn, in every dimension, and vanilla asks the chunk system for an older status of the chunk, which adds a ticket and returns a wrapper around the same chunk. A fully loaded chunk is now read directly (350 ns to 200 ns per lookup). Any other chunk, any other thread and world generation go through the original call. Switch `structure_lookup_uses_loaded_chunk`.\n- **Crabber's Delight: the tackle box search is skipped when it can only find nothing** — every player tick read the 343 positions around the player, which scales with the player count. The search is skipped when the loaded chunks hold no tackle box and the reads would change nothing (15 µs to 300 ns with nothing around, 2 µs with chests around). A tackle box, a pending, removed or missing block entity, or a chunk that is not loaded runs the original search. Pinned to Crabber's Delight 1.3.1. Switch `crabbersdelight_skip_empty_tackle_box_search`.\n- **CosmeticArmours: the two new chains are gated** — `ThreadAdvProdProcedure` and `ClothAdvProdProcedure` of CosmeticArmours 1.6 test 16 items each, every player tick. They now go through the item presence gate like the 15 others.\n\n### Other changes\n\n- Built and tested against the jars of the production pack: CosmeticWeapons 1.2.0.1, CosmeticArmours 1.6.0.1, and FastSuite, Crabber's Delight, Placebo and Farmer's Delight in the dev runs.\n- New admin menu row \"Spare work\" with the module switch and the four patches.\n\n..."
+		},
 		{
 			"tag": "v0.3.0",
 			"published": "2026-11-05T01:41:03Z",
@@ -17,7 +78,7 @@
 					"name": "arcadiatweaks-0.3.0.jar",
 					"url": "https://github.com/Team-Arcadia/arcadia-tweaks/releases/download/v0.3.0/arcadiatweaks-0.3.0.jar",
 					"size": 487298,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "1cea2b70d365d89f8c457f81c38d9df7c1b0da3b6526422b329087f4afed3d8d",
 					"mods": [
