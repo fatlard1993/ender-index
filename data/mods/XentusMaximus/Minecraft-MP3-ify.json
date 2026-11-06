@@ -6,8 +6,139 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-29T21:07:09Z",
-	"pushed": "2026-11-03T21:29:22Z",
+	"pushed": "2026-11-06T23:12:00Z",
 	"releases": [
+		{
+			"tag": "v1.3.4",
+			"published": "2026-11-06T22:48:11Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 718890386,
+					"name": "mp3player-1.3.4.jar",
+					"url": "https://github.com/XentusMaximus/Minecraft-MP3-ify/releases/download/v1.3.4/mp3player-1.3.4.jar",
+					"size": 1498158,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "872bf84dc874f76163772b257896c5e2bfd7ffbf2ce1b358ecf1b106fff321df",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mp3player",
+							"version": "1.3.4",
+							"name": "MP3-Player",
+							"description": "In-game MP3-Player & placeable 3D Boombox (MP3, M4A, Opus, WAV, FLAC & OGG) with modern GUI, Minecraft Sound Options volume slider, and Essential-compatible Opus 3D spatial audio.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [
+								"io_github_jaredmdobson_concentus",
+								"com_tianscar_javasound_jaad",
+								"org_jflac_jflac-codec",
+								"javazoom_jlayer"
+							]
+						}
+					],
+					"icon": "8c2452f95026b4b9ca83b5d3bd5be39c7cb539bcc192d5d85dc003930a77e7e8.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Boombox",
+								"MP3 Player",
+								"Speaker",
+								"Speaker Controller"
+							],
+							"block": [
+								"Boombox",
+								"Speaker"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 660,
+						"jars": [
+							"META-INF/jars/concentus-1.0.1.jar",
+							"META-INF/jars/jaad-0.9.4.jar",
+							"META-INF/jars/jflac-codec-1.5.2.jar",
+							"META-INF/jars/jlayer-1.0.1.jar"
+						],
+						"capabilities": {
+							"exec": {
+								"de/vibecoded/mp3player/client/spotify/SpotifyManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"network": {
+								"de/vibecoded/mp3player/client/spotify/SpotifyManager.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send",
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/jaad-0.9.4.jar!net/sourceforge/jaad/spi/javasound/AACAudioFileReader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jflac-codec-1.5.2.jar!org/jflac/sound/spi/FlacAudioFileReader.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jlayer-1.0.1.jar!javazoom/jl/player/jlp.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/jlayer-1.0.1.jar!javazoom/jl/player/PlayerApplet.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"open.spotify.com": [
+								"de/vibecoded/mp3player/client/spotify/SpotifyManager.class"
+							],
+							"developer.spotify.com": [
+								"de/vibecoded/mp3player/client/spotify/SpotifyManager.class"
+							],
+							"accounts.spotify.com": [
+								"de/vibecoded/mp3player/client/spotify/SpotifyManager.class"
+							],
+							"api.spotify.com": [
+								"de/vibecoded/mp3player/client/spotify/SpotifyManager.class"
+							],
+							"github.com": [
+								"de/vibecoded/mp3player/client/spotify/SpotifyManager.class"
+							],
+							"127.0.0.1": [
+								"de/vibecoded/mp3player/client/spotify/SpotifyManager.class"
+							],
+							"api-partner.spotify.com": [
+								"de/vibecoded/mp3player/client/spotify/SpotifyManager.class"
+							],
+							"www.javazoom.net": [
+								"META-INF/jars/jlayer-1.0.1.jar!javazoom/jl/converter/jlc$jlcArgs.class"
+							],
+							"www.server.com": [
+								"META-INF/jars/jlayer-1.0.1.jar!javazoom/jl/player/jlp.class"
+							],
+							"www.shoutcastserver.com": [
+								"META-INF/jars/jlayer-1.0.1.jar!javazoom/jl/player/jlp.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [1.3.4] - 2026-11-06\n\n### Added\n- **Spotify Account Linking & Playlist Playback (ViewTab.SPOTIFY)**:\n  - Added a dedicated Spot tab in the MP3 Player, Boombox, and Speaker Controller GUI that requires linking a Spotify account before browsing and playing Spotify playlists.\n  - Built-in local loopback OAuth 2.0 PKCE & Account Linking Portal (http://127.0.0.1:8888/spotify) with a detailed step-by-step Spotify Developer Application setup guide and 1-click Redirect URI copy button, plus direct in-game support for Spotify Client IDs, Profile URLs, and OAuth tokens persisted in config/mp3player.properties.\n  - **Full Playlist Pagination (250+ / up to 5,000 Tracks):** Automatically paginates through entire playlists beyond the 100-track Embed limit without hitting rate limits using both the Spotify Web API (\next pages) and Spotify's Partner Pathfinder GraphQL API (\fetchPlaylistContents).\n  - **Studio-Accurate Audio Resolution & Caching:** Prioritizes official YouTube Topic / Official Audio studio masters verified against the exact Spotify track duration (±8s tolerance) while filtering out unofficial Slowed, Sped Up, Nightcore, 8D, Karaoke, Cover, and Remix uploads, caching streams in mp3s/.spotify-cache/ (spotify_v2_<id>.mp3) for Headphones, 3D Boomboxes, and Linked Speaker Networks (+ Queue).\n\n### Changed\n- **Unlimited Linkable Speakers (Integer.MAX_VALUE)**:\n  - Raised Mp3Payloads.MAX_LINKED_SPEAKERS from 64 to Integer.MAX_VALUE (2,147,483,647) and removed server speaker control distance caps, allowing an unlimited number of speakers to be linked and streamed simultaneously."
+		},
 		{
 			"tag": "v1.3.2",
 			"published": "2026-11-03T21:28:21Z",
@@ -18,7 +149,7 @@
 					"name": "mp3player-1.3.2.jar",
 					"url": "https://github.com/XentusMaximus/Minecraft-MP3-ify/releases/download/v1.3.2/mp3player-1.3.2.jar",
 					"size": 1443970,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "36aa7ce8dad34be79ddce8195aa844fddd799df4de6843010ca377dc2adec519",
 					"mods": [
