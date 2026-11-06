@@ -6,8 +6,99 @@
 	"archived": false,
 	"license": "CC0-1.0",
 	"created": "2026-10-28T03:43:04Z",
-	"pushed": "2026-10-30T16:40:19Z",
+	"pushed": "2026-11-06T03:42:16Z",
 	"releases": [
+		{
+			"tag": "v1.0.3",
+			"published": "2026-11-06T03:43:20Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 715798094,
+					"name": "vmrbooklet-1.0.3.jar",
+					"url": "https://github.com/APonder-Dev/ECC-VMRBooklet/releases/download/v1.0.3/vmrbooklet-1.0.3.jar",
+					"size": 335548,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "a3784d734a94bdcbbfd697ed6e6fc426cd3b3370110b5df709f0c458339ec47b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "vmrbooklet",
+							"version": "1.0.3",
+							"name": "VMR Booklet",
+							"description": "A client-side collection tracker for every vanilla item: a searchable, filterable booklet with recipes, how-to-get notes, crafting-chain trees, goal lists, streaks, and friend comparison. Progress comes from the server's /booklet GUI, /sell, a Google Sheet, or manual edits. Works on any server; nothing installed server-side.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "e7681741df50ccd1fa3c35e7e4d1db63d7122f3356f2d79f86c09180b3369ec0.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 103,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/aponder/vmrbooklet/client/sync/BookletPasteService.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.close"
+								],
+								"dev/aponder/vmrbooklet/client/sync/BookletSheetWriter.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.close",
+									"java/net/http/HttpClient.send"
+								],
+								"dev/aponder/vmrbooklet/client/sync/BookletUpload.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.close"
+								],
+								"dev/aponder/vmrbooklet/client/sync/GoogleServiceAccount.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.close"
+								]
+							}
+						},
+						"hosts": {
+							"api.mclo.gs": [
+								"dev/aponder/vmrbooklet/client/sync/BookletPasteService.class"
+							],
+							"sheets.googleapis.com": [
+								"dev/aponder/vmrbooklet/client/sync/BookletSheetWriter.class"
+							],
+							"docs.google.com": [
+								"dev/aponder/vmrbooklet/client/sync/BookletUpload.class"
+							],
+							"oauth2.googleapis.com": [
+								"dev/aponder/vmrbooklet/client/sync/GoogleServiceAccount.class"
+							],
+							"www.googleapis.com": [
+								"dev/aponder/vmrbooklet/client/sync/GoogleServiceAccount.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n\n- A \"Show: Unfinished\" option in the Show cycle, between Completed and Partial - everything still standing between you and 100% (Partial + Undiscovered together), without having to flip between those two separately.\n- Right-click the Show button to open a dropdown and jump straight to any filter, same as the Category row.\n- `/vbooklet missing notes` - same list as `/vbooklet missing`, but with each item's acquisition note attached, so it's an actual to-do list instead of just names.\n- `/vbooklet trades` - cross-references everything you're still missing against every imported friend's own progress and lists who already has what, instead of having to compare friend tabs by hand.\n- `/vbooklet need <item>` - walks an item's recipe chain (skipping anything you already have enough of, and stopping at items with their own acquisition note instead of looping through a fake compress/decompress recipe) to build a shopping list of the raw materials still standing between you and it.\n- `/vbooklet goal <item>` / `/vbooklet goal` / `/vbooklet goal clear` - a small, self-picked subset of items to track as its own progress line in the booklet header, separate from the general Favorites list.\n- A \"T\" button next to ?/%/R showing a day-by-day completion timeline - how many items you finished on each day, newest first. The activity log this reads from now keeps 500 entries instead of 50, so there's enough history for it to actually be worth graphing.\n- A \"N\" button showing a live, expandable tree of what's still needed to craft the selected item - the same recipe-chain walk `/vbooklet need` already did, but as something you can leave open and click through node by node (expand/collapse, jump straight to a leaf) instead of a one-shot clipboard dump.\n- An \"F\" button showing which of your imported friends already have each of your missing items - a live version of `/vbooklet trades`.\n- `/vbooklet missing bycategory` - same list as `/vbooklet missing`, grouped under a header line per category instead of one flat list.\n- Named goal lists: `/vbooklet goal lists` shows every list you have (with the active one marked), `/vbooklet goal list <name>` switches to one (creating it empty if it's new). Everything that already worked on \"your goal list\" (`/vbooklet goal <item>`, `/vbooklet goal`, `/vbooklet goal clear`, and the header progress line) now applies to whichever list is active. An existing single-list `goals.json` from before this migrates automatically into a list named \"default\" the first time it's read - nothing pinned gets lost.\n- Search shortcuts inside the booklet: `/` or Ctrl+F jumps straight to the search box without clicking it, plus an optional rebindable \"Focus Booklet Search\" key (unbound by default) under Controls.\n- A day-streak counter in the header, next to the session-completion count, once it's at least 2 days - entirely derived from the existing activity log, no new save data needed.\n- Hover tooltips on every header and toolbar button (?, %, R, T, N, F, Show, Sort, Category, Next unfinished, Notify), and placeholder text in the empty search box.\n- Mod Menu settings now have toggles for the header's streak and goal-progress parts, alongside the existing scan-notification toggle.\n- Every piece of text the mod shows - the booklet screen, overlays, toasts, chat feedback, and the settings screen - now comes from the language file (`assets/vmrbooklet/lang/en_us.json`), so the mod can be translated. Category names reuse Minecraft's own creative-tab names, so they already appear in your game language.\n- A \"Booklet: 3/5\" (or \"✓ Booklet\") line on every booklet item's tooltip, anywhere in the game - inventories, chests, trades, recipe views - with \"· Goal\" added when it's on your active goal list. Toggleable in Mod Menu settings.\n\n..."
+		},
 		{
 			"tag": "v1.0.2",
 			"published": "2026-10-30T16:41:27Z",
@@ -18,7 +109,7 @@
 					"name": "vmrbooklet-1.0.2.jar",
 					"url": "https://github.com/APonder-Dev/ECC-VMRBooklet/releases/download/v1.0.2/vmrbooklet-1.0.2.jar",
 					"size": 218911,
-					"downloads": 3,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "7447621846a564a62fb2583d068b1ed94c9c2c14bc337c5e6b02f5b4b6d7505b",
 					"mods": [
