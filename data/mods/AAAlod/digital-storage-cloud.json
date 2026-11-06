@@ -9,6 +9,153 @@
 	"pushed": "2026-11-06T15:21:43Z",
 	"releases": [
 		{
+			"tag": "v1.2.3",
+			"published": "2026-11-06T15:26:38Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 717587033,
+					"name": "digital-storage-cloud-fabric-1.2.3.jar",
+					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.3/digital-storage-cloud-fabric-1.2.3.jar",
+					"size": 1186074,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "e8a3490e2b9f6d72a41ccdd743596c1e4cb3bdfc45c76b5ad961a4a0b85f8cc1",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "digitalstorage",
+							"version": "1.2.3",
+							"name": "Digital Storage Cloud",
+							"description": "Player-owned storage volumes exposed through lightweight, linkable accessors.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java",
+								"toms_storage"
+							],
+							"provides": []
+						}
+					],
+					"icon": "9dae24b93926f7739e4df014d9c561303470f0ed1ffe06f31d0b467459a89675.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Digital Storage Cloud"
+							],
+							"block": [
+								"Advanced Inventory Hopper",
+								"Digital Storage Accessor"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 487,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/kehai/digitalstorage/internal/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"dev/kehai/digitalstorage/optimization/SophisticatedEndpointGuard$1.class": [
+									"extends java/lang/ClassLoader"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 717587231,
+					"name": "digital-storage-cloud-forge-1.2.3.jar",
+					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.3/digital-storage-cloud-forge-1.2.3.jar",
+					"size": 1350624,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "cda8295c18e3013bb08c1d8771de82025598b039f446dfa3a8224771672adbee",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "digitalstorage",
+							"version": "1.2.3",
+							"name": "汤姆的简易存储：云上加仓",
+							"description": "Player-owned storage volumes exposed through lightweight, linkable accessors.",
+							"minecraft": "[1.20.1,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"toms_storage"
+							]
+						}
+					],
+					"icon": "9dae24b93926f7739e4df014d9c561303470f0ed1ffe06f31d0b467459a89675.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Digital Storage Cloud"
+							],
+							"block": [
+								"Advanced Inventory Hopper",
+								"Digital Storage Accessor"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 555,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/kehai/digitalstorage/internal/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"dev/kehai/digitalstorage/optimization/SophisticatedEndpointGuard$1.class": [
+									"extends java/lang/ClassLoader"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.2.3 — 精妙存储兼容与稳定性修复\n\n本次更新让批量转移支持符合条件的精妙存储容器，并修复卷删除、访问器交互和状态刷新问题。\n\n## 精妙存储兼容\n- 支持直接连接 Tom 存储连接器或相邻组成容器组的精妙箱子、木桶、有限木桶和潜影盒，包括各材质等级；支持精妙堆叠升级。\n- 相邻精妙容器和精妙双箱可参与批量转移；已识别的旧版精妙存储不再因缺少新版远程关联接口而被直接排除。\n- 精妙端点仍需通过连接、库存身份及升级检查；未识别的版本或处理器可能被跳过，原因会记录在服务器日志中。\n- 精妙控制器网络、通过线缆间接连接的精妙容器、背包和非堆叠升级尚不在此次支持范围；具体条件见玩家指南。\n\n## 卷与访问器\n- 删除空卷时先记录删除意图，避免旧的异步写入在进程异常退出后使卷重新出现；名称无效的删除标记会被隔离。\n- 修复潜行右键访问器时仍可能打开界面的问题，为手持物品交互放行。\n- 修复外部绑定、卷列表或升级材料变化后，访问器界面可能不能及时刷新的问题。\n- 每位玩家最多创建 64 个卷，服务器可配置更低的上限。旧配置中的 0 会调整为 64；已有超额卷保留，可用命令管理。"
+		},
+		{
 			"tag": "v1.2.2",
 			"published": "2026-10-05T06:36:05Z",
 			"prerelease": false,
@@ -18,7 +165,7 @@
 					"name": "digital-storage-cloud-fabric-1.2.2.jar",
 					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.2/digital-storage-cloud-fabric-1.2.2.jar",
 					"size": 1165188,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "eb3c16d298f70cc484e1483d4ff3455ec4196110c7ad8d46cffd1b4228e07f0b",
 					"mods": [
@@ -155,7 +302,7 @@
 					"name": "digital-storage-cloud-fabric-1.2.1.jar",
 					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.1/digital-storage-cloud-fabric-1.2.1.jar",
 					"size": 1092468,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "6632c6d10dfbefc022841ff3e7b0e449f7f7a1f36e2150f044cdf29a66c787af",
 					"mods": [
@@ -221,7 +368,7 @@
 					"name": "digital-storage-cloud-forge-1.2.1.jar",
 					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.1/digital-storage-cloud-forge-1.2.1.jar",
 					"size": 1254270,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "a429ab3b54d197a4ade65025e3088ff983fd9a0bb90aee25880167f27638850a",
 					"mods": [
@@ -292,7 +439,7 @@
 					"name": "digital-storage-cloud-fabric-1.2.0.jar",
 					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.0/digital-storage-cloud-fabric-1.2.0.jar",
 					"size": 1058904,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "cb69f452d60834215a3edb26a2fc6cf97663be85b440ea51ba405a2fab071a57",
 					"mods": [
@@ -358,7 +505,7 @@
 					"name": "digital-storage-cloud-forge-1.2.0.jar",
 					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.0/digital-storage-cloud-forge-1.2.0.jar",
 					"size": 1217926,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "80efa6725d0cf8746073c57b5b043fcb803443cb7c21a23264ff5b1812d0ba48",
 					"mods": [
@@ -429,7 +576,7 @@
 					"name": "digital-storage-cloud-1.1.14.jar",
 					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.1.14/digital-storage-cloud-1.1.14.jar",
 					"size": 955389,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "a76044378c958bbb9703040c7e4a1b84023cd43e1d4498d407d54859b395ed97",
 					"mods": [
