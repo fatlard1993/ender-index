@@ -6,8 +6,283 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-06-17T05:57:35Z",
-	"pushed": "2026-10-27T15:29:38Z",
+	"pushed": "2026-11-07T07:35:10Z",
 	"releases": [
+		{
+			"tag": "v2.6.0-fabric-26.3-adapter.1",
+			"published": "2026-11-07T07:37:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 719993668,
+					"name": "halo-26.3-fabric-2.6.0+adapter.1.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.6.0-fabric-26.3-adapter.1/halo-26.3-fabric-2.6.0%2Badapter.1.jar",
+					"size": 861589,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "3d279245efe0cc0e9d2657c78b161ac5782c08458a214920ad7c8f519743236a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "halo",
+							"version": "2.6.0+adapter.1",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "=26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 417,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.1-fabric-26.3-adapter.1...v2.6.0-fabric-26.3-adapter.1)\n\n---\n\n- Add optional official replay integration for **Minecraft 26.3 Fabric**: ReplayMod **26.3-2.6.28** and Flashback **0.43.6** using their Minecraft 26.3 files. Reuse one core API v2 host and schema 1 recording track for equipment, startup/shutdown progress and actual scepter UI state.\n- Advance playback and export by recording source time, including speed changes. Pause and repeated views do not advance simulation; continuous playback retains inertia across covered periodic snapshots, while seeks restore phase and clear future motion.\n- Keep ReplayMod Full/Quick indexing, marker-baseline rewriting and export boundaries, plus Flashback snapshot and output-frame hooks.\n- Hide replay scepter UI by default. Opt in with the client JSON boolean `replayScepterUiEnabled=true` and restart; ESC/the close button work during playback or pause without immediate reopening. The next recorded opening or seek may restore the screen; export always hides it. Playback blocks live ownership/C2S write-back and recursive recording.\n- Preserve this platform's existing rendering/input architecture and existing definitions, saves, online packets and API v2 signatures. Players install one Halo JAR; recorder mods are optional and are not bundled.\n- Pin HaloCore to **2.6.0 / 03f84db5**, adapter revision **1**. The maintainer explicitly accepted the corresponding development build on **2026-11-07**. Behavior source/configuration hashes match that accepted build; release version and commit provenance are regenerated from the clean committed tree.\n- Formal local builds passed all **364 core tests** and **159/159 adapter tests** with no failures, errors or skips. The two targeted official-recorder ABI cases actually executed and passed. Codec, UI/config, legacy API, core boundaries, distribution and clean commit provenance checks passed. Earlier accepted development-build checks covered isolated client startup and dedicated-server client-class isolation. CI without these external recorder fixtures reports its ABI skips separately and does not replace the local ABI results.\n- Recordings do not embed resources or recover information missing from old recordings. Original gameplay physics trajectories and frame-identical results across FPS are not guaranteed. Unreported marker, multiview, Iris/LabPBR and third-party model combinations retain separate validation scope.\n- Known startup observation: the first concurrent-client run hit a native `jvm.dll / 0xc0000005` crash. The same package initialized and passed required hooks on an isolated retry; the cause remains unlocated and is not claimed fixed.\n\nRequires **Java 25** or newer and Fabric API for **Minecraft 26.3 Fabric**. Built with Fabric Loader **0.19.5** / Fabric API **0.160.6+26.3**. Install and test the two recorder mods separately.\n\nThe setting is in `config/halo-azusake/halo_mod_config.json`; only the JSON boolean `true` enables replay UI.\n\n---\n\n- 为 **Minecraft 26.3 Fabric** 接入可选官方回放兼容：ReplayMod **26.3-2.6.28** 与 Flashback **0.43.6**，使用各自对应 MC 文件。共用 core API v2 宿主和 schema 1 轨道，记录佩戴、启动／关闭进度及权杖实际开关状态。\n- 普通回放和导出按录像源时间推进，随倍速变化；暂停和重复视角不额外推进。连续经过已覆盖周期快照保留惯性，seek 恢复相位并清除未来运动。\n- 保留 ReplayMod Full／Quick 索引、marker 起点快照重写与导出边界，并接入 Flashback 快照和输出帧 hook。\n- 默认隐藏回放权杖 UI。客户端 JSON 布尔配置 `replayScepterUiEnabled=true` 并重启可显式启用；播放／暂停均可 ESC／按钮关闭，不会立即重开，下一次录制打开或 seek 可恢复显示。导出始终隐藏，回放隔离实时佩戴／C2S 写回及递归录制。\n- 保留本平台既有绘制和输入架构，旧定义、存档、在线数据包及公开 API v2 保持兼容。玩家只安装一个 Halo JAR；录制器可选且不内嵌。\n- 固定 HaloCore **2.6.0 / 03f84db5**，适配修订 **1**。维护者已于 **2026-11-07** 明确确认对应开发包测试通过；行为源码／配置哈希与该验收包一致，正式版本标识和来源信息从干净提交重新生成。\n- 正式本地构建通过 **364 项 core 测试**；适配器 **159 项中 159 项通过**，无失败、错误或跳过。两个目标官方录制器 ABI 用例均实际执行通过；codec、UI／配置、旧 API、core 边界、合包和干净提交来源检查通过。此前已验收开发包完成隔离客户端启动和专服客户端类隔离检查。云端未提供外部录制器 fixture 时的 ABI 跳过单独保留，不能替代本地实际执行结果。\n- 录像不内嵌资源，旧录像缺失的信息无法补录；不保证原游玩物理轨迹或跨 FPS 逐帧一致。未逐项报告的 marker、多视角、Iris/LabPBR 及第三方模型组合保留独立验收边界。\n\n..."
+		},
+		{
+			"tag": "v2.6.0-fabric-26.2-adapter.1",
+			"published": "2026-11-07T07:36:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 719992660,
+					"name": "halo-26.2-fabric-2.6.0+adapter.1.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.6.0-fabric-26.2-adapter.1/halo-26.2-fabric-2.6.0%2Badapter.1.jar",
+					"size": 848511,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "a6717f77641ab99c487c5611c9f5bdb917021f23447f22932e0502106dbe173c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "halo",
+							"version": "2.6.0+adapter.1",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "=26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 408,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.1-fabric-26.2-adapter.1...v2.6.0-fabric-26.2-adapter.1)\n\n---\n\n- Add optional official replay integration for **Minecraft 26.2 Fabric**: ReplayMod **26.2-2.6.28** and Flashback **0.43.6** using their Minecraft 26.2 files. Reuse one core API v2 host and schema 1 recording track for equipment, startup/shutdown progress and actual scepter UI state.\n- Advance playback and export by recording source time, including speed changes. Pause and repeated views do not advance simulation; continuous playback retains inertia across covered periodic snapshots, while seeks restore phase and clear future motion.\n- Keep ReplayMod Full/Quick indexing, marker-baseline rewriting and export boundaries, plus Flashback snapshot and output-frame hooks.\n- Hide replay scepter UI by default. Opt in with the client JSON boolean `replayScepterUiEnabled=true` and restart; ESC/the close button work during playback or pause without immediate reopening. The next recorded opening or seek may restore the screen; export always hides it. Playback blocks live ownership/C2S write-back and recursive recording.\n- Preserve this platform's existing rendering/input architecture and existing definitions, saves, online packets and API v2 signatures. Players install one Halo JAR; recorder mods are optional and are not bundled.\n- Pin HaloCore to **2.6.0 / 03f84db5**, adapter revision **1**. The maintainer explicitly accepted the corresponding development build on **2026-11-07**. Behavior source/configuration hashes match that accepted build; release version and commit provenance are regenerated from the clean committed tree.\n- Formal local builds passed all **364 core tests** and **155/155 adapter tests** with no failures, errors or skips. The two targeted official-recorder ABI cases actually executed and passed. Codec, UI/config, legacy API, core boundaries, distribution and clean commit provenance checks passed. Earlier accepted development-build checks covered isolated client startup and dedicated-server client-class isolation. CI without these external recorder fixtures reports its ABI skips separately and does not replace the local ABI results.\n- Recordings do not embed resources or recover information missing from old recordings. Original gameplay physics trajectories and frame-identical results across FPS are not guaranteed. Unreported marker, multiview, Iris/LabPBR and third-party model combinations retain separate validation scope.\n\nRequires **Java 25** or newer and Fabric API for **Minecraft 26.2 Fabric**. Built with Fabric Loader **0.19.3** / Fabric API **0.157.0+26.2**. Install and test the two recorder mods separately.\n\nThe setting is in `config/halo-azusake/halo_mod_config.json`; only the JSON boolean `true` enables replay UI.\n\n---\n\n- 为 **Minecraft 26.2 Fabric** 接入可选官方回放兼容：ReplayMod **26.2-2.6.28** 与 Flashback **0.43.6**，使用各自对应 MC 文件。共用 core API v2 宿主和 schema 1 轨道，记录佩戴、启动／关闭进度及权杖实际开关状态。\n- 普通回放和导出按录像源时间推进，随倍速变化；暂停和重复视角不额外推进。连续经过已覆盖周期快照保留惯性，seek 恢复相位并清除未来运动。\n- 保留 ReplayMod Full／Quick 索引、marker 起点快照重写与导出边界，并接入 Flashback 快照和输出帧 hook。\n- 默认隐藏回放权杖 UI。客户端 JSON 布尔配置 `replayScepterUiEnabled=true` 并重启可显式启用；播放／暂停均可 ESC／按钮关闭，不会立即重开，下一次录制打开或 seek 可恢复显示。导出始终隐藏，回放隔离实时佩戴／C2S 写回及递归录制。\n- 保留本平台既有绘制和输入架构，旧定义、存档、在线数据包及公开 API v2 保持兼容。玩家只安装一个 Halo JAR；录制器可选且不内嵌。\n- 固定 HaloCore **2.6.0 / 03f84db5**，适配修订 **1**。维护者已于 **2026-11-07** 明确确认对应开发包测试通过；行为源码／配置哈希与该验收包一致，正式版本标识和来源信息从干净提交重新生成。\n- 正式本地构建通过 **364 项 core 测试**；适配器 **155 项中 155 项通过**，无失败、错误或跳过。两个目标官方录制器 ABI 用例均实际执行通过；codec、UI／配置、旧 API、core 边界、合包和干净提交来源检查通过。此前已验收开发包完成隔离客户端启动和专服客户端类隔离检查。云端未提供外部录制器 fixture 时的 ABI 跳过单独保留，不能替代本地实际执行结果。\n- 录像不内嵌资源，旧录像缺失的信息无法补录；不保证原游玩物理轨迹或跨 FPS 逐帧一致。未逐项报告的 marker、多视角、Iris/LabPBR 及第三方模型组合保留独立验收边界。\n\n需要 **Java 25** 或更高版本，以及适用于 **Minecraft 26.2 Fabric** 的 Fabric API。构建使用 Fabric Loader **0.19.3** / Fabric API **0.157.0+26.2**。 两个录制器分开安装与测试。\n\n配置路径为 `config/halo-azusake/halo_mod_config.json`，只有 JSON 布尔值 `true` 启用回放 UI。\n\n\n..."
+		},
+		{
+			"tag": "v2.6.0-fabric-26.1-adapter.1",
+			"published": "2026-11-07T07:36:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 719992594,
+					"name": "halo-26.1.2-fabric-2.6.0+adapter.1.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.6.0-fabric-26.1-adapter.1/halo-26.1.2-fabric-2.6.0%2Badapter.1.jar",
+					"size": 847252,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "00da6ef64bb25ddcfb6db7688b87f38487c7b40089f8770e681919e52a17803e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "halo",
+							"version": "2.6.0+adapter.1",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": ">=26.1 <26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 407,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.1-fabric-26.1-adapter.1...v2.6.0-fabric-26.1-adapter.1)\n\n---\n\n- Add optional official replay integration for **Minecraft 26.1.2 Fabric**: ReplayMod **26.1-2.6.28** and Flashback **0.43.3** using their Minecraft 26.1.2 files. Reuse one core API v2 host and schema 1 recording track for equipment, startup/shutdown progress and actual scepter UI state.\n- Advance playback and export by recording source time, including speed changes. Pause and repeated views do not advance simulation; continuous playback retains inertia across covered periodic snapshots, while seeks restore phase and clear future motion.\n- Keep ReplayMod Full/Quick indexing, marker-baseline rewriting and export boundaries, plus Flashback snapshot and output-frame hooks.\n- Hide replay scepter UI by default. Opt in with the client JSON boolean `replayScepterUiEnabled=true` and restart; ESC/the close button work during playback or pause without immediate reopening. The next recorded opening or seek may restore the screen; export always hides it. Playback blocks live ownership/C2S write-back and recursive recording.\n- Preserve this platform's existing rendering/input architecture and existing definitions, saves, online packets and API v2 signatures. Players install one Halo JAR; recorder mods are optional and are not bundled.\n- Pin HaloCore to **2.6.0 / 03f84db5**, adapter revision **1**. The maintainer explicitly accepted the corresponding development build on **2026-10-30**. Behavior source/configuration hashes match that accepted build; release version and commit provenance are regenerated from the clean committed tree.\n- Formal local builds passed all **364 core tests** and **150/150 adapter tests** with no failures, errors or skips. The two targeted official-recorder ABI cases actually executed and passed. Codec, UI/config, legacy API, core boundaries, distribution and clean commit provenance checks passed. Earlier accepted development-build checks covered isolated client startup and dedicated-server client-class isolation. CI without these external recorder fixtures reports its ABI skips separately and does not replace the local ABI results.\n- Recordings do not embed resources or recover information missing from old recordings. Original gameplay physics trajectories and frame-identical results across FPS are not guaranteed. Unreported marker, multiview, Iris/LabPBR and third-party model combinations retain separate validation scope.\n- This round's explicit in-game replay acceptance covers **26.1.2** only. The retained 26.1/26.1.1 CI matrix checks API linkage and does not extend that acceptance. The tag keeps the existing `fabric-26.1` naming format.\n\nRequires **Java 25** or newer and Fabric API for **Minecraft 26.1.2 Fabric**. Built with Fabric Loader **0.19.3** / Fabric API **0.155.3+26.1.2**. Install and test the two recorder mods separately.\n\nThe setting is in `config/halo-azusake/halo_mod_config.json`; only the JSON boolean `true` enables replay UI.\n\n---\n\n- 为 **Minecraft 26.1.2 Fabric** 接入可选官方回放兼容：ReplayMod **26.1-2.6.28** 与 Flashback **0.43.3**，使用各自对应 MC 文件。共用 core API v2 宿主和 schema 1 轨道，记录佩戴、启动／关闭进度及权杖实际开关状态。\n- 普通回放和导出按录像源时间推进，随倍速变化；暂停和重复视角不额外推进。连续经过已覆盖周期快照保留惯性，seek 恢复相位并清除未来运动。\n- 保留 ReplayMod Full／Quick 索引、marker 起点快照重写与导出边界，并接入 Flashback 快照和输出帧 hook。\n- 默认隐藏回放权杖 UI。客户端 JSON 布尔配置 `replayScepterUiEnabled=true` 并重启可显式启用；播放／暂停均可 ESC／按钮关闭，不会立即重开，下一次录制打开或 seek 可恢复显示。导出始终隐藏，回放隔离实时佩戴／C2S 写回及递归录制。\n- 保留本平台既有绘制和输入架构，旧定义、存档、在线数据包及公开 API v2 保持兼容。玩家只安装一个 Halo JAR；录制器可选且不内嵌。\n- 固定 HaloCore **2.6.0 / 03f84db5**，适配修订 **1**。维护者已于 **2026-10-30** 明确确认对应开发包测试通过；行为源码／配置哈希与该验收包一致，正式版本标识和来源信息从干净提交重新生成。\n- 正式本地构建通过 **364 项 core 测试**；适配器 **150 项中 150 项通过**，无失败、错误或跳过。两个目标官方录制器 ABI 用例均实际执行通过；codec、UI／配置、旧 API、core 边界、合包和干净提交来源检查通过。此前已验收开发包完成隔离客户端启动和专服客户端类隔离检查。云端未提供外部录制器 fixture 时的 ABI 跳过单独保留，不能替代本地实际执行结果。\n- 录像不内嵌资源，旧录像缺失的信息无法补录；不保证原游玩物理轨迹或跨 FPS 逐帧一致。未逐项报告的 marker、多视角、Iris/LabPBR 及第三方模型组合保留独立验收边界。\n\n..."
+		},
+		{
+			"tag": "v2.6.0-fabric-1.21.1-adapter.2",
+			"published": "2026-11-07T07:34:12Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 719987444,
+					"name": "halo-1.21.1-fabric-2.6.0+adapter.2.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.6.0-fabric-1.21.1-adapter.2/halo-1.21.1-fabric-2.6.0%2Badapter.2.jar",
+					"size": 877465,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "08d210e0c0de314b49cab3192d225bb81c2413a65d5e1241199d3cd257717cec",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "halo",
+							"version": "2.6.0+adapter.2",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 413,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.6.0-fabric-1.21.1-adapter.1...v2.6.0-fabric-1.21.1-adapter.2)\n\n---\n\n- Hide the replay scepter UI by default. Set the client JSON boolean `replayScepterUiEnabled` to `true` and restart to opt in; normal gameplay screens and recording of UI state are unchanged.\n- Allow ESC and the close button during both paused and running playback. A manual dismissal suppresses the current recorded UI session, including after playback resumes; the next recorded opening or a new seek epoch may restore it. Export always hides the interactive screen.\n- Keep the fix in the client adapter. HaloCore 2.6.0, API v2, replay schema 1, definitions, saves and online packets are unchanged; existing Halo replay tracks do not need to be re-recorded.\n- Pin HaloCore to **2.6.0 / 03f84db5**, adapter revision **2**. The maintainer explicitly accepted the corresponding development build on **2026-10-30**. Behavior source/configuration hashes match that accepted build; release version and commit provenance are regenerated from the clean committed tree.\n- Formal local builds passed all **364 core tests** and **146/147 adapter tests**; the one external YSM-fixture signature test was skipped because its fixture was not supplied. The two targeted official-recorder ABI cases actually executed and passed. Codec, UI/config, legacy API, core boundaries, distribution and clean commit provenance checks passed. Earlier accepted development-build checks covered isolated client startup and dedicated-server client-class isolation. CI without these external recorder fixtures reports its ABI skips separately and does not replace the local ABI results.\n- Recordings do not embed resources or recover information missing from old recordings. Original gameplay physics trajectories and frame-identical results across FPS are not guaranteed. Unreported marker, multiview, Iris/LabPBR and third-party model combinations retain separate validation scope.\n\nRequires **Java 21** or newer and Fabric API for **Minecraft 1.21.1 Fabric**. Built with Fabric Loader **0.16.14** / Fabric API **0.116.15+1.21.1**. The accepted isolated production startup used Loader 0.19.3. Install and test the two recorder mods separately.\n\nThe setting is in `config/halo-azusake/halo_mod_config.json`; only the JSON boolean `true` enables replay UI.\n\n---\n\n- 默认隐藏回放权杖 UI。可将客户端 JSON 布尔配置 `replayScepterUiEnabled` 设为 `true` 后重启启用；普通游玩界面和 UI 状态录制保持原行为。\n- 播放和暂停时都允许 ESC／关闭按钮。手动关闭会抑制当前录制 UI 会话，恢复播放不会强制重开；下一次录制的打开事件或 seek 新 epoch 可恢复显示。导出始终隐藏交互界面。\n- 修复位于客户端适配层。HaloCore 2.6.0、API v2、录像 schema 1、定义、存档和在线数据包均不变；已有 Halo 录像轨道无需重录。\n- 固定 HaloCore **2.6.0 / 03f84db5**，适配修订 **2**。维护者已于 **2026-10-30** 明确确认对应开发包测试通过；行为源码／配置哈希与该验收包一致，正式版本标识和来源信息从干净提交重新生成。\n- 正式本地构建通过 **364 项 core 测试**；适配器 **147 项中 146 项通过**，仅 1 项未提供外部 YSM 测试包的签名检查跳过。两个目标官方录制器 ABI 用例均实际执行通过；codec、UI／配置、旧 API、core 边界、合包和干净提交来源检查通过。此前已验收开发包完成隔离客户端启动和专服客户端类隔离检查。云端未提供外部录制器 fixture 时的 ABI 跳过单独保留，不能替代本地实际执行结果。\n- 录像不内嵌资源，旧录像缺失的信息无法补录；不保证原游玩物理轨迹或跨 FPS 逐帧一致。未逐项报告的 marker、多视角、Iris/LabPBR 及第三方模型组合保留独立验收边界。\n\n需要 **Java 21** 或更高版本，以及适用于 **Minecraft 1.21.1 Fabric** 的 Fabric API。构建使用 Fabric Loader **0.16.14** / Fabric API **0.116.15+1.21.1**。 已验收开发包的隔离成品启动使用 Loader 0.19.3。 两个录制器分开安装与测试。\n\n配置路径为 `config/halo-azusake/halo_mod_config.json`，只有 JSON 布尔值 `true` 启用回放 UI。\n\nHalo commit: `2074bb168d1b7d921455ac5083e241aba533c5ed`. Core commit: `03f84db58dc677f405796b422a8897fcf556bda1`."
+		},
+		{
+			"tag": "v2.6.0-fabric-1.20.1-adapter.2",
+			"published": "2026-11-07T07:32:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 719983609,
+					"name": "halo-1.20.1-fabric-2.6.0+adapter.2.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.6.0-fabric-1.20.1-adapter.2/halo-1.20.1-fabric-2.6.0%2Badapter.2.jar",
+					"size": 836281,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "45c42fa5b70df1d6442b6c3542904b0e7f803eb75e112f1112604c97adf9f087",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "halo",
+							"version": "2.6.0+adapter.2",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 389,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.1-fabric-1.20.1-adapter.1...v2.6.0-fabric-1.20.1-adapter.2)\n\n---\n\n- Add optional official replay integration for **Minecraft 1.20.1 Fabric**: ReplayMod **1.20.1-2.6.28**; also check the official 1.20.1-2.6.23 file. Reuse one core API v2 host and schema 1 recording track for equipment, startup/shutdown progress and actual scepter UI state.\n- Advance playback and export by recording source time, including speed changes. Pause and repeated views do not advance simulation; continuous playback retains inertia across covered periodic snapshots, while seeks restore phase and clear future motion.\n- Keep ReplayMod Full/Quick indexing, marker-baseline rewriting and export boundaries.\n- Hide replay scepter UI by default. Opt in with the client JSON boolean `replayScepterUiEnabled=true` and restart; ESC/the close button work during playback or pause without immediate reopening. The next recorded opening or seek may restore the screen; export always hides it. Playback blocks live ownership/C2S write-back and recursive recording.\n- Preserve this platform's existing rendering/input architecture and existing definitions, saves, online packets and API v2 signatures. Players install one Halo JAR; recorder mods are optional and are not bundled.\n- There is no official Flashback release for this platform; Flashback support is not claimed.\n- Pin HaloCore to **2.6.0 / 03f84db5**, adapter revision **2**. The maintainer explicitly accepted the corresponding development build on **2026-10-30**. Behavior source/configuration hashes match that accepted build; release version and commit provenance are regenerated from the clean committed tree.\n- Formal local builds passed all **364 core tests** and **145/146 adapter tests**; the one external YSM-fixture signature test was skipped because its fixture was not supplied. The two targeted official-recorder ABI cases actually executed and passed. Codec, UI/config, legacy API, core boundaries, distribution and clean commit provenance checks passed. Earlier accepted development-build checks covered isolated client startup and dedicated-server client-class isolation. CI without these external recorder fixtures reports its ABI skips separately and does not replace the local ABI results.\n- Recordings do not embed resources or recover information missing from old recordings. Original gameplay physics trajectories and frame-identical results across FPS are not guaranteed. Unreported marker, multiview, Iris/LabPBR and third-party model combinations retain separate validation scope.\n\nRequires **Java 17** or newer and Fabric API for **Minecraft 1.20.1 Fabric**. Built with Fabric Loader **0.15.11** / Fabric API **0.92.0+1.20.1**. The accepted isolated production startup used Loader 0.19.3 / Fabric API 0.92.11+1.20.1.\n\nThe setting is in `config/halo-azusake/halo_mod_config.json`; only the JSON boolean `true` enables replay UI.\n\n---\n\n- 为 **Minecraft 1.20.1 Fabric** 接入可选官方回放兼容：ReplayMod **1.20.1-2.6.28**，另检查官方 1.20.1-2.6.23 文件。共用 core API v2 宿主和 schema 1 轨道，记录佩戴、启动／关闭进度及权杖实际开关状态。\n- 普通回放和导出按录像源时间推进，随倍速变化；暂停和重复视角不额外推进。连续经过已覆盖周期快照保留惯性，seek 恢复相位并清除未来运动。\n- 保留 ReplayMod Full／Quick 索引、marker 起点快照重写与导出边界。\n- 默认隐藏回放权杖 UI。客户端 JSON 布尔配置 `replayScepterUiEnabled=true` 并重启可显式启用；播放／暂停均可 ESC／按钮关闭，不会立即重开，下一次录制打开或 seek 可恢复显示。导出始终隐藏，回放隔离实时佩戴／C2S 写回及递归录制。\n- 保留本平台既有绘制和输入架构，旧定义、存档、在线数据包及公开 API v2 保持兼容。玩家只安装一个 Halo JAR；录制器可选且不内嵌。\n- 本平台没有 Flashback 官方发布交集，不声明 Flashback 支持。\n- 固定 HaloCore **2.6.0 / 03f84db5**，适配修订 **2**。维护者已于 **2026-10-30** 明确确认对应开发包测试通过；行为源码／配置哈希与该验收包一致，正式版本标识和来源信息从干净提交重新生成。\n- 正式本地构建通过 **364 项 core 测试**；适配器 **146 项中 145 项通过**，仅 1 项未提供外部 YSM 测试包的签名检查跳过。两个目标官方录制器 ABI 用例均实际执行通过；codec、UI／配置、旧 API、core 边界、合包和干净提交来源检查通过。此前已验收开发包完成隔离客户端启动和专服客户端类隔离检查。云端未提供外部录制器 fixture 时的 ABI 跳过单独保留，不能替代本地实际执行结果。\n- 录像不内嵌资源，旧录像缺失的信息无法补录；不保证原游玩物理轨迹或跨 FPS 逐帧一致。未逐项报告的 marker、多视角、Iris/LabPBR 及第三方模型组合保留独立验收边界。\n\n\n..."
+		},
 		{
 			"tag": "v2.6.0-fabric-1.21.1-adapter.1",
 			"published": "2026-10-27T15:25:09Z",
