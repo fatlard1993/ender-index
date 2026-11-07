@@ -9,6 +9,153 @@
 	"pushed": "2026-11-07T18:57:19Z",
 	"releases": [
 		{
+			"tag": "v1.2.4",
+			"published": "2026-11-07T19:01:13Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 721637397,
+					"name": "digital-storage-cloud-fabric-1.2.4.jar",
+					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.4/digital-storage-cloud-fabric-1.2.4.jar",
+					"size": 1280887,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "94fda1468f8b5cd063bf60c27bae3061b169ef6f4a658945b7a3b606156cc13d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "digitalstorage",
+							"version": "1.2.4",
+							"name": "Digital Storage Cloud",
+							"description": "Player-owned storage volumes exposed through lightweight, linkable accessors.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java",
+								"toms_storage"
+							],
+							"provides": []
+						}
+					],
+					"icon": "9dae24b93926f7739e4df014d9c561303470f0ed1ffe06f31d0b467459a89675.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Digital Storage Cloud"
+							],
+							"block": [
+								"Advanced Inventory Hopper",
+								"Digital Storage Accessor"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 512,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/kehai/digitalstorage/internal/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"dev/kehai/digitalstorage/optimization/SophisticatedEndpointGuard$1.class": [
+									"extends java/lang/ClassLoader"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 721637522,
+					"name": "digital-storage-cloud-forge-1.2.4.jar",
+					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.4/digital-storage-cloud-forge-1.2.4.jar",
+					"size": 1451379,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "97c4506a8fc237f079b1b0f275b61aa00a195c06f18e90683f80a9b9ca11b4aa",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "digitalstorage",
+							"version": "1.2.4",
+							"name": "汤姆的简易存储：云上加仓",
+							"description": "Player-owned storage volumes exposed through lightweight, linkable accessors.",
+							"minecraft": "[1.20.1,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"toms_storage"
+							]
+						}
+					],
+					"icon": "9dae24b93926f7739e4df014d9c561303470f0ed1ffe06f31d0b467459a89675.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Digital Storage Cloud"
+							],
+							"block": [
+								"Advanced Inventory Hopper",
+								"Digital Storage Accessor"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 584,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/kehai/digitalstorage/internal/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"dev/kehai/digitalstorage/optimization/SophisticatedEndpointGuard$1.class": [
+									"extends java/lang/ClassLoader"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 1.2.4 — 数据安全与高级漏斗修复\n\n本次更新改进存储数据保护，修复高级漏斗直连访问器和 Fabric 批量移出到精妙存储容器的问题。\n\n## 数据安全与持久化\n\n- 存储改用单一 SavedData 文件和后台快照；首次升级时会尝试迁移旧 `digitalstorage/` 数据，并保留旧目录备份。\n- 暂时无法识别的物品数据会保留；损坏或来自更高版本的数据受到保护，避免被空数据覆盖。卷暂时不可用时，访问器保留绑定。\n- 所有账号与卷共用的物品变体数据预算默认上限为 64 MiB。已有超限数据仍可读取、提取；恢复到限额前拒绝增加数据。\n- 已挂载的卷不能删除；服务器配置允许时可以创建超过 64 个卷。\n\n## 漏斗\n\n- 修复高级漏斗直接向绑定数字卷的访问器输入物品时不工作的情况。新放置的高级漏斗使用 DSC 自有方块实体，旧世界中的原漏斗继续兼容；普通 Tom 漏斗行为不变。\n\n## Fabric 批量移出\n\n- 修复批量移出到符合条件的精妙存储容器时，有空槽却提示空间不足、需要重复点击的问题。一次开始移出可填充可插入的空槽。\n- 此项修复仅针对 Fabric；Forge 是否受同类问题影响尚未验证。"
+		},
+		{
 			"tag": "v1.2.3",
 			"published": "2026-11-06T15:26:38Z",
 			"prerelease": false,
@@ -18,7 +165,7 @@
 					"name": "digital-storage-cloud-fabric-1.2.3.jar",
 					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.3/digital-storage-cloud-fabric-1.2.3.jar",
 					"size": 1186074,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "e8a3490e2b9f6d72a41ccdd743596c1e4cb3bdfc45c76b5ad961a4a0b85f8cc1",
 					"mods": [
@@ -89,7 +236,7 @@
 					"name": "digital-storage-cloud-forge-1.2.3.jar",
 					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.3/digital-storage-cloud-forge-1.2.3.jar",
 					"size": 1350624,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "cda8295c18e3013bb08c1d8771de82025598b039f446dfa3a8224771672adbee",
 					"mods": [
