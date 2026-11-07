@@ -6,8 +6,60 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2025-12-03T15:29:44Z",
-	"pushed": "2026-11-05T16:32:04Z",
+	"pushed": "2026-11-07T10:53:37Z",
 	"releases": [
+		{
+			"tag": "1.4.2",
+			"published": "2026-11-07T10:53:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 720426563,
+					"name": "brntalk-mc1.21.1-1.4.2.jar",
+					"url": "https://github.com/JasdewStarfield/BRNTalk/releases/download/1.4.2/brntalk-mc1.21.1-1.4.2.jar",
+					"size": 271945,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "fd927e43819f45865e8118a9674786e059f9f68cc8702cf1e0fc1d8bf3f1f3e0",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "brntalk",
+							"version": "1.4.2",
+							"name": "BRNTalk",
+							"description": "A simple dialogue / talk UI mod for Minecraft.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"cloth_config",
+								"ftblibrary",
+								"jei",
+								"brnquest"
+							]
+						}
+					],
+					"icon": "da2ad4b73629636bfba71d534fd524071a2f36dbc3c79466f06909a634d68d4d.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 134,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 中文\n\n> 本次更新适用于 Minecraft 1.21.1 NeoForge。网络协议升级至 2，客户端与服务端需要同步更新。\n\n### 改动\n\n- **对话选择**：按钮绑定显示时的会话和消息位置，拒绝重复或过期请求，避免误答下一题或重复执行剧情动作。\n- **剧本重载**：全部候选剧本通过校验后统一生效；语法错误、断链和重复 ID 会保留旧剧本及进行中的对话，合法删除仍可生效。\n- **历史同步**：全量历史、新对话和追加消息按最多 32 KiB 分片传输，收齐后更新界面；单次传输上限为 64 MiB，编码失败会提示并保留存档，超时或断线时清理未完成传输。\n- **客户端状态**：退出服务器时清理对话状态；全量同步替换会话后清理旧已读请求，避免旧请求影响新会话。\n\n### 技术性更改\n\n- **对话操作**：统一启动、选择、继续和清除流程，集中协调存档、消息事件、完成判定与客户端同步；操作结果使用独立消息快照。\n- **运行数据与恢复**：分离剧本仓库、玩家线程存储与历史恢复流程，合并登录时重复的线程重建和全量同步，并补齐玩家退出、服务器停止时的清理。程序化剧本注册也会校验完整候选集合，无效候选抛出 `IllegalArgumentException` 并保留原活动集合。\n- **界面职责**：分离选项区域和已读请求协调，使按钮布局、点击上下文及已读确认可以独立维护。\n\n## English\n\n> Minecraft 1.21.1 NeoForge only. Network protocol 2 requires both clients and servers to update.\n\n### Changed\n\n- **Dialogue choices**: bind buttons to the session and message position displayed when they were created. Reject duplicate or stale requests to prevent answering the next question or repeating dialogue actions.\n- **Script reloads**: activate the full candidate set only after validation succeeds. Syntax errors, broken links and duplicate IDs retain the previous scripts and live conversations; intentional deletion still applies.\n- **History synchronization**: transfer full history, new threads and appended messages in frames of at most 32 KiB, applying only complete transfers. Each transfer is limited to 64 MiB; encoding failures display a message and preserve saved history, while timeouts and disconnects clear incomplete transfers.\n- **Client state**: clear dialogue state when leaving a server and discard pending read requests from old sessions after full synchronization replaces them.\n\n### Technical Changes\n\n- **Conversation operations**: centralize start, choice, resume and clear flows, including persistence, message events, completion checks and client synchronization. Operation results use independent message snapshots.\n- **Runtime data and recovery**: separate the script repository, player thread storage and history restoration. Consolidate duplicate login rebuilds and full synchronization, and clean up runtime state on player logout and server shutdown. Programmatic script registration also validates the complete candidate set; invalid candidates throw `IllegalArgumentException` and retain the active set.\n- **UI responsibilities**: separate the choice area and read-request coordinator so button layout, click context and read acknowledgements can be maintained independently."
+		},
 		{
 			"tag": "1.4.1",
 			"published": "2026-10-08T13:05:28Z",
@@ -18,7 +70,7 @@
 					"name": "brntalk-mc1.20.1-1.4.1.jar",
 					"url": "https://github.com/JasdewStarfield/BRNTalk/releases/download/1.4.1/brntalk-mc1.20.1-1.4.1.jar",
 					"size": 206314,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "d9f9edf95a38f6358c7a3d423d2a60cec06be19c0cdbbb3ded3b6534f5434b87",
 					"mods": [
@@ -61,7 +113,7 @@
 					"name": "brntalk-mc1.21.1-1.4.1.jar",
 					"url": "https://github.com/JasdewStarfield/BRNTalk/releases/download/1.4.1/brntalk-mc1.21.1-1.4.1.jar",
 					"size": 243318,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "0f999d2d7d8ef3858a49d5992ba153b497e20bdd0f123a6da0702d60dac0829e",
 					"mods": [
@@ -113,7 +165,7 @@
 					"name": "brntalk-mc1.20.1-1.4.0.jar",
 					"url": "https://github.com/JasdewStarfield/BRNTalk/releases/download/1.4.0/brntalk-mc1.20.1-1.4.0.jar",
 					"size": 203972,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "5b47e0a4db7ee34543463dadaa527a36ee6e32733fd35d23b5ca85410d81ebf2",
 					"mods": [
@@ -156,7 +208,7 @@
 					"name": "brntalk-mc1.21.1-1.4.0.jar",
 					"url": "https://github.com/JasdewStarfield/BRNTalk/releases/download/1.4.0/brntalk-mc1.21.1-1.4.0.jar",
 					"size": 203079,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "df9ff4bb8b86b27c798010d954c4c9135ee89814b2a2c3af3bfb621581c2c6ba",
 					"mods": [
@@ -207,7 +259,7 @@
 					"name": "brntalk-mc1.20.1-1.3.1.jar",
 					"url": "https://github.com/JasdewStarfield/BRNTalk/releases/download/1.3.1/brntalk-mc1.20.1-1.3.1.jar",
 					"size": 202802,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "d3e4e08f62b07f8a9d211a95f0b91a53eee4056c82ef9fa9e55ee5519cfdeba6",
 					"mods": [
@@ -250,7 +302,7 @@
 					"name": "brntalk-mc1.21.1-1.3.1.jar",
 					"url": "https://github.com/JasdewStarfield/BRNTalk/releases/download/1.3.1/brntalk-mc1.21.1-1.3.1.jar",
 					"size": 201881,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "f635fd439e2bb93859ba592aa06cd8dcce0504288bbfdc38141a8356eb031b38",
 					"mods": [
@@ -301,7 +353,7 @@
 					"name": "brntalk-mc1.20.1-1.3.0.jar",
 					"url": "https://github.com/JasdewStarfield/BRNTalk/releases/download/1.3.0/brntalk-mc1.20.1-1.3.0.jar",
 					"size": 202456,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "68423ca78084334ffda8d4f128adbc4364fe07c3a44af687d8e7ffe501991c4d",
 					"mods": [
@@ -344,7 +396,7 @@
 					"name": "brntalk-mc1.21.1-1.3.0.jar",
 					"url": "https://github.com/JasdewStarfield/BRNTalk/releases/download/1.3.0/brntalk-mc1.21.1-1.3.0.jar",
 					"size": 201538,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "83917869fd90eb615fbdf918257a510fffd36aaf3702c7ba72cb51f3b4860d33",
 					"mods": [
