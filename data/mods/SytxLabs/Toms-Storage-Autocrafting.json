@@ -5,8 +5,97 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-11-01T16:31:00Z",
-	"pushed": "2026-11-03T20:19:14Z",
+	"pushed": "2026-11-07T22:36:21Z",
 	"releases": [
+		{
+			"tag": "0.3.0",
+			"published": "2026-11-07T22:36:22Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 722161716,
+					"name": "tsautocraft-fabric-26.3-0.3.0.jar",
+					"url": "https://github.com/SytxLabs/Toms-Storage-Autocrafting/releases/download/0.3.0/tsautocraft-fabric-26.3-0.3.0.jar",
+					"size": 610529,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "9bb0934a98e7f71f011254529165a770120d76f3765b062f890ccfc4ffa87efa",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "tsautocraft",
+							"version": "0.3.0",
+							"name": "Tom's Storage Autocrafting",
+							"description": "Unofficial AE2-style autocrafting for Tom's Simple Storage: Pattern Terminal, Pattern Provider, Autocrafting Terminal, Requester, Exporter, Importer and Crafting Emitter. Request crafts right in Tom's terminals, with job priorities, fluids via containers, upgrades, Jade and an API for other mods.",
+							"minecraft": ">=26.3 <26.4",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java",
+								"toms_storage"
+							],
+							"provides": [],
+							"suggests": [
+								"jei",
+								"roughlyenoughitems",
+								"jade"
+							]
+						}
+					],
+					"icon": "25f3634c9d71e1f7e048bbe01b9138c525e257baea0d29362ebaa1c14aa50ef9.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Tom's Storage Autocrafting"
+							],
+							"block": [
+								"Autocrafting Terminal",
+								"Crafting Emitter",
+								"Directional Crafting Emitter",
+								"Exporter",
+								"Framed Directional Crafting Emitter",
+								"Framed Exporter",
+								"Framed Importer",
+								"Framed Pattern Provider Connector",
+								"Importer",
+								"Level Maintainer",
+								"Pattern Access Terminal",
+								"Pattern Provider",
+								"Pattern Provider Connector",
+								"Pattern Terminal",
+								"Requester"
+							],
+							"item": [
+								"Autocrafting Guide",
+								"Blank Pattern",
+								"Capacity Upgrade",
+								"Crafting Upgrade",
+								"Encoded Pattern",
+								"Redstone Upgrade",
+								"Speed Upgrade",
+								"Stack Upgrade"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 199,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 0.3.0\n\n## Please note when updating\n\n- The **Pattern Provider GUI** is a bit taller (new row for lock mode and priority).\n- A full-block Pattern Provider no longer supplies inventories that belong to the storage network itself.\n- **Dispensers and droppers** now get a built-in machine profile: blocking on, a redstone pulse after every delivery and\n  10 ticks between deliveries. Override it with your own profile in a datapack if needed.\n\n## New\n\n### Blocks & items\n- **Pattern Access Terminal**: all Pattern Providers of the network in one place. Insert, take out and swap patterns\n  without walking to each provider; search by provider name or pattern output, hide full providers. Works wireless.\n- **Level Maintainer**: 12 entries with item, threshold and batch size (\"craft 64 when below 32\"). Speed Upgrade for\n  faster checks, Redstone Upgrade to pause new jobs.\n- **Autocrafting Guide**: in-game handbook (book + Blank Pattern) with a page for every block, pattern mode and feature,\n  with setup pictures.\n\n### Patterns\n- **Brewing patterns**: the Pattern Terminal grid turns into a brewing stand (fuel, reagent, 1-3 bottles that may differ),\n  using the (data-driven) brewing recipes, so mod and datapack recipes work too. The fuel is only delivered when the stand\n  runs out (not counted per brew). JEI/REI \"+\" encodes a full stand. The Importer waits until a brewing stand is done.\n- **Amount multiplier** in the Pattern Terminal for processing and fluid patterns: x2, /2, x10, /10.\n\n### Pattern Provider\n- **Lock mode**: off, *until the result is back* (per side on the full block, with a safety timeout), or only with /\n  without a redstone signal.\n- **Priority**: providers with a higher priority get jobs first when several have the same pattern.\n- Stack Upgrades now work with the `direct` and `redstone` crafter triggers: every stacked set gets its own trigger.\n\n### Jobs\n- **Craft missing** from JEI/REI: in Tom's Crafting Terminal the \"+\" tooltip shows which missing ingredients can be\n  crafted; Ctrl + click starts jobs for them.\n- **Job history** in the Autocrafting Terminal (tabs Running / History, size configurable).\n- **Estimated time left** in the job tooltip.\n- **Recipe tree** in the request preview (toggle between list and tree, lines expand and collapse).\n- **Return inputs on cancel**: ingredients of a cancelled job that still sit unprocessed in a crafter, furnace or\n  machine go back into storage (config `returnInputsOnCancel`).\n\n### Datapacks\n- **Machine profiles**: `routes` send different inputs through different sides (by item id, `#tag`, `\"fuel\": \"cooking\" |\n  \"brewing\" | \"any\"` or position in the pattern), `cooldown` pauses between two deliveries (e.g. a dispenser filling buckets: the water source must flow back).\n- Built-in profiles for **furnace / blast furnace / smoker** (first input on top, fuel from the side) and the **brewing\n  stand** (bottles and fuel from the side, reagent on top), so processing patterns may include the fuel.\n- Built-in profile for **dispenser / dropper**: redstone pulse after every delivery, so water bottles/buckets can be automated.\n\n### Config\n- `providerLockTimeoutSeconds`, `returnInputsOnCancel`, `jobHistorySize`, `maintainerCheckTicks`, `maintainerReplanSeconds`.\n\n### For mod developers\n- `PatternMode.gridSlotEnabled`, `PatternMode.optionalInput` (inputs delivered when needed, not planned per craft),\n  `PatternMode.DispatchContext.undoPull`, new default methods on `CraftingProvider` (priority, lock/result callbacks,\n  `returnInputs`). Existing implementations keep working.\n\n## Fixed\n\n- Items could get lost when pulled ingredients did not fit back into a full network.\n- With Stack Upgrades, a partial delivery could be delivered twice (overproduction).\n- A delivery that failed after pulling still counted as a craft; fluid patterns could lose the fluid in that case.\n- Jobs waiting for results could finish too early after a chunk reload or server restart.\n\n..."
+		},
 		{
 			"tag": "0.2.0",
 			"published": "2026-11-02T21:36:20Z",
@@ -17,7 +106,7 @@
 					"name": "tsautocraft-fabric-26.3-0.2.0.jar",
 					"url": "https://github.com/SytxLabs/Toms-Storage-Autocrafting/releases/download/0.2.0/tsautocraft-fabric-26.3-0.2.0.jar",
 					"size": 449923,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "da05de10ed8df021cb4cd47a5d96eadc2b2d39b89f447496f0418568f88a2826",
 					"mods": [
