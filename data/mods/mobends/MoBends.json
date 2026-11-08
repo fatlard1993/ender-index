@@ -6,8 +6,61 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2017-12-03T10:23:21Z",
-	"pushed": "2026-11-08T17:14:35Z",
+	"pushed": "2026-11-08T18:15:42Z",
 	"releases": [
+		{
+			"tag": "v2.0.0-alpha.2-1.12.2",
+			"published": "2026-11-08T17:34:41Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 724681903,
+					"name": "MoBends_1.12.2-2.0.0-alpha.2.jar",
+					"url": "https://github.com/mobends/MoBends/releases/download/v2.0.0-alpha.2-1.12.2/MoBends_1.12.2-2.0.0-alpha.2.jar",
+					"size": 1577926,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "0da086b2fdc4677df8f41fb5b81c2f506284a303c7869ccb246232b6af5bfa0b",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 608,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"goblinbob/mobends/core/client/gui/WebLink.class": [
+									"java/net/URL.openConnection"
+								],
+								"goblinbob/mobends/core/asset/AssetsModule.class": [
+									"java/net/URL.openConnection"
+								],
+								"goblinbob/mobends/core/util/ConnectionHelper.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"raw.githubusercontent.com": [
+								"goblinbob/mobends/core/client/gui/WebLink.class"
+							],
+							"mobends.com": [
+								"goblinbob/mobends/core/client/gui/WebLink.class",
+								"goblinbob/mobends/core/ModStatics.class",
+								"goblinbob/mobends/core/env/EnvironmentModule.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n\n- Skeletons stand on their feet, as players and zombies do: standing still, the feet stay planted\n  and they turn by stepping, quickly and lightly, and stop with their feet where the walk left\n  them. Walking, strafing, attacking and aiming a bow pose the legs as before.\n- Settings has an _Options_ button for mobs with options: settings their animation offers, such as\n  the player's spin attack. Mods and resource packs can give their models, types and extensions\n  options of their own (`options` in the file), which their animators read as `option.<name>`.\n- Animators can scale a model's parts with the `core:scale` driver (`x`, `y`, `z`, or `all` for\n  every axis): it multiplies the part's scale by default, or replaces it with `\"@space\":\n  \"override\"`, and transitions crossfade it. What the part carries (child parts, a held item,\n  armor) is scaled with it.\n- Servers that limit resource packs (`LIMITED`) keep a resource pack's scaling within\n  `maxPartScale` (default 1.5) of the trusted animation's, up or down, so a pack can't hide parts\n  or blow them up.\n\n### Changed\n\n- Animation layers that switch on and off (sneaking, holding a torch, a skeleton strafing, a zombie\n  pigman's slash and stance) fade in and out instead of jumping, and start their animation over\n  when they come back. Animators set how long with a layer's `@fade` (ticks).\n- A transition that interrupts another no longer freezes the animation fading out: it keeps\n  moving (looking around, walking) until it has faded. A node that starts over (a transition to\n  itself with a duration) fades from where it was instead of jumping.\n- An animation value that isn't a number (a division by zero in a resource pack's animator, say)\n  puts the part at rest instead of freezing it where it was.\n- Poses are declarative: a part's rotation, position or scale that no animation writes in a frame\n  goes back to rest, instead of staying where an earlier node left it, and transitions fade such\n  parts to rest (or to the layers below). A scaled part no longer stays scaled after its node, a\n  player's riding dip no longer sticks once they slow down, and the spider no longer keeps its\n  body's sway while crawling or dying. The spider looks around while it jumps.\n- The Mo' Bends menu is more compact: a smaller title, with Link account under it and the\n  sections (Settings, Customize, Supporters) beside it as slim buttons. Hovering one sends a glint\n  through it, which leaves the section's color behind and brings in its icon (Settings has a gear\n  now). More Settings moved into Settings.\n- The heads of players, zombies and skeletons no longer turn with the body: they look where the\n  creature looks however its body bends or sways, walking, sprinting, sneaking, riding or aiming a\n  bow. The poses that turn the head on purpose still do (the sword's stance and slashes, the\n  punches and the guard, eating, falling, gliding), the stumbling zombie's head still hangs with its\n  body, and a player climbing over a ledge still bows their head with it. The Legacy Mo' Bends\n  pack keeps the old heads, which turn with the body.\n- Model definitions can say a bone doesn't turn with its parent (`\"inheritRotation\": false`): it\n  stays where its parent puts it, but its rotation is relative to the whole model.\n- The Mo' Bends menu has a Refresh button in its bottom-left corner, in place of the F10 key: it\n  reloads the animations and fetches the account, assets and supporter accessories again.\n- The Config button for Mo' Bends in Forge's Mods list opens the Mo' Bends menu, so it can be\n  reached from the title screen. Forge's screen for the trails and item options is behind the\n  menu's new More Settings button.\n- _Perform Spin Attack_ moved from Forge's mod options to the player's options in the Mo' Bends\n  menu. If you had turned it off, it stays off.\n- Only players end the sword combo with a spin attack; skeletons repeat the four slashes.\n\n..."
+		},
 		{
 			"tag": "v2.0.0-alpha.1-1.12.2",
 			"published": "2026-11-07T13:46:29Z",
@@ -18,7 +71,7 @@
 					"name": "MoBends_1.12.2-2.0.0-alpha.1.jar",
 					"url": "https://github.com/mobends/MoBends/releases/download/v2.0.0-alpha.1-1.12.2/MoBends_1.12.2-2.0.0-alpha.1.jar",
 					"size": 1519504,
-					"downloads": 1,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "406b57d0a797b70f6534c90a39013b9756c1a512bd42585922eb3d4e1126b9d6",
 					"mods": [],
