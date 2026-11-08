@@ -5,8 +5,60 @@
 	"archived": false,
 	"license": "Apache-2.0",
 	"created": "2025-03-08T00:44:05Z",
-	"pushed": "2026-11-08T14:48:15Z",
+	"pushed": "2026-11-08T15:22:14Z",
 	"releases": [
+		{
+			"tag": "v4.10.0+26.1.2",
+			"published": "2026-11-08T15:24:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 724331589,
+					"name": "block-entity-tooltip-4.10.0.jar",
+					"url": "https://github.com/TheFRedFox/mc-block-entity-tooltip/releases/download/v4.10.0%2B26.1.2/block-entity-tooltip-4.10.0.jar",
+					"size": 77881,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "1a2a3b56e5bcaa9b32edbf0bab174b0c32ce3a51b12a5281a91e56abd6f9842e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "block-entity-tooltip",
+							"version": "4.10.0",
+							"name": "BET - Block'n'Entity Tooltip",
+							"description": "BET - Block’n’Entity Tooltip shows you the name of any block or entity you’re looking at in Minecraft, making it easy to identify what’s around you!",
+							"minecraft": "~26.1.0",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin",
+								"cloth-config",
+								"modmenu"
+							],
+							"provides": []
+						}
+					],
+					"icon": "9523727877465dd40d5ba4ed29bee41953974069a04f67eeca3b1d68f4dd4af3.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 20,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [4.10.0+26.1.2] - 2026-11-08\n\n**Compatible with Minecraft 26.1, 26.1.1, and 26.1.2**\n\n### Added\n- Configurable tooltip position (issue #26). The config screen has a\n  **Position Editor** entry that opens a live editor screen:\n  - **Preset buttons** as arrows on a 3×3 grid: top left/center/right, middle\n    left / **Below crosshair** (`·`) / middle right, bottom left /\n    **Action bar** (`▣`) / bottom right. Each button sets one of the nine\n    anchors; a frame marks the current anchor.\n  - **Anchor button** cycles through the nine anchors. The box stays in place;\n    only X/Y change to the new anchor.\n  - **Red guide lines** run from the anchor point to the box: the horizontal\n    line is X, the vertical line is Y.\n  - **X / Y inputs** set the offset in GUI pixels from the anchor, so anchor\n    plus X/Y reproduce a position exactly on another device.\n  - **Drag** the sample box anywhere. It attaches to the nearest of the nine\n    anchors.\n  - All controls sit in one compact panel in the screen half away from the\n    box, so the box never covers them.\n  - All three methods preview live. **Cancel** restores the position from\n    when the editor opened.\n  - A faint placeholder shows where vanilla action-bar messages appear.\n- The position is an anchor plus a pixel offset, like vanilla HUD elements. A\n  tooltip keeps its distance to the nearest screen edge at every GUI scale and\n  window size.\n\n### Changed\n- **Default position is now `Action bar`**: centered, 2 px above the line\n  where vanilla shows action-bar messages. This applies to all users,\n  including existing configs. The old fixed placement near the bottom-right\n  corner is gone. Pick `Bottom right` in the editor to get close to it.\n\n### Technical\n- First MINOR feature bump in the project's history (4.9.0 → 4.10.0); the\n  feature digit had been static at `9`.\n- Config fields `anchor`/`offsetX`/`offsetY` are `@ConfigEntry.Gui.Excluded`\n  (serialized, not shown as Cloth fields). Presets are not stored; the editor\n  derives them from the position. An unknown `anchor` value in the config file\n  falls back to the default instead of crashing the HUD.\n- The HUD renders from a `PositionDraft` the editor edits live, so **Done**\n  shows in-game at once. Cloth's \"Save & Quit\" commits the draft to config\n  (`FreehandEditorEntry.isEdited()`/`save()`). Cloth exposes no discard hook,\n  so a client-tick check re-seeds the draft from config when the draft differs\n  outside the config UI; a discard rolls the in-game position back too.\n- Cloth Config 26.1.x has no native button list-entry; the launcher is a\n  `TextListEntry` subclass registered via `AutoConfigClient.getGuiRegistry` +\n  `registerAnnotationProvider` on a `@FreehandEditorButton` marker field, with\n  bounds captured from `extractRenderState` so it only triggers on its own row.\n- Editor uses the MC 26.1 input/render API (`MouseButtonEvent`, `EditBox`,\n  `extractRenderState(GuiGraphicsExtractor, …)`).\n\n## [4.9.0+26.1.2] - 2026-05-15\n\n**Compatible with Minecraft 26.1, 26.1.1, and 26.1.2**\n\nBinary compatibility across the 26.1.x line verified by loading the 26.1.2-built jar on real MC 26.1 client.\n\n### Changed\n- Updated Minecraft to 26.1.2\n- Updated Fabric API to 0.149.0+26.1.2\n- Updated ModMenu to 18.0.0-beta.1 (still pre-release but graduated from alpha — TerraformersMC's v18 ladder is alpha → beta → stable; same MC support range: 26.1, 26.1.1, 26.1.2)\n- Updated Fabric Loom to 1.16.2\n- Updated Gradle to 9.5.1\n- Updated GitHub Actions: `actions/upload-artifact` v6→v7, `gradle/actions` v5→v6, `softprops/action-gh-release` v2→v3\n\n### Technical\n\n..."
+		},
 		{
 			"tag": "v4.9.0+26.1.2",
 			"published": "2026-05-15T18:43:01Z",
@@ -48,7 +100,7 @@
 						"unreadable": []
 					},
 					"icon": "9523727877465dd40d5ba4ed29bee41953974069a04f67eeca3b1d68f4dd4af3.png",
-					"downloads": 4,
+					"downloads": 5,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -99,7 +151,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 2
+					"downloads": 3
 				}
 			],
 			"notes": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [0.9.0+1.21.9] - 2025-10-04\n\n**Compatible with Minecraft 1.21.9**\n\n### Changed\n- Updated to Minecraft 1.21.9 compatibility\n- Updated Fabric API to 0.133.14+1.21.9\n- Updated ModMenu to 16.0.0-rc.1 for MC 1.21.9 compatibility\n- Updated Gradle to 8.14\n- Updated Fabric Loom to 1.11.3\n\n### Fixed\n- Fixed Entity world field access for MC 1.21.9 - changed from `world` field to `entityWorld` property (MC 1.21.9 made Entity.world field private)\n\n### Technical\n- Migrated from direct `world` field access to Kotlin property syntax `entityWorld`\n\n## [0.9.0+1.21.6] - 2025-09-07\n\n**Compatible with Minecraft 1.21.6, 1.21.7, and 1.21.8**\n\n### Changed\n- Verified and bumped Fabric API to 0.133.4+1.21.8 for MC 1.21.8 compatibility\n- Verified and bumped ModMenu to 15.0.0 for MC 1.21.8 compatibility\n- Added support for Minecraft 1.21.6+ (no new mod features, only compatibility updates)\n- Migrated from deprecated `HudLayerRegistrationCallback` to new `HudElementRegistry` API (required for MC 1.21.6+)\n- Updated Fabric API to 1.21.6+ compatible versions\n- Updated Fabric Loader from 0.16.10 to 0.16.14\n- Updated Cloth Config to 1.21.6+ compatible versions\n- Updated ModMenu to 1.21.6+ compatible versions\n- Updated Yarn mappings to match Minecraft version\n\n### Fixed\n- Text rendering issues with new HUD API - text now properly displays with correct ARGB color format\n- HUD element positioning changed from before chat to after crosshair for better rendering order\n\n### Technical\n- Refactored HUD rendering to use `HudElementRegistry.attachElementAfter()`\n- Fixed text color format to use full ARGB (`0xFFFFFFFF`) instead of RGB\n- Converted `LookingAtRenderer` from `LayeredDrawer.Layer` to `HudElement` interface\n\n## [0.9.0+1.21.4] - Previous Version\n\n**Compatible with Minecraft 1.21.4 and 1.21.5**\n\n### Added\n- Initial release of Block Entity Tooltip mod\n- Display block names when looking at blocks\n- Display entity names when looking at entities\n- Configuration support via Cloth Config\n- ModMenu integration for easy configuration access\n- Configurable display settings (enable/disable blocks, entities, fluids)\n- Configurable detection distance\n\n### Note\nThis version uses the older `HudLayerRegistrationCallback` API which was removed in Minecraft 1.21.6."
@@ -144,7 +196,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 1
+					"downloads": 2
 				}
 			]
 		},
@@ -188,7 +240,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 1
+					"downloads": 2
 				}
 			]
 		},
@@ -232,7 +284,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 1
+					"downloads": 2
 				}
 			],
 			"notes": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [0.9.0+1.21.9] - 2025-10-04\n\n**Compatible with Minecraft 1.21.9**\n\n### Changed\n- Updated to Minecraft 1.21.9 compatibility\n- Updated Fabric API to 0.133.14+1.21.9\n- Updated ModMenu to 16.0.0-rc.1 for MC 1.21.9 compatibility\n- Updated Gradle to 8.14\n- Updated Fabric Loom to 1.11.3\n\n### Fixed\n- Fixed Entity world field access for MC 1.21.9 - changed from `world` field to `entityWorld` property (MC 1.21.9 made Entity.world field private)\n\n### Technical\n- Migrated from direct `world` field access to Kotlin property syntax `entityWorld`"
