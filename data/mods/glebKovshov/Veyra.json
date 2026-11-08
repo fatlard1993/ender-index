@@ -6,8 +6,71 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-17T06:24:32Z",
-	"pushed": "2026-11-08T11:56:50Z",
+	"pushed": "2026-11-08T12:26:35Z",
 	"releases": [
+		{
+			"tag": "v1.1.0+mc1.21.11",
+			"published": "2026-11-08T12:14:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 723833416,
+					"name": "veyra-1.1.0+mc1.21.11.jar",
+					"url": "https://github.com/glebKovshov/Veyra/releases/download/v1.1.0%2Bmc1.21.11/veyra-1.1.0%2Bmc1.21.11.jar",
+					"size": 1197864,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "7e590b9938bbd491df1a1fbd22835f8760770046e4c771ce4f101d60b07f0de7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "veyra",
+							"version": "1.1.0+mc1.21.11",
+							"name": "Veyra",
+							"description": "A VulkanMod shader loader for Minecraft.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"vulkanmod",
+								"java"
+							],
+							"provides": [
+								"org_anarres_jcpp"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 461,
+						"jars": [
+							"META-INF/jars/jcpp-1.4.14.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/jcpp-1.4.14.jar!org/anarres/cpp/BuildMetadata.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"www.anarres.org": [
+								"META-INF/jars/jcpp-1.4.14.jar!org/anarres/cpp/Main.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Veyra 1.1.0\n\nVeyra 1.1.0 runs Photon v1.4, fixes shadow, water and post-processing compatibility issues shared by other packs, and adds an Iris-style shader menu to VulkanMod's video settings.\n\n## Changes since 1.0.0\n\n- **Photon v1.4.** Photon now renders end to end. This needed:\n  - raw 3D textures loaded from `.dat` files;\n  - Iris core-profile inputs in leash and line programs;\n  - entity tangents and struct varyings;\n  - the `RG16F` color format;\n  - several Vulkan GLSL portability fixes: the `sampler` identifier, multi-line layouts, narrow fragment outputs and float depth-compare results.\n\n  In a matched foliage scene, the frame differs from Iris 1.10.8 by about 6/255 RGB.\n- **Post-processing.** Post vertex stages receive `gl_Vertex` as the [0,1] quad Iris uses, in OpenGL clip space. Packs that scale it into tiles, as Photon does for bloom, no longer smear across the frame.\n- **Iris compatibility.**\n  - `flip.<program>.<buffer>` directives are honored.\n  - Custom-uniform expressions can read matrix elements as `matrix.column.row`. Photon uses this to compute its sun and light directions.\n  - The fixed-function alpha test is applied only to `gl_FragColor`/`gl_FragData[0]` outputs, as Iris does. Packs that pack data into alpha (such as Photon's light levels) keep it.\n- **VulkanMod GLSL workaround.** VulkanMod's parser treated `in`/`out` function parameters as stage interfaces, so out-parameters returned nothing. In Photon this made ambient occlusion flicker on foliage.\n- **Shadows.**\n  - Depth for deferred programs is copied before translucents.\n  - Shadow culling covers the full drawn depth range and does not use camera occlusion.\n  - Post programs read the current frame's shadow matrices.\n\n  Together these fix flicker, short shadow reach and camera-dependent casters.\n- **Water.**\n  - Vertex stages see the sampling projection, so screen-space reflections start from the right place.\n  - Tangent handedness matches Iris.\n  - Waterlogged plants keep the water material.\n- **Loading.** Packs load about twice as fast; on an RTX 3070, Photon loads from the menu in about 12 s instead of 21 s. The shader screens show a loading status rather than freezing on the click.\n- **Menu.** **Options → Video Settings → Shader Settings** opens a full-screen, Iris-style pack list (F6 still works). The list has:\n  - a shaders on/off toggle and Active/Unsupported markers;\n  - Open Shader Pack Folder, Refresh and Shader Pack Settings buttons;\n  - Apply, Cancel and Done.\n\n  Clicking a pack only selects it; Apply, Done or a double-click loads it. Option screens use the whole window. English and Russian translations are included.\n\n## Installation\n\nRequires Minecraft 1.21.11, Fabric Loader 0.18.4 or newer, VulkanMod 0.6.8 and Java 21 or newer.\n\nAssets: the install JAR `veyra-1.1.0+mc1.21.11.jar`, a sources JAR, an example-packs ZIP and `SHA256SUMS.txt`. Put the install JAR beside VulkanMod and remove older Veyra JARs. Open **Options → Video Settings → Shader Settings** (or press F6) to select and configure a shader pack. Veyra does not redistribute or modify shader pack archives.\n\n## Validation\n\n- JDK 21 checks: 693 JUnit tests pass, 173 shader compilation checks pass, and the 75-case pinned source audit (4 packs × 3 dimensions, 939 geometry programs, 18 active compute stages) matches the 1.0.0 baseline.\n- RTX 3070, compared with 1.0.0 frames:\n  - Complementary Reimagined HIGH, BSL and Sildur render unchanged.\n  - All four packs, Photon included, load and render through the menu path.\n  - 55 of the 56 graphics fixtures pass. `shadow-color-entity` fails on this machine with 1.0.0 as well; it passes on the hosted Lavapipe gate. `entity-vertex-execution` failed once while the window was still 10×10 at startup and passed on two reruns.\n- Photon was compared with Iris 1.10.8 on matched scenes with a fixed clock:\n  - Frame-to-frame foliage change is 0.06/255 in Veyra and 0.12/255 in Iris.\n\n..."
+		},
 		{
 			"tag": "v1.0.0+mc1.21.11",
 			"published": "2026-11-04T12:11:41Z",
@@ -18,7 +81,7 @@
 					"name": "veyra-1.0.0+mc1.21.11.jar",
 					"url": "https://github.com/glebKovshov/Veyra/releases/download/v1.0.0%2Bmc1.21.11/veyra-1.0.0%2Bmc1.21.11.jar",
 					"size": 1115140,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "7047dd89d5619bb0a34c6847a87caaf7856fff81495139e132604bd248541e6c",
 					"mods": [
