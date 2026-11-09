@@ -6,8 +6,61 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2025-09-03T08:29:09Z",
-	"pushed": "2026-10-28T21:20:09Z",
+	"pushed": "2026-11-09T15:15:24Z",
 	"releases": [
+		{
+			"tag": "2.0.0+26.3",
+			"published": "2026-11-09T15:15:25Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 727927661,
+					"name": "worlds-2.0.0+26.3.jar",
+					"url": "https://github.com/Wroud/mc-worlds/releases/download/2.0.0%2B26.3/worlds-2.0.0%2B26.3.jar",
+					"size": 497923,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "852fe87a227e1e8e6acf10e7e961af266b79ef68b6de405cca7c3cdf79ebc620",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mc-worlds",
+							"version": "2.0.0+26.3",
+							"name": "Worlds",
+							"description": "Create and manage worlds in-game, through commands.",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "121e583016345011702a86017d274fcd8dbeb6463761f177e176cd7beb2dd32f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 155,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/wroud/mc/worlds/manager/importer/ArchiveDownload.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n\n- World groups. Create a group with `/worlds group create <group>`, then run `/worlds group join <group>` in each world that belongs to it. The worlds of a group act as one vanilla world: a nether portal leads to the group's own Nether-like world and back, an end portal leads to the group's End-like world, leaving the End or dying without a bed brings you back to the group's spawn, and the compass points at it. A bed in another group does not count there. Worlds you never put in a group behave exactly as before.\n- Each group has its own spawn, set with `/worlds group spawn here` or a position, separate from the server spawn of `/setworldspawn`. `/worlds group` shows the group of the world you are in, and `/worlds group list` shows all of them.\n- The worlds of a group share one set of game rules: a rule set in any of them, with `/gamerule` or the Game Rules screen, holds in all of them. A world's own overrides pause while it is in a group and return when it leaves.\n- Two game rules for groups, `mc-worlds:default_game_mode` and `mc-worlds:force_game_mode`, give a group a default or a forced game mode, like the `gamemode` and `force-gamemode` server properties do for the whole server.\n- `/worlds import … group <group>` puts imported worlds straight into a group, so an imported Overworld, Nether and End pair their portals. `/worlds list` shows each world's group.\n- Each group keeps its own copy of every player: inventory, ender chest, experience, health, effects, game mode, respawn point, statistics, advancements and the data other mods store on the player. Moving into a world of another group, by teleport, respawn or another mod's portal, swaps to that group's copy and leaves the one you came from behind, untouched, until you return. A first visit to a group starts you fresh. Boats, minecarts, thrown ender pearls and mobs stay in their group. The copies are ordinary player files under `players/groups/` in the save.\n- Deleting a group also deletes the player data kept for it.\n- Temporary worlds and groups for minigames and events. `/worlds create temporary <name>`, `/worlds import temporary <name>` and `/worlds group create temporary <name>` make one with a generated id, and `/worlds list` marks the temporary worlds. A temporary group holds only temporary worlds and deleting it deletes them with the player data kept for it. Nothing temporary survives a restart.\n- Entering a temporary group remembers where you came from. `/worlds group temp leave <players>` sends players back there with everything they had, and so does deleting the group while they are inside, on the death screen or offline. Nothing from inside comes home with them.\n- Data pack functions can create, enter and delete all of this. Generated ids are in the `mc-worlds:temporary` command storage, ready for function macros.\n- Other mods can now do everything the commands do: create, import and delete worlds, manage groups and run temporary worlds for minigames. They can also react when a player moves between groups or a group is deleted. The [API guide](https://github.com/Wroud/mc-worlds/blob/main/API.md) has the details.\n\n### Changed\n\n- Every world command now needs operator level 2 instead of 3, so data pack functions and command blocks can use them. Level 2 operators and command blocks can now delete any world or group and make the server download a world.\n- The word `temporary` is now part of `/worlds create`, `/worlds import` and `/worlds group create`. A world or group named `temporary` must be written `minecraft:temporary`, and `/worlds create temporary 123` no longer means a world named `temporary` with seed 123. The `mc-worlds-temp` namespace is reserved.\n- `allow_entering_nether_using_portals` applies to every Nether-like world a portal leads to, not only the vanilla Nether.\n- The API for mods changed, so mods built on an older version of Worlds need an update. That includes Stargate.\n\n### Fixed\n\n\n..."
+		},
 		{
 			"tag": "1.11.0+26.3",
 			"published": "2026-10-28T21:20:09Z",
@@ -18,7 +71,7 @@
 					"name": "worlds-1.11.0+26.3.jar",
 					"url": "https://github.com/Wroud/mc-worlds/releases/download/1.11.0%2B26.3/worlds-1.11.0%2B26.3.jar",
 					"size": 408463,
-					"downloads": 2,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "02d260515b5d85480027df760d7744b090af8c2f214353ef0d0412d96eeff71a",
 					"mods": [
