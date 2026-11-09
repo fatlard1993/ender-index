@@ -1,0 +1,194 @@
+{
+	"repo": "Aksh124/seed-cracker",
+	"host": "github",
+	"description": "Fabric 26.2 client mod that recovers the world seed from structures",
+	"stars": 0,
+	"archived": false,
+	"created": "2026-11-07T21:08:53Z",
+	"pushed": "2026-11-08T06:54:01Z",
+	"releases": [
+		{
+			"tag": "v1.3.0",
+			"published": "2026-11-08T06:54:01Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 723168938,
+					"name": "seed-cracker-1.3.0.jar",
+					"url": "https://github.com/Aksh124/seed-cracker/releases/download/v1.3.0/seed-cracker-1.3.0.jar",
+					"size": 70706,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "7ee69218dc490991043a9b43f70cc8e7518d4bac5ddac6f85bd0aa976381723e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "seedcracker",
+							"version": "1.3.0",
+							"name": "Seed Cracker",
+							"description": "Recovers the world seed from structures you visit and the hashed seed the server sends.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 25,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "For Minecraft 26.2 with Fabric Loader 0.20+ and Fabric API. Client-side only.\n\n**New structures**\n\n| Find | Where | Bits |\n| --- | --- | --- |\n| Villages | Overworld | 9.4 |\n| Ruined portals | Overworld and Nether | 9.3 |\n| Ancient cities | Overworld, read from chunk data, no digging | 8 |\n| Woodland mansions | Overworld | 11.3 |\n| End cities | End | 5.8 |\n| End pillars | End, read from their heights | 16 at once |\n\nThese are recognised by matching vanilla's own structure templates against the world, in every rotation (and mirror, for portals). A match only counts when it lines up with the chunk grid exactly where vanilla places that structure, and most of its blocks are there.\n\n**No temples needed with the End pillars.** The pillar order depends only on the seed's lowest 32 bits, so the solver can search those first. With the pillars, any mix of structures adding up to about 45 bits works. One test cracked the seed in about 4 seconds from an ancient city, a mansion, two End cities and the pillars.\n\n**Saved progress**\n- Finds are saved per server (by address) or per single-player world in `config/seedcracker/`, so leaving or relaunching no longer resets them.\n- A world whose seed was already found shows it as soon as you join.\n- If a server resets its world, the old finds are dropped automatically.\n- `/seedcracker clear` deletes that server's save.\n\n**Sharing**\n- `/seedcracker share` gives a short code to copy: the seed if it's known, otherwise your finds. Nine finds take about 60 characters.\n- `/seedcracker share <player>` sends it by `/msg`. With the mod, they get an **[Import]** button instead of the raw code.\n- `/seedcracker import <code>` adds the finds you don't have and cracks if that's now enough.\n- Codes from a different server or world are refused."
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-11-07T21:58:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 722065028,
+					"name": "seed-cracker-1.2.0.jar",
+					"url": "https://github.com/Aksh124/seed-cracker/releases/download/v1.2.0/seed-cracker-1.2.0.jar",
+					"size": 32750,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "1b99de00df3955b98dbc5fb11b7c91e40c5582f6e9e0c70a242e4f79c84974e3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "seedcracker",
+							"version": "1.2.0",
+							"name": "Seed Cracker",
+							"description": "Recovers the world seed from structures you visit and the hashed seed the server sends.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 14,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "For Minecraft 26.2 with Fabric Loader 0.20+ and Fabric API.\n\n**New finds**\n- **Igloos** (9.2 bits each). The start chunk is worked out from the furnace's facing, so rotated igloos that cross a chunk border still count.\n- **Buried treasure** (6.6 bits each). Chests are read from chunk data, so there's no need to dig. Treasure overlaps little with structure data: 3 structures plus 3 treasures leaves about 30 candidates, against about 10,000 for 5 structures.\n\n**New command**\n- `/seedcracker info` explains how cracking works, the bits each find is worth, your progress, and what's still needed.\n- `/seedcracker` now works as well as `/seedcrack`.\n\n**Changes**\n- Cracking starts once there's enough information (45 bits, 18 of them low bits) rather than after 5 structures. Chat shows progress with each find.\n\nPaper's anti-xray can hide buried chests from the client."
+		},
+		{
+			"tag": "v1.1.0",
+			"published": "2026-11-07T21:28:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 721993421,
+					"name": "seed-cracker-1.1.0.jar",
+					"url": "https://github.com/Aksh124/seed-cracker/releases/download/v1.1.0/seed-cracker-1.1.0.jar",
+					"size": 21620,
+					"downloads": 1,
+					"inspection": 2,
+					"error": "download answered 504"
+				}
+			],
+			"notes": "For Minecraft 26.2 with Fabric Loader 0.20+ and Fabric API.\n\n- When the seed is found, it's now handed to other mods automatically. Structure Map uses this to pick up the seed with no extra steps.\n- Mods can receive the seed by declaring a `seedcracker:seed_found` entrypoint that implements `java.util.function.LongConsumer`. It's called on the client thread.\n\nCracking itself is unchanged from 1.0.0."
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-11-07T21:09:01Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 721942829,
+					"name": "seed-cracker-1.0.0.jar",
+					"url": "https://github.com/Aksh124/seed-cracker/releases/download/v1.0.0/seed-cracker-1.0.0.jar",
+					"size": 21187,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "6ab20ac4388ed24ebb6779fa24d2e79292bb8bd50c7ec28a86a9ce06dcd11a86",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "seedcracker",
+							"version": "1.0.0",
+							"name": "Seed Cracker",
+							"description": "Recovers the world seed from structures you visit and the hashed seed the server sends.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 8,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First release, for Minecraft 26.2 with Fabric Loader 0.20+ and Fabric API.\n\nExplore the Overworld and the mod notes each desert pyramid, jungle temple and swamp hut that loads. After 5 it cracks the seed in the background and posts it in chat (click to copy). It also saves the seed to `config/seedcracker-seeds.txt`. 6 or more structures is faster.\n\nCommands: `/seedcrack`, `/seedcrack crack`, `/seedcrack remove <number>`, `/seedcrack clear`.\n\nThis won't work if the server hides or changes the hashed seed, or uses custom structure seeds (Spigot/Paper settings)."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-11-09T05:18:38.521Z",
+	"pictures": [],
+	"picturesChecked": "2026-11-09T05:18:38.521Z",
+	"contributors": {
+		"commits": 4,
+		"more": 0,
+		"people": [
+			{
+				"login": "Aksh124",
+				"commits": 4,
+				"name": "Akshay Mahajan",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-11-09T05:18:38.521Z",
+	"history": 1
+}
