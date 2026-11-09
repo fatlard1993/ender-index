@@ -18,7 +18,7 @@
 					"name": "unionclef-1.21.11-0.95.66.jar",
 					"url": "https://github.com/3ndetz/unionclef/releases/download/v0.95.66/unionclef-1.21.11-0.95.66.jar",
 					"size": 6389324,
-					"downloads": 38,
+					"downloads": 74,
 					"inspection": 2,
 					"sha256": "ff23056a32f7e2fe9fe6a7f5dda73f3529e4ab3df543b1488123bf9a90007961",
 					"mods": [
@@ -137,7 +137,7 @@
 					"name": "unionclef-1.21.11-0.95.65.jar",
 					"url": "https://github.com/3ndetz/unionclef/releases/download/v0.95.65/unionclef-1.21.11-0.95.65.jar",
 					"size": 6389161,
-					"downloads": 5,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "a4a7ed7f73d2ad106272edc49db681c2447fd2c8199e1fb8b732f65de61b82bf",
 					"mods": [
@@ -248,7 +248,7 @@
 					"name": "unionclef-1.21.11-0.95.64.jar",
 					"url": "https://github.com/3ndetz/unionclef/releases/download/v0.95.64/unionclef-1.21.11-0.95.64.jar",
 					"size": 6388541,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "1db4c0560040dba57a31d7e91cbe696e83f4e74d7c2797a0f4a560c561841d17",
 					"mods": [
@@ -453,7 +453,7 @@
 						"unreadable": []
 					},
 					"icon": "a99bba88d78bfab8d0ab303bf64e2301e52022ee8647ad8d77186fc04b4ea1be.png",
-					"downloads": 32
+					"downloads": 33
 				}
 			],
 			"notes": "## Installation\n\n1. Install [Fabric Loader](https://fabricmc.net/) for the Minecraft version listed in the release title\n2. Drop the release JAR into your `.minecraft/mods/` folder\n3. Launch Minecraft\n\nNo separate mods install needed — everything is bundled into the main UnionClef JAR. If you see a separate `tungsten-**.jar`, do not install it next to UnionClef: UnionClef already contains it.\n\n## Modules\n\nUnionClef bundles two systems, each with its own command prefix:\n\n| Module | Prefix | What it does |\n| --- | --- | --- |\n| **Tungsten** | `;` | Movement — physics-simulated pathfinding, block-space search, bridging, mining |\n| **AltoClef** | `@` | High-level bot tasks (get items, kill mobs, survive) |\n\n## Quick start commands\n\n```\n;goto <x> <y> <z>          — tungsten: walk/jump to coordinates\n;followPlayer <nick>        — tungsten: follow a player\n;stop                       — tungsten: stop current action\n;settings debugTime true    — tungsten: enable profiling output\n\n@goto <x> <y> <z>          — altoclef: smart goto (avoids mobs, eats, etc.)\n```\n\n---\n\n# Water, air and buckets\n\nWork from the UNIONCLEF-HARD session (developed and bench-tested 2026-10-02..10-04, left\nuncommitted when that session paused), reviewed, rebuilt over 0.95.62 and re-tested before\nrelease.\n\n**Pillaring in water uses swimming input.** A pillar started in water used to hold sneak with\njump, and sneak sinks the body: the bot sat at a bank holding both. It now swims up while in\nwater and goes back to the land sneak/jump placement once out. `pillarUsesSwimInputInWater` is\nnow on by default (`false` keeps the old input). Earlier evidence: 42 water/neighbour and 36 dry\ninteraction trials passed at 29+ FPS; on the retained food-bank checkpoint new food appeared in\n5/5 FPS-valid ON observations against 1/5 OFF.\n\n**The air escape starts when the way out needs it.** The rescue used to wait until half the air\nwas gone. It now prices the actual exit -- digging the cap overhead, with vanilla's underwater\nmining penalty, or swimming to the nearest breathable cell -- and starts early enough to finish\nit. A live route to air is followed to its end instead of being re-priced every tick (baritone\nPathingBehavior.java:196-224), which stops the dig/swim flip-flop measured in dry-entry tunnels.\n\n**Extra water buckets are emptied, one is kept.** The task used to empty every water bucket at\nits own feet. It now keeps one filled bucket and empties only the extras, against a solid face\nwithin reach.\n\n**The block scanner no longer reads the live world from its worker thread.** Chunk contents are\ncopied on the client tick (`ChunkBlockSnapshot`) and the worker searches the copies.\n\nRe-tested on this build (0.95.62 + this work):\n\n- `nav_water`, `nav_water_pillar`, `nav_grid_water_roof`, `nav_flat`, `nav_staircase`,\n  `nav_descend`, `nav_break`, `nav_bridge`, `nav_gaps`: 9/9 PASS, 29-30 FPS.\n- `portal_lava_lake` PASS (27.6 FPS), `craft_at_distant_table` PASS.\n- Same checkpoint 7 minutes before a drowning in the air escape, interleaved: 0.95.62 had two\n  deaths in one of two runs (a creeper and a zombie, lowest health 1.8); this build none in two\n  (lowest health 11.2 and 20). The drowning itself did not recur in either arm, so this is not\n  claimed as a drowning fix.\n- Night in a lake (`repro-lake-night`): no deaths, health 20.\n- 15-minute native run from `full59-before-portal`: PASS, 0 deaths, lowest health 17.3, iron and\n  crafting rungs. Its median FPS was 20; the interleaved checkpoint pair above read the same FPS on\n  both builds (26/22 vs 26/22), so the host was loaded that day rather than the scanner slow.\n\n**HOW TO TEST:**\n\n```powershell\npython deploy/runner/run_suite.py nav --only nav_water,nav_water_pillar,nav_grid_water_roof --record\npython deploy/runner/gamer_smoke.py 15 --from full59-before-portal --raw-resume --record\n```\n\nAlso: checkpoints named `repro-*` are never removed by the budget trim (two reproductions were\n\n..."
@@ -562,7 +562,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 5
+					"downloads": 7
 				}
 			],
 			"notes": "## Installation\n\n1. Install [Fabric Loader](https://fabricmc.net/) for the Minecraft version listed in the release title\n2. Drop the release JAR into your `.minecraft/mods/` folder\n3. Launch Minecraft\n\nNo separate mods install needed — everything is bundled into the main UnionClef JAR. If you see a separate `tungsten-**.jar`, do not install it next to UnionClef: UnionClef already contains it.\n\n## Modules\n\nUnionClef bundles two systems, each with its own command prefix:\n\n| Module | Prefix | What it does |\n| --- | --- | --- |\n| **Tungsten** | `;` | Movement — physics-simulated pathfinding, block-space search, bridging, mining |\n| **AltoClef** | `@` | High-level bot tasks (get items, kill mobs, survive) |\n\n## Quick start commands\n\n```\n;goto <x> <y> <z>          — tungsten: walk/jump to coordinates\n;followPlayer <nick>        — tungsten: follow a player\n;stop                       — tungsten: stop current action\n;settings debugTime true    — tungsten: enable profiling output\n\n@goto <x> <y> <z>          — altoclef: smart goto (avoids mobs, eats, etc.)\n```\n\n---\n\n# Dressed for the nether\n\nThree changes for the night and the nether, each measured on the bench.\n\n**The bot no longer floats in a lake all night.** With every dig-in site within 16 blocks under\nwater, the night shelter used to wait in the lake till morning -- 6.5 minutes afloat in one run,\n\"impaled by Drowned\" in another. It now heads for dry land (a heightmap scan out to 48 blocks)\nand digs in there. Lake replays: before, 0/4 left the water; after, the valid runs reached the\nshore and dug in.\n\n**No hoglin hunting in stone gear.** A hoglin has 40 health and throws the player on every hit;\nfrom the nether arrival, hunts with a stone sword ended \"slain by Hoglin\" or \"fell from a high\nplace\". Hoglins are now food only with an iron-or-better weapon and an iron-or-better chestplate\nworn; otherwise the bot goes back to the Overworld for food. Same checkpoint: deaths 2/2 before,\n1/2 after (that one from a piglin fight).\n\n**A gold helmet before the nether.** Piglins attack a player wearing no gold. Before the trip the\nbot now mines, smelts and crafts a gold helmet, with a six-minute budget so a world without gold\nnearby does not stop the run. Two 15-minute runs: a helmet in both, no deaths; one reached the\nnether and was alive at full health for its remaining seven minutes there.\n\n**HOW TO TEST:**\n\n```powershell\npython deploy/runner/gamer_smoke.py 15 --from full59-before-portal --raw-resume --record\npython deploy/runner/gamer_smoke.py 6 --from nether-fresh --raw-resume --record\n```\n\nAlso: `InputControls.waterKeyHolders` names whoever holds jump or sneak in water, and\n`gamer_smoke.py --grcon \"COMMAND\"` runs an rcon command after a checkpoint restore.\n\n**Known:** in the nether the bot later holds a small area on \"Going to biome\"; tracked. No speed\nor FPS gain is claimed, and the whole playthrough is still open.\n\n\n**Full Changelog**: https://github.com/3ndetz/unionclef/compare/v0.95.61...v0.95.62"
