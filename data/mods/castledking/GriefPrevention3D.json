@@ -6,9 +6,82 @@
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2025-07-20T07:11:54Z",
-	"pushed": "2026-11-01T20:21:12Z",
+	"pushed": "2026-11-09T08:04:45Z",
 	"forkOf": "GriefPrevention/GriefPrevention",
 	"releases": [
+		{
+			"tag": "v19.0.6",
+			"published": "2026-11-09T08:04:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 726692332,
+					"name": "GriefPrevention3D.jar",
+					"url": "https://github.com/castledking/GriefPrevention3D/releases/download/v19.0.6/GriefPrevention3D.jar",
+					"size": 2425078,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "38dc0b831b5593bdb4a96e6e8844fe3d013eaf8d1def61cf56efc3b4a4637d78",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "griefprevention3d",
+							"version": "19.0.6",
+							"name": "GriefPrevention3D",
+							"description": "Native Fabric adapter for GriefPrevention3D claim protection.",
+							"minecraft": ">=26.1 <26.4- || >=1.21.2 <1.21.12-",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api-base",
+								"fabric-command-api-v2",
+								"fabric-events-interaction-v0",
+								"fabric-lifecycle-events-v1",
+								"fabric-networking-api-v1",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 945,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/griefprevention/metrics/Metrics$MetricsBase.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"yaml.org": [
+								"com/griefprevention/internal/lib/snakeyaml/DumperOptions.class"
+							],
+							"bstats.org": [
+								"com/griefprevention/metrics/Metrics$MetricsBase.class",
+								"com/griefprevention/metrics/Metrics.class"
+							],
+							"github.com": [
+								"me/ryanhamshire/GriefPrevention/Alias.class"
+							],
+							"dev.bukkit.org": [
+								"me/ryanhamshire/GriefPrevention/GriefPrevention.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# GriefPrevention3D v19.0.6\n\n**Wiki:** https://github.com/castledking/GriefPrevention3D/wiki\n\nBack up `GriefPreventionData` before updating.\n\n## Fabric: Restore Nature\n\nThe Restore Nature feature has been ported to Fabric, bringing full parity with Paper and Spigot\nfor repairing griefed terrain and returning areas to their natural state.\n\n- **`/restorenature`** (`/rn`, `/aclaim restore`): Switches the golden shovel into restoration mode.\n  Right-clicking a block inspects and restores a 5-block radius column (from the world's minimum to\n  maximum height) back to natural terrain.\n- **`/restorenatureaggressive`** (`/rna`, `/aclaim restore aggressive`): Switches to aggressive restoration\n  mode. In addition to standard cleanup, this mode overrides claim boundaries, strips player-placed\n  ores and bedrock, and clears tree canopies (leaves and logs).\n- **`/restorenaturefill [radius]`** (`/rnf`, `/aclaim restore fill [radius]`): Switches to fill mode with\n  a custom radius between 1 and 10 blocks (default 2), filling holes and hollowed areas in the terrain.\n- **`/basicclaims`** (`/bc`): Exits any active restoration mode and returns the shovel back to standard claim\n  creation.\n\n### Restoration behavior\n\n- **Asynchronous column scan:** Terrain processing runs off the main thread. It samples the entire vertical\n  column, strips player-placed blocks (such as chests, crafting tables, furnaces, doors, rails, wool,\n  planks, slabs, stairs, and torches), removes floating blocks (suspended dirt, snow, or logs), and knocks\n  down thin unnatural walls.\n- **Natural fill and surface repair:** Terrain holes beneath the surface level are filled in using the\n  dimension's base material (netherrack in the Nether, end stone in the End, dirt in the Overworld).\n  The natural surface block (grass block, sand, red sand, or mycelium) is restored based on the biome.\n- **Claim respect:** Standard restoration skips any block located within an existing claim. Aggressive mode\n  can modify claimed blocks.\n- **Entity protection:** Players and animals standing within the restoration zone have air cleared at their\n  feet and head to prevent suffocation. Unprotected item drops and hanging entities (item frames, paintings)\n  in the zone are removed.\n- **Visual boundary:** After restoration completes on the server, a 5-second glowing boundary preview\n  with lime glazed terracotta corner markers and emerald side markers (matching Paper) outlines the restored\n  zone for the user.\n\n### New Fabric commands & permissions\n\n| Command | Permission | Default | What it does |\n|---|---|---|---|\n| `/restorenature` (`/rn`, `/aclaim restore`) | `griefprevention.restorenature` | op | Switches the shovel tool to standard restoration mode |\n| `/restorenatureaggressive` (`/rna`, `/aclaim restore aggressive`) | `griefprevention.restorenatureaggressive` | op | Switches the shovel tool to aggressive restoration mode |\n| `/restorenaturefill [radius]` (`/rnf`, `/aclaim restore fill [radius]`) | `griefprevention.restorenatureaggressive` | op | Switches the shovel tool to fill mode with radius 1–10 |\n| `/gpglow [on\\|off\\|toggle]` (`/claimglow`) | `griefprevention.visualize` | all | Toggles glowing boundary visualization on or off |\n\n## Boundary visualizations: `/gpglow` toggle & surface fixes\n\n- **`/gpglow toggle` on Fabric and Paper:** Fabric now supports `/gpglow` (`/claimglow`) to enable or\n  disable glowing boundary display entities (`/gpglow [on|off|toggle]`). The setting is persisted to\n  `Visualizations.Glow` in `config.yml` while preserving comments, and toggling it off immediately despawns\n  active glowing entities. Paper's `/gpglow` command handler now also accepts `/gpglow toggle` directly.\n- **Single green glow & consistent blocks:** Aligned Fabric restore nature markers with Paper, using\n  `lime_glazed_terracotta` corners and `emerald_block` sides with a single green glow outline (`0x55FF55`)\n  instead of separate aqua and green glows.\n\n..."
+		},
 		{
 			"tag": "v19.0.5",
 			"published": "2026-11-01T20:21:13Z",
@@ -19,7 +92,7 @@
 					"name": "GriefPrevention3D.jar",
 					"url": "https://github.com/castledking/GriefPrevention3D/releases/download/v19.0.5/GriefPrevention3D.jar",
 					"size": 2393984,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "2fa9cfbbbeac7984e30c041d200e74674bd6341a1c047285371840c6146a1390",
 					"mods": [
