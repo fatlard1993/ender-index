@@ -9,6 +9,94 @@
 	"pushed": "2026-11-09T05:44:47Z",
 	"releases": [
 		{
+			"tag": "v1.2.5",
+			"published": "2026-11-09T06:34:54Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 726479153,
+					"name": "digital-storage-cloud-fabric-1.2.5.jar",
+					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.5/digital-storage-cloud-fabric-1.2.5.jar",
+					"size": 1297118,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "ff460cbfb31e1aa0458b22c4ddac12d532726052de195391415e8a657b048647",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "digitalstorage",
+							"version": "1.2.5",
+							"name": "Digital Storage Cloud",
+							"description": "Player-owned storage volumes exposed through lightweight, linkable accessors.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java",
+								"toms_storage"
+							],
+							"provides": []
+						}
+					],
+					"icon": "9dae24b93926f7739e4df014d9c561303470f0ed1ffe06f31d0b467459a89675.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Digital Storage Cloud"
+							],
+							"block": [
+								"Advanced Inventory Hopper",
+								"Digital Storage Accessor"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 516,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/kehai/digitalstorage/internal/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"dev/kehai/digitalstorage/internal/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"classloading": {
+								"dev/kehai/digitalstorage/optimization/SophisticatedEndpointGuard$1.class": [
+									"extends java/lang/ClassLoader"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 726479307,
+					"name": "digital-storage-cloud-forge-1.2.5.jar",
+					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.5/digital-storage-cloud-forge-1.2.5.jar",
+					"size": 1460302,
+					"downloads": 1,
+					"inspection": 2,
+					"error": "download answered 504"
+				}
+			],
+			"notes": "# 1.2.5 — 推荐迁移、访问器与持久化安全\n\n本次更新把网络推荐迁移并入现有批量转移，完善 Fabric 访问器生命周期、停服持久化和 Forge 恢复/批量路径，并缩短漏斗失败退避。\n\n## 推荐迁移与批量转移\n\n- “按建议移入”改用批量转移执行，建议预选、数量调整、分页、停止和关闭界面后继续等行为与批量转移一致；旧的独立迁移引擎已移除。\n- 推荐列表只包含当前实际批量路由可转移的物品；大网络不会再被无关的 4096 个变体直接阻断。\n- Forge 修复 Tom 周期重建导致批量移出中途停止的问题，真实网络变化仍会停止继续搬运。\n- Fabric 批量导出单步最多执行 64 次插入或访问 64 个槽位，低效第三方 Storage 不会在单 tick 内无界循环；剩余数量跨 tick 继续。\n\n## Fabric 访问器\n\n- 访问器使用带绑定租约的容量视图；解绑、重绑、区块或方块实体重载、移除后，旧 Storage 和旧 StorageView 不再读写旧卷。\n- Tom 端点识别与网络去重继续按实际卷处理，同一卷的多个访问器仍只计一份存储。\n\n## 持久化与恢复\n\n- 停服改为有界等待最终快照并记录最后成功代际；超时不会无限挂起服务器，但不能保证最新代际一定落盘。日志和诊断会报告 dirty 状态、最后成功代际/时间和失败原因。\n- 非原子文件系统上的备份在成功安装后只保留最近两份；启动时从新到旧尝试可验证的备份，最新备份损坏时可恢复次新有效备份。\n- 优先使用原子替换；不支持原子替换时保留旧文件的验证备份后安装，失败时恢复备份。非原子替换期间进程或机器突然退出仍可能留下不完整目标，启动依赖备份恢复，不能承诺零丢失。\n\n## Forge 恢复与批量路径\n\n- live 与 legacy `forge-transfer` 恢复目录并存时，先只读检查 recovery、incidents、hoppers 和同进程未落盘记录；存在未决或不可读证据时阻止新的批量转移，保留全部证据等待人工核对。\n- `clear()` 立即撤销批量快路径；等价重建后恢复，真实结构变化则更新版本，避免正常 Tom 重建误停任务。\n\n## 漏斗\n\n- 失败退避默认值从 `[20, 40, 100, 200, 400]` 调整为 `[20, 40, 80, 120, 200]`，最长等待约 10 秒而不是 20 秒。\n- 已有 TOML 中的自定义或旧退避列表不会被自动改写；需要新默认值时请手动调整 `hopper.failureCooldownTicks`。\n\n## 兼容性与已知限制\n\n- 升级前请备份完整世界，并保留 `digitalstorage.dat.bak-*` 与 `digitalstorage-legacy-*` 供诊断。\n- 1.2.5 仍使用单一 SavedData 文件，尚未实现逐记录损坏隔离；单条结构损坏仍可能使全部卷只读。\n- 第三方直接移除容器且 Tom 尚未重建的窗口、精妙容器的完整移除覆盖和扩大后的精妙存储范围仍留待 1.3。\n- 有界停服可能丢失超时前最后一批未落盘状态，本版不将其宣传为零丢失保证。\n- Fabric/Forge 世界互相转换仍未验证；Forge 恢复记录冲突需要管理员人工核对。\n- 适用于 Minecraft 1.20.1，依赖 Tom's Storage 1.7.1；客户端与服务端需要使用相同的 DSC 版本。替换旧 JAR，sources 包不安装到 mods。"
+		},
+		{
 			"tag": "v1.2.4",
 			"published": "2026-11-07T19:01:13Z",
 			"prerelease": false,
@@ -18,7 +106,7 @@
 					"name": "digital-storage-cloud-fabric-1.2.4.jar",
 					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.4/digital-storage-cloud-fabric-1.2.4.jar",
 					"size": 1280887,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "94fda1468f8b5cd063bf60c27bae3061b169ef6f4a658945b7a3b606156cc13d",
 					"mods": [
@@ -89,7 +177,7 @@
 					"name": "digital-storage-cloud-forge-1.2.4.jar",
 					"url": "https://github.com/AAAlod/digital-storage-cloud/releases/download/v1.2.4/digital-storage-cloud-forge-1.2.4.jar",
 					"size": 1451379,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "97c4506a8fc237f079b1b0f275b61aa00a195c06f18e90683f80a9b9ca11b4aa",
 					"mods": [
