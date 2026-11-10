@@ -5,7 +5,7 @@
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2025-05-27T15:13:55Z",
-	"pushed": "2026-11-10T15:58:23Z",
+	"pushed": "2026-11-10T17:11:09Z",
 	"releases": [
 		{
 			"tag": "20.5.7",
@@ -13,13 +13,13 @@
 			"prerelease": false,
 			"assets": [
 				{
-					"id": 732005000,
+					"id": 732267724,
 					"name": "neoecoae-20.5.7.jar",
 					"url": "https://github.com/DancingSnow0517/NeoECOAEExtension/releases/download/20.5.7/neoecoae-20.5.7.jar",
-					"size": 8530618,
-					"downloads": 1,
+					"size": 8571223,
+					"downloads": 0,
 					"inspection": 2,
-					"sha256": "30a1f8958ed3d83f26972f86c14804af63879dbd4d1ff438c3d80c66aa302f90",
+					"sha256": "80360ab5dfa3af036fe70b07b246df7cee9d5ae3e44bfcffd39587bb547ca9e8",
 					"mods": [
 						{
 							"loader": "forge",
@@ -108,7 +108,6 @@
 								"ECO - LE3 Storage Matrix (Air)",
 								"ECO - LE3 Storage Matrix (Experience)",
 								"ECO - LE4 Mana Storage Matrix",
-								"ECO - LE4 Storage Matrix (Bulk Item)",
 								"ECO - LE4 Storage Matrix (Chemical)",
 								"ECO - LE4 Storage Matrix (Complex Omni)",
 								"ECO - LE4 Storage Matrix (Data)",
@@ -119,8 +118,9 @@
 								"ECO - LE4 Storage Matrix (Matter)",
 								"ECO - LE4 Storage Matrix (Mega Air)",
 								"ECO - LE4 Storage Matrix (Mega Chemical)",
+								"ECO - LE4 Storage Matrix (Mega Energy)",
+								"ECO - LE4 Storage Matrix (Mega Experience)",
 								"ECO - LE6 Mana Storage Matrix",
-								"ECO - LE6 Storage Matrix (Bulk Item)",
 								"ECO - LE6 Storage Matrix (Chemical)",
 								"ECO - LE6 Storage Matrix (Complex Omni)",
 								"ECO - LE6 Storage Matrix (Data)",
@@ -131,8 +131,8 @@
 								"ECO - LE6 Storage Matrix (Matter)",
 								"ECO - LE6 Storage Matrix (Mega Air)",
 								"ECO - LE6 Storage Matrix (Mega Chemical)",
+								"ECO - LE6 Storage Matrix (Mega Energy)",
 								"ECO - LE9 Mana Storage Matrix",
-								"ECO - LE9 Storage Matrix (Bulk Item)",
 								"ECO - LE9 Storage Matrix (Chemical)",
 								"ECO - LE9 Storage Matrix (Complex Omni)",
 								"ECO - LE9 Storage Matrix (Data)",
@@ -144,6 +144,7 @@
 								"ECO - LE9 Storage Matrix (Mega Air)",
 								"ECO - LE9 Storage Matrix (Mega Chemical)",
 								"ECO - LE9 Storage Matrix (Mega Data)",
+								"ECO - LE9 Storage Matrix (Mega Energy)",
 								"ECO Bulk Conversion",
 								"ECO Complex Omni Storage Matrix Housing",
 								"ECO Infinite Base Resource Storage Matrix",
@@ -152,7 +153,6 @@
 								"ECO Lightning Storage Matrix Housing",
 								"ECO Mana Storage Matrix Housing",
 								"ECO Storage Matrix Housing (Air)",
-								"ECO Storage Matrix Housing (Bulk Item)",
 								"ECO Storage Matrix Housing (Chemical)",
 								"ECO Storage Matrix Housing (Data)",
 								"ECO Storage Matrix Housing (Experience)",
@@ -250,7 +250,7 @@
 						"shaders": false
 					},
 					"scan": {
-						"classes": 2641,
+						"classes": 2659,
 						"jars": [
 							"META-INF/jarjar/Registrate-MC1.20-1.3.11.jar",
 							"META-INF/jarjar/mixinextras-forge-0.5.3.jar",
@@ -279,10 +279,17 @@
 							]
 						},
 						"unreadable": []
-					}
+					},
+					"replaced": [
+						{
+							"id": 732005000,
+							"sha256": "30a1f8958ed3d83f26972f86c14804af63879dbd4d1ff438c3d80c66aa302f90",
+							"until": "2026-11-10T16:34:25.533Z"
+						}
+					]
 				}
 			],
-			"notes": "## 中文\n\nMinecraft 1.20.1 / Forge，建议使用 **AE2 15.4.11、LDLib 1.0.52.a 和 GuideME 20.1.15**。\n\n### 新增与优化\n\n- 支持通过存储接口批量转入 GTL 无限存储盘，保留精确数量、资源过滤与迁移恢复。\n- 优化存储读写、落盘调度、网络增量更新、终端库存快照和接口搬运，减少重复遍历与临时对象。\n- 使用分段计数处理超大库存，保留规划中的精确数量与无限库存语义。\n- 优化无环规划的路线重试，复用有效计算前缀、活动图检查和配方数量展开。\n- 优化加工状态首屏与增量同步，关闭状态页后停止后台请求。\n- 完善合成报告统计与材料卡片，支持 Shift 查看精确数量和流体单位换算，提前同步最终方案摘要。\n\n### 修复\n\n- 修复原版 CPU 与 ECO 互切时的状态和监听器清理，并保护异常状态条目的显示。\n- 修复请求器循环订单接入 ECO 规划及已就绪节点重复初始化的问题。\n- 修复正式环境下终端大数量库存差异注入的问题。\n- 兼容 GTL 库存快照实现，保留其原有存储更新流程。\n- 将机壳碰撞箱调整为完整方块。\n- 为四种充能水晶母岩补齐 AE2 生长加速标签。\n\n### 兼容性说明\n\n- 请同步升级客户端和服务端。\n\n---\n\n## English\n\nMinecraft 1.20.1 / Forge. Recommended versions: **AE2 15.4.11, LDLib 1.0.52.a, and GuideME 20.1.15**.\n\n### Added and improved\n\n- Added bulk imports from GTL infinite storage cells through storage interfaces, preserving exact quantities, resource filters, and migration recovery.\n- Optimized storage access, save scheduling, incremental network updates, terminal inventory snapshots, and interface transfers to reduce repeated scans and temporary allocations.\n- Added segmented counting for very large inventories while preserving exact quantities and infinite-stock semantics during planning.\n- Optimized acyclic route retries by reusing valid calculation prefixes, active graph checks, and recipe quantity expansion.\n- Improved initial and incremental processing status synchronization and stopped background requests when the status screen closes.\n- Improved crafting report statistics and material cards, including Shift tooltips for exact quantities, fluid unit conversion, and earlier final-plan summaries.\n\n### Fixed\n\n- Fixed status and listener cleanup when switching between vanilla CPUs and ECO, and guarded rendering of invalid status entries.\n- Fixed requester loop orders using ECO planning and repeated initialization of ready nodes.\n- Fixed large-quantity terminal inventory delta injection in production environments.\n- Preserved the original storage update flow when GTL inventory snapshots are present.\n- Changed casing collision shapes to full blocks.\n- Added the AE2 growth acceleration tag to all four energized crystal budding blocks.\n\n### Compatibility\n\n- Update both client and server together."
+			"notes": "## 中文\n\nMinecraft 1.20.1 / Forge，建议使用 **AE2 15.4.11、LDLib 1.0.52.a 和 GuideME 20.1.15**。\n\n### 新增与优化\n\n- 支持通过存储接口批量转入 GTL 无限存储盘，保留精确数量、资源过滤与迁移恢复。\n- 优化存储读写、落盘调度、网络增量更新、终端库存快照和接口搬运，减少重复遍历与临时对象。\n- 使用分段计数处理超大库存，保留规划中的精确数量与无限库存语义。\n- 优化无环规划的路线重试，复用有效计算前缀、活动图检查和配方数量展开。\n- 优化加工状态首屏与增量同步，关闭状态页后停止后台请求。\n- 完善合成报告统计与材料卡片，支持 Shift 查看精确数量和流体单位换算，提前同步最终方案摘要。\n- 新增网络拉取卡，支持流体输入仓按目标库存从 ME 网络补货，并将超额流体回存。\n- 流体输入仓使用 AE2 原生库存数量设置菜单，支持长整数数量，并统一齿轮按钮样式。\n- 更新 JEI 工具说明，移除旧版 LE4、LE6、LE9 大宗物品矩阵及其外壳。\n\n### 修复\n\n- 修复原版 CPU 与 ECO 互切时的状态和监听器清理，并保护异常状态条目的显示。\n- 修复请求器循环订单接入 ECO 规划及已就绪节点重复初始化的问题。\n- 修复正式环境下终端大数量库存差异注入的问题。\n- 兼容 GTL 库存快照实现，保留其原有存储更新流程。\n- 将机壳碰撞箱调整为完整方块。\n- 为四种充能水晶母岩补齐 AE2 生长加速标签。\n\n### 兼容性说明\n\n- 请同步升级客户端和服务端。\n- 本次重新发布包含流体输入仓网络补货及相关界面调整。\n\n---\n\n## English\n\nMinecraft 1.20.1 / Forge. Recommended versions: **AE2 15.4.11, LDLib 1.0.52.a, and GuideME 20.1.15**.\n\n### Added and improved\n\n- Added bulk imports from GTL infinite storage cells through storage interfaces, preserving exact quantities, resource filters, and migration recovery.\n- Optimized storage access, save scheduling, incremental network updates, terminal inventory snapshots, and interface transfers to reduce repeated scans and temporary allocations.\n- Added segmented counting for very large inventories while preserving exact quantities and infinite-stock semantics during planning.\n- Optimized acyclic route retries by reusing valid calculation prefixes, active graph checks, and recipe quantity expansion.\n- Improved initial and incremental processing status synchronization and stopped background requests when the status screen closes.\n- Improved crafting report statistics and material cards, including Shift tooltips for exact quantities, fluid unit conversion, and earlier final-plan summaries.\n- Added a network pull card so fluid input hatches can replenish target stock from the ME network and return excess fluid.\n- Fluid input hatches now use AE2's native stock amount menu with long-integer quantities and a consistent gear button style.\n- Updated JEI tool descriptions and removed the legacy LE4, LE6, and LE9 bulk item matrices and their housing.\n\n### Fixed\n\n- Fixed status and listener cleanup when switching between vanilla CPUs and ECO, and guarded rendering of invalid status entries.\n- Fixed requester loop orders using ECO planning and repeated initialization of ready nodes.\n- Fixed large-quantity terminal inventory delta injection in production environments.\n- Preserved the original storage update flow when GTL inventory snapshots are present.\n- Changed casing collision shapes to full blocks.\n- Added the AE2 growth acceleration tag to all four energized crystal budding blocks.\n\n### Compatibility\n\n- Update both client and server together.\n- This replacement release includes fluid input hatch network replenishment and related UI changes."
 		},
 		{
 			"tag": "20.5.6",
