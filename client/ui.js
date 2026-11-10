@@ -303,7 +303,7 @@ export const trailSteps = (...steps) =>
 		return [
 			new Component({ tag: 'span', textContent: '/', attributes: { 'aria-hidden': 'true' }, ...between }),
 			step.href
-				? new Link({ href: step.href, textContent: step.label, ...between })
+				? new Link({ href: step.href, textContent: step.label, tooltip: false, ...between })
 				: new Component({
 						tag: 'span',
 						textContent: step.label,
@@ -329,7 +329,12 @@ export const siteBar = (at, ...steps) => {
 				tag: 'nav',
 				attributes: { 'aria-label': 'Breadcrumb' },
 				append: [
-					new Link({ addClass: 'site', href: `${hrefOf('/')}${location.search}`, textContent: 'ender index' }),
+					new Link({
+						addClass: 'site',
+						href: `${hrefOf('/')}${location.search}`,
+						textContent: 'ender index',
+						tooltip: false,
+					}),
 					shown,
 				],
 			}),
@@ -340,6 +345,7 @@ export const siteBar = (at, ...steps) => {
 						variant: 'flat',
 						href: place === 'mods' ? `${href}${location.search}` : href,
 						textContent: label,
+						tooltip: false,
 						...(place === at ? { attributes: { 'aria-current': steps.length > 0 ? 'location' : 'page' } } : {}),
 					});
 
@@ -351,8 +357,8 @@ export const siteBar = (at, ...steps) => {
 			new Row({
 				style: { marginLeft: 'auto', flexWrap: 'nowrap' },
 				append: [
-					forStrangers(new Link({ variant: 'flat', href: LAUNCHER, textContent: 'Get ender' })),
-					new Link({ variant: 'flat', href: REPOSITORY, target: '_blank', textContent: 'GitHub' }),
+					forStrangers(new Link({ variant: 'flat', href: LAUNCHER, textContent: 'Get ender', tooltip: false })),
+					new Link({ variant: 'flat', href: REPOSITORY, target: '_blank', textContent: 'GitHub', tooltip: false }),
 				],
 			}),
 		],
