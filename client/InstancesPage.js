@@ -364,6 +364,12 @@ const newInstance = signal => {
 			choice.minecraft = value;
 		},
 	});
+	const name = new Input({
+		placeholder: 'Its name',
+		onInput: ({ target: { value } }) => {
+			choice.name = value;
+		},
+	});
 	const specs = new Input({
 		tag: 'textarea',
 		placeholder: 'More mods: their index pages, ender add lines, gh:owner/repo or mr:sodium, as many as you like',
@@ -427,9 +433,9 @@ const newInstance = signal => {
 			style: { gap: theme.space.md },
 			append: [
 				new Title({ textContent: 'New instance' }),
-				new Label({
-					label: 'From a pack',
-					append: new Row({
+				new Label(
+					{ label: 'From a pack', for: source },
+					new Row({
 						append: [
 							source,
 							new Button({
@@ -439,19 +445,14 @@ const newInstance = signal => {
 							}),
 						],
 					}),
-				}),
-				new Label({
-					label: 'From a list',
-					append: new Stack({
+				),
+				new Label(
+					{ label: 'From a list', for: name },
+					new Stack({
 						append: [
 							new Row({
 								append: [
-									new Input({
-										placeholder: 'Its name',
-										onInput: ({ target: { value } }) => {
-											choice.name = value;
-										},
-									}),
+									name,
 									minecraft,
 									new Select({
 										options: Object.entries(INSTANCE_LOADERS).map(([value, label]) => ({ label, value })),
@@ -509,7 +510,7 @@ const newInstance = signal => {
 							}),
 						],
 					}),
-				}),
+				),
 				status,
 			],
 		}),

@@ -178,9 +178,9 @@ export const packDialog = items => {
 			append: [
 				new Row({
 					append: [
-						new Label({ label: 'Name', append: name }),
-						new Label({ label: 'Minecraft', append: minecraft }),
-						new Label({ label: 'Loader', append: loader }),
+						new Label({ label: 'Name' }, name),
+						new Label({ label: 'Minecraft' }, minecraft),
+						new Label({ label: 'Loader' }, loader),
 					],
 				}),
 				new Meta({
