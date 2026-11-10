@@ -1,0 +1,371 @@
+{
+	"repo": "song682/CatFrame-Compat",
+	"host": "github",
+	"description": "Compatibility layer for CatFrame",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-08-16T02:28:09Z",
+	"pushed": "2026-10-28T15:32:58Z",
+	"releases": [
+		{
+			"tag": "v0.0.12",
+			"published": "2026-10-28T15:32:58Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 685440063,
+					"name": "CatFrameCompat-0.0.12-deobf.jar",
+					"url": "https://github.com/song682/CatFrame-Compat/releases/download/v0.0.12/CatFrameCompat-0.0.12-deobf.jar",
+					"size": 287534,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "4c56bb2ca6c41c32a0de1ca16a7f90cf2eecc9ae01d2110ab70aa39567b26feb",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 153,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/ui/extended/theme/JsonThemeLoader.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 685440062,
+					"name": "CatFrameCompat-0.0.12.jar",
+					"url": "https://github.com/song682/CatFrame-Compat/releases/download/v0.0.12/CatFrameCompat-0.0.12.jar",
+					"size": 282786,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "d786c662064d40857fa876b5877d8675ca01a75cd0b68130ed216901a8afeec6",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 153,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/ui/extended/theme/JsonThemeLoader.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CatFrameCompat - 0.0.12\n\n## What is changed?\nChange version number from previous to `0.0.12`\n\n### ➕Add:\n    - add readme\n- Downgrade Forge cfg to just another ConfigFormat: ForgeCfgFormat reads through Configuration.load and refills ConfigDocument, writes by rebuilding the property graph from the document only, so ForgeConfigScope is deleted and DocumentConfigScope becomes the single scope implementation. Clamp, range comments, dirty tracking, duplicate detection and unparsable-value repair now exist exactly once in ConfigManager and ConfigValue. Accepted tradeoffs per decision: hand added undeclared entries are dropped on write with a warning like every other format, shared module sections are not preserved, and the config version header is not handled.\n- Add optional numeric bounds to the Int, Long and Double config annotations: out of range values read from the file are clamped to the nearest bound and written back so the correction is not recomputed every launch, the bound is appended to the entry comment as a Range line for every format, a clamp logs a warning, and a min above max is rejected at registration\n- Add ExampleConfig as a reference FORGE_CFG config class covering all six entry types, an explicit general and named category split, and a set plus save write back path, with an explicit file name so it does not collide with the suggested configuration file of CompatConfig\n- Add pluggable config system with explicit registration: @Configure plus IConfig enforced together, IConfigScope dual backend over Forge Configuration and an ordered ConfigDocument, and self written JSON/properties/TOML formats that round trip comments and omit the general layer when it is the only category\n- new package in the mixins.\n- Route vanilla-style screen tooltips through CatFrame deferred tooltip pipeline: add early mixin on GuiScreen renderToolTip/drawHoveringText, gated by new enableVanillaTooltipsCompat switch (default off) and NEI/Chromatic Tooltips absence; add FMLCorePlugin early loader and early mixin config wired to the compat refmap\n\n### 🔧Fix:\n    - Add @ConfigEntry.Name overrides on CompatConfig fields whose old Forge cfg entries carried an enable prefix (enableItemPhysicCompat, enableBackhandCompat, enableCtm, enableNaturalTextures, enableChromaticTooltipsCompat, enableTagTooltips, enableNeiTooltipsCompat, enableVanillaTooltipsCompat) so existing values in config/CatFrameCompat.cfg are read instead of being treated as undeclared and reset to defaults. ctmDebugLog, activeTheme and blockStateRotationFreely already match their old entry names and need no override.\n- Add ExampleConfig exercising every annotation of the config system and register it from preInit, and fix ForgeConfigScope never calling Configuration.load so registration read an empty category tree and overwrote the existing file with defaults\n- Add Forge model-level transform support in extended layer: new BlockstateTransform parses the TRSR transform field (translation/rotation/scale, Euler-plus-array and quaternion-plus-object forms, origin pivot including Forge's opposing-corner default, 3x4 matrix form) from the rawJson channel; new BlockstateTransformExtension resolves the variant transform per block render and writes the block-space matrix into RenderContext.displayTransform; register the extension in ClientProxy preInit\n- Split entry metadata into a dedicated ConfigEntry annotation: rename the ConfigDocument model class to ConfigValue to free the name, move Comment, Category, Name, Ignore and the six kind annotations Boolean, Int, Long, Double, Text and List off Configure so it only describes the file again, resolve each field by its kind annotation, and reject fields that carry none, more than one, or one that disagrees with the field type, plus reject two fields mapping to the same category and key\n\n..."
+		},
+		{
+			"tag": "v0.0.11",
+			"published": "2026-10-24T18:01:43Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 672935833,
+					"name": "CatFrameCompat-0.0.11-deobf.jar",
+					"url": "https://github.com/song682/CatFrame-Compat/releases/download/v0.0.11/CatFrameCompat-0.0.11-deobf.jar",
+					"size": 222433,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "6609e78b50674b0cc02a2e18b0567ee9eb69a8eb73a0f9751fc82d779b520b02",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 115,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/ui/extended/theme/JsonThemeLoader.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 672935834,
+					"name": "CatFrameCompat-0.0.11.jar",
+					"url": "https://github.com/song682/CatFrame-Compat/releases/download/v0.0.11/CatFrameCompat-0.0.11.jar",
+					"size": 217569,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "8fe595dcadfc48cb89f0eca027193d00603be6241813a2568c3a28e83fa48e8e",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 115,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/ui/extended/theme/JsonThemeLoader.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CatFrameCompat - 0.0.11\n\n## What is changed?\nChange version number from previous to `0.0.11`\n\n### ➕Add:\n    - Adapt to CatFrame 0.10.10: take ItemStateModel from ModelRegistry in MixinItemPhysics (retarget the ModifyArg INVOKE at ItemStateModel#render, drop the removed model/render/IItemStateProvider) and implement the now-abstract AbstractComponent#renderWidget in NotificationBase\n- Add NEI container-tooltip coexistence bridge. New compact/nei package: NeiTooltipBridge injects CatFrame tooltip components as CodeChickenLib line handlers, NeiComponentLine adapts ClientTooltipComponent to GuiDraw.ITooltipLineHandler, NeiTooltipSuppressor disables NEI item tooltips when Chromatic Tooltips already owns the frame. Late mixin MixinAbstractContainerScreenNei cancels CatFrame own slot tooltip once NEI owns the frame. Adds NEI_TOOLTIPS_COMPAT mixin entry, isNEIInstalled gate, enableNeiTooltipsCompat option, compileOnly NEI/CodeChickenLib deps and postInit registration in ClientProxy. Also carries the complete TagTooltips sources that ClientProxy registers.\n\n### 🔧Fix:\n    - fix somethings\n- fix the build gradle and deleting some useless class and some things cleans up and a state of resident sprite tools added\n\n### ❗❗❗Deprecated:\n    - No deprecations\n\n\n## Notes\nFull Changelog: https://github.com/song682/CatFrame-Compat/commits/v0.0.11"
+		},
+		{
+			"tag": "v0.0.10",
+			"published": "2026-10-11T07:39:39Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 630118362,
+					"name": "CatFrameCompat-0.0.10-deobf.jar",
+					"url": "https://github.com/song682/CatFrame-Compat/releases/download/v0.0.10/CatFrameCompat-0.0.10-deobf.jar",
+					"size": 213717,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "e2da52583478cbd517039f6d851957384d7d9aabb72fd78d9973b1326b04c04b",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 110,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/ui/extended/theme/JsonThemeLoader.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 630118363,
+					"name": "CatFrameCompat-0.0.10.jar",
+					"url": "https://github.com/song682/CatFrame-Compat/releases/download/v0.0.10/CatFrameCompat-0.0.10.jar",
+					"size": 209065,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "eea032e79205a5d674d983fdb0e40e9268ca2993c1bd809019c8b0403fc8c976",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 110,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/ui/extended/theme/JsonThemeLoader.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CatFrameCompact - 0.0.10\n\n## What is changed?\nChange version number from previous to `0.0.10`\n\n### ➕Add:\n    - No new features\n\n### 🔧Fix:\n    - fixes\n\n### ❗❗❗Deprecated:\n    - No deprecations\n\n\n## Notes\nFull Changelog: https://github.com/song682/CatFrame-Compat/commits/v0.0.10"
+		},
+		{
+			"tag": "v0.0.9-Hotfix2",
+			"published": "2026-10-10T16:49:50Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 628478462,
+					"name": "CatFrameCompat-0.0.9-Hotfix2-deobf.jar",
+					"url": "https://github.com/song682/CatFrame-Compat/releases/download/v0.0.9-Hotfix2/CatFrameCompat-0.0.9-Hotfix2-deobf.jar",
+					"size": 213741,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "054ac55dd247de824e62f2fcfeeb12563f3b122c52544c38090e1c97533ed41d",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 110,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/ui/extended/theme/JsonThemeLoader.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 628478466,
+					"name": "CatFrameCompat-0.0.9-Hotfix2.jar",
+					"url": "https://github.com/song682/CatFrame-Compat/releases/download/v0.0.9-Hotfix2/CatFrameCompat-0.0.9-Hotfix2.jar",
+					"size": 209090,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "700dec0eab783c3c177db3ff43cf30bfc3ebac038ad842690cc095a729e75180",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 110,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/ui/extended/theme/JsonThemeLoader.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CatFrameCompact - 0.0.9-Hotfix2\n\n## What is changed?\nChange version number from previous to `0.0.9-Hotfix2`\n\n### ➕Add:\n    - add jar fogot\n\n### 🔧Fix:\n    - fix the jitpack usage\n- fix the jitpack usage\n\n### ❗❗❗Deprecated:\n    - No deprecations\n\n\n## Notes\nFull Changelog: https://github.com/song682/CatFrame-Compat/commits/v0.0.9-Hotfix2"
+		},
+		{
+			"tag": "v0.0.9-Hotfix",
+			"published": "2026-10-10T16:03:40Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 628378151,
+					"name": "CatFrameCompat-0.0.9-Hotfix-deobf.jar",
+					"url": "https://github.com/song682/CatFrame-Compat/releases/download/v0.0.9-Hotfix/CatFrameCompat-0.0.9-Hotfix-deobf.jar",
+					"size": 213737,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e740661a3e143e8118dfde3dd1878e203306799aed84de05c6cf8414acfc4f37",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 110,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/ui/extended/theme/JsonThemeLoader.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 628378141,
+					"name": "CatFrameCompat-0.0.9-Hotfix.jar",
+					"url": "https://github.com/song682/CatFrame-Compat/releases/download/v0.0.9-Hotfix/CatFrameCompat-0.0.9-Hotfix.jar",
+					"size": 209086,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "69aaa7550404b1b6c76a8e86f5d4e03d2d012fb0641163e492416aeb45206d20",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 110,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/ui/extended/theme/JsonThemeLoader.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CatFrameCompact - 0.0.9-Hotfix\n\n## What is changed?\nChange version number from previous to `0.0.9-Hotfix`\n\n### ➕Add:\n    - No new features\n\n### 🔧Fix:\n    - fixes\n\n### ❗❗❗Deprecated:\n    - No deprecations\n\n\n## Notes\nFull Changelog: https://github.com/song682/CatFrame-Compat/commits/v0.0.9-Hotfix"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-11-10T05:42:26.595Z",
+	"pictures": [],
+	"picturesChecked": "2026-11-10T05:42:26.595Z",
+	"contributors": {
+		"commits": 148,
+		"more": 0,
+		"people": [
+			{
+				"login": "song682",
+				"commits": 148,
+				"name": "dfdvdsf",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-11-10T05:42:26.595Z",
+	"history": 1
+}
