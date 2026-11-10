@@ -6,8 +6,66 @@
 	"archived": false,
 	"license": "Apache-2.0",
 	"created": "2025-09-18T23:03:57Z",
-	"pushed": "2026-11-09T15:50:00Z",
+	"pushed": "2026-11-10T11:08:02Z",
 	"releases": [
+		{
+			"tag": "v26.2.2",
+			"published": "2026-11-10T11:07:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 731124543,
+					"name": "stash-hunter-26.2.2.jar",
+					"url": "https://github.com/omtoi101/Stash-Hunter/releases/download/v26.2.2/stash-hunter-26.2.2.jar",
+					"size": 324435,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "1eb699807bf79a80c725508649066d81dedc07acd3d6a045f1bf552708ac352e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "stash-hunter",
+							"version": "26.2.2",
+							"name": "StashHunter",
+							"description": "A Meteor client addon for finding stashes on anarchy servers.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor",
+								"xaerominimap"
+							]
+						}
+					],
+					"icon": "4b3730241efa0539e98b7c6e8f58f976600d6c7304d814d8ee694b3bb6f6bb6e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 106,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/stashhunter/stashhunter/utils/DiscordWebhook.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "> [!NOTE]\n> **First full release of 26.2.2.** It contains everything from the [v26.2.2-pre1 test build](https://github.com/omtoi101/Stash-Hunter/releases/tag/v26.2.2-pre1) plus the changes below. Coming from v26.2.1? Read the pre1 notes too: a reworked stash scan, more reliable flight and nine new modules.\n>\n> It builds and passes all 157 unit tests, but **it has not been fully tested in-game yet**. Try it on a test account or a test server first, and report anything odd.\n\n## Install\n\nDownload `stash-hunter-26.2.2.jar` below and put it in your `mods` folder (remove older Stash-Hunter jars).\n\n- Minecraft 26.2, Meteor Client 26.2, Java 25\n- Fabric API is not needed\n- Optional: Baritone 26.2 (elytra pathing, walking to chest-index finds), Xaero's Minimap 26.2 (stash waypoints)\n\n`.sh` is short for `.stashhunter`.\n\n## Elytra repair lands first\n\n- **`auto-elytra-repair` repairs on the ground now.** The bot pauses the flight, sinks straight down with ElytraFly, repairs with XP bottles (Mending) and takes off again. Scaffold blocks are no longer needed.\n- **Unsafe ground is skipped.** Over water, lava, fire, magma, cactus, powder snow or the End's void it glides on until the ground is safe.\n- **A stalled or impossible repair pauses instead of disconnecting.** If the XP bottles run out on the ground, or you have no XP bottles or Mending at all, the bot lands and the flight stays paused. Restock, then `.sh resume`.\n- `altitude-loss-detector` no longer triggers during the descent.\n\n## Shorter spiral search\n\n- **`.sh spiral` stops at the last ring the scan needs**, e.g. 24 km less flying at radius 3000.\n- The default gap is twice your `scan-radius`. A wider gap warns you how much is left unscanned.\n- The start message shows the path length, `.sh status` the progress in percent and km.\n\n## Chest index\n\n- **Finds light up:** `.chest-index search <item>` outlines every container it finds for `highlight-seconds`, also with the module off.\n- **Click the coordinates** and Baritone walks next to the container. With `open-after-walk` it opens the container on arrival. Without Baritone, or for another dimension, the click copies the coordinates.\n- **`[+waypoint]`** after a find adds a Meteor waypoint for the container.\n- **`.chest-index shulker <name>`** finds shulker boxes by their custom name.\n- The index is saved in the background, so a big index no longer stutters every minute.\n\n## Named trips\n\n- **`.sh name <name>`** names the running (or latest) trip, **`.sh resume <name>`** continues it, **`.sh delete <name>`** removes it. Named trips are kept until you delete them.\n- `.sh list` shows each trip's name, progress, path length and save time.\n- A finished flight is saved as complete, so `.sh resume` no longer flies it again.\n- Saving a trip no longer stutters: trips are written in the background.\n\n## New module: `cave-disturbance-detector`\n\nMarks plain air inside cave air, i.e. blocks a player broke: in Nether caves, mineshafts, strongholds, dungeons and in the caves of chunks generated in 1.13–1.17. Overworld caves generated since 1.18 contain no cave air, so it stays silent there.\n\n## Please test\n\n- An elytra repair mid-flight, with and without Baritone, also over water\n- A spiral search with `.sh pause` / `.sh resume`\n- `.chest-index search` and clicking a find, in singleplayer first\n- Named trips: name a trip, pause, restart the game, resume it by name\n- `cave-disturbance-detector` in a mineshaft where you broke a few blocks\n\nReport bugs at https://github.com/omtoi101/Stash-Hunter/issues and attach `logs/latest.log`.\n\n**Full changelog:** https://github.com/omtoi101/Stash-Hunter/blob/v26.2.2/CHANGELOG.md"
+		},
 		{
 			"tag": "v26.2.2-pre1",
 			"published": "2026-10-31T18:08:57Z",
@@ -18,7 +76,7 @@
 					"name": "stash-hunter-26.2.2-pre1.jar",
 					"url": "https://github.com/omtoi101/Stash-Hunter/releases/download/v26.2.2-pre1/stash-hunter-26.2.2-pre1.jar",
 					"size": 284532,
-					"downloads": 20,
+					"downloads": 23,
 					"inspection": 2,
 					"sha256": "f6ca159c7f415cf8ccb19ea47e51e66ef1b5a90c60726f1c137297b01793ffa1",
 					"mods": [
@@ -234,7 +292,8 @@
 						},
 						"hosts": {},
 						"unreadable": []
-					}
+					},
+					"gone": "2026-11-10T11:06:16.291Z"
 				},
 				{
 					"id": 696103880,
@@ -275,6 +334,57 @@
 					},
 					"scan": {
 						"classes": 34,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/stashhunter/stashhunter/utils/DiscordWebhook.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					},
+					"gone": "2026-11-10T11:06:16.291Z"
+				},
+				{
+					"id": 731124746,
+					"name": "stash-hunter-26.2.2.jar",
+					"url": "https://github.com/omtoi101/Stash-Hunter/releases/download/snapshot/stash-hunter-26.2.2.jar",
+					"size": 324420,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "43973d53df9cbe98d56c5dd4f372d64f6215aa2fc289d9433f0cabc01945168b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "stash-hunter",
+							"version": "26.2.2",
+							"name": "StashHunter",
+							"description": "A Meteor client addon for finding stashes on anarchy servers.",
+							"minecraft": "26.2",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor",
+								"xaerominimap"
+							]
+						}
+					],
+					"icon": "4b3730241efa0539e98b7c6e8f58f976600d6c7304d814d8ee694b3bb6f6bb6e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 106,
 						"jars": [],
 						"capabilities": {
 							"network": {
