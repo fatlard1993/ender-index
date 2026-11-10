@@ -485,6 +485,7 @@ export default class SearchPage extends View {
 			type: 'search',
 			value: state.query,
 			placeholder: 'Search mods: lithium, fabric api, backpacks',
+			attributes: { 'aria-label': 'Search mods' },
 			style: { flex: '1', minWidth: '12em', width: 'auto' },
 			onInput: debounce(({ target: { value } }) => {
 				state.query = value;
@@ -496,6 +497,7 @@ export default class SearchPage extends View {
 			options: [{ label: 'Any Minecraft', value: '' }, ...(state.minecraft ? [state.minecraft] : [])],
 			value: state.minecraft ?? '',
 			style: { width: 'auto' },
+			attributes: { 'aria-label': 'Minecraft' },
 			onChange: ({ target: { value } }) => {
 				state.minecraft = value || undefined;
 				restart();
@@ -513,11 +515,12 @@ export default class SearchPage extends View {
 			},
 		});
 
-		const choice = (key, choices, any) =>
+		const choice = (key, choices, any, named) =>
 			new Select({
 				options: [{ label: any, value: '' }, ...Object.entries(choices).map(([value, label]) => ({ label, value }))],
 				value: state[key] ?? '',
 				style: { width: 'auto' },
+				attributes: { 'aria-label': named },
 				onChange: ({ target: { value } }) => {
 					state[key] = value || undefined;
 					restart();
@@ -528,6 +531,7 @@ export default class SearchPage extends View {
 			options: [{ label: 'Any theme', value: '' }, ...(state.tag ? [state.tag] : [])],
 			value: state.tag ?? '',
 			style: { width: 'auto' },
+			attributes: { 'aria-label': 'Theme' },
 			onChange: ({ target: { value } }) => {
 				state.tag = value || undefined;
 				restart();
@@ -547,6 +551,7 @@ export default class SearchPage extends View {
 			options: Object.entries(SORTS).map(([value, label]) => ({ label, value })),
 			value: state.sort,
 			style: { width: 'auto' },
+			attributes: { 'aria-label': 'Sort by' },
 			onChange: ({ target: { value } }) => {
 				state.sort = value;
 				restart();
@@ -690,9 +695,9 @@ export default class SearchPage extends View {
 					gap: 8,
 					style: { margin: '4px 0' },
 					append: [
-						choice('side', SIDES, 'Any side'),
-						choice('released', RELEASED, 'Released any time'),
-						choice('host', HOSTS, 'Any host'),
+						choice('side', SIDES, 'Any side', 'Side'),
+						choice('released', RELEASED, 'Released any time', 'Released'),
+						choice('host', HOSTS, 'Any host', 'Host'),
 						theme,
 						sort,
 					],

@@ -610,6 +610,7 @@ const downloadsPanel = (entry, record) => {
 		options: [{ label: 'Any Minecraft', value: '' }, ...(choice.minecraft ? [choice.minecraft] : [])],
 		value: choice.minecraft ?? '',
 		style: { width: 'auto' },
+		attributes: { 'aria-label': 'Minecraft' },
 		onChange: ({ target: { value } }) => {
 			choice.minecraft = value || undefined;
 			draw();
@@ -626,6 +627,7 @@ const downloadsPanel = (entry, record) => {
 		],
 		value: choice.loader ?? '',
 		style: { width: 'auto' },
+		attributes: { 'aria-label': 'Loader' },
 		onChange: ({ target: { value } }) => {
 			choice.loader = value || undefined;
 			draw();
@@ -634,6 +636,7 @@ const downloadsPanel = (entry, record) => {
 	const text = new Input({
 		type: 'search',
 		placeholder: 'Filter by release, file or version',
+		attributes: { 'aria-label': 'Filter the downloads' },
 		style: { flex: '1', minWidth: '12em', width: 'auto' },
 		onInput: ({ target: { value } }) => {
 			choice.text = value;

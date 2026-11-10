@@ -151,6 +151,7 @@ const modsPanel = (pack, byKey) => {
 	const filter = new Input({
 		type: 'search',
 		placeholder: `Filter its ${count(pack.count)} mods`,
+		attributes: { 'aria-label': 'Filter its mods' },
 		style: { maxWidth: '320px' },
 	});
 	const shown = new Stack();

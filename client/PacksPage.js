@@ -61,18 +61,19 @@ export default class PacksPage extends View {
 			drawResults();
 		};
 
-		const choose = (key, options, any) =>
+		const choose = (key, named, options, any) =>
 			new Select({
 				options: [...(any ? [{ label: any, value: '' }] : []), ...options],
 				value: state[key] ?? '',
 				style: { width: 'auto' },
+				attributes: { 'aria-label': named },
 				onChange: ({ target: { value } }) => {
 					state[key] = value || undefined;
 					draw();
 				},
 			});
 		const listed = labels => Object.entries(labels).map(([value, label]) => ({ label, value }));
-		const minecraft = choose('minecraft', state.minecraft ? [state.minecraft] : [], 'Any Minecraft');
+		const minecraft = choose('minecraft', 'Minecraft', state.minecraft ? [state.minecraft] : [], 'Any Minecraft');
 
 		this.content([
 			siteBar('packs'),
@@ -90,6 +91,7 @@ export default class PacksPage extends View {
 							new Input({
 								type: 'search',
 								placeholder: 'Search packs',
+								attributes: { 'aria-label': 'Search packs' },
 								value: state.query,
 								style: { flex: '1', minWidth: '12em', width: 'auto' },
 								onInput: debounce(({ target: { value } }) => {
@@ -97,15 +99,15 @@ export default class PacksPage extends View {
 									draw();
 								}, 150),
 							}),
-							choose('sort', listed(PACK_SORTS)),
+							choose('sort', 'Sort by', listed(PACK_SORTS)),
 						],
 					}),
 					new Row({
 						append: [
 							minecraft,
-							choose('loader', listed(LOADERS), 'Any loader'),
-							choose('format', listed(PACK_FORMATS), 'Any format'),
-							choose('jars', listed(PACK_JARS), 'Any jars'),
+							choose('loader', 'Loader', listed(LOADERS), 'Any loader'),
+							choose('format', 'Format', listed(PACK_FORMATS), 'Any format'),
+							choose('jars', 'Jars', listed(PACK_JARS), 'Any jars'),
 						],
 					}),
 					status,

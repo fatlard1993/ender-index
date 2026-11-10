@@ -124,7 +124,10 @@ const signInRow = signal => {
 };
 
 const addOffline = () => {
-	const name = new Input({ placeholder: 'A name, 3 to 16 letters, digits or _' });
+	const name = new Input({
+		placeholder: 'A name, 3 to 16 letters, digits or _',
+		attributes: { 'aria-label': 'Player name' },
+	});
 	const add = () =>
 		attempt(
 			async () => {

@@ -360,12 +360,14 @@ const newInstance = signal => {
 	const minecraft = new Select({
 		options: [{ label: 'The newest release', value: '' }],
 		value: '',
+		attributes: { 'aria-label': 'Minecraft' },
 		onChange: ({ target: { value } }) => {
 			choice.minecraft = value;
 		},
 	});
 	const name = new Input({
 		placeholder: 'Its name',
+		attributes: { 'aria-label': 'Name' },
 		onInput: ({ target: { value } }) => {
 			choice.name = value;
 		},
@@ -373,7 +375,7 @@ const newInstance = signal => {
 	const specs = new Input({
 		tag: 'textarea',
 		placeholder: 'More mods: their index pages, ender add lines, gh:owner/repo or mr:sodium, as many as you like',
-		attributes: { rows: 3 },
+		attributes: { rows: 3, 'aria-label': 'Mods' },
 	});
 
 	const importPasted = () => {
@@ -457,6 +459,7 @@ const newInstance = signal => {
 									new Select({
 										options: Object.entries(INSTANCE_LOADERS).map(([value, label]) => ({ label, value })),
 										value: choice.loader,
+										attributes: { 'aria-label': 'Loader' },
 										onChange: ({ target: { value } }) => {
 											choice.loader = value;
 										},

@@ -66,6 +66,7 @@ const listMod = () => {
 	const result = new Meta({ tag: 'span' });
 	const field = new Input({
 		placeholder: 'gh:you/your-mod, or its link',
+		attributes: { 'aria-label': 'Your mod' },
 		style: { flex: '1', minWidth: '14em', width: 'auto' },
 	});
 	const button = new Button({
