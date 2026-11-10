@@ -50,6 +50,15 @@ export const Title = styled.Component(
 	`,
 );
 
+/** A heading at a page's name size, breaking a long name anywhere rather than widening the page. */
+export const Heading = styled.Component(
+	() => `
+		margin: 0;
+		font-size: 1.6em;
+		overflow-wrap: anywhere;
+	`,
+);
+
 export const Chip = styled(
 	TooltipWrapper,
 	({ colors, radius, space }) => `

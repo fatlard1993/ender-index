@@ -27,6 +27,7 @@ import {
 } from './search';
 import {
 	Chip,
+	Heading,
 	LAUNCHER,
 	Meta,
 	Row,
@@ -42,14 +43,6 @@ import {
 	tiles,
 } from './ui';
 import { hrefOf, navigate } from './route';
-
-const Heading = styled.Component(
-	() => `
-		margin: 0;
-		font-size: 1.6em;
-		overflow-wrap: anywhere;
-	`,
-);
 
 /** Where a pack's mods come from, each kind a share of one bar, told again beneath it in words. */
 const KINDS = [

@@ -70,6 +70,7 @@ import { local } from './local';
 import {
 	Chip,
 	Command,
+	Heading,
 	Meta,
 	Row,
 	Stack,
@@ -93,14 +94,6 @@ import {
 	tiles,
 } from './ui';
 import { hrefOf } from './route';
-
-const Heading = styled.Component(
-	() => `
-		margin: 0;
-		font-size: 1.6em;
-		overflow-wrap: anywhere;
-	`,
-);
 
 /** A readme as its host would show it, kept to this column: wide images and tables scale or scroll, never the page. */
 export const Prose = styled.Component(
