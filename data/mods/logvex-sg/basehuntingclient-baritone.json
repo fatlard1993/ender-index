@@ -1,0 +1,89 @@
+{
+	"repo": "logvex-sg/basehuntingclient-baritone",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-09-26T11:10:41Z",
+	"pushed": "2026-11-11T14:35:48Z",
+	"releases": [
+		{
+			"tag": "v2.0.0",
+			"published": "2026-11-11T14:35:56Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 735827030,
+					"name": "basehunting-2.0.0.jar",
+					"url": "https://github.com/logvex-sg/basehuntingclient-baritone/releases/download/v2.0.0/basehunting-2.0.0.jar",
+					"size": 433640,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "7f081076fb93062f6c47248ac19cab757959bccc595bddd73d3c9000b386437b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "basehunting",
+							"version": "2.0.0",
+							"name": "Base Hunting Client",
+							"description": "Anarchy base-hunting toolkit. Firework-free elytra autopilot with automatic elytra management, adaptive exploration, stash and new-chunk detection, player tracking, mending and ender chest handling, a safe storage system (inventory sorting, chest sorting, a container network, shulker work and restocking), survival guardrails and fully configurable Discord webhook notifications.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f86199c6596cbcff498da5b9c42c0cf88099b157c265a8fa45c3238904c3fc81.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 148,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Base Hunting Client 2.0.0 — the storage release\n\nA complete storage and inventory subsystem on top of the 1.1.0 exploration and equipment release.\nEvery storage action is planned by pure logic, queued to a single clicker, and only reported as done\nonce the live container actually matches the planned result.\n\n**Download:** `basehunting-2.0.0.jar` (below). Requires Minecraft 1.21.11, Fabric Loader, and Meteor\nClient. Baritone is optional (only Base Hunter v1 needs it).\n\n### New storage modules\n\n| Module | What it does |\n| --- | --- |\n| `inventory-manager` | Sorts your inventory into a stable category order — on activate, after closing a container, or on an interval. |\n| `chest-sorter` | Sorts any container, deposits/withdraws only the categories you select, and registers opened containers. |\n| `storage-network` | A per-server, per-dimension container directory with last-known contents, and travel to a container. |\n| `shulker-manager` | Fills, empties, sorts and searches shulker boxes. |\n| `restock-manager` | Tops up travel supplies from registered storage, walking there with Baritone when available. |\n| `storage-monitor` | Runs named workflows and is the storage status view. |\n\n### Safety first\n\n- **One thing clicks slots: `ContainerInteractionManager`.** Every feature plans moves as pure data and\n  submits them there. An operation holds the `INVENTORY` lease for its whole life and only one runs at a\n  time, so two features can never click at once.\n- **Every operation is verified, not assumed.** The plan is simulated against the live container before\n  the first click, and success is reported only once the container actually matches. A wrong settled\n  state, a missing slot, or a timeout is a failure with a reason.\n- **Deposits only move categories you selected.** A protection list and the reserve settings are a\n  second gate; the selected slot, hotbar reserve and protected items never move, and stacks are never\n  split.\n- **A shulker whose contents were never seen is reported unknown, never empty.**\n- **No packets are forged.** The player looks at a block, `interactBlock` runs, items move with normal\n  slot clicks. A server refusal is reported, not worked around.\n\n### Also in this release\n\n- Storage & Inventory section in the management screen (`/bh gui`).\n- Storage HUD lines (`show-storage`, `show-shulkers`).\n- Commands: `/bh storage …`, `/bh shulker …`, `/bh workflow …`, `/bh restock …`.\n- Storage notification categories with per-event cooldowns in the Discord notifier.\n- A failed operation publishes `CONTAINER_OP_FAILED`, so it shows in chat, the GUI and Discord.\n\n### Verification\n\n`./gradlew clean build` — BUILD SUCCESSFUL. All suites run headlessly via `./gradlew verifyAddon`:\n\n| Suite | Assertions |\n| --- | --- |\n| `plannerTest` | 21 |\n| `coreLogicTest` | 175 |\n| `storageLogicTest` | 131 (new) |\n| `apiContractTest` | 36 |\n\nThe addon also loads in a real dev client: `Initializing Base Hunting Client` → `(Meteor Client) Loading`,\nwith no addon exceptions.\n\n### Docs\n\n- [README](https://github.com/logvex-sg/basehuntingclient-baritone/blob/main/README.md)\n- [Full guide](https://github.com/logvex-sg/basehuntingclient-baritone/blob/main/docs/GUIDE.md)\n- [Changelog](https://github.com/logvex-sg/basehuntingclient-baritone/blob/main/CHANGELOG.md)\n\n### Known limitation\n\nThe storage system is verified by headless logic tests and a real client load. It has not been exercised\nagainst a live multiplayer server with real containers. The architecture reports a server refusal as a\nfailure with a reason rather than a silent false success.\n\n---\n\n_This release was prepared by an AI agent (OpenHands) on behalf of logvex-sg._"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "An autonomous base-hunting and equipment-management addon for Meteor Client, built for anarchy servers.",
+	"funding": [],
+	"fundingChecked": "2026-11-11T14:50:15.993Z",
+	"pictures": [],
+	"picturesChecked": "2026-11-11T14:50:15.993Z",
+	"contributors": {
+		"commits": 9,
+		"more": 0,
+		"people": [
+			{
+				"login": "openhands-agent",
+				"commits": 5,
+				"name": "OpenHands",
+				"funding": []
+			},
+			{
+				"login": "logvex-sg",
+				"commits": 4,
+				"name": "logvex",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-11-11T14:50:15.993Z",
+	"history": 1
+}
