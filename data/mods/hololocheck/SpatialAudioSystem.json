@@ -6,8 +6,138 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-03-22T15:10:47Z",
-	"pushed": "2026-11-11T03:59:57Z",
+	"pushed": "2026-11-11T04:34:34Z",
 	"releases": [
+		{
+			"tag": "v1.2.0",
+			"published": "2026-11-11T04:34:34Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 734137021,
+					"name": "spatialaudiosystem-1.2.0.jar",
+					"url": "https://github.com/hololocheck/SpatialAudioSystem/releases/download/v1.2.0/spatialaudiosystem-1.2.0.jar",
+					"size": 140495513,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "14130c23ea9956bbfcfc45c73acaaf44dd1ba17c4c8657fc3c81a93f5e4fcecb",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "spatialaudiosystem",
+							"version": "1.2.0",
+							"name": "Spatial Audio System",
+							"description": "A mod that lets you play custom MP3 and OGG audio files in-game.\nIncludes playback devices, recording devices, recording media, and range specification boards.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"manta",
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "fe7eeda3a77f18e5d0f71c1f0c0859eb51613cdc28df7a3a0d8d4abe5ab3fe81.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Spatial Audio System"
+							],
+							"block": [
+								"Memory Device",
+								"Playback Device"
+							],
+							"item": [
+								"Range Board",
+								"Recording Medium",
+								"Sound Handy"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1134,
+						"jars": [
+							"META-INF/jarjar/manta-2.94.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jarjar/manta-2.94.0.jar!com/manta/internal/os.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"javazoom/spi/mpeg/sampled/file/MpegAudioFileReader.class": [
+									"java/net/URL.openConnection"
+								],
+								"javazoom/spi/mpeg/sampled/file/tag/IcyInputStream.class": [
+									"java/net/URL.openConnection"
+								],
+								"javazoom/jl/player/PlayerApplet.class": [
+									"java/net/URL.openStream"
+								],
+								"javazoom/jl/player/jlp.class": [
+									"java/net/URL.openStream"
+								],
+								"org/tritonus/share/sampled/file/TAudioFileReader.class": [
+									"java/net/URL.openStream",
+									"java/net/URL.openConnection"
+								]
+							},
+							"native": {
+								"META-INF/jarjar/manta-2.94.0.jar!com/manta/video/youtube/runtime/mcsschrome/MCSSChrome.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								]
+							}
+						},
+						"hosts": {
+							"www.w3.org": [
+								"com/spatialaudiosystem/screen/PlaybackDeviceScreenV2.class"
+							],
+							"apache.org": [
+								"META-INF/jarjar/manta-2.94.0.jar!com/manta/internal/llAfen.class",
+								"META-INF/jarjar/manta-2.94.0.jar!com/manta/internal/m5mnQ.class"
+							],
+							"javax.xml.xmlconstants": [
+								"META-INF/jarjar/manta-2.94.0.jar!com/manta/internal/llAfen.class",
+								"META-INF/jarjar/manta-2.94.0.jar!com/manta/internal/m5mnQ.class"
+							],
+							"xml.org": [
+								"META-INF/jarjar/manta-2.94.0.jar!com/manta/internal/llAfen.class"
+							],
+							"www.youtube.com": [
+								"META-INF/jarjar/manta-2.94.0.jar!com/manta/internal/ob.class"
+							],
+							"i.ytimg.com": [
+								"META-INF/jarjar/manta-2.94.0.jar!com/manta/internal/pDHL.class"
+							],
+							"mcss-embed.local": [
+								"META-INF/jarjar/manta-2.94.0.jar!com/manta/internal/qL3.class"
+							],
+							"www.javazoom.net": [
+								"javazoom/jl/converter/jlc$jlcArgs.class"
+							],
+							"www.server.com": [
+								"javazoom/jl/player/jlp.class"
+							],
+							"www.shoutcastserver.com": [
+								"javazoom/jl/player/jlp.class"
+							],
+							"www.tritonus.org": [
+								"org/tritonus/share/GlobalInfo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## English\n\n### Major Changes\n\n- **Manta 2.94.0 (Manta 7.1) is bundled (jar-in-jar)** — required range `[2.94.0,3)`. The CEF runtime that plays in-game videos (Chromium Embedded Framework 122) is now **bundled in the jar** and extracted to `<game folder>/mcss-chrome-native` the first time a video plays. **Nothing is downloaded, and the jar contains no executable (.exe):** CEF's child processes are started by the Java that runs the game (`java.exe` / `javaw.exe`), which loads the bundled DLLs — in Task Manager they appear as Java processes. The jar is now about 140 MB. Videos that need DRM (Widevine), and pop-up windows opened from links inside a video, do not open. Update TSU to 1.2.0 at the same time (it embeds the same Manta).\n- **Chinese UI** — zh_cn, with zh_hk / zh_tw converted from it.\n\n### Changed\n\n- F1 hints read as natural Japanese, and what nine of them said was corrected against the code; English and Chinese say what the code does too.\n- UI labels, playlist counts and tooltips are drawn with Manta's raster font. Scrollbar thumbs can be grabbed and dragged.\n\n### Added\n\n- **Wiki** — a Videos page with the SAS guide (English, Japanese and Chinese).\n\n### Fixed\n\n- The recording device's screen shows a picked or cleared file at once.\n- `/clone ... move` moves a playback or recording device's contents instead of doubling them.\n- A memory device's medium keeps its length with its sound (on clear, and on a rewrite that cannot be timed).\n- A late listener who has played a sound before hears it without a transfer.\n- In the schedule popup, releasing a running quick-craft goes through.\n\n### Internal\n\n- Network version 1.8. **Older clients are refused at login** — update the client and the server together.\n\n## 日本語\n\n### 主な変更\n\n- **Manta 2.94.0 (Manta 7.1) を内包（jar-in-jar）** — 要求範囲 `[2.94.0,3)`。ゲーム内動画の再生に使う CEF（Chromium Embedded Framework 122）を **jar に同梱**し、最初に動画を再生するときに `<ゲームフォルダ>/mcss-chrome-native` へ展開します。**インターネットからの取得は行わず、jar に実行ファイル（.exe）は含みません。** CEF の子プロセスはゲームを動かしている Java（`java.exe` / `javaw.exe`）が同梱の DLL を読んで起動します（タスク マネージャーでは Java のプロセスに見えます）。jar は約 140 MB になりました。DRM（Widevine）を要する動画と、動画内のリンクから開くポップアップは開きません。TSU も 1.2.0 へ同時に更新してください（同じ Manta を内包しています）。\n- **中国語 UI** — zh_cn と、そこから変換した zh_hk / zh_tw。\n\n### 変更\n\n- F1 ヒントを自然な日本語に直し、9 件の内容をコードと突き合わせて訂正しました。英語・中国語もコードどおりの内容に揃えました。\n- UI のラベル・再生リストの件数・ツールチップを Manta のラスタフォントで描きます。スクロールバーのつまみをつかんでドラッグできます。\n\n### 追加\n\n- **wiki** — SAS のガイド動画（英・日・中）の Videos ページ。\n\n### 修正\n\n- 録音装置の画面が、選んだ・消したファイルをすぐに表示します。\n- `/clone ... move` で再生装置・録音装置の中身が倍にならず移動します。\n- メモリーデバイスの媒体の長さが音と一緒に移ります（消去、時間を計れない書き換え）。\n- 以前に再生した音を持っている途中参加者は、転送なしでその音を聞けます。\n- スケジュールのポップアップで、進行中のクイッククラフトの離す操作が通ります。\n\n### 内部\n\n- 通信の版 1.8。**古いクライアントはログイン時に拒否されます** — サーバーとクライアントを同時に更新してください。"
+		},
 		{
 			"tag": "v1.1.0",
 			"published": "2026-09-05T09:45:48Z",
@@ -18,7 +148,7 @@
 					"name": "spatialaudiosystem-1.1.0.jar",
 					"url": "https://github.com/hololocheck/SpatialAudioSystem/releases/download/v1.1.0/spatialaudiosystem-1.1.0.jar",
 					"size": 2472619,
-					"downloads": 5,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "61c5ea0049f97fd485376cd8c36ab574f9ef9cf314c1ceba85737daf9a922d2f",
 					"mods": [
@@ -151,7 +281,7 @@
 					"name": "spatialaudiosystem-1.0.5.jar",
 					"url": "https://github.com/hololocheck/SpatialAudioSystem/releases/download/v1.0.5/spatialaudiosystem-1.0.5.jar",
 					"size": 2022756,
-					"downloads": 5,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "a91528517d7fdc2ff04cbb37ee511427866860f25efa009451879c64293378fb",
 					"mods": [
@@ -283,7 +413,7 @@
 					"name": "stationsoundsystem-1.0.3.jar",
 					"url": "https://github.com/hololocheck/SpatialAudioSystem/releases/download/v1.0.3/stationsoundsystem-1.0.3.jar",
 					"size": 469828,
-					"downloads": 12,
+					"downloads": 13,
 					"inspection": 2,
 					"sha256": "efa5ae346b898bd79e2a86abe8f6e9fdd90833e40911513c252a9ff43370529d",
 					"mods": [
@@ -376,7 +506,7 @@
 					"name": "stationsoundsystem-1.0.2.jar",
 					"url": "https://github.com/hololocheck/SpatialAudioSystem/releases/download/v1.0.2/stationsoundsystem-1.0.2.jar",
 					"size": 457666,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "dc6f73b76ba05645f064f4adc003f6621a23173180bd08379a8e17a2e4b6d7ab",
 					"mods": [
