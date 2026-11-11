@@ -5,8 +5,60 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-09-26T11:10:41Z",
-	"pushed": "2026-11-11T16:36:20Z",
+	"pushed": "2026-11-11T17:41:18Z",
 	"releases": [
+		{
+			"tag": "v2.3.0",
+			"published": "2026-11-11T17:42:06Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 736367134,
+					"name": "basehunting-2.3.0.jar",
+					"url": "https://github.com/logvex-sg/basehuntingclient-baritone/releases/download/v2.3.0/basehunting-2.3.0.jar",
+					"size": 566321,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "dceae32676bb343b245ef96cf24e87de625febb9fbc65c7bf21d8bab7b5eb713",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "basehunting",
+							"version": "2.3.0",
+							"name": "Base Hunting Client",
+							"description": "Anarchy base-hunting toolkit. Firework-free elytra autopilot with automatic elytra management, adaptive exploration, stash and new-chunk detection, player tracking, mending and ender chest handling, a safe storage system (inventory sorting, chest sorting, a container network, shulker work and restocking), survival guardrails and fully configurable Discord webhook notifications.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f86199c6596cbcff498da5b9c42c0cf88099b157c265a8fa45c3238904c3fc81.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 202,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Base Hunting Client 2.3.0 — stability hardening\n\nA bug-fix release. Every item below is a real defect found by reading the code, and each has a\nregression test that fails if it comes back. No features were removed.\n\n## Flight\n\n- **The v2 autopilot no longer retries a doomed takeoff forever.** `BaseHunterV2` re-asserts \"I want to\n  fly\" every tick, and that call used to reset the launch retry budget, so a takeoff that could never\n  succeed was retried indefinitely. The budget now resets only on a genuine off->on transition, a live\n  glide replenishes it, and when it is spent the controller reports the failure once and stops. The\n  policy lives in a new, pure `DeploymentGovernor` with a headless regression test.\n- `BaseHunterV2` re-arms its \"not flying\" warning after a resumed flight, so every interruption is\n  reported, not just the first.\n\n## Memory\n\n- `NewChunks` chunk sets and the `foundAt` timestamp map are now backed by a new `BoundedLongSet`\n  (200k cap, oldest-first eviction). A multi-hour flight can no longer grow memory without limit.\n- `StashFinder.lastScanned` is size-capped the same way.\n\n## Data\n\n- **`/bh database export` now covers all seven stores.** It previously wrote only four, silently\n  dropping the storage registry, storage workflows and kits — restoring such a backup on a fresh\n  machine wiped them. A headless test pins the section list so a new store cannot fall out unnoticed.\n\n## Alerts\n\n- `Embed.fingerprint()` now includes the footer and thumbnail, so distinct alerts are no longer\n  collapsed by the 3-second dedupe window.\n- A webhook dropped on a full queue no longer records its dedupe key, so its retry is not suppressed as\n  a duplicate.\n\n## Crashes and correctness\n\n- `ElytraManager.bestSpareRemaining()` guards `mc.player` (was an NPE from `/bh elytra status` before a\n  world is joined).\n- Task ids come from a single counter, so `cancel(id)` can no longer hit the wrong task.\n\n## Verification\n\n- `./gradlew clean build` is green; the jar is `build/libs/basehunting-2.3.0.jar`.\n- `verifyAddon` runs seven headless suites, 0 failures: plannerTest 36, coreLogicTest 196,\n  storageLogicTest 131, automationLogicTest 147, hardeningTest 21 (new), apiContractTest 21,\n  baritoneContractTest 30.\n- The addon loads in a real dev client under Xvfb with no addon exceptions.\n\n## Install\n\nDrop `basehunting-2.3.0.jar` into `.minecraft/mods` alongside Meteor Client and Fabric Loader (Baritone\noptional). Requires Minecraft 1.21.11, Fabric, JDK 21.\n\n**SHA-256:** `dceae32676bb343b245ef96cf24e87de625febb9fbc65c7bf21d8bab7b5eb713`"
+		},
 		{
 			"tag": "v2.2.0",
 			"published": "2026-11-11T16:36:30Z",
@@ -17,7 +69,7 @@
 					"name": "basehunting-2.2.0.jar",
 					"url": "https://github.com/logvex-sg/basehuntingclient-baritone/releases/download/v2.2.0/basehunting-2.2.0.jar",
 					"size": 561096,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "cdff39d6756c41d3ac0920d016cdbd5a55385106bad78756ced58576fa21fbeb",
 					"mods": [
@@ -69,7 +121,7 @@
 					"name": "basehunting-2.1.0.jar",
 					"url": "https://github.com/logvex-sg/basehuntingclient-baritone/releases/download/v2.1.0/basehunting-2.1.0.jar",
 					"size": 556907,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "3f360bb09924c06af9796920ec190a5b4f26aa4adc8c4f8c9f85a2e336a1b84d",
 					"mods": [
