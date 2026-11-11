@@ -6,8 +6,138 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-03-22T15:10:47Z",
-	"pushed": "2026-11-11T17:50:26Z",
+	"pushed": "2026-11-11T21:55:24Z",
 	"releases": [
+		{
+			"tag": "v1.2.1",
+			"published": "2026-11-11T20:19:36Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 736842083,
+					"name": "spatialaudiosystem-1.2.1.jar",
+					"url": "https://github.com/hololocheck/SpatialAudioSystem/releases/download/v1.2.1/spatialaudiosystem-1.2.1.jar",
+					"size": 140523634,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "a921ec722ccb1ffe7b5255f66c9159a863a6fc3adb61fb08b3570b56e1ff6ccd",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "spatialaudiosystem",
+							"version": "1.2.1",
+							"name": "Spatial Audio System",
+							"description": "A mod that lets you play custom MP3 and OGG audio files in-game.\nIncludes playback devices, recording devices, recording media, and range specification boards.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"manta",
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "fe7eeda3a77f18e5d0f71c1f0c0859eb51613cdc28df7a3a0d8d4abe5ab3fe81.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Spatial Audio System"
+							],
+							"block": [
+								"Memory Device",
+								"Playback Device"
+							],
+							"item": [
+								"Range Board",
+								"Recording Medium",
+								"Sound Handy"
+							]
+						},
+						"data": [
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1149,
+						"jars": [
+							"META-INF/jarjar/manta-2.95.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jarjar/manta-2.95.0.jar!com/manta/internal/os.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"javazoom/spi/mpeg/sampled/file/MpegAudioFileReader.class": [
+									"java/net/URL.openConnection"
+								],
+								"javazoom/spi/mpeg/sampled/file/tag/IcyInputStream.class": [
+									"java/net/URL.openConnection"
+								],
+								"javazoom/jl/player/PlayerApplet.class": [
+									"java/net/URL.openStream"
+								],
+								"javazoom/jl/player/jlp.class": [
+									"java/net/URL.openStream"
+								],
+								"org/tritonus/share/sampled/file/TAudioFileReader.class": [
+									"java/net/URL.openStream",
+									"java/net/URL.openConnection"
+								]
+							},
+							"native": {
+								"META-INF/jarjar/manta-2.95.0.jar!com/manta/video/youtube/runtime/mcsschrome/MCSSChrome.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								]
+							}
+						},
+						"hosts": {
+							"www.w3.org": [
+								"com/spatialaudiosystem/screen/PlaybackDeviceScreenV2.class"
+							],
+							"apache.org": [
+								"META-INF/jarjar/manta-2.95.0.jar!com/manta/internal/llAfen.class",
+								"META-INF/jarjar/manta-2.95.0.jar!com/manta/internal/m5mnQ.class"
+							],
+							"javax.xml.xmlconstants": [
+								"META-INF/jarjar/manta-2.95.0.jar!com/manta/internal/llAfen.class",
+								"META-INF/jarjar/manta-2.95.0.jar!com/manta/internal/m5mnQ.class"
+							],
+							"xml.org": [
+								"META-INF/jarjar/manta-2.95.0.jar!com/manta/internal/llAfen.class"
+							],
+							"www.youtube.com": [
+								"META-INF/jarjar/manta-2.95.0.jar!com/manta/internal/ob.class"
+							],
+							"i.ytimg.com": [
+								"META-INF/jarjar/manta-2.95.0.jar!com/manta/internal/pTT.class"
+							],
+							"mcss-embed.local": [
+								"META-INF/jarjar/manta-2.95.0.jar!com/manta/internal/qeq.class"
+							],
+							"www.javazoom.net": [
+								"javazoom/jl/converter/jlc$jlcArgs.class"
+							],
+							"www.server.com": [
+								"javazoom/jl/player/jlp.class"
+							],
+							"www.shoutcastserver.com": [
+								"javazoom/jl/player/jlp.class"
+							],
+							"www.tritonus.org": [
+								"org/tritonus/share/GlobalInfo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## English\n\n### Changed\n\n- **Manta 2.95.0 is embedded** (required range `[2.95.0,3)`). Update TSU to 1.2.1 at the same time (it embeds the same Manta).\n  - The video runtime gets ready in the background while the title screen is up: on the first start the bundled CEF runtime is extracted to `<game folder>/mcss-chrome-native` (about 318 MB), and on every start CEF is initialised, which starts two of its child processes (GPU and network service; they show as Java processes in Task Manager). Nothing is downloaded, and no web page is opened until a video card shows a video. A video card opened right after joining a world no longer waits for the runtime (its picture showed in 0.84-0.94 s on our test machine). While the runtime or the video is still loading, the card shows a loading screen with a progress bar; a video that cannot be played shows YouTube's own message. Start the game with `-Dmanta.video.prewarm=false` to wait for the first video instead.\n  - A wiki video card draws Manta's own control bar (play/pause, seek bar, time, captions, mute) in place of YouTube's. It shows while the pointer moves over the playing video and goes the moment the pointer leaves; the seek bar can be dragged.\n  - Captions are off at first. The bar's CC turns them on; where the video has none in the game's language, its English captions are shown auto-translated.\n  - In the panel opened with \"Open as Panel\", YouTube's progress bar can be dragged.\n- Range outlines no longer look through every block entity around the player each frame (drawing is lighter where other mods' machines are many).\n\n### Fixed\n\n- The first video opened could take a while to show its picture, sometimes until it was clicked.\n\n## 日本語\n\n### 変更\n\n- **Manta 2.95.0 を内包**（要求範囲 `[2.95.0,3)`）。TSU も 1.2.1 へ同時に更新してください（同じ Manta を内包しています）。\n  - 動画機能の準備を、タイトル画面の間に裏で済ませます。初回の起動で同梱の CEF ランタイムを `<ゲームフォルダ>/mcss-chrome-native` へ展開し（約 318 MB）、起動のたびに CEF を初期化します（このとき CEF の子プロセスが 2 つ — GPU と network service — 起動し、タスクマネージャーでは Java のプロセスに見えます）。ダウンロードは行わず、動画カードが動画を出すまで Web ページは開きません。ワールドに入ってすぐ wiki の動画カードを開いても、準備を待たずに絵が出ます（手元の試験機で 0.84〜0.94 秒）。準備中・読み込み中は、動画の上にロード画面とプログレスバーを出します（再生できない動画では YouTube のメッセージを出します）。最初の動画まで準備を待たせたいときは、起動オプションに `-Dmanta.video.prewarm=false` を付けてください。\n  - wiki の動画カードは、YouTube の操作バーの代わりに Manta の操作バー（再生/一時停止・シーク・時間・字幕・消音）を描きます。再生中の動画の上でカーソルを動かすと出て、外すとすぐ消えます。シークバーはドラッグできます。\n  - 字幕は最初は表示しません。操作バーの CC で付けると、動画にゲームの言語の字幕が無いときは英語の字幕を自動翻訳して出します。\n  - 「動画を展開する」のパネルでも、YouTube の再生バーをドラッグできます。\n- 範囲表示の描画が、毎フレーム周囲のすべてのブロックエンティティを調べなくなりました（他 mod の機械が多い場所で描画が軽くなります）。\n\n### 修正\n\n- 最初に開いた動画の絵が出るまで時間がかかる（押すまで出ないことがある）不具合を直しました。"
+		},
 		{
 			"tag": "v1.2.0",
 			"published": "2026-11-11T04:34:34Z",
@@ -18,7 +148,7 @@
 					"name": "spatialaudiosystem-1.2.0.jar",
 					"url": "https://github.com/hololocheck/SpatialAudioSystem/releases/download/v1.2.0/spatialaudiosystem-1.2.0.jar",
 					"size": 140495513,
-					"downloads": 2,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "14130c23ea9956bbfcfc45c73acaaf44dd1ba17c4c8657fc3c81a93f5e4fcecb",
 					"mods": [
