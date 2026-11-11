@@ -5,8 +5,60 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-09-26T11:10:41Z",
-	"pushed": "2026-11-11T17:41:18Z",
+	"pushed": "2026-11-11T18:58:15Z",
 	"releases": [
+		{
+			"tag": "v2.4.0",
+			"published": "2026-11-11T18:59:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 736606902,
+					"name": "basehunting-2.4.0.jar",
+					"url": "https://github.com/logvex-sg/basehuntingclient-baritone/releases/download/v2.4.0/basehunting-2.4.0.jar",
+					"size": 615134,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "5cd44d02e227421be4472a372e50f9de83c313319c220cfb8438b4bcc2612de3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "basehunting",
+							"version": "2.4.0",
+							"name": "Base Hunting Client",
+							"description": "Anarchy base-hunting toolkit. Firework-free elytra autopilot with automatic elytra management, adaptive exploration, stash and new-chunk detection, player tracking, mending and ender chest handling, a safe storage system (inventory sorting, chest sorting, a container network, shulker work and restocking), survival guardrails and fully configurable Discord webhook notifications.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f86199c6596cbcff498da5b9c42c0cf88099b157c265a8fa45c3238904c3fc81.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 219,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Base Hunting Client 2.4.0 — the command-terminal release\n\nThis release adds an **in-game command terminal**: a real command line over the same managers the GUI\nand `/bh` use, with argument parsing, Tab completion, history, configurable shortcuts, per-command\npermissions and a confirmation step for anything that changes state.\n\n## The command terminal\n\nEnable `command-terminal` and open `/bh gui`; the **Terminal** section is at the bottom of the screen.\n\n- **Nineteen command groups** cover the whole addon: `status`, `modules`, `tasks`, `storage`,\n  `navigate`, `baritone`, `kit`, `elytra`, `echest`, `player`, `stash`, `route`, `explore`, `chat`,\n  `config`, `database`, `history`, `macro`, `clear`, `gui`.\n- **Per-subcommand permissions.** A subcommand can be stricter than its parent — `storage list` is\n  read-only, `storage withdraw` is not — and the registry checks the level of the subcommand actually\n  being run.\n- **Confirmation gate.** A destructive command prints what it is about to do and needs a second Enter;\n  any intervening command disarms it.\n- **Tab completion** for command names, subcommands and registered argument candidates, routed into\n  Meteor's own completion popup.\n- **History** with an Up/Down cursor that keeps the half-typed line as a draft, duplicate collapsing\n  and a size cap.\n- **Shortcuts** (`aliases` setting, `s=status`, `w=withdraw`) and **macros** (`macros` setting,\n  `name = step ; step`), replayed through the same registry so permissions still hold.\n\n`/bh terminal run <line>` runs one command from chat and echoes the output; `/bh terminal help` lists\nevery command.\n\n## Safety\n\nThe terminal's input comes from a text box you type into — never from a chat message — so it can offer\nthe state-changing commands the chat prefix system refuses by default. It has **no shell, no\nfilesystem access and no arbitrary code execution**: every command is an addon operation, and every\nstep of a macro goes through the same permission and confirmation checks as a typed command.\n\n## Architecture\n\n| Layer | File | Role |\n| --- | --- | --- |\n| Parser / registry / history / macros | `core/terminal/` | pure, no Minecraft types, headlessly tested |\n| Runtime + bindings | `modules/CommandTerminal.java` | builds the registry, binds handlers to the managers |\n| GUI | `gui/TerminalRenderer.java`, `gui/BaseHuntingScreen.java` | text box + completion + section |\n| Bridge | `commands/BaseHuntCommand.java` | `/bh terminal run <line>` and `/bh terminal help` |\n\nEvery handler calls the same public manager method the GUI button and the `/bh` command call, so the\nthree entry points cannot drift apart.\n\n## Verification\n\n```\n./gradlew clean build     # BUILD SUCCESSFUL\n./gradlew verifyAddon     # 8 suites, all green\n```\n\n| Suite | Assertions |\n| --- | --- |\n| `plannerTest` | 41 |\n| `coreLogicTest` | 147 |\n| `baritoneContractTest` | 30 |\n| `automationLogicTest` | 196 |\n| `hardeningTest` | 21 |\n| `storageLogicTest` | 21 |\n| `apiContractTest` | 131 |\n| `terminalLogicTest` (new) | 86 |\n\n`apiContractTest` now also pins the Meteor GUI members the terminal drives (`GuiTheme.textBox`/`view`,\n`WTextBox.action`, `WTextBox.Renderer.getCompletions`, `WView.maxHeight`), so a rename fails the build\ninstead of the client. Loaded in a real dev client headless (`Initializing Base Hunting Client` →\n`(Meteor Client) Loading`, version 2.4.0, no addon errors).\n\n## Asset\n\n`basehunting-2.4.0.jar` — sha256 `5cd44d02e227421be4472a372e50f9de83c313319c220cfb8438b4bcc2612de3`"
+		},
 		{
 			"tag": "v2.3.0",
 			"published": "2026-11-11T17:42:06Z",
@@ -17,7 +69,7 @@
 					"name": "basehunting-2.3.0.jar",
 					"url": "https://github.com/logvex-sg/basehuntingclient-baritone/releases/download/v2.3.0/basehunting-2.3.0.jar",
 					"size": 566321,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "dceae32676bb343b245ef96cf24e87de625febb9fbc65c7bf21d8bab7b5eb713",
 					"mods": [
