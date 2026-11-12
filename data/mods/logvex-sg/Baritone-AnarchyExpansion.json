@@ -5,8 +5,60 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-09-26T11:10:41Z",
-	"pushed": "2026-11-12T08:28:52Z",
+	"pushed": "2026-11-12T18:13:58Z",
 	"releases": [
+		{
+			"tag": "v2.7.0",
+			"published": "2026-11-12T18:14:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 740556489,
+					"name": "baritone-anarchy-expansion-2.7.0.jar",
+					"url": "https://github.com/logvex-sg/Baritone-AnarchyExpansion/releases/download/v2.7.0/baritone-anarchy-expansion-2.7.0.jar",
+					"size": 787375,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "767528a365568ae468641f3bbf04a552873306ba17976da49effeafa961826fd",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baritone-anarchy-expansion",
+							"version": "2.7.0",
+							"name": "Baritone Anarchy Expansion",
+							"description": "Anarchy base-hunting toolkit. Firework-free elytra autopilot with automatic elytra management, adaptive exploration, stash and new-chunk detection, player tracking, mending and ender chest handling, a safe storage system (inventory sorting, chest sorting, a container network, shulker work and restocking), survival guardrails and fully configurable Discord webhook notifications.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f86199c6596cbcff498da5b9c42c0cf88099b157c265a8fa45c3238904c3fc81.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 287,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Baritone Anarchy Expansion 2.7.0 — the persistence release\n\nTwo things the addon advertised but did not actually do are now real, plus a route command that was\nmissing.\n\n## Importing a database written by a newer build is refused, not half-applied\n\n`DatabaseIO` wrote a `formatVersion` on export but never checked it on import, so a file from a later\nbuild was read with whatever this build happened to understand — and the fields it introduced were\nsilently dropped. The new pure `DatabaseVersion` classifies a whole-database tag:\n\n| Verdict | Meaning | Action |\n| --- | --- | --- |\n| `CURRENT` | same format | applied |\n| `LEGACY` | older format | applied, reported as upgraded |\n| `TOO_NEW` | newer format | **refused**, with a chat message and a log line |\n\nA file with no version header is treated as current, so a hand-made tag still imports. `/bh database\nversion` reports the format and the last verdict, and `/bh database status` prints the format too.\n\n## An unfinished route survives the session that started it\n\nBase Hunter V2's pending queue and in-flight target were memory-only, so quitting the game, switching\nserver or crossing a portal threw the route away and it had to be set up again by hand. The new\n`JourneyPlan` snapshots the target in flight and the remaining queue with the server address and\ndimension they belong to, persisted through `ExplorationStore`:\n\n- saved on disconnect, dimension change and pause (`BaseHunterV2 → remember-route`, on by default);\n- restored with `/bh resume`, or automatically at launch when `auto-start` is on — a saved route is\n  resumed before a fresh sweep is started;\n- only restored when the server *and* dimension still match, so a portal cannot send you toward\n  coordinates that mean nothing in the new world;\n- capped at 256 targets, and cleared when a route finishes or is stopped on purpose, so a stale route\n  is never replayed.\n\n## New commands\n\n- `/bh route remove <index>` — remove one waypoint by its 1-based index (matching `/bh route list`).\n- `/bh route saved` — show the route remembered from an earlier session.\n- `/bh route forget` — discard the remembered route.\n- `/bh database version` — show the database format version and the last import verdict.\n\n## Under the hood\n\n- New pure, headlessly tested classes: `core/logic/DatabaseVersion` and `core/logic/JourneyPlan`.\n- A test-caught bug fixed: the whole-database reader looked for the key `version`, but export writes\n  `formatVersion` (the per-store key `version` is a different thing). The reader now uses the right key.\n- 931 headless assertions passing (up from 900); `coreLogicTest` gains `databaseVersioning` and\n  `journeyPlan`.\n\n## Install\n\n1. Fabric Loader for Minecraft 1.21.11, [Meteor Client](https://meteorclient.com/) for 1.21.11.\n2. Drop `baritone-anarchy-expansion-2.7.0.jar` into `mods`. Baritone stays optional (v1 only).\n3. Full manual: [`docs/GUIDE.md`](docs/GUIDE.md)."
+		},
 		{
 			"tag": "v2.6.1",
 			"published": "2026-11-12T08:26:36Z",
