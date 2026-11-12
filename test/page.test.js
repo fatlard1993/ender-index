@@ -203,3 +203,27 @@ describe('pages that send the visitor somewhere', () => {
 		page.destroy();
 	});
 });
+
+describe("a mod's page", () => {
+	test('opens a picture of the gallery large when it is pressed, rather than following its link', async () => {
+		document.body.innerHTML = '';
+
+		const { default: ModPage } = await import('../client/ModPage');
+		const page = new ModPage({ appendTo: document.body, host: 'github', owner: 'CaffeineMC', name: 'lithium' });
+		const picture = () =>
+			[...document.querySelectorAll('a')].find(
+				link => link.getAttribute('href') === 'https://raw.githubusercontent.com/CaffeineMC/lithium/HEAD/docs/farm.png',
+			);
+
+		await settle(() => picture() !== undefined);
+
+		const pressed = new MouseEvent('click', { bubbles: true, cancelable: true, button: 0 });
+
+		picture().dispatchEvent(pressed);
+
+		expect(pressed.defaultPrevented).toBe(true);
+		expect(document.querySelector('dialog')?.textContent).toContain('Open the file');
+		document.querySelector('dialog')?.remove();
+		page.destroy();
+	});
+});

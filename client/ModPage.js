@@ -310,7 +310,7 @@ const pictureGrid = (title, shots) => {
 			});
 
 			link.elem.querySelector('img').addEventListener('error', () => link.elem.remove());
-			link.elem.addEventListener('click', event => {
+			link.onPointerPress(event => {
 				if (!plainClick(event)) return;
 
 				event.preventDefault();
@@ -372,7 +372,7 @@ const playerShot = (title, shot, shared, byKey) => {
 		}),
 	});
 
-	link.elem.addEventListener('click', event => {
+	link.onPointerPress(event => {
 		if (!plainClick(event)) return;
 
 		event.preventDefault();
