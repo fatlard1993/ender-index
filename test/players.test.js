@@ -80,6 +80,30 @@ describe('the players panel', () => {
 		card.elem.remove();
 	});
 
+	test('says on the name field why ender refused a player, rather than in a toast', async () => {
+		const card = panel.playersPanel(new AbortController().signal);
+		const answer = globalThis.fetch;
+
+		globalThis.fetch = async (address, options = {}) =>
+			options.method === 'POST'
+				? Response.json({ error: 'a name is 3 to 16 letters, digits or _' }, { status: 400 })
+				: answer(address, options);
+		document.body.append(card.elem);
+		await settle(() => card.elem.textContent.includes('Add an offline player'));
+
+		const field = card.elem.querySelector('input[aria-label="Player name"]');
+
+		field.value = 'no';
+		field.dispatchEvent(new Event('input', { bubbles: true }));
+		[...card.elem.querySelectorAll('button')].find(each => each.textContent.includes('Add an offline')).click();
+		await settle(() => card.elem.textContent.includes('was not added'));
+		globalThis.fetch = answer;
+
+		expect(card.elem.textContent).toContain('no was not added: a name is 3 to 16 letters, digits or _');
+		expect(document.querySelector('.notify, [class*="Notify"]')?.textContent ?? '').not.toContain('was not added');
+		card.elem.remove();
+	});
+
 	test('offers each instance the active player or one of its own, showing the one it has', () => {
 		const [choice] = panel.playerChoice({ name: 'suite', account: 'Kid_2' });
 		const options = [...choice.elem.querySelectorAll('option')].map(option => [option.value, option.label]);

@@ -142,20 +142,26 @@ const signInRow = signal => {
 };
 
 const addOffline = () => {
+	// What ender said of the name it refused, shown on the field until the name changes
+	let refused;
 	const name = new Input({
 		placeholder: 'A name, 3 to 16 letters, digits or _',
 		attributes: { 'aria-label': 'Player name' },
+		validate: value => (refused && String(value).trim() === refused.name ? refused.message : undefined),
 	});
-	const add = () => {
+	const add = async () => {
 		const named = String(name.options.value).trim();
 
-		return attempt(
-			async () => {
-				await local.addPlayer(named);
-				told('success', `${named} can play`);
-			},
-			`${named || 'That name'} was not added`,
-		);
+		refused = undefined;
+
+		try {
+			await local.addPlayer(named);
+			told('success', `${named} can play`);
+		} catch (error) {
+			refused = { name: named, message: `${named || 'That name'} was not added: ${error.message}` };
+		}
+
+		name.validate();
 	};
 
 	name.elem.addEventListener('keydown', event => {
