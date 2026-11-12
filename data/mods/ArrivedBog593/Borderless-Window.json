@@ -6,8 +6,111 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-07-08T22:56:03Z",
-	"pushed": "2026-11-12T07:20:14Z",
+	"pushed": "2026-11-12T07:54:37Z",
 	"releases": [
+		{
+			"tag": "v1.11.1+mc26.1.2",
+			"published": "2026-11-12T07:21:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 738490487,
+					"name": "borderlesswindow-fabric-1.11.1+mc26.1.2.jar",
+					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.11.1%2Bmc26.1.2/borderlesswindow-fabric-1.11.1%2Bmc26.1.2.jar",
+					"size": 310647,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "2caef728deaa66de88a66bbdaed233bd571975373e04685f26b1f727d7e4b577",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "borderlesswindow",
+							"version": "1.11.1",
+							"name": "Borderless Window",
+							"description": "Adds borderless fullscreen to Minecraft with a 3-mode system (Windowed / Borderless / Fullscreen) and configurable F11 behavior, plus a growing set of video and quality-of-life options Minecraft doesn't expose. Every setting defaults to vanilla behavior. Configurable from Minecraft's own Video Settings, with optional Sodium integration. Nothing else to install.",
+							"minecraft": "26.1.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-resource-loader-v1",
+								"fabric-key-mapping-api-v1",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"fabric-api-base",
+								"fabric-key-mapping-api-v1",
+								"fabric-resource-loader-v1"
+							],
+							"suggests": [
+								"sodium",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "b012eadea23169976ce499078a09f64573a9e8d741167e941c75c6b1a95128da.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 175,
+						"jars": [
+							"META-INF/jars/fabric-api-base-2.0.3+ece063234c.jar",
+							"META-INF/jars/fabric-key-mapping-api-v1-2.0.4+e2bdee784c.jar",
+							"META-INF/jars/fabric-resource-loader-v1-2.0.10+7c44c7324c.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 738490485,
+					"name": "borderlesswindow-neoforge-1.11.1+mc26.1.2.jar",
+					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.11.1%2Bmc26.1.2/borderlesswindow-neoforge-1.11.1%2Bmc26.1.2.jar",
+					"size": 157906,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "744cb9c274cce7adf64e412758f48dcca991c9d403643e42fc1387486077e5fa",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "borderlesswindow",
+							"version": "1.11.1",
+							"name": "Borderless Window",
+							"description": "Adds borderless fullscreen to Minecraft with a 3-mode system (Windowed / Borderless / Fullscreen) and configurable F11 behavior, plus a growing set of video and quality-of-life options Minecraft doesn't expose. Every setting defaults to vanilla behavior. Configurable from Minecraft's own Video Settings, with optional Sodium integration. Nothing else to install.",
+							"minecraft": "[26.1.2]",
+							"environment": "client",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"sodium"
+							]
+						}
+					],
+					"icon": "b012eadea23169976ce499078a09f64573a9e8d741167e941c75c6b1a95128da.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 72,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Borderless Window 1.11.1\n\n*NeoForge · Fabric 26.1.2 · 2026-11-12*\n\n> **The hand settings now work with Iris shaders.** With a shaderpack on, Hide Hand While Zooming and Hand Bobbing used to have no effect; now they do. Also fixes a hang at launch on NeoForge with its early loading screen turned off.\n\n## ⚠️ Important Notes\n\n- Every setting stays as it was\n- When updating, delete the 1.11.0 jar from your mods folder\n\n## ✨ New Features\n\n- **The mod's icon** next to its name in Sodium's page list, as Sodium, Iris and Reese's Sodium Options show theirs\n- **Links to the mod's page:** NeoForge's mod list now shows the button to its GitHub page, and the Website button in Mod Menu on Fabric works (it was greyed out)\n\n## 🔧 Technical Changes\n\n- **Fixed:** with an Iris shaderpack on, Hide Hand While Zooming and Hand Bobbing did nothing. Iris draws the hand itself, from its own hand renderer, so the mod's hooks on Minecraft's never ran. The mod now hooks Iris's renderer too, only when Iris is installed. Without Iris the hook is skipped before Mixin looks for Iris's class, so no warning shows up in the log\n- **Fixed:** on NeoForge with its early loading screen off (`earlyWindowControl = false` in `config/fml.toml`), the game could hang on a white window at launch. The mod restored the saved screen mode from NeoForge's client setup, which since 26.1 runs on a loader thread; moving the window from there waits for the main thread, which was busy waiting for mod loading. The saved mode is now restored on the second frame on both loaders, as it already was on Fabric\n\n## 📦 Dependencies\n\n- Minecraft 26.1.2 with NeoForge 26.1.2.x, or with Fabric Loader 0.18.4 or newer\n- Optional: Sodium 0.9.0 or newer on either loader, and Mod Menu on Fabric\n\n---\n\n<details>\n<summary><b>🇪🇸 Leer en español</b></summary>\n\n> **Los ajustes de la mano ahora funcionan con shaders de Iris.** Con un shaderpack activo, Ocultar mano al hacer zoom y Balanceo de la mano no tenían efecto; ahora sí. También corrige un cuelgue al arrancar en NeoForge con su pantalla de carga temprana desactivada.\n\n## ⚠️ Notas Importantes\n\n- Los ajustes se quedan como estaban\n- Al actualizar, borra el jar de la 1.11.0 de tu carpeta de mods\n\n## ✨ Nuevas Características\n\n- **El ícono del mod** junto a su nombre en la lista de páginas de Sodium, como muestran el suyo Sodium, Iris y Reese's Sodium Options\n- **Ligas a la página del mod:** la lista de mods de NeoForge ahora muestra el botón a su página de GitHub, y el botón Sitio web de Mod Menu en Fabric funciona (salía en gris)\n\n## 🔧 Cambios Técnicos\n\n- **Corregido:** con un shaderpack de Iris activo, Ocultar mano al hacer zoom y Balanceo de la mano no hacían nada. Iris dibuja la mano por su cuenta, desde su propio renderizador de mano, así que los hooks del mod en el de Minecraft nunca corrían. Ahora el mod también se engancha al renderizador de Iris, solo cuando Iris está instalado. Sin Iris el hook se omite antes de que Mixin busque la clase de Iris, así que no sale ningún aviso en el log\n- **Corregido:** en NeoForge con su pantalla de carga temprana desactivada (`earlyWindowControl = false` en `config/fml.toml`), el juego podía colgarse en una ventana blanca al arrancar. El mod restauraba el modo de pantalla guardado desde el client setup de NeoForge, que desde 26.1 corre en un hilo del loader; mover la ventana desde ahí espera al hilo principal, que estaba ocupado esperando la carga de mods. Ahora el modo guardado se restaura en el segundo frame en los dos loaders, como ya pasaba en Fabric\n\n## 📦 Dependencias\n\n- Minecraft 26.1.2 con NeoForge 26.1.2.x, o con Fabric Loader 0.18.4 o más nuevo\n- Opcional: Sodium 0.9.0 o más nuevo en cualquiera de los dos loaders, y Mod Menu en Fabric\n\n</details>"
+		},
 		{
 			"tag": "v1.11.2+mc1.21.11",
 			"published": "2026-11-12T07:05:46Z",
@@ -18,7 +121,7 @@
 					"name": "borderlesswindow-fabric-1.11.2+mc1.21.11.jar",
 					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.11.2%2Bmc1.21.11/borderlesswindow-fabric-1.11.2%2Bmc1.21.11.jar",
 					"size": 327374,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "a54d53e2e9d2987444872ff6f428380030546cf77fa33fdf3a6151bf9ad8146b",
 					"mods": [
@@ -72,7 +175,7 @@
 					"name": "borderlesswindow-neoforge-1.11.2+mc1.21.11.jar",
 					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.11.2%2Bmc1.21.11/borderlesswindow-neoforge-1.11.2%2Bmc1.21.11.jar",
 					"size": 155005,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "393ffcfb0b5bc8065fe3c69c4440781bc021c4058b2d3b5a1bae703bfe5aaa6e",
 					"mods": [
@@ -121,7 +224,7 @@
 					"name": "borderlesswindow-fabric-1.11.2+mc1.21.1.jar",
 					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.11.2%2Bmc1.21.1/borderlesswindow-fabric-1.11.2%2Bmc1.21.1.jar",
 					"size": 300106,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "f9b169e92e3adfaa69ed291ea1f0bf6d8f439e8b12c97fab2df23b0d7fac4fac",
 					"mods": [
@@ -175,7 +278,7 @@
 					"name": "borderlesswindow-neoforge-1.11.2+mc1.21.1.jar",
 					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.11.2%2Bmc1.21.1/borderlesswindow-neoforge-1.11.2%2Bmc1.21.1.jar",
 					"size": 153977,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "cfe77f6c98eb35bb97c6779bd4150efc0b6c661699da14d106bf44172c761de9",
 					"mods": [
@@ -224,7 +327,7 @@
 					"name": "borderlesswindow-fabric-1.11.0+mc26.2.jar",
 					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.11.0%2Bmc26.2/borderlesswindow-fabric-1.11.0%2Bmc26.2.jar",
 					"size": 311582,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "fbaa25277de6210b4f7b7805ac07acb7bbd58c87445fbc2645eeca069b8c5c81",
 					"mods": [
@@ -278,7 +381,7 @@
 					"name": "borderlesswindow-neoforge-1.11.0+mc26.2.jar",
 					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.11.0%2Bmc26.2/borderlesswindow-neoforge-1.11.0%2Bmc26.2.jar",
 					"size": 158889,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "b016e20e5d3422612b5eae5b025b377801117463f1b23e697872fb957ead84c0",
 					"mods": [
