@@ -5,6 +5,7 @@ import {
 	Content,
 	Dialog,
 	EmptyState,
+	Form,
 	Input,
 	Label,
 	Link,
@@ -343,36 +344,72 @@ const runInto = async (status, starting) => {
 	}
 };
 
+/** What is wrong with the mods listed for a new instance, or nothing: a pack goes in From a pack, and each line is a mod. */
+const listProblem = text => {
+	const { packs, unread } = readPasted(String(text ?? ''), { bare: 'mod' });
+
+	if (packs.length > 0) return `${packs.join(', ')} is a pack; it goes in From a pack above`;
+	if (unread.length > 0) return `Not a mod ender can read: ${unread.join(' ')}`;
+
+	return undefined;
+};
+
 const newInstance = signal => {
 	const status = new Meta({ style: { whiteSpace: 'pre-wrap' } });
 	const source = new Input({
 		placeholder: "A pack's index page or ender import line, a gist link, gh:owner/repo, or an https link to a pack",
 		style: { flex: '1' },
 	});
-	const choice = { name: '', minecraft: '', loader: 'fabric', withCollected: false };
-	const minecraft = new Select({
-		options: [{ label: 'The newest release', value: '' }],
-		value: '',
-		attributes: { 'aria-label': 'Minecraft' },
-		onChange: ({ target: { value } }) => {
-			choice.minecraft = value;
+	const form = new Form({
+		data: {
+			name: '',
+			minecraft: '',
+			loader: 'fabric',
+			collected: collection.items.length,
+			withCollected: true,
+			specs: '',
 		},
-	});
-	const name = new Input({
-		placeholder: 'Its name',
-		attributes: { 'aria-label': 'Name' },
-		onInput: ({ target: { value } }) => {
-			choice.name = value;
-		},
-	});
-	const specs = new Input({
-		tag: 'textarea',
-		placeholder: 'More mods: their index pages, ender add lines, gh:owner/repo or mr:sodium, as many as you like',
-		attributes: { rows: 3, 'aria-label': 'Mods' },
+		inputs: [
+			{
+				type: 'group',
+				style: { display: 'flex', flexWrap: 'wrap', gap: theme.space.sm },
+				inputs: [
+					{
+						key: 'name',
+						placeholder: 'Its name',
+						validate: value => (String(value ?? '').trim() ? undefined : 'Give it a name first'),
+					},
+					{
+						key: 'minecraft',
+						InputComponent: Select,
+						options: [{ label: 'The newest release', value: '' }],
+					},
+					{
+						key: 'loader',
+						InputComponent: Select,
+						options: Object.entries(INSTANCE_LOADERS).map(([value, label]) => ({ label, value })),
+					},
+				],
+			},
+			{
+				key: 'withCollected',
+				label: 'With the mods collected',
+				type: 'checkbox',
+				condition: data => data.collected > 0,
+			},
+			{
+				key: 'specs',
+				label: 'More mods',
+				tag: 'textarea',
+				placeholder: 'Their index pages, ender add lines, gh:owner/repo or mr:sodium, as many as you like',
+				attributes: { rows: 3 },
+				validate: listProblem,
+			},
+		],
 	});
 
 	const importPasted = () => {
-		const { pack, mods, said } = packOrMods(source.elem.value);
+		const { pack, mods, said } = packOrMods(String(source.options.value ?? ''));
 
 		if (pack) {
 			runInto(status, () => local.importPack(pack));
@@ -381,26 +418,37 @@ const newInstance = signal => {
 		}
 
 		if (mods) {
-			const listed = specs.elem.value.trim();
+			const listed = String(form.options.data.specs ?? '').trim();
 
-			specs.elem.value = [listed, ...mods].filter(Boolean).join('\n');
-			source.elem.value = '';
+			form.options.data.specs = [listed, ...mods].filter(Boolean).join('\n');
+			source.options.value = '';
 		}
 
 		status.elem.textContent = said;
 	};
 
-	const withCollected = new Component({ tag: 'span' });
+	const make = () => {
+		if (form.hasErrors()) return;
+
+		const { name, minecraft, loader, withCollected, specs } = form.options.data;
+		const listed = [
+			...(withCollected ? collection.items.map(item => specFor(item.host ?? 'github', item.repo)) : []),
+			...readPasted(String(specs ?? ''), { bare: 'mod' }).mods,
+		];
+
+		runInto(status, () =>
+			local.create({
+				name: instanceNameOf(name),
+				...(minecraft ? { minecraft } : {}),
+				loader,
+				specs: [...new Set(listed)],
+			}),
+		);
+	};
+
 	const packOfCollected = new Component({ tag: 'span' });
 	const drawCollected = items => {
-		choice.withCollected = items.length > 0 && (choice.withCollected || withCollected.elem.childElementCount === 0);
-		withCollected.content(
-			items.length > 0
-				? checkbox(`with the ${items.length} mods collected`, choice.withCollected, ({ target: { checked } }) => {
-						choice.withCollected = checked;
-					})
-				: [],
-		);
+		form.options.data.collected = items.length;
 		packOfCollected.content(
 			items.length > 0
 				? new Button({
@@ -418,7 +466,7 @@ const newInstance = signal => {
 
 	loadVersions()
 		.then(versions => {
-			minecraft.options.options = [{ label: 'The newest release', value: '' }, ...versions];
+			form.inputElements.minecraft.options.options = [{ label: 'The newest release', value: '' }, ...versions];
 		})
 		.catch(() => {});
 
@@ -441,72 +489,11 @@ const newInstance = signal => {
 						],
 					}),
 				),
-				new Label(
-					{ label: 'From a list', for: name },
-					new Stack({
-						append: [
-							new Row({
-								append: [
-									name,
-									minecraft,
-									new Select({
-										options: Object.entries(INSTANCE_LOADERS).map(([value, label]) => ({ label, value })),
-										value: choice.loader,
-										attributes: { 'aria-label': 'Loader' },
-										onChange: ({ target: { value } }) => {
-											choice.loader = value;
-										},
-									}),
-								],
-							}),
-							withCollected,
-							specs,
-							new Row({
-								append: [
-									new Button({
-										icon: 'plus',
-										textContent: 'Make it',
-										onPointerPress: () => {
-											if (!choice.name.trim()) {
-												status.elem.textContent = 'Give it a name first';
-
-												return;
-											}
-
-											const pasted = readPasted(specs.elem.value, { bare: 'mod' });
-
-											if (pasted.packs.length > 0 || pasted.unread.length > 0) {
-												status.elem.textContent =
-													pasted.packs.length > 0
-														? `${pasted.packs.join(', ')} is a pack; it goes in From a pack above`
-														: `Not a mod ender can read: ${pasted.unread.join(' ')}`;
-
-												return;
-											}
-
-											const listed = [
-												...(choice.withCollected
-													? collection.items.map(item => specFor(item.host ?? 'github', item.repo))
-													: []),
-												...pasted.mods,
-											];
-
-											runInto(status, () =>
-												local.create({
-													name: instanceNameOf(choice.name),
-													...(choice.minecraft ? { minecraft: choice.minecraft } : {}),
-													loader: choice.loader,
-													specs: [...new Set(listed)],
-												}),
-											);
-										},
-									}),
-									packOfCollected,
-								],
-							}),
-						],
-					}),
-				),
+				new Title({ textContent: 'From a list' }),
+				form,
+				new Row({
+					append: [new Button({ icon: 'plus', textContent: 'Make it', onPointerPress: make }), packOfCollected],
+				}),
 				status,
 			],
 		}),

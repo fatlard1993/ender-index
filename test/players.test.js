@@ -266,3 +266,106 @@ describe("a Mac's Terminal on the Settings page", () => {
 		expect(local.local.ender.terminal).toEqual({ linked: true, line });
 	});
 });
+
+describe('the instances page', () => {
+	let InstancesPage;
+
+	const mount = async () => {
+		document.body.innerHTML = '';
+
+		const page = new InstancesPage({ appendTo: document.body });
+
+		await settle(() => document.body.textContent.includes('Make it') && document.body.textContent.includes('survival'));
+
+		return page;
+	};
+
+	const buttonNamed = label =>
+		[...document.querySelectorAll('button')].find(found => found.textContent.trim() === label);
+
+	const type = (field, value) => {
+		field.value = value;
+		field.dispatchEvent(new Event('input', { bubbles: true }));
+		field.dispatchEvent(new Event('change', { bubbles: true }));
+	};
+
+	const posted = () => sent.filter(([method, address]) => method === 'POST' && address.endsWith('api/instances'));
+
+	beforeAll(async () => {
+		responses['/api/instances'] = [{ name: 'survival', type: 'client', minecraft: '26.3', loader: { type: 'fabric' } }];
+		responses['/api/jobs'] = [];
+		responses['version_manifest_v2.json'] = { versions: [{ id: '26.3', type: 'release' }] };
+		local.local.askAgain();
+
+		({ default: InstancesPage } = await import('../client/InstancesPage'));
+	});
+
+	test("gives a client instance's update first as a checkbox field, its label tied to it", async () => {
+		const page = await mount();
+		const label = [...document.querySelectorAll('label')].find(found => found.textContent.includes('update first'));
+		const box = document.getElementById(label.htmlFor);
+
+		expect(box.type).toBe('checkbox');
+		expect(label.nextElementSibling).toBe(box);
+		expect(box.classList.contains('vbc-input')).toBe(true);
+		expect(box.checked).toBe(true);
+		page.destroy();
+	});
+
+	test('says on the name field that a new instance needs one, and makes nothing', async () => {
+		const page = await mount();
+
+		sent.length = 0;
+		buttonNamed('Make it').click();
+		await settle(() => document.body.textContent.includes('Give it a name first'));
+
+		expect(document.body.textContent).toContain('Give it a name first');
+		expect(posted()).toEqual([]);
+		page.destroy();
+	});
+
+	test('says on the list that a pack goes in From a pack, and makes nothing', async () => {
+		const page = await mount();
+		const [name] = document.querySelectorAll('input[placeholder="Its name"]');
+
+		type(name, 'family');
+		type(document.querySelector('textarea'), 'ender import gh:me/family-pack');
+		sent.length = 0;
+		buttonNamed('Make it').click();
+		await settle(() => document.body.textContent.includes('goes in From a pack'));
+
+		expect(document.body.textContent).toContain('gh:me/family-pack is a pack; it goes in From a pack above');
+		expect(posted()).toEqual([]);
+		page.destroy();
+	});
+
+	test('makes the instance from the fields once they are right', async () => {
+		const page = await mount();
+
+		type(document.querySelector('input[placeholder="Its name"]'), 'My Family');
+		type(document.querySelector('textarea'), 'gh:CaffeineMC/lithium');
+		sent.length = 0;
+		buttonNamed('Make it').click();
+		await settle(() => posted().length > 0);
+
+		expect(JSON.parse(posted()[0][2])).toEqual({
+			name: 'my-family',
+			loader: 'fabric',
+			specs: ['gh:CaffeineMC/lithium'],
+		});
+		page.destroy();
+	});
+
+	test('moves mods pasted as a pack into the list, through the field values', async () => {
+		const page = await mount();
+		const source = document.querySelector('input[placeholder^="A pack\'s index page"]');
+
+		type(source, 'ender add gh:CaffeineMC/lithium');
+		buttonNamed('Import').click();
+		await settle(() => document.querySelector('textarea').value.includes('lithium'));
+
+		expect(document.querySelector('textarea').value).toBe('gh:CaffeineMC/lithium');
+		expect(source.value).toBe('');
+		page.destroy();
+	});
+});
