@@ -193,6 +193,7 @@ export const packDialog = items => {
 			],
 		}),
 		footer: [
+			new Button({ variant: 'flat', textContent: 'Close', onPointerPress: () => dialog.close() }),
 			new Button({
 				icon: 'copy',
 				variant: 'flat',
@@ -213,7 +214,6 @@ export const packDialog = items => {
 				onPointerPress: () => download(current()),
 			}),
 			new Button({ icon: 'share', textContent: 'Publish as gist', onPointerPress: () => publish(current(), result) }),
-			new Button({ variant: 'flat', textContent: 'Close', onPointerPress: () => dialog.close() }),
 		],
 	});
 

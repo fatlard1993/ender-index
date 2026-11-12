@@ -43,6 +43,17 @@ describe('making a pack', () => {
 		expect(maker.instanceNameOf('   ')).toBe('pack');
 		expect(maker.instanceNameOf('x'.repeat(80))).toHaveLength(64);
 	});
+
+	test("puts the dialog's way out first and publishing, its main verb, last", () => {
+		const dialog = maker.packDialog([{ host: 'github', repo: 'CaffeineMC/sodium' }]);
+		const labels = [...dialog.elem.querySelectorAll('footer button, .footer button')].map(button =>
+			button.textContent.trim(),
+		);
+
+		expect(labels[0]).toBe('Close');
+		expect(labels.at(-1)).toBe('Publish as gist');
+		dialog.close();
+	});
 });
 
 describe('what the instances page says of a job', () => {
