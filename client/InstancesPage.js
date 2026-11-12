@@ -162,7 +162,7 @@ const instanceCard = (instance, signal) => {
 		const job = local.jobFor(instance.name);
 		const working = job?.state === 'running';
 
-		for (const button of actions) button.elem.disabled = working;
+		for (const button of actions) button.options.disabled = working;
 
 		status.elem.textContent = jobLine(job);
 		showProgress(bar, job);

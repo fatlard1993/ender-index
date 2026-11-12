@@ -69,7 +69,7 @@ const signInRow = signal => {
 		variant: 'flat',
 		textContent: 'Sign in to Microsoft',
 		onPointerPress: async () => {
-			button.elem.disabled = true;
+			button.options.disabled = true;
 
 			try {
 				const job = await local.signIn();
@@ -112,7 +112,7 @@ const signInRow = signal => {
 			} catch (error) {
 				told('danger', `The sign in did not finish: ${error.message}`);
 			} finally {
-				button.elem.disabled = false;
+				button.options.disabled = false;
 				prompt.elem.style.display = 'none';
 				status.elem.textContent = '';
 				await local.refreshPlayers();

@@ -73,7 +73,7 @@ const listMod = () => {
 		icon: 'list',
 		textContent: 'List it now',
 		onPointerPress: async () => {
-			button.elem.disabled = true;
+			button.options.disabled = true;
 
 			try {
 				const { url, before } = await local.listMod(field.elem.value);
@@ -85,7 +85,7 @@ const listMod = () => {
 			} catch (error) {
 				new Notify({ intent: 'danger', content: `The index was not asked to list it: ${error.message}` });
 			} finally {
-				button.elem.disabled = false;
+				button.options.disabled = false;
 			}
 		},
 	});

@@ -200,7 +200,7 @@ export const listingButton = link => {
 		textContent: 'List it on the index',
 		tooltip: `Asks the index to list it, as ${local.login} on GitHub; it is listed within a few minutes`,
 		onPointerPress: async () => {
-			button.elem.disabled = true;
+			button.options.disabled = true;
 
 			try {
 				const { url, before } = await local.listPack(link);
@@ -213,7 +213,7 @@ export const listingButton = link => {
 					}),
 				);
 			} catch (error) {
-				button.elem.disabled = false;
+				button.options.disabled = false;
 				new Notify({ intent: 'danger', content: `The index was not asked to list it: ${error.message}` });
 			}
 		},

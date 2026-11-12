@@ -9,7 +9,7 @@ const updateButton = upgrade => {
 		icon: 'download',
 		textContent: `Update to ${upgrade.latest}`,
 		onPointerPress: async () => {
-			button.elem.disabled = true;
+			button.options.disabled = true;
 			status.elem.textContent = `Downloading ender ${upgrade.latest}; the page reloads once it is running`;
 
 			try {
@@ -17,7 +17,7 @@ const updateButton = upgrade => {
 			} catch (error) {
 				new Notify({ intent: 'danger', content: `ender was not updated: ${error.message}` });
 				status.elem.textContent = '';
-				button.elem.disabled = false;
+				button.options.disabled = false;
 			}
 		},
 	});
@@ -90,7 +90,7 @@ export const terminalRow = terminal => {
 		variant: 'flat',
 		textContent: 'Add ender to Terminal',
 		onPointerPress: async () => {
-			button.elem.disabled = true;
+			button.options.disabled = true;
 			status.elem.textContent = "Waiting for your password in macOS's dialog";
 
 			try {
@@ -100,7 +100,7 @@ export const terminalRow = terminal => {
 					throw new Error('macOS answered, but /usr/local/bin/ender is still not this one');
 			} catch (error) {
 				new Notify({ intent: 'danger', content: `ender was not added to Terminal: ${error.message}` });
-				button.elem.disabled = false;
+				button.options.disabled = false;
 				status.elem.textContent = '';
 			}
 		},

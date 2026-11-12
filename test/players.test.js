@@ -220,6 +220,20 @@ describe("a Mac's Terminal on the Settings page", () => {
 		expect(document.body.textContent).toContain('still not this one');
 	});
 
+	test('turns its button off through the disabled option while macOS asks, and back on after', async () => {
+		responses['/api/terminal'] = { linked: false, line };
+
+		const [row] = enderPanel.terminalRow({ linked: false, line });
+		const button = [...row.elem.querySelectorAll('button')].find(each => each.textContent.includes('Add ender'));
+
+		document.body.append(row.elem);
+		button.click();
+
+		expect(button.disabled).toBe(true);
+		await settle(() => !button.disabled);
+		expect(button.disabled).toBe(false);
+	});
+
 	test('shows nothing for an ender installed some other way', () => {
 		expect(enderPanel.terminalRow(undefined)).toEqual([]);
 	});

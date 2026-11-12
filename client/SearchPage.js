@@ -590,7 +590,7 @@ export default class SearchPage extends View {
 			if (local.starred === undefined && local.starsError === undefined) return;
 
 			starring.elem.style.display = '';
-			starring.elem.disabled = local.starred === undefined;
+			starring.options.disabled = local.starred === undefined;
 			if (local.starsError) starring.elem.title = local.starsError;
 			if (state.starred) render();
 		};
