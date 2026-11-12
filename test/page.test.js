@@ -190,6 +190,17 @@ test("names the phone's filters button by what pressing it does, with how many f
 	page.destroy();
 });
 
+test("shows a mod's install command as Code, with Code's own copy button", async () => {
+	const page = await mount('');
+	const command = [...document.querySelectorAll('pre')].find(code =>
+		code.textContent.startsWith('ender add gh:CaffeineMC/lithium'),
+	);
+
+	expect(command.classList.contains('language-shell')).toBe(true);
+	expect([...command.children].some(child => child.className.includes('fa-copy'))).toBe(true);
+	page.destroy();
+});
+
 describe('pages that send the visitor somewhere', () => {
 	test("offer Get ender's downloads as links to the files, not buttons that set the location", async () => {
 		document.body.innerHTML = '';

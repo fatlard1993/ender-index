@@ -1,4 +1,4 @@
-import { Button, Dialog, Input, Label, Link, Notify, Select, copyToClipboard } from '@vanilla-bean/components';
+import { Button, Dialog, Input, Label, Link, Select, copyToClipboard } from '@vanilla-bean/components';
 import { specFor } from 'ender-launcher/spec';
 
 import { listingButton } from './controls';
@@ -55,7 +55,10 @@ const publish = async (pack, result) => {
 					],
 				}),
 				new Row({
-					append: [new Command({ tag: 'code', textContent: line }), new Meta({ textContent: 'installs it anywhere' })],
+					append: [
+						new Command({ code: line, multiline: true, copyButton: true }),
+						new Meta({ textContent: 'installs it anywhere' }),
+					],
 				}),
 				new Row({ append: listingButton(url) }),
 			]);
@@ -90,11 +93,16 @@ const publish = async (pack, result) => {
 export const packDialog = items => {
 	const asked = readQuery(location.search);
 	const choice = { name: 'My pack', minecraft: asked.minecraft, loader: asked.loader ?? 'fabric' };
-	const preview = new Command({ tag: 'pre', style: { maxHeight: '220px', overflow: 'auto', whiteSpace: 'pre' } });
+	const preview = new Command({
+		multiline: true,
+		language: 'json',
+		copyButton: true,
+		style: { display: 'block', maxHeight: '220px', overflow: 'auto', whiteSpace: 'pre' },
+	});
 	const result = new Stack();
 	const current = () => packOf({ ...choice, items });
 	const draw = () => {
-		preview.elem.textContent = textOf(current());
+		preview.options.code = textOf(current());
 	};
 	const name = new Input({
 		value: choice.name,
@@ -194,19 +202,6 @@ export const packDialog = items => {
 		}),
 		footer: [
 			new Button({ variant: 'flat', textContent: 'Close', onPointerPress: () => dialog.close() }),
-			new Button({
-				icon: 'copy',
-				variant: 'flat',
-				textContent: 'Copy',
-				onPointerPress: async () => {
-					const copied = await copyToClipboard(textOf(current()));
-
-					new Notify({
-						intent: copied ? 'success' : 'warning',
-						content: copied ? 'Copied the pack' : 'The clipboard is out of reach here; download the pack instead',
-					});
-				},
-			}),
 			new Button({
 				icon: 'download',
 				variant: 'flat',

@@ -1,7 +1,7 @@
-import { Button, Card, Link, styled, theme } from '@vanilla-bean/components';
+import { Card, Link, styled, theme } from '@vanilla-bean/components';
 
 import { LOADERS, PACK_FORMATS, packPath, pictureUrl, repositoryUrl } from './search';
-import { Chip, Command, Meta, Row, Stack, Title, Warning, about, avatar, copyCommand, count, date } from './ui';
+import { Chip, Command, Meta, Row, Stack, Title, Warning, about, avatar, count, date } from './ui';
 
 const Mosaic = styled.Component(
 	({ colors, radius }) => `
@@ -62,11 +62,7 @@ export const packStats = pack =>
 
 export const installRow = (pack, ...beside) =>
 	new Row({
-		append: [
-			new Command({ tag: 'code', textContent: pack.install }),
-			new Button({ icon: 'copy', variant: 'flat', title: 'Copy', onPointerPress: () => copyCommand(pack.install) }),
-			...beside,
-		],
+		append: [new Command({ code: pack.install, multiline: true, copyButton: true }), ...beside],
 	});
 
 /** A pack in a list: what it is, how much of it the index has, what to know before installing it, and how. */

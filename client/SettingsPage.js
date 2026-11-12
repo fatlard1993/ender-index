@@ -25,7 +25,7 @@ export default class SettingsPage extends View {
 						message: 'Run ender web, and this page shows its version, updates and players',
 						append: new Row({
 							append: [
-								new Command({ tag: 'code', textContent: 'ender web' }),
+								new Command({ code: 'ender web', multiline: true, copyButton: true }),
 								new Link({ href: LAUNCHER, textContent: 'Get ender' }),
 							],
 						}),

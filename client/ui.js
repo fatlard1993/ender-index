@@ -1,15 +1,4 @@
-import {
-	Card,
-	Component,
-	Dialog,
-	Link,
-	Notify,
-	Toolbar,
-	TooltipWrapper,
-	copyToClipboard,
-	styled,
-	theme,
-} from '@vanilla-bean/components';
+import { Card, Code, Component, Dialog, Link, Toolbar, TooltipWrapper, styled, theme } from '@vanilla-bean/components';
 
 import { local, updateReady } from './local';
 import { REPOSITORY, aboutOf, modPath, pictureUrl, readmeSources, titleOf } from './search';
@@ -86,15 +75,22 @@ export const Warning = styled.Component(
 	`,
 );
 
-export const Command = styled.Component(
+/**
+ * A command, a path or a code shown on the page: Code, on the overlay. One with a copy button is a block (multiline:
+ * true), as Code 7.2.3 draws no copy button on an inline one.
+ */
+export const Command = styled(
+	Code,
 	({ colors, radius, space }) => `
 		background: ${colors.overlay};
 		border-radius: ${radius.sm};
 		padding: ${space.xs} ${space.sm};
 		font-size: 0.9em;
-		user-select: all;
+		min-width: 0;
+		white-space: pre-wrap;
 		overflow-wrap: anywhere;
 	`,
+	{ language: 'shell' },
 );
 
 /** A repository's picture, or a cube where its host has none to give without a request. */
@@ -143,15 +139,6 @@ export const fetchReadme = async (entry, readme, signal) => {
 	}
 
 	return undefined;
-};
-
-export const copyCommand = async command => {
-	const copied = await copyToClipboard(command);
-
-	new Notify({
-		intent: copied ? 'success' : 'warning',
-		content: copied ? `Copied ${command}` : 'The clipboard is out of reach here; select the command and copy it',
-	});
 };
 
 const Stat = styled.Component(

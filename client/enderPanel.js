@@ -1,7 +1,7 @@
 import { Button, Card, Link, Notify, theme } from '@vanilla-bean/components';
 
 import { local, updateReady } from './local';
-import { Command, Meta, Row, Stack, Title, copyCommand } from './ui';
+import { Command, Meta, Row, Stack, Title } from './ui';
 
 const updateButton = upgrade => {
 	const status = new Meta();
@@ -29,7 +29,7 @@ const howTo = {
 	self: updateButton,
 	brew: () => [
 		new Meta({ textContent: 'Homebrew keeps it:' }),
-		new Command({ tag: 'code', textContent: 'brew upgrade ender' }),
+		new Command({ code: 'brew upgrade ender', multiline: true, copyButton: true }),
 	],
 	checkout: () => [
 		new Meta({ textContent: "It runs from a checkout: git pull in ender's folder brings it up to date" }),
@@ -67,7 +67,7 @@ const versionLine = upgrade => {
 const placeRow = (label, path) =>
 	new Row({
 		style: { flexWrap: 'wrap' },
-		append: [new Meta({ textContent: label }), new Command({ tag: 'code', textContent: path })],
+		append: [new Meta({ textContent: label }), new Command({ code: path })],
 	});
 
 const terminalLabel = () => new Meta({ textContent: 'Terminal' });
@@ -115,8 +115,7 @@ export const terminalRow = terminal => {
 			style: { flexWrap: 'wrap' },
 			append: [
 				new Meta({ textContent: 'or paste' }),
-				new Command({ tag: 'code', textContent: terminal.line }),
-				new Button({ icon: 'copy', variant: 'flat', title: 'Copy', onPointerPress: () => copyCommand(terminal.line) }),
+				new Command({ code: terminal.line, multiline: true, copyButton: true }),
 			],
 		}),
 	];

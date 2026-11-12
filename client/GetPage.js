@@ -1,6 +1,6 @@
-import { Button, Content, Link, SectionLabel, View, theme } from '@vanilla-bean/components';
+import { Content, Link, SectionLabel, View, theme } from '@vanilla-bean/components';
 
-import { Command, Meta, Row, Stack, Title, copyCommand, siteBar } from './ui';
+import { Command, Meta, Row, Stack, Title, siteBar } from './ui';
 
 const SCRIPTS = 'https://raw.githubusercontent.com/fatlard1993/ender-launcher/main';
 
@@ -47,13 +47,7 @@ export const systemOf = (userAgent = '') => {
 /** The one-line install a system's terminal runs. */
 export const installFor = system => INSTALLS[system === 'windows' ? 'windows' : 'unix'];
 
-const commandRow = command =>
-	new Row({
-		append: [
-			new Command({ tag: 'code', textContent: command }),
-			new Button({ icon: 'copy', variant: 'flat', title: 'Copy', onPointerPress: () => copyCommand(command) }),
-		],
-	});
+const commandRow = command => new Row({ append: new Command({ code: command, multiline: true, copyButton: true }) });
 
 const downloadButton = file =>
 	new Link({ variant: 'button', href: file.href, icon: 'download', textContent: file.label });
@@ -111,11 +105,7 @@ export default class GetPage extends View {
 										commandRow(BREW),
 										new Meta({
 											tag: 'p',
-											append: [
-												'Then ',
-												new Command({ tag: 'code', textContent: 'ender desktop' }),
-												' adds the Ender icon.',
-											],
+											append: ['Then ', new Command({ code: 'ender desktop' }), ' adds the Ender icon.'],
 										}),
 									]),
 							new SectionLabel({ level: 2, textContent: 'Then' }),

@@ -61,7 +61,6 @@ import {
 	Warning,
 	about,
 	avatar,
-	copyCommand,
 	count,
 	date,
 	fetchReadme,
@@ -243,7 +242,7 @@ const cautionsOf = (entry, { sharing, unproven }) =>
 
 /** A click on a card's own surface, not on a link, a button, a command to select, or after selecting text. */
 const opensCard = event =>
-	!event.target.closest('a, button, input, select, code, .vbc-button') && !getSelection()?.toString();
+	!event.target.closest('a, button, input, select, code, pre, .vbc-button') && !getSelection()?.toString();
 
 const THEMES_SHOWN = 4;
 
@@ -360,13 +359,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 						}),
 						new Row({
 							append: [
-								new Command({ tag: 'code', textContent: command }),
-								new Button({
-									icon: 'copy',
-									variant: 'flat',
-									title: 'Copy',
-									onPointerPress: () => copyCommand(command),
-								}),
+								new Command({ code: command, multiline: true, copyButton: true }),
 								collectButton(entry),
 								...installControls(entry),
 								...supportLink(entry),

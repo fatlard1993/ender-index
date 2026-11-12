@@ -5,7 +5,7 @@ import { runLocally } from './controls';
 import { local } from './local';
 import { packDialog } from './packMaker';
 import { installAllCommand, modPath } from './search';
-import { Command, Row, Stack, copyCommand } from './ui';
+import { Command, Row, Stack } from './ui';
 import { hrefOf } from './route';
 
 const Bar = styled.Component(
@@ -74,13 +74,7 @@ export default class CollectionBar extends Bar {
 								draw(collection.items);
 							},
 						}),
-						new Command({ tag: 'code', textContent: command, style: { flex: '1', minWidth: '12em' } }),
-						new Button({
-							icon: 'copy',
-							variant: local.selected ? 'flat' : undefined,
-							textContent: 'Copy',
-							onPointerPress: () => copyCommand(command),
-						}),
+						new Command({ code: command, multiline: true, copyButton: true, style: { flex: '1', minWidth: '12em' } }),
 						...(local.selected
 							? [
 									new Button({

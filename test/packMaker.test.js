@@ -50,8 +50,22 @@ describe('making a pack', () => {
 			button.textContent.trim(),
 		);
 
+		expect(labels).not.toContain('Copy');
 		expect(labels[0]).toBe('Close');
 		expect(labels.at(-1)).toBe('Publish as gist');
+		dialog.close();
+	});
+
+	test('previews the pack as a Code block that follows its name and copies it with its own button', () => {
+		const dialog = maker.packDialog([{ host: 'github', repo: 'CaffeineMC/sodium' }]);
+		const preview = dialog.elem.querySelector('pre.language-json');
+		const name = dialog.elem.querySelector('input');
+
+		name.value = 'Family';
+		name.dispatchEvent(new Event('input', { bubbles: true }));
+
+		expect(JSON.parse(preview.querySelector('code').textContent).name).toBe('Family');
+		expect(preview.querySelector('button').className).toContain('fa-copy');
 		dialog.close();
 	});
 });

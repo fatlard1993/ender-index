@@ -1,7 +1,7 @@
 import { Button, Card, Dialog, EmptyState, Input, Link, Notify, Select, theme } from '@vanilla-bean/components';
 
 import { lastSaid, local } from './local';
-import { Chip, Command, Meta, Row, Stack, Title, copyCommand } from './ui';
+import { Chip, Command, Meta, Row, Stack, Title } from './ui';
 
 const told = (intent, content) => new Notify({ intent, content });
 
@@ -94,8 +94,13 @@ const signInRow = signal => {
 					prompt.elem.style.display = '';
 					prompt.content([
 						new Meta({ textContent: 'Your code' }),
-						new Command({ tag: 'code', textContent: found.code, style: { fontSize: '1.3em', letterSpacing: '0.1em' } }),
-						new Button({ icon: 'copy', variant: 'flat', title: 'Copy', onPointerPress: () => copyCommand(found.code) }),
+						new Command({
+							code: found.code,
+							language: 'plaintext',
+							multiline: true,
+							copyButton: true,
+							style: { fontSize: '1.3em', letterSpacing: '0.1em' },
+						}),
 						new Link({
 							variant: 'button',
 							href: found.link,

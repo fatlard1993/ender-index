@@ -78,7 +78,6 @@ import {
 	Warning,
 	about,
 	avatar,
-	copyCommand,
 	count,
 	date,
 	fetchReadme,
@@ -1052,11 +1051,7 @@ export default class ModPage extends View {
 					]
 				: []),
 			new Row({
-				append: [
-					new Command({ tag: 'code', textContent: command }),
-					new Button({ icon: 'copy', variant: 'flat', title: 'Copy', onPointerPress: () => copyCommand(command) }),
-					controls,
-				],
+				append: [new Command({ code: command, multiline: true, copyButton: true }), controls],
 			}),
 			forStrangers(
 				new Meta({

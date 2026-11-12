@@ -81,7 +81,8 @@ export const jobLine = job => {
 
 const outputView = () =>
 	new Command({
-		tag: 'pre',
+		multiline: true,
+		language: 'plaintext',
 		style: { display: 'none', maxHeight: '260px', overflow: 'auto', whiteSpace: 'pre-wrap', margin: 0 },
 	});
 
@@ -100,8 +101,8 @@ const showProgress = (view, job) => {
 };
 
 const showOutput = (view, job, open) => {
-	view.elem.style.display = open && job ? '' : 'none';
-	view.elem.textContent = job?.lines.join('\n') ?? '';
+	view.elem.style.display = open && job ? 'block' : 'none';
+	view.options.code = job?.lines.join('\n') ?? '';
 	view.elem.scrollTop = view.elem.scrollHeight;
 };
 
@@ -564,7 +565,7 @@ export default class InstancesPage extends View {
 						message: 'Run ender web, and this page manages the instances there',
 						append: new Row({
 							append: [
-								new Command({ tag: 'code', textContent: 'ender web' }),
+								new Command({ code: 'ender web', multiline: true, copyButton: true }),
 								new Link({ href: LAUNCHER, textContent: 'Get ender' }),
 							],
 						}),
