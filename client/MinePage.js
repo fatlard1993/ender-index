@@ -127,7 +127,7 @@ export default class MinePage extends View {
 		document.title = 'Your mods :: ender index';
 		this.content([
 			siteBar(undefined, { label: 'Your mods' }),
-			new Content({ column: 900, style: { paddingBlock: '12px' }, append: body }),
+			new Content({ column: 900, style: { paddingBlock: theme.space.md }, append: body }),
 		]);
 
 		this.show(body).catch(error =>

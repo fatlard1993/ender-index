@@ -77,7 +77,7 @@ export default class GetPage extends View {
 			siteBar(undefined, { label: 'Get ender' }),
 			new Content({
 				column: 900,
-				style: { paddingBlock: '12px' },
+				style: { paddingBlock: theme.space.md },
 				append: [
 					new Stack({
 						style: { gap: theme.space.md },

@@ -117,7 +117,7 @@ export default class CollectionBar extends Bar {
 													onPointerPress: () => collection.toggle(item),
 												}),
 												new Link({ href: hrefOf(modPath(item)), textContent: item.title ?? item.repo }),
-												new Component({ tag: 'span', textContent: item.repo, style: { opacity: 0.6 } }),
+												new Component({ tag: 'span', textContent: item.repo, style: { color: theme.colors.muted } }),
 											],
 										}),
 								),

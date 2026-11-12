@@ -26,26 +26,26 @@ export const Row = styled.Component(
 );
 
 export const Meta = styled.Component(
-	({ colors }) => `
+	({ colors, fontSize }) => `
 		color: ${colors.muted};
-		font-size: 0.85em;
+		font-size: ${fontSize.sm};
 	`,
 );
 
 export const Title = styled.Component(
-	() => `
+	({ fontSize }) => `
 		font-weight: bold;
-		font-size: 1.1em;
+		font-size: ${fontSize.lg};
 	`,
 );
 
 export const Chip = styled(
 	TooltipWrapper,
-	({ colors, radius, space }) => `
+	({ colors, fontSize, radius, space }) => `
 		border: 1px solid ${colors.border};
 		border-radius: ${radius.pill};
 		padding: 0 ${space.sm};
-		font-size: 0.8em;
+		font-size: ${fontSize.sm};
 
 		&.finding {
 			border-color: ${colors.alpha(colors.warning, 0.6)};
@@ -60,9 +60,9 @@ export const Chip = styled(
 );
 
 export const Warning = styled.Component(
-	({ colors }) => `
+	({ colors, fontSize }) => `
 		color: ${colors.warning};
-		font-size: 0.9em;
+		font-size: ${fontSize.sm};
 	`,
 );
 
@@ -72,11 +72,11 @@ export const Warning = styled.Component(
  */
 export const Command = styled(
 	Code,
-	({ colors, radius, space }) => `
+	({ colors, fontSize, radius, space }) => `
 		background: ${colors.overlay};
 		border-radius: ${radius.sm};
 		padding: ${space.xs} ${space.sm};
-		font-size: 0.9em;
+		font-size: ${fontSize.sm};
 		min-width: 0;
 		white-space: pre-wrap;
 		overflow-wrap: anywhere;
@@ -133,7 +133,7 @@ export const fetchReadme = async (entry, readme, signal) => {
 };
 
 const Stat = styled.Component(
-	({ colors, radius, space }) => `
+	({ colors, fontSize, radius, space }) => `
 		display: flex;
 		flex-direction: column;
 		padding: ${space.sm} ${space.md};
@@ -142,7 +142,7 @@ const Stat = styled.Component(
 		min-width: 7em;
 
 		& > strong {
-			font-size: 1.2em;
+			font-size: ${fontSize.xl};
 		}
 	`,
 );
@@ -434,9 +434,9 @@ const Tiles = styled.Component(
 );
 
 const Clamped = styled.Component(
-	({ colors }) => `
+	({ colors, fontSize }) => `
 		color: ${colors.muted};
-		font-size: 0.85em;
+		font-size: ${fontSize.sm};
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;

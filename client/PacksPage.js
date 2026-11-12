@@ -1,4 +1,4 @@
-import { Button, Content, EmptyState, Input, Select, View, debounce } from '@vanilla-bean/components';
+import { Button, Content, EmptyState, Input, Select, View, debounce, theme } from '@vanilla-bean/components';
 
 import { loadPacks } from './data';
 import { packCard } from './packs';
@@ -79,7 +79,7 @@ export default class PacksPage extends View {
 			siteBar('packs'),
 			new Content({
 				column: 900,
-				style: { paddingBlock: '12px' },
+				style: { paddingBlock: theme.space.md },
 				append: [
 					new Meta({
 						tag: 'p',

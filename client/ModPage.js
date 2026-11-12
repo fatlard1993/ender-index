@@ -208,7 +208,11 @@ const capabilityList = scan =>
 			}),
 			...Object.entries(classes).map(
 				([className, calls]) =>
-					new Meta({ tag: 'div', style: { marginLeft: '1em' }, textContent: `${className}: ${calls.join(', ')}` }),
+					new Meta({
+						tag: 'div',
+						style: { marginLeft: theme.space.md },
+						textContent: `${className}: ${calls.join(', ')}`,
+					}),
 			),
 		);
 
@@ -849,7 +853,7 @@ export default class ModPage extends View {
 		const body = new Stack({ append: new EmptyState({ loading: true, title: `Loading ${repo}` }) });
 
 		this.bar = siteBar('mods', { label: repo });
-		this.content([this.bar, new Content({ column: 900, style: { paddingBlock: '12px' }, append: body })]);
+		this.content([this.bar, new Content({ column: 900, style: { paddingBlock: theme.space.md }, append: body })]);
 
 		const { signal } = this;
 

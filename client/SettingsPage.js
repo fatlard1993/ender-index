@@ -1,4 +1,4 @@
-import { Content, EmptyState, Link, View } from '@vanilla-bean/components';
+import { Content, EmptyState, Link, View, theme } from '@vanilla-bean/components';
 
 import { enderPanel } from './enderPanel';
 import { local } from './local';
@@ -12,7 +12,10 @@ export default class SettingsPage extends View {
 
 		const body = new Stack({ append: new EmptyState({ loading: true, title: 'Asking ender about itself' }) });
 
-		this.content([siteBar('settings'), new Content({ column: 900, style: { paddingBlock: '12px' }, append: body })]);
+		this.content([
+			siteBar('settings'),
+			new Content({ column: 900, style: { paddingBlock: theme.space.md }, append: body }),
+		]);
 
 		local.ready().then(served => {
 			if (this.signal.aborted) return;

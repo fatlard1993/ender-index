@@ -110,7 +110,7 @@ const signInRow = signal => {
 							language: 'plaintext',
 							multiline: true,
 							copyButton: true,
-							style: { fontSize: '1.3em', letterSpacing: '0.1em' },
+							style: { fontSize: theme.fontSize.xl, letterSpacing: '0.1em' },
 						}),
 						new Link({
 							variant: 'button',

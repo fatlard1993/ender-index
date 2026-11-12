@@ -523,7 +523,10 @@ export default class InstancesPage extends View {
 
 		const body = new Stack({ append: new EmptyState({ loading: true, title: 'Asking ender for its instances' }) });
 
-		this.content([siteBar('instances'), new Content({ column: 900, style: { paddingBlock: '12px' }, append: body })]);
+		this.content([
+			siteBar('instances'),
+			new Content({ column: 900, style: { paddingBlock: theme.space.md }, append: body }),
+		]);
 
 		const list = new Stack();
 		let drawn;

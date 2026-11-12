@@ -72,6 +72,9 @@ import { ROUTES, hrefOf } from './route';
 
 const PAGE_SIZE = 25;
 
+// The build below names its theme filter theme, so the spacing is taken from the theme here
+const { space } = theme;
+
 /** The filters past the first row: always shown on a wide screen, folded on a phone until asked for. */
 const MoreFilters = styled.Component(
 	({ media, space }) => `
@@ -695,7 +698,7 @@ export default class SearchPage extends View {
 			append: [
 				new Toolbar({
 					gap: 8,
-					style: { margin: '4px 0' },
+					style: { margin: `${space.xs} 0` },
 					append: [
 						choice('side', SIDES, 'Any side', 'Side'),
 						choice('released', RELEASED, 'Released any time', 'Released'),
@@ -722,18 +725,21 @@ export default class SearchPage extends View {
 
 		const scrolling = new Content({
 			column: 900,
-			style: { paddingBlock: '12px' },
+			style: { paddingBlock: space.md },
 			append: [
 				new Meta({
 					tag: 'p',
 					textContent:
 						'Minecraft mods found where their source lives. Every jar here came from the releases of its own repository and was scanned by ender: what its code can reach is a finding, not a verdict.',
 				}),
-				new Toolbar({ style: { margin: '12px 0 4px' }, append: [search, minecraft, loader, foldButton] }),
+				new Toolbar({
+					style: { margin: `${space.md} 0 ${space.xs}` },
+					append: [search, minecraft, loader, foldButton],
+				}),
 				moreFilters,
 				localBar,
 				status,
-				new Stack({ style: { marginTop: '12px' }, append: [results, more] }),
+				new Stack({ style: { marginTop: space.md }, append: [results, more] }),
 			],
 		});
 
