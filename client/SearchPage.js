@@ -362,7 +362,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 						}),
 						new Row({
 							append: [
-								new Command({ code: command, multiline: true, copyButton: true }),
+								new Command({ code: command, copyButton: true }),
 								collectButton(entry),
 								...installControls(entry),
 								...supportLink(entry),

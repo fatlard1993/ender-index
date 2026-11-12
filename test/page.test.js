@@ -192,10 +192,11 @@ test("names the phone's filters button by what pressing it does, with how many f
 
 test("shows a mod's install command as Code, with Code's own copy button", async () => {
 	const page = await mount('');
-	const command = [...document.querySelectorAll('pre')].find(code =>
+	const command = [...document.querySelectorAll('code')].find(code =>
 		code.textContent.startsWith('ender add gh:CaffeineMC/lithium'),
 	);
 
+	expect(command.tagName).toBe('CODE');
 	expect(command.classList.contains('language-shell')).toBe(true);
 	expect([...command.children].some(child => child.className.includes('fa-copy'))).toBe(true);
 	page.destroy();

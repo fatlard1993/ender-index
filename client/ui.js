@@ -67,8 +67,8 @@ export const Warning = styled.Component(
 );
 
 /**
- * A command, a path or a code shown on the page: Code, on the overlay. One with a copy button is a block (multiline:
- * true), as Code 7.2.3 draws no copy button on an inline one.
+ * A command, a path or a code shown on the page: Code, on the overlay. One line is inline code, its copy button kept at
+ * the end of the text however the text wraps.
  */
 export const Command = styled(
 	Code,
@@ -80,6 +80,18 @@ export const Command = styled(
 		min-width: 0;
 		white-space: pre-wrap;
 		overflow-wrap: anywhere;
+
+		&:not(pre) {
+			display: inline-flex;
+			align-items: center;
+			gap: ${space.xs};
+			max-width: 100%;
+			vertical-align: middle;
+
+			& > button {
+				flex: none;
+			}
+		}
 	`,
 	{ language: 'shell' },
 );

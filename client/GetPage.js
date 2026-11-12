@@ -47,7 +47,7 @@ export const systemOf = (userAgent = '') => {
 /** The one-line install a system's terminal runs. */
 export const installFor = system => INSTALLS[system === 'windows' ? 'windows' : 'unix'];
 
-const commandRow = command => new Row({ append: new Command({ code: command, multiline: true, copyButton: true }) });
+const commandRow = command => new Row({ append: new Command({ code: command, copyButton: true }) });
 
 const downloadButton = file =>
 	new Link({ variant: 'button', href: file.href, icon: 'download', textContent: file.label });

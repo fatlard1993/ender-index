@@ -29,7 +29,7 @@ const howTo = {
 	self: updateButton,
 	brew: () => [
 		new Meta({ textContent: 'Homebrew keeps it:' }),
-		new Command({ code: 'brew upgrade ender', multiline: true, copyButton: true }),
+		new Command({ code: 'brew upgrade ender', copyButton: true }),
 	],
 	checkout: () => [
 		new Meta({ textContent: "It runs from a checkout: git pull in ender's folder brings it up to date" }),
@@ -115,7 +115,7 @@ export const terminalRow = terminal => {
 			style: { flexWrap: 'wrap' },
 			append: [
 				new Meta({ textContent: 'or paste' }),
-				new Command({ code: terminal.line, multiline: true, copyButton: true }),
+				new Command({ code: terminal.line, copyButton: true }),
 			],
 		}),
 	];

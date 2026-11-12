@@ -62,7 +62,7 @@ export const packStats = pack =>
 
 export const installRow = (pack, ...beside) =>
 	new Row({
-		append: [new Command({ code: pack.install, multiline: true, copyButton: true }), ...beside],
+		append: [new Command({ code: pack.install, copyButton: true }), ...beside],
 	});
 
 /** A pack in a list: what it is, how much of it the index has, what to know before installing it, and how. */

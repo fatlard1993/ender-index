@@ -56,7 +56,7 @@ const publish = async (pack, result) => {
 				}),
 				new Row({
 					append: [
-						new Command({ code: line, multiline: true, copyButton: true }),
+						new Command({ code: line, copyButton: true }),
 						new Meta({ textContent: 'installs it anywhere' }),
 					],
 				}),

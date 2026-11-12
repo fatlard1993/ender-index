@@ -1053,7 +1053,7 @@ export default class ModPage extends View {
 					]
 				: []),
 			new Row({
-				append: [new Command({ code: command, multiline: true, copyButton: true }), controls],
+				append: [new Command({ code: command, copyButton: true }), controls],
 			}),
 			forStrangers(
 				new Meta({

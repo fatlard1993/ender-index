@@ -77,7 +77,7 @@ export default class CollectionBar extends Bar {
 								draw(collection.items);
 							},
 						}),
-						new Command({ code: command, multiline: true, copyButton: true, style: { flex: '1', minWidth: '12em' } }),
+						new Command({ code: command, copyButton: true, style: { flex: '1', minWidth: '12em' } }),
 						...(local.selected
 							? [
 									new Button({

@@ -569,7 +569,7 @@ export default class InstancesPage extends View {
 						message: 'Run ender web, and this page manages the instances there',
 						append: new Row({
 							append: [
-								new Command({ code: 'ender web', multiline: true, copyButton: true }),
+								new Command({ code: 'ender web', copyButton: true }),
 								new Link({ href: LAUNCHER, textContent: 'Get ender' }),
 							],
 						}),
