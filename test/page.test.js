@@ -237,3 +237,29 @@ describe("a mod's page", () => {
 		page.destroy();
 	});
 });
+
+describe('the collection bar', () => {
+	test('empties the collection at once, and Undo brings every mod back', async () => {
+		document.body.innerHTML = '';
+
+		const { default: CollectionBar } = await import('../client/CollectionBar');
+		const { collection } = await import('../client/collection');
+
+		collection.clear();
+		collection.toggle(listing[0], 'Lithium');
+		collection.toggle(listing[2], 'Backpacks');
+
+		const bar = new CollectionBar({ appendTo: document.body });
+
+		[...bar.elem.querySelectorAll('button')].find(button => button.className.includes('fa-trash')).click();
+		expect(collection.items).toEqual([]);
+
+		const undo = [...document.querySelectorAll('button')].find(button => button.textContent.trim() === 'Undo');
+
+		expect(undo.closest('.notify, [class*="Notify"]').textContent).toContain('Emptied the collection of 2 mods');
+		undo.click();
+		expect(collection.items.map(item => item.repo)).toEqual(['CaffeineMC/lithium', 'a/backpacks']);
+		collection.clear();
+		bar.destroy();
+	});
+});

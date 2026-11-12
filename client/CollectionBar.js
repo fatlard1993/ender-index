@@ -1,4 +1,4 @@
-import { Button, Component, Link, styled, theme } from '@vanilla-bean/components';
+import { Button, Component, Link, Notify, styled, theme } from '@vanilla-bean/components';
 
 import { collection } from './collection';
 import { runLocally } from './controls';
@@ -25,6 +25,25 @@ const Bar = styled.Component(
 		}
 	`,
 );
+
+/** Empties the collection at once, with an Undo that brings every mod back. */
+const emptyCollection = () => {
+	const kept = collection.items;
+
+	collection.clear();
+	new Notify({
+		intent: 'success',
+		content: `Emptied the collection of ${kept.length === 1 ? 'one mod' : `${kept.length} mods`}`,
+		actions: [
+			{
+				textContent: 'Undo',
+				onPointerPress: () => {
+					for (const item of kept) if (!collection.has(item)) collection.toggle(item, item.title);
+				},
+			},
+		],
+	});
+};
 
 export default class CollectionBar extends Bar {
 	build() {
@@ -82,7 +101,7 @@ export default class CollectionBar extends Bar {
 							variant: 'flat',
 							icon: 'trash',
 							tooltip: 'Empty the collection',
-							onPointerPress: collection.clear,
+							onPointerPress: () => emptyCollection(),
 						}),
 					],
 				}),
