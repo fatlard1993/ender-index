@@ -127,4 +127,29 @@ describe('the search page', () => {
 		expect(location.search).toBe('?side=client');
 		page.destroy();
 	});
+
+	test('shows each filter chip and Collect as pressed or not, from what they toggle', async () => {
+		const page = await mount('?support=1&avoid=network');
+		const button = label =>
+			[...document.querySelectorAll('button')].find(found => found.textContent.trim().startsWith(label));
+
+		expect(button('Takes support').getAttribute('aria-pressed')).toBe('true');
+		expect(button('network').getAttribute('aria-pressed')).toBe('true');
+		expect(button('exec').getAttribute('aria-pressed')).toBe('false');
+
+		button('Takes support').click();
+		expect(button('Takes support').getAttribute('aria-pressed')).toBe('false');
+		expect(button('Takes support').classList.contains('selected')).toBe(false);
+		page.destroy();
+
+		const { collectButton } = await import('../client/controls');
+		const { collection } = await import('../client/collection');
+		const lithium = listing[0];
+
+		expect(collectButton(lithium).elem.getAttribute('aria-pressed')).toBe('false');
+		collection.toggle(lithium, 'Lithium');
+		expect(collectButton(lithium).elem.getAttribute('aria-pressed')).toBe('true');
+		expect(collectButton(lithium).elem.className).not.toContain('intent-success');
+		collection.clear();
+	});
 });

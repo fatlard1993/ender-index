@@ -13,9 +13,9 @@ export const collectButton = entry => {
 	const collected = collection.has(entry);
 
 	return new Button({
-		icon: collected ? 'check' : 'plus',
-		variant: collected ? undefined : 'flat',
-		intent: collected ? 'success' : undefined,
+		icon: 'plus',
+		variant: 'flat',
+		pressed: collected,
 		textContent: collected ? 'Collected' : 'Collect',
 		tooltip: collected ? 'Take it out of the collection' : 'Gather it with others to install together',
 		onPointerPress: () => collection.toggle(entry, titleOf(entry)),
@@ -233,7 +233,8 @@ export const starButton = entry => {
 	return [
 		new Button({
 			icon: 'star',
-			variant: starred ? undefined : 'flat',
+			variant: 'flat',
+			pressed: starred,
 			textContent: starred ? 'Starred' : 'Star',
 			tooltip: starred ? 'Take back your star on GitHub' : 'Star it on GitHub, as the account ender signs in with',
 			onPointerPress: () =>

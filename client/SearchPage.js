@@ -563,14 +563,13 @@ export default class SearchPage extends View {
 			icon: 'heart',
 			textContent: 'Takes support',
 			tooltip: 'Only mods whose author says how to support them',
+			pressed: state.support,
 			onPointerPress: () => {
 				state.support = !state.support;
-				supporting.elem.classList.toggle('selected', state.support);
+				supporting.options.pressed = state.support;
 				restart();
 			},
 		});
-
-		supporting.elem.classList.toggle('selected', state.support);
 
 		const starring = new Button({
 			variant: 'chip',
@@ -578,14 +577,13 @@ export default class SearchPage extends View {
 			textContent: 'Starred',
 			tooltip: 'Only mods you starred on GitHub',
 			style: { display: 'none' },
+			pressed: state.starred,
 			onPointerPress: () => {
 				state.starred = !state.starred;
-				starring.elem.classList.toggle('selected', state.starred);
+				starring.options.pressed = state.starred;
 				restart();
 			},
 		});
-
-		starring.elem.classList.toggle('selected', state.starred);
 
 		/** Offered once ender web has said what the player starred, or said why it cannot. */
 		const showStars = () => {
@@ -607,16 +605,15 @@ export default class SearchPage extends View {
 						variant: 'chip',
 						textContent: capability,
 						tooltip: CAPABILITIES[capability],
+						pressed: state.avoid.includes(capability),
 						onPointerPress: () => {
 							state.avoid = state.avoid.includes(capability)
 								? state.avoid.filter(avoided => avoided !== capability)
 								: [...state.avoid, capability];
-							chip.elem.classList.toggle('selected', state.avoid.includes(capability));
+							chip.options.pressed = state.avoid.includes(capability);
 							restart();
 						},
 					});
-
-					chip.elem.classList.toggle('selected', state.avoid.includes(capability));
 
 					return chip;
 				}),
