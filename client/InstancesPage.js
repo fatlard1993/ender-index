@@ -216,6 +216,28 @@ const instanceCard = (instance, signal) => {
 		status.content([`Published at ${published} `, ...listingButton(published)]);
 	};
 	const client = instance.type === 'client';
+	const modsToggle = new Button({
+		icon: 'chevron-down',
+		variant: 'flat',
+		textContent: open.mods ? 'Hide mods' : 'Show mods',
+		onPointerPress: () => {
+			open.mods = !open.mods;
+			mods.elem.style.display = open.mods ? '' : 'none';
+			modsToggle.options.textContent = open.mods ? 'Hide mods' : 'Show mods';
+			if (open.mods) showMods();
+		},
+	});
+	const outputToggle = new Button({
+		icon: 'terminal',
+		variant: 'flat',
+		textContent: open.output ? 'Hide output' : 'Show output',
+		title: 'What ender printed for the last job here',
+		onPointerPress: () => {
+			open.output = !open.output;
+			outputToggle.options.textContent = open.output ? 'Hide output' : 'Show output';
+			showJob();
+		},
+	});
 
 	if (open.mods) showMods();
 	local.watchJobs(showJob, signal);
@@ -264,26 +286,8 @@ const instanceCard = (instance, signal) => {
 							textContent: 'Update',
 							onPointerPress: () => runJob(() => local.update(instance.name)),
 						}),
-						new Button({
-							icon: 'chevron-down',
-							variant: 'flat',
-							textContent: 'Mods',
-							onPointerPress: () => {
-								open.mods = !open.mods;
-								mods.elem.style.display = open.mods ? '' : 'none';
-								if (open.mods) showMods();
-							},
-						}),
-						new Button({
-							icon: 'terminal',
-							variant: 'flat',
-							textContent: 'Output',
-							title: 'What ender printed for the last job here',
-							onPointerPress: () => {
-								open.output = !open.output;
-								showJob();
-							},
-						}),
+						modsToggle,
+						outputToggle,
 						action({
 							icon: 'share',
 							variant: 'flat',

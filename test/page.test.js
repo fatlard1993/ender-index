@@ -102,11 +102,11 @@ describe('the search page', () => {
 		expect(card.textContent).toContain('Needs');
 		expect(card.textContent).toContain('sodium');
 
-		const toggle = [...card.querySelectorAll('button')].find(button => button.textContent.includes('Less'));
+		const toggle = [...card.querySelectorAll('button')].find(button => button.textContent.includes('Hide details'));
 
 		expect(toggle.getAttribute('aria-expanded')).toBe('true');
 		toggle.click();
-		await settle(() => toggle.textContent.includes('More'));
+		await settle(() => toggle.textContent.includes('Show details'));
 		expect(toggle.getAttribute('aria-expanded')).toBe('false');
 		page.destroy();
 	});
@@ -168,6 +168,16 @@ describe('the search page', () => {
 		expect([...support.children].some(child => child.classList.contains('fa-heart'))).toBe(false);
 		page.destroy();
 	});
+});
+
+test("names the phone's filters button by what pressing it does, with how many filters are on", async () => {
+	const page = await mount('?side=client');
+	const fold = [...document.querySelectorAll('button')].find(button => button.textContent.includes('filters'));
+
+	expect(fold.textContent.trim()).toBe('Show filters (1)');
+	fold.click();
+	expect(fold.textContent.trim()).toBe('Hide filters (1)');
+	page.destroy();
 });
 
 describe('pages that send the visitor somewhere', () => {

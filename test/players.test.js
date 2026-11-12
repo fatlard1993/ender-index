@@ -368,4 +368,13 @@ describe('the instances page', () => {
 		expect(source.value).toBe('');
 		page.destroy();
 	});
+
+	test("labels a card's mods and output buttons with what pressing them does", async () => {
+		const page = await mount();
+
+		buttonNamed('Show output').click();
+		expect(buttonNamed('Hide output')).toBeDefined();
+		expect(buttonNamed('Show mods')).toBeDefined();
+		page.destroy();
+	});
 });

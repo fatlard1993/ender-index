@@ -101,12 +101,13 @@ const PhoneOnly = styled(
 	`,
 );
 
-const filtersLabel = ({ side, released, host, sort, avoid, support, tag, starred }) => {
+const filtersLabel = ({ side, released, host, sort, avoid, support, tag, starred }, folded = true) => {
 	const active = [side, released, host, sort !== 'best', avoid.length > 0, support, tag, starred].filter(
 		Boolean,
 	).length;
+	const verb = folded ? 'Show filters' : 'Hide filters';
 
-	return active > 0 ? `Filters (${active})` : 'Filters';
+	return active > 0 ? `${verb} (${active})` : verb;
 };
 
 // Typing anywhere searches, except into a field, whose keys are its own
@@ -295,7 +296,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 	const toggle = new Button({
 		variant: 'flat',
 		icon: 'chevron-down',
-		textContent: 'More',
+		textContent: 'Show details',
 		attributes: { 'aria-expanded': 'false' },
 		onPointerPress: () => setOpen(!open.has(key)),
 	});
@@ -388,7 +389,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 		if (opening && !details.elem.isConnected) card.append(details);
 		details.elem.style.display = opening ? '' : 'none';
 		toggle.options.icon = opening ? 'chevron-up' : 'chevron-down';
-		toggle.options.textContent = opening ? 'Less' : 'More';
+		toggle.options.textContent = opening ? 'Hide details' : 'Show details';
 		toggle.elem.setAttribute('aria-expanded', String(opening));
 	}
 
@@ -716,10 +717,13 @@ export default class SearchPage extends View {
 			variant: 'flat',
 			icon: 'sliders',
 			textContent: filtersLabel(state),
-			onPointerPress: () => moreFilters.toggleClass('folded'),
+			onPointerPress: () => {
+				moreFilters.toggleClass('folded');
+				labelFolding();
+			},
 		});
 
-		const labelFolding = () => (foldButton.options.textContent = filtersLabel(state));
+		const labelFolding = () => (foldButton.options.textContent = filtersLabel(state, moreFilters.hasClass('folded')));
 
 		const scrolling = new Content({
 			column: 900,
