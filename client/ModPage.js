@@ -678,11 +678,7 @@ const forkedFrom = entry => {
 
 /** How the author of the project a fork came from takes support, said as theirs, not the fork's. */
 const originalSupport = entry => [
-	new SectionLabel({
-		level: 2,
-		textContent: `Support the author of ${entry.forkOf.repo}`,
-		style: { marginTop: theme.space.xl },
-	}),
+	new SectionLabel({ level: 2, textContent: `Support the author of ${entry.forkOf.repo}` }),
 	new Row({
 		append: supportOf(entry.forkOf).map(
 			({ url, label }) =>
@@ -1085,7 +1081,7 @@ export default class ModPage extends View {
 			}),
 			...(supportOf(entry).length > 0
 				? [
-						new SectionLabel({ level: 2, textContent: 'Support the author', style: { marginTop: theme.space.xl } }),
+						new SectionLabel({ level: 2, textContent: 'Support the author' }),
 						new Row({
 							append: supportOf(entry).map(
 								({ url, label }) =>
