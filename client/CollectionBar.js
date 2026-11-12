@@ -1,4 +1,4 @@
-import { Button, Component, Link, Notify, styled, theme } from '@vanilla-bean/components';
+import { Button, Component, Content, Link, Notify, styled, theme } from '@vanilla-bean/components';
 
 import { collection } from './collection';
 import { runLocally } from './controls';
@@ -8,15 +8,17 @@ import { installAllCommand, modPath } from './search';
 import { Command, Row, Stack } from './ui';
 import { hrefOf } from './route';
 
-const Bar = styled.Component(
+/** Docked under the view, it scrolls as a Content once the list is taller than half the screen. */
+const Bar = styled(
+	Content,
 	({ colors, space }) => `
 		flex: none;
 		display: flex;
 		flex-direction: column;
 		gap: ${space.sm};
 		max-height: 50%;
-		overflow: auto;
-		padding: ${space.sm} max(${space.md}, (100% - 900px) / 2);
+		margin: 0;
+		padding-block: ${space.sm};
 		border-top: 1px solid ${colors.border};
 		background: ${colors.surface};
 
@@ -24,6 +26,7 @@ const Bar = styled.Component(
 			display: none;
 		}
 	`,
+	{ column: 900 },
 );
 
 /** Empties the collection at once, with an Undo that brings every mod back. */

@@ -303,7 +303,7 @@ describe('the search page before its index arrives', () => {
 });
 
 describe('the collection bar', () => {
-	test('empties the collection at once, and Undo brings every mod back', async () => {
+	test('scrolls as a Content, empties the collection at once, and Undo brings every mod back', async () => {
 		document.body.innerHTML = '';
 
 		const { default: CollectionBar } = await import('../client/CollectionBar');
@@ -314,6 +314,9 @@ describe('the collection bar', () => {
 		collection.toggle(listing[2], 'Backpacks');
 
 		const bar = new CollectionBar({ appendTo: document.body });
+
+		expect(bar.elem.className).toContain('Content');
+		expect(bar.elem.classList.contains('column')).toBe(true);
 
 		[...bar.elem.querySelectorAll('button')].find(button => button.className.includes('fa-trash')).click();
 		expect(collection.items).toEqual([]);
