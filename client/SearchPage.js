@@ -68,7 +68,7 @@ import {
 	loadJson,
 	screenshots,
 } from './ui';
-import { hrefOf } from './route';
+import { ROUTES, hrefOf } from './route';
 
 const PAGE_SIZE = 25;
 
@@ -675,7 +675,7 @@ export default class SearchPage extends View {
 			localBar.content([new Meta({ textContent: 'Installing into' }), instancePicker()]);
 			local.loadAccount().then(() => {
 				if (local.login && !this.signal.aborted)
-					localBar.append(new Link({ href: hrefOf('/mine'), textContent: 'Your mods' }));
+					localBar.append(new Link({ href: hrefOf(ROUTES.mine), textContent: 'Your mods' }));
 			});
 
 			// Filters follow the instance, so what is offered is what it can load

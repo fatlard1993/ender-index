@@ -2,7 +2,7 @@ import { Card, Code, Component, Dialog, Link, Toolbar, TooltipWrapper, styled, t
 
 import { local, updateReady } from './local';
 import { REPOSITORY, aboutOf, modPath, pictureUrl, readmeSources, titleOf } from './search';
-import { hrefOf } from './route';
+import { ROUTES, hrefOf, routeTo } from './route';
 
 export const count = number => number.toLocaleString('en-US');
 
@@ -187,10 +187,10 @@ const Places = styled.Component(
 );
 
 /** Where the index says how to get ender, the launcher that installs what it lists. */
-export const LAUNCHER = hrefOf('/get');
+export const LAUNCHER = hrefOf(ROUTES.get);
 
 /** Where the index tells mod authors what it reads from their repositories, or one part of that. */
-export const authorsPath = part => hrefOf(part ? `/authors/${part}` : '/authors');
+export const authorsPath = part => hrefOf(part ? routeTo('authorsPart', { part }) : ROUTES.authors);
 
 /**
  * Shown only on a page ender is not serving: there it is the launcher's own, and the way to get ender is no news.
@@ -230,10 +230,10 @@ export const forLocal = component => {
 };
 
 const PLACES = {
-	mods: { label: 'Mods', href: hrefOf('/') },
-	packs: { label: 'Packs', href: hrefOf('/packs') },
-	instances: { label: 'Instances', href: hrefOf('/instances'), local: true },
-	settings: { label: 'Settings', href: hrefOf('/settings'), local: true, marked: true },
+	mods: { label: 'Mods', href: hrefOf(ROUTES.mods) },
+	packs: { label: 'Packs', href: hrefOf(ROUTES.packs) },
+	instances: { label: 'Instances', href: hrefOf(ROUTES.instances), local: true },
+	settings: { label: 'Settings', href: hrefOf(ROUTES.settings), local: true, marked: true },
 };
 
 /** The bar's breadcrumb: the views above this one, each a link, before the bar's heading; only the site shows on a phone. */
@@ -348,7 +348,11 @@ export const siteBar = (at, ...steps) => {
 			}),
 		],
 	});
-	const site = { label: 'ender index', href: `${hrefOf('/')}${location.search}`, options: { addClass: 'site' } };
+	const site = {
+		label: 'ender index',
+		href: `${hrefOf(ROUTES.mods)}${location.search}`,
+		options: { addClass: 'site' },
+	};
 
 	bar.trail = (...retold) => {
 		const title = retold.at(-1)?.label ?? (at === 'mods' ? undefined : PLACES[at]?.label);

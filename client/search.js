@@ -2,7 +2,7 @@ import { HOSTS, fit, ownerOf } from 'ender-launcher/rank';
 import { specFor } from 'ender-launcher/spec';
 import { supportOf } from 'ender-launcher/support';
 
-import { hrefOf } from './route';
+import { ROUTES, hrefOf, routeTo } from './route';
 
 export const INDEX = 'https://raw.githubusercontent.com/fatlard1993/ender-index/main/data';
 
@@ -43,10 +43,10 @@ const authorOf = value => {
 };
 
 /** Where the page lists every mod the index gave a theme. */
-export const tagPath = tag => `${hrefOf('/')}${writeQuery({ tag })}`;
+export const tagPath = tag => `${hrefOf(ROUTES.mods)}${writeQuery({ tag })}`;
 
 /** Where the page lists every mod an entry's owner has in the index. */
-export const authorPath = entry => `${hrefOf('/')}${writeQuery({ author: ownerOf(entry) })}`;
+export const authorPath = entry => `${hrefOf(ROUTES.mods)}${writeQuery({ author: ownerOf(entry) })}`;
 
 export const readQuery = search => {
 	const params = new URLSearchParams(search);
@@ -280,7 +280,11 @@ export const CAPABILITIES = {
 export const modPath = entry => {
 	const split = entry.repo.lastIndexOf('/');
 
-	return `/mod/${entry.host ?? 'github'}/${encodeURIComponent(entry.repo.slice(0, split))}/${encodeURIComponent(entry.repo.slice(split + 1))}`;
+	return routeTo('mod', {
+		host: entry.host ?? 'github',
+		owner: encodeURIComponent(entry.repo.slice(0, split)),
+		name: encodeURIComponent(entry.repo.slice(split + 1)),
+	});
 };
 
 const RECORD_DIRECTORIES = { github: '', codeberg: 'codeberg.org/', gitlab: 'gitlab.com/' };
@@ -475,8 +479,19 @@ const PACK_ORDERS = {
 export const sortPacks = (packs, sort = 'stars') =>
 	packs.toSorted((a, b) => PACK_ORDERS[sort](a, b) || a.repo.localeCompare(b.repo));
 
+/** A pack's own page, as the router spells it. */
+export const packRoute = pack => {
+	const split = pack.repo.indexOf('/');
+
+	return routeTo('pack', {
+		host: pack.host ?? 'github',
+		owner: pack.repo.slice(0, split),
+		name: pack.repo.slice(split + 1),
+	});
+};
+
 /** Where a pack's own page is. */
-export const packPath = pack => hrefOf(`/pack/${pack.host ?? 'github'}/${pack.repo}`);
+export const packPath = pack => hrefOf(packRoute(pack));
 
 /** Where a pack's mod comes from: the index, when it has it, or else where its jar is. */
 export const kindOf = mod => (mod.key ? 'indexed' : mod.jar);

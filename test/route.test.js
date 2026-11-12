@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 
 import { sitePages } from '../scripts/buildSite';
-import { addressOf, followsHere, hashRoute, hrefOf, routeOf } from '../client/route';
+import { ROUTES, addressOf, followsHere, hashRoute, hrefOf, routeOf, routeTo } from '../client/route';
 
 const SITE = 'https://fatlard1993.github.io/ender-index/';
 
@@ -88,4 +88,14 @@ describe('the pages GitHub Pages serves', () => {
 		expect(pages.get('404.html')).toContain('<title>ender index</title>');
 		expect(pages.has('packs.html')).toBe(true);
 	});
+});
+
+test("builds every page's route from the one map the router reads, a pack's and a mod's too", async () => {
+	const { modPath, packRoute } = await import('../client/search');
+
+	expect(routeTo('pack', { host: 'github', owner: 'me', name: 'family' })).toBe('/pack/github/me/family');
+	expect(routeTo('authorsPart', { part: 'funding' })).toBe('/authors/funding');
+	expect(packRoute({ repo: 'me/family' })).toBe(routeTo('pack', { host: 'github', owner: 'me', name: 'family' }));
+	expect(modPath({ host: 'gitlab', repo: 'group/sub/project' })).toBe('/mod/gitlab/group%2Fsub/project');
+	expect(Object.values(ROUTES).every(route => route.startsWith('/'))).toBe(true);
 });

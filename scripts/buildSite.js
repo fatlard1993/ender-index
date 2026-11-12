@@ -3,7 +3,8 @@ import { dirname, join, relative } from 'node:path';
 
 import { LIBRARY_STYLESHEETS, buildClient } from '@vanilla-bean/components/app';
 
-import { aboutOf, modPath, pictureUrl, titleOf } from '../client/search';
+import { ROUTES } from '../client/route';
+import { aboutOf, modPath, packRoute, pictureUrl, titleOf } from '../client/search';
 
 const OUT = join(import.meta.dir, '..', 'client', 'build');
 const DATA = join(import.meta.dir, '..', 'data');
@@ -87,21 +88,21 @@ const plainRoute = route => (route.split('/').every(part => part === decodeURICo
  * 404.html, the site as it is, which shows the route all the same.
  */
 export const sitePages = ({ shell, site, mods, packs }) => {
-	const pages = new Map([['404.html', pageFor(shell, site, { route: '/' })]]);
+	const pages = new Map([['404.html', pageFor(shell, site, { route: ROUTES.mods })]]);
 	const add = page => {
 		const route = plainRoute(page.route);
 
 		if (route) pages.set(fileOf(route), pageFor(shell, site, { ...page, route }));
 	};
 
-	pages.set('index.html', pageFor(shell, site, { route: '/' }));
+	pages.set('index.html', pageFor(shell, site, { route: ROUTES.mods }));
 
 	for (const [route, title] of [
-		['/packs', 'Packs'],
-		['/get', 'Get ender'],
-		['/authors', 'For authors'],
-		['/instances', 'Instances'],
-		['/mine', 'Your mods'],
+		[ROUTES.packs, 'Packs'],
+		[ROUTES.get, 'Get ender'],
+		[ROUTES.authors, 'For authors'],
+		[ROUTES.instances, 'Instances'],
+		[ROUTES.mine, 'Your mods'],
 	])
 		add({ route, title });
 
@@ -116,7 +117,7 @@ export const sitePages = ({ shell, site, mods, packs }) => {
 	for (const pack of packs)
 		if (pack.repo.split('/').length === 2)
 			add({
-				route: `/pack/${pack.host ?? 'github'}/${pack.repo}`,
+				route: packRoute(pack),
 				title: pack.name,
 				description: pack.description && brief(pack.description),
 				image: pictureUrl(pack, 256),

@@ -54,5 +54,22 @@ export const followLinks = () =>
 		navigate(routeOf(new URL(anchor.href)));
 	});
 
+/** Every page of the site by name: the router, the bar's places and every link to a page build from these. */
+export const ROUTES = Object.freeze({
+	mods: '/',
+	packs: '/packs',
+	pack: '/pack/:host/:owner/:name',
+	get: '/get',
+	authors: '/authors',
+	authorsPart: '/authors/:part',
+	instances: '/instances',
+	settings: '/settings',
+	mine: '/mine',
+	mod: '/mod/:host/:owner/:name',
+});
+
+/** The route of a named page, its parameters filled in as given: encoding one is the caller's to do. */
+export const routeTo = (name, params = {}) => ROUTES[name].replaceAll(/:(\w+)/g, (_, key) => params[key]);
+
 /** A link to a route, relative to the base, so it reaches the same page on GitHub Pages and from ender web. */
 export const hrefOf = route => `.${route}`;

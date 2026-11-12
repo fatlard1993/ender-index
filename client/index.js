@@ -10,7 +10,7 @@ import PackPage from './PackPage';
 import PacksPage from './PacksPage';
 import SearchPage from './SearchPage';
 import SettingsPage from './SettingsPage';
-import { addressOf, followLinks, hashRoute, navigate, routeOf } from './route';
+import { ROUTES, addressOf, followLinks, hashRoute, navigate, routeOf } from './route';
 
 import '@vanilla-bean/components/app/reloadOnBuild';
 
@@ -38,16 +38,16 @@ new Page({
 			new SiteRouter({
 				mode: 'history',
 				views: {
-					'/': SearchPage,
-					'/packs': PacksPage,
-					'/pack/:host/:owner/:name': PackPage,
-					'/get': GetPage,
-					'/authors': AuthorsPage,
-					'/authors/:part': AuthorsPage,
-					'/instances': InstancesPage,
-					'/settings': SettingsPage,
-					'/mine': MinePage,
-					'/mod/:host/:owner/:name': ModPage,
+					[ROUTES.mods]: SearchPage,
+					[ROUTES.packs]: PacksPage,
+					[ROUTES.pack]: PackPage,
+					[ROUTES.get]: GetPage,
+					[ROUTES.authors]: AuthorsPage,
+					[ROUTES.authorsPart]: AuthorsPage,
+					[ROUTES.instances]: InstancesPage,
+					[ROUTES.settings]: SettingsPage,
+					[ROUTES.mine]: MinePage,
+					[ROUTES.mod]: ModPage,
 				},
 				onRenderView: () => (document.title = 'ender index'),
 			}),
