@@ -6,8 +6,82 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-07-20T09:27:08Z",
-	"pushed": "2026-11-11T02:26:45Z",
+	"pushed": "2026-11-12T02:50:44Z",
 	"releases": [
+		{
+			"tag": "v5.0.1",
+			"published": "2026-11-12T02:50:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 737796764,
+					"name": "gestorage-5.0.1.jar",
+					"url": "https://github.com/GGontry/Gestorage/releases/download/v5.0.1/gestorage-5.0.1.jar",
+					"size": 340800,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "f9ebdfeb820cd28b33a7c33b7eca4c93b02880c5fbad665a1c067cc0549b6a63",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "gestorage",
+							"version": "5.0.1",
+							"name": "Gestorage",
+							"description": "A modular mod that improves every aspect of storage and inventory management.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"owo-lib"
+							],
+							"provides": [
+								"owo-sentinel"
+							],
+							"suggests": [
+								"lithium",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "f6dfe4adea9dab8ea9863d26ceb2a3b062555e9a6175d87752f3968de9b3798e.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 172,
+						"jars": [
+							"META-INF/jars/owo-sentinel-0.12.15.4+1.21.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/owo-sentinel-0.12.15.4+1.21.jar!io/wispforest/owosentinel/OwoSentinel.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"api.modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.12.15.4+1.21.jar!io/wispforest/owosentinel/OwoSentinel.class"
+							],
+							"modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.12.15.4+1.21.jar!io/wispforest/owosentinel/SentinelConsole.class"
+							],
+							"github.com": [
+								"META-INF/jars/owo-sentinel-0.12.15.4+1.21.jar!io/wispforest/owosentinel/SentinelWindow.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Fixed\n\n- A hopper picking up a dropped stack of empty shulkers while hopper stacking was off could delete most of the stack: the whole entity stack was copied, the destination capped it to 1, and the entity was discarded. The pickup now moves at most the effective limit and leaves the remainder in the item entity.\n- Hopper-rule bypasses through item-entity collision and hopper minecart ticks were closed; both now run inside the hopper context. Shift-clicking or manually inserting into a hopper screen is also capped to one shulker per slot while hopper stacking is off.\n- Empty shulkers carrying a loot table (`CONTAINER_LOOT`) were treated as empty and could stack, which risked duplicating structure loot when placed. They are now always treated as non-empty.\n- The hopper transfer context is now reentrant and always cleared in a `finally` block, so nested hopper calls or an exception can no longer leave the server thread marked as a hopper.\n- Turning player stacking off now splits existing over-max empty-shulker stacks in the player inventory, cursor and ender chest into singles, dropping the overflow at the player's feet. The same normalization runs on join, and the extended ender chest is normalized when it is opened.\n- Modded shulkers with a custom `MAX_STACK_SIZE` now keep their own limit instead of being forced to 64.\n- Lithium's cached full-slot count is now invalidated when either shulker rule changes, so toggling hopper stacking no longer leaves hoppers stuck (or over-eager) until the inventory changes.\n- A legacy over-max destination stack can no longer corrupt a hopper transfer: vanilla's merge calculation subtracts a negative amount when the destination already exceeds the limit, so slots at or over the limit are skipped.\n- A hopper chain no longer stops after the destination chest is emptied while hoppers are off. Empty shulkers are max 1 only during the hopper transfer, which made Lithium's cached full-slot count treat each single as full; removing them with the player limit of 64 never decremented that cache, including when shift-clicking or manually taking stacks changed the count in place. The compatibility mixin now applies the same effective limit whenever Lithium updates its cache, so the hopper resumes as soon as a slot is cleared.\n- Extended ender chest overflow is now saved at most once every two seconds per player instead of on every refill request, which could force repeated world saves. Closing the ender chest still saves immediately, and refill still keeps target stacks topped to 64.\n- The ender chest overflow NBT is backed up once per session before it is first read, so a first write can no longer overwrite the only recoverable copy.\n- Keybind capture in the config screen now reads the live modifier state. Modifiers held before capture started are included, and a modifier released during capture is no longer stuck in the binding.\n- Careful Break now handles nested deaths correctly: an inner death without a player killer no longer clears the outer death context, so later drops from the outer kill are still collected.\n- Legacy (version 0) shulker link files with a malformed entry now skip only that entry instead of discarding every link.\n- The client-side ender chest size mirror now updates on join and whenever `gestorage:enderChestSize` changes (including a plain `/gamerule`), not only when an ender chest is opened.\n- Tool Wheel sync now also reads state that is still pending in memory, so a change made before the next world save is no longer sent to the client as empty."
+		},
 		{
 			"tag": "v5.0.0",
 			"published": "2026-11-10T21:34:02Z",
