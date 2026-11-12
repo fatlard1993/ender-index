@@ -17,14 +17,7 @@ import { loadListing, loadPackPage, loadPacks } from './data';
 import { local } from './local';
 import { Prose, renderReadme } from './ModPage';
 import { installRow, packCard, packChips, packFace, packWarnings } from './packs';
-import {
-	collectionKey,
-	kindOf,
-	similarPacks,
-	readmeSources,
-	repositoryUrl,
-	writePackQuery,
-} from './search';
+import { collectionKey, kindOf, similarPacks, readmeSources, repositoryUrl, writePackQuery } from './search';
 import {
 	Chip,
 	Heading,
@@ -149,7 +142,7 @@ const modsPanel = (pack, byKey) => {
 	});
 	const shown = new Stack();
 	const draw = () => {
-		const words = filter.elem.value.toLowerCase().split(/\s+/).filter(Boolean);
+		const words = String(filter.options.value).toLowerCase().split(/\s+/).filter(Boolean);
 		const fits = text => words.every(word => text.toLowerCase().includes(word));
 		const indexed = [...new Set(pack.mods.filter(mod => mod.key).map(mod => mod.key))]
 			.map(key => byKey.get(key))

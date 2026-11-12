@@ -56,6 +56,25 @@ describe('the players panel', () => {
 		expect(text).not.toContain('client id');
 	});
 
+	test('adds the offline player typed into its field', async () => {
+		const card = panel.playersPanel(new AbortController().signal);
+
+		document.body.append(card.elem);
+		await settle(() => card.elem.textContent.includes('Add an offline player'));
+
+		const field = card.elem.querySelector('input[aria-label="Player name"]');
+		const button = [...card.elem.querySelectorAll('button')].find(each => each.textContent.includes('Add an offline'));
+
+		field.value = 'Steve';
+		field.dispatchEvent(new Event('input', { bubbles: true }));
+		sent.length = 0;
+		button.click();
+		await settle(() => sent.some(([method]) => method === 'POST'));
+
+		expect(sent).toContainEqual(['POST', './api/players', JSON.stringify({ name: 'Steve' })]);
+		card.elem.remove();
+	});
+
 	test('offers each instance the active player or one of its own, showing the one it has', () => {
 		const [choice] = panel.playerChoice({ name: 'suite', account: 'Kid_2' });
 		const options = [...choice.elem.querySelectorAll('option')].map(option => [option.value, option.label]);

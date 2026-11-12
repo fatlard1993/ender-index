@@ -76,7 +76,7 @@ const listMod = () => {
 			button.options.disabled = true;
 
 			try {
-				const { url, before } = await local.listMod(field.elem.value);
+				const { url, before } = await local.listMod(field.options.value);
 
 				result.content([
 					before ? 'Asked before: ' : 'Asked: it is crawled within a few minutes, and ',

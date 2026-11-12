@@ -128,14 +128,17 @@ const addOffline = () => {
 		placeholder: 'A name, 3 to 16 letters, digits or _',
 		attributes: { 'aria-label': 'Player name' },
 	});
-	const add = () =>
-		attempt(
+	const add = () => {
+		const named = String(name.options.value).trim();
+
+		return attempt(
 			async () => {
-				await local.addPlayer(name.elem.value.trim());
-				told('success', `${name.elem.value.trim()} can play`);
+				await local.addPlayer(named);
+				told('success', `${named} can play`);
 			},
-			`${name.elem.value.trim() || 'That name'} was not added`,
+			`${named || 'That name'} was not added`,
 		);
+	};
 
 	name.elem.addEventListener('keydown', event => {
 		if (event.key === 'Enter') add();
