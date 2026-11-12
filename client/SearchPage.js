@@ -4,7 +4,6 @@ import {
 	Component,
 	Content,
 	EmptyState,
-	Icon,
 	Input,
 	Link,
 	Notify,
@@ -114,6 +113,16 @@ const filtersLabel = ({ side, released, host, sort, avoid, support, tag, starred
 const isTypingInField = target =>
 	target?.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target?.tagName);
 
+/** A link to support an author, its heart drawn red. */
+const SupportLink = styled(
+	Link,
+	({ colors }) => `
+		&:before {
+			color: ${colors.danger};
+		}
+	`,
+);
+
 /** The first way its author takes support, named; the mod's page lists every one. */
 const supportLink = entry => {
 	const [first, ...rest] = supportOf(entry);
@@ -121,13 +130,13 @@ const supportLink = entry => {
 	if (first === undefined) return [];
 
 	return [
-		new Link({
+		new SupportLink({
 			variant: 'flat',
 			href: first.url,
 			target: '_blank',
 			attributes: { rel: 'noopener noreferrer' },
-			style: { display: 'inline-flex', flexDirection: 'row', alignItems: 'center', gap: theme.space.xs },
-			append: [new Icon({ icon: 'heart', style: { color: theme.colors.danger } }), 'Support'],
+			icon: 'heart',
+			textContent: 'Support',
 			tooltip: `Support the author on ${first.label}${rest.length > 0 ? `, or ${rest.length} other ${rest.length === 1 ? 'way' : 'ways'} on its page` : ''}`,
 		}),
 	];

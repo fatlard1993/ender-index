@@ -15,7 +15,11 @@ const entry = (repo, mods, extra) => ({
 });
 
 const listing = [
-	entry('CaffeineMC/lithium', [mod('lithium', 'Lithium')], { stars: 2192, description: 'Performance' }),
+	entry('CaffeineMC/lithium', [mod('lithium', 'Lithium')], {
+		stars: 2192,
+		description: 'Performance',
+		funding: [{ platform: 'ko_fi', url: 'https://ko-fi.com/lithium' }],
+	}),
 	entry('copy/client', [mod('sodium', 'Sodium')], {
 		stars: 0,
 		latest: { tag: 'v5', mods: [mod('sodium', 'Sodium')], provides: [], capabilities: ['network'] },
@@ -151,5 +155,17 @@ describe('the search page', () => {
 		expect(collectButton(lithium).elem.getAttribute('aria-pressed')).toBe('true');
 		expect(collectButton(lithium).elem.className).not.toContain('intent-success');
 		collection.clear();
+	});
+
+	test('gives a support link its heart through the icon option, not an Icon appended inside it', async () => {
+		const page = await mount('');
+		const support = [...document.querySelectorAll('a')].find(
+			link => link.getAttribute('href') === 'https://ko-fi.com/lithium',
+		);
+
+		expect(support.textContent).toStartWith('Support');
+		expect(support.className).toContain('fa-heart');
+		expect([...support.children].some(child => child.classList.contains('fa-heart'))).toBe(false);
+		page.destroy();
 	});
 });
