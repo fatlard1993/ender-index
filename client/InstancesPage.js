@@ -31,15 +31,8 @@ const INSTANCE_LOADERS = { ...LOADERS, vanilla: 'Vanilla' };
 
 const told = (intent, content) => new Notify({ intent, content });
 
-const checkbox = (text, checked, onChange) =>
-	new Component({
-		tag: 'label',
-		style: { display: 'inline-flex', alignItems: 'center', gap: theme.space.xs, cursor: 'pointer' },
-		append: [
-			new Component({ tag: 'input', attributes: { type: 'checkbox', ...(checked ? { checked: '' } : {}) }, onChange }),
-			text,
-		],
-	});
+const checkbox = (label, checked, onChange) =>
+	new Label({ label, variant: 'inline-after' }, new Input({ type: 'checkbox', value: checked, onChange }));
 
 const STEP = /^:: (.+)$/;
 
