@@ -226,7 +226,7 @@ export default class PackPage extends View {
 						new EmptyState({
 							icon: 'magnifying-glass',
 							title: `${repo} is not a pack the index lists`,
-							action: { textContent: 'Every pack', onPointerPress: () => navigate('/packs') },
+							action: new Link({ variant: 'button', href: hrefOf('/packs'), textContent: 'Every pack' }),
 						}),
 					);
 

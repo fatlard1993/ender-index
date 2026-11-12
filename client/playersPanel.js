@@ -1,4 +1,4 @@
-import { Button, Card, Dialog, Input, Notify, Select, theme } from '@vanilla-bean/components';
+import { Button, Card, Dialog, Input, Link, Notify, Select, theme } from '@vanilla-bean/components';
 
 import { lastSaid, local } from './local';
 import { Chip, Command, Meta, Row, Stack, Title, Warning, copyCommand } from './ui';
@@ -96,11 +96,13 @@ const signInRow = signal => {
 						new Meta({ textContent: 'Your code' }),
 						new Command({ tag: 'code', textContent: found.code, style: { fontSize: '1.3em', letterSpacing: '0.1em' } }),
 						new Button({ icon: 'copy', variant: 'flat', title: 'Copy', onPointerPress: () => copyCommand(found.code) }),
-						new Button({
+						new Link({
+							variant: 'button',
+							href: found.link,
+							target: '_blank',
+							attributes: { rel: 'noopener noreferrer' },
 							icon: 'arrow-up-right-from-square',
 							textContent: "Open Microsoft's page",
-							title: found.link,
-							onPointerPress: () => window.open(found.link, '_blank', 'noopener'),
 						}),
 					]);
 				};

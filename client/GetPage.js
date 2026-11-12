@@ -56,14 +56,7 @@ const commandRow = command =>
 	});
 
 const downloadButton = file =>
-	new Button({
-		icon: 'download',
-		textContent: file.label,
-		title: file.href,
-		onPointerPress: () => {
-			window.location.href = file.href;
-		},
-	});
+	new Link({ variant: 'button', href: file.href, icon: 'download', textContent: file.label });
 
 const downloadSection = (system, level = 2) => {
 	const download = DOWNLOADS[system];

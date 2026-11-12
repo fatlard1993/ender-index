@@ -169,3 +169,37 @@ describe('the search page', () => {
 		page.destroy();
 	});
 });
+
+describe('pages that send the visitor somewhere', () => {
+	test("offer Get ender's downloads as links to the files, not buttons that set the location", async () => {
+		document.body.innerHTML = '';
+
+		const { default: GetPage } = await import('../client/GetPage');
+		const page = new GetPage({ appendTo: document.body });
+		const downloads = [...document.querySelectorAll('a')].filter(link =>
+			link.getAttribute('href')?.startsWith('https://github.com/fatlard1993/ender-launcher/releases/latest/download/'),
+		);
+
+		expect(downloads.map(link => link.getAttribute('href').split('/').at(-1))).toEqual([
+			'Ender-mac-arm64.dmg',
+			'Ender-mac-x64.dmg',
+			'Ender-Setup.exe',
+		]);
+		expect(downloads.every(link => link.className.includes('variant-button'))).toBe(true);
+		page.destroy();
+	});
+
+	test('lead from a pack the index does not list to every pack by a link', async () => {
+		document.body.innerHTML = '';
+
+		const { default: PackPage } = await import('../client/PackPage');
+		const page = new PackPage({ appendTo: document.body, host: 'github', owner: 'no', name: 'pack' });
+
+		await settle(() => document.body.textContent.includes('is not a pack the index lists'));
+
+		const every = [...document.querySelectorAll('a')].find(link => link.textContent.trim().startsWith('Every pack'));
+
+		expect(every.getAttribute('href')).toBe('./packs');
+		page.destroy();
+	});
+});
