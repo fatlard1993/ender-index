@@ -3,7 +3,7 @@ import { Content, EmptyState, Link, View } from '@vanilla-bean/components';
 import { enderPanel } from './enderPanel';
 import { local } from './local';
 import { playersPanel } from './playersPanel';
-import { Command, LAUNCHER, Row, Stack, Title, siteBar } from './ui';
+import { Command, LAUNCHER, Row, Stack, siteBar } from './ui';
 
 /** The ender serving this page, kept apart from the instances it keeps: its version and update, and who plays. */
 export default class SettingsPage extends View {
@@ -35,11 +35,7 @@ export default class SettingsPage extends View {
 				return;
 			}
 
-			body.content([
-				new Title({ tag: 'h1', textContent: 'Settings' }),
-				enderPanel(this.signal),
-				playersPanel(this.signal),
-			]);
+			body.content([enderPanel(this.signal), playersPanel(this.signal)]);
 		});
 	}
 }

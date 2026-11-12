@@ -167,7 +167,6 @@ export default class MinePage extends View {
 		if (this.signal.aborted) return;
 
 		body.content([
-			new Title({ tag: 'h1', textContent: 'Your mods' }),
 			mods.length > 0
 				? new Meta({
 						tag: 'p',

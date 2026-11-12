@@ -288,7 +288,6 @@ export default class PackPage extends View {
 					new Stack({
 						style: { flex: '1', minWidth: '0', gap: theme.space.sm },
 						append: [
-							new Heading({ tag: 'h1', textContent: pack.name }),
 							new Row({
 								append: [
 									new Link({

@@ -575,7 +575,7 @@ export default class InstancesPage extends View {
 				return;
 			}
 
-			body.content([new Title({ tag: 'h1', textContent: 'Instances' }), newInstance(this.signal), list]);
+			body.content([newInstance(this.signal), list]);
 			local.loadPlayers();
 			drawList();
 			local.subscribe(drawList, this.signal);

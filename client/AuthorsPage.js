@@ -2,7 +2,7 @@ import { Content, View } from '@vanilla-bean/components';
 
 import { guideMarkup } from './guide';
 import { Prose } from './ModPage';
-import { Title, authorsPath, siteBar } from './ui';
+import { authorsPath, siteBar } from './ui';
 
 /** What a mod author's repository can hold for the index to make the most of: linked by part, as authors/funding. */
 export default class AuthorsPage extends View {
@@ -20,7 +20,7 @@ export default class AuthorsPage extends View {
 			new Content({
 				column: 900,
 				style: { paddingBlock: '12px' },
-				append: [new Title({ tag: 'h1', textContent: 'For mod authors' }), prose],
+				append: prose,
 			}),
 		]);
 

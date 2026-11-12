@@ -245,9 +245,10 @@ const PLACES = {
 	settings: { label: 'Settings', href: hrefOf('/settings'), local: true, marked: true },
 };
 
+/** The bar's breadcrumb: the views above this one, each a link, before the bar's heading; only the site shows on a phone. */
 const Trail = styled.Component(
 	({ colors, fontSize, media, space }) => `
-		flex: 1 1 auto;
+		flex: 0 1 auto;
 		display: flex;
 		align-items: center;
 		gap: ${space.xs};
@@ -255,31 +256,20 @@ const Trail = styled.Component(
 		white-space: nowrap;
 		color: ${colors.muted};
 
+		&:empty {
+			display: none;
+		}
+
 		& > .site {
 			flex-shrink: 0;
 			font-size: ${fontSize.lg};
 			font-weight: 600;
-			color: inherit;
+			color: ${colors.white};
 			text-decoration: none;
 		}
 
-		& > .steps {
-			display: contents;
-		}
-
-		& > .site,
-		& [aria-current='page'] {
-			color: ${colors.white};
-		}
-
-		& [aria-current='page'] {
-			min-width: 0;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
-
 		@media ${media.wide} {
-			max-width: calc(50% - 170px);
+			max-width: 25%;
 		}
 
 		@media ${media.phone} {
@@ -290,50 +280,57 @@ const Trail = styled.Component(
 	`,
 );
 
-/** A page's steps in the bar: each one back a link, the page itself last; only the last shows on a phone. */
-export const trailSteps = (...steps) =>
-	steps.flatMap((step, at) => {
-		const last = at === steps.length - 1;
-		const between = last ? {} : { addClass: 'between' };
+/**
+ * The bar's heading, the view's own name, leaves the middle of a wide screen to the index's places: the far side
+ * holds the half beside them, and the heading takes what the breadcrumb leaves before them, from nothing, so a long
+ * name is cut short rather than wrapping the bar.
+ */
+const SiteToolbar = styled(
+	Toolbar,
+	({ media, space }) => `
+		& > .heading {
+			flex: 0 1 auto;
+			margin-left: ${space.xs};
+		}
+
+		@media ${media.wide} {
+			& > .heading {
+				flex: 1 1 0;
+			}
+
+			& > .end {
+				flex: 0 0 calc(50% + 170px);
+				justify-content: flex-end;
+			}
+		}
+	`,
+);
+
+/** The views above a page, each a link and a slash, the site first; the page itself is the bar's heading. */
+export const trailSteps = (...above) =>
+	above.flatMap((step, at) => {
+		const between = at === 0 ? {} : { addClass: 'between' };
 
 		return [
+			new Link({ href: step.href, textContent: step.label, tooltip: false, ...between, ...step.options }),
 			new Component({ tag: 'span', textContent: '/', attributes: { 'aria-hidden': 'true' }, ...between }),
-			step.href
-				? new Link({ href: step.href, textContent: step.label, tooltip: false, ...between })
-				: new Component({
-						tag: 'span',
-						textContent: step.label,
-						title: step.label,
-						attributes: { 'aria-current': 'page' },
-					}),
 		];
 	});
 
 /**
- * Every page's bar: the index's name and where the page is within it, the index's own places with the current one
- * marked and the mods keeping the search they were left with, and on the far side the link that leaves it, to its
- * repository, where GitHub shows how to sponsor it. Given steps, the bar answers trail(...steps) to retell them once
- * the page knows what it shows.
+ * Every page's bar: the views above the page as links, the page's own name as the bar's heading, the index's own
+ * places with the current one marked and the mods keeping the search they were left with, and on the far side the
+ * link that leaves it, to its repository, where GitHub shows how to sponsor it. The search, the index's home, is
+ * headed with the index's name. Given steps, the bar answers trail(...steps) to retell them once the page knows what
+ * it shows.
  */
 export const siteBar = (at, ...steps) => {
-	const shown = new Component({ tag: 'span', addClass: 'steps', append: trailSteps(...steps) });
-	const bar = new Toolbar({
+	const trail = new Trail({ tag: 'nav', addClass: 'start', attributes: { 'aria-label': 'Breadcrumb' } });
+	const bar = new SiteToolbar({
 		variant: 'bar',
 		style: { position: 'relative' },
 		append: [
-			new Trail({
-				tag: 'nav',
-				attributes: { 'aria-label': 'Breadcrumb' },
-				append: [
-					new Link({
-						addClass: 'site',
-						href: `${hrefOf('/')}${location.search}`,
-						textContent: 'ender index',
-						tooltip: false,
-					}),
-					shown,
-				],
-			}),
+			trail,
 			new Places({
 				tag: 'nav',
 				append: Object.entries(PLACES).map(([place, { label, href, local: localOnly, marked }]) => {
@@ -351,6 +348,7 @@ export const siteBar = (at, ...steps) => {
 				}),
 			}),
 			new Row({
+				addClass: 'end',
 				style: { marginLeft: 'auto', flexWrap: 'nowrap' },
 				append: [
 					forStrangers(new Link({ variant: 'flat', href: LAUNCHER, textContent: 'Get ender', tooltip: false })),
@@ -359,8 +357,15 @@ export const siteBar = (at, ...steps) => {
 			}),
 		],
 	});
+	const site = { label: 'ender index', href: `${hrefOf('/')}${location.search}`, options: { addClass: 'site' } };
 
-	bar.trail = (...retold) => shown.content(trailSteps(...retold));
+	bar.trail = (...retold) => {
+		const title = retold.at(-1)?.label ?? (at === 'mods' ? undefined : PLACES[at]?.label);
+
+		trail.content(title === undefined ? [] : trailSteps(site, ...retold.slice(0, -1)));
+		bar.options.heading = title ?? site.label;
+	};
+	bar.trail(...steps);
 
 	return bar;
 };

@@ -201,6 +201,14 @@ test("shows a mod's install command as Code, with Code's own copy button", async
 	page.destroy();
 });
 
+test("heads the search, the index's home, with the index's name and no breadcrumb", async () => {
+	const page = await mount('');
+
+	expect(document.querySelector('[role="heading"][aria-level="1"]').textContent).toBe('ender index');
+	expect(document.querySelectorAll('nav[aria-label="Breadcrumb"] a')).toHaveLength(0);
+	page.destroy();
+});
+
 describe('pages that send the visitor somewhere', () => {
 	test("offer Get ender's downloads as links to the files, not buttons that set the location", async () => {
 		document.body.innerHTML = '';
@@ -255,6 +263,22 @@ describe("a mod's page", () => {
 		expect(pressed.defaultPrevented).toBe(true);
 		expect(document.querySelector('dialog')?.textContent).toContain('Open the file');
 		document.querySelector('dialog')?.remove();
+		page.destroy();
+	});
+	test("is headed in its bar by the mod's name, after a breadcrumb of links, and repeats no h1 below", async () => {
+		document.body.innerHTML = '';
+
+		const { default: ModPage } = await import('../client/ModPage');
+		const page = new ModPage({ appendTo: document.body, host: 'github', owner: 'CaffeineMC', name: 'lithium' });
+		const heading = () => document.querySelector('[role="heading"][aria-level="1"]');
+
+		await settle(() => heading()?.textContent === 'Lithium');
+
+		const crumbs = [...document.querySelectorAll('nav[aria-label="Breadcrumb"] a')].map(link => link.textContent);
+
+		expect(crumbs).toEqual(['ender index']);
+		expect(document.querySelector('nav[aria-label="Breadcrumb"] [aria-current]')).toBeNull();
+		expect(document.querySelector('h1')).toBeNull();
 		page.destroy();
 	});
 });

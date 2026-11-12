@@ -1,6 +1,6 @@
 import { Content, Link, SectionLabel, View, theme } from '@vanilla-bean/components';
 
-import { Command, Meta, Row, Stack, Title, siteBar } from './ui';
+import { Command, Meta, Row, Stack, siteBar } from './ui';
 
 const SCRIPTS = 'https://raw.githubusercontent.com/fatlard1993/ender-launcher/main';
 
@@ -82,7 +82,6 @@ export default class GetPage extends View {
 					new Stack({
 						style: { gap: theme.space.md },
 						append: [
-							new Title({ tag: 'h1', textContent: 'Get ender' }),
 							paragraph(
 								'ender is the launcher this index is made for: it installs the mods and packs listed here, and what they need, into Minecraft instances it keeps. It is one file, with nothing else to install; it fetches the Java each game version needs itself.',
 							),

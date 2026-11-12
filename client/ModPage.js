@@ -70,7 +70,6 @@ import { local } from './local';
 import {
 	Chip,
 	Command,
-	Heading,
 	Meta,
 	Row,
 	Stack,
@@ -1000,7 +999,6 @@ export default class ModPage extends View {
 					new Stack({
 						style: { flex: '1', minWidth: '0', gap: theme.space.sm },
 						append: [
-							new Heading({ tag: 'h1', textContent: title }),
 							new Row({
 								append: [
 									new Link({
