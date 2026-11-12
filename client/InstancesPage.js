@@ -24,7 +24,7 @@ import { instanceNameOf, packDialog } from './packMaker';
 import { packOrMods, readPasted } from './pasted';
 import { playerChoice } from './playersPanel';
 import { LOADERS } from './search';
-import { Chip, Command, LAUNCHER, Meta, Row, Stack, Title, Warning, siteBar } from './ui';
+import { Chip, Command, LAUNCHER, Meta, Row, Stack, Title, siteBar } from './ui';
 
 const NAMEABLE_SOURCES = new Set(['github', 'codeberg', 'gitlab', 'modrinth', 'curseforge']);
 
@@ -175,20 +175,31 @@ const instanceCard = (instance, signal) => {
 		}
 	};
 	const showMods = async () => {
-		mods.content(new Meta({ textContent: 'Reading its mods' }));
+		mods.content(new EmptyState({ loading: true, title: 'Reading its mods' }));
 
 		try {
 			const manifest = await local.details(instance.name);
 
 			mods.content(
 				(manifest.mods ?? []).length === 0
-					? new Meta({ textContent: 'No mods chosen yet: add them from the Mods page' })
+					? new EmptyState({
+							icon: 'puzzle-piece',
+							title: 'No mods chosen yet',
+							message: 'Add them from the Mods page',
+						})
 					: modList(manifest, spec =>
 							runJob(() => local.dropFrom(instance.name, [spec]), { done: `Removed ${spec}` }).then(showMods),
 						),
 			);
 		} catch (error) {
-			mods.content(new Meta({ textContent: `Its mods did not load: ${error.message}` }));
+			mods.content(
+				new EmptyState({
+					icon: 'triangle-exclamation',
+					title: 'Its mods did not load',
+					message: error.message,
+					action: { textContent: 'Try again', onPointerPress: () => showMods() },
+				}),
+			);
 		}
 	};
 	const publish = async fresh => {
@@ -524,9 +535,19 @@ export default class InstancesPage extends View {
 			drawn = shape;
 			cards?.abort();
 			cards = new AbortController();
-			if (local.error) list.content(new Warning({ textContent: local.error }));
+			if (local.error)
+				list.content(
+					new EmptyState({
+						icon: 'triangle-exclamation',
+						title: 'The instances did not load',
+						message: local.error,
+						action: { textContent: 'Try again', onPointerPress: () => local.reload() },
+					}),
+				);
 			else if (local.all.length === 0)
-				list.content(new Meta({ tag: 'p', textContent: 'No instances yet: make one above.' }));
+				list.content(
+					new EmptyState({ icon: 'cube', title: 'No instances yet', message: 'Make one above, from a pack or a list' }),
+				);
 			else list.content(local.all.map(instance => instanceCard(instance, cards.signal)));
 		};
 

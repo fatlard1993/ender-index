@@ -121,7 +121,12 @@ export default class MinePage extends View {
 
 		this.show(body).catch(error =>
 			body.content(
-				new EmptyState({ icon: 'triangle-exclamation', title: 'Your mods did not load', message: error.message }),
+				new EmptyState({
+					icon: 'triangle-exclamation',
+					title: 'Your mods did not load',
+					message: error.message,
+					action: { textContent: 'Try again', onPointerPress: () => this.render() },
+				}),
 			),
 		);
 	}
@@ -163,13 +168,16 @@ export default class MinePage extends View {
 
 		body.content([
 			new Title({ tag: 'h1', textContent: 'Your mods' }),
-			new Meta({
-				tag: 'p',
-				textContent:
-					mods.length > 0
-						? `Signed in to GitHub as ${local.login}: ${count(mods.length)} of your repositories are in the index, ${lacking > 0 ? `${count(lacking)} of them with something the index cannot do for players` : 'and each has what players need'}.`
-						: `Signed in to GitHub as ${local.login}, whose repositories have no mods in the index yet. Mods kept under an organization are listed under it.`,
-			}),
+			mods.length > 0
+				? new Meta({
+						tag: 'p',
+						textContent: `Signed in to GitHub as ${local.login}: ${count(mods.length)} of your repositories are in the index, ${lacking > 0 ? `${count(lacking)} of them with something the index cannot do for players` : 'and each has what players need'}.`,
+					})
+				: new EmptyState({
+						icon: 'cube',
+						title: 'No mods of yours in the index yet',
+						message: `Signed in to GitHub as ${local.login}. Mods kept under an organization are listed under it; name one of yours below to list it now.`,
+					}),
 			new Link({ href: authorsPath(), textContent: 'What the index reads from your repositories' }),
 			...mods.map(modCard),
 			listMod(),

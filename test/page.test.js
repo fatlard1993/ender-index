@@ -55,6 +55,16 @@ beforeAll(async () => {
 					},
 				],
 			},
+			'/pack-pages/me/family.json': {
+				host: 'github',
+				repo: 'me/family',
+				name: 'Family',
+				count: 1,
+				matched: [],
+				formats: ['ender'],
+				install: 'ender import gh:me/family',
+				mods: [{ name: 'Sodium', jar: 'modrinth', modrinth: 'sodium' }],
+			},
 			'CaffeineMC/lithium/HEAD/README.md': '![shields](https://img.shields.io/x) A mod.\n\n![The farm](docs/farm.png)',
 		},
 	});
@@ -238,6 +248,25 @@ describe("a mod's page", () => {
 	});
 });
 
+describe('the search page before its index arrives', () => {
+	test('keeps its loading state when the collection changes meanwhile', async () => {
+		const { collection } = await import('../client/collection');
+
+		history.replaceState(null, '', '/ender-index/');
+		document.body.innerHTML = '';
+
+		const page = new SearchPage({ appendTo: document.body });
+
+		collection.toggle(listing[0], 'Lithium');
+
+		expect(document.body.textContent).toContain('Loading the index');
+		expect(document.body.textContent).not.toContain('No mods match');
+
+		collection.clear();
+		page.destroy();
+	});
+});
+
 describe('the collection bar', () => {
 	test('empties the collection at once, and Undo brings every mod back', async () => {
 		document.body.innerHTML = '';
@@ -261,5 +290,28 @@ describe('the collection bar', () => {
 		expect(collection.items.map(item => item.repo)).toEqual(['CaffeineMC/lithium', 'a/backpacks']);
 		collection.clear();
 		bar.destroy();
+	});
+});
+
+describe("a pack's page", () => {
+	test('says in an EmptyState that it has no readme, and that no mod matches what was typed', async () => {
+		document.body.innerHTML = '';
+
+		const { default: PackPage } = await import('../client/PackPage');
+		const page = new PackPage({ appendTo: document.body, host: 'github', owner: 'me', name: 'family' });
+
+		await settle(() => document.body.textContent.includes('No readme'));
+
+		const states = () => [...document.querySelectorAll('[class*="EmptyState"]')].map(state => state.textContent);
+
+		expect(states().some(text => text.includes('No readme was found at the root of the repository.'))).toBe(true);
+
+		const filter = document.querySelector('input[aria-label="Filter its mods"]');
+
+		filter.value = 'zzz';
+		filter.dispatchEvent(new Event('input', { bubbles: true }));
+
+		expect(states().some(text => text.includes('None of its mods match') && text.includes('"zzz"'))).toBe(true);
+		page.destroy();
 	});
 });

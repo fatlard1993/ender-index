@@ -1141,50 +1141,68 @@ export default class ModPage extends View {
 			...Object.values(panels),
 		]);
 
-		fetchReadme(entry, record.readme, signal)
-			.then(found => {
-				if (signal.aborted) return;
+		const loadReadme = () =>
+			fetchReadme(entry, record.readme, signal)
+				.then(found => {
+					if (signal.aborted) return;
 
-				if (found === undefined) {
+					if (found === undefined) {
+						readme.content(
+							new EmptyState({
+								icon: 'file-lines',
+								title: 'No readme',
+								message:
+									record.readme === null
+										? 'The repository has no readme.'
+										: 'No readme was found at the root of the repository.',
+							}),
+						);
+
+						return;
+					}
+
+					showGallery({
+						pictures: [...new Set([...screenshotsOf(found.markdown, found.sources.raw, PICTURES_SHOWN), ...pictures])],
+					});
+
+					const prose = new Prose();
+
+					prose.elem.innerHTML = renderReadme(found.markdown, found.sources);
+					prose.elem.addEventListener(
+						'click',
+						event => {
+							const anchor = event.target.closest(`a[href^="#${HEADING_PREFIX}"]`);
+
+							if (!anchor) return;
+
+							event.preventDefault();
+							prose.elem
+								.querySelector(`[id="${CSS.escape(anchor.getAttribute('href').slice(1))}"]`)
+								?.scrollIntoView({ behavior: 'smooth' });
+						},
+						{ signal },
+					);
+					readme.content(prose);
+				})
+				.catch(error => {
+					if (error.name === 'AbortError') return;
+
 					readme.content(
-						new Meta({
-							tag: 'p',
-							textContent:
-								record.readme === null
-									? 'The repository has no readme.'
-									: 'No readme was found at the root of the repository.',
+						new EmptyState({
+							icon: 'triangle-exclamation',
+							title: 'The readme did not load',
+							message: error.message,
+							action: {
+								textContent: 'Try again',
+								onPointerPress: () => {
+									readme.content(new EmptyState({ loading: true, title: 'Fetching the readme' }));
+									loadReadme();
+								},
+							},
 						}),
 					);
-
-					return;
-				}
-
-				showGallery({
-					pictures: [...new Set([...screenshotsOf(found.markdown, found.sources.raw, PICTURES_SHOWN), ...pictures])],
 				});
 
-				const prose = new Prose();
-
-				prose.elem.innerHTML = renderReadme(found.markdown, found.sources);
-				prose.elem.addEventListener(
-					'click',
-					event => {
-						const anchor = event.target.closest(`a[href^="#${HEADING_PREFIX}"]`);
-
-						if (!anchor) return;
-
-						event.preventDefault();
-						prose.elem
-							.querySelector(`[id="${CSS.escape(anchor.getAttribute('href').slice(1))}"]`)
-							?.scrollIntoView({ behavior: 'smooth' });
-					},
-					{ signal },
-				);
-				readme.content(prose);
-			})
-			.catch(error => {
-				if (error.name !== 'AbortError')
-					readme.content(new Meta({ tag: 'p', textContent: `The readme did not load: ${error.message}` }));
-			});
+		loadReadme();
 	}
 }

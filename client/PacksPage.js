@@ -39,7 +39,7 @@ export default class PacksPage extends View {
 				fitting.length > 0
 					? fitting.slice(0, shown).map(packCard)
 					: new EmptyState({
-							icon: 'magnifying-glass',
+							icon: packs.length > 0 ? 'magnifying-glass' : 'box',
 							title: packs.length > 0 ? 'No packs match' : 'No packs are listed yet',
 							message:
 								packs.length > 0

@@ -116,6 +116,11 @@ describe('the players panel', () => {
 
 		expect(local.local.players).toBeNull();
 		expect(panel.playerChoice({ name: 'suite' })).toEqual([]);
+
+		const card = panel.playersPanel(new AbortController().signal);
+		const state = card.elem.querySelector('[class*="EmptyState"]');
+
+		expect(state.textContent).toContain('This ender is too old to manage players here');
 	});
 });
 

@@ -180,7 +180,13 @@ const modsPanel = (pack, byKey) => {
 					]
 				: []),
 			...(indexed.length + outside.length === 0
-				? [new Meta({ tag: 'p', textContent: 'None of its mods match.' })]
+				? [
+						new EmptyState({
+							icon: 'magnifying-glass',
+							title: 'None of its mods match',
+							message: `No mod of the pack has every word of "${words.join(' ')}" in its name or description`,
+						}),
+					]
 				: []),
 		]);
 	};
@@ -353,25 +359,47 @@ export default class PackPage extends View {
 
 		const entry = { host: pack.host, repo: pack.repo };
 
-		fetchReadme(entry, undefined, signal)
-			.then(found => {
-				if (signal.aborted) return;
+		const loadReadme = () =>
+			fetchReadme(entry, undefined, signal)
+				.then(found => {
+					if (signal.aborted) return;
 
-				if (found === undefined) {
-					readme.content(new Meta({ tag: 'p', textContent: 'No readme was found at the root of the repository.' }));
+					if (found === undefined) {
+						readme.content(
+							new EmptyState({
+								icon: 'file-lines',
+								title: 'No readme',
+								message: 'No readme was found at the root of the repository.',
+							}),
+						);
 
-					return;
-				}
+						return;
+					}
 
-				const prose = new Prose();
+					const prose = new Prose();
 
-				prose.elem.innerHTML = renderReadme(found.markdown, found.sources ?? readmeSources(entry));
-				readme.content(prose);
-			})
-			.catch(
-				error =>
-					!signal.aborted &&
-					readme.content(new Meta({ tag: 'p', textContent: `The readme did not load: ${error.message}` })),
-			);
+					prose.elem.innerHTML = renderReadme(found.markdown, found.sources ?? readmeSources(entry));
+					readme.content(prose);
+				})
+				.catch(error => {
+					if (signal.aborted) return;
+
+					readme.content(
+						new EmptyState({
+							icon: 'triangle-exclamation',
+							title: 'The readme did not load',
+							message: error.message,
+							action: {
+								textContent: 'Try again',
+								onPointerPress: () => {
+									readme.content(new EmptyState({ loading: true, title: 'Fetching the readme' }));
+									loadReadme();
+								},
+							},
+						}),
+					);
+				});
+
+		loadReadme();
 	}
 }

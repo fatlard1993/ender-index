@@ -1,7 +1,7 @@
-import { Button, Card, Dialog, Input, Link, Notify, Select, theme } from '@vanilla-bean/components';
+import { Button, Card, Dialog, EmptyState, Input, Link, Notify, Select, theme } from '@vanilla-bean/components';
 
 import { lastSaid, local } from './local';
-import { Chip, Command, Meta, Row, Stack, Title, Warning, copyCommand } from './ui';
+import { Chip, Command, Meta, Row, Stack, Title, copyCommand } from './ui';
 
 const told = (intent, content) => new Notify({ intent, content });
 
@@ -164,16 +164,24 @@ export const playersPanel = signal => {
 		drawn = shape;
 
 		if (playersError) {
-			body.content(new Warning({ textContent: `ender could not list its players: ${playersError}` }));
+			body.content(
+				new EmptyState({
+					icon: 'triangle-exclamation',
+					title: 'ender could not list its players',
+					message: playersError,
+					action: { textContent: 'Try again', onPointerPress: () => local.refreshPlayers() },
+				}),
+			);
 
 			return;
 		}
 
 		if (players === null) {
 			body.content(
-				new Meta({
-					tag: 'p',
-					textContent: 'This ender is too old to manage players here; "ender upgrade" brings it up to date.',
+				new EmptyState({
+					icon: 'circle-up',
+					title: 'This ender is too old to manage players here',
+					message: '"ender upgrade" brings it up to date.',
 				}),
 			);
 
@@ -181,14 +189,20 @@ export const playersPanel = signal => {
 		}
 
 		if (players === undefined) {
-			body.content(new Meta({ textContent: 'Asking ender who can play' }));
+			body.content(new EmptyState({ loading: true, title: 'Asking ender who can play' }));
 
 			return;
 		}
 
 		body.content([
 			...(players.accounts.length === 0
-				? [new Meta({ tag: 'p', textContent: `No players yet: the game plays offline as ${players.fallback}.` })]
+				? [
+						new EmptyState({
+							icon: 'user',
+							title: 'No players yet',
+							message: `The game plays offline as ${players.fallback}: add an offline player or sign in to Microsoft below.`,
+						}),
+					]
 				: players.accounts.map(playerRow)),
 			addOffline(),
 			signInRow(signal),

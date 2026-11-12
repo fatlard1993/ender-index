@@ -417,6 +417,8 @@ export default class SearchPage extends View {
 		});
 
 		const draw = () => {
+			if (entries === undefined) return;
+
 			results.content(
 				ranked.length > 0
 					? ranked.slice(0, shown).map(found => resultCard(found, versions, state, entries, open, pickTheme))
