@@ -1,7 +1,7 @@
-import { Button, Card, Link, Notify, theme } from '@vanilla-bean/components';
+import { Button, Card, Link, Notify, SectionLabel, theme } from '@vanilla-bean/components';
 
 import { local, updateReady } from './local';
-import { Command, Meta, Row, Stack, Title } from './ui';
+import { Command, Meta, Row, Stack } from './ui';
 
 const updateButton = upgrade => {
 	const status = new Meta();
@@ -158,6 +158,6 @@ export const enderPanel = signal => {
 
 	return new Card(
 		{},
-		new Stack({ style: { gap: theme.space.md }, append: [new Title({ textContent: 'ender' }), body] }),
+		new Stack({ style: { gap: theme.space.md }, append: [new SectionLabel({ level: 2, textContent: 'ender' }), body] }),
 	);
 };

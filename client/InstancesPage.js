@@ -10,6 +10,7 @@ import {
 	Label,
 	Link,
 	Notify,
+	SectionLabel,
 	Select,
 	View,
 	theme,
@@ -491,7 +492,7 @@ const newInstance = signal => {
 		new Stack({
 			style: { gap: theme.space.md },
 			append: [
-				new Title({ textContent: 'New instance' }),
+				new SectionLabel({ level: 2, textContent: 'New instance' }),
 				new Label(
 					{ label: 'From a pack', for: source },
 					new Row({
@@ -505,7 +506,7 @@ const newInstance = signal => {
 						],
 					}),
 				),
-				new Title({ textContent: 'From a list' }),
+				new SectionLabel({ level: 3, textContent: 'From a list' }),
 				form,
 				new Row({
 					append: [new Button({ icon: 'plus', textContent: 'Make it', onPointerPress: make }), packOfCollected],

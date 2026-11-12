@@ -1,7 +1,18 @@
-import { Button, Card, Dialog, EmptyState, Input, Link, Notify, Select, theme } from '@vanilla-bean/components';
+import {
+	Button,
+	Card,
+	Dialog,
+	EmptyState,
+	Input,
+	Link,
+	Notify,
+	SectionLabel,
+	Select,
+	theme,
+} from '@vanilla-bean/components';
 
 import { lastSaid, local } from './local';
-import { Chip, Command, Meta, Row, Stack, Title } from './ui';
+import { Chip, Command, Meta, Row, Stack } from './ui';
 
 const told = (intent, content) => new Notify({ intent, content });
 
@@ -220,7 +231,10 @@ export const playersPanel = signal => {
 
 	return new Card(
 		{},
-		new Stack({ style: { gap: theme.space.md }, append: [new Title({ textContent: 'Players' }), body] }),
+		new Stack({
+			style: { gap: theme.space.md },
+			append: [new SectionLabel({ level: 2, textContent: 'Players' }), body],
+		}),
 	);
 };
 

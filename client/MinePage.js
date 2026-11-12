@@ -1,4 +1,15 @@
-import { Button, Card, Content, EmptyState, Input, Link, Notify, View, theme } from '@vanilla-bean/components';
+import {
+	Button,
+	Card,
+	Content,
+	EmptyState,
+	Input,
+	Link,
+	Notify,
+	SectionLabel,
+	View,
+	theme,
+} from '@vanilla-bean/components';
 
 import { loadInterest, loadListing } from './data';
 import { local } from './local';
@@ -93,7 +104,7 @@ const listMod = () => {
 	return new Stack({
 		style: { marginTop: theme.space.lg },
 		append: [
-			new Title({ textContent: 'A mod of yours missing?' }),
+			new SectionLabel({ level: 2, textContent: 'A mod of yours missing?' }),
 			new Meta({
 				tag: 'p',
 				textContent:

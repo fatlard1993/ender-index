@@ -6,6 +6,7 @@ import {
 	Input,
 	Link,
 	Notify,
+	SectionLabel,
 	Tabs,
 	View,
 	styled,
@@ -20,7 +21,6 @@ import { installRow, packCard, packChips, packFace, packWarnings } from './packs
 import { collectionKey, kindOf, similarPacks, readmeSources, repositoryUrl, writePackQuery } from './search';
 import {
 	Chip,
-	Heading,
 	LAUNCHER,
 	Meta,
 	Row,
@@ -126,7 +126,7 @@ const group = (title, explained, content) =>
 	new Stack({
 		style: { gap: theme.space.sm, marginTop: theme.space.md },
 		append: [
-			new Heading({ tag: 'h2', style: { fontSize: '1.1em' }, textContent: title }),
+			new SectionLabel({ level: 2, textContent: title }),
 			new Meta({ tag: 'p', textContent: explained }),
 			...content,
 		],

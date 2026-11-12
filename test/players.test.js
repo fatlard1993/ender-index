@@ -54,6 +54,11 @@ describe('the players panel', () => {
 		expect(text).toContain('Play as');
 		expect(text).toContain('Sign in to Microsoft');
 		expect(text).not.toContain('client id');
+
+		const label = card.elem.querySelector('[aria-level="2"]');
+
+		expect(label.textContent).toBe('Players');
+		expect(label.className).toContain('SectionLabel');
 	});
 
 	test('adds the offline player typed into its field', async () => {
