@@ -6,8 +6,111 @@
 	"archived": false,
 	"license": "NOASSERTION",
 	"created": "2026-07-10T17:56:11Z",
-	"pushed": "2026-11-03T20:53:43Z",
+	"pushed": "2026-11-13T17:35:51Z",
 	"releases": [
+		{
+			"tag": "Fabric-26.4-snapshot-8-4.8.4211-dev",
+			"published": "2026-11-13T17:35:52Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 744554655,
+					"name": "twilightforest.re26-26.4-snapshot-8-4.8.4211-dev-fabric.jar",
+					"url": "https://github.com/Lonmo0208/Twilightforest-Re26/releases/download/Fabric-26.4-snapshot-8-4.8.4211-dev/twilightforest.re26-26.4-snapshot-8-4.8.4211-dev-fabric.jar",
+					"size": 24012738,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "7d4e8769dddb71a6a6e54fcfd3e0486a571748562b9c5b3b99487ae975b78781",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "twilightforest",
+							"version": "4.8.4211-dev",
+							"name": "The Twilight Forest:Re26",
+							"description": "Unofficial port of Twilight Forest from Minecraft 1.21.1 to Minecraft 26.1.x and 26.2.x, adapting the mod's dimension, biomes, structures, bosses, items, and mechanics to the latest Minecraft version for modern gameplay.",
+							"minecraft": "*",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"forgeconfigapiport"
+							],
+							"provides": [
+								"forgeconfigapiport"
+							],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "8d438a6ecc1277cdde6e23ec926fdfecfe9e7f531638bf0c70ad2ec96597e2c3.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement",
+							"dimension",
+							"enchantment",
+							"loot_table",
+							"recipe",
+							"structure",
+							"worldgen"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 2433,
+						"jars": [
+							"META-INF/jars/forge-config-api-port-26.2.1-patched.jar",
+							"META-INF/jars/forge-config-api-port-26.2.1-patched.jar!META-INF/jars/core-3.8.4.jar",
+							"META-INF/jars/forge-config-api-port-26.2.1-patched.jar!META-INF/jars/toml-3.8.4.jar"
+						],
+						"capabilities": {
+							"unsafe": {
+								"twilightforest/compat/c2me/OpenclFallbackEnabler.class": [
+									"sun/misc/Unsafe.staticFieldOffset",
+									"sun/misc/Unsafe.putBoolean"
+								]
+							},
+							"network": {
+								"META-INF/jars/forge-config-api-port-26.2.1-patched.jar!META-INF/jars/core-3.8.4.jar!com/electronwill/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/forge-config-api-port-26.2.1-patched.jar!META-INF/jars/core-3.8.4.jar!com/electronwill/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/forge-config-api-port-26.2.1-patched.jar!META-INF/jars/core-3.8.4.jar!com/electronwill/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"minecraft.wiki": [
+								"twilightforest/config/ConfigComments.class",
+								"twilightforest/config/TFCommonConfig.class"
+							],
+							"benimatic.com": [
+								"twilightforest/config/ConfigComments.class",
+								"twilightforest/config/TFCommonConfig.class"
+							],
+							"discord.experiment115.com": [
+								"twilightforest/events/EntityEvents.class",
+								"twilightforest/mixin/PlayerAdvancementsMixin.class"
+							],
+							"github.com": [
+								"twilightforest/item/travellers_gear/modifiers/TransferableComponentModifier.class",
+								"twilightforest/client/OptifineWarningScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Beta build for Minecraft 26.4-snapshot-8\n\nThis is a **beta** build for a Minecraft snapshot. Please back up your worlds; expect rough edges and APIs that may still change before 26.4 stable. The mod version stays **4.8.4211-dev**.\n\n### Snapshot-8 port\n- Command API rework: `ResourceKeyArgument` → `ResourceArgument`, `ResourceOrTagKeyArgument` → `ResourceOrTagArgument`, raw brigadier argument/suggestion lambdas must use the new `SerializableArgument` / `CustomSuggestion` types, `Commands.LEVEL_*` moved to `CommandPermissionLevels`\n- Loot predicates/functions implement the new `constantValue`/`validate`/`validateCustom` hooks and `getRequiredParams`\n- Block entities: `getUpdateTag(HolderLookup.Provider)` → `(HolderGetter.Provider)`; same for structure generate and traveller modifier network codecs\n- Game rules use the new `SerializableArgument.ContextFree` argument model\n- Wood/set types use Fabric's `build()` builders (`BlockSetType.OAK` → `DEFAULT_WOOD`)\n\n### Known degradation on snapshot-8\nFabric upstream disabled `fabric-renderer-api-v1` / `renderer-indigo` / `model-loading-api-v1` for this snapshot (their vanilla hooks broke), so:\n- The 7 custom block models (force field, connected textures, giant blocks, noise-varying aurora, patches, royal rags, reactor debris) bake with **static** geometry; the level-aware dynamic effects are paused until Fabric re-enables the module. Blockstate parsing for them still works via our vendored subset of fabric-model-loading-api-v1 (see `thirdparty/FABRIC_MODEL_LOADING_API.md`)\n- Mason jar lids don't render (they needed the extra-model subsystem)\n\n### Fixes in 4.8.4211-dev carried over\n- Fixed the Ominous Fire not converting mobs that die in it (horses → zombie horses, piglins → zombified piglins, villagers → zombie villagers)\n- Added the missing armor repair item tags (`repairs_naga_armor`, `repairs_ironwood_armor`, etc.) which snapshot-8 now requires at startup\n\n## Prerequisite (Important)\nThis mod requires Forge Config API Port to run properly:\n- CurseForge: `https://www.curseforge.com/minecraft/mc-mods/forge-config-api-port`\n- Modrinth: `https://modrinth.com/mod/forge-config-api-port`\n\nRequires Fabric Loader `0.20.1+` and Fabric API `0.166.2+26.4`."
+		},
 		{
 			"tag": "Fabric-26.4-snapshot-7-4.8.4211-dev",
 			"published": "2026-11-03T20:53:43Z",
@@ -121,7 +224,7 @@
 					"name": "twilightforest.re26-26w14a-4.8.4211.af-fabric.jar",
 					"url": "https://github.com/Lonmo0208/Twilightforest-Re26/releases/download/Fabric-26w14a-4.8.4211.af/twilightforest.re26-26w14a-4.8.4211.af-fabric.jar",
 					"size": 23418496,
-					"downloads": 10,
+					"downloads": 12,
 					"inspection": 2,
 					"sha256": "124e8b8ef75a084e0f262255e90085d719c1d56b4d81deac95ff62029c8b768b",
 					"mods": [
@@ -633,7 +736,7 @@
 					"name": "twilightforest.re26-26.3-4.8.4211-fabric.jar",
 					"url": "https://github.com/Lonmo0208/Twilightforest-Re26/releases/download/Fabric-26.3-4.8.4211/twilightforest.re26-26.3-4.8.4211-fabric.jar",
 					"size": 23994366,
-					"downloads": 13,
+					"downloads": 17,
 					"inspection": 2,
 					"sha256": "ccda157bbfc7cfc50091afd77a4d97f63f621dc8f508f507a08f23b7b037c68c",
 					"mods": [
@@ -1449,7 +1552,7 @@
 						},
 						"unreadable": []
 					},
-					"downloads": 186
+					"downloads": 189
 				}
 			],
 			"notes": "## Prerequisite (Important)\nThis mod requires Forge Config API Port to run properly:\n- CurseForge: `https://www.curseforge.com/minecraft/mc-mods/forge-config-api-port`\n- Modrinth: `https://modrinth.com/mod/forge-config-api-port`\n\n## Combat Fixes\n- Fixed the Hydra's head attacks and breath attacks failing to work\n- Fixed all boss health bars showing as white: each boss now has its own matching health bar color\n\n## Item Fixes\n- Fixed the Lifedrain Scepter not being able to drain through walls: you can now drain enemies behind walls again (this fix is unverified)\n- Fixed the Uncrafting Table crashing with an error when used\n\n## World Generation Fixes\n- Fixed terrain sinking and clipping around large structures (courtyards, strongholds, etc.)\n- Fixed some biomes failing to generate properly\n- Fixed abnormal generation of structures such as the Lich Tower and Dark Tower\n- Fixed courtyard mazes generating incompletely / with broken fragments\n\n## Visuals & Details\n- Fixed multiple block models showing as pink missing-texture blocks (Mushgloom, Torchberry Plant, Trollber, etc.)\n- Added 9 trophy item models (Naga, Lich, Hydra, Snow Queen, etc.)\n- Fixed the Twilight Forest dimension lighting being abnormally too dark\n\n## Other\n- Fixed config files failing to load properly (this fix is unverified)\n- Removed unused code for better stability"
