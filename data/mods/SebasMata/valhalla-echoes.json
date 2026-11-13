@@ -6,8 +6,88 @@
 	"archived": false,
 	"license": "CC0-1.0",
 	"created": "2026-02-12T18:55:05Z",
-	"pushed": "2026-08-28T04:58:31Z",
+	"pushed": "2026-11-12T23:35:26Z",
 	"releases": [
+		{
+			"tag": "v0.5.0-beta",
+			"published": "2026-11-12T23:13:19Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 741444201,
+					"name": "valhalla-echoes-v0.5.0-beta.jar",
+					"url": "https://github.com/SebasMata/valhalla-echoes/releases/download/v0.5.0-beta/valhalla-echoes-v0.5.0-beta.jar",
+					"size": 219238,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "29f2fd05befa8e9ad9e688492614dafba48b1f00cf271533e8b65eb05d3a87b2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "valhalla-echoes",
+							"version": "v0.5.0-beta",
+							"name": "Valhalla Echoes",
+							"description": "Awaken the legends of the North! Valhalla Echoes introduces fearsome Mystical Vikings to Minecraft, featuring uniquely modeled 3D equipment like the iconic Horned Helmet and powerful mystical weaponry. Brace yourself for the sounds of battle as you encounter these ancient warriors.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "35548aeed3d0feaa79e315ec705b9d34a4e71f76597e41dec37b0d9966861590.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Draugr Spawn Egg",
+								"Mystical Boots",
+								"Mystical Chestplate",
+								"Mystical Essence",
+								"Mystical Helmet",
+								"Mystical Horned Helmet",
+								"Mystical Ingot",
+								"Mystical Leggings",
+								"Mystical Pickaxe",
+								"Mystical Shovel",
+								"Mystical Sword",
+								"Mystical Viking Spawn Egg",
+								"Mystical War Axe",
+								"Obsidian Rod",
+								"Runic Gem",
+								"Suspicious substance",
+								"Targe Mystical Shield"
+							],
+							"entity": [
+								"Draugr",
+								"Mystical Viking"
+							],
+							"group": [
+								"Valhalla Echoes"
+							]
+						},
+						"data": [
+							"recipe",
+							"structure",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 18,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's Changed\n* Update for 26.3 by @SebasMata in https://github.com/SebasMata/valhalla-echoes/pull/25\n\n\n**Full Changelog**: https://github.com/SebasMata/valhalla-echoes/compare/v0.4.0-alpha...v0.5.0-beta\n\n## Summary\nPort **Valhalla Echoes** from Minecraft `1.21.11` to **Minecraft `26.3`** (Fabric) and bump the mod version to **`v0.5.0-beta`**.\n\n## Changes\n\n### Build & Dependencies\n- Updated `gradle.properties`:\n  - `minecraft_version`: `1.21.11` → `26.3`\n  - `loader_version`: `0.18.4` → `0.20.1`\n  - `loom_version`: `1.15-SNAPSHOT` → `1.19-SNAPSHOT`\n  - `fabric_api_version`: `0.141.3+1.21.11` → `0.166.2+26.3`\n  - `mod_version`: `v0.4.0-alpha` → `v0.5.0-beta`\n- Updated `build.gradle`:\n  - Switched Loom plugin from `net.fabricmc.fabric-loom-remap` to `net.fabricmc.fabric-loom` (unobfuscated releases in `26.x`).\n  - Removed `mappings loom.officialMojangMappings()` and migrated `modImplementation` to `implementation`.\n  - Bumped Java compilation and compatibility level from Java 21 to **Java 25**.\n- Updated Gradle Wrapper to `9.8.2` (`gradle/wrapper/gradle-wrapper.properties`).\n- Updated `fabric.mod.json` dependency constraints (`fabricloader >=0.20.1`, `minecraft ~26.3`, `java >=25`).\n- Updated Mixin `compatibilityLevel` to `JAVA_25` in `valhalla-echoes.mixins.json` and `valhalla-echoes.client.mixins.json`.\n- Updated `README.md` to reflect Minecraft `26.3` and `v0.5.0-beta`.\n\n### Code & API Migration\n- **Tools (`MysticalShovelItem.java`):** Changed superclass from the removed `ShovelItem` to `Item` and applied `properties.shovel(...)` directly in the constructor.\n- **Creative Tabs (`ModItems.java`):** Migrated `ItemGroupEvents.modifyEntriesEvent` to `CreativeModeTabEvents.modifyOutputEvent`.\n- **Entity AI (`MysticalVikingEntity.java`, `MysticalVikingAi.java`):**\n  - Migrated `EntityType.PLAYER` / `EntityType.PIGLIN` to `EntityTypes.PLAYER` / `EntityTypes.PIGLIN`.\n  - Updated brain initialization to use `Brain.Provider`, `Brain.Packed`, and `ActivityData.create(...)`.\n- **Combat Mixin (`TargeShieldMixin.java`):** Updated `LivingEntity#knockback` call to pass `DamageSource` and `amount`.\n- **Client Rendering (`ValhallaEchoesClient.java`):** Migrated `EntityModelLayerRegistry` to `ModelLayerRegistry` and updated `ArmorRenderer.submitTransformCopyingModel(...)` to match the new signature.\n\n### Data & Worldgen\n- **Structure Spawns (`viking_village.json`):** Updated `spawn_overrides` from deprecated `minCount`/`maxCount` fields to the new `count` `IntProvider` (`minecraft:uniform`) format.\n\n## Testing\n- Verified successful compilation and packaging via `./gradlew build`.\n- Launched `:runClient` in Minecraft `26.3`, created a new world, and confirmed world loading without data/codec errors."
+		},
 		{
 			"tag": "v0.4.0-alpha",
 			"published": "2026-06-04T22:00:38Z",
@@ -18,7 +98,7 @@
 					"name": "valhalla-echoes-v0.4.0-alpha.jar",
 					"url": "https://github.com/SebasMata/valhalla-echoes/releases/download/v0.4.0-alpha/valhalla-echoes-v0.4.0-alpha.jar",
 					"size": 217847,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "5e36e93837fc6f82be91f20de2f183da17d0fa11bdf2d0ce9d366d179f28eb75",
 					"mods": [
@@ -98,7 +178,7 @@
 					"name": "valhalla-echoes-v0.3.1-alpha.jar",
 					"url": "https://github.com/SebasMata/valhalla-echoes/releases/download/v0.3.1-alpha/valhalla-echoes-v0.3.1-alpha.jar",
 					"size": 208718,
-					"downloads": 5,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "4bc678964f9f9d4d9010755e1ec3fe17f866a88dc7d87cdfa288cb853e94c9c8",
 					"mods": [
@@ -176,7 +256,7 @@
 					"name": "valhalla-echoes-v0.3.0-alpha.jar",
 					"url": "https://github.com/SebasMata/valhalla-echoes/releases/download/v0.3.0-alpha/valhalla-echoes-v0.3.0-alpha.jar",
 					"size": 190910,
-					"downloads": 8,
+					"downloads": 9,
 					"inspection": 2,
 					"sha256": "5937db223373f7bd60cd9565bfa8b611a356019ba7d73e61bead6f255fb913e1",
 					"mods": [
@@ -254,7 +334,7 @@
 					"name": "valhalla-echoes-v0.2.4-pre-alpha.jar",
 					"url": "https://github.com/SebasMata/valhalla-echoes/releases/download/v0.2.4-pre-alpha/valhalla-echoes-v0.2.4-pre-alpha.jar",
 					"size": 154059,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "a456a73d2d7792da0e967dc40bde4ff6d499a12096f8bea2c8d07d593bf09c98",
 					"mods": [
