@@ -6,8 +6,103 @@
 	"archived": false,
 	"license": "NOASSERTION",
 	"created": "2026-09-30T21:54:24Z",
-	"pushed": "2026-11-04T17:07:35Z",
+	"pushed": "2026-11-13T21:26:03Z",
 	"releases": [
+		{
+			"tag": "v3.2.3",
+			"published": "2026-11-13T21:26:22Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 745240343,
+					"name": "legendarysurvivaloverhaul-fabric-1.20.1-3.2.3.jar",
+					"url": "https://github.com/Atlasroar/LegendarySurvivalOverhaul/releases/download/v3.2.3/legendarysurvivaloverhaul-fabric-1.20.1-3.2.3.jar",
+					"size": 3947149,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "0a04f6620eab06bd741dd10ac3837e9bdfbefc03e581f8417c0f006fb7b3456b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "legendarysurvivaloverhaul",
+							"version": "3.2.3+1.20.1",
+							"name": "Legendary Survival Overhaul",
+							"description": "Making survival harder. Highly configurable, so you can play the way you want.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cardinal-components-base",
+								"cardinal-components-entity"
+							],
+							"provides": [
+								"cardinal-components-base",
+								"cardinal-components-entity",
+								"com_electronwill_night-config_core",
+								"com_electronwill_night-config_toml"
+							],
+							"suggests": [
+								"immersive_weathering",
+								"fzzy_config",
+								"fabric-language-kotlin",
+								"trinkets",
+								"modmenu",
+								"sereneseasons",
+								"betterdays",
+								"sereneseasonsplus",
+								"overflowingbars"
+							]
+						}
+					],
+					"icon": "679810bb29349cbe56088125cda6cb52872874fed38c0526395604f139b1f10b.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 711,
+						"jars": [
+							"META-INF/jars/cardinal-components-base-5.2.2.jar",
+							"META-INF/jars/cardinal-components-entity-5.2.2.jar",
+							"META-INF/jars/core-3.6.7.jar",
+							"META-INF/jars/toml-3.6.7.jar"
+						],
+						"capabilities": {
+							"classloading": {
+								"META-INF/jars/cardinal-components-base-5.2.2.jar!dev/onyxstudios/cca/internal/base/asm/CcaClassLoader.class": [
+									"extends java/lang/ClassLoader"
+								]
+							},
+							"network": {
+								"META-INF/jars/core-3.6.7.jar!com/electronwill/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/core-3.6.7.jar!com/electronwill/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/core-3.6.7.jar!com/electronwill/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Air-provider scan optimization\n\n- Skip positions outside the maximum-radius sphere before accessing loaded world blocks.\n- Classify each distinct immutable block state once per scan instead of repeating provider-tag, lit-state and lava checks at every position.\n- At the default maximum radius, a block-centered scan requires 3,071 candidate lookups instead of 6,859. Empty-air classification calls fall from 6,860 to 2.\n- Preserve provider-specific radii, worst-hazard precedence, eye-fluid handling, breathing rules and the existing entity-cache timing.\n\nEarlier local uncached empty-air benchmarks were approximately 6-7.5x faster. This is not a whole-server MSPT guarantee. The supplied Spark profile contains inconsistent parent/child timing totals; a fresh profile using a Spark build containing [lucko/spark#588](https://github.com/lucko/spark/pull/588) is needed to quantify server-wide gains.\n\nAll v3.2.2 features remain included. No new settings, required dependencies or save/config migrations.\n\n## Installation\n\nMinecraft **1.20.1**, **Fabric Loader 0.15.0+**, **Java 17** and a compatible **Fabric API** are required. Fzzy Config and Trinkets remain strongly recommended, not required. Fabric Language Kotlin is needed only if an installed optional library requires it.\n\nBack up your world/configs and replace the old LSO JAR with the installable JAR below. Do not install the sources JAR.\n\n## Validation\n\nFull build, packaged-resource checks and actual isolated Fabric server assertions pass. Air regressions compare against the previous algorithm and cover fractional positions/radii, negative coordinates, overlapping lava/portals, lit/unlit states, flowing lava, eye fluids, maximum-radius boundaries, unloaded chunks, and cache expiry/invalidation. Existing wetness/lily/skating assertions also pass.\n\n## Downloads and SHA-256\n\nInstallable:\n`legendarysurvivaloverhaul-fabric-1.20.1-3.2.3.jar`\n`0A04F6620EAB06BD741DD10AC3837E9BDFBEFC03E581F8417C0F006FB7B3456B`\n\nSources:\n`legendarysurvivaloverhaul-fabric-1.20.1-3.2.3-sources.jar`\n`703527A79937B21D75B9655A4BED0186E6739D294A26EDC8907DAD373CE9982C`\n\nChanges: [#56](https://github.com/Atlasroar/LegendarySurvivalOverhaul/pull/56)"
+		},
 		{
 			"tag": "v3.2.2",
 			"published": "2026-11-04T17:08:08Z",
@@ -18,7 +113,7 @@
 					"name": "legendarysurvivaloverhaul-fabric-1.20.1-3.2.2.jar",
 					"url": "https://github.com/Atlasroar/LegendarySurvivalOverhaul/releases/download/v3.2.2/legendarysurvivaloverhaul-fabric-1.20.1-3.2.2.jar",
 					"size": 3946678,
-					"downloads": 8,
+					"downloads": 13,
 					"inspection": 2,
 					"sha256": "2447b92fd0bdabe18152ebd349af96e2e07ca1defd6bced4d7c1f2cf863e54e7",
 					"mods": [
