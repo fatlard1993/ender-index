@@ -5,8 +5,60 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-09-26T11:10:41Z",
-	"pushed": "2026-11-13T09:53:23Z",
+	"pushed": "2026-11-13T11:14:33Z",
 	"releases": [
+		{
+			"tag": "v2.9.0",
+			"published": "2026-11-13T11:14:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 743358614,
+					"name": "baritone-anarchy-expansion-2.9.0.jar",
+					"url": "https://github.com/logvex-sg/Baritone-AnarchyExpansion/releases/download/v2.9.0/baritone-anarchy-expansion-2.9.0.jar",
+					"size": 846440,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "019df42220ed8591a06bf857dacb7ea2cd2f4620409aad2ceb5db95f7e30fef8",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baritone-anarchy-expansion",
+							"version": "2.9.0",
+							"name": "Baritone Anarchy Expansion",
+							"description": "Anarchy base-hunting toolkit. Firework-free elytra autopilot with automatic elytra management, adaptive exploration, stash and new-chunk detection, player tracking, mending and ender chest handling, a safe storage system (inventory sorting, chest sorting, a container network, shulker work and restocking), survival guardrails and fully configurable Discord webhook notifications.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f86199c6596cbcff498da5b9c42c0cf88099b157c265a8fa45c3238904c3fc81.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 304,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [2.9.0]— 2026-11-13\n\nThe realistic-player release. A bot that snaps its camera and stands perfectly still is easy to spot, so\nthis release makes the client *move* the way a person does: the camera eases toward a target instead of\njumping to it, the player makes small idle gestures, and a profiler scores how human the result actually\nlooks. Each piece is a pure, headlessly tested core, so the suite grows from 939 to 997 assertions and\n`./gradlew build` is green (21 + 196 + 131 + 147 + 86 + 181 + 21 + 41 + 57 + 58 + 58).\n\n### Added — smooth look (`smooth-look`)\n\n- **The camera turns like a wrist, not a switch.** `LookSmoother` approaches a target along the shortest\n  arc at a bounded per-tick speed, eases in, and settles with a small seeded jitter that fades as the aim\n  arrives — so an aim request looks like a hand moving a mouse, not a coordinate being written.\n- **Correct angle maths.** Yaw takes the short way across the ±180° seam (170° → −170° is 20°, not 340°),\n  pitch is clamped to ±90°, and `yawTo` / `pitchTo` derive the aim from a world position in any quadrant.\n- **Arrival, not overshoot.** The smoother reports when it is within a tolerance of the target and can\n  release the camera; `face-player` keeps a continuous, smoothly-tracking aim on the nearest player.\n- **`/bh look …` and the terminal `look …`** aim at a player, a coordinate or a raw yaw/pitch, or clear\n  the target. It holds the `ROTATION` lease while turning, so it never fights another module for the camera.\n\n### Added — human behavior (`human-behavior`)\n\n- **Idle gestures a person would make.** `HumanBehavior` schedules short, bounded gestures — a glance, a\n  tiny strafe, a jump, a brief sneak, a look down at the hotbar — separated by random pauses, never twice\n  the same gesture in a row, so an idle client does not read as a statue.\n- **Deliberately timid.** Every duration is bounded, the module refuses to gesture while another automation\n  owns movement, and it takes the lowest priority so it can never preempt anything that matters. It presses\n  the same keys a player would and forges no packets.\n- **`/bh human on|off|status`** and the terminal `human …` toggle and inspect it.\n\n### Added — behavior monitor (`behavior-monitor`)\n\n- **A score, not a hope.** `BehaviorProfiler` watches a rolling window of yaw and position samples and\n  reduces it to how much the turn rate varies, how often the player pauses, and how straight the path is,\n  combined into a 0-100 human-likeness score. A flat 0 (\"this looks like a bot\") is visible on the HUD and\n  in `/bh human profile` instead of being taken on faith.\n- Read-only: it never writes the camera or the player, so it runs alongside anything.\n\n---\n\n### Install\n1. Minecraft 1.21.11 + Fabric Loader\n2. Meteor Client installed\n3. Drop `baritone-anarchy-expansion-2.9.0.jar` into `mods`\n\n_This release was prepared by an AI agent (OpenHands) on behalf of the repository owner._"
+		},
 		{
 			"tag": "v2.7.0",
 			"published": "2026-11-12T18:14:02Z",
@@ -17,7 +69,7 @@
 					"name": "baritone-anarchy-expansion-2.7.0.jar",
 					"url": "https://github.com/logvex-sg/Baritone-AnarchyExpansion/releases/download/v2.7.0/baritone-anarchy-expansion-2.7.0.jar",
 					"size": 787375,
-					"downloads": 1,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "767528a365568ae468641f3bbf04a552873306ba17976da49effeafa961826fd",
 					"mods": [
