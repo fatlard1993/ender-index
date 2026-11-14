@@ -5,8 +5,86 @@
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2026-08-21T23:52:03Z",
-	"pushed": "2026-09-11T02:54:33Z",
+	"pushed": "2026-11-14T06:15:35Z",
 	"releases": [
+		{
+			"tag": "r1.0b6",
+			"published": "2026-11-14T06:17:38Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 746520079,
+					"name": "x4ui-r1.0b6.jar",
+					"url": "https://github.com/X4yii/x4ui/releases/download/r1.0b6/x4ui-r1.0b6.jar",
+					"size": 2475173,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "1805186193dc85398612a5623e523e8dd693e8cbc7f8970f29b3015463ba4189",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1140,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/FFmpegProcessDecoder.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/DirectMemoryVideoDecoder$DecoderThread.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/DirectMemoryVideoDecoder.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/FFmpegProcessDecoder$DecoderThread.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/FFmpegAudioDecoder$AudioDecoderThread.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/MediaPipeline.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/shaded/jcodec/testing/TestTool.class": [
+									"java/lang/Runtime.exec"
+								]
+							},
+							"network": {
+								"com/x4yi/x4ui/impl/client/resource/network/SecurityUtils.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"unsafe": {
+								"META-INF/versions/21/com/x4yi/x4ui/common/platform/PlatformBridge.class": [
+									"sun/misc/Unsafe.invokeCleaner"
+								],
+								"com/x4yi/x4ui/common/platform/PlatformBridge.class": [
+									"\"sun.misc.Unsafe\" by name"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "---\ntitle: \"X4UI Framework r1.0b6\"\ndate: 2026-11-14\nproject: \"X4UI\"\nversion: \"r1.0b6\"\n---\n\n# X4UI r1.0b6\n\n[ES]\n### Compatibilidad Dual Oficial (Forge 1.12.2 + CleanroomMC)\n- **Soporte oficial Java 8 (Forge 1.12.2 + LWJGL 2) y Java 25 (CleanroomMC + LWJGL 3):** `PlatformBridge` implementado como **Multi-Release JAR** (`META-INF/versions/21/`) para usar `Cleaner` y virtual threads en JVMs modernas con fallback seguro en Java 8.\n- **Abstracciones de Entrada y Gráficos:**\n  - `KeyCodes` desacopla constantes de teclado de `org.lwjgl.input.Keyboard`.\n  - `UIInput` normaliza deltas de rueda del mouse (LWJGL 2 `±120` y LWJGL 3/GLFW) y protege coordenadas del mouse ante `displayWidth == 0` / `displayHeight == 0`.\n  - `IGraphics` incorpora `clearDepthBuffer()` y carga de texturas BGRA sin llamadas directas a `GL11`/`GL12` en componentes.\n\n### Framework Flexible Servidor ↔ Cliente (Con o Sin `Container`)\n- **Nuevo `UINetwork` + `ScreenRegistry` + `PacketHandshake`:** Registro y apertura remota de pantallas desde servidor (`openScreen`), cierre remoto (`closeScreen`), toasts (`sendToast`), handshake automático y modo server-optional (`isServerSupported()`, `hasClient(player)`).\n- **RPC Request–Response (`PacketGuiRpc` + `RpcResult`):** Consultas asíncronas cliente → servidor desde `GuiBaseScreen`/`GuiBaseContainer` con `request(...)`, timeout configurable, cancelación automática al cerrar la pantalla y `NO_SERVER_SUPPORT` en servidores sin `x4ui`.\n- **Estado por Pantalla y Lotes (`UIStateBus.Scope.SCREEN` + `PacketStateBatch`):** `syncedState(key, valor)` se limpia automáticamente en `onGuiClosed()`; `UIStateBus.scopedKey(ns, key)` y `clearNamespace(ns)` evitan colisiones.\n- **Canales Multi-Jugador (`UIChannels` + `ClientSessionTracker`):** Suscripción automática por canal (`openChannelScreen`), `broadcastState`, `broadcastBatch` y `broadcastToast` con desuscripción al cerrar pantalla o desconectarse.\n- **Seguridad en Red (`ActionGuard` + Rate-Limiting):** Guardas componibles (`opLevel`, `withinDistance`, `withinEntityDistance`, `require`) y cooldown por jugador/acción (`50ms` por defecto).\n\n### Diseño Minimalista y Motor de Layout\n- **Tema sólido minimalista por defecto:** Paleta oscura limpia en `DefaultTheme` y variantes de `GuiButton`.\n- **Primitivas de `GuiPanel` y `FlexAlign`:** `GuiPanel.row`, `GuiPanel.column`, `GuiPanel.card`, `GuiPanel.spacer()`, `FlexAlign` (`START`, `CENTER`, `END`, `STRETCH`), `createCenteredWindow` y `GuiScrollPanel.vertical`.\n- **Correcciones de Layout:** Fix de `percentWidth` respecto a padding y reserva automática de barra en `GuiScrollPanel`.\n\n### Multimedia, Seguridad y Limpieza\n- **FFmpeg en el OS del usuario (`MediaManager`):** Descubrimiento automático de `ffmpeg` en Linux, macOS y Windows 10/11 (en lugar de descargarlo en `.minecraft/`), con fallback automático a JCodec cuando no está disponible.\n- **Manejo de errores en `GuiVideo`:** Estado de error visible con diagnóstico, barra de estado, limpieza segura de recursos y recuperación ante fallos de red o códec.\n- **Seguridad y Sincronización:** `SecurityUtils` para validación SSRF y path traversal; `StateContainerListener` atómico de 32-bit; migración de logs a Log4j2; eliminación total de shims `@Deprecated`.\n[/ES]\n\n[EN]\n### Official Dual Runtime Support (Forge 1.12.2 + CleanroomMC)\n- **Official Java 8 (Forge 1.12.2 + LWJGL 2) & Java 25 (CleanroomMC + LWJGL 3) support:** `PlatformBridge` implemented as a **Multi-Release JAR** (`META-INF/versions/21/`) using `Cleaner` and virtual threads on modern JVMs with safe Java 8 fallbacks.\n- **Input & Graphics Abstractions:**\n  - `KeyCodes` decouples key constants from `org.lwjgl.input.Keyboard`.\n  - `UIInput` normalizes mouse wheel deltas (LWJGL 2 `±120` and LWJGL 3/GLFW) and guards mouse coordinates against `displayWidth == 0` / `displayHeight == 0`.\n  - `IGraphics` adds `clearDepthBuffer()` and BGRA texture upload without direct `GL11`/`GL12` calls in components.\n\n\n..."
+		},
 		{
 			"tag": "r1.0b5",
 			"published": "2026-09-11T02:55:05Z",
@@ -17,7 +95,7 @@
 					"name": "x4ui-r1.0b5.jar",
 					"url": "https://github.com/X4yii/x4ui/releases/download/r1.0b5/x4ui-r1.0b5.jar",
 					"size": 2369872,
-					"downloads": 5,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "1e5fbbe36fc4357171f7022a6501308a32d1c019ba223572caf576866a723550",
 					"mods": [],
@@ -94,7 +172,7 @@
 					"name": "x4ui-r1.0b4.jar",
 					"url": "https://github.com/X4yii/x4ui/releases/download/r1.0b4/x4ui-r1.0b4.jar",
 					"size": 2252916,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "e8bc299db51e62180b60cd36f229bd510080949a7af95ea6b4e3f9b5595f71f7",
 					"mods": [],
@@ -159,7 +237,7 @@
 					"name": "x4ui-r1.0b3a.jar",
 					"url": "https://github.com/X4yii/x4ui/releases/download/r1.0b3a/x4ui-r1.0b3a.jar",
 					"size": 86337,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "89b7914ceef9041b29518f5573ad65ae8ec758f722cdf60199c639751624bc62",
 					"mods": [],
@@ -191,7 +269,7 @@
 					"name": "x4ui-r1.0b3.jar",
 					"url": "https://github.com/X4yii/x4ui/releases/download/r1.0b3/x4ui-r1.0b3.jar",
 					"size": 85982,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "4e7f36e6d7498bd7711b9e130efb977ddb2a69c6a6189431e9288bc7520c8aed",
 					"mods": [],

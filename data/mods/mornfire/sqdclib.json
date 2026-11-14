@@ -1,0 +1,331 @@
+{
+	"repo": "mornfire/sqdclib",
+	"host": "github",
+	"description": "A minecraft lib",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-10-12T15:14:14Z",
+	"pushed": "2026-10-20T15:53:42Z",
+	"releases": [
+		{
+			"tag": "v3.0.1",
+			"published": "2026-10-20T14:49:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 659767960,
+					"name": "sqdclib-3.0.1-video.jar",
+					"url": "https://github.com/mornfire/sqdclib/releases/download/v3.0.1/sqdclib-3.0.1-video.jar",
+					"size": 3456876,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "06edf60ea946bdc7c90e6e1e1cb6b38e48f70af543c95cc970509f14c76165a9",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "sqdclib",
+							"version": "3.0.1",
+							"name": "SQDCLib",
+							"description": "Narrative foundation library: persistent story state, quests, dialogue and cutscene layers.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"geckolib"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1121,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"org/jcodec/testing/TestTool.class": [
+									"java/lang/Runtime.exec"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 659767793,
+					"name": "sqdclib-3.0.1.jar",
+					"url": "https://github.com/mornfire/sqdclib/releases/download/v3.0.1/sqdclib-3.0.1.jar",
+					"size": 1390625,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "6518b279c1b7c51122919a537057367bc92825e599f398e45242a4fd6cdcd36d",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "sqdclib",
+							"version": "3.0.1",
+							"name": "SQDCLib",
+							"description": "Narrative foundation library: persistent story state, quests, dialogue and cutscene layers.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"geckolib"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 136,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Fixes the startup failure in 3.0.0, and ships two jars so you can choose.\n\n**Which jar to use**\n\n- `sqdclib-3.0.1.jar` - no video decoder. Startup is never at risk. Video events parse and fire but fall back after three seconds with a log line. Use this if you do not need video.\n- `sqdclib-3.0.1-video.jar` - includes the video decoder. Use this if you do need video, and please report whether it starts on your setup.\n\n**What went wrong in 3.0.0.** It bundled JCodec and the mod would not start. Both `jcodec` and `jcodec-javase` contain the `org.jcodec.common` package, so nesting them trips the JPMS split-package check, and the failure happens before log initialization, which is why it looks like nothing happens at all.\n\n**What changed.**\n\n- Only `jcodec` core is used now. `jcodec-javase` is gone entirely, because frames are converted through `Yuv420pToRgb` straight into a texture instead of going through `AWTUtil` and `BufferedImage`. That removes the AWT dependency and one of the two conflicting jars.\n- Building with `-PwithVideo` produces the video jar with the decoder unpacked in. Plain `gradlew build` produces the safe jar.\n\n**A colour bug fixed along the way.** `NativeImage.setPixelRGBA` writes the bytes straight through in RGBA order, so its argument is effectively ABGR. The old path passed `BufferedImage.getRGB` output, which is ARGB, and would have swapped red and blue for any video that actually played.\n\nRequirements: Minecraft 1.21.1, NeoForge 21.1.219+, Java 21, GeckoLib 4+ (optional)\n\nSHA-256 (sqdclib-3.0.1.jar): 6518B279C1B7C51122919A537057367BC92825E599F398E45242A4FD6CDCD36D\nSHA-256 (sqdclib-3.0.1-video.jar): 06EDF60EA946BDC7C90E6E1E1CB6B38E48F70AF543C95CC970509F14C76165A9"
+		},
+		{
+			"tag": "v3.0.0",
+			"published": "2026-10-19T15:37:27Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 656679267,
+					"name": "sqdclib-3.0.0.jar",
+					"url": "https://github.com/mornfire/sqdclib/releases/download/v3.0.0/sqdclib-3.0.0.jar",
+					"size": 2190549,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2883724b1e538f331c3b54f97a3c2df2e37089f4d3b0bb5637ed1b5294deaa3e",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "sqdclib",
+							"version": "3.0.0",
+							"name": "SQDCLib",
+							"description": "Narrative foundation library: persistent story state, quests, dialogue and cutscene layers.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"geckolib"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1126,
+						"jars": [
+							"META-INF/jarjar/jcodec-0.2.5.jar",
+							"META-INF/jarjar/jcodec-javase-0.2.5.jar"
+						],
+						"capabilities": {
+							"exec": {
+								"META-INF/jarjar/jcodec-0.2.5.jar!org/jcodec/testing/TestTool.class": [
+									"java/lang/Runtime.exec"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Full-screen video cutscenes.\n\n**What it does.** A cutscene definition with `video_id` plays an MP4 full screen instead of running the timeline. Aspect ratio is preserved with automatic letterboxing, the HUD is hidden, background music and weather audio are suspended, and the client sends a completion packet when the video ends so the server can continue its logic.\n\n    {\n      \"type\": \"video\",\n      \"video_id\": \"ymondf:videos/ultimate_new_moon\",\n      \"lock_movement\": true,\n      \"audio\": \"ymondf:video_audio\"\n    }\n\n`Cutscenes.playVideo(player, id)` is also available directly from code. `VideoFinishedEvent` reports whether playback succeeded.\n\n**Decoder.** JCodec, a pure Java MP4/H.264 implementation, bundled through jarJar. No native libraries, no external installs, the jar grows by about 1.9 MB. Decoding runs on a worker thread with a bounded frame queue; the main thread only uploads one texture per tick. Frames are dropped by timestamp rather than queued, so a slow decoder cannot make playback drift.\n\n**Format support is deliberately narrow.** MP4/H.264 only. WebM/VP9 has no viable pure Java decoder; supporting it would mean shipping FFmpeg natives and turning a 250 KB jar into hundreds of megabytes.\n\n**Audio is not read from the container.** JCodec decodes the video track only. The `audio` field names a SoundEvent that starts with the video, so the sound comes from the normal sound system and respects the player's volume settings.\n\n**Failure is bounded.** A missing file, a decode error, or no frame within 3 seconds closes the screen and reports failure. The player is never stuck on a black screen, and the reason is logged with the full video path.\n\nRequirements: Minecraft 1.21.1, NeoForge 21.1.219+, Java 21, GeckoLib 4+ (optional)\n\nSHA-256: 2883724B1E538F331C3B54F97A3C2DF2E37089F4D3B0BB5637ED1B5294DEAA3E"
+		},
+		{
+			"tag": "v2.2.0",
+			"published": "2026-10-18T06:28:13Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 652687135,
+					"name": "sqdclib-2.2.0.jar",
+					"url": "https://github.com/mornfire/sqdclib/releases/download/v2.2.0/sqdclib-2.2.0.jar",
+					"size": 255232,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "8fe9273dca84a06534f6809c5dcc2077bdd88f1fdac999c82a7a9f8ca4a224af",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "sqdclib",
+							"version": "2.2.0",
+							"name": "SQDCLib",
+							"description": "Narrative foundation library: persistent story state, quests, dialogue and cutscene layers.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"geckolib"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 126,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Definitions can now live in code, not just in datapacks.\n\n**Code registration.** `Cutscenes`, `Dialogues` and `Quests` each keep a definition map that is consulted before the datapack registry:\n\n    Cutscenes.register(id, new CutsceneDefinition(...));\n    Dialogues.register(id, new DialogueDefinition(...));\n    Quests.register(id, new QuestDefinition(...));\n\nLookups check code first, so callers never need to know where a definition came from. This path bypasses namespaces, directory layout, `pack.mcmeta` and pack loading entirely, which is the direct answer to a registry that will not populate. `unregister` and `registered` round it out.\n\nCode registration runs on both sides during mod construction, so client and server see the same set - including the quest screen, which now merges code and datapack ids through `Quests.allIds`.\n\n**Dialogue portraits now have proper precedence and path handling.** `portrait` can be set on a node, on the speaker, or at the dialogue definition level, in that order of precedence. Two path forms are accepted:\n\n- `ymondf:elder` resolves to `assets/ymondf/textures/gui/portrait/elder.png`\n- `ymondf:textures/gui/avatar_portrait.png` is used as written, because it starts with `textures/`\n\nPortraits scale to a 48 pixel long edge using the image's own aspect ratio rather than being forced square. Dimensions are read once per texture and cached.\n\n**Music ids are sound events, not file paths.** `\"music\": \"ymondf:avatar_descent\"` refers to an entry in `assets/ymondf/sounds.json`, with the audio itself at `assets/ymondf/sounds/avatar_descent.ogg`. If the event is not registered, the server now logs a warning naming the id instead of quietly doing nothing.\n\nRequirements: Minecraft 1.21.1, NeoForge 21.1.219+, Java 21, GeckoLib 4+ (optional)\n\nSHA-256: 8FE9273DCA84A06534F6809C5DCC2077BDD88F1FDAC999C82A7A9F8CA4A224AF"
+		},
+		{
+			"tag": "v2.1.2",
+			"published": "2026-10-18T05:56:07Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 652626094,
+					"name": "sqdclib-2.1.2.jar",
+					"url": "https://github.com/mornfire/sqdclib/releases/download/v2.1.2/sqdclib-2.1.2.jar",
+					"size": 251662,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2e7682790c18c3af3659200309d85e7f342474b40f39709d9e65ac7107208066",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "sqdclib",
+							"version": "2.1.2",
+							"name": "SQDCLib",
+							"description": "Narrative foundation library: persistent story state, quests, dialogue and cutscene layers.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"geckolib"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 125,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Fixes the reason every datapack registry came up empty.\n\n**Root cause.** NeoForge resolves a datapack registry directory through `CommonHooks.prefixNamespace`, which for a registry whose namespace is not `minecraft` returns `namespace/path`. For `sqdclib:story_quest` that resolves to `sqdclib/story_quest`, so the files must live at:\n\n    data/<pack_namespace>/sqdclib/story_quest/\n\nThe bundled example data shipped under `data/<pack_namespace>/story_quest/`, one level too high. The registry still registered correctly, so nothing errored - it simply found no files and held zero entries. That is the quiet failure that looked like registration itself was broken.\n\nAll bundled data moved to the correct path. If you ship your own pack, note the extra namespace layer; it is not optional.\n\n**Better diagnostics.** On server start each registry now reports what it actually found:\n\n    [sqdclib] story_quest holds 2 entries [sqdclib:first_relic, sqdclib:prologue] loaded from 2 resource file(s) under data/<pack_namespace>/sqdclib/story_quest/\n\nWhen a registry is empty it names the expected directory, and if it finds the files one level too high it says so explicitly instead of leaving you to compare strings.\n\n**Protocol version is now 3.** `CutsceneStartPayload` changed shape in 2.1.0 while the version stayed at 2, so 2.0.x and 2.1.x clients could decode each other's packets incorrectly. Bumping it makes the mismatch a clean connection refusal.\n\n**Also in this build:** the mod-bus listener and the game-bus diagnostic were split into separate classes, and the registration path logs itself once during startup.\n\nRequirements: Minecraft 1.21.1, NeoForge 21.1.219+, Java 21, GeckoLib 4+ (optional)\n\nSHA-256: 2E7682790C18C3AF3659200309D85E7F342474B40F39709D9E65AC7107208066"
+		},
+		{
+			"tag": "v2.1.1",
+			"published": "2026-10-18T05:41:13Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 652600392,
+					"name": "sqdclib-2.1.1.jar",
+					"url": "https://github.com/mornfire/sqdclib/releases/download/v2.1.1/sqdclib-2.1.1.jar",
+					"size": 248906,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "4e1226e6100cd4180813f33de3d3923d8063f1b27b825f32a488e8a910d38f7f",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "sqdclib",
+							"version": "2.1.1",
+							"name": "SQDCLib",
+							"description": "Narrative foundation library: persistent story state, quests, dialogue and cutscene layers.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"geckolib"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 124,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Diagnostics release.\n\nThe server now logs the contents of the three story registries once it finishes starting:\n\n    [sqdclib] story_quest = 2 entries [sqdclib:first_relic, sqdclib:prologue]\n    [sqdclib] story_dialogue = 2 entries [sqdclib:elder_greeting, sqdclib:villager_chat]\n    [sqdclib] story_cutscene = 1 entries [sqdclib:relic_reveal]\n\nThis separates three cases that used to look identical in game:\n\n- empty sets everywhere: the library never registered the datapack registries\n- your entries missing but built-in ones present: the pack is under the wrong namespace or path\n- `registry is missing entirely`: the registry itself was never created, which logs a warning instead\n\nTwo notes that are easy to mistake for bugs:\n\n- Datapack registries are read once when the world loads. `/reload` does not rebuild them, so after swapping a jar or editing files under `data/`, leave the world and re-enter.\n- Old saves keep their known datapack list. If entries still do not show up, verify against a fresh world before chasing anything else.\n\nRequirements: Minecraft 1.21.1, NeoForge 21.1.219+, Java 21, GeckoLib 4+ (optional)\n\nSHA-256: 4E1226E6100CD4180813F33DE3D3923D8063F1B27B825F32A488E8A910D38F7F"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-11-14T07:39:39.146Z",
+	"pictures": [],
+	"picturesChecked": "2026-11-14T07:39:39.146Z",
+	"contributors": {
+		"commits": 13,
+		"more": 0,
+		"people": [
+			{
+				"login": "mornfire",
+				"commits": 13,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-11-14T07:39:39.146Z",
+	"history": 1
+}
