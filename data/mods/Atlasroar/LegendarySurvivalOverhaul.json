@@ -6,8 +6,103 @@
 	"archived": false,
 	"license": "NOASSERTION",
 	"created": "2026-09-30T21:54:24Z",
-	"pushed": "2026-11-13T21:26:03Z",
+	"pushed": "2026-11-14T00:56:51Z",
 	"releases": [
+		{
+			"tag": "v3.2.4",
+			"published": "2026-11-14T00:24:40Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 745703466,
+					"name": "legendarysurvivaloverhaul-fabric-1.20.1-3.2.4.jar",
+					"url": "https://github.com/Atlasroar/LegendarySurvivalOverhaul/releases/download/v3.2.4/legendarysurvivaloverhaul-fabric-1.20.1-3.2.4.jar",
+					"size": 3952918,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "eca6ee774aebef1e65427c6140367c26a9e2197694c983293a2fe882326d0bdf",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "legendarysurvivaloverhaul",
+							"version": "3.2.4+1.20.1",
+							"name": "Legendary Survival Overhaul",
+							"description": "Making survival harder. Highly configurable, so you can play the way you want.",
+							"minecraft": "~1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cardinal-components-base",
+								"cardinal-components-entity"
+							],
+							"provides": [
+								"cardinal-components-base",
+								"cardinal-components-entity",
+								"com_electronwill_night-config_core",
+								"com_electronwill_night-config_toml"
+							],
+							"suggests": [
+								"immersive_weathering",
+								"fzzy_config",
+								"fabric-language-kotlin",
+								"trinkets",
+								"modmenu",
+								"sereneseasons",
+								"betterdays",
+								"sereneseasonsplus",
+								"overflowingbars"
+							]
+						}
+					],
+					"icon": "679810bb29349cbe56088125cda6cb52872874fed38c0526395604f139b1f10b.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 713,
+						"jars": [
+							"META-INF/jars/cardinal-components-base-5.2.2.jar",
+							"META-INF/jars/cardinal-components-entity-5.2.2.jar",
+							"META-INF/jars/core-3.6.7.jar",
+							"META-INF/jars/toml-3.6.7.jar"
+						],
+						"capabilities": {
+							"classloading": {
+								"META-INF/jars/cardinal-components-base-5.2.2.jar!dev/onyxstudios/cca/internal/base/asm/CcaClassLoader.class": [
+									"extends java/lang/ClassLoader"
+								]
+							},
+							"network": {
+								"META-INF/jars/core-3.6.7.jar!com/electronwill/nightconfig/core/file/FileNotFoundAction.class": [
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/core-3.6.7.jar!com/electronwill/nightconfig/core/io/ConfigParser.class": [
+									"java/net/URL.openConnection",
+									"java/net/URL.openStream"
+								],
+								"META-INF/jars/core-3.6.7.jar!com/electronwill/nightconfig/core/io/ConfigWriter.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Six performance stages, unchanged survival behavior\n- Skating: skip support-block work for non-wearers; still remove stale walking penalties after unequipping skates.\n- Temperature: reuse scan directions and the existing sky condition.\n- Air: reuse available FULL chunks within each scan with create=false. Default empty-air chunk checks/fetches drop from 6,143 to 11 while all 3,071 eligible spherical block positions remain covered.\n- Equipment: cache built-in temperature calculations against full stack/NBT, live temperature data and coat strength. Twenty unchanged updates reduce built-in calculations from 240 to 0. Attribute reconciliation stays live; custom modifiers/providers keep conservative uncached fallbacks.\n- Configuration: rebuild gameplay JSON only when captured values change. Twenty unchanged polls rebuild zero snapshots instead of 20; 20-tick polling, immediate JOIN snapshots, pending broadcasts and STOP reset are preserved.\n- Wetness: reuse both fluid states within each due update. Partially submerged wet updates use 2 fluid reads instead of 4, with the existing block read unchanged. Particle, immunity, mount and wetting/drying rules are preserved.\n\nNo survival-balance, mob air-sensitivity, provider-radius/precedence, entity-cache timing, setting, required-dependency or save/config-migration changes. All v3.2.3 features remain included. Measured counts are focused fixture results, not whole-server MSPT promises; a fresh installed-release Spark capture is needed to quantify overall gains.\n\n## Installation\nMinecraft 1.20.1, Fabric and Java 17. Install **legendarysurvivaloverhaul-fabric-1.20.1-3.2.4.jar**, replacing the previous LSO JAR. The sources JAR is for developers, not installation. Fzzy Config and Trinkets remain strongly recommended, not required; installing Fzzy also requires its own Fabric Language Kotlin dependency.\n\n## Artifact SHA-256\n```text\nlegendarysurvivaloverhaul-fabric-1.20.1-3.2.4.jar\nECA6EE774AEBEF1E65427C6140367C26A9E2197694C983293A2FE882326D0BDF\n\nlegendarysurvivaloverhaul-fabric-1.20.1-3.2.4-sources.jar\n4D8D662F9A11E09ADA2E9CA56FD83D7C5D8703F6F309318438A58B2CD0029225\n```\n\nVersioned documentation, focused regressions and release metadata are included in PR #57. Live wiki publication is separate."
+		},
 		{
 			"tag": "v3.2.3",
 			"published": "2026-11-13T21:26:22Z",
@@ -18,7 +113,7 @@
 					"name": "legendarysurvivaloverhaul-fabric-1.20.1-3.2.3.jar",
 					"url": "https://github.com/Atlasroar/LegendarySurvivalOverhaul/releases/download/v3.2.3/legendarysurvivaloverhaul-fabric-1.20.1-3.2.3.jar",
 					"size": 3947149,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "0a04f6620eab06bd741dd10ac3837e9bdfbefc03e581f8417c0f006fb7b3456b",
 					"mods": [
