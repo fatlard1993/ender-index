@@ -176,14 +176,20 @@ export const about = found =>
 				}),
 			];
 
+/**
+ * Wide enough for the bar to hold the page's name on its one line, beside the breadcrumb, with the index's places in
+ * the middle; narrower, the name takes a line of its own when it doesn't fit, as on a phone.
+ */
+const BAR_WIDE = '(min-width: 900px)';
+
 const Places = styled.Component(
-	({ colors, media, space }) => `
+	({ colors, space }) => `
 		display: flex;
 		align-items: center;
 		gap: ${space.xs};
 		margin-left: ${space.md};
 
-		@media ${media.wide} {
+		@media ${BAR_WIDE} {
 			position: absolute;
 			left: 50%;
 			transform: translateX(-50%);
@@ -271,7 +277,7 @@ const Trail = styled.Component(
 			text-decoration: none;
 		}
 
-		@media ${media.wide} {
+		@media ${BAR_WIDE} {
 			max-width: 25%;
 		}
 
@@ -284,19 +290,19 @@ const Trail = styled.Component(
 );
 
 /**
- * The bar's heading, the view's own name, leaves the middle of a wide screen to the index's places: the far side
- * holds the half beside them, and the heading takes what the breadcrumb leaves before them, from nothing, so a long
- * name is cut short rather than wrapping the bar.
+ * The bar's heading, the view's own name, leaves the middle of a wide bar to the index's places: the far side holds
+ * the half beside them, and the heading takes what the breadcrumb leaves before them, from nothing, so a long name is
+ * cut short rather than wrapping the bar. A narrower bar wraps a name that doesn't fit onto a line of its own.
  */
 const SiteToolbar = styled(
 	Toolbar,
-	({ media, space }) => `
+	({ space }) => `
 		& > .heading {
 			flex: 0 1 auto;
 			margin-left: ${space.xs};
 		}
 
-		@media ${media.wide} {
+		@media ${BAR_WIDE} {
 			& > .heading {
 				flex: 1 1 0;
 			}
