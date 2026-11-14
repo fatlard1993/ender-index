@@ -5,8 +5,119 @@
 	"stars": 0,
 	"archived": false,
 	"created": "2026-10-21T18:14:52Z",
-	"pushed": "2026-11-10T18:27:18Z",
+	"pushed": "2026-11-14T19:06:42Z",
 	"releases": [
+		{
+			"tag": "v2.0.8-neoforge-1.21.1",
+			"published": "2026-11-14T19:06:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 748483765,
+					"name": "primordial-2.0.8-neoforge-1.21.1.jar",
+					"url": "https://github.com/Herrscher-of-Voids/ProjectE-Primordial/releases/download/v2.0.8-neoforge-1.21.1/primordial-2.0.8-neoforge-1.21.1.jar",
+					"size": 1150913,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "f31fdbb77177ded561835f9a87454ee8d29219f884530c0dc7a6d75e4a4314a3",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "primordial",
+							"version": "2.0.8",
+							"name": "ProjectE:Primordial",
+							"description": "ProjectE:Primordial for NeoForge 1.21.1. EMC settlement, blackhole recovery, resource knowledge and certificates are ported; the full migration is in progress.",
+							"minecraft": "[1.21.1,1.21.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"projecte",
+								"curios"
+							],
+							"suggests": [
+								"ftbquests",
+								"ae2",
+								"refinedstorage",
+								"beyonddimensions"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Armor of the Undying Void",
+								"Aura Certificate",
+								"Axe of the Sundered Firmament",
+								"Black Hole Charm",
+								"Boots of the Galaxy Strider",
+								"Configurator",
+								"Crown of the Event Horizon",
+								"EMC Accelerator",
+								"Energy Certificate",
+								"Fluid Certificate",
+								"Gas Certificate",
+								"Greaves of Sealed Spacetime",
+								"Hammer of Shattered Starcores",
+								"Hoe of Eternal Renewal",
+								"Intermediate-mass Black Hole",
+								"Iron's Mana Knowledge Certificate",
+								"Katar of the Final Rift",
+								"Kerr Black Hole",
+								"Kerr–Newman Black Hole",
+								"Longbow of Singularity",
+								"Mana Certificate",
+								"Morning Star of Celestial Annihilation",
+								"Pickaxe of Cosmic Collapse",
+								"Pressure Certificate",
+								"Price Editor",
+								"Primordial Black Hole",
+								"Reissner–Nordström Black Hole",
+								"Rotation Speed Certificate",
+								"Schwarzschild Black Hole",
+								"Shears of Severed Causality",
+								"Shovel of the Silent Earth",
+								"Soul Energy Knowledge Certificate",
+								"Source Certificate",
+								"Stellar Black Hole",
+								"Stress Certificate",
+								"Supermassive Black Hole",
+								"Sword of the Final Abyss",
+								"Ultramassive Black Hole"
+							],
+							"block": [
+								"Black Hole",
+								"Entity Generator",
+								"Transmutation Interface"
+							],
+							"group": [
+								"Primordial"
+							],
+							"entity": [
+								"Accreting Block",
+								"Singularity"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 418,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 原初 2.0.8 — NeoForge 1.21.1\n\n修复 2.0.5 玩家反馈的转化接口库存固定、AE 大单合成取料受阻的问题；本包也包含此前 2.0.6、2.0.7 的容器售卖、JEI 按钮、生存定价器与失败售卖回滚修复。\n\n- AE 物品、流体库存按当前 EMC、知识和有效购买价格计算，不再把物理接口每 tick 吞吐额度当作总库存。零余额不显示虚拟库存，超大余额按原生 long 数量上限饱和。\n- 同一玩家在同一个 AE 网络放置多个转化接口时，只贡献一次该账户的虚拟库存；移除其中的代表接口后，由剩余接口继续提供目录。\n- AE 原生仓储支持一次提交整单物品及流体请求，保留精确扣费、知识、阶段、组件与服务端线程校验。物理接口的传输预算不变。\n- AE 合成初始取料失败时，本次由 EMC 生成的材料按当时的精确买价退回原付款账户；不按普通卖价折损，不把退款后的虚拟材料再存进物理盘。普通售入仍按正常售价结算。\n- 混合物理库存与 EMC 材料回退时，保留未被网络接收的资源到原生 CPU 库存，供 AE 保存并重试；后续回退抛错时，从 CPU 移除已经确认退款或归还的部分，避免保留重复副本。第三方仓储若接收后抛错且不报告实际接收量，本包不能推断其内部结果。\n- AE 节点状态回调只排队刷新，实际挂载刷新在宿主 tick 的异常隔离内执行，避免在 AE 拓扑切换期间直接访问未挂载的存储服务。\n- 超越维度原生仓储同样分离虚拟总库存与物理吞吐额度，支持整单提取及规则交易；付款回调重新核对原付款人、实体、挂载身份和网络授权，端口中途失效时拒发并退款。\n- 修复超越维度原生终端同步只认物理资源存在性的问题：纯 EMC 资源此前虽然出现在虚拟目录中，却被同步快照过滤，表现为接入后终端仍为空。存在性查询现在与已授权端口的虚拟快照一致，逐 key 查询不重新枚举全目录。\n\n目录里的每种材料数量，是用当前共享 EMC 分别计算的最大可兑换数量，不代表各项都有独立实物库存。整单材料总价超过余额时，AE 仍可报告材料不足；失败回退不得额外扣款或复制资源。\n\n验证记录（2026-11-11）：\n\n- 使用最低 NeoForge 21.1.119 构建正式 JAR，基础环境 GameTest 270/270 通过；未安装 AE/BD 时仍可启动。\n- 相同生产类在 NeoForge 21.1.265、本地附属整包、AE2 19.2.18、超越维度 0.8.2 环境中 314/314 通过。\n- 在隔离目录中仅将超越维度替换为 0.8.9，同一生产类与回归测试 314/314 通过；未替换玩家实例的附属 JAR。\n- AE 检查真实终端库存缓存随 EMC 初值、两倍、零、恢复变化，以及双接口去重与移除代表后的接替。真实 CraftingCpuHelper 一次取得 6000 钻石和 2,000,001 mB 水；失败回归覆盖买卖差价、分数余额、混合物理库存、重复失败、账户隔离及回退抛错。\n- 超越维度检查后绑定自然挂载、原生服务端菜单资源快照、生产订阅及实际同步 payload 编解码；覆盖纯虚拟与混合库存、零 EMC、撤权、10,000 件物品、3,000,000 mB 流体整单、规则交易与付款同步期间端口失效。\n- 流体单价独立校验：每桶 1/3 EMC 等于每 mB 1/3000 EMC；300 万 mB 应收费 1000 EMC。BD 原生键的 1000 单位也确认为 1000 mB。\n- 正式 JAR 保留 NeoForge `[21.1.119,21.2)`；AE/BD 仍为可选依赖，不包含 GameTest 类或附属模组本体。\n\n尚未独立复现玩家原始的 AE“接入即崩溃”现场；已复现的超越维度纯 EMC 终端过滤问题也不代表覆盖全部接线方式或整合包。未启动客户端或占用桌面，终端画面和玩家实际搭法仍需游戏内复测。\n\n升级：备份存档，删除旧原初 JAR，换入本包，完全退出并重启游戏；联机客户端与服务端同时更新。不要同时保留两个版本。无需重建 EMC 账户或删除转化接口。\n\nGitHub Release：v2.0.8-neoforge-1.21.1。"
+		},
 		{
 			"tag": "v2.0.5-neoforge-1.21.1",
 			"published": "2026-11-07T16:43:44Z",
@@ -17,7 +128,7 @@
 					"name": "primordial-2.0.5-neoforge-1.21.1.jar",
 					"url": "https://github.com/Herrscher-of-Voids/ProjectE-Primordial/releases/download/v2.0.5-neoforge-1.21.1/primordial-2.0.5-neoforge-1.21.1.jar",
 					"size": 1133890,
-					"downloads": 3,
+					"downloads": 10,
 					"inspection": 2,
 					"sha256": "343387c25aff9a4eaa6bbab2929e6101bbab45cded6613e0b1c2c6d32e90cdcc",
 					"mods": [
@@ -127,7 +238,7 @@
 					"name": "primordial-2.0.4-neoforge-1.21.1.jar",
 					"url": "https://github.com/Herrscher-of-Voids/ProjectE-Primordial/releases/download/v2.0.4-neoforge-1.21.1/primordial-2.0.4-neoforge-1.21.1.jar",
 					"size": 1132527,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "860a092331d0b1a2a84251114165f1f88a24a6b2a580f70c888370cc5c9ae3b8",
 					"mods": [
@@ -237,7 +348,7 @@
 					"name": "primordial-2.0.3-neoforge-1.21.1.jar",
 					"url": "https://github.com/Herrscher-of-Voids/ProjectE-Primordial/releases/download/v2.0.3-neoforge-1.21.1/primordial-2.0.3-neoforge-1.21.1.jar",
 					"size": 1131324,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "17eb1f4827e6534f3a513a1223d6613de0ba88668ffdfe616a3e2c14e63284fa",
 					"mods": [
@@ -347,7 +458,7 @@
 					"name": "primordial-2.0.2-neoforge-1.21.1.jar",
 					"url": "https://github.com/Herrscher-of-Voids/ProjectE-Primordial/releases/download/v2.0.2-neoforge-1.21.1/primordial-2.0.2-neoforge-1.21.1.jar",
 					"size": 1131032,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "ecca29d34f9a92606e3e5691358e28bcb1c0e3b1458f1ea739650ddaf2025b3d",
 					"mods": [
@@ -567,7 +678,7 @@
 					"name": "primordial-2.0.0-forge-1.20.1.jar",
 					"url": "https://github.com/Herrscher-of-Voids/ProjectE-Primordial/releases/download/v2.0.0-forge-1.20.1/primordial-2.0.0-forge-1.20.1.jar",
 					"size": 1167219,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "4c47844c86721e306d7e7c6b9a6f90be717b3f8066559c1eba6f9397b5b6d4e1",
 					"mods": [
