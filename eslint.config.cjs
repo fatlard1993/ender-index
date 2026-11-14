@@ -24,4 +24,5 @@ module.exports = [
 			'import/no-unresolved': ['warn', { ignore: ['^bun', '^ender-launcher/', '^@vanilla-bean/components/app$'] }],
 		},
 	},
+	...require('@vanilla-bean/components/eslint.usage.config.cjs'),
 ];
