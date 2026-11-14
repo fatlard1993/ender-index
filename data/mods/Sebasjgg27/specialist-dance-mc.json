@@ -6,8 +6,94 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-11T19:34:19Z",
-	"pushed": "2026-11-09T03:14:05Z",
+	"pushed": "2026-11-14T18:06:59Z",
 	"releases": [
+		{
+			"tag": "v1.6.0",
+			"published": "2026-11-14T17:59:06Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 748311292,
+					"name": "specialist-dance-1.6.0.jar",
+					"url": "https://github.com/Sebasjgg27/specialist-dance-mc/releases/download/v1.6.0/specialist-dance-1.6.0.jar",
+					"size": 2037464,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "62dce6e659adcc6622078ef36df1330058ac35c4ae6c5e6f4b5f8945d55d0f59",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "specialist-dance",
+							"version": "1.6.0",
+							"name": "Specialist Dance",
+							"description": "Celebrate valuable items with a Specialist dance animation in your screen.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [
+								"com_tianscar_javasound_javasound-flac",
+								"com_tianscar_javasound_javasound-mp3",
+								"com_googlecode_soundlibs_tritonus-share"
+							],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "1822b52b4796e2b92ff6b809150fced4a14b26ac5f3bfbe6f2b163d857b905ab.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 271,
+						"jars": [
+							"META-INF/jars/javasound-flac-1.4.1.jar",
+							"META-INF/jars/javasound-mp3-1.9.8.jar",
+							"META-INF/jars/tritonus-share-0.3.7.4.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/javasound-flac-1.4.1.jar!org/kc7bfi/jflac/sound/spi/FlacAudioFileReader.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/javasound-mp3-1.9.8.jar!javazoom/spi/mpeg/sampled/file/MpegAudioFileReader.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/javasound-mp3-1.9.8.jar!javazoom/spi/mpeg/sampled/file/tag/IcyInputStream.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/tritonus-share-0.3.7.4.jar!org/tritonus/share/sampled/file/TAudioFileReader.class": [
+									"java/net/URL.openStream",
+									"java/net/URL.openConnection"
+								]
+							},
+							"exec": {
+								"com/sebas/specialistdance/config/menu/SpecialistDanceConfigScreen.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"www.tritonus.org": [
+								"META-INF/jars/tritonus-share-0.3.7.4.jar!org/tritonus/share/GlobalInfo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Specialist Dance 1.6.0 — Your Rules + Animation Speed\n\nThe dance now fires on rules you write instead of a hardcoded ore list. Tell it which block you mine, which item you pick up, which mob you kill or which container you open, and it dances when that happens. The animation also plays faster or slower from the **K** menu, and **Mod Menu** opens the settings screen so you no longer need to know the keybind.\n\n## Added\n\n- `rules` in the config file — a list of `{trigger, source, item, enabled}` entries that replaces the built-in ore → drop map. Triggers are `mined` (this block yields this item), `pickup` (this item from anywhere), `mob` (this mob drops it) and `container` (this block gives it to you). A file with no `rules` key starts from the ten ore presets.\n- **Your rules** screen on the **Rules** pane — a **Trigger** selector, **Source** and **Item** fields with TAB autocomplete that matches the part after the `:`, and **Pick mob** / **Pick block** / **Pick item** grids paged over the live registries.\n- **Undo** and **Redo** in **Your rules** (`Ctrl/Cmd+Z` and `Ctrl/Cmd+Y`), 40 steps deep, covering add, delete, toggle, clear and reset.\n- **Animation speed** slider in the **K** menu (`animationSpeed`), from `0.1x` to `10.0x` — a GIF that imports too slow can be sped up without touching its `pack.json`.\n- `speedMultiplier` in `pack.json`, so one pack can carry its own playback speed. It overrides the global slider rather than multiplying with it, matching how `frameDurationMs` already overrides the global timing.\n- `configVersion` in the config file with a `migrate()` hook that runs on load; the stamp is `4` in this release. A file written before the key existed is detected as version `0` and stamped current.\n- Mod Menu integration — the mod's **Config** button in **Mods** opens the existing settings screen. Mod Menu is recommended, never required.\n\n## Changed\n\n- The **K** menu is two panes — a sidebar of **Music**, **Dance**, **Animation**, **Rules** and **Content** beside one column of rows. The music and dance pickers are scrollable lists of the real files in `config/specialist-dance/`, replacing the duplicate **Music track** dropdown, and the **Dance** pane previews the selected pack live.\n- The ore list on the **Rules** pane became a rule editor — each row carries its own enable box, the source's item icon and both ids; left-click toggles, right-click deletes.\n- Every numeric config field now has an upper bound as well as a lower one, so a stray extra zero (`frameDurationMs: 50000`) is clamped instead of hanging the trigger pipeline; an `animationEndBehavior` outside `stop`/`hold`/`loop` falls back to `stop`.\n- Frame timing rounds instead of truncating, and floors at 1 ms, so a fast multiplier cannot divide a duration down to zero.\n- The trigger diagnostic logs the frame duration the animation actually uses (after the speed multiplier) and also logs `speed`.\n- `SpecialistDanceConfig` moved to `com.sebas.specialistdance.config`; your config file path is unchanged.\n\n## Fixed\n\n- Ids containing `_` are accepted again. Every vanilla id with an underscore was rejected, so the ten preset ore rules were deleted on every launch and a `mob` or `container` rule could never be saved.\n- A rejected rule names the field it wants (`mob id must look like minecraft:zombie`) instead of one generic block-id message, and the red notice clears when you type, pick or delete.\n- The **Trigger** row shows `mine`, `pickup`, `kill` and `open` instead of echoing the raw value back as `Trigger: mob`.\n\n## Installation\n\n- **Minecraft:** Java Edition 1.21.11\n- **Loader:** Fabric 0.18.1\n- **API:** Fabric API 0.141.5+1.21.11\n- **Client-side only**; not required on the server\n\nDownload `specialist-dance-1.6.0.jar` and place it in your `mods/` folder.\n\n## Known limitations\n\n- `mined` and `pickup` wait for the item to reach your inventory, so breaking a block in Creative does not dance.\n\n..."
+		},
 		{
 			"tag": "v1.5.0",
 			"published": "2026-11-01T17:56:47Z",
@@ -18,7 +104,7 @@
 					"name": "specialist-dance-1.5.0.jar",
 					"url": "https://github.com/Sebasjgg27/specialist-dance-mc/releases/download/v1.5.0/specialist-dance-1.5.0.jar",
 					"size": 1993562,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "7f2b670cdb64aaa090309820482fb53f8f3a7010e25a5cc84b720e77571bc0b9",
 					"mods": [
