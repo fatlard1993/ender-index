@@ -6,8 +6,83 @@
 	"archived": false,
 	"license": "LGPL-3.0",
 	"created": "2026-11-11T11:10:36Z",
-	"pushed": "2026-11-14T18:05:11Z",
+	"pushed": "2026-11-15T19:14:49Z",
 	"releases": [
+		{
+			"tag": "v0.24.0",
+			"published": "2026-11-15T19:15:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 752064706,
+					"name": "skysurveyor-0.24.0.jar",
+					"url": "https://github.com/forenick/Surveyor/releases/download/v0.24.0/skysurveyor-0.24.0.jar",
+					"size": 695437,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "b7b1adac710a1fdbda71a35c1cf1b5ccc76c24ea5353776bb1f282a29cdd01ca",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "skysurveyor",
+							"version": "0.24.0",
+							"name": "Surveyor",
+							"description": "Information-only mining tools for Hypixel SkyBlock, starting with Glacite Mineshafts.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"owo"
+							],
+							"provides": [],
+							"breaks": [
+								"shaftjournal",
+								"shafttools"
+							],
+							"breaksVersions": {
+								"shaftjournal": "*",
+								"shafttools": "*"
+							}
+						}
+					],
+					"icon": "a0df3c683987feb127f5c7b5f7623805f49178273863a33049f0dd4de0692a07.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 253,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/skysurveyor/money/PriceFeed.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.sendAsync"
+								]
+							}
+						},
+						"hosts": {
+							"api.hypixel.net": [
+								"dev/skysurveyor/money/PriceFeed.class"
+							],
+							"api.eliteskyblock.com": [
+								"dev/skysurveyor/money/PriceFeed.class"
+							],
+							"hysky.de": [
+								"dev/skysurveyor/money/PriceFeed.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Coins outside shafts: what you mine in the Dwarven Mines between shafts counts in session, day, Stats and HUD coins and Coins / h.\n- Coins outside shafts HUD line with Session, Per hour and All-time ranges.\n- Outside shafts row at the bottom of a session's shafts, and in the coins tooltips.\n- A session lasts until your last mining, not the end of its last shaft.\n- Per hour rates stop counting after 2 minutes without mining.\n- Hover a session's length to see how much was a break.\n- Time shafting on the Stats tab leaves breaks out.\n- A session says how many items went to the material stash while you mined.\n- Prices stay up to date during long shafts.\n- Session Coins tooltip shows where the coins came from, then Earned, Spent and Net.\n- Coins tooltips show how much Bazaar tax was taken off.\n- Coins breakdown tooltips list the most valuable items first.\n- Glossy Gemstones get their own row in the coins breakdown.\n- Keys and campfires setting: insta-buy, crafted from your own Enchanted Tungsten or Umber, or not counted.\n- A key saved by Resourceful costs nothing and the shaft says so.\n- Shaft table's Gems column is now Mined: Fine for gem shafts, metal in your Metal tier for metal shafts.\n- Mined amounts in the colour of the gem or metal, without the ≈.\n- Hover a Mined value to see the whole amount, f.e. 303.3 Enchanted Tungsten.\n- Sort the shafts in a session by clicking a column header.\n- Make your own personal bests on the Stats tab: pick a value, per shaft or per session, highest or lowest, and a shaft type.\n- Edit personal bests: drag to reorder, remove, rename, or reset to the default list.\n- Metal / shaft and Drystreak personal bests, f.e. Jasper dry 9 (longest 18).\n- Fastest spawn, Fastest session and Lapis / shaft are no longer in the default list.\n- Click anywhere on a personal best to open it.\n- Open sessions show your other sessions on the left, click one to switch. On small screens it folds to a strip.\n- Back button moved to the top of that list.\n- Arrows and chart bars in the journal light up when you hover them.\n- Stats chart types (bars or line) are saved.\n- Personal best HUD line: show any personal best from the Stats tab, f.e. `{pb:drystreak_jasp}`.\n- Typos in `{pb:...}` tags show an error with a suggestion.\n- Drystreak HUD line: shafts since your last shaft of a type you pick, f.e. `{dry:jasper}`.\n- Corpses looted HUD line per corpse type, f.e. `{looted:umber}`, with Shaft, Session, Per hour and All-time ranges.\n- Mined metal HUD line with Shaft, Session, Per hour and All-time ranges, in your Metal tier.\n- Session length, Time since last shaft and Shafts today HUD lines.\n- Times over an hour show hours, f.e. 1:16:00 or 1h 16m.\n- `/sv hud` opens the HUD editor.\n- New players see `(/sv hud)` under the default HUD boxes until they open the editor.\n- Recordings also save what Surveyor detected live.\n- Each HUD line has an Easy and an Advanced mode.\n- Advanced: type the whole line with colours, values and maths, f.e. `{coins / shafts}`.\n- Advanced lines can show several values.\n- Colour rules are typed, one a line, f.e. `{cold} <= -80 &c`, with maths on both sides.\n- Colour rules can use > >= < <= = and !=.\n- Value list beside the line page: click a value, option, colour or sign to type it.\n- Short value names in text: `{spawn}`, `{avg_spawn}`, `{shafts}`, `{cold}` and more. Old names still work.\n- + Rule types a rule for the first value in the text.\n- Mistakes in the text or rules say what's wrong.\n- Numbers in rules can be typed as 1,5M, 150k, 90s or 1m 30s.\n- Turning Advanced on starts with that line's ready-made rules, like Cold yellow at -50 and red at -80.\n- Old lines with colour rules show as Advanced and look the same.\n- Shaft lines show the last shaft while you're outside one: shaft type, time inside, corpses, Cold, campfires.\n- \"Outside\" choice on shaft lines: last shaft or -.\n- New HUD lines get their own value colour: coins gold, powder and Cold aqua, corpse Fine blue, campfires gold.\n\n..."
+		},
 		{
 			"tag": "v0.23.0-beta.2",
 			"published": "2026-11-14T18:05:55Z",
@@ -18,7 +93,7 @@
 					"name": "skysurveyor-0.23.0-beta.2.jar",
 					"url": "https://github.com/forenick/Surveyor/releases/download/v0.23.0-beta.2/skysurveyor-0.23.0-beta.2.jar",
 					"size": 599920,
-					"downloads": 1,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "3938e3fc2873998490ffac4c2e02aae6d829073156f231967110fed59e3a86c9",
 					"mods": [
@@ -93,7 +168,7 @@
 					"name": "skysurveyor-0.23.0-beta.1.jar",
 					"url": "https://github.com/forenick/Surveyor/releases/download/v0.23.0-beta.1/skysurveyor-0.23.0-beta.1.jar",
 					"size": 545703,
-					"downloads": 1,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "c454342f5717f38990517454d040c8a05f0fb8d473de1c75b66aa84d5438ee49",
 					"mods": [
@@ -168,7 +243,7 @@
 					"name": "skysurveyor-0.22.0-beta.1.jar",
 					"url": "https://github.com/forenick/Surveyor/releases/download/v0.22.0-beta.1/skysurveyor-0.22.0-beta.1.jar",
 					"size": 534730,
-					"downloads": 2,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "13cafbcb4cb08c1dfe9b83d29a63b7c2fc1269dcec41a38ed1b7e03da1b3cb3d",
 					"mods": [
@@ -243,7 +318,7 @@
 					"name": "skysurveyor-0.21.3.jar",
 					"url": "https://github.com/forenick/Surveyor/releases/download/v0.21.3/skysurveyor-0.21.3.jar",
 					"size": 491161,
-					"downloads": 2,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "9d06f481a6cf7d69f35c6e3f81396872661f033e637ee66cf18df02acffceec5",
 					"mods": [

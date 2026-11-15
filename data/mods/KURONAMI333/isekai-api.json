@@ -6,8 +6,56 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-05-27T04:16:03Z",
-	"pushed": "2026-09-18T03:54:33Z",
+	"pushed": "2026-11-15T18:54:11Z",
 	"releases": [
+		{
+			"tag": "v3.0.0",
+			"published": "2026-11-15T18:54:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 752002304,
+					"name": "isekai-api-3.0.0-neoforge-1.21.1.jar",
+					"url": "https://github.com/KURONAMI333/isekai-api/releases/download/v3.0.0/isekai-api-3.0.0-neoforge-1.21.1.jar",
+					"size": 878440,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "2f0cdcbda94d41eede0ffdd81db460056a98dcba083cbddc674a6110ce7f1ba1",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "isekai_api",
+							"version": "3.0.0",
+							"name": "Isekai API",
+							"description": "A universal worldgen library for NeoForge 1.21.1. Provides world rule extraction and remap for Java MOD and datapack consumers. Unrelated to the Isekai Adventure modpack.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "a49bd761825ed15b4216991b6e7fdb99e5ea21527c3282e73ba4b22310af1c48.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 365,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Breaking changes\n\n- **Mob spawn changes are dimension-scoped.** `exclusions.mob_spawns`, `additions.mob_spawns`,\n  `mob_spawn_strategy` and `mob_spawn_strategy_by_category` used to rewrite the shared biome's\n  spawn builder; they now apply only in the descriptor's dimension. The same biome in another\n  dimension keeps its original list.\n- **Carver exclusions and additions are dimension-scoped on noise-based dimensions.**\n  `exclusions.carvers` and `additions.carvers` now apply only in the declared dimension when its\n  generator is a `NoiseBasedChunkGenerator`. Dimensions with another generator keep the old\n  biome-wide edit (see limitations).\n- **Other mods' features follow the declared scope.** A feature another mod adds to a declared\n  biome is removed from the shared biome and re-injected as a guarded copy for the declaring\n  dimension. Dimensions that do not declare the worldshape no longer receive it\n  (`ForeignFeatureReconciler`).\n- **Internal signatures changed** (`@ApiStatus.Internal`, no compatibility promise):\n  `ModifyPhase.mobSpawnStrategy(WorldshapeDescriptor, Holder<Biome>)`,\n  `RemovePhase.excludedCarvers(WorldshapeDescriptor, ResourceKey<Biome>, …)` and\n  `AddPhase.additionalCarvers(WorldshapeDescriptor, ResourceKey<Biome>, …)`.\n- **2.x datapacks load unchanged, but the scope changes.** The same JSON now affects one dimension\n  instead of every dimension that shares the biome. A pack that relied on the old cross-dimension\n  leak must declare a descriptor for the other dimension.\n- **`ClientAtmosphereOverride` gained a `skyColor` component.** The record is now\n  `(skyColor, fogColor, fogNearDistance, fogFarDistance)`; the three-argument constructor is gone.\n  Source callers pass `Optional.empty()` for `skyColor`, and compiled callers must recompile.\n\n### Added\n\n- **Per-dimension feature drop at decoration time.** `ChunkGeneratorDecorationMixin` redirects\n  `generationSettingsGetter.apply(biome)` in `ChunkGenerator#applyBiomeDecoration`;\n  `DimensionFeatureScope` removes the recorded takeover set for the dimension generating the\n  chunk. The set is recorded by the ADD phase, so the drop and the injected copy always agree.\n- **Final feature veto for custom generators.** `PlacedFeatureScopeMixin` injects at\n  `PlacedFeature#placeWithContext` HEAD and rejects the same takeover values, so a generator that\n  overrides `applyBiomeDecoration` wholesale also honours `exclusions.features`,\n  `feature_predicates` and `ore_strategy`.\n- **Injected features carry `isekai_api:dimension_guard`.** `additions.features`, remap copies and\n  `feature_predicates` copies place only in the descriptor's dimension.\n- **Structure exclusions are dimension-scoped.** `StructureFindValidGenerationPointMixin` vetoes\n  during generation-point search. During chunk generation the dimension comes from\n  `ChunkDimensionIndex` (a weak `ProtoChunk` → dimension index); `/locate` and `/place` use the\n  level directly; only an index miss falls back to matching the `BiomeSource`.\n- **Mob spawn rules are enforced at the runtime read points.** `MobSpawnScope` holds a\n  per-(dimension, biome) rule. `NaturalSpawner#mobsAt` (RETURN) and\n  `spawnMobsForChunkGeneration` (`getMobs` redirect) filter the list; `MobSpawnVetoHandler`\n  cancels at `FinalizeSpawnEvent` (LOWEST) for paths that never read a list, so an exclusion also\n  covers patrols, spawners, spawn eggs and `/summon`.\n- **Carver rules are enforced at carve time.** `NoiseBasedChunkGeneratorCarverMixin` redirects\n  `ChunkAccess#carverBiome` in `NoiseBasedChunkGenerator#applyCarvers`; `CarverScope` applies the\n  recorded add/remove rule per (dimension, biome).\n- **`client_atmosphere` reaches clients on a dedicated server.** The server sends the active\n  Y-bands over the optional `isekai_api:client_atmosphere` channel on login, `/reload` and\n  dimension change; the client applies them before falling back to its own registry, so sky and\n\n..."
+		},
 		{
 			"tag": "v2.2.0",
 			"published": "2026-09-04T23:13:19Z",
@@ -18,7 +66,7 @@
 					"name": "isekai_api-2.2.0.jar",
 					"url": "https://github.com/KURONAMI333/isekai-api/releases/download/v2.2.0/isekai_api-2.2.0.jar",
 					"size": 487236,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "dd61cb2ad8c442bf474f349280ae3737c3514f41f4269c4c138211f1ccba7ad3",
 					"mods": [
@@ -66,7 +114,7 @@
 					"name": "isekai-api-2.1.0-neoforge-1.21.1.jar",
 					"url": "https://github.com/KURONAMI333/isekai-api/releases/download/v2.1.0/isekai-api-2.1.0-neoforge-1.21.1.jar",
 					"size": 484813,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "48e712644224a95b83476a062680a783ebe68e178cd42a1bd94e0cb50dc13a87",
 					"mods": [
@@ -114,7 +162,7 @@
 					"name": "isekai-api-2.0.0-neoforge-1.21.1.jar",
 					"url": "https://github.com/KURONAMI333/isekai-api/releases/download/v2.0.0/isekai-api-2.0.0-neoforge-1.21.1.jar",
 					"size": 472599,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "ae631a35ce27afd9a27aaf220547f281fab2cb15fb81dd30a24b42f5c58f858d",
 					"mods": [
