@@ -70,7 +70,7 @@ export default class CollectionBar extends Bar {
 						new Button({
 							variant: 'flat',
 							icon: open ? 'chevron-down' : 'chevron-up',
-							textContent: `${items.length} collected`,
+							textContent: `${open ? 'Hide' : 'Show'} ${items.length} collected`,
 							tooltip: open ? 'Hide the list' : 'Show the list',
 							onPointerPress: () => {
 								open = !open;
