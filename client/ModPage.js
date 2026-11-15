@@ -159,8 +159,12 @@ const FORM_TAGS = ['form', 'input', 'button', 'select', 'textarea', 'option'];
 /**
  * A readme as safe markup: it is anyone's HTML, so it is sanitized before it is shown, links leave in a new tab, and
  * every relative image and link is pointed back at its repository.
+ * @param {string} markdown - The readme
+ * @param {object} sources - Where its relative images (`raw`) and links (`page`) point
+ * @param {Window} [root] - The window whose HTML parser sanitizes it: the page's own, unless a test gives another
+ * @returns {string} The safe markup
  */
-export const renderReadme = (markdown, sources) => {
+export const renderReadme = (markdown, sources, root = window) => {
 	const renderer = new marked.Renderer();
 
 	renderer.heading = function ({ tokens, depth }) {
@@ -169,7 +173,7 @@ export const renderReadme = (markdown, sources) => {
 		return `<h${depth} id="${HEADING_PREFIX}${slug(text.replace(/<[^>]+>/g, ''))}">${text}</h${depth}>`;
 	};
 
-	const purify = DOMPurify();
+	const purify = DOMPurify(root);
 
 	purify.addHook('afterSanitizeAttributes', node => {
 		if (node.hasAttribute('src')) node.setAttribute('src', readmeUrl(node.getAttribute('src'), sources.raw));
