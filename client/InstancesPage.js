@@ -375,9 +375,12 @@ const listProblem = text => {
 
 const newInstance = signal => {
 	const status = new Meta({ style: { whiteSpace: 'pre-wrap' } });
+	// Why what was pasted is not one pack to import, shown on the field until what is in it changes
+	let refused;
 	const source = new Input({
 		placeholder: "A pack's index page or ender import line, a gist link, gh:owner/repo, or an https link to a pack",
 		style: { flex: '1' },
+		validate: value => (refused && String(value ?? '') === refused.text ? refused.message : undefined),
 	});
 	const form = new Form({
 		data: {
@@ -428,7 +431,11 @@ const newInstance = signal => {
 	});
 
 	const importPasted = () => {
-		const { pack, mods, said } = packOrMods(String(source.options.value ?? ''));
+		const text = String(source.options.value ?? '');
+		const { pack, mods, said } = packOrMods(text);
+
+		refused = pack || mods ? undefined : { text, message: said };
+		source.validate();
 
 		if (pack) {
 			runInto(status, () => local.importPack(pack));
@@ -436,14 +443,14 @@ const newInstance = signal => {
 			return;
 		}
 
+		// Mods are moved to the list below, which is said beside the actions: not a problem with the field
 		if (mods) {
 			const listed = String(form.options.data.specs ?? '').trim();
 
 			form.options.data.specs = [listed, ...mods].filter(Boolean).join('\n');
 			source.options.value = '';
+			status.elem.textContent = said;
 		}
-
-		status.elem.textContent = said;
 	};
 
 	const make = () => {
