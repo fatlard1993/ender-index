@@ -31,7 +31,7 @@ const NAMEABLE_SOURCES = new Set(['github', 'codeberg', 'gitlab', 'modrinth', 'c
 
 const INSTANCE_LOADERS = { ...LOADERS, vanilla: 'Vanilla' };
 
-const told = (intent, content) => new Notify({ intent, content });
+const told = (intent, content, options) => new Notify({ intent, content, ...options });
 
 const checkbox = (label, checked, onChange) =>
 	new Label({ label, variant: 'inline-after' }, new Input({ type: 'checkbox', value: checked, onChange }));
@@ -164,6 +164,7 @@ const instanceCard = (instance, signal) => {
 		showProgress(bar, job);
 		showOutput(output, job, open.output);
 	};
+	// A job can finish minutes after its press, so what it says goes beside this instance's card
 	const runJob = async (starting, { done, quietWhenDone = false } = {}) => {
 		try {
 			const job = await starting();
@@ -171,9 +172,9 @@ const instanceCard = (instance, signal) => {
 			showJob();
 			await local.finished(job, { reloading: !quietWhenDone });
 
-			if (!quietWhenDone) told('success', done ?? `${job.title}: done`);
+			if (!quietWhenDone) told('success', done ?? `${job.title}: done`, { anchor: card });
 		} catch (error) {
-			told('danger', `${instance.name}: ${error.message}`);
+			told('danger', `${instance.name}: ${error.message}`, { anchor: card });
 		}
 	};
 	const showMods = async () => {
@@ -353,7 +354,8 @@ const runInto = async (status, starting) => {
 		show();
 		local.watchJobs(show, controller.signal);
 		await local.finished(job);
-		told('success', `${job.title}: done`);
+		// Long after the press: beside the status line it is about
+		told('success', `${job.title}: done`, { anchor: status });
 	} catch (error) {
 		status.elem.textContent = `It did not work: ${error.message}`;
 	} finally {

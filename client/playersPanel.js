@@ -14,7 +14,7 @@ import {
 import { lastSaid, local } from './local';
 import { Chip, Command, Meta, Row, Stack } from './ui';
 
-const told = (intent, content) => new Notify({ intent, content });
+const told = (intent, content, options) => new Notify({ intent, content, ...options });
 
 const KINDS = { offline: 'offline', microsoft: 'Microsoft' };
 
@@ -126,9 +126,10 @@ const signInRow = signal => {
 				show();
 				local.watchJobs(show, signal);
 				await local.finished(job, { reloading: false });
-				told('success', lastSaid(job.lines) || 'Signed in');
+				// Finished in another tab, long after the press: beside the sign in
+				told('success', lastSaid(job.lines) || 'Signed in', { anchor: button });
 			} catch (error) {
-				told('danger', `The sign in did not finish: ${error.message}`);
+				told('danger', `The sign in did not finish: ${error.message}`, { anchor: button });
 			} finally {
 				button.options.disabled = false;
 				prompt.elem.style.display = 'none';
