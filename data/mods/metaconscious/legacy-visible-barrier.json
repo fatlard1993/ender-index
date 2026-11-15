@@ -6,8 +6,241 @@
 	"archived": false,
 	"license": "CC0-1.0",
 	"created": "2025-02-11T10:25:43Z",
-	"pushed": "2026-11-14T14:11:36Z",
+	"pushed": "2026-11-15T06:04:16Z",
 	"releases": [
+		{
+			"tag": "v1.3.0",
+			"published": "2026-11-15T06:08:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 750026687,
+					"name": "legacy-visible-barrier-1.3.0+legacy-fabric.jar",
+					"url": "https://github.com/metaconscious/legacy-visible-barrier/releases/download/v1.3.0/legacy-visible-barrier-1.3.0%2Blegacy-fabric.jar",
+					"size": 69750,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "8e4321b0a64a8696a81e1219a2a32da60986fc127b82ca9cbb33948f12a2b775",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lvb",
+							"version": "1.3.0+legacy-fabric",
+							"name": "Legacy Visible Barrier",
+							"description": "Toggle the visibility of barrier blocks.",
+							"minecraft": "1.8.9",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"legacy-fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4677f987045a161fbf2e24ee5de34ec57fb736a8d2cb7fc51516a2714c0c35ac.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 35,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 750026789,
+					"name": "legacy-visible-barrier-1.3.0+ornithe.gen2.jar",
+					"url": "https://github.com/metaconscious/legacy-visible-barrier/releases/download/v1.3.0/legacy-visible-barrier-1.3.0%2Bornithe.gen2.jar",
+					"size": 69897,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "75aa578f90f11f8a8cdd948c5f388c39d2c9c4eed02b2bc4919295bc163de311",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lvb",
+							"version": "1.3.0+ornithe.gen2",
+							"name": "Legacy Visible Barrier",
+							"description": "Toggle the visibility of barrier blocks.",
+							"minecraft": "1.8.9",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"osl-core",
+								"osl-entrypoints",
+								"osl-keybinds",
+								"osl-lifecycle-events",
+								"osl-resource-loader"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4677f987045a161fbf2e24ee5de34ec57fb736a8d2cb7fc51516a2714c0c35ac.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 35,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 750026747,
+					"name": "legacy-visible-barrier-1.3.0+ornithe.jar",
+					"url": "https://github.com/metaconscious/legacy-visible-barrier/releases/download/v1.3.0/legacy-visible-barrier-1.3.0%2Bornithe.jar",
+					"size": 69589,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b04d2dc6a10c22669e2259398b2354dc3d4261b54182cd6c7d07fc8cb78fd724",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lvb",
+							"version": "1.3.0+ornithe",
+							"name": "Legacy Visible Barrier",
+							"description": "Toggle the visibility of barrier blocks.",
+							"minecraft": "1.8.9",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"osl-core",
+								"osl-entrypoints",
+								"osl-keybinds",
+								"osl-lifecycle-events",
+								"osl-resource-loader"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4677f987045a161fbf2e24ee5de34ec57fb736a8d2cb7fc51516a2714c0c35ac.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 35,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Add an Ornithe Calamus Gen2 distribution alongside both existing Gen1 distributions.\n- Reject mismatched mapping generations before activating Minecraft rendering hooks.\n- Isolate generation-specific sources, dependencies and build outputs;\n  verify all three production distributions and cross-generation rejection in CI.\n- Import both Ornithe generations in IntelliJ IDEA with separate source roots,\n  mappings, dependencies and client run configurations; build all targets in one invocation.\n- Update the build to Gradle 9.2.1, Loom 1.15.5, Legacy Looming 1.15.3 and Ploceus 1.15.9;\n  retain Java 8 mod bytecode and runtime support.\n- Eliminate toggle-triggered terrain reloads and screen flicker in enhanced mode.\n- Add native compatibility and off modes, selected before Mixin transformation. Native\n  mode uses coalesced section updates, with an optional full-reload refresh policy.\n- Recover from missing enhanced hooks and contained rendering failures by switching\n  to native mode; report shared model failures as visualization unavailable.\n- Build barrier geometry separately and share translucent draw ordering with existing\n  terrain vertices in both adapters, preserving water and glass blending.\n- Track barriers through block changes, chunk data updates, unloads, and world changes.\n- Preserve lightmap, color, vertex-array and buffer state around barrier drawing,\n  including foreign VAOs and element buffers.\n- Enforce client-thread index access and non-reentrant rendering; restore graphics\n  state before recovery and keep rendering workers separate from mode decisions.\n- Keep the barrier frame hook reachable when a mod replaces or cancels terrain drawing.\n- Retain compiled vertex origins, shader attributes and sprite ordering with OptiFine;\n  restore atlas bindings after multi-texture uploads.\n- Document tested rendering mods, supported loader generations, and translucent ordering.\n- Add production-namespace compatibility tests for active hitboxes, block highlights,\n  chunk grids, orthographic cameras, village markers, custom outlines and waypoint labels.\n- Add client regression checks for rendering isolation, state restoration and lifecycle updates."
+		},
+		{
+			"tag": "v1.2.0",
+			"published": "2026-11-15T05:54:03Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 749997596,
+					"name": "legacy-visible-barrier-1.2.0+legacy-fabric.jar",
+					"url": "https://github.com/metaconscious/legacy-visible-barrier/releases/download/v1.2.0/legacy-visible-barrier-1.2.0%2Blegacy-fabric.jar",
+					"size": 28327,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "e083e40a81dae7eca7e97d67a16f3dcd62b67d4c2a18a12f2842af7d79140268",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lvb",
+							"version": "1.2.0+legacy-fabric",
+							"name": "Legacy Visible Barrier",
+							"description": "Toggle the visibility of barrier blocks.",
+							"minecraft": "1.8.9",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"legacy-fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4677f987045a161fbf2e24ee5de34ec57fb736a8d2cb7fc51516a2714c0c35ac.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 8,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 749997641,
+					"name": "legacy-visible-barrier-1.2.0+ornithe.jar",
+					"url": "https://github.com/metaconscious/legacy-visible-barrier/releases/download/v1.2.0/legacy-visible-barrier-1.2.0%2Bornithe.jar",
+					"size": 28467,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "fe05de092b34259536da7e6833a25b2252a427774ff9176a47ab3b46956dff2b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "lvb",
+							"version": "1.2.0+ornithe",
+							"name": "Legacy Visible Barrier",
+							"description": "Toggle the visibility of barrier blocks.",
+							"minecraft": "1.8.9",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"osl-core",
+								"osl-entrypoints",
+								"osl-keybinds",
+								"osl-lifecycle-events",
+								"osl-resource-loader"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4677f987045a161fbf2e24ee5de34ec57fb736a8d2cb7fc51516a2714c0c35ac.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 8,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Build Legacy Fabric and Ornithe artifacts from one four-project Gradle build.\n- Provision Java toolchains for Gradle and IntelliJ IDEA builds.\n- Share dependency-free visibility logic, translations, and barrier assets.\n- Enforce client-thread mutation and publish visibility safely to rendering workers.\n- Ignore queued toggles outside a world while retaining visibility across connections.\n- Declare client-only initialization and explicit runtime dependencies for both artifacts.\n- Verify core behavior, release contracts, Java 8 bytecode, metadata, and packaged resources.\n- Publish platform-specific SemVer build identifiers through a shared GitHub release pipeline."
+		},
 		{
 			"tag": "v1.1.0",
 			"published": "2025-12-08T07:11:22Z",
@@ -18,7 +251,7 @@
 					"name": "legacy-visible-barrier-mod-1.1.0+mc1.8.9.jar",
 					"url": "https://github.com/metaconscious/legacy-visible-barrier/releases/download/v1.1.0/legacy-visible-barrier-mod-1.1.0%2Bmc1.8.9.jar",
 					"size": 28281,
-					"downloads": 18,
+					"downloads": 20,
 					"inspection": 2,
 					"sha256": "8b15cffe8ac12e707b3659cb7b0761f467c6be0983e35b106d10c3418a5c7728",
 					"mods": [
@@ -61,7 +294,7 @@
 					"name": "legacy-visible-barrier-mod-1.0.1.jar",
 					"url": "https://github.com/metaconscious/legacy-visible-barrier/releases/download/v1.0.1/legacy-visible-barrier-mod-1.0.1.jar",
 					"size": 28140,
-					"downloads": 6,
+					"downloads": 8,
 					"inspection": 2,
 					"sha256": "6faa41c5018feaef350e0939074f9169522e0d23837e99450fb5d444abb8019b",
 					"mods": [
@@ -112,7 +345,7 @@
 					"name": "legacy-visible-barrier-mod-1.0.0.jar",
 					"url": "https://github.com/metaconscious/legacy-visible-barrier/releases/download/v1.0.0/legacy-visible-barrier-mod-1.0.0.jar",
 					"size": 21535,
-					"downloads": 1,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "f7bdd491cea0b72e534b69e513593e6b5b1bd360a0b6a9b3ffb030b7e58ff637",
 					"mods": [

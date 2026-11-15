@@ -1,0 +1,299 @@
+{
+	"repo": "AnnoyingVillager/onescreen",
+	"host": "github",
+	"description": "Minecraft 26.2 Fabric media screen mod with image, video, HLS, OpenGL and Vulkan support.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-11-14T11:55:09Z",
+	"pushed": "2026-11-14T19:02:36Z",
+	"releases": [
+		{
+			"tag": "v0.2.0",
+			"published": "2026-11-14T19:03:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 748476960,
+					"name": "onescreen-0.2.0.jar",
+					"url": "https://github.com/AnnoyingVillager/onescreen/releases/download/v0.2.0/onescreen-0.2.0.jar",
+					"size": 166573,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b28047eb6531adf91f89c09d56f53b63e4cd0af709d16d7159cda787983076aa",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "onescreen",
+							"version": "0.2.0",
+							"name": "OneScreen",
+							"description": "A focused Fabric screen mod for images and video in Minecraft.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"watermedia",
+								"watermedia_binaries"
+							],
+							"provides": []
+						}
+					],
+					"icon": "f5d027b934a02ce5ec6eed6d0e8cc1112ea196f48736b7443e29e27847a2bf7a.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"OneScreen"
+							],
+							"block": [
+								"Screen Frame"
+							]
+						},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 67,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/onescreen/client/media/HlsPlaylistResolver.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# OneScreen 0.2.0\n\n高分辨率媒体与 GPU 纹理更新，面向 Minecraft Java Edition 26.2 / Fabric。\n\n## 主要更新\n\n- 移除 OneScreen 侧固定的 `1280x720` / `1920x1080` 视频输出上限；近距离 `LOD=MAX` 时使用 WATERMeDIA 的实际输出尺寸。\n- OpenGL 接入 WATERMeDIA GPU 纹理，Vulkan 接入 `VKEngine`、Minecraft Vulkan device 和外部纹理视图。\n- 保留 AWT CPU 纹理回退，并优化视频帧到 `NativeImage` 的批量像素复制。\n- 新增按距离变化的 `VideoLod`，档位包含迟滞，避免边界处反复调整。\n- 修复 Vulkan 共享 graphics queue 的提交、等待和呈现同步，解决 4K 播放时可能出现的 `VK_ERROR_DEVICE_LOST`。\n- WATERMeDIA 正式基线更新为 `3.0.0`，Binaries 更新为 `3.0.0`；支持 `3.0.0.x < 3.0.0 < 3.0.x` 的特殊版本排序。\n- Agent 文档统一迁移到 `agents/`；README 与 `docs/` 重新整理为人类安装说明、功能说明和二次开发实现原理。\n\n## 安装前置\n\n必须同时安装：\n\n- Minecraft Java Edition `26.2`\n- Java `25`\n- Fabric Loader `0.18.0` 或更高\n- [Fabric API `0.152.0+26.2`](https://modrinth.com/mod/fabric-api)\n- [WATERMeDIA `3.0.0`](https://modrinth.com/mod/watermedia)\n- [WATERMeDIA Binaries `3.0.0`](https://modrinth.com/mod/watermedia-binaries)\n\nCurseForge 下载页：\n\n- [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api)\n- [WATERMeDIA](https://www.curseforge.com/minecraft/mc-mods/watermedia)\n- [WATERMeDIA Binaries](https://www.curseforge.com/minecraft/mc-mods/watermedia-binaries)\n\n下载本 Release 中的 `onescreen-0.2.0.jar` 并放入 `mods` 文件夹。多人游戏需要服务端和客户端安装 OneScreen；媒体前置模组由各客户端安装。\n\n## 兼容性\n\n- `WATERMeDIA 3.0.0 + Binaries 3.0.0` 是当前正式测试基线。\n- `3.0.0.x` 测试版本在版本排序中低于 `3.0.0`，仅提供 best-effort 兼容，未来可能移除。\n- 后续 `3.0.x` 正式版本按同一 API 兼容范围运行，但每个新依赖版本仍需重新验收。\n- `format=GPU` 表示纹理上传路径，`hardwareAccel=true/false` 表示解码器选择，两者不是同一指标。\n\n## 已验证与已知限制\n\n- Vulkan 1080p H.264 实测输出 `1920x1080`、`format=GPU`、`hardwareAccel=true`。\n- Vulkan 4K AV1 Main 10-bit HLG 实测输出 `3840x2160`、`format=GPU`；当前 WATERMeDIA 选择软解，但 GPU 纹理上传正常。\n- 修复后的 4K Vulkan 连续播放超过 1 分钟，未出现新的设备丢失或崩溃报告。\n- OpenGL 1080p/4K 回归、Vulkan 4K 30 分钟压力测试、多屏并发和长时间直播重连仍需继续测试。\n- 多频道 IPTV 列表当前只播放第一个源。\n- HLS 直播进度条只读，只显示当前片段的近似进度。\n- 4K/8K 是否硬解及能否流畅播放取决于片源、编解码器、GPU、驱动和 WATERMeDIA，不构成所有硬件上的性能承诺。\n\n## 项目说明\n\n本项目由生成式 AI 主导完成，不是 Mojang、Fabric 或 WATERMeDIA 的官方项目。请先备份世界并在测试环境中验证。问题报告请附脱敏后的 `latest.log`、WATERMeDIA 日志和复现步骤。\n\n许可证：[MIT License](https://github.com/AnnoyingVillager/onescreen/blob/main/LICENSE)"
+		},
+		{
+			"tag": "v0.1.2",
+			"published": "2026-11-14T15:05:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 747838532,
+					"name": "onescreen-0.1.2.jar",
+					"url": "https://github.com/AnnoyingVillager/onescreen/releases/download/v0.1.2/onescreen-0.1.2.jar",
+					"size": 136722,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "4527ea0e5ad2482cb11958dd0fb960ed9d4834e6658ecd7e9d8415b489a96cab",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "onescreen",
+							"version": "0.1.2",
+							"name": "OneScreen",
+							"description": "A focused Fabric screen mod for images and video in Minecraft.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"watermedia",
+								"watermedia_binaries"
+							],
+							"provides": []
+						}
+					],
+					"icon": "f5d027b934a02ce5ec6eed6d0e8cc1112ea196f48736b7443e29e27847a2bf7a.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"OneScreen"
+							],
+							"block": [
+								"Screen Frame"
+							]
+						},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 53,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/onescreen/client/media/HlsPlaylistResolver.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# OneScreen 0.1.2\n\n播放控制与图标修正，面向 Minecraft Java Edition 26.2 / Fabric。\n\n## 修复\n\n- 停止播放会释放媒体纹理并清除屏幕上的视频或图片画面；再次播放可重新加载。\n- 在编辑器中点击暂停后，关闭编辑器仍保持暂停，不再随游戏菜单关闭而恢复播放。\n- 放大播放控件左侧的手动刷新图标，提升小尺寸界面下的辨识度。\n- 模组图标改为高对比度的 `screen_frame` 画框图案，并使用最近邻缩放保持像素边缘清晰。\n\n## 兼容与验证\n\n- WATERMeDIA `3.0.1` + Binaries `3.0.1` 与 WATERMeDIA `3.0.0.23` + Binaries `3.0.0.6` 的运行兼容保持不变。\n- 播放控制修复已在 Vulkan 1.4.329 实机验证。\n- WATERMeDIA `3.0.0.23` 仍仅提供初版兼容，未来可能移除；新安装建议使用 `3.0.1`。\n\n## 安装前置\n\n- Minecraft 26.2\n- Java 25\n- Fabric Loader 0.18.0 或更高\n- Fabric API 0.152.0+26.2\n- WATERMeDIA 3.0.1 + WATERMeDIA Binaries 3.0.1（推荐）\n- 或 WATERMeDIA 3.0.0.23 + Binaries 3.0.0.6（早期客户端初版兼容）\n\n## PCL2 图标说明\n\nPCL2 的本地 Mod 列表不会读取 JAR 内嵌的 `fabric.mod.json` 图标，而是显示 Modrinth/CurseForge 在线项目图标。本版本包含正确的 JAR 内嵌图标，但如果 PCL2 未将文件匹配到在线项目，仍可能显示通用图标。\n\n本项目由生成式 AI 主导完成。请在测试世界中先验证并备份存档。"
+		},
+		{
+			"tag": "v0.1.1",
+			"published": "2026-11-14T13:25:12Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 747568752,
+					"name": "onescreen-0.1.1.jar",
+					"url": "https://github.com/AnnoyingVillager/onescreen/releases/download/v0.1.1/onescreen-0.1.1.jar",
+					"size": 135448,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "a61cd7096da444b437000661aa676a08629315cec4c4d8b885fc87c5eb6f1673",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "onescreen",
+							"version": "0.1.1",
+							"name": "OneScreen",
+							"description": "A focused Fabric screen mod for images and video in Minecraft.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"watermedia",
+								"watermedia_binaries"
+							],
+							"provides": []
+						}
+					],
+					"icon": "e7681741df50ccd1fa3c35e7e4d1db63d7122f3356f2d79f86c09180b3369ec0.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"OneScreen"
+							],
+							"block": [
+								"Screen Frame"
+							]
+						},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 52,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/onescreen/client/media/HlsPlaylistResolver.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# OneScreen 0.1.1\n\n屏幕控制与建筑展示能力更新，面向 Minecraft Java Edition 26.2 / Fabric。\n\n## 新增\n\n- 播放控件左侧新增手动刷新按钮，停止播放后可重新加载 URL。\n- 屏幕可围绕所在平面的法线旋转任意角度，支持 `-180°` 到 `180°` 连续数值；画面、位置偏移和声音中心同步旋转。\n- 新增默认关闭的“隐藏画框材质”选项。开启后隐藏静态画框模型，媒体画面和右键编辑功能仍然保留。\n- 新增 `/screen rotation` 与 `/screen hideframe` 命令。\n- `/screen info` 现在显示旋转角度和画框材质隐藏状态。\n\n## 修复与兼容\n\n- 旋转角度和隐藏状态会随方块实体保存、同步，并在旧存档中安全回退到 `0°` / 不隐藏。\n- 手动刷新由服务端验证后递增 `loadRevision`，客户端按现有生命周期安全关闭并重建播放器。\n\n## 验证\n\n- WATERMeDIA `3.0.1` + Binaries `3.0.1`：OpenGL 3.3 与 Vulkan 1.4.329 实机测试通过。\n- 已验证停止 → 手动刷新 → 播放、旋转渲染、隐藏画框后继续交互，以及退出重进后的持久化。\n- WATERMeDIA `3.0.0.23` + Binaries `3.0.0.6`：Vulkan 1.4.329 下已验证视频、硬件解码、停止、手动刷新和重新播放。该旧组合仅提供初版兼容，未来可能移除，新安装建议使用 `3.0.1`。\n\n## 安装\n\n- Minecraft 26.2\n- Java 25\n- Fabric Loader 0.18.0 或更高\n- Fabric API 0.152.0+26.2\n- WATERMeDIA 3.0.1 + WATERMeDIA Binaries 3.0.1（推荐）\n- 或 WATERMeDIA 3.0.0.23 + Binaries 3.0.0.6（早期客户端初版兼容）\n\n## 已知限制\n\n- 多频道 IPTV 列表目前只播放第一个频道。\n- HLS 直播流不能在进度条上拖动，只显示当前片段的估算进度。\n- 直播追帧默认关闭；开启后重新连接可能产生短暂黑屏、缓冲或音频中断。\n- 4K/8K 高帧率播放不是默认性能承诺。\n- WATERMeDIA `3.0.0.23` 仅提供初版兼容，未来可能移除。\n\n本项目由生成式 AI 主导完成。请在测试世界中先验证并备份存档。"
+		},
+		{
+			"tag": "v0.1.0",
+			"published": "2026-11-14T11:58:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 747347186,
+					"name": "onescreen-0.1.0.jar",
+					"url": "https://github.com/AnnoyingVillager/onescreen/releases/download/v0.1.0/onescreen-0.1.0.jar",
+					"size": 130115,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "7964c72c2f2a15556f24cd190ca7aaeb19c04c7ef51cd6777834e7b30691d5c2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "onescreen",
+							"version": "0.1.0",
+							"name": "OneScreen",
+							"description": "A focused Fabric screen mod for images and video in Minecraft.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"watermedia",
+								"watermedia_binaries"
+							],
+							"provides": []
+						}
+					],
+					"icon": "e7681741df50ccd1fa3c35e7e4d1db63d7122f3356f2d79f86c09180b3369ec0.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"OneScreen"
+							],
+							"block": [
+								"Screen Frame"
+							]
+						},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 51,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/onescreen/client/media/HlsPlaylistResolver.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# OneScreen 0.1.0\n\nOneScreen 的首个公开版本，面向 Minecraft Java Edition 26.2 / Fabric 客户端。\n\n## 主要功能\n\n- 1×1×1/16 六向屏幕画框，可贴在方块六个表面。\n- PNG、JPEG、WebP、MP4、HLS/M3U8 等 WATERMeDIA 媒体。\n- 适应、拉伸、平铺、填充、居中五种画面比例。\n- 播放进度、循环、直播追帧、播放、暂停和停止控制。\n- 服务端权威设置同步与 `/screen` 管理命令。\n- OpenGL 与 Vulkan 渲染路径。\n- WATERMeDIA 3.0.0.23 初版兼容、3.0.1 运行兼容。\n\n## 安装\n\n需要同时安装：\n\n- Minecraft 26.2\n- Java 25\n- Fabric Loader 0.18.0 或更高\n- Fabric API 0.152.0+26.2\n- WATERMeDIA 与匹配版本的 WATERMeDIA Binaries\n  - 推荐：WATERMeDIA 3.0.1 + Binaries 3.0.1\n  - 早期客户端：WATERMeDIA 3.0.0.23 + Binaries 3.0.0\n\n下载本页附加的 `onescreen-0.1.0.jar` 并放入 `mods` 文件夹。\n\n## 已知限制\n\n- 多频道 IPTV 列表目前只播放第一个源。\n- 公网直播流的长时间播放与重连仍需更多实机验证。\n- 4K/8K 高帧率播放不是默认性能承诺。\n- WATERMeDIA 3.0.0.23 仅为初版兼容，未来可能移除。\n- 本项目由生成式 AI 主导完成，请在测试世界中先验证并备份存档。\n\n## 许可证\n\nMIT License。第三方依赖、Minecraft 与 WATERMeDIA 仍分别受各自许可证约束。"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-11-15T05:58:30.121Z",
+	"pictures": [],
+	"picturesChecked": "2026-11-15T05:58:30.121Z",
+	"contributors": {
+		"commits": 8,
+		"more": 0,
+		"people": [
+			{
+				"login": "AnnoyingVillager",
+				"commits": 8,
+				"name": "Annoying Villager",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-11-15T05:58:30.121Z",
+	"history": 1
+}

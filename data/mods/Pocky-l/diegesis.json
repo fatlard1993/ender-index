@@ -1,0 +1,493 @@
+{
+	"repo": "Pocky-l/diegesis",
+	"host": "github",
+	"description": "Library for in-world block interfaces: the camera moves to the block and players work with its 3D parts directly, without a GUI.",
+	"stars": 4,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-11-02T14:32:02Z",
+	"pushed": "2026-11-15T06:18:50Z",
+	"releases": [
+		{
+			"tag": "v1.0.0-beta.10+1.21.1",
+			"published": "2026-11-15T06:18:53Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 750049109,
+					"name": "diegesis-fabric-1.21.1-1.0.0-beta.10.jar",
+					"url": "https://github.com/Pocky-l/diegesis/releases/download/v1.0.0-beta.10%2B1.21.1/diegesis-fabric-1.21.1-1.0.0-beta.10.jar",
+					"size": 864491,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "bcb770b94a476145b88980cdb009e39f2a6670c4256bbc1cd1eaf083d2697f27",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "diegesis",
+							"version": "1.0.0-beta.10",
+							"name": "Diegesis",
+							"description": "Library for in-world block interfaces: the camera moves to the block and players work with its 3D parts directly, without a GUI.",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cc50b1e389f1578dc40a92e21ce4026737513d7a24580927873c7505be361603.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 291,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 750049108,
+					"name": "diegesis-neoforge-1.21.1-1.0.0-beta.10.jar",
+					"url": "https://github.com/Pocky-l/diegesis/releases/download/v1.0.0-beta.10%2B1.21.1/diegesis-neoforge-1.21.1-1.0.0-beta.10.jar",
+					"size": 892262,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "72a6ed63250afdb3ac9113a85f183709bcf7dce1911661daa068a757a85cba99",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "diegesis",
+							"version": "1.0.0-beta.10",
+							"name": "Diegesis",
+							"description": "Library for in-world block interfaces: the camera moves to the block and players work with its 3D parts directly, without a GUI.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "cc50b1e389f1578dc40a92e21ce4026737513d7a24580927873c7505be361603.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 293,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n- Node option `takes_items`: while a stack is on the cursor the node is hovered too and its click goes to `onItemClick`, for\n  places a station lays things on by code.\n- `StationBehavior.onScroll(view, node, amount)`: the mouse wheel over the scene goes to the station's code first.\n- `StationView.moveCamera(x, y, z)`: code moves the station's whole camera, which glides there, for work at another height.\n- `StationType.Builder.hidesBlocks(Span)`: a multiblock station hides its other blocks with the main one while it is\n  in use, so its scene can lift a tower apart.\n- `NodeView.setOutlineSeenOnly(true)`: the hover outline goes round the part of the node the player sees, not its whole\n  shape through what stands in front of it (one basket of a stack). Under a shader pack the whole shape stays outlined.\n- Menu stations (`StationType.Builder.menu(MenuBinding)`, `Authority.MENU`): a station that works through the block's own\n  vanilla menu, opened on the server by the block's normal use and never shown. Its slots show the menu's slots and every\n  click is the one the vanilla screen sends, so it moves items on any server, with or without Diegesis there.\n  `StationView.menu()` (`MenuAccess`), `StationBehavior.onMenuOpened` and `onMenuRefused`.\n- At a menu station the keys of a vanilla container screen work over a slot: 1-9 and the off-hand key swap, Q throws one\n  (Ctrl+Q the stack), the pick button copies a stack in creative mode, and a click past the block throws the stack in the\n  hand.\n- `DiegesisClient.toScreen(world)` and `stationScreenClass()`, for laying recipe viewers' overlays round a station.\n- A drag that spreads the stack in the hand over several slots shows, as a vanilla screen does, what each slot will hold\n  and how many stay in the hand.\n- `DiegesisClient.registerChildScreen`: a screen such as a recipe viewer's page may open over a station without ending it;\n  the player is back at the station when it returns. `DiegesisClient.hoveredStack()` (the item under the cursor at a station)\n  and `isStationScreen(screen)` for recipe viewers' keys.\n- At a menu station the mouse wheel moves one item at a time, as Mouse Tweaks does: down over a stack sends one to the other\n  side (inventory and station), up brings one more of the same into it.\n- `MenuAccess.placeRecipe(recipe, all)`: lays a recipe into a menu station the way the vanilla recipe book does.\n- Drawer option `layout: hotbar`: the hotbar stays where the HUD has it and takes clicks, the off hand beside it at a\n  menu station, and over it a square for each other stack the station can use, in the order they had when the station\n  opened, with one empty square always: nothing moves while the player works.\n- Drawer option `carry_size`: a stack taken from the inventory drawer is carried over the scene at that size, as big as the\n  station's own items, instead of the size of the last stack carried.\n- Slot option `count_facing: front`: the count stands at the item's foot facing the block's front, readable when the camera\n  looks into a hollow of a wall rather than down onto a table.\n- Camera option `interactive_at`: clicks count from that share of the flight in (default 1: once the camera has arrived).\n\n### Fixed\n- With InvMove, the keys that go over to a neighbouring station also walked the player away from it:\n  the player stands still while working at a station.\n- Items in a scene keep their depth when tipped: a bucket being poured, or anything leaning, no longer shows dark lines\n  across its face where its one-pixel sides were drawn over it.\n- The shadow of a carried item is even: it no longer shows darker stripes and bands where the item's front and back overlapped.\n- Where a graphics driver refuses the targets smooth painters are drawn into, they are still drawn over the finished frame,\n  only without smoothing; before, they went back into the scene, where a block beside the station could cover them.\n\n..."
+		},
+		{
+			"tag": "v1.0.0-beta.10",
+			"published": "2026-11-15T06:18:26Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 750048165,
+					"name": "diegesis-fabric-1.20.1-1.0.0-beta.10.jar",
+					"url": "https://github.com/Pocky-l/diegesis/releases/download/v1.0.0-beta.10/diegesis-fabric-1.20.1-1.0.0-beta.10.jar",
+					"size": 861745,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "d490499f3ba2d1f4bfb59e005fb012020b59d08f25f569b53d83a28a537ec9ea",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "diegesis",
+							"version": "1.0.0-beta.10",
+							"name": "Diegesis",
+							"description": "Library for in-world block interfaces: the camera moves to the block and players work with its 3D parts directly, without a GUI.",
+							"minecraft": "1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cc50b1e389f1578dc40a92e21ce4026737513d7a24580927873c7505be361603.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 290,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 750048163,
+					"name": "diegesis-forge-1.20.1-1.0.0-beta.10.jar",
+					"url": "https://github.com/Pocky-l/diegesis/releases/download/v1.0.0-beta.10/diegesis-forge-1.20.1-1.0.0-beta.10.jar",
+					"size": 898216,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "2b7c9f5b24190c70cbc15e6233731680c2e23622f154346b2ede7c4fb8666bed",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "diegesis",
+							"version": "1.0.0-beta.10",
+							"name": "Diegesis",
+							"description": "Library for in-world block interfaces: the camera moves to the block and players work with its 3D parts directly, without a GUI.",
+							"minecraft": "[1.20.1,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "cc50b1e389f1578dc40a92e21ce4026737513d7a24580927873c7505be361603.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 294,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n- Node option `takes_items`: while a stack is on the cursor the node is hovered too and its click goes to `onItemClick`, for\n  places a station lays things on by code.\n- `StationBehavior.onScroll(view, node, amount)`: the mouse wheel over the scene goes to the station's code first.\n- `StationView.moveCamera(x, y, z)`: code moves the station's whole camera, which glides there, for work at another height.\n- `StationType.Builder.hidesBlocks(Span)`: a multiblock station hides its other blocks with the main one while it is\n  in use, so its scene can lift a tower apart.\n- `NodeView.setOutlineSeenOnly(true)`: the hover outline goes round the part of the node the player sees, not its whole\n  shape through what stands in front of it (one basket of a stack). Under a shader pack the whole shape stays outlined.\n- Menu stations (`StationType.Builder.menu(MenuBinding)`, `Authority.MENU`): a station that works through the block's own\n  vanilla menu, opened on the server by the block's normal use and never shown. Its slots show the menu's slots and every\n  click is the one the vanilla screen sends, so it moves items on any server, with or without Diegesis there.\n  `StationView.menu()` (`MenuAccess`), `StationBehavior.onMenuOpened` and `onMenuRefused`.\n- At a menu station the keys of a vanilla container screen work over a slot: 1-9 and the off-hand key swap, Q throws one\n  (Ctrl+Q the stack), the pick button copies a stack in creative mode, and a click past the block throws the stack in the\n  hand.\n- `DiegesisClient.toScreen(world)` and `stationScreenClass()`, for laying recipe viewers' overlays round a station.\n- A drag that spreads the stack in the hand over several slots shows, as a vanilla screen does, what each slot will hold\n  and how many stay in the hand.\n- `DiegesisClient.registerChildScreen`: a screen such as a recipe viewer's page may open over a station without ending it;\n  the player is back at the station when it returns. `DiegesisClient.hoveredStack()` (the item under the cursor at a station)\n  and `isStationScreen(screen)` for recipe viewers' keys.\n- At a menu station the mouse wheel moves one item at a time, as Mouse Tweaks does: down over a stack sends one to the other\n  side (inventory and station), up brings one more of the same into it.\n- `MenuAccess.placeRecipe(recipe, all)`: lays a recipe into a menu station the way the vanilla recipe book does.\n- Drawer option `layout: hotbar`: the hotbar stays where the HUD has it and takes clicks, the off hand beside it at a\n  menu station, and over it a square for each other stack the station can use, in the order they had when the station\n  opened, with one empty square always: nothing moves while the player works.\n- Drawer option `carry_size`: a stack taken from the inventory drawer is carried over the scene at that size, as big as the\n  station's own items, instead of the size of the last stack carried.\n- Slot option `count_facing: front`: the count stands at the item's foot facing the block's front, readable when the camera\n  looks into a hollow of a wall rather than down onto a table.\n- Camera option `interactive_at`: clicks count from that share of the flight in (default 1: once the camera has arrived).\n\n### Fixed\n- With InvMove, the keys that go over to a neighbouring station also walked the player away from it:\n  the player stands still while working at a station.\n- Items in a scene keep their depth when tipped: a bucket being poured, or anything leaning, no longer shows dark lines\n  across its face where its one-pixel sides were drawn over it.\n- The shadow of a carried item is even: it no longer shows darker stripes and bands where the item's front and back overlapped.\n- Opening a station with a named entity or another player in the camera's way crashed with Iris on Sodium 0.5 (#3). Name\n  labels, lines and glints of things in the way stay solid now; their bodies still fade.\n\n..."
+		},
+		{
+			"tag": "v1.0.0-beta.9+1.21.1",
+			"published": "2026-11-13T22:54:38Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 745487650,
+					"name": "diegesis-fabric-1.21.1-1.0.0-beta.9.jar",
+					"url": "https://github.com/Pocky-l/diegesis/releases/download/v1.0.0-beta.9%2B1.21.1/diegesis-fabric-1.21.1-1.0.0-beta.9.jar",
+					"size": 815582,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "7ca2f46f5fbbe1601fa36d7fe5a1d31befe57765029e0860a36c1d1e5b93fa58",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "diegesis",
+							"version": "1.0.0-beta.9",
+							"name": "Diegesis",
+							"description": "Library for in-world block interfaces: the camera moves to the block and players work with its 3D parts directly, without a GUI.",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cc50b1e389f1578dc40a92e21ce4026737513d7a24580927873c7505be361603.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 271,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 745487652,
+					"name": "diegesis-neoforge-1.21.1-1.0.0-beta.9.jar",
+					"url": "https://github.com/Pocky-l/diegesis/releases/download/v1.0.0-beta.9%2B1.21.1/diegesis-neoforge-1.21.1-1.0.0-beta.9.jar",
+					"size": 834429,
+					"downloads": 10,
+					"inspection": 2,
+					"sha256": "8c3d61c0e96490dba92cea02f91e6b1711454bc791298505a5130cd7d6838061",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "diegesis",
+							"version": "1.0.0-beta.9",
+							"name": "Diegesis",
+							"description": "Library for in-world block interfaces: the camera moves to the block and players work with its 3D parts directly, without a GUI.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "cc50b1e389f1578dc40a92e21ce4026737513d7a24580927873c7505be361603.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 271,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n- `NodeView.setFoam(coverage, color)`: foam on a tank's liquid, clinging to the walls first and lying in patches further in,\n  growing and settling over a second: a beer's head, scum on a stock.\n- `NodeView.holdLevel(seconds, over)`: a tank's liquid keeps the level it shows for a while and then rises or falls to\n  what the tank holds over the given time, so that a bucket brought over and tipped fills it as its stream runs.\n- `StationBehavior.holdsBlock(view)`: a station that hides its block keeps it hidden after the last player left for as\n  long as this says, so that its scene can finish closing, as a lid falling shut.\n- `NodeView.showLiquid(liquid, fraction)`: a tank shows a liquid at a level set by code, whatever the station's tank\n  holds: a mug filled at a tap.\n- A node drawn over everything (`setOnTop`) takes its tank's liquid along, so that a mug held low before a keg's tap is\n  not cut by the floor.\n  A stream poured into such a node is drawn with it, so that it runs into the vessel instead of ending at its rim.\n- `StationView.isBlockHidden()`: whether a station's block is left out of the world in this frame, for the scene's copy of\n  it to show exactly then.\n- Visual option `lit_as_block` (`Visual.asLitAsBlock()`): a block model lit as the world lights the station's block,\n  faces shaded as a block's, the light around it and smooth lighting's corner shadows, so that a scene's copy of a block\n  it hides no longer looks lit up beside the block.\n\n### Changed\n- Splashes and drops are as big as vanilla's and splashes last longer, so that they are seen from a station's camera.\n  Splashes are vanilla's in white, so that they take a liquid's colour: in honey they were black.\n- A full tank shows its liquid's surface, foam and patches as a fuller one does: at 100% the plain top of the box stood in\n  for it.\n- Ripples show on a cloudy or foamy liquid too (`setMottle`, `setFoam`, trails): their slopes catch the light as on a\n  clear one, where before they only moved its surface unseen.\n\n### Fixed\n- With [Sodium](https://modrinth.com/mod/sodium) 0.5.11, opening a station while smoke, flames or other particles are in\n  view, such as by a lit stove or a campfire, could crash the game with \"does not implement interface\n  VertexBufferWriter\". Particles in the way of the camera now fade through the particle itself, with any renderer.\n- A station that hides its block swaps it for its scene in one frame: the block's chunk is rebuilt at once, as for a\n  block a player places, instead of a few frames later, so the block no longer blinks or shows twice as a player comes\n  and goes."
+		},
+		{
+			"tag": "v1.0.0-beta.9",
+			"published": "2026-11-13T22:35:25Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 745436693,
+					"name": "diegesis-fabric-1.20.1-1.0.0-beta.9.jar",
+					"url": "https://github.com/Pocky-l/diegesis/releases/download/v1.0.0-beta.9/diegesis-fabric-1.20.1-1.0.0-beta.9.jar",
+					"size": 812811,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "bbc9fada7d28791292c5d10de66d6d0a4323f42a1ab925a848d6dea7fecaaa7d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "diegesis",
+							"version": "1.0.0-beta.9",
+							"name": "Diegesis",
+							"description": "Library for in-world block interfaces: the camera moves to the block and players work with its 3D parts directly, without a GUI.",
+							"minecraft": "1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cc50b1e389f1578dc40a92e21ce4026737513d7a24580927873c7505be361603.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 270,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 745436694,
+					"name": "diegesis-forge-1.20.1-1.0.0-beta.9.jar",
+					"url": "https://github.com/Pocky-l/diegesis/releases/download/v1.0.0-beta.9/diegesis-forge-1.20.1-1.0.0-beta.9.jar",
+					"size": 840058,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "e76519f79c130752cf65d1f4b379f2c2f31c0c65fb5bb1a22b7b83df67a2dd06",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "diegesis",
+							"version": "1.0.0-beta.9",
+							"name": "Diegesis",
+							"description": "Library for in-world block interfaces: the camera moves to the block and players work with its 3D parts directly, without a GUI.",
+							"minecraft": "[1.20.1,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "cc50b1e389f1578dc40a92e21ce4026737513d7a24580927873c7505be361603.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 272,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n- `NodeView.setFoam(coverage, color)`: foam on a tank's liquid, clinging to the walls first and lying in patches further in,\n  growing and settling over a second: a beer's head, scum on a stock.\n- `NodeView.holdLevel(seconds, over)`: a tank's liquid keeps the level it shows for a while and then rises or falls to\n  what the tank holds over the given time, so that a bucket brought over and tipped fills it as its stream runs.\n- `StationBehavior.holdsBlock(view)`: a station that hides its block keeps it hidden after the last player left for as\n  long as this says, so that its scene can finish closing, as a lid falling shut.\n- `NodeView.showLiquid(liquid, fraction)`: a tank shows a liquid at a level set by code, whatever the station's tank\n  holds: a mug filled at a tap.\n- A node drawn over everything (`setOnTop`) takes its tank's liquid along, so that a mug held low before a keg's tap is\n  not cut by the floor.\n  A stream poured into such a node is drawn with it, so that it runs into the vessel instead of ending at its rim.\n- `StationView.isBlockHidden()`: whether a station's block is left out of the world in this frame, for the scene's copy of\n  it to show exactly then.\n- Visual option `lit_as_block` (`Visual.asLitAsBlock()`): a block model lit as the world lights the station's block,\n  faces shaded as a block's, the light around it and smooth lighting's corner shadows, so that a scene's copy of a block\n  it hides no longer looks lit up beside the block.\n\n### Changed\n- Splashes and drops are as big as vanilla's and splashes last longer, so that they are seen from a station's camera.\n  Splashes are vanilla's in white, so that they take a liquid's colour: in honey they were black.\n- A full tank shows its liquid's surface, foam and patches as a fuller one does: at 100% the plain top of the box stood in\n  for it.\n- Ripples show on a cloudy or foamy liquid too (`setMottle`, `setFoam`, trails): their slopes catch the light as on a\n  clear one, where before they only moved its surface unseen.\n\n### Fixed\n- A station that hides its block swaps it for its scene in one frame: the block's chunk is rebuilt at once, as for a\n  block a player places, instead of a few frames later, so the block no longer blinks or shows twice as a player comes\n  and goes."
+		},
+		{
+			"tag": "v1.0.0-beta.8+1.21.1",
+			"published": "2026-11-13T08:05:54Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 742824161,
+					"name": "diegesis-fabric-1.21.1-1.0.0-beta.8.jar",
+					"url": "https://github.com/Pocky-l/diegesis/releases/download/v1.0.0-beta.8%2B1.21.1/diegesis-fabric-1.21.1-1.0.0-beta.8.jar",
+					"size": 803116,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "70cc44530978a17b96318b3c114c343347876bde96a9bb5ab1158a37210995d9",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "diegesis",
+							"version": "1.0.0-beta.8",
+							"name": "Diegesis",
+							"description": "Library for in-world block interfaces: the camera moves to the block and players work with its 3D parts directly, without a GUI.",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "cc50b1e389f1578dc40a92e21ce4026737513d7a24580927873c7505be361603.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 267,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 742824164,
+					"name": "diegesis-neoforge-1.21.1-1.0.0-beta.8.jar",
+					"url": "https://github.com/Pocky-l/diegesis/releases/download/v1.0.0-beta.8%2B1.21.1/diegesis-neoforge-1.21.1-1.0.0-beta.8.jar",
+					"size": 821751,
+					"downloads": 11,
+					"inspection": 2,
+					"sha256": "357b9a5ee0f0cd7b2c24d882de0a369cce9b62767006b29770517a585920fe1a",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "diegesis",
+							"version": "1.0.0-beta.8",
+							"name": "Diegesis",
+							"description": "Library for in-world block interfaces: the camera moves to the block and players work with its 3D parts directly, without a GUI.",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "cc50b1e389f1578dc40a92e21ce4026737513d7a24580927873c7505be361603.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 267,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n- `DiegesisClient.arrival()`: how far the camera has come to the station worked at, so that what hangs by a station can\n  appear and go in step with the camera.\n- `DiegesisClient.isSceneDrawn(pos)`: whether a station's scene is drawn in this frame, for a block entity renderer\n  that the scene stands in for.\n- Camera option `keep_width`, 16:9 by default: a window narrower than that, such as 4:3 or a game snapped to half a\n  screen, sees the whole width of the station's shot with more above and below, instead of losing its sides.\n\n### Changed\n- The camera flies to a station and back faster: 0.4 seconds instead of 0.6, and 0.45 instead of 0.65 over to a\n  neighbour. It sets off at once and lands softly, on a slight arc, and the zoom, the inventory and the first-person\n  hand go in step with it: the hand goes down and comes back up instead of vanishing and popping back. Scenes that set\n  their own `transition` keep it.\n\n### Fixed\n- Using a station again while the camera flies back from it no longer jerks the view round.\n- A stack whose data another mod changes all the time, such as food a spoilage mod ages every second, no longer\n  flies into the inventory with \"+N\" again and again while you work at a station.\n- With [Real Camera](https://www.curseforge.com/minecraft/mc-mods/real-camera) the camera keeps the station's view: Real\n  Camera rests while you work at a station and takes the camera back when you leave. Before, the view ended at odd\n  angles with the work off screen.\n- With [Leawind's Third Person](https://www.curseforge.com/minecraft/mc-mods/leawind-third-person) the station's view\n  wins too, and the camera flies in from the third-person view and back to it.\n- Stations on structures that [Sable](https://modrinth.com/mod/sable) moves now open on Fabric too, such as builds of\n  [Sable Beyond](https://modrinth.com/mod/sable_beyond): before, such a block kept its own menu there."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-11-15T05:58:30.121Z",
+	"pictures": [
+		"docs/compat/blur.png",
+		"docs/compat/blur_plus.png",
+		"docs/compat/create-aeronautics.png",
+		"docs/compat/embeddium.png",
+		"docs/compat/oculus.png",
+		"docs/more-mods/dhturbo.png",
+		"docs/more-mods/handson_delight.png",
+		"docs/more-mods/hextale.png",
+		"docs/more-mods/hoarfrost.png",
+		"docs/more-mods/inventorybackups.png",
+		"docs/more-mods/mekanismadvancedgenerators.png",
+		"docs/more-mods/petrichor.png",
+		"docs/more-mods/pocky_shaders.png",
+		"docs/more-mods/rustling_leaves.png",
+		"docs/showcase/coffee.png",
+		"docs/showcase/soup.gif"
+	],
+	"picturesChecked": "2026-11-15T05:58:30.121Z",
+	"contributors": {
+		"commits": 57,
+		"more": 0,
+		"people": [
+			{
+				"login": "Pocky-l",
+				"commits": 57,
+				"name": "Roman Dudko",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-11-15T05:58:30.121Z",
+	"history": 1
+}

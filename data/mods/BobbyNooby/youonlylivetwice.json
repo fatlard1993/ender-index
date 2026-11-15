@@ -1,0 +1,282 @@
+{
+	"repo": "BobbyNooby/youonlylivetwice",
+	"host": "github",
+	"description": "A minecraft server-side fabric mod intended to increase the stakes of a multiplayer minecraft playthrough by removing several features usually taken for granted and provide an overall more immersive experience.",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2024-08-18T13:52:51Z",
+	"pushed": "2026-11-15T01:20:25Z",
+	"releases": [
+		{
+			"tag": "v1.2.0",
+			"published": "2026-11-15T01:20:25Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 749380727,
+					"name": "you-only-live-twice-1.2.0.jar",
+					"url": "https://github.com/BobbyNooby/youonlylivetwice/releases/download/v1.2.0/you-only-live-twice-1.2.0.jar",
+					"size": 15107640,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "9cb88a982be6db475d1e06bc6c054932fe7795b6711324662cf9375ebfe8987b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "you-only-live-twice",
+							"version": "1.2.0",
+							"name": "You Only Live Twice",
+							"description": "Server-side hardcore multiplayer: dying locks you out for days, your items wait in a grave anyone can loot, a logout leaves your body behind, and the server hides who is online.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [
+								"org_xerial_sqlite-jdbc"
+							]
+						}
+					],
+					"icon": "4ef883cb8463923872606d8ca75ccc926b5d4ce34ddf2827e72e550cb86733ab.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 518,
+						"jars": [
+							"META-INF/jars/sqlite-jdbc-3.50.1.0.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/core/NativeDB.class": [
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/SQLiteJDBCLoader.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								]
+							},
+							"network": {
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/SQLiteConnection.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/SQLiteJDBCLoader.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/SQLiteJDBCLoader$VersionHolder.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"exec": {
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/util/ProcessRunner.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/util/OSInfo.class": [
+									"java/lang/Runtime.exec"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "YOLT 1.2.0 for Minecraft 26.3. It's a server-side Fabric mod: players join with a plain vanilla client and no client\nmod.\n\n## What's new: a flavour MOTD\n\n- **The server list shows a flavour line as the MOTD.** A new one each time a player refreshes the list, never the\n  same one twice in a row. The lines are `serverList.motdLines` in the config. By default they are the 13 lines of\n  the tab list header, colours and all. A line can hold one `\\n` to fill both rows of the MOTD.\n- **A server updating to 1.2.0 gets it too**, since the new key arrives at its default. To keep your own MOTD from\n  `server.properties`, set `\"motdLines\": []` in the `serverList` section and run `/yolt reload`.\n- Only the server list's normal ping shows the line. Clients older than 1.7, the query port (`enable-query`) and the\n  game itself after a join get the MOTD from `server.properties`.\n\nThe [config documentation](https://github.com/BobbyNooby/youonlylivetwice/blob/release/docs/config.md#serverlist)\nhas the details.\n\n`/status` is easier to read, with colour and shorter lines.\n\n## What it does\n\n- **Death lockout.** Dying kicks you, and you can't rejoin for 7 days (configurable).\n- **Graves.** Your items stay in a player head where you died, and anyone can loot it. Graves can't be broken and\n  never expire.\n- **Reviving.** Craft a grave head with a nether star, a netherite ingot, a diamond, a gold ingot and an iron ingot\n  into a paper called \"Revive <name>\". Right-click with it to end that player's lockout.\n- **Logout bodies.** When you log out, your body stays where you stood. Whatever happens to it happens to you.\n- **Hidden information.** Global chat becomes proximity chat. The tab list, nametags, commands, the online player\n  count, death, join and advancement messages and the coordinates on F3 are hidden. The server list shows no names\n  and a flavour MOTD. Ops can turn on an admin view to see all of it.\n- **World border.** The Overworld and the Nether share one border, 10,000 blocks across by default, with no Nether\n  fast travel. New players spawn at a random spot inside it.\n- **Hardcore layer.** Extra rules that make survival itself harder, each with its own switch. The Curse of the\n  Undead, the flat anvil price and the Mending nerf are on by default. The rest is off until you turn it on.\n\nThe [documentation](https://github.com/BobbyNooby/youonlylivetwice/blob/release/docs/README.md) explains each feature.\n\n## Install\n\nYou need Minecraft 26.3, Fabric Loader 0.20.1 or newer, Fabric API 0.165.2+26.3 or newer, and Java 25.\n\nPut the jar in the server's `mods` folder next to Fabric API and start the server once. It writes the config and,\nwith the world border on (the default), sets the border to 10,000 blocks across.\n\nUpdating from 1.1.0 needs nothing else. At its next start the config file gets `serverList.motdLines` at its default.\nThe log doesn't name it, since the file's layout (`configVersion` 2) is the same. Going back to 1.1.0 is safe: it\nwarns that `serverList.motdLines` is an unknown key and leaves it out of the file.\n\nUpdating from 1.0.0 needs nothing else either:\n\n- The old config is kept as `you-only-live-twice.json.v1.bak`, and the file goes to `configVersion` 2.\n- `hide.coordinates`, `chat.allowWhispers` and `skins.lockAfterFirstChoice` are turned on only where your file still\n  says `false`, 1.0.0's default. Each one turned on gets a line in the log with the command to turn it off again, such\n  as `/yolt config hide.coordinates false`. One you already set to `true` stays.\n- The keys and sections 1.0.0 didn't have are added at their defaults, and the log names them. So the flavour MOTD,\n  the Curse of the Undead, the flat anvil price and the Mending nerf come on too.\n- 1.0.0 leaves the newer config alone if you go back, since it is from a newer version.\n\n## Good to know\n\n- Revive papers can get their own look from a resource pack, `you-only-live-twice-revive-pack-1.2.0.zip` on this\n\n..."
+		},
+		{
+			"tag": "v1.1.0",
+			"published": "2026-11-14T14:04:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 747669859,
+					"name": "you-only-live-twice-1.1.0.jar",
+					"url": "https://github.com/BobbyNooby/youonlylivetwice/releases/download/v1.1.0/you-only-live-twice-1.1.0.jar",
+					"size": 15102360,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "2352cdd09a0634ba1c2ff72f80877df614ec1e3d21260b5443ba16ca30a64df2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "you-only-live-twice",
+							"version": "1.1.0",
+							"name": "You Only Live Twice",
+							"description": "Server-side hardcore multiplayer: dying locks you out for days, your items wait in a grave anyone can loot, a logout leaves your body behind, and the server hides who is online.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [
+								"org_xerial_sqlite-jdbc"
+							]
+						}
+					],
+					"icon": "4ef883cb8463923872606d8ca75ccc926b5d4ce34ddf2827e72e550cb86733ab.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 515,
+						"jars": [
+							"META-INF/jars/sqlite-jdbc-3.50.1.0.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/core/NativeDB.class": [
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/SQLiteJDBCLoader.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								]
+							},
+							"network": {
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/SQLiteConnection.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/SQLiteJDBCLoader.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/SQLiteJDBCLoader$VersionHolder.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"exec": {
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/util/ProcessRunner.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/util/OSInfo.class": [
+									"java/lang/Runtime.exec"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "YOLT 1.1.0 for Minecraft 26.3. It's a server-side Fabric mod: players join with a plain vanilla client and no client\nmod.\n\n## What's new: the hardcore layer\n\nA set of optional rules that make survival itself harder. Each part has its own switch, and with a part off nothing\nchanges for it. **Only the Curse of the Undead, the flat anvil price and the Mending nerf are on by default**, so every\nplayer now has `/status`, with a Rules line. The rest is off until you turn it on.\n\n- **Weight.** Everything you carry weighs something, and a heavy load slows you down. Armour and tools barely count:\n  your kit and half an inventory of ordinary blocks still walk at full speed, and shulker boxes full of stone are half\n  speed.\n- **Broken legs.** A long fall breaks your legs and slows you until they heal.\n- **Limp.** Very low health slows you.\n- **Bed rest.** Lying in a bed heals you, day or night.\n- **Curse of the Undead.** Each return from death, by dying or by a totem, costs a max heart. They come back with play\n  time.\n- **Nutrients.** Foods carry protein, vitamins and sugar, and running low on one costs you. One simple food never\n  covers all three: eat two or three kinds, or rabbit stew.\n- **Hunger tax, Mending nerf, flat anvil prices and an elytra nerf.**\n- **Tougher and relentless mobs.** More health, harder hits, a longer chase, and zombies that break doors.\n- **Blood moons.** Some nights bring more, tougher and better geared mobs that drop more.\n- **Cold.** Out in the snow a chill builds, and torches, fires and leather keep it off.\n- **`/status`** shows each player a report on their own body.\n- **The curse can outlast the limp.** A server may let the curse take a player low enough to limp until a heart comes\n  back; the log only notes it.\n- **Revive paper texture.** Revive papers can get their own look from a resource pack (a placeholder texture for\n  now). The pack is `you-only-live-twice-revive-pack-1.1.0.zip` on this release. YOLT doesn't send it: host it and set\n  it in `server.properties`.\n\nThe [hardcore documentation](https://github.com/BobbyNooby/youonlylivetwice/blob/release/docs/hardcore.md) explains\neach part and how to set up the pack.\n\n## New defaults\n\n- `hide.coordinates` is on: every player sees X and Z shifted by a private amount.\n- `chat.allowWhispers` is on: everyone can `/w` a player in range.\n- `skins.lockAfterFirstChoice` is on: a player picks their skin once, then only an op changes it.\n- `hardcore.anvil.enabled` and `hardcore.mending.enabled` are on.\n- `hardcore.curse.enabled` is on: the Curse of the Undead. Each return from death, by dying or by a totem, costs a\n  max heart, up to 4, and one comes back after every 3 Minecraft days (60 minutes) of play. A server updating from\n  1.0.0 gets it too. To turn it off: `/yolt config hardcore.curse.enabled false`.\n- `hardcore.legs.bodiesCanBreakLegs` is off: a logout body's fall only costs it health. Nothing about a logged-out\n  player heals, so legs broken then would stay broken until they came back.\n\n## Other changes\n\n- **Whispers are logged.** Each whisper writes one line to the server log: who sent it, to which name, the text and\n  whether it was heard. Players see nothing new.\n- **One whisper for every player.** `/msg` and `/tell` are now the same ranged whisper as `/w` for players, ops too,\n  so no player can reach another out of earshot. The console, command blocks and datapack functions keep vanilla's\n  `/msg`, `/tell` and `/w`, selectors and all. `/teammsg` stays vanilla.\n- **Nether portals at 1:1 link only nearby.** A Nether portal looks for an Overworld portal within 16 blocks of its\n  exit, not 128, so it can't lead to someone else's base. A pair that linked further apart makes a new portal once.\n- **The flat anvil clears the counter.** Every item that comes out of an anvil while the flat price is on has\n  vanilla's hidden prior-work counter at 0, so it prices like a new item if the flat price is turned off.\n\n..."
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-11-13T17:19:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 744456517,
+					"name": "you-only-live-twice-1.0.0.jar",
+					"url": "https://github.com/BobbyNooby/youonlylivetwice/releases/download/v1.0.0/you-only-live-twice-1.0.0.jar",
+					"size": 14911421,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "ad7bc77a795e75b173904d1b7ce922748b998483b9cfdd8253ca7f6c1e5a8bb0",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "you-only-live-twice",
+							"version": "1.0.0",
+							"name": "You Only Live Twice",
+							"description": "Server-side hardcore multiplayer: dying locks you out for days, your items wait in a grave anyone can loot, a logout leaves your body behind, and the server hides who is online.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [
+								"org_xerial_sqlite-jdbc"
+							]
+						}
+					],
+					"icon": "4ef883cb8463923872606d8ca75ccc926b5d4ce34ddf2827e72e550cb86733ab.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 419,
+						"jars": [
+							"META-INF/jars/sqlite-jdbc-3.50.1.0.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/core/NativeDB.class": [
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/SQLiteJDBCLoader.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								]
+							},
+							"network": {
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/SQLiteConnection.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/SQLiteJDBCLoader.class": [
+									"java/net/URL.openConnection"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/SQLiteJDBCLoader$VersionHolder.class": [
+									"java/net/URL.openStream"
+								]
+							},
+							"exec": {
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/util/ProcessRunner.class": [
+									"java/lang/Runtime.exec"
+								],
+								"META-INF/jars/sqlite-jdbc-3.50.1.0.jar!org/sqlite/util/OSInfo.class": [
+									"java/lang/Runtime.exec"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "YOLT for Minecraft 26.3. It's a server-side Fabric mod: players join with a plain vanilla client, no client mod and no\nresource pack.\n\n## What it does\n\n- **Death lockout.** Dying kicks you, and you can't rejoin for 7 days (configurable).\n- **Graves.** Your items stay in a player head where you died, and anyone can loot it. Graves can't be broken and\n  never expire.\n- **Reviving.** Craft a grave head with a nether star, a netherite ingot, a diamond, a gold ingot and an iron ingot\n  into a paper called \"Revive <name>\". Right-click with it to end that player's lockout.\n- **Logout bodies.** When you log out, your body stays where you stood. Whatever happens to it happens to you.\n- **Hidden information.** Global chat becomes proximity chat. The tab list, nametags, commands, the online player\n  count, death, join and advancement messages and the coordinates on F3 are hidden. Ops can turn on an admin view to\n  see all of it.\n- **World border.** The Overworld and the Nether share one border, 10,000 blocks across by default, with no Nether\n  fast travel. New players spawn at a random spot inside it.\n- **Off by default:** a grave compass that points at your latest grave, and fake X and Z coordinates for each player\n  (`hide.coordinates`).\n\nEvery feature has a switch in `config/you-only-live-twice.json`, and `/yolt config` changes them in game. The\n[documentation](https://github.com/BobbyNooby/youonlylivetwice/blob/release/docs/README.md) explains each one.\n\n## Install\n\nYou need Minecraft 26.3, Fabric Loader 0.20.1 or newer, Fabric API 0.165.2+26.3 or newer, and Java 25.\n\nPut the jar in the server's `mods` folder next to Fabric API and start the server once. It writes the config and,\nwith the world border on (the default), sets the border to 10,000 blocks across.\n\n## Good to know\n\n- Coming from the old 1.21.5 build: its death database is moved aside at startup, and the lockouts in it end.\n- Read the [known limits](https://github.com/BobbyNooby/youonlylivetwice/blob/release/docs/known-limits.md) before you host."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-11-15T05:58:30.121Z",
+	"pictures": [],
+	"picturesChecked": "2026-11-15T05:58:30.121Z",
+	"contributors": {
+		"commits": 1046,
+		"more": 0,
+		"people": [
+			{
+				"login": "BobbyNooby",
+				"commits": 1046,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-11-15T05:58:30.121Z",
+	"history": 1
+}

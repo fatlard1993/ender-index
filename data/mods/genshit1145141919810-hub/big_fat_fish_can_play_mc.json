@@ -1,0 +1,232 @@
+{
+	"repo": "genshit1145141919810-hub/big_fat_fish_can_play_mc",
+	"host": "github",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-11-02T08:22:27Z",
+	"pushed": "2026-11-14T12:32:44Z",
+	"releases": [
+		{
+			"tag": "v0.5.0-alpha.1",
+			"published": "2026-11-14T12:29:12Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 747426172,
+					"name": "big-fat-fish-can-play-mc-0.5.0-alpha.1.jar",
+					"url": "https://github.com/genshit1145141919810-hub/big_fat_fish_can_play_mc/releases/download/v0.5.0-alpha.1/big-fat-fish-can-play-mc-0.5.0-alpha.1.jar",
+					"size": 431787,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "9a4e3ede5f84df8e517c222a7f183bc06a83934663c832bc2b223796dc0e2c24",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "big_fat_fish_can_play_mc",
+							"version": "0.5.0-alpha.1",
+							"name": "大肥鱼能玩MC",
+							"description": "Big Fat Fish Can Play MC — 一个真实第二个账号的 AI 搭子：聊天、跟随、挖矿、合成、战斗、多步规划。默认接 DeepSeek，任何 OpenAI 兼容端点都能用。",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone",
+								"xaerominimap"
+							]
+						}
+					],
+					"icon": "86ce2ff6edc9b543b080ed4cbaea52121f457d97c51f890bcad47bb76009e7af.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 116,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"io/github/xiaod/deepseekcompanion/chat/LlmClient.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"api.openai.com": [
+								"io/github/xiaod/deepseekcompanion/command/LocalCommandHandler.class"
+							],
+							"api.deepseek.com": [
+								"io/github/xiaod/deepseekcompanion/config/CompanionConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 0.5.0-alpha.1 ??reliable hands, honest planning (1.21.11)\n\nThe build where the hands stopped fighting the brain: crafting, armour swapping and\nexploration are verified by the *result*, not by what the client merely thinks happened.\nEverything below was verified in a real 1.21.11 Fabric client, from a `/clear` world.\n\n### Fixed\n- **Crafting could never finish outside a crafting table.** The armour controller drained\n  whatever sat on the cursor every tick ??including the stack the crafting machine had just\n  picked up ??so every inventory-grid (2?2) craft ended in \"no output\". The armoured hand and\n  the crafting hand now take turns: no controller touches the cursor while a container action\n  is running.\n- **The armour swap could not replace an occupied slot.** Vanilla quick-move only fills an\n  *empty* armour slot, so upgrades looped forever with the piece still in the bag. Equipping\n  now does pickup ??click the armour slot ??put the old piece back, one verified action per\n  tick with a 3 s deadline.\n- **Mining through walls.** `goto` used a fixed Y, so exploration dug into hillsides. Baritone\n  now gets a plain XZ goal and walks node by node, checking for trees at every node.\n\n### Changed\n- **Mining is Baritone's `#mine` again** for wood as well as ore. The hand-rolled digger is\n  only used when Baritone is missing or `.xd fair on` is active. Wood still respects the\n  \"don't dig logs below Y\" limit: if there is no tree above the floor nearby, the bot looks\n  for a forest instead of tunnelling to a mineshaft.\n- **Material bookkeeping matches vanilla tags.** Logs are counted per wood type\n  (`#minecraft:oak_logs` does not accept cherry logs), planks stay interchangeable, and the\n  smelting fuel is picked from the wood the bot actually owns. This removed the\n  \"the plan says the materials are there, the crafting grid disagrees\" family of failures.\n- **Crafting click execution went back to the proven model**: build the click sequence once,\n  fire it one click at a time, then verify the outcome by counting the item (two rebuild\n  retries). Per-step state checks were removed because the client's cursor mirror is not\n  authoritative without an open screen. A strict ingredient pre-check still runs before the\n  table is opened and reports the missing token of the recipe that is closest to craftable.\n- **Single-action failure is fed back to the model**: the controller's own diagnostic\n  (\"no iron ore nearby\") is handed back with the failed action and the LLM gets one chance to\n  change approach before the system escalates to a multi-step plan. `idle`/`stop` no longer\n  count as failures.\n- **Prompt corrections**: `arg` semantics are now documented per action (they used to claim\n  only `mine` takes an argument, which broke `goto`/`craft`/`hunt`), plans may not assume\n  items the inventory does not have, and mining/chop/goto plan steps get a 3? timeout so an\n  ongoing dig is not killed mid-way.\n- **Exploration** walks ~48-block nodes, turns 135? after 8 nodes on the same heading, and\n  replans against the new location; a node with trees stops the walk and chops immediately.\n- **Butler** only collects drops within 5 blocks (and within 4 blocks vertically) and does not\n  re-target while already walking, instead of marching across the map for a stray item.\n- The game snapshot now shows what is in flight (\"?e???plan/acquire ??) so the model knows\n  the bot is busy.\n\n### Added\n- `.xd think <text>` ??feed a sentence to the model as if the owner said it. Single-player has\n  no second player, so this is how the whole \"model decides ??action runs\" path is tested.\n- LLM requests use `response_format: json_object` with an automatic fallback when the endpoint\n  rejects it, and every call logs its token usage.\n- Armour scoring is `armour + 1.5 ? toughness + 0.5 ? protection`; one upgrade per scan, and\n  the resulting set is logged after each swap."
+		},
+		{
+			"tag": "v0.4.0-alpha.3",
+			"published": "2026-11-11T13:00:22Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 735544952,
+					"name": "big-fat-fish-can-play-mc-0.4.0-alpha.3.jar",
+					"url": "https://github.com/genshit1145141919810-hub/big_fat_fish_can_play_mc/releases/download/v0.4.0-alpha.3/big-fat-fish-can-play-mc-0.4.0-alpha.3.jar",
+					"size": 415801,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "1693ea4d25f588212aac390118f0c294548595f48d7c028363ae9948095daa47",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "big_fat_fish_can_play_mc",
+							"version": "0.4.0-alpha.3",
+							"name": "大肥鱼能玩MC",
+							"description": "Big Fat Fish Can Play MC — 一个真实第二个账号的 AI 搭子：聊天、跟随、挖矿、合成、战斗、多步规划。默认接 DeepSeek，任何 OpenAI 兼容端点都能用。",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone",
+								"xaerominimap"
+							]
+						}
+					],
+					"icon": "86ce2ff6edc9b543b080ed4cbaea52121f457d97c51f890bcad47bb76009e7af.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 114,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"io/github/xiaod/deepseekcompanion/chat/LlmClient.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"api.openai.com": [
+								"io/github/xiaod/deepseekcompanion/command/LocalCommandHandler.class"
+							],
+							"api.deepseek.com": [
+								"io/github/xiaod/deepseekcompanion/config/CompanionConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 0.4.0-alpha.3 ??English UI, Meteor-style self-care, polish (1.21.11)\n\nFirst build with an English interface and the \"look after yourself\" modules borrowed from\nMeteor Client (the safe ones). Everything below was verified in a real 1.21.11 Fabric client.\n\n### Added\n- **Localisation**: the game language decides the interface language. Chinese is the source\n  language; `assets/big_fat_fish_can_play_mc/lang/en_us.json` carries 181 strings plus 14\n  template rules, applied at the three chat output funnels. Other languages fall back to\n  English, then to Chinese. `tools/check-lang.cjs` reports untranslated strings and typos.\n- **AutoTool**: mining picks the fastest tool for the block (pickaxe/axe/shovel/shears) across\n  the whole inventory, instead of always holding a pickaxe.\n- **AutoReplenish**: an emptied hotbar slot is refilled from the main inventory (2 s throttle,\n  one slot at a time).\n- **Fair play mode** (`.xd fair on`): targets must be inside the line of sight (raycast) and\n  Baritone's `#mine` is bypassed, so ores are not picked from chunk data. Off by default,\n  because that is how it can actually mine.\n- `.xd fair`, `.xd base`, `.xd header` and a help entry for each.\n\n### Changed\n- Weapon swap-back after combat now really swaps the weapon back with the item that was in the\n  hand, instead of only changing the selected slot.\n- Descending for deep ores relocates to a nearby solid spot when the shaft hits bedrock, fluid\n  or a large drop, instead of giving up immediately.\n\n### Fixed\n- Crafting verifies the result slot is actually empty after taking the output (and retries),\n  guarded so the furnace input slot is never touched.\n- English/Chinese wording for the new settings, plus documentation for the localisation\n  workflow (`docs/LOCALIZATION.md`)."
+		},
+		{
+			"tag": "v0.4.0-alpha.2",
+			"published": "2026-11-03T12:30:51Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 705636710,
+					"name": "big-fat-fish-can-play-mc-0.4.0-alpha.2.jar",
+					"url": "https://github.com/genshit1145141919810-hub/big_fat_fish_can_play_mc/releases/download/v0.4.0-alpha.2/big-fat-fish-can-play-mc-0.4.0-alpha.2.jar",
+					"size": 399585,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "d9bde7eae555baf770bcff392919e68d4c2fdee48189b10944b393b69edd36f6",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "big_fat_fish_can_play_mc",
+							"version": "0.4.0-alpha.2",
+							"name": "大肥鱼能玩MC",
+							"description": "Big Fat Fish Can Play MC — 一个真实第二个账号的 AI 搭子：聊天、跟随、挖矿、合成、战斗、多步规划。默认接 DeepSeek，任何 OpenAI 兼容端点都能用。",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone",
+								"xaerominimap"
+							]
+						}
+					],
+					"icon": "86ce2ff6edc9b543b080ed4cbaea52121f457d97c51f890bcad47bb76009e7af.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 111,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"io/github/xiaod/deepseekcompanion/chat/LlmClient.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {
+							"api.openai.com": [
+								"io/github/xiaod/deepseekcompanion/command/LocalCommandHandler.class"
+							],
+							"api.deepseek.com": [
+								"io/github/xiaod/deepseekcompanion/config/CompanionConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 0.4.0-alpha.2 ??acquisition rework, real survival loop (1.21.11)\n\nThis is the first alpha that survives **from nothing**: chop ??planks ??table ??tools ??mine ??smelt ??better tools. Everything below was verified in a real 1.21.11 Fabric client.\n\n### Added\n- **Loot-table driven material discovery** (`BlockDrops`): reads the vanilla\n  `data/minecraft/loot_table/blocks/*.json` through the classpath, so iron ore and deepslate\n  iron ore (and modded ores) are understood without hand-written maps.\n- **Item families** (`ItemFamilies`): built from vanilla item tags ??any log counts as wood,\n  any planks as planks, stone/deepslate as stone-tool material.\n- **Requirement-graph planner** (`AcquireTask`): collects every demand, merges counts, and\n  emits one batched pass (\"mine 10 logs, then craft 3? planks\") instead of\n  mine-craft-mine-craft interleaving. Demands iterate to a fixed point before yields are fixed.\n- **Milestone staging**: iron tool = wooden pickaxe ??stone pickaxe ??iron pickaxe, each stage\n  planned independently against the current inventory.\n- **Estimation with slack**: raw materials are mined with a buffer (hard floor of 10 logs);\n  shortfalls are re-mined to the exact missing amount, not inflated.\n- **Re-plan on failure**: a craft/smelt that cannot finish recomputes what is actually missing\n  from the live inventory, up to a bounded number of times.\n- **Deep descent**: staircase/vertical digging with bedrock/fluid/large-drop guards, used only\n  when the target ore family is not already nearby; the rest of movement stays with Baritone.\n- **Placed-block recycling** (`PlacedBlocks`): remembers every crafting table/furnace it placed\n  and mines it back **as soon as the remaining plan no longer needs it**.\n- **Loot-safe placement**: clears a spot before placing, walks elsewhere if there is no room,\n  and treats \"a table is already nearby\" as success.\n- **Cooking data generated from the game jar** (`tools/gen-smelting.ps1`): smelting/blasting/\n  smoking/campfire tables regenerated from `data/minecraft/recipe/*.json` (raw iron ??iron ingot).\n- **OpenAI-compatible endpoints**: any base URL (`/v1` handled), custom auth header, automatic\n  `max_tokens` / `max_completion_tokens` fallback, tolerant response parsing.\n- **Combat improvements borrowed from KillAura's engineering, mob-only**: threat-weighted target\n  selection (creeper/skeleton first, low HP finish), human-like smooth aiming (??2?/tick, swing\n  only when aligned), no hitting through walls, weapon switching across the whole inventory with\n  swap-back after combat, and **eating takes priority over attacking**.\n- **Diagnostics**: `.xd why <item>` prints candidate plans, per-item sources and planner notes;\n  `.xd dig <n>`; updated `.xd base` / `.xd header`.\n\n### Fixed\n- Craft steps only crafted once regardless of the planned count.\n- `SMELT` passed the ingredient name instead of the output name.\n- Mining completion counted the exact item id, so chopping spruce never satisfied \"need 10 oak logs\".\n- Ore tags resolved to deepslate variants when only stone was around (and vice versa).\n- Crafting grid was not cleared between attempts, producing \"wrong recipe\" junk items.\n- Interacting with a crafting table 5?? blocks away silently failed; it now walks over first.\n- Butler's stuck detection fought mining/placement and cancelled tasks.\n- Baritone `#mine` and the mod's own `goto` were cancelling each other during acquisition.\n\n### Tooling\n- `tools/new-world.mjs` (fresh test world from a template `level.dat`),\n  `tools/watch-test.ps1` (a test run returns the moment it settles),\n  `tools/gen-smelting.ps1`, `tools/scan-meteor.cjs` (module survey),\n  `docs/meteor-feature-survey.md` (what we borrow from Meteor Client and what we refuse to)."
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "它不是 NPC 生物，也不是假客户端：模组跑在你的第二个正版账号所在的真实客户端里，用普通玩家动作（走、挖、右键、点格子、发聊天）做事，寻路交给 Baritone。你在聊天里喊它，它会回话、跟着你、挖矿砍树、做饭、合成、打架、存箱子；一件事一个动作做不完时，它会自己拆成多步计划。",
+	"funding": [],
+	"fundingChecked": "2026-11-15T05:58:30.121Z",
+	"pictures": [
+		"docs/char-with-block.png",
+		"docs/promo-maid.png"
+	],
+	"picturesChecked": "2026-11-15T05:58:30.121Z",
+	"contributors": {
+		"commits": 36,
+		"more": 0,
+		"people": [
+			{
+				"login": "big-fat-fish",
+				"commits": 36,
+				"name": "大肥鱼",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-11-15T05:58:30.121Z",
+	"history": 1
+}
