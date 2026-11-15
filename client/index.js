@@ -37,6 +37,8 @@ new Page({
 		append: [
 			new SiteRouter({
 				mode: 'history',
+				// The site follows its own links (followLinks), under a base the Router doesn't know
+				routeLinks: false,
 				views: {
 					[ROUTES.mods]: SearchPage,
 					[ROUTES.packs]: PacksPage,
