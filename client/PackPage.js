@@ -63,11 +63,11 @@ const Bar = styled.Component(
 );
 
 const Swatch = styled.Component(
-	({ colors }) => `
+	({ colors, space }) => `
 		display: inline-block;
 		width: 0.7em;
 		height: 0.7em;
-		margin-right: 0.35em;
+		margin-right: ${space.xs};
 		border-radius: 2px;
 
 		${KINDS.map(kind => `&.${kind.id} { background: ${colors[kind.color]}; }`).join('\n')}
