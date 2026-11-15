@@ -6,8 +6,94 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-11-14T18:11:54Z",
-	"pushed": "2026-11-15T05:30:30Z",
+	"pushed": "2026-11-15T15:45:49Z",
 	"releases": [
+		{
+			"tag": "v1.5.0",
+			"published": "2026-11-15T15:46:01Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 751473705,
+					"name": "mineagent-1.5.0.jar",
+					"url": "https://github.com/CuteTenshii/MineAgent/releases/download/v1.5.0/mineagent-1.5.0.jar",
+					"size": 351004,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "1b5b405af4c3032e370db0803e0c3f3ecefa75faac6fd17a9546c2bdecab5d42",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mineagent",
+							"version": "1.5.0",
+							"name": "MineAgent",
+							"description": "Lets an AI play your character: give it a goal and it walks, mines, crafts, smelts and fights to reach it. Works with Claude, ChatGPT, DeepSeek, Gemini, Ollama and other OpenAI-compatible APIs.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 132,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"moe/tenshii/mineagent/agent/llm/JsonHttp.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.sendAsync",
+									"java/net/http/HttpClient.close"
+								]
+							}
+						},
+						"hosts": {
+							"api.anthropic.com": [
+								"moe/tenshii/mineagent/agent/llm/Provider.class"
+							],
+							"api.openai.com": [
+								"moe/tenshii/mineagent/agent/llm/Provider.class"
+							],
+							"api.deepseek.com": [
+								"moe/tenshii/mineagent/agent/llm/Provider.class"
+							],
+							"generativelanguage.googleapis.com": [
+								"moe/tenshii/mineagent/agent/llm/Provider.class"
+							],
+							"openrouter.ai": [
+								"moe/tenshii/mineagent/agent/llm/Provider.class"
+							],
+							"api.groq.com": [
+								"moe/tenshii/mineagent/agent/llm/Provider.class"
+							],
+							"api.mistral.ai": [
+								"moe/tenshii/mineagent/agent/llm/Provider.class"
+							],
+							"api.x.ai": [
+								"moe/tenshii/mineagent/agent/llm/Provider.class"
+							],
+							"localhost": [
+								"moe/tenshii/mineagent/agent/llm/Provider.class",
+								"moe/tenshii/mineagent/command/AgentCommands.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**New**\n- `teleport` moves the player with `/tp` when the server allows it (cheats in singleplayer, operator on a server), with no need for `/agent commands on`. It refuses spots inside blocks and, for a player who cannot fly, spots above a fall of more than 3 blocks.\n- `face` turns the player's head toward a block, an entity, a compass direction or a yaw/pitch angle, so the model can aim `use_item` after moving. `look` accepts the same targets, and `observe` shows yaw and pitch.\n- Walking is faster and smoother: the walker cuts straight across open ground, strafes while turning instead of stopping at each corner, and sprints on clear stretches. A 60-block test course went from 16 to under 11 seconds.\n- `walk_to` opens wooden doors and fence gates instead of breaking them, climbs ladders and vines, and drops up to 32 blocks into water.\n- The model is told about advancements the player completes during a goal.\n\n**Fixes**\n- Path searches no longer freeze the game: each one is spread over several ticks, and long trips are planned leg by leg as chunks load. A search toward an unloaded area used to take about half a second within a single tick, so a run of re-plans stalled the game for seconds.\n- Chunks the server has not sent are no longer mistaken for open air, which made flights plan through terrain that had not loaded yet.\n- The walker no longer jumps whenever it brushes a wall.\n- The player no longer spins in place while flying. A flight to a spot inside a block or in a closed room fails at once with the reason, instead of hovering and searching for 20 seconds.\n- Some lines of the model's instructions contained stray tab characters.\n\nRequires Minecraft 26.3, Fabric Loader 0.20.1+, Fabric API and Java 25."
+		},
 		{
 			"tag": "v1.4.0",
 			"published": "2026-11-15T05:30:58Z",
@@ -18,7 +104,7 @@
 					"name": "mineagent-1.4.0.jar",
 					"url": "https://github.com/CuteTenshii/MineAgent/releases/download/v1.4.0/mineagent-1.4.0.jar",
 					"size": 321766,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "d8021cf0aba44c2f1cc202cd28222f9b3d4a0f44d273cabd13f5bca1160c31cf",
 					"mods": [
@@ -104,7 +190,7 @@
 					"name": "mineagent-1.3.0.jar",
 					"url": "https://github.com/CuteTenshii/MineAgent/releases/download/v1.3.0/mineagent-1.3.0.jar",
 					"size": 224196,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "f3fe1fd8849c038f38022aae68ffef356ad9651d5537e191a1c7df1cccebb0af",
 					"mods": [
@@ -190,7 +276,7 @@
 					"name": "mineagent-1.2.0.jar",
 					"url": "https://github.com/CuteTenshii/MineAgent/releases/download/v1.2.0/mineagent-1.2.0.jar",
 					"size": 206898,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "286330eae55929b9dcb0eea7b74f16479ba17a46c2334f1a6655e229eaa45f6c",
 					"mods": [
@@ -276,7 +362,7 @@
 					"name": "mineagent-1.1.0.jar",
 					"url": "https://github.com/CuteTenshii/MineAgent/releases/download/v1.1.0/mineagent-1.1.0.jar",
 					"size": 193488,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "7a4eac129ebf81bc59a681ed2aec1ce827486941531f121f1a2629a886efd3c7",
 					"mods": [
