@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 
 import { RateLimited } from '../src/fetch';
 import * as github from '../src/github';
@@ -84,9 +84,16 @@ describe('a repository read over GraphQL', () => {
 
 describe('the crawl reading repositories in batches', () => {
 	const original = globalThis.fetch;
+	const token = process.env.GITHUB_TOKEN;
+
+	beforeEach(() => {
+		process.env.GITHUB_TOKEN = 'test';
+	});
 
 	afterEach(() => {
 		globalThis.fetch = original;
+		process.env.GITHUB_TOKEN = token;
+		if (token === undefined) delete process.env.GITHUB_TOKEN;
 		github.planRepositories([]);
 		github.holdSteady(new Map());
 		github.forgetCache();
