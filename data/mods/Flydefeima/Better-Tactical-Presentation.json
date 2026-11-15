@@ -6,8 +6,58 @@
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2026-07-01T07:47:17Z",
-	"pushed": "2026-10-24T06:21:18Z",
+	"pushed": "2026-11-15T03:07:53Z",
 	"releases": [
+		{
+			"tag": "v2.0.2",
+			"published": "2026-11-15T03:07:54Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 749641829,
+					"name": "BetterTacticalPresentation-2.0.2.jar",
+					"url": "https://github.com/Flydefeima/Better-Tactical-Presentation/releases/download/v2.0.2/BetterTacticalPresentation-2.0.2.jar",
+					"size": 215520,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "24d1d2d2195512d988ccf37ad68b5b0520ac9fefd0c0833a5b4c30ca29bb2348",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "btp",
+							"version": "2.0.2",
+							"name": "Better Tactical Presentation",
+							"description": "Adds a toggle key for the tilt gun mechanic in TACZ.",
+							"environment": "*",
+							"depends": [
+								"tacz",
+								"forge"
+							],
+							"suggests": [
+								"taczlabs",
+								"playeranimator",
+								"cloth_config"
+							]
+						}
+					],
+					"icon": "9ed4cc5d16afeafc8031735e44d800ffec084740ed01204cbd3eaf542f6ba1a6.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 46,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# BTP v2.0.2 — TaCZ 1.2.0 兼容更新\n\n[中文](#cn) | [English](#en)\n\n---\n\n<a id=\"cn\"></a>\n## 中文\n\n### 摘要\n\nBTP v2.0.2 是一次以 **适配 TaCZ 1.2.0** 为主要目标的更新。此前版本主要面向 TaCZ 1.1.8；TaCZ 1.2.0 调整了倍率切换输入接口及部分枪械行为，因此本版同步更新了相关 Mixin 目标与据枪逻辑，并补充服务端散布倍率同步。除此之外，本次更新还改进了第三人称动画兼容性、输入处理和配置生效时机，并修复了若干运行时问题。\n\n### TaCZ 1.2.0 兼容适配\n\n- **适配新的倍率切换入口**：TaCZ 1.1.8 使用的 `ZoomKey.doZoomLogic()` 已不再是本版的拦截入口；BTP 现改为拦截 TaCZ 1.2.0 的 `ZoomKey.onZoomPress()`。由于键盘与手柄路径最终共用该入口，只需处理一次即可避免重复触发。BTP 原有的 V 键相关功能继续保留，包括虚拟据枪倍率档、倍率提示，以及不开镜切换倍率。\n- **适配枪械 `can_slide` 行为变化**：TaCZ 1.2.0 的狙击枪将 `can_slide` 设为 `false`。为避免这项变化影响 BTP 的据枪体验，新增 `forceTiltOnAllGuns` 配置，默认开启；开启时据枪不受枪械 `can_slide` 标记限制。关闭后则尊重各枪械自身的 `can_slide` 设置。\n- **明确前置版本要求**：本版依赖 TaCZ `[1.2.0, 1.3.0)`，面向 TaCZ 1.2.x。TaCZ 1.1.x（包括 1.1.8）不再受支持，请先升级 TaCZ 再使用本版 BTP。\n\n### 其他改进\n\n**服务端散布同步**\n\n- 新增服务端 `GunSpreadMixin`，在服务端射击散布计算时应用玩家当前的据枪散布倍率。\n- 客户端会在进入或退出据枪时，将当前 `tiltSpreadMultiplier` 与据枪状态一并发送给服务端，使服务端散布计算与客户端准星显示使用相同倍率。\n- **此功能要求服务端也安装 BTP**。若服务端未安装 BTP，客户端仍可使用本地据枪效果，但服务端射击散布不会应用该倍率。玩家在据枪过程中修改倍率时，新值会在下一次进入据枪时用于服务端散布计算。\n\n**输入与配置**\n\n- 新增 `enableHoldTilt` 开关（默认 `true`），可在配置界面单独启用或禁用按住据枪键，不影响其他据枪触发模式。\n- 改进按住据枪键的键盘/鼠标输入类型校验，并调整鼠标事件消费条件，避免空手或打开 GUI 时误吞鼠标点击。\n- 修复按住据枪期间仍持续按住右键时，松开据枪键后瞄准状态无法正确恢复的问题。\n- 配置界面新增 `forceTiltOnAllGuns` 和 `enableZoomWithoutAim` 等选项；保存配置后会立即刷新运行时配置，不再依赖异步文件监视器。\n\n**动画与运行时稳定性**\n\n- 远程玩家在手枪与步枪之间切换时，会正确刷新对应的第三人称据枪动画。\n- 与 TaCZ 的动画播放条件对齐，在游泳、爬梯、睡觉或滑翔时停止播放 BTP 第三人称据枪动画。\n- 调整开火动画结束后的状态切换：若据枪循环动画资源无法加载，会清理动画层，避免状态卡住。\n- 将依赖 PlayerAnimator 的 `LoopUpperMixin` 移入可选 Mixin 配置，避免把可选动画兼容逻辑放在主 Mixin 配置中；同时将客户端连接检测从通用网络类中拆出，改善专用服务器侧的类加载安全性。\n- 修复长按右键模式快速按下、松开并再次按下时，旧定时任务可能误触发的问题。\n- 修复据枪期间切换 TaCZ:Labs 准星兼容选项后，原始准星设置可能无法恢复的问题；并在玩家退出服务器时清理对应的服务端状态缓存。\n\n### 升级提示\n\n- **TaCZ 版本**：请将前置模组升级至 TaCZ 1.2.x。TaCZ 1.1.8 与本版 BTP 不兼容。\n- **多人游戏**：若需要服务端正确应用据枪散布倍率，请在客户端和服务端都安装本版 BTP。服务端未安装 BTP 时，服务端散布保持 TaCZ 原有行为。\n- **自定义枪械包**：如果枪械通过 Lua `calcSpread` 完全自定义散布计算，可能会覆盖本版对 `inaccuracy` 参数的修改，因此不保证该类自定义散布也会受到据枪倍率影响。\n- **配置**：新增的 `forceTiltOnAllGuns` 与 `enableHoldTilt` 默认均为 `true`。现有配置项仍按 Forge 配置机制读取，缺失的新配置项会使用默认值。\n\n---\n\n<a id=\"en\"></a>\n## English\n\n### Summary\n\nBTP v2.0.2 is primarily a **compatibility update for TaCZ 1.2.0**. Earlier versions were mainly built around TaCZ 1.1.8. Since TaCZ 1.2.0 changes the zoom-input entry point and some weapon behaviors, this release updates the corresponding Mixin targets and tilt logic, and adds server-side tilt-spread synchronization. It also improves third-person animation compatibility, input handling, and config application timing, alongside several runtime fixes.\n\n### TaCZ 1.2.0 Compatibility\n\n- **Updated zoom input interception**: `ZoomKey.doZoomLogic()`, used by TaCZ 1.1.8, is no longer the entry point targeted by this release. BTP now hooks TaCZ 1.2.0's `ZoomKey.onZoomPress()`. Since keyboard and controller input paths ultimately share this entry point, handling it once avoids duplicate activation. BTP's existing V-key features remain available, including the virtual tilt zoom stage, zoom hints, and zoom switching without aiming.\n- **Adapted to the `can_slide` behavior change**: TaCZ 1.2.0 sets `can_slide` to `false` for sniper rifles. The new `forceTiltOnAllGuns` option (enabled by default) prevents this from affecting BTP's tilt behavior. When disabled, BTP respects each weapon's own `can_slide` setting.\n- **Updated dependency requirement**: this release declares TaCZ `[1.2.0, 1.3.0)` and targets TaCZ 1.2.x. TaCZ 1.1.x, including 1.1.8, is no longer supported. Update TaCZ before installing this BTP release.\n\n### Other Improvements\n\n**Server-side Spread Synchronization**\n\n- Added a server-side `GunSpreadMixin` to apply each player's current tilt-spread multiplier during server-side shot spread calculation.\n- When entering or leaving tilt, the client now sends the current `tiltSpreadMultiplier` along with the tilt state, allowing the server-side spread calculation to use the same multiplier as the client-side crosshair.\n\n..."
+		},
 		{
 			"tag": "v2.0.0",
 			"published": "2026-10-24T06:21:18Z",
@@ -18,7 +68,7 @@
 					"name": "BetterTacticalPresentation-2.0.0.jar",
 					"url": "https://github.com/Flydefeima/Better-Tactical-Presentation/releases/download/v2.0.0/BetterTacticalPresentation-2.0.0.jar",
 					"size": 206096,
-					"downloads": 2,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "8382d032bd27ed68e0e6dfbec340bfb95507869d5516aeedc2771a4abf902ec5",
 					"mods": [
@@ -68,7 +118,7 @@
 					"name": "BTPmod-forge-1.20.1-1.6.1.jar",
 					"url": "https://github.com/Flydefeima/Better-Tactical-Presentation/releases/download/v1.6.1/BTPmod-forge-1.20.1-1.6.1.jar",
 					"size": 172008,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "75e6f44bcea3486da29f71667533f9e1d398595710d7abcd373f9094aa6a8535",
 					"mods": [
@@ -117,7 +167,7 @@
 					"name": "BTPmod-forge-1.20.1-1.6.0.jar",
 					"url": "https://github.com/Flydefeima/Better-Tactical-Presentation/releases/download/v1.6.0/BTPmod-forge-1.20.1-1.6.0.jar",
 					"size": 168416,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "a9ccec518e532693af75c645a8d72018e95e25d00fc0e7180c56f9de4b38d944",
 					"mods": [
@@ -166,7 +216,7 @@
 					"name": "BTPmod-forge-1.20.1-1.5.4.jar",
 					"url": "https://github.com/Flydefeima/Better-Tactical-Presentation/releases/download/v1.5.4/BTPmod-forge-1.20.1-1.5.4.jar",
 					"size": 156858,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "1d236ffafc641af63d44dc9fece3ca7dd4f69d2715b937eaaf5258114ca09895",
 					"mods": [
