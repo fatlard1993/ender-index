@@ -629,9 +629,11 @@ export default class SearchPage extends View {
 		});
 
 		const versionList = loadVersions().catch(error => {
+			// A background load, not a press: the corner stack
 			new Notify({
 				intent: 'warning',
 				content: `Mojang's version list did not load (${error.message}), so results do not say which versions they fit`,
+				anchor: false,
 			});
 
 			return [];
