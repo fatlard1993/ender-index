@@ -399,26 +399,38 @@ const playerShot = (title, shot, shared, byKey) => {
 	});
 };
 
-/** What players shared of it, each with its story, then where to share one. */
-const playerShotsOf = (entry, title, { shared, byKey, problem }) => [
-	...(problem ? [new Meta({ tag: 'p', textContent: `The shots players shared did not load: ${problem}` })] : []),
-	...(shared.length > 0
-		? [
-				new Stack({
-					style: { gap: theme.space.lg },
-					append: shared.map(shot => playerShot(title, shot, shared, byKey)),
-				}),
-			]
-		: []),
-	new Meta({
-		tag: 'p',
-		append: [
-			shared.length > 0 ? 'Played with it? ' : 'No player has shared a shot of it yet. ',
-			new Link({ href: shareUrl([collectionKey(entry)]), target: '_blank', textContent: 'Share a shot' }),
-			' from your game and the story behind it, with a GitHub account. It shows here once it has been looked over.',
-		],
-	}),
-];
+/** What players shared of it, each with its story, then where to share one; while they load, or when they did not, that alone. */
+const playerShotsOf = (entry, title, { shared, byKey, loading, problem }, retry) => {
+	if (loading) return [new EmptyState({ loading: true, title: 'Fetching the shots players shared' })];
+	if (problem)
+		return [
+			new EmptyState({
+				icon: 'triangle-exclamation',
+				title: 'The shots players shared did not load',
+				message: problem,
+				action: { textContent: 'Try again', onPointerPress: retry },
+			}),
+		];
+
+	return [
+		...(shared.length > 0
+			? [
+					new Stack({
+						style: { gap: theme.space.lg },
+						append: shared.map(shot => playerShot(title, shot, shared, byKey)),
+					}),
+				]
+			: []),
+		new Meta({
+			tag: 'p',
+			append: [
+				shared.length > 0 ? 'Played with it? ' : 'No player has shared a shot of it yet. ',
+				new Link({ href: shareUrl([collectionKey(entry)]), target: '_blank', textContent: 'Share a shot' }),
+				' from your game and the story behind it, with a GitHub account. It shows here once it has been looked over.',
+			],
+		}),
+	];
+};
 
 const fitsLabel = ({ minecraft, loader }) =>
 	[minecraft && `Minecraft ${minecraft}`, loader && LOADERS[loader]].filter(Boolean).join(' with ') || 'any version';
@@ -956,15 +968,25 @@ export default class ModPage extends View {
 			selected: 'readme',
 			style: { marginTop: theme.space.lg, overflowY: 'hidden' },
 		});
-		const shown = { shared: [], pictures, byKey: new Map(listing.map(other => [collectionKey(other), other])) };
+		const shown = {
+			shared: [],
+			pictures,
+			byKey: new Map(listing.map(other => [collectionKey(other), other])),
+			loading: true,
+		};
 		const showGallery = found => {
 			Object.assign(shown, found);
 			gallery.content(pictureGrid(title, shown.pictures));
-			players.content(playerShotsOf(entry, title, shown));
+			players.content(playerShotsOf(entry, title, shown, () => loadPlayerShots()));
 			tabs.options.tabs = tabsFor(shown);
 		};
+		const loadPlayerShots = () => {
+			showGallery({ loading: true, problem: undefined });
+			loadShots()
+				.then(byMod => !signal.aborted && showGallery({ shared: byMod[collectionKey(entry)] ?? [], loading: false }))
+				.catch(error => !signal.aborted && showGallery({ problem: error.message, loading: false }));
+		};
 
-		showGallery({});
 		loadPacks()
 			.then(found => {
 				if (signal.aborted) return;
@@ -979,9 +1001,7 @@ export default class ModPage extends View {
 				tabs.options.tabs = tabsFor(shown);
 			})
 			.catch(() => {});
-		loadShots()
-			.then(byMod => !signal.aborted && showGallery({ shared: byMod[collectionKey(entry)] ?? [] }))
-			.catch(error => !signal.aborted && showGallery({ problem: error.message }));
+		loadPlayerShots();
 
 		const shares = entry.shares ?? sharing(entry, listing);
 		const author = authorOf(entry, listing);
