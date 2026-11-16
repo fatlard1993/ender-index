@@ -14,7 +14,7 @@
 			"prerelease": false,
 			"assets": [
 				{
-					"id": 724938922,
+					"id": 752226772,
 					"name": "baritone-api-fabric-1.17.0.jar",
 					"url": "https://github.com/StormDevzz/RaveX/releases/download/ravex15/baritone-api-fabric-1.17.0.jar",
 					"size": 4813299,
@@ -91,13 +91,13 @@
 					}
 				},
 				{
-					"id": 724938924,
+					"id": 752226774,
 					"name": "ravex-1.5.jar",
 					"url": "https://github.com/StormDevzz/RaveX/releases/download/ravex15/ravex-1.5.jar",
-					"size": 55642733,
-					"downloads": 3,
+					"size": 55672579,
+					"downloads": 7,
 					"inspection": 2,
-					"sha256": "2491cfb20d29840899c40890b9b642d15353985e96b2a504359667e7787b5663",
+					"sha256": "9b0e4d6247a8b93182641645b4612b37791bccdaaac2a3bea042d3a63c9898c0",
 					"mods": [
 						{
 							"loader": "fabric",
@@ -129,7 +129,7 @@
 						"shaders": true
 					},
 					"scan": {
-						"classes": 2131,
+						"classes": 2137,
 						"jars": [
 							"META-INF/jars/DiscordIPC-0.10.2.jar",
 							"META-INF/jars/jna-5.17.0.jar",
@@ -273,7 +273,8 @@
 							"github.com": [
 								"ravex/gui/changelog/ChangelogScreen.class",
 								"ravex/manager/ChangelogManager.class",
-								"ravex/manager/UpdateManager.class"
+								"ravex/manager/UpdateManager.class",
+								"ravex/modules/client/RichPresence.class"
 							],
 							"api.github.com": [
 								"ravex/manager/ChangelogManager.class",
@@ -294,11 +295,16 @@
 							"id": 697652254,
 							"sha256": "dd76da1dcf5a687f16e2abbf56c73a83639f07ce3bfe84edc8c91aa7d69528e4",
 							"until": "2026-11-09T14:51:41.910Z"
+						},
+						{
+							"id": 724938924,
+							"sha256": "2491cfb20d29840899c40890b9b642d15353985e96b2a504359667e7787b5663",
+							"until": "2026-11-16T17:49:18.488Z"
 						}
 					]
 				}
 			],
-			"notes": "# RaveX\n\n## November 7, 2026\n\n### Loader\n- Loader window is now draggable (mouse events properly handled on the content pane).\n- Added Windows acrylic blur effect to the loader window (DWM SetWindowCompositionAttribute + DwmEnableBlurBehindWindow), with proper HWND retrieval and delayed application after window is shown.\n- Replaced the old single-arc loading spinner with a rotating dots spinner (5 dots with staggered delays and non-linear rotation/opacity keyframes).\n- Loading dots are now white; animation speed increased.\n- Fixed text rendering issues on the acrylic backdrop: switched text antialiasing from LCD/ClearType (colored fringes) to grayscale gasp-based antialiasing; disabled antialiasing for the \"X\" letter to remove blue outline.\n- Text elements (OS version, system info, extra info, status) are now truncated with \"...\" if they exceed the available width.\n- OS version string now shows the localized Windows edition and release (e.g. \"Windows 11 Pro 25H2\") via WMI `Win32_OperatingSystem.Caption` + registry `DisplayVersion`, supporting all Windows display languages.\n- Loader window now appears in the taskbar (changed from `JWindow` to undecorated `JFrame`).\n- Fixed window transparency/flickering during drag (override `update()` to skip background erase, `repaint()` after `setLocation`).\n\n### RichPresence (Discord)\n- Fixed Discord IPC handshake: expected opcode was incorrectly set to 2 (Close) instead of 1 (Frame), causing all handshakes to fail. Status now updates correctly.\n- Fixed window freeze when disabling RichPresence (deadlock between `updateThread` holding `rpcMutex` and `nativeShutdown` acquiring it) — added `join(2000)` timeout.\n- Added diagnostic logging (`isConnected`, `sent:` state/details).\n\n### Removed Lua integration\n- Removed `LuaManager` (660 lines), Lua resource files, and C++ Lua native code.\n- Removed `org.luaj:luaj-jse` dependency from `build.gradle`.\n- `Handshake` module now uses only built-in modes (Basic/Forge/Lunar/Custom) without Lua `onHandshake` override.\n\n### Loader (launcher integration)\n- Embedded JAR-in-JAR dependencies (including JNA) are now extracted to a temp directory and added to the loader process classpath, so acrylic blur works when running through external launchers (Freesm Launcher, etc.).\n\n### Native layer\n- Updated `ravex_dc.dll` manifest hash and rebuilt the native library with the handshake fix.\n- Added \"loader\" to `preloadDependencies` in `NativeLoader`.\n\n## November 1, 2026\n\n## KickX Launcher v1.3 (Windows)\n\n- KickX Launcher for Windows is now version **1.3** (not 1.3.0). Version reflected in `app.rc`, `app.manifest` and `build_info.h.in`.\n- Launcher self-update: download hash verification, DPAPI-encrypted tokens, safe uninstall, offline/config/java crash fixes, faster mod search, \"what's new\" dialog.\n- New launcher themes: Hungarian language, Win95 and Vista themes.\n- Support for the Linux KickX Launcher ended on **October 11, 2026**. The Linux launcher is no longer developed or supported.\n- The Windows KickX Launcher continues to be updated. The Windows launcher version is not mentioned in README.\n\n## Build system\n\n- Native libraries (C++ DLL/so) are now built **only** when explicitly running `./gradlew build`. Regular run/build tasks (e.g. `./gradlew runClient`) no longer trigger the native CMake build. The native build still runs before resource processing within `./gradlew build`.\n- Removed the temporary `scripts/` folder (`generate_intro.py`, `sync_native_manifest.py`, pycache).\n- Native libraries verified: full CMake/MSVC build succeeded (all `ravex_*.dll`, `kickx_launcher.exe`, `KickXSetup.exe`) and the `ravex_native_smoke` ctest passed.\n\n## Native layer (C++ / JNI) reworked and extended\n\nA large set of native hooks was added or reworked across many modules:\n\n- **AutoClicker** (`autoclicker_jni.cpp`)\n\n..."
+			"notes": "# RaveX\n\n## November 15, 2026\n\n### Combat\n- **BasePlace** rewritten as a full Java module. It now follows `AutoCrystal.currentTarget`, uses AutoCrystal's damage, range and wall-range settings, predicts target movement and selects an obsidian position that AutoCrystal can actually use.\n- BasePlace now disables itself and sends a warning when AutoCrystal is disabled or has no target. Warnings follow the Notifications `Mode` setting: Toast or chat text.\n- Fixed BasePlace not placing obsidian: the old self-damage filter ignored armor, toughness and line of sight, so every candidate was rejected. Self damage is now used only for scoring; AutoCrystal decides whether the resulting crystal is safe.\n- Obsidian is searched in the hotbar by default for legit play. Inventory swapping is optional through `SwapInv`.\n- BasePlace no longer requires end crystals in the inventory to start placing.\n- Stale AutoCrystal base positions no longer block new base placement; the active base must still deal enough damage to the current target.\n\n### HUD\n- **InvPreviewHud** now animates the hotbar selection highlight. The highlight slides smoothly between slots with a spring animation instead of jumping.\n- **SpeedometerHud** now smooths displayed speed changes with a spring animation. Switching between BPS and KMH is animated as well.\n- **ArrayListHud** added the `Animation` setting: `Default`, `Slide`, `Fade`, `Bounce` and `Wave`. `Default` preserves the previous behavior.\n- Changing the ArrayList animation mode now replays the entry animation immediately, so the selected style is visible without toggling modules.\n- ArrayList added blue-white highlight animations: `Slide` sweeps the highlight left to right, `Bounce` sweeps it back and forth, `Fade` pulses it. `Wave` keeps the per-character vertical wave.\n- **FpsHud** added the `Instant` option. When enabled, FPS is calculated from the last 12 frame times and updates every frame instead of using the slow vanilla counter.\n- **IndicatorsHud** description corrected. It now describes health, armor, TPS, speed and knockback indicators instead of target information.\n\n### Chat\n- Custom `^` command suggestions now animate their height, width and alpha smoothly.\n- Suggestion list is positioned like vanilla command suggestions, above the chat input.\n- Tab completion keeps showing hints until Space is pressed. Pressing Space now actually inserts the space and collapses the top-level hint list.\n- Typing a space after a command shows subcommand hints when the command has them, and hides the list when it does not.\n- Enter and Space during Tab cycling no longer cancel the key press.\n\n### Render\n- Fixed **Tracers** rendering when the target is behind the player. Behind targets now use camera-space direction and point to the correct screen edge instead of mirrored screen coordinates.\n- **BlockOutline** now uses the block's `VoxelShape` and renders every shape box. Flower pots, heads, slabs and other non-full blocks outline correctly instead of using a full cube.\n- Full blocks keep the previous Thin and Thick outline styles.\n- Vanilla block outline is now stable with **FreeCam**: `hitResult` is recalculated every frame from the interpolated FreeCam camera position and rotation.\n- **Borders** `CurrentChunk` is always enabled. The current chunk highlight smoothly interpolates its position when crossing chunk borders and fades in smoothly.\n- **SourceFiller** added `Render` and `Color` settings. The water source highlight now slides between blocks and fades in and out smoothly. The nearest water source is selected instead of the first scanned block.\n- **SwingAnimation** added the `Vanilla` mode. It uses the normal vanilla first-person swing instead of a custom pose.\n- SwingAnimation `Speed` now applies to the `Vanilla` mode. At `Speed = 1.0` the swing duration is left completely untouched, so it matches vanilla exactly. Other speeds scale the vanilla 6-tick duration.\n\n### Client\n\n..."
 		},
 		{
 			"tag": "ravex149",
