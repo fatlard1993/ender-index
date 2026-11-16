@@ -6,8 +6,116 @@
 	"archived": false,
 	"license": "NOASSERTION",
 	"created": "2026-02-13T11:42:03Z",
-	"pushed": "2026-11-14T16:18:31Z",
+	"pushed": "2026-11-16T03:49:46Z",
 	"releases": [
+		{
+			"tag": "1.20.1-1.4.0",
+			"published": "2026-11-16T03:49:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 753348450,
+					"name": "logisticsnetworks-1.20.1-1.4.0.jar",
+					"url": "https://github.com/Almana-mc/LogisticsNetworks/releases/download/1.20.1-1.4.0/logisticsnetworks-1.20.1-1.4.0.jar",
+					"size": 2438725,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "e1922e7869d04dc2289f6ccc7371aa63bb121274bd959470472bf204830e7736",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "logisticsnetworks",
+							"version": "1.4.0",
+							"name": "LogisticsNetworks",
+							"description": "High level, extremely lag friendly logistics mod",
+							"minecraft": "[1.20.1,)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"suggests": [
+								"jei",
+								"mekanism",
+								"ars_nouveau",
+								"jade",
+								"ae2",
+								"guideme",
+								"ftbteams",
+								"computercraft",
+								"buildinggadgets2",
+								"create",
+								"sophisticatedcore",
+								"curios"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"Logistics Networks"
+							],
+							"item": [
+								"Amount Filter",
+								"Ars Source Upgrade",
+								"Big Filter",
+								"Diamond Upgrade",
+								"Dimensional Upgrade",
+								"Durability Filter",
+								"Filter",
+								"Gold Upgrade",
+								"Iron Upgrade",
+								"Logistics Node",
+								"Medium Filter",
+								"Mekanism Chemical Upgrade",
+								"Mod Filter",
+								"NBT Filter",
+								"Netherite Upgrade",
+								"Network Upgrade",
+								"Pattern Setter",
+								"Recipe Card",
+								"Regex Filter",
+								"Slot Filter",
+								"Tag Filter",
+								"Wrench"
+							],
+							"entity": [
+								"Logistics Node"
+							],
+							"block": [
+								"Computer",
+								"Logistics Server"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 817,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.4.1.jar",
+							"META-INF/jarjar/mixinextras-forge-0.4.1.jar!META-INF/jars/MixinExtras-0.4.1.jar"
+						],
+						"capabilities": {
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.4.1.jar!META-INF/jars/MixinExtras-0.4.1.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Security\n\n- Fixed a server exploit where a modified client could put any item into a node's filter or upgrade slots and get it back by breaking the node\n\n## Feature Additions\n\n- Added redstone mode \"Ignored\", which is now the default\n- Added distribution mode \"Priority Robin\": each send goes to the next receiver, cycling from highest to lowest priority\n- Renamed distribution mode \"Round Robin\" to \"Equal Distribution\". It now splits what the sender actually has across every receiver, for items, fluids, energy, chemicals and Source, so 10 items over 10 receivers gives 1 each\n- Raised the default item and fluid batch limits for every upgrade tier. Existing `upgrades.json` files keep their values; delete the file to get the new defaults\n- Imports now respect a filter entry's slot mapping: items for a mapped entry only go into those slots\n- Stock with a slot mapping now counts only the mapped slots\n- Every interaction now uses rebindable keybinds under Controls → Logistics Networks: Modifier Keys 1–3, Primary Interaction and Secondary Interaction\n- Added a slot number overlay for container screens, toggled with Alt + I\n- New client config option to invert the wrench copy/paste controls\n- Networks now have a colour. Networks from older worlds get a random colour the first time the world loads, and keep it\n- Networks remember when they were created. Networks from older worlds get a creation time the first time one of their nodes is opened\n- Added the common config option `nodeAccessMode`: `Teams` (default: the owner and FTB Teams teammates), `Allies` (also FTB Teams allies) or `All` (everyone). It is also in the config screen\n- Added admin mode: `/logisticsnetworks admin` (or `/ln admin`) toggles it for an operator, and `/logisticsnetworks admin mode <player>` toggles it for another player. It ends when the player logs out\n- Added the client option \"Default Node Visibility\" for newly placed nodes\n- Labels now keep a shared template of their channels and upgrades. Labelled nodes share upgrade changes, taking the upgrades from your inventory, and nodes that were unloaded catch up with edits when they load\n- Toggling a labelled node's visibility now applies to the whole label\n- Pasting a clipboard onto a node with a label now applies the label's current settings\n- Filters are now virtual: nodes no longer hold filter items. Click an empty filter slot in the node screen and choose Normal, Mod or Regex to create one, or click a filter slot while holding any item to add that item to it\n- Each channel now has 6 filter slots, and normal filters hold 45 entries\n- New node screen. The network list can be sorted (New→Old, A–Z, Z–A, Old→New), each network has an Edit button for its name and colour, and creating a network asks for confirmation (client option \"Confirm Network Creation\")\n- Labels can be deleted from the label picker. If the label is in use, a confirmation shows how many nodes use it\n- Batch, priority and delay fields accept arithmetic such as `64*7`\n- Channel tabs are tinted by resource type\n- Nodes now have 6 upgrade slots in a 3x2 grid, and the node screen's channel tabs are taller. Existing nodes keep their upgrades in the first 4 slots\n- The Computer is now a two-block desktop. Holding one shows a white hologram where it will go, and both halves share one outline. Computers placed in older worlds keep working; break and place them again to get the second half\n- Networks in the Computer can be pinned to the top of the list with the star, searched by name, and deleted with the trash button. Deleting returns the nodes and their upgrades to your inventory, and is refused while any of the network's nodes are unloaded\n- Redesigned the Computer's I/O Monitor: every channel on one page with live rates, a bar chart (30s / 1m / 2m), and a breakdown of exactly which items, fluids and chemicals are moving\n\n..."
+		},
 		{
 			"tag": "26.1.2-1.14.0",
 			"published": "2026-11-14T16:18:31Z",
@@ -18,7 +126,7 @@
 					"name": "logisticsnetworks-26.1.2-1.14.0.jar",
 					"url": "https://github.com/Almana-mc/LogisticsNetworks/releases/download/26.1.2-1.14.0/logisticsnetworks-26.1.2-1.14.0.jar",
 					"size": 2447927,
-					"downloads": 1,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "4b0b3855aed6c555250d2bc15f27460af45fa1b94b36a4a5b4736d4b77f393bd",
 					"mods": [
@@ -118,7 +226,7 @@
 					"name": "logisticsnetworks-1.21.1-1.18.0.jar",
 					"url": "https://github.com/Almana-mc/LogisticsNetworks/releases/download/1.21.1-1.18.0/logisticsnetworks-1.21.1-1.18.0.jar",
 					"size": 2448166,
-					"downloads": 6,
+					"downloads": 7,
 					"inspection": 2,
 					"sha256": "9542cf5e270addf384b386124dde0f45e261e548592caca0c94ce6021740554f",
 					"mods": [
@@ -890,7 +998,7 @@
 					"name": "logisticsnetworks-26.1.2-1.12.1.jar",
 					"url": "https://github.com/Almana-mc/LogisticsNetworks/releases/download/26.1.2-1.12.1/logisticsnetworks-26.1.2-1.12.1.jar",
 					"size": 1945895,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "1ddd491244ccc77eb8155aa4c831ac0565e9f72dbb5ca7d67ac0a6eb3b69554e",
 					"mods": [
@@ -984,7 +1092,7 @@
 					"name": "logisticsnetworks-1.21.1-1.16.2.jar",
 					"url": "https://github.com/Almana-mc/LogisticsNetworks/releases/download/1.21.1-1.16.2/logisticsnetworks-1.21.1-1.16.2.jar",
 					"size": 1944437,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "c9ee28b0bd304749c6ab5c2febb1e45d479287a2375d7ba3859c88a9ddc6a732",
 					"mods": [
