@@ -1,35 +1,112 @@
 {
 	"repo": "adhyys07/logics",
 	"host": "github",
+	"description": "Scans a redstone build in Minecraft and recovers the boolean logic as gate diagrams, truth tables and timing. Exports SVG, Verilog, KiCad and Arduino. Fabric mod.",
 	"stars": 0,
 	"archived": false,
 	"license": "CC0-1.0",
 	"created": "2026-10-29T17:09:36Z",
-	"pushed": "2026-11-09T16:17:03Z",
-	"releases": [],
-	"source": {
-		"commit": "cd41da921ff8b412de8a6767f1dfa95a5abdef95",
-		"committed": "2026-11-09T16:16:53Z",
-		"minecraft": "26.3",
-		"loader": "fabric",
-		"mods": [
+	"pushed": "2026-11-16T17:04:43Z",
+	"releases": [
+		{
+			"tag": "v0.1.0",
+			"published": "2026-11-16T16:27:23Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 755563175,
+					"name": "redstonelogics-0.1.0-desktop.jar",
+					"url": "https://github.com/adhyys07/logics/releases/download/v0.1.0/redstonelogics-0.1.0-desktop.jar",
+					"size": 220017,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b50491bb59c95472891caf21d636fa6c12ad4f31e573f89f9f3180eb87ad6d57",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 89,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"www.w3.org": [
+								"com/redstonelogics/export/SvgExporter.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 755563184,
+					"name": "redstonelogics-0.1.0.jar",
+					"url": "https://github.com/adhyys07/logics/releases/download/v0.1.0/redstonelogics-0.1.0.jar",
+					"size": 291519,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "3d8e49e3f4cac331c6a758a64d9f9f3584067fa1509d76f453fc8150090cebc3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "redstonelogics",
+							"version": "0.1.0",
+							"name": "RedstoneLogics",
+							"description": "Scans a redstone build and turns it into a logic gate diagram: SVG or PNG schematics, a Markdown netlist report, and a generated Arduino sketch. Recognises NOT, AND, OR, NAND, NOR, XOR, XNOR, inhibit gates and SR latches.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "ee4d086595f0eb46f18d9fea6c19c9efbae709290ad5aa4443e48b57e166bd2c.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 114,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {
+							"www.w3.org": [
+								"com/redstonelogics/export/SvgExporter.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First public build. **Marked a pre-release**: the analysis core is well tested, the in-game scanning path is not. See *Status* below before you rely on it.\n\n## What it is\n\nPoint it at a redstone build and it tells you what the circuit *does* — it reads the blocks, follows the signal, and recovers the boolean logic. You get a gate diagram, a truth table, timing analysis, and exports to Verilog, KiCad, Logisim or an Arduino sketch.\n\nIt reads circuits. It does not build them.\n\n## Install\n\nDrop **`redstonelogics-0.1.0.jar`** into your `mods` folder alongside [Fabric API](https://modrinth.com/mod/fabric-api).\n\n- Minecraft **26.3**\n- Fabric Loader **0.20.1+**\n- Java **25**\n\nThen look at any part of a redstone build, press **V** to pick it, and **K** to open the analyser.\n\n`redstonelogics-0.1.0-desktop.jar` is **not a mod** — don't put it in `mods`. It's a standalone viewer for looking at circuits away from the game: `java -jar redstonelogics-0.1.0-desktop.jar`.\n\n## What it recognises\n\nNOT · AND · OR · NAND · NOR · XOR · XNOR · INHIBIT · buffers · delays · SR latches\n\nStructurally: full adder · half adder · 2:1 mux · gated latch — collapsed into one box each on large builds.\n\nTorches become NOT gates, repeaters keep their tick count, comparators become comparison or subtraction (including ones reading a chest), observers become edge detectors, levers and buttons become inputs. Anything it can't name is still drawn with its expression underneath.\n\n## Exports\n\nSVG · PNG · Verilog (+ exhaustive testbench) · KiCad netlist · Logisim · Graphviz · Mermaid · CSV · Arduino sketch · Markdown report · JSON\n\nImports `.rlogic.json` snapshots, Sponge `.schem`, and Litematica `.litematic`.\n\n## Status — read this\n\nThe analysis core is exercised on every build: eight known circuits are checked against their expected logic, and the decision diagram and its sum-of-products cover are both verified against brute force.\n\n**The in-game scanning path has had very little real-world use.** If a result surprises you, suspect the tool first and please open an issue.\n\nKnown gaps:\n\n- **Observers** pulse correctly in the simulator, but the diagram carries the pulse as a free input — it shows what you do with the pulse, not when it arrives.\n- **Quasi-connectivity** is modelled from a snapshot. A real build only acts on it when a block update arrives, and one snapshot can't see that.\n- **Comparators reading containers** become a free 0–15 input. It can't know what's in the chest.\n- **Locked repeaters** are reported as having no fixed function. Honest, not useful.\n- A cross-coupled latch has two stable states and this picks neither.\n- **Litematica import** is round-tripped against our own writer, not yet against a file saved by Litematica itself.\n- Selections cap at 200,000 blocks.\n\n## Modrinth\n\nA Modrinth release is pending — new projects there go through review before they're publicly visible.\n\n## Licence\n\n[CC0 1.0](https://github.com/adhyys07/logics/blob/main/LICENSE) — public domain."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-11-16T16:58:12.694Z",
+	"pictures": [],
+	"picturesChecked": "2026-11-16T16:58:12.694Z",
+	"contributors": {
+		"commits": 15,
+		"more": 0,
+		"people": [
 			{
-				"loader": "fabric",
-				"id": "redstonelogics",
-				"version": "0.1.0",
-				"name": "RedstoneLogics",
-				"description": "Scans a redstone build and turns it into a logic gate diagram: SVG or PNG schematics, a Markdown netlist report, and a generated Arduino sketch. Recognises NOT, AND, OR, NAND, NOR, XOR, XNOR, inhibit gates and SR latches.",
-				"minecraft": "~26.3",
-				"environment": "*",
-				"depends": [
-					"fabricloader",
-					"minecraft",
-					"java",
-					"fabric-api"
-				],
-				"provides": []
+				"login": "adhyys07",
+				"commits": 15,
+				"name": "Adhdhyan Jain",
+				"funding": []
 			}
-		],
-		"checked": "2026-11-13"
-	}
+		]
+	},
+	"contributorsChecked": "2026-11-16T16:58:12.694Z",
+	"history": 1
 }
