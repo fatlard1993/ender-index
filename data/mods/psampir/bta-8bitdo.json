@@ -1,0 +1,131 @@
+{
+	"repo": "psampir/bta-8bitdo",
+	"host": "github",
+	"description": "8BitDo controller support and per-device button-layout switching for Better than Adventure! 8.0.1",
+	"stars": 0,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-11-16T15:32:49Z",
+	"pushed": "2026-11-17T01:58:54Z",
+	"releases": [
+		{
+			"tag": "v1.0.1+8.0.1",
+			"published": "2026-11-17T01:53:29Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 757213561,
+					"name": "eightbitdo-1.0.1+8.0.1.jar",
+					"url": "https://github.com/psampir/bta-8bitdo/releases/download/v1.0.1%2B8.0.1/eightbitdo-1.0.1%2B8.0.1.jar",
+					"size": 122182,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "18af640d9ec5814cc8fbb79fbedcd69f9372aa81597d2b0b09381617fad6d028",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "eightbitdo",
+							"version": "1.0.1+8.0.1",
+							"name": "8BitDo Controller Support",
+							"description": "Registers runtime GLFW gamepad mappings for every 8BitDo controller, so Better than Adventure's native controller support actually sees it.",
+							"minecraft": "*",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "55ac806db7ed637d8c027105b5130cc0e4ee0d6514cdfbb6ef6ea557be0af8d0.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 10,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Metadata release for Mod Menu — the mod now shows its own icon and working links. No gameplay changes.\n\n## Changed\n\n- **Mod list icon.** The jar ships a square 256×256 icon (`icon` in `fabric.mod.json`), so Mod Menu shows the project logo instead of the generic placeholder.\n- **Website** button in Mod Menu now opens the Modrinth page: <https://modrinth.com/mod/bta-8bitdo>.\n- **Issues** button opens the GitHub issue tracker (<https://github.com/psampir/bta-8bitdo/issues>), and the sources link points at the repository.\n- Version `1.0.1+8.0.1`; everything else is identical to `1.0.0+8.0.1` (runtime GLFW mappings for 8BitDo pads, per-device layout toggle, hot-plug).\n\n## Install\n\nDrop the jar into the `mods` folder of a **Babric BTA 8.0.1** instance (fabric-loader `0.18.4-bta.11`, Java 17+). Client-side only. Restart the game after updating — Mod Menu reads mod icons and metadata at startup.\n\n## Notes\n\n- Plain BTA 8.0.1 cannot load mods; use the Babric instance from Turnip-Labs.\n- The mod hooks BTA internals (`InputHandler.initGLFW`/`poll`, `ControllerType.fromController`, `ScreenControllerSetup.init`/`tick`); a future BTA update may need matching changes.\n- Full documentation: <https://github.com/psampir/bta-8bitdo>"
+		},
+		{
+			"tag": "v1.0.0+8.0.1",
+			"published": "2026-11-16T15:33:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 755378552,
+					"name": "eightbitdo-1.0.0+8.0.1.jar",
+					"url": "https://github.com/psampir/bta-8bitdo/releases/download/v1.0.0%2B8.0.1/eightbitdo-1.0.0%2B8.0.1.jar",
+					"size": 31784,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "9b3e169c596bc9f3ea9b83eb2e1ddb48baae942d6eaf384ec6432617e55cbe33",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "eightbitdo",
+							"version": "1.0.0+8.0.1",
+							"name": "8BitDo Controller Support",
+							"description": "Registers runtime GLFW gamepad mappings for every 8BitDo controller, so Better than Adventure's native controller support actually sees it.",
+							"minecraft": "*",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 10,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "8BitDo controllers now work with Better than Adventure! 8.0.1's native controller support, and their button glyphs can match the shell.\n\n## Features\n\n- **Runtime GLFW mappings.** BTA only recognises a pad when a mapping matches its whole GUID, firmware revision included. The mod builds one from the GUID the device reports and registers it before BTA counts controllers, so the log shows `1 controllers found!` instead of `0 controllers found!`.\n- **210 8BitDo entries** merged from SDL_GameControllerDB and BTA's own database, resolved by exact GUID → same bus/VID/PID → same VID/PID → XInput fallback.\n- **Per-device button layout toggle** in the controller setup screen: `AUTO → XBOX 360 → NINTENDO SWITCH → AUTO`. The choice is written to `config/eightbitdo.properties` (rules on `guid:`, `name:` and `vid:pid`, `auto` to opt out) and applies immediately. Glyphs only — input is never remapped.\n- **Hot-plug.** Pads attached or woken after start are picked up within a few frames.\n\n## Install\n\nRequires a **Babric BTA 8.0.1** instance (`bta_fabric_instance_8.0.1.zip`, fabric-loader `0.18.4-bta.11`) — plain BTA 8.0.1 cannot load mods — and Java 17+.\n\n1. Drop `eightbitdo-1.0.0+8.0.1.jar` into the instance's `mods` folder.\n2. Start the game with the controller connected; the log shows `Registered controller mapping …` and `1 controllers found!`.\n3. Open *Options → Controller... → Select Controller...* and use the `Layout` button.\n\nClient-side only: servers do not need it and cannot tell it is installed.\n\n## Tested\n\nBTA 8.0.1 (Babric), 8BitDo Ultimate 2 Bluetooth in 2.4G/XInput mode (`2dc8:310b`, GUID `03000000c82d00000b31000000010000`), on 2026-11-16: the Switch glyphs B/A/Y/X, the `(NINTENDO SWITCH)` type and the `Layout: NINTENDO SWITCH` button all verified in game; `tools/verify.fish` passes against the real pad.\n\n## Limitations\n\n- The mixins hook BTA internals (`InputHandler.initGLFW`/`poll`, `ControllerType.fromController`, `ScreenControllerSetup.init`/`tick`). A future BTA update may need matching changes; `tools/verify.fish` checks the targets with `javap`.\n- The button layout is a manual choice: pads that share a USB id but ship different ABXY shells cannot be told apart.\n- Only devices reporting USB vendor `0x2dc8` (8BitDo) are touched.\n- Not affiliated with 8BitDo or the Better than Adventure! team.\n\nBuild instructions, the config format and the verification harness: https://github.com/psampir/bta-8bitdo"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"fundingChecked": "2026-11-17T05:44:49.842Z",
+	"pictures": [
+		"docs/logo/bta-source.png",
+		"docs/logo/preview-64.png",
+		"docs/screenshots/controller-setup.png"
+	],
+	"picturesChecked": "2026-11-17T05:44:49.842Z",
+	"contributors": {
+		"commits": 11,
+		"more": 0,
+		"people": [
+			{
+				"login": "psampir",
+				"commits": 11,
+				"name": "Paweł Sampir",
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-11-17T05:44:49.842Z",
+	"history": 1
+}
