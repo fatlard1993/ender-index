@@ -6,8 +6,73 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-04T05:07:09Z",
-	"pushed": "2026-10-07T08:25:52Z",
+	"pushed": "2026-11-17T15:32:15Z",
 	"releases": [
+		{
+			"tag": "v1.0.2",
+			"published": "2026-11-17T15:33:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 759596628,
+					"name": "zpbw-1.0.2.jar",
+					"url": "https://github.com/hawkzlol/zpbw/releases/download/v1.0.2/zpbw-1.0.2.jar",
+					"size": 237108,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "99048ea44e4b4d375f112faf2f4e0af9fa3cb6a19f0e5e80148466d5b8194c78",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "zpbw",
+							"version": "1.0.2",
+							"name": "Zero Ping Blinkwarp",
+							"description": "ZPBW: local blinkwarp prediction with ordered packet holding, genuine server reconciliation and server-packet tick timeouts.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 95,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/hawkslol/zpbw/UpdateCheckerKt.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"com/hawkslol/zpbw/UpdateChecker$Companion.class",
+								"com/hawkslol/zpbw/UpdateChecker.class",
+								"com/hawkslol/zpbw/ZpbwMessages.class"
+							],
+							"api.github.com": [
+								"com/hawkslol/zpbw/UpdateCheckerKt.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# ZPBW 1.0.2\n\nFor Minecraft Java 26.2 · Fabric · Java 25\n\n## Changes\n\n- **Smoother chaining:** reuse a prediction slot as each genuine teleport confirms, without waiting for the entire chain to drain. Up to five additional warp clicks can queue when all five prediction slots are occupied.\n- **NoSneakDelay input fix:** use current movement, jump and sprint keys at the next uncommitted native sample instead of replaying an older deferred snapshot. Early sneak, brief taps and immediate sneak-use remain supported.\n- **Stronger recovery:** after a failed chain, wait for remaining genuine teleports before resuming dependent movement and actions. Preserve real knockback/explosion impulses when no teleport supersedes them.\n- Keep queued interactions, native teleport acknowledgements and session/ownership cleanup ordered throughout recovery.\n\n## Notes\n\n- Recovery after a failure can briefly pause movement and queued actions. High latency or bursts of nonzero server Pings can still trigger timeouts.\n- An input already sent by NoSneakDelay must remain committed through its first natural sample; this update removes stale replay, not that first-sample delay.\n- 237 automated tests pass. The latest isolated lab matrices completed 114 windows at 25–300 ms with no Simulation flags or setbacks; DuplicateRotPlace also reproduced with both features disabled. These results do not guarantee anticheat compatibility or cover every Hypixel/modpack combination. Earlier baseline attribute synchronization and delayed-server model limitations are documented in the [validation notes](https://github.com/hawkzlol/zpbw/blob/v1.0.2/docs/validation-1.0.2.md).\n\nInstall `zpbw-1.0.2.jar` and remove the previous ZPBW JAR. Fabric API and Fabric Language Kotlin are required. Restart Minecraft after replacing the mod.\n\nIf something goes wrong, run `/zpbw logs` before closing Minecraft and include the copied report in a [GitHub issue](https://github.com/hawkzlol/zpbw/issues)."
+		},
 		{
 			"tag": "v1.0.1",
 			"published": "2026-10-07T08:28:47Z",
@@ -18,7 +83,7 @@
 					"name": "zpbw-1.0.1.jar",
 					"url": "https://github.com/hawkzlol/zpbw/releases/download/v1.0.1/zpbw-1.0.1.jar",
 					"size": 226293,
-					"downloads": 4,
+					"downloads": 8,
 					"inspection": 2,
 					"sha256": "28ba97ecddf2cdbda18b21a79a1e14c48577ba1c3a0286288c8daff4308f48f5",
 					"mods": [
@@ -83,7 +148,7 @@
 					"name": "zpbw-1.0.0.jar",
 					"url": "https://github.com/hawkzlol/zpbw/releases/download/v1.0.0/zpbw-1.0.0.jar",
 					"size": 214661,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "c7e57edff39b7fd3d79e959639335d086fecd821144d32297e2fa381bbce19c8",
 					"mods": [
