@@ -6,8 +6,111 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-07-08T22:56:03Z",
-	"pushed": "2026-11-17T06:19:29Z",
+	"pushed": "2026-11-17T07:23:29Z",
 	"releases": [
+		{
+			"tag": "v1.11.4+mc1.21.11",
+			"published": "2026-11-17T07:27:38Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 758075107,
+					"name": "borderlesswindow-fabric-1.11.4+mc1.21.11.jar",
+					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.11.4%2Bmc1.21.11/borderlesswindow-fabric-1.11.4%2Bmc1.21.11.jar",
+					"size": 333945,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "37e9413582010157e9e667e6e7e595c69842d7d7f7b5e63204d457789d5226f3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "borderlesswindow",
+							"version": "1.11.4",
+							"name": "Borderless Window",
+							"description": "Adds borderless fullscreen to Minecraft with a 3-mode system (Windowed / Borderless / Fullscreen) and configurable F11 behavior, plus a growing set of video and quality-of-life options Minecraft doesn't expose. Every setting defaults to vanilla behavior. Configurable from Minecraft's own Video Settings, with optional Sodium integration. Nothing else to install.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-resource-loader-v1",
+								"fabric-key-binding-api-v1",
+								"minecraft",
+								"java"
+							],
+							"provides": [
+								"fabric-api-base",
+								"fabric-key-binding-api-v1",
+								"fabric-resource-loader-v1"
+							],
+							"suggests": [
+								"sodium",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "b012eadea23169976ce499078a09f64573a9e8d741167e941c75c6b1a95128da.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 174,
+						"jars": [
+							"META-INF/jars/fabric-api-base-1.0.5+4ebb5c083e.jar",
+							"META-INF/jars/fabric-key-binding-api-v1-1.1.7+4fc5413f3e.jar",
+							"META-INF/jars/fabric-resource-loader-v1-1.0.10+78c8b4663e.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 758075113,
+					"name": "borderlesswindow-neoforge-1.11.4+mc1.21.11.jar",
+					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.11.4%2Bmc1.21.11/borderlesswindow-neoforge-1.11.4%2Bmc1.21.11.jar",
+					"size": 161549,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "bdcbfdddbbcebc65aa5d70fe4688ab9fc1ef915631cc2ad0709f19353bd536da",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "borderlesswindow",
+							"version": "1.11.4",
+							"name": "Borderless Window",
+							"description": "Adds borderless fullscreen to Minecraft with a 3-mode system (Windowed / Borderless / Fullscreen) and configurable F11 behavior, plus a growing set of video and quality-of-life options Minecraft doesn't expose. Every setting defaults to vanilla behavior. Configurable from Minecraft's own Video Settings, with optional Sodium integration. Nothing else to install.",
+							"minecraft": "[1.21.11]",
+							"environment": "client",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"sodium"
+							]
+						}
+					],
+					"icon": "b012eadea23169976ce499078a09f64573a9e8d741167e941c75c6b1a95128da.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 71,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Borderless Window 1.11.4\n\n*NeoForge · Fabric 1.21.11 · 2026-11-17*\n\n> **A round of fixes.** Fullscreen Resolution now works, a minimized single-player world pauses again with Pause Rendering When Minimized, the config is always saved, Camera Bobbing and the distortion sliders work under Iris shaders, and the jar no longer breaks a dedicated server that has it.\n\n## ⚠️ Important Notes\n\n- Every setting stays as it was\n- When updating, delete the 1.11.3 jar from your mods folder\n- NeoForge from 21.11.42 on is accepted again: 1.11.3 asked for 21.11.48 or newer\n- Fullscreen now uses the Fullscreen Resolution set in the video settings. If it was ever moved off Current, Fullscreen switches to that resolution after updating; set it back to Current to keep the desktop's\n\n## 🐛 Fixes\n\n- **Fullscreen Resolution works.** The slider in Minecraft's video settings and in Sodium's did nothing: Fullscreen always took the desktop resolution. Fullscreen now uses the one you pick, and changing it while in Fullscreen applies it right away\n- **Pause Rendering When Minimized no longer keeps a single-player world running.** Minimizing with Win+D or the minimize button stopped the drawing before Minecraft could pause the game, so the world kept going unattended. Drawing now stops one second after minimizing, after the pause, and never during a resource reload, which used to wait for the window to come back\n- **The config is always saved.** On a fresh Fabric instance without a `config` folder, no setting was ever remembered. The file is now also written safely (a crash mid-save can no longer cut it short), a damaged file is kept as `borderlesswindow.json.bak` instead of being overwritten, and both cases are reported in the log\n- **Dedicated servers.** A NeoForge server pack that kept the jar could fail to start or crash later; the mod now just stays idle on a server\n- **Zoom.** Presses of the zoom key in Hold mode piled up and were replayed on switching to Toggle, which could turn the zoom on by itself\n- **Camera bobbing and distortion with shaders.** With an Iris shaderpack on, Camera Bobbing and the Portal and Nausea Distortion sliders did nothing, because Iris applies the bobbing and the spin itself. They now work with and without shaders\n- **Screen Mode in Minecraft's video settings after F11.** With the video settings open (without Sodium), pressing F11 updated the selector, but the next click on it could do nothing until the screen was reopened. It now always switches\n- **Translations.** The Spanish texts use the names Minecraft shows for its own options and effects in each variant (for example Velocidad de destello and Cuerpo ignífugo in Spain), and the two distortion tooltips match the rest\n\n## 🔧 Technical Changes\n\n- Borderless only adds its extra row of height on Windows, where the trick is needed; elsewhere the window matches the monitor\n- Closing the config screen or applying Sodium's page writes the config once instead of once per option\n- \"Vertical Only\" bobbing uses a lighter hook (`ModifyArg` instead of `ModifyArgs`)\n- The video settings no longer copy their option list with `clone()`, a call that older Mixin versions cannot transform (on 1.21.1 it crashed Fabric Loader 0.16.0)\n- The build compiles against the oldest Mixin and MixinExtras the jar can meet, keeps its shared build logic in an included build (`build-logic`) as the MultiLoader template does, and the release workflows run with fewer permissions. Releases are now named \"Borderless Window 1.11.4 for NeoForge 1.21.11\" on CurseForge and \"Borderless Window 1.11.4 for Minecraft 1.21.11\" on GitHub\n\n## 📦 Dependencies\n\n- Minecraft 1.21.11 with NeoForge 21.11.42 or newer, or with Fabric Loader 0.17.3 or newer\n- Optional: Sodium 0.8.x on either loader, and Mod Menu on Fabric\n\n---\n\n<details>\n<summary><b>🇪🇸 Leer en español</b></summary>\n\n\n..."
+		},
 		{
 			"tag": "v1.11.4+mc1.21.1",
 			"published": "2026-11-17T06:19:53Z",
@@ -18,7 +121,7 @@
 					"name": "borderlesswindow-fabric-1.11.4+mc1.21.1.jar",
 					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.11.4%2Bmc1.21.1/borderlesswindow-fabric-1.11.4%2Bmc1.21.1.jar",
 					"size": 306102,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "d2b607cf5093255df1224b4cb20af78184706d95095686c028188d5eb497c54f",
 					"mods": [
@@ -72,7 +175,7 @@
 					"name": "borderlesswindow-neoforge-1.11.4+mc1.21.1.jar",
 					"url": "https://github.com/ArrivedBog593/Borderless-Window/releases/download/v1.11.4%2Bmc1.21.1/borderlesswindow-neoforge-1.11.4%2Bmc1.21.1.jar",
 					"size": 159950,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "5ba18c0e48be83c800fc4675815c896cd2f652605fb214d20b1878a9a2cb2184",
 					"mods": [

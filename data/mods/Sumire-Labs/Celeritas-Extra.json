@@ -6,8 +6,40 @@
 	"archived": false,
 	"license": "NOASSERTION",
 	"created": "2025-10-03T17:02:05Z",
-	"pushed": "2026-11-16T18:03:40Z",
+	"pushed": "2026-11-17T07:06:05Z",
 	"releases": [
+		{
+			"tag": "0.11.1-release",
+			"published": "2026-11-17T07:07:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 758018386,
+					"name": "celeritasextra-0.11.1.jar",
+					"url": "https://github.com/Sumire-Labs/Celeritas-Extra/releases/download/0.11.1-release/celeritasextra-0.11.1.jar",
+					"size": 402696,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "f8adf7451e19ca4ea398a5da798252eb8857305f072b9bb937e418d191d891f3",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 185,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n\n- Added separate settings for showing per-option Undo and Reset to Default buttons, both enabled by default. These settings work with either search engine and in the Pintonium and standalone Extra screens. Screen-wide Apply/Undo and Reset controls remain available.\n\n### Fixed\n\n- Fixed overlapping search bars with newer Celeritas builds. Added \"Replace search engine with RSO\", enabled by default, to switch between Extra's search and Celeritas's built-in search after Apply. Per-option Undo/Reset remains available in both modes."
+		},
 		{
 			"tag": "0.11.0-release",
 			"published": "2026-11-16T11:55:17Z",
@@ -18,7 +50,7 @@
 					"name": "celeritasextra-0.11.0.jar",
 					"url": "https://github.com/Sumire-Labs/Celeritas-Extra/releases/download/0.11.0-release/celeritasextra-0.11.0.jar",
 					"size": 393032,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "0ffcead81aaa688fd7b07533784ff4017aaaa53602e74c35bfca3ae62cf203ba",
 					"mods": [],
@@ -70,7 +102,7 @@
 					}
 				}
 			],
-			"notes": "### Changed\n\n- Updated the development environment to Sumire-Labs/CleanroomDevEnv `6b24e5c` and migrated the Gradle build and project-specific scripts to Kotlin DSL.\n- Updated Gradle to 9.9.0 and GitHub Actions setup-java to 6.2.0.\n- Enabled parallel builds and configuration caching, including production JAR verification.\n- Moved Spotless configuration to `gradle/spotless/` and removed Felt, following the template update. The project's LGPLv3 license and source notices remain in place.\n- Updated release-note extraction to handle BOMs, CRLF line endings, and headings inside code fences. Stable-stage handling, MCP artifact filtering, and Windows CI coverage remain supported.\n- Resolved the optional Iris shadow-pass API independently of renderer development dependencies. Camera-based optimizations stay disabled when the API cannot report the shadow-pass state.\n\n### Removed\n\n- Removed Actinium integration, generated option adapters, its fast-item LOD hook, and the development dependency. Actinium supports Cleanroom 0.6.x; Celeritas Extra requires 0.7.x. Celeritas and Nothirium integrations remain supported.\n\n### Fixed\n\n- Fixed background FPS limits below 20 falling short of the selected rate. For example, a 15 FPS limit could produce about 10 FPS. The scheduler now carries timing remainders forward and avoids catch-up bursts after stalls.\n- Fixed a crash when the block-entity dispatcher receives a null tile. Profiling also respects the dispatcher's invalid-tile check.\n- Applied TokenEnvoy replacements to all compiled Mod classes, including renamed entry points.\n- Fixed false unresolved-token reports by checking class constant-pool text, and selected runtime JAR variants for embedded and shaded dependencies.\n- Fixed Shift+Tab starting at the wrong field when no field is focused in the standalone list editor. It now selects the last field.\n- Fixed VSync showing as enabled when the vanilla VSync setting is off and the saved adaptive-sync preference is on.\n- Moved both item-frame LOD and vertex-cache invalidation to the render thread when models are rebaked, preventing concurrent cache access during asynchronous model baking."
+			"notes": "### Changed\n\n- Updated DevEnv.\n- Camera-based optimizations stay disabled when the Iris shadow-pass state cannot be determined, preventing incorrect rendering during shadow passes.\n\n### Removed\n\n- Removed Actinium support. Actinium supports Cleanroom 0.6.x; Celeritas Extra requires 0.7.x. Celeritas and Nothirium remain supported.\n\n### Fixed\n\n- Fixed background FPS limits below 20 falling short of the selected rate. For example, a 15 FPS limit could produce about 10 FPS. The scheduler now carries timing remainders forward and avoids catch-up bursts after stalls.\n- Fixed a crash when the block-entity dispatcher receives a null tile. Profiling also respects the dispatcher's invalid-tile check.\n- Fixed Shift+Tab starting at the wrong field when no field is focused in the standalone list editor. It now selects the last field.\n- Fixed VSync showing as enabled when the vanilla VSync setting is off and the saved adaptive-sync preference is on.\n- Moved both item-frame LOD and vertex-cache invalidation to the render thread when models are rebaked, preventing concurrent cache access during asynchronous model baking."
 		},
 		{
 			"tag": "0.10.2-release",
@@ -102,7 +134,7 @@
 					}
 				}
 			],
-			"notes": "### Changed\n\n- The experimental static item vertex cache now draws supported Forge item segments directly from cached GPU buffers, with reusable vertex array state. This avoids regenerating or re-uploading vertices on GPU cache hits while preserving Forge lighting and item-frame LOD.\n- The cache remains off by default. Unsupported render paths retain the existing CPU cache or normal rendering, and the cache is bypassed with Iris or a renderer's native item cache.\n\n### Fixed\n\n- Lowered the optional AssetMover requirement to 2.5 so Modern Clouds works with the version available on CurseForge.\n- Fixed release-type selection for automated CurseForge and Modrinth publishing."
+			"notes": "### Changed\n\n- The experimental static item vertex cache now draws supported Forge item segments directly from cached GPU buffers, with reusable vertex array state. This avoids regenerating or re-uploading vertices on GPU cache hits while preserving Forge lighting and item-frame LOD.\n- The cache remains off by default. Unsupported render paths retain the existing CPU cache or normal rendering, and the cache is bypassed with Iris or a renderer's native item cache.\n\n### Fixed\n\n- Lowered the optional AssetMover requirement to 2.5 so Modern Clouds works with the version available on CurseForge."
 		},
 		{
 			"tag": "0.10.1-release",
@@ -134,7 +166,7 @@
 					}
 				}
 			],
-			"notes": "### Requirements\n\n- Requires Cleanroom Loader 0.7.14-alpha or newer within the 0.7.x series, and Java 25. The optional AssetMover integration now requires AssetMover 3.0.1 or newer.\n\n### Changed\n\n- Replaced the development template with Sumire-Labs/CleanroomDevEnv (`1ccd9f6`), retaining renderer integrations and additional production JAR checks.\n- Updated the development environment to Cleanroom 0.7.14-alpha, CleanroomGradle 0.23.0, AssetMover 3.0.1, and JUnit 6.1.3. CleanMix and MixinExtras now follow the selected loader automatically.\n- Adopted the template's Spotless formatter and import-order rules, and formatted existing Java sources and tests.\n- Adopted the template's Gradle Wrapper, native SRG access-transformer configuration, publishing tasks, Windows/Linux CI, and weekly Renovate configuration.\n- Retained curated changelog release notes and exclusion of MCP development JARs from release uploads.\n\n### Fixed\n\n- Fixed the development-only StripLatestForgeRequirements Mixin preparation error with Cleanroom 0.7.14. Forge requirement filtering now runs after JAR/directory candidate discovery, preserving the helper's behavior without targeting an already-loaded class. The compatibility helper is excluded from release artifacts."
+			"notes": "### Requirements\n\n- Requires Cleanroom Loader 0.7.14-alpha or newer within the 0.7.x series, and Java 25. The optional AssetMover integration now requires AssetMover 3.0.1 or newer.\n\n### Changed\n\n- Updated DevEnv."
 		},
 		{
 			"tag": "0.10.0",

@@ -6,8 +6,86 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2022-12-22T15:32:20Z",
-	"pushed": "2026-11-03T11:47:51Z",
+	"pushed": "2026-11-17T07:45:32Z",
 	"releases": [
+		{
+			"tag": "v0.10.12",
+			"published": "2026-11-17T07:45:32Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 758122520,
+					"name": "CatFrame-0.10.12-deobf.jar",
+					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.12/CatFrame-0.10.12-deobf.jar",
+					"size": 1569376,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "68ab8151853de2e65b2ca5ae4edc5a65f0ed0606ae1556382a3101d241670976",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Bingo Plushy",
+								"Bluey Plushy"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 673,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/resources/builtin/BuiltinResourcePack.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 758122519,
+					"name": "CatFrame-0.10.12.jar",
+					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.12/CatFrame-0.10.12.jar",
+					"size": 1590763,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "1fcd4a4c02de93d8973bceb64c5aea2e82d99bc38b84968d2a0948376e39c6ef",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Bingo Plushy",
+								"Bluey Plushy"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 673,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"decok/dfcdvadstf/catframe/resources/builtin/BuiltinResourcePack.class": [
+									"java/net/URL.openConnection"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CatFrame - 0.10.12\n\n## What is changed?\nChange version number from previous to `0.10.12`\n\n### ➕Add:\n    -   emptyMessageAgreesWithTheMultiLineWidget and\n-   new scrollingFallback helper, kept pure so it is unit tested\n- - tests: 3 new StringWidget cases (23 total) and 2 new MultiLineTextWidget cases\n- Add ui/screens/ConfirmScreen, the CatFrame counterpart of vanilla GuiYesNo.\n- - .gitignore: add logs/ next to the other minecraft run artifacts (.minecraft/, eclipse,\n- Add ui/components/MultiLineTextWidget, the read-only multi-line counterpart of the\n- Add the S10 TextOverflow capability to ui/components/StringWidget and reuse the\n- StringSplitter added in the previous commit.\n- - new TextOverflow enum {CLAMPED, TRUNCATED, WRAP}; CLAMPED keeps the reference\n-   without a FontRenderer; add StringWidgetOverflowTest (9 cases)\n- Add StringSplitter backport (1.7.10 legacy §-code aware) for width-aware text\n- - new ui/StringSplitter: WidthProvider bound to FontRenderer (per-glyph advance\n-   (reflowDisplayLines / countDisplayLines), keeping the trailing-newline rule\n- - add StringSplitterTest (21 cases) with a synthetic width provider\n- Recognise flags/width/precision/tT specifiers in Text templates so %5s and %.2f reach String.format instead of leaking literally. A specifier that cannot be split now flattens the whole template via formatFlat rather than leaving later conversions unrendered. Extract decomposeTemplate/formatFlat as package-private pure helpers and add TextTemplateTest covering splittable, decorated, prose-percent, failure, index-mixing, style and boundary cases.\n- Add typed state updaters for vanilla blocks and bind them to the definitions.\n- - New VanillaStateUpdaters: STAIRS / PANE / REDSTONE_WIRE / DOOR / DOUBLE_PLANT (+ DOUBLE_PLANT_PREDICATE) / SNOWY, ported to the current string-domain properties (flag values are \"true\"/\"false\", enums are their serialized names) instead of the old enum-domain draft.\n- - Neighbour meta decoding goes through the declared MetaBlockProperty instances (STAIR_FACING_META / HALF_BOTTOM_TOP_B2 / DOUBLE_PLANT_VARIANT_META), and the door cross-half decoders reuse the value lists of DOOR_FACING / DOOR_HINGE / OPEN, so each property keeps a single decode implementation.\n- - ResidentStateModel: add explicit updater / predicate bindings (Builder.updater / Builder.renderWhen) that fall back to the definition's own hooks, so a base fragment's typed logic reaches registration without re-declaring.\n- - BlockStateDefinition: add nullable updater / renderPredicate fields with getUpdater() / getRenderPredicate(); both stay null for every existing definition, so decode and render results are unchanged.\n- - Builder: add updater(StateUpdater) and renderWhen(RenderPredicate); create() backfills both onto the definition.\n- Add typed state-update contracts for world-dependent block states.\n- - Pure addition: no existing pipeline touched, no behaviour change.\n- Register the stretching mcmeta section with the vanilla IMetadataSerializer (MixinMinecraftMetadataSection on refreshResources), add StretchingMetadataSectionSerializer and make TextureStretchingMetadata implement IMetadataSection; load() now prefers IResource#getMetadata with the bare-mcmeta parser kept as fallback, closes every resource stream and invalidates its cache on resource reload\n- Add\n\n### 🔧Fix:\n    - Fix the overflow and clipping defects found in the StringWidget and\n- - CLAMPED never draws a suffix wider than the limit: when maxWidth is at most the\n-   rather than appending a suffix that would widen it past the limit\n-   it to its own width minus the suffix like MultiLineLabel#create\n-   carry the code prefix active at their break point, so nothing is treated as a\n-   reaching the drawn string and the width, wrap prefixes per line, clamped suffix\n-   clipText semantics (clip next to the suffix, then append it), TRUNCATED is a hard\n- - the suffix is \"...\" rather than U+2026 because the 1.7.10 default font is\n\n..."
+		},
 		{
 			"tag": "v0.10.11",
 			"published": "2026-11-03T11:47:51Z",
@@ -53,7 +131,7 @@
 					"name": "CatFrame-0.10.11.jar",
 					"url": "https://github.com/song682/CatFrame/releases/download/v0.10.11/CatFrame-0.10.11.jar",
 					"size": 1563016,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "76d9be92c5011cd4680f345d62a918f3d16d343ebecb54714709606760209676",
 					"mods": [],
