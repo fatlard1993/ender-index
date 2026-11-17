@@ -6,8 +6,63 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-06-29T11:22:20Z",
-	"pushed": "2026-11-15T12:41:11Z",
+	"pushed": "2026-11-17T03:40:05Z",
 	"releases": [
+		{
+			"tag": "v0.8.0",
+			"published": "2026-11-17T03:44:22Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 757504914,
+					"name": "seed-map-for-xaero-0.8.0.jar",
+					"url": "https://github.com/MineYuanlu/SeedMapForXaero/releases/download/v0.8.0/seed-map-for-xaero-0.8.0.jar",
+					"size": 7768978,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "390dbad8c02f2c76cc3d97638082edf8f18271a64c4f1f364f7ccd3afa33dd66",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "seed-map-for-xaero",
+							"version": "0.8.0",
+							"name": "Seed Map For Xaero",
+							"description": "Shows seed-based biome preview and structures on Xaero's World Map",
+							"minecraft": ">=26.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaeroworldmap"
+							],
+							"provides": []
+						}
+					],
+					"icon": "5f7b6ca9caf8c14673fff7f9e5eeb3782bdee30bc51e420e0330e697304cf8f1.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 157,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"bid/yuanlu/seedmap4xaero/client/nativeapi/Xsm.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**面向玩家 / For Players**\n\n- 修复断开连接（退出世界/服务器）时种子地图缓存清理失效的问题（#38）：GPU 纹理删除此前在 Netty 网络线程直接执行，被 MC 的渲染线程断言拦截且异常被静默吞掉，导致缓存残留与显存纹理泄漏，部分环境下断开瞬间游戏直接崩溃；清理现已改为标志位由每 tick 渲染线程消费执行\n- 设置面板交互音效：面板内手工路由的点击（复选框、分区折叠、Tab 切换、滑条与各类按钮）现在会播放原版按钮点击音，与 vanilla 界面手感一致\n- 设置按钮图标焕新：地图界面的 \"SM\" 按钮由透明背景文字按钮改为与 Xaero 侧栏同风格的 16×16 图标（白色 SM 字样 + 彩色种子图案 + 投影），并具备与 Xaero 按钮一致的悬停染色效果\n\n- Fixed stale caches and GPU texture leaks when disconnecting from a world/server (#38): texture deletion used to run on the Netty thread, tripping MC's render-thread assertion with the exception silently swallowed — cleanup aborted mid-way, leaking cached tiles and VRAM textures, and on some setups the game crashed outright on disconnect; cleanup is now deferred to a flag consumed on the render thread each tick\n- Panel interaction sounds: hand-routed clicks inside the settings panel (checkboxes, collapsible sections, tab switching, sliders and buttons) now play the vanilla button click sound\n- New settings button look: the \"SM\" button on the map screen is now a 16×16 icon matching Xaero's sidebar style (white \"SM\" letters + a colored seed sprout + drop shadow) instead of the old transparent text button, with the same hover/tint behavior as Xaero's buttons\n\n<details>\n<summary>开发细节 / Developer Details</summary>\n\n- 发布流程改为 tag-only：版本号由 build.gradle 依据 git 状态确定性计算（HEAD==tag 且工作区干净 → 精确 X.Y.Z，否则 X.Y.Z+<n>.<hash>[.dirty]，dirty 含 untracked；`-Pmod_version` 可覆盖）；gradle.properties 删除 mod_version（单一事实源 = release tag）；publish 前硬校验计算版本必须为精确 X.Y.Z 且与 tag 一致，拦截 dirty/错 tag 产物\n- 修复发布版本被误判 dirty：download-artifact 产物挪入已 ignore 的 `build/prebuilt/`，reusable-package checkout 补全 `fetch-depth: 0` + `fetch-tags: true`\n- 分支模型迁移 GitHub Flow：取缔 develop，PR → master 跑全量门禁；matrix-test/build 新增固定名聚合 job `gate` / `build-gate` 作 branch protection required check；workflow 加 concurrency 取消过期 run\n- CI 工具链与版本矩阵例行刷新：msys2 crt/headers/pthread 系列升 r598、cmake 4.4.5；versions.json 26.3 行 fabricApi 0.165.2+26.3\n- 断线清理实现：DISCONNECT（Netty 线程）仅置 volatile 标志——不用 `client.execute`，因断线流程 `dropAllTasks` 会清空排队任务；由 END_CLIENT_TICK 在渲染线程消费；E2E 追加断线清理回归断言，client/AGENTS.md 记录线程契约\n- 按钮实现：XsmIconButton 由 TooltipButton（文字）改为 GuiTexturedButton（贴图 `sm_button.png`），新增生成脚本 `tools/gen_sm_button_icon.py`，移除 lang 键 `xsm.button.sm`\n\n- Release flow reworked to tag-only: the version is now computed deterministically by build.gradle from git state (exact X.Y.Z when HEAD is the tag and the tree is clean, otherwise X.Y.Z+<n>.<hash>[.dirty] with untracked counted as dirty; overridable via `-Pmod_version`); gradle.properties drops mod_version — the release tag is the single source of truth; publishing hard-verifies the computed version is an exact X.Y.Z matching the tag before building/uploading\n- Fixed release versions being misjudged as dirty: downloaded artifacts moved into the ignored `build/prebuilt/`, and the packaging checkout now fetches full history and tags\n- Branch model migrated to GitHub Flow: develop retired, PRs → master run the full gate; fixed-name aggregate jobs `gate` / `build-gate` added as stable branch-protection required checks; workflows cancel superseded runs via concurrency\n- Routine CI toolchain/matrix refresh: msys2 crt/headers/pthread packages bumped to r598 and cmake to 4.4.5; versions.json 26.3 row fabricApi 0.165.2+26.3\n- Disconnect cleanup internals: DISCONNECT (Netty thread) only sets a volatile flag — `client.execute` is unsafe since `dropAllTasks` during disconnect discards queued tasks — consumed by END_CLIENT_TICK on the render thread; E2E gained a disconnect-cleanup regression assertion and the thread contract is documented in client/AGENTS.md\n- Button implementation: XsmIconButton switched from TooltipButton (text) to GuiTexturedButton with the `sm_button.png` texture; a generator script `tools/gen_sm_button_icon.py` was added and the `xsm.button.sm` lang key removed\n\n</details>\n\n**Full Changelog**: https://github.com/MineYuanlu/SeedMapForXaero/compare/v0.7.3...v0.8.0"
+		},
 		{
 			"tag": "v0.7.3",
 			"published": "2026-10-29T16:30:11Z",
