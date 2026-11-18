@@ -5,8 +5,57 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-11-10T15:52:55Z",
-	"pushed": "2026-11-18T11:30:15Z",
+	"pushed": "2026-11-18T14:59:24Z",
 	"releases": [
+		{
+			"tag": "BETA-1.0",
+			"published": "2026-11-18T14:59:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 763815820,
+					"name": "flightline-1.0.0-beta.1.jar",
+					"url": "https://github.com/notmicrosoft2000-cmd/flightline/releases/download/BETA-1.0/flightline-1.0.0-beta.1.jar",
+					"size": 1409308,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b29a2eeeefb50c837c4c275b07b73840b02b6bab54cdbb7c0b82f44bbd7618de",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "flightline",
+							"version": "1.0.0-beta.1",
+							"name": "Flight Line",
+							"description": "Flight physics and aircraft systems for the player: flight, GPWS/EGPWS, TCAS, cockpit alarms and radio.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "8bba7f64b6c4817b1b480c065fb6b7bd4fc0ba3c97d2a80a8bdf2c75c7682609.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 141,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "BETA 1.0 is the first beta build of Flight Line. It brings back readable alerts inside the flight deck, cleans up the autopilot MCP, and makes turbulence feel like a moving airframe instead of a fixed camera jolt.\n\n## Flight deck and displays\n- Added an `ALERT` tab to the autopilot flight deck. Active warnings are shown as compact, fitted labels from the same authoritative warning bits the HUD already receives.\n- TCAS stays in its own advisory panel. It never triggers the red alarm frame.\n- The HUD itself remains wordless: warning text lives only in the flight deck, while non-TCAS warnings still show the website-red edge flash.\n- Rebuilt the MCP tab into four centered columns for HDG, ALT, V/S, and IAS, with aligned step buttons, SYNC/LEVEL controls, and consistent spacing. All existing actions and value paths are unchanged.\n- Applied the website-derived field-manual palette across the HUD and cockpit screens, fixed GUI Scale 1 readability and click alignment without shrinking panels, refined weather map scope/legend/route layout, added ILS setup guidance, and compacted the HUD and tutorial tracker.\n\n## Flight feel\n- Reworked camera turbulence: layered slow roll/pitch/yaw sway, stall and ground-roll buffet, and fine positional jitter.\n- Motion is sampled once per frame with delta-time smoothing, so it stays consistent at low and high frame rates.\n- Hard caps keep tilt near 2.6 degrees and offset at 0.025 blocks, raised to 0.05 only in windshear. A380 and Gina keep their different turbulence sensitivity.\n- The offset is render-only and removed each frame, so long flights cannot drift. Effects are suppressed on the ground, after a crash, in ATC camera-follow, and after disconnect.\n\n## Operations and audio\n- Added operator-only, server-authoritative `/flightline weather windshear [durationTicks]` and `/flightline weather clear`. Windshear requires an active thunderstorm, is dimension-scoped, and reuses the existing flight physics.\n- Gina's `PULL UP` voice line now uses the previously unused `GINA_GPWS_PULL_UP`; terrain callouts are unchanged.\n\n## Compatibility and safety\n- No new keybinds. `H`, `O`, `T`, `E`, `F7`, `L`, `P`, and `Y` are unchanged.\n- No new payload types or fields, and no gameplay physics changes from the camera effects.\n- Still server-authoritative flight, with no plane entities.\n- Platform: Minecraft 26.3, Fabric Loader 0.20.1 or newer, Fabric API 0.165.2+26.3, Java 25 or newer.\n\n## Verification\n- `./gradlew clean build` and `./gradlew test` pass.\n- Mixin shadows and injection points were checked against the Minecraft 26.3 client jar.\n- Interactive `runClient` checks are recommended for the flight deck ALERT tab, MCP alignment, wordless alarm behavior, TCAS isolation, and camera feel across calm air, storms, windshear, stall, takeoff, landing, A380/Gina, ATC-follow, and reconnect.\n\nUse the plain `flightline-1.0.0-beta.1.jar` to play. The `-sources.jar` is for developers. Official downloads are only on this GitHub Releases page."
+		},
 		{
 			"tag": "Alpha-V12",
 			"published": "2026-11-18T07:27:28Z",
