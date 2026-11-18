@@ -1,0 +1,279 @@
+{
+	"repo": "notmicrosoft2000-cmd/flightline",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-11-10T15:52:55Z",
+	"pushed": "2026-11-18T06:03:57Z",
+	"releases": [
+		{
+			"tag": "Alpha-V11.1",
+			"published": "2026-11-18T04:39:01Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 761924390,
+					"name": "flightline-0.1.0-alpha.11.jar",
+					"url": "https://github.com/notmicrosoft2000-cmd/flightline/releases/download/Alpha-V11.1/flightline-0.1.0-alpha.11.jar",
+					"size": 1311501,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "50e448f3aa3ad2f9f6609dc7344ccea54cf5ce761fb01c82d90ecacb2d278e04",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "flightline",
+							"version": "0.1.0-alpha.11",
+							"name": "Flight Line",
+							"description": "Flight physics and aircraft systems for the player: flight, GPWS/EGPWS, TCAS, cockpit alarms and radio.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "8bba7f64b6c4817b1b480c065fb6b7bd4fc0ba3c97d2a80a8bdf2c75c7682609.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 104,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Alpha V11.1 is a follow-up to Alpha V11. It fixes the random pause/client-shutdown watchdog crash and gives the flight deck, weather displays, ATC, emergency, tutorial, radar, and HUD a more visual, instrument-like presentation.\n\n## Fixed\n- Replaced the live `level.getAllEntities()` iterator in `MobFlightController.tick` with a stable snapshot so aircraft simulation side effects can no longer corrupt iteration during shutdown.\n- Bounded mob simulation to 192 aircraft per tick with a round-robin cursor, preserving cleanup while keeping a dense world from stalling the server thread.\n- Cleared static mob flight state on `ServerLifecycleEvents.SERVER_STOPPED`.\n\n## Cockpit and displays\n- Reworked the Autopilot/MCP panel with instrument-style heading, altitude, vertical-speed, and IAS dials/tapes, DME runway distance, a METAR-style WX page, and an aircraft schematic SYS page.\n- Renamed the former KEYS page to SYS and removed keycap, operator, debug, payload, and server/client wording from cockpit screens.\n- Expanded the Weather Map and radar weather layer with deterministic layered storm cells, heavier cores, lightning marks, trailing history, visibility haze, wind field, compass rose, DBZ legend, and airborne traffic vectors with altitude labels.\n- Shared the same layered cell renderer between the standalone weather map and the autopilot WX page.\n- Made ATC, emergency checklist, tutorial, radar, and HUD wording read like real flight-deck procedures: approach control filters, `NM` ranges, `FLIGHT DATA`, `EXECUTE NEXT ACTION`, and `A-ICE`.\n- Kept the compact `Y` flight-data card opt-in; core ground speed, track, and G-load remain on the PFD.\n\n## Safety and compatibility\n- ATC/debug emergency injection remains operator-only; clients still cannot set emergency state directly.\n- No network payload changes. `FlightInstrumentPayload` remains 12 top-level fields and `WeatherGuidance` 9 fields.\n- No changes to Gina audio isolation, Kasa audio while piloting Gina, overlapping alarms/voicelines, Gina 787 airbrake restriction, engine-targeted fire/failure, or keybinds.\n- Same platform as Alpha V11: Minecraft 26.3, Fabric Loader 0.20.1, Fabric API 0.165.2+26.3, Java 25.\n- The mod version remains `0.1.0-alpha.11`; this is a new release and does not overwrite `Alpha-V11`.\n\n## Verification\n- `./gradlew clean build test` passes.\n- `./gradlew runClient` launches; a quick-play world load and shutdown produced no watchdog crash in the log.\n- Automated GUI screenshots were not available in this environment, so visual layout checks should still be confirmed in a normal desktop session.\n\nUse the plain `flightline-0.1.0-alpha.11.jar` to play. The `-sources.jar` is for developers."
+		},
+		{
+			"tag": "Alpha-V11",
+			"published": "2026-11-18T01:50:18Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 761442664,
+					"name": "flightline-0.1.0-alpha.11.jar",
+					"url": "https://github.com/notmicrosoft2000-cmd/flightline/releases/download/Alpha-V11/flightline-0.1.0-alpha.11.jar",
+					"size": 1307396,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "8cb643c139e44e421e66ce95c20ad2f4960377b2f187c27be9bea25d17a1db04",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "flightline",
+							"version": "0.1.0-alpha.11",
+							"name": "Flight Line",
+							"description": "Flight physics and aircraft systems for the player: flight, GPWS/EGPWS, TCAS, cockpit alarms and radio.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "8bba7f64b6c4817b1b480c065fb6b7bd4fc0ba3c97d2a80a8bdf2c75c7682609.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 104,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Alpha V11 is a follow-up to Alpha V10 that fixes the UI regression without changing gameplay logic or networking.\n\n## Fixed\n- Replaced the V10 non-uniform X/Y panel compression with a shared `ScreenScaler` that scales panels, controls, and text uniformly.\n- Applied the scaler to Autopilot, ATC, Emergency Checklist, Flight Tutorial, Weather Map, Controls, and Flight Radar.\n- Added inverse mouse mapping so hover, click, drag, resize, and scroll still line up after scaling.\n- Removed compressible panel sizing from the revamped screens; text keeps its proportions instead of appearing squished.\n\n## Editor diagnostics\n- The “177 problems” reported by VS Code were JSpecify null-analysis diagnostics from the Java language server, not Gradle compiler errors.\n- Disabled editor-only null analysis and enabled automatic Gradle project import in the shared VS Code workspace settings.\n- Removed tracked `bin/` generated output so the IDE build output no longer pollutes the repository.\n\n## Compatibility\n- No new network payloads.\n- No changes to emergency authority, Gina audio isolation, engine isolation, Gina speed/airbrakes, or keybinds.\n- Same platform as Alpha V10: Minecraft 26.3, Fabric Loader 0.20.1, Fabric API 0.165.2+26.3, Java 25.\n\n## Verification\n- `./gradlew clean build test` passes.\n- `./gradlew runClient` launches successfully.\n\nUse the plain `flightline-0.1.0-alpha.11.jar` to play. The `-sources.jar` is for developers."
+		},
+		{
+			"tag": "Alpha-V10",
+			"published": "2026-11-18T01:32:43Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 761397130,
+					"name": "flightline-0.1.0-alpha.10.jar",
+					"url": "https://github.com/notmicrosoft2000-cmd/flightline/releases/download/Alpha-V10/flightline-0.1.0-alpha.10.jar",
+					"size": 1302453,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "508412a77b962a57e95f151fe25b2e19d45813b8bbcff99180c25f66da72a2fb",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "flightline",
+							"version": "0.1.0-alpha.10",
+							"name": "Flight Line",
+							"description": "Flight physics and aircraft systems for the player: flight, GPWS/EGPWS, TCAS, cockpit alarms and radio.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "8bba7f64b6c4817b1b480c065fb6b7bd4fc0ba3c97d2a80a8bdf2c75c7682609.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 103,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Flight Line Alpha V10\n\nAlpha V10 is a UI layout pass across every revamped cockpit screen. It targets the overlapping labels, clipped button text, and panels that spilled outside their cards at smaller GUI scales.\n\n### Fixed\n\n- **Autopilot / flight director** — Rebuilt NAV runway control spacing so inputs, step buttons, and action buttons no longer collide. Status text now stays left of the ARM button, and MCP select rows, FMA chips, gauges, keycap rows, and quick-links all use fitted text. Weather radar drawing is clipped to its scope.\n- **Emergency checklist** — The entire 860×600 checklist now scales with the GUI instead of using fixed pixel offsets. Severity banner, condition cards, checkpoints, procedure buttons, and the footer all stay inside their panels. Long strings are ellipsized and no longer cover buttons.\n- **ATC console** — Clearance inputs moved below the section label, contact rows use scaled line spacing, and all dynamic labels and hints are fitted to their columns.\n- **Flight tutorial** — Briefing text uses scaled row positions and fitted strings; status text no longer sits under RESET/CLOSE, and objective rows keep a minimum readable height.\n- **Weather map** — Added a stacked two-row button layout for narrow windows, clamped the scope height, and fitted the bottom hint.\n- **Flight radar** — Compact mode no longer draws orientation text over the scope readout, selected-target text clears the range buttons, compact buttons use short labels, and hints are fitted away from the resize handle.\n- **Controls screen** — Key rebinding buttons show a short listening label and fitted key names.\n\n### Compatibility\n\n- Minecraft 26.3\n- Fabric Loader 0.20.1 or newer\n- Fabric API 0.165.2+26.3\n- Java 25 or newer\n\nNo gameplay logic or network payloads changed. `./gradlew build test` passed. In-game visual verification of each screen is still recommended."
+		},
+		{
+			"tag": "Alpha-V9",
+			"published": "2026-11-18T00:33:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 761230777,
+					"name": "flightline-0.1.0-alpha.9.jar",
+					"url": "https://github.com/notmicrosoft2000-cmd/flightline/releases/download/Alpha-V9/flightline-0.1.0-alpha.9.jar",
+					"size": 1300749,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "0e7a06219c3ce526aca806789a954adf9f108c929bf943856681bd651fe5ed4d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "flightline",
+							"version": "0.1.0-alpha.9",
+							"name": "Flight Line",
+							"description": "Flight physics and aircraft systems for the player: flight, GPWS/EGPWS, TCAS, cockpit alarms and radio.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "8bba7f64b6c4817b1b480c065fb6b7bd4fc0ba3c97d2a80a8bdf2c75c7682609.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 103,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Flight Line Alpha V9\n\nAlpha V9 follows up Alpha V8 with a cleaner HUD layout. The core motion data now lives inside the existing primary flight display instead of in a permanent centre-screen panel.\n\n### Changed\n\n- **Telemetry folded into the PFD** — Ground speed, track, load factor, and autoflight mode are now three compact rows in the PFD status block beside wind, ILS/attitude, vertical speed, DME, QNH, and temperature.\n- **Expanded telemetry is opt-in** — Press `Y` to open a compact telemetry detail card attached to the EICAS column. It starts hidden, so it no longer covers the centre of the screen by default.\n- **No permanent telemetry box** — The bottom-centre numeric strip from Alpha V8 has been removed.\n- **Docs updated** — The controls page now describes `Y` as telemetry detail rather than a full HUD toggle.\n\n### Still in Alpha V9\n\n- Interactive four-stage tutorial on `L`\n- Weather map on `P` and the radar `WX` layer\n- Rebuilt ATC console with filters and richer contact cards\n- Upgraded PFD attitude, FMA, ILS, heading, and flight-path symbology\n\n### Compatibility\n\n- Minecraft 26.3\n- Fabric Loader 0.20.1 or newer\n- Fabric API 0.165.2+26.3\n- Java 25 or newer\n\nNo network payloads were added or changed. `./gradlew build test` passed."
+		},
+		{
+			"tag": "Alpha-V8",
+			"published": "2026-11-18T00:16:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 761183027,
+					"name": "flightline-0.1.0-alpha.8.jar",
+					"url": "https://github.com/notmicrosoft2000-cmd/flightline/releases/download/Alpha-V8/flightline-0.1.0-alpha.8.jar",
+					"size": 1300358,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "ff867f0b2d6b99f475b465252ef21148a1fa0a6ef48ed5f5cc17f0fd7da9ae4a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "flightline",
+							"version": "0.1.0-alpha.8",
+							"name": "Flight Line",
+							"description": "Flight physics and aircraft systems for the player: flight, GPWS/EGPWS, TCAS, cockpit alarms and radio.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "8bba7f64b6c4817b1b480c065fb6b7bd4fc0ba3c97d2a80a8bdf2c75c7682609.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 103,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Flight Line Alpha V8\n\nThis release expands the flight deck with a guided lesson, live telemetry, weather visualization, and a much more capable ATC console.\n\n### Added\n\n- **Interactive flight tutorial** — Press `L` for a four-stage lesson covering takeoff, cruise, autopilot, and landing. Objectives evaluate live flight data and a compact tracker stays visible while flying.\n- **Telemetry HUD** — Press `Y` to toggle a bottom-centre strip with ground speed, track, estimated G-load, wind, N1, flaps, gear, airbrakes, vertical speed, fuel, and approach data.\n- **Weather map** — Press `P` for a standalone storm-cell map. The flight radar also has a `WX ON` / `WX OFF` layer toggle. Cells are deterministic and driven by authoritative weather guidance without adding network payloads.\n- **ATC console revamp** — `ALL`, `PLAYERS`, and `MOBS` filters, richer contact cards with relative altitude and range, improved clearance entry, and direct access to the radar map.\n\n### Improved\n\n- **Primary flight display** — finer 2.5° pitch ladder, clearer FMA modes with LOC/GS arming, ILS diamonds, heading track and course markers, altitude-tape VSI readout, and an extended flight-path marker.\n- **Emergency and autopilot screens** — redesigned panels with clearer status grouping and actions.\n- **Cockpit prompts** — the in-game hint list now includes the new tutorial, telemetry, and weather map keys.\n\n### Compatibility\n\n- Minecraft 26.3\n- Fabric Loader 0.20.1 or newer\n- Fabric API 0.165.2+26.3\n- Java 25 or newer\n\nNo new network payloads were added. Emergency state remains operator-only, and the top-level `StreamCodec.composite` payload field counts remain within the 14-field limit.\n\nInstall by placing the main JAR in your Fabric mods folder. The sources JAR is included for developers."
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "Flight Line is a Fabric mod for Minecraft 26.3 that turns players and mobs into aircraft without adding plane entities.",
+	"funding": [],
+	"fundingChecked": "2026-11-18T05:49:57.613Z",
+	"pictures": [
+		"docs/favicon-32.png",
+		"docs/favicon.png",
+		"docs/og-image.png"
+	],
+	"picturesChecked": "2026-11-18T05:49:57.613Z",
+	"contributors": {
+		"commits": 25,
+		"more": 0,
+		"people": [
+			{
+				"login": "notmicrosoft2000-cmd",
+				"commits": 25,
+				"funding": []
+			}
+		]
+	},
+	"contributorsChecked": "2026-11-18T05:49:57.613Z",
+	"history": 1
+}

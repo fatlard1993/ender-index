@@ -6,21 +6,69 @@
 	"archived": false,
 	"license": "NOASSERTION",
 	"created": "2026-09-02T22:45:18Z",
-	"pushed": "2026-11-18T03:20:40Z",
+	"pushed": "2026-11-18T04:44:08Z",
 	"releases": [
+		{
+			"tag": "v1.2.1-1.20.1",
+			"published": "2026-11-18T04:40:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 761928947,
+					"name": "epicysm-1.20.1-1.2.1.jar",
+					"url": "https://github.com/Argorice/EpicYSM/releases/download/v1.2.1-1.20.1/epicysm-1.20.1-1.2.1.jar",
+					"size": 566503,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "cf25fa182fe0cd74e1cb1ea49d2abb8f1bead7f08c2e0f091f824774300db2a1",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "epicysm",
+							"version": "1.2.1",
+							"name": "EpicYSM",
+							"description": "Yes Steve Model characters fight with Epic Fight animations. Readable models are converted into Epic Fight meshes; encrypted ones are posed through their own skeleton.",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"epicfight",
+								"yes_steve_model"
+							]
+						}
+					],
+					"icon": "be0f3928a4f137d1794d19e62426197580e21df1e5e9daaeed26ebdf1347d8a5.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 142,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Minecraft 1.20.1, Forge 47. Requires Epic Fight 20.10.2+ and Yes Steve Model 2 (tested with 2.6.5). Client side only.\n\nFixes to 1.2.0: afterimages of a converted model with Epic Fight's compute shader on, and freezes at a change of model - with ModernFix's dynamic resources on, and on putting on an encrypted model with many readable ones installed.\n\n- Afterimages of a converted model are no longer empty when Epic Fight skins its meshes on the graphics card (\"Use compute shader\" in Epic Fight's settings): no vertex of the mesh went through the draw an afterimage is kept from. On a frame an afterimage keeps, the mesh is skinned on the processor instead, the other way Epic Fight has; it looks the same.\n- The search for the model in Yes Steve Model's memory no longer reads other mods' lazy maps by their values. With ModernFix's dynamic resources on, the game's block models sit in such a map, and every value read out of it is a block model loaded: each search loaded them all - a freeze of a second and more at every change of model, and ModernFix's errors about models it could not load in the log. Such a map is now read by what it already holds.\n- Putting on a model that is none of the readable ones - an encrypted one - no longer opens every readable model there is: to look for it among them, the display name of each was read out of its own files, every time, on the frame the model changed (with 154 readable models, a frame of three seconds). The names are read once, with the models ahead of time. Telling apart models that share one picture takes their bone names from the same reading ahead, instead of reading the geometry of each of them again.\n- The search for the model in Yes Steve Model's memory no longer goes through the game's own objects, past the player and the renderer it starts from. In a large pack it went through 200 000 objects, the most it looks at, of which 8 209 were Yes Steve Model's and the rest mostly the world, its entities and chunks, the client and the server: about a second of a frozen game at every change of model, and a search stopped at its limit before it had seen everything. Yes Steve Model keeps what it looks for in its own objects; the holders a mod's data rides on an entity by are still gone through. Logging, threads and class loaders are passed over as well, and text, numbers and arrays of numbers no longer count against the most it looks at (with the game left out, 143 278 of the 200 000 were strings). What the search needs to know of each kind of object - its fields, whether it is a bone - is worked out once for the kind instead of for every object, and nothing is put in line past the most it looks at: everything it came across was kept, millions of objects in the maps that stop it going through anything twice, and they were most of its time. Outside the game, over a stand-in of 160 models, a search went from about 300 ms to about 60 ms and found the same.\n- The log says, up to eight times a session, how long a look through Yes Steve Model's memory took when it took long enough to be felt, how far in the skeleton it took came up, and whose objects it went through.\n- With the skeleton overlay on, the log no longer says that an encrypted model is shown without Epic Fight's attack animations: it is drawn by Yes Steve Model and posed by Epic Fight.\n\nThe same fixes are part of 1.2.0 for Minecraft 1.21.1 / NeoForge, from the `main` branch."
+		},
 		{
 			"tag": "v1.2.0",
 			"published": "2026-11-18T03:20:49Z",
 			"prerelease": false,
 			"assets": [
 				{
-					"id": 761698762,
+					"id": 761940853,
 					"name": "epicysm-1.2.0.jar",
 					"url": "https://github.com/Argorice/EpicYSM/releases/download/v1.2.0/epicysm-1.2.0.jar",
-					"size": 554696,
+					"size": 564283,
 					"downloads": 1,
 					"inspection": 2,
-					"sha256": "df3cccf48c6e41424638d30e8ca927a76ba86fbfd8e0e9a18f971bdd6b14ddd4",
+					"sha256": "5623c5bb9536886fa78585bfe414b9d6100ccab2461120fa97c6a9b67aac9f06",
 					"mods": [
 						{
 							"loader": "neoforge",
@@ -46,15 +94,22 @@
 						"shaders": false
 					},
 					"scan": {
-						"classes": 138,
+						"classes": 143,
 						"jars": [],
 						"capabilities": {},
 						"hosts": {},
 						"unreadable": []
-					}
+					},
+					"replaced": [
+						{
+							"id": 761698762,
+							"sha256": "df3cccf48c6e41424638d30e8ca927a76ba86fbfd8e0e9a18f971bdd6b14ddd4",
+							"until": "2026-11-18T05:49:57.613Z"
+						}
+					]
 				}
 			],
-			"notes": "Minecraft 1.21.1, NeoForge. Requires Epic Fight 21.13.3+ and Yes Steve Model 2 (tested with 2.6.5). Client side only.\n\nAfterimages in the model, arms that let go of a sheathed blade, older Epic Fight versions, Touhou Little Maid's maids, and a long list of fixes to how models are found and posed.\n\n- Maids of Touhou Little Maid dressed in a Yes Steve Model model fight in it, with Epic Fight: Touhou Little Maid. Such a maid is drawn by Yes Steve Model with Epic Fight's pose, the way a player in an encrypted model is, and Epic Fight draws the weapon on her model's own hand. Nothing is decrypted. The add-on is a Minecraft 1.20.1 mod; on 1.21.1 this does nothing until it is there.\n- A player and a maid in the same model each get their own live copy of it, and under shaders the model is no longer read again every second.\n- Epic Fight's afterimages - the copies of the body a dodge, a step or adrenaline leaves behind - show the Yes Steve Model model instead of Epic Fight's own body in the player's skin, converted or encrypted. Nothing is decrypted: the next draw of the body is kept as it is drawn and played back by the afterimage.\n- Afterimages of the model are bounded in what they draw a frame: Epic Fight Nightfall's trails, which leave one every frame, made the game stutter with a model's ten to forty thousand vertices in each. A long trail of a large model now shows two or three afterimages at a time. New setting \"Afterimages of the model\" switches them back to Epic Fight's own body.\n- Katanas held in the sheath: the left arm no longer reaches out after a blade the animation has put at the left hip (Epic Fight Nightfall's Yamato, HF blade and Murasama, Epic Fight Extra's sheathed walk, run and jump); hands at the body's sides are no longer pulled towards each other; a right hand crossing the body to the hilt stays where the animation holds it.\n- Converted wine fox models with a fox form no longer show the fox at the girl's feet in battle: the animations for the model's arrows and its horse were read over the player's. Seven of the 27 models Yes Steve Model ships now look in battle as they do out of it - the fox hidden on three; a hat, a gun and its sight or a car shown only by a switch on four more.\n- Works with Epic Fight from 21.13.3 (21.15 was needed before): compiled against Epic Fight's own sources at thirteen of its versions from 21.13.3 to 21.17.3, and what one has and another has not is asked for by name. Yes Steve Model 2 is found by what its classes are; made and tested with 2.6.5.\n- A readable model is drawn with the picture Yes Steve Model draws the player with: the player's skin on Steve and Alex, or the variant picked in Yes Steve Model's skin screen.\n- New setting \"Readable models in battle\": Converted, Yes Steve Model, or Automatic (the default). Left to Yes Steve Model, a readable model is posed the way an encrypted one is and keeps what was switched in its own menu, its expression and its size.\n- Encrypted models: the face stays Yes Steve Model's in battle; layers keep the place Yes Steve Model gave them; \"Model's own animations in battle\" decides for every bone. Models with a second body, rigs named the way other tools name them (hips, spine, chest), HHead and models of more than 1024 bones are read as the bodies they are, and a change of body is not taken for a change of model.\n- Other players: a model that arrives late over the network is no longer missed; a change of model is also noticed from Yes Steve Model's own record of it; a player met again after a respawn, a portal or leaving view is posed again.\n- A model switched off in Yes Steve Model's settings is no longer fought in; such a player goes to the renderer that held Epic Fight's player slot before this mod (with Gender Mod Epic Fight Compat, the chest follows the body). Wildfire's Female Gender Mod's chest is no longer drawn beside a converted model.\n\n..."
+			"notes": "Minecraft 1.21.1, NeoForge. Requires Epic Fight 21.13.3+ and Yes Steve Model 2 (tested with 2.6.5). Client side only.\n\nAfterimages in the model, arms that let go of a sheathed blade, older Epic Fight versions, Touhou Little Maid's maids, and a long list of fixes to how models are found and posed.\n\n- Maids of Touhou Little Maid dressed in a Yes Steve Model model fight in it, with Epic Fight: Touhou Little Maid. Such a maid is drawn by Yes Steve Model with Epic Fight's pose, the way a player in an encrypted model is, and Epic Fight draws the weapon on her model's own hand. Nothing is decrypted. The add-on is a Minecraft 1.20.1 mod; on 1.21.1 this does nothing until it is there.\n- A player and a maid in the same model each get their own live copy of it, and under shaders the model is no longer read again every second.\n- Epic Fight's afterimages - the copies of the body a dodge, a step or adrenaline leaves behind - show the Yes Steve Model model instead of Epic Fight's own body in the player's skin, converted or encrypted. Nothing is decrypted: the next draw of the body is kept as it is drawn and played back by the afterimage.\n- Afterimages of the model are bounded in what they draw a frame: Epic Fight Nightfall's trails, which leave one every frame, made the game stutter with a model's ten to forty thousand vertices in each. A long trail of a large model now shows two or three afterimages at a time. New setting \"Afterimages of the model\" switches them back to Epic Fight's own body.\n- Afterimages of a converted model are no longer empty with Epic Fight's \"Use compute shader\" on.\n- With ModernFix's dynamic resources on, a change of model no longer freezes the game for a second and more: the search for the model in Yes Steve Model's memory made ModernFix load every block model of the game.\n- Putting on an encrypted model no longer opens every readable model there is on that frame (three seconds with 154 of them).\n- A change of model costs less in a large pack, where it froze the game for about a second: the search for the model in Yes Steve Model's memory no longer goes through the game's world, client and server, and no longer keeps everything it comes across on the way.\n- Katanas held in the sheath: the left arm no longer reaches out after a blade the animation has put at the left hip (Epic Fight Nightfall's Yamato, HF blade and Murasama, Epic Fight Extra's sheathed walk, run and jump); hands at the body's sides are no longer pulled towards each other; a right hand crossing the body to the hilt stays where the animation holds it.\n- Converted wine fox models with a fox form no longer show the fox at the girl's feet in battle: the animations for the model's arrows and its horse were read over the player's. Seven of the 27 models Yes Steve Model ships now look in battle as they do out of it - the fox hidden on three; a hat, a gun and its sight or a car shown only by a switch on four more.\n- Works with Epic Fight from 21.13.3 (21.15 was needed before): compiled against Epic Fight's own sources at thirteen of its versions from 21.13.3 to 21.17.3, and what one has and another has not is asked for by name. Yes Steve Model 2 is found by what its classes are; made and tested with 2.6.5.\n- A readable model is drawn with the picture Yes Steve Model draws the player with: the player's skin on Steve and Alex, or the variant picked in Yes Steve Model's skin screen.\n- New setting \"Readable models in battle\": Converted, Yes Steve Model, or Automatic (the default). Left to Yes Steve Model, a readable model is posed the way an encrypted one is and keeps what was switched in its own menu, its expression and its size.\n\n..."
 		},
 		{
 			"tag": "v1.2.0-1.20.1",
@@ -66,7 +121,7 @@
 					"name": "epicysm-1.20.1-1.2.0.jar",
 					"url": "https://github.com/Argorice/EpicYSM/releases/download/v1.2.0-1.20.1/epicysm-1.20.1-1.2.0.jar",
 					"size": 556923,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "b8b67cf2a6e213b66048ade5995e09131b3ebee151d255b2954595d3110799f5",
 					"mods": [

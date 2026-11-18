@@ -6,8 +6,69 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2025-02-11T10:28:18Z",
-	"pushed": "2026-11-18T03:11:21Z",
+	"pushed": "2026-11-18T04:57:15Z",
 	"releases": [
+		{
+			"tag": "0.2.0+mc.1.21.5",
+			"published": "2026-11-18T04:57:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 761951286,
+					"name": "kaya-0.2.0+mc.1.21.5.jar",
+					"url": "https://github.com/eggomods/kaya/releases/download/0.2.0%2Bmc.1.21.5/kaya-0.2.0%2Bmc.1.21.5.jar",
+					"size": 2256397,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "4def69dae04f5857104ae7e4faee1abae712a5f75fc674207489ce2ca9896592",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "kaya",
+							"version": "0.2.0+mc.1.21.5",
+							"name": "Kaya",
+							"description": "Empower your game with this library that adds data-driven powers to entities via data packs.",
+							"minecraft": "1.21.5",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"yet_another_config_lib_v3"
+							],
+							"provides": [
+								"org_quiltmc_parsers_gson",
+								"org_quiltmc_parsers_json"
+							],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "cecc934ac3dd31ce76e0b8b407fb598f7c35d0a5defae907839ab5ae3d303e76.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1047,
+						"jars": [
+							"META-INF/jars/gson-0.3.1.jar",
+							"META-INF/jars/json-0.3.1.jar"
+						],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "##  additions\n- [[#16](https://github.com/eggomods/kaya/pull/16)] added int/float provider types related to player experience:\n  - `player/xp/progress` (float)\n  - `player/xp/level` (int)\n  - `player/xp/next` (int)\n  - `player/xp/score` (int)\n- [[#23](https://github.com/eggomods/kaya/pull/23)] added `callback/vibration/listened` power type\n- [[#25](https://github.com/eggomods/kaya/pull/25)] added math-related float/vec3 provider types\n  - `normalize` (vec3)\n  - `cross_product` (vec3)\n  - `reverse` (vec3)\n  - `product` (vec3) (aliases: `mul`, `multiply`)\n  - `linear_interpolated` (vec3) (aliases: `lerp`)\n  - `sum` (vec3) (aliases: `add`, `addition`)\n  - `difference` (vec3) (aliases: `sub`, `diff`, `subtract`)\n  - `rotate` (vec3)\n  - `dot_product` (float)\n- [[#30](https://github.com/eggomods/kaya/pull/30)] added more math-related float provider types\n  - `arc/cosine` (aliases: `acos`)\n  - `arc/sine` (aliases: `asin`)\n  - `cosine` (aliases: `cos`)\n  - `sine` (aliases: `sin`)\n  - `square_root/inverse` (aliases: `inv_sqrt`)\n  - `square_root` (aliases: `sqrt`)\n  - `tangent/arc/2` (aliases: `atan2`)\n  - `tangent` (aliases: `tan`)\n  - `tangent/arc` (aliases: `atan`)\n  - `to_degrees`\n  - `to_radians`\n- added float provider types for entity pitch/yaw\n  - `entity/pitch`\n  - `entity/yaw`\n- added `from_slot` item provider type\n- added an optional `entity` entity provider field to `blocks_colliding_box` int provider type (to accommodate the removal of the `BoxProvider#getCollisionContext` method)\n- re-added `command_result` number provider type as an int provider type, which was mistakenly removed when Kaya's number providers were split into float/int providers\n\n##  fixes\n- fixed `modify/player/spawn` power type sometimes putting the player on the ceiling of a dimension that has one (e.g: the Nether)\n- fixed incorrect logic for checking if an output log is already displayed (for output logs that are only supposed to be displayed once)\n- fixed `key/pressed_ticks` int provider type still providing the computed result even if the pressed time of the specified key is not zero\n\n##  changes\n\n### for users\n- renamed `entity` and `block` slot provider types to `from_entity` and `from_block` respectively (the old paths will be used as aliases, but they may be removed in a subsequent or future version)\n- the `equipped_enchantment_level` int provider type can now accept a set of enchantment IDs/tags in its `enchantment` field\n\n### for developers\n- [[#28](https://github.com/eggomods/kaya/pull/28)] refactored how dependencies of managers are handled\n- powers now have `Properties` which stores the power's name, description, hidden flag, and active condition. to migrate, replace the `Optional<Condition>` with `Properties`, and place it at the very end (convention)\n- added a new service, `KayaServices#MANAGERS`, for storing all the managers instead of having individual services for each manager\n- added a helper method for easily enabling a rudimentary version handshake for a certain mod ID\n- removed `BoxProvider#getCollisionContext` method to reduce ambiguity in scenarios where an explicit collision context is needed"
+		},
 		{
 			"tag": "0.1.2+mc.1.21.5",
 			"published": "2026-11-04T05:06:22Z",
@@ -18,7 +79,7 @@
 					"name": "kaya-0.1.2.jar",
 					"url": "https://github.com/eggomods/kaya/releases/download/0.1.2%2Bmc.1.21.5/kaya-0.1.2.jar",
 					"size": 2138980,
-					"downloads": 3,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "3128e19a3e24085aaab5173ea4f8f380f8a85aa366421c87e08e949789a11b28",
 					"mods": [
@@ -79,7 +140,7 @@
 					"name": "kaya-0.1.1.jar",
 					"url": "https://github.com/eggomods/kaya/releases/download/0.1.1%2Bmc.1.21.5/kaya-0.1.1.jar",
 					"size": 2139016,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "03d9391dc74350e0130733d97ac844be217bdb5361af26c8d4899a5ff50aed13",
 					"mods": [
@@ -140,7 +201,7 @@
 					"name": "kaya-0.1.0.jar",
 					"url": "https://github.com/eggomods/kaya/releases/download/0.1.0%2Bmc.1.21.5/kaya-0.1.0.jar",
 					"size": 2138614,
-					"downloads": 9,
+					"downloads": 10,
 					"inspection": 2,
 					"sha256": "8c521ccfea5071960a95639fb7ca196b3242c446f0b3cd0dc9501fa487e65a3a",
 					"mods": [
