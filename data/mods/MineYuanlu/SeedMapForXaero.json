@@ -6,8 +6,63 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-06-29T11:22:20Z",
-	"pushed": "2026-11-18T08:42:58Z",
+	"pushed": "2026-11-18T09:16:41Z",
 	"releases": [
+		{
+			"tag": "v0.8.1",
+			"published": "2026-11-18T09:09:29Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 762698967,
+					"name": "seed-map-for-xaero-0.8.1.jar",
+					"url": "https://github.com/MineYuanlu/SeedMapForXaero/releases/download/v0.8.1/seed-map-for-xaero-0.8.1.jar",
+					"size": 7768979,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "816fbc1e79fcbc3a2130e5941629d14f5f97180df7dbcdff0dfbd04710800186",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "seed-map-for-xaero",
+							"version": "0.8.1",
+							"name": "Seed Map For Xaero",
+							"description": "Shows seed-based biome preview and structures on Xaero's World Map",
+							"minecraft": ">=26.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaeroworldmap"
+							],
+							"provides": []
+						}
+					],
+					"icon": "5f7b6ca9caf8c14673fff7f9e5eeb3782bdee30bc51e420e0330e697304cf8f1.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 157,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"bid/yuanlu/seedmap4xaero/client/nativeapi/Xsm.class": [
+									"java/lang/System.load"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**面向玩家 / For Players**\n\n- 本版没有游戏内容改动，重点在于下载可验证：每个 Release 现在同时提供 `SHA256SUMS` 与 SLSA 构建来源证明，任何人都能确认下载到的 jar 与自己从 GitHub Release 或 Modrinth 拿到的文件来自同一份源码、同一次 CI 构建（`gh attestation verify` 可一键校验）\n- 发布说明改由发布流程自动撰写中英双语版本，并且可以和手动填写的说明互相替代；从本版起，每个版本的更新说明都会同时提供中文和英文\n\n- No in-game changes this release — it focuses on download verifiability: every Release now ships a `SHA256SUMS` and SLSA build provenance, so anyone can confirm the jar they downloaded came from the same source and the same CI run, whether it came from the GitHub Release page or Modrinth (one-command check: `gh attestation verify`)\n- Release notes are now written automatically in both Chinese and English by the release pipeline (manual text still takes priority), so every version from now on ships bilingual notes\n\n<details>\n<summary>开发细节 / Developer Details</summary>\n\n- `release.yml` 的 release job 现在显式构建 universal JAR，生成 `SHA256SUMS`，并用 `actions/attest-build-provenance@v4` 对 JAR 与该校验文件出具来源证明；job 增加了 `id-token: write`、`attestations: write` 权限，GitHub Release 同时上传 jar 和 `SHA256SUMS`\n- 新增 `doc/build-verification.md`（回应 Modrinth 对 native 二进制的可验证性要求）：说明 JAR 内 6 个 native 库的目标平台、CI 构建链路、工具链固定策略、本地复现命令，以及用校验和和 attestation 两步验证的方法；README 中英双份都加了链接\n- 发布说明改为三级回退：手动 `release_notes` input → AI 生成 → git log changelog；仍按这三级的同样规则处理标题，顺序为：手动 `release_title` input、AI 生成、`v{版本号}`。Modrinth changelog 与 GitHub Release 正文共用同一份说明；只有走 git log 兜底时才追加 GitHub 自动 notes\n- 新增 `notes` job，它与 native 编译并行执行，并用 `opencode run --agent plan --standalone --auto` 生成本次发布说明；该 job 为只读加固：`contents: read`、`persist-credentials: false`、600s 超时。模型引用无效或已弃用会硬失败，终止发布；超时或网络等其余失败回退 git log\n- 输出校验分两层：模板内硬约束，加上脚本对 LLM 边界失败的兜底。脚本会剥掉 markdown 代码围栏、按 `^# vX.Y.Z` 定位标题行并丢弃其前的过程性开场白、把标题与正文分离；首个版本没有可达的前一 tag 时跳过 AI 路径\n- 新增 `scripts/prepare_opencode_cmd.sh`：仿照 opencode 的命令模板展开语义（剥 frontmatter、`$N` 吞尾、`$ARGUMENTS`、在 repo root 执行 `!`…`` 并注入），让 CI 与本地 `/release-notes` 命令共用 `.opencode/commands/release-notes.md` 这一单一事实源\n- `/release-notes` 命令改用 `gh api --jq`，替代匿名 `curl | jq`（原先被 GitHub rate limit 返回错误 JSON，导致 jq “Cannot index string with string” 报错）；opencode 安装改为 `npm install -g @opencode/cli@2.3.2` 固定版本，替代官方 curl 安装脚本\n\n- The release job now builds the universal JAR explicitly, generates `SHA256SUMS`, and attests both the JAR and the checksum file via `actions/attest-build-provenance@v4`; the job gained `id-token: write` / `attestations: write` permissions, and the GitHub Release attaches both files\n- Added `doc/build-verification.md` (addressing Modrinth's verifiability requirement for native binaries): the six native targets bundled in the JAR, the CI pipeline, toolchain pinning strategy, local reproduction commands, and the two-step verification flow (checksum + attestation); linked from both the Chinese and English README\n- Release notes use a three-tier fallback: manual `release_notes` input → AI generation → git log changelog; the title follows the same precedence (`release_title` input → AI → `v{version}`). Modrinth changelog and GitHub Release body share one text; GitHub auto-generated notes are appended only on the git-log fallback path\n- New `notes` job runs in parallel with the native build and generates notes via `opencode run --agent plan --standalone --auto`; hardened read-only (`contents: read`, `persist-credentials: false`, 600s timeout). An invalid or deprecated model reference hard-fails the release; other failures (timeout, network) fall back to git log\n- Output validation is layered — hard constraints in the template plus script-side guards for LLM boundary failures: strips markdown fences, locates the `^# vX.Y.Z` title line and drops any preamble, and splits title from body; when no previous reachable tag exists (first release), the AI path is skipped\n\n..."
+		},
 		{
 			"tag": "v0.8.0",
 			"published": "2026-11-17T03:44:22Z",
@@ -18,7 +73,7 @@
 					"name": "seed-map-for-xaero-0.8.0.jar",
 					"url": "https://github.com/MineYuanlu/SeedMapForXaero/releases/download/v0.8.0/seed-map-for-xaero-0.8.0.jar",
 					"size": 7768978,
-					"downloads": 0,
+					"downloads": 10,
 					"inspection": 2,
 					"sha256": "390dbad8c02f2c76cc3d97638082edf8f18271a64c4f1f364f7ccd3afa33dd66",
 					"mods": [
