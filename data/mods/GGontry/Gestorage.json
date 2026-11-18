@@ -6,8 +6,82 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-07-20T09:27:08Z",
-	"pushed": "2026-11-18T01:36:26Z",
+	"pushed": "2026-11-18T21:57:18Z",
 	"releases": [
+		{
+			"tag": "v6.0.0",
+			"published": "2026-11-18T21:57:19Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 765156704,
+					"name": "gestorage-6.0.0.jar",
+					"url": "https://github.com/GGontry/Gestorage/releases/download/v6.0.0/gestorage-6.0.0.jar",
+					"size": 392192,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "59d6560e1a5722e24962fc438a2f711058014927412649c6f874acb00a227ce1",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "gestorage",
+							"version": "6.0.0",
+							"name": "Gestorage",
+							"description": "A modular mod that improves every aspect of storage and inventory management.",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"owo-lib"
+							],
+							"provides": [
+								"owo-sentinel"
+							],
+							"suggests": [
+								"lithium",
+								"modmenu"
+							]
+						}
+					],
+					"icon": "f6dfe4adea9dab8ea9863d26ceb2a3b062555e9a6175d87752f3968de9b3798e.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 194,
+						"jars": [
+							"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/OwoSentinel.class": [
+									"java/net/URL.openStream"
+								]
+							}
+						},
+						"hosts": {
+							"api.modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/OwoSentinel.class"
+							],
+							"modrinth.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/SentinelConsole.class"
+							],
+							"github.com": [
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/SentinelWindow.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 6.0.0\n\n## Minecraft 1.21.11\n\n- **Ported to Minecraft 1.21.11** (Fabric Loader >= 0.20.1, Fabric API 0.141.6+, owo-lib 0.13.0, Mod Menu 17.0.1). This release also contains everything that was in development for 5.0.0.\n- **Game rules are now snake_case.** `gestorage:enderChestSize`, `gestorage:stackableShulkers` and `gestorage:hopperStackableShulkers` became `gestorage:ender_chest_size`, `gestorage:stackable_shulkers` and `gestorage:hopper_stackable_shulkers`. 1.21.11 stores game rules in a registry keyed by identifiers, and identifier paths cannot contain uppercase letters (vanilla renamed every one of its own rules the same way), so the old names can no longer be registered.\n- **Existing worlds keep their settings.** The values saved under the old names in a 1.21.1 world are imported into the new rules the first time the world is opened. The import runs once per world, so a later `/gamerule` change is never overwritten. Vanilla logs the old keys it has to drop while opening the world once; that is expected and harmless.\n\n## Added\n\n- **Careful Break is now per player.** Each player owns the eight toggles (Enabled, Careful Break, Careful Drop, Always Careful, Tree Capitator, Better Harvesting and both Auto Replant options), stored by UUID in `config/gestorage/careful_break.json`, so one player's keybinds no longer change anyone else's gameplay and fake players are never affected. Only operators, the singleplayer host and players an operator permits can change their own copy; without permission the options are shown off and have no effect. Existing global settings from 6.0.0 pre-release builds are reset to off, so each player opts in again.\n- **New `/gestorage careful` commands:** `allow <players>` and `deny <players>` grant or revoke permission per player (deny also turns their saved options off), `allowall [on|off]` grants it to everyone, and `list` reports the current permissions (all OP level 2).\n- **Inspector module (off by default):** hold a configurable key (or use Toggle Mode) to preview the live contents of the inventory under your crosshair, inside one framed panel with the target's own icon beside its name. Blocks and entities are resolved on the server from the client's vanilla crosshair selection, so chests, hoppers, shulker boxes and storage minecarts all work. An optional **Show Info Box** draws a small panel above the preview with the target's name, id, position, block state properties or health, and inventory size; it also works on blocks and entities without an inventory. Settings live in `inspector.json5`.\n- **Slot Lock** module: hold a configurable key and left-click a slot to lock it.\n  - Lockable slots: the whole player inventory (main inventory, hotbar, armor and offhand) and the ender chest while it is open.\n  - Holding the key outlines lockable slots in yellow; locked slots keep a red outline.\n  - Options: sorting skips locked slots, prevent drop, and prevent use (right-click use and block placement; attacks and opening containers/doors are unaffected).\n  - Locks are stored per player and per world, are server-authoritative, and do not stop normal item movement.\n- **Shulker Restock: reversible refill order** — you can now choose whether items are pulled out of the shulker box from the first slot to the last (the default) or from the last slot to the first. Toggle it with the `Reverse Order` option in the module settings or its own assignable keybind; the server honours your choice in the `refill_request` packet.\n- **Config screen: real translucency, no extra mod required.** The settings menu's window, buttons and checkboxes have always shipped with semi-transparent artwork, but the vanilla draw path never enabled alpha blending on them, so an external mod (Translucency Fix) was needed to see through them. Gestorage now renders them blended, so the menu blends with the world behind it out of the box.\n\n..."
+		},
 		{
 			"tag": "v5.0.1",
 			"published": "2026-11-12T02:50:45Z",
@@ -18,7 +92,7 @@
 					"name": "gestorage-5.0.1.jar",
 					"url": "https://github.com/GGontry/Gestorage/releases/download/v5.0.1/gestorage-5.0.1.jar",
 					"size": 340800,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "f9ebdfeb820cd28b33a7c33b7eca4c93b02880c5fbad665a1c067cc0549b6a63",
 					"mods": [
