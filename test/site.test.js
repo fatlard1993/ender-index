@@ -375,6 +375,7 @@ describe('the Get ender page', () => {
 		const files = Object.values(DOWNLOADS).flatMap(download => download.files.map(file => file.href.split('/').at(-1)));
 
 		expect(files).toEqual(['Ender-mac-arm64.dmg', 'Ender-mac-x64.dmg', 'Ender-Setup.exe']);
+		expect(DOWNLOADS.mac.requires).toBe('macOS 13 (Ventura) or later');
 		expect(DOWNLOADS.mac.steps).toContain('Open Anyway');
 		expect(DOWNLOADS.windows.steps).toContain('Run anyway');
 	});

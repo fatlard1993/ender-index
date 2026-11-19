@@ -21,6 +21,8 @@ export const BREW = 'brew install fatlard1993/tap/ender';
 export const DOWNLOADS = {
 	mac: {
 		label: 'macOS',
+		// Bun's macOS runtime, which every ender binary carries, will not load on anything older
+		requires: 'macOS 13 (Ventura) or later',
 		files: [
 			{ label: 'Download for Apple silicon (M1 and later)', href: `${RELEASE}/Ender-mac-arm64.dmg` },
 			{ label: 'Download for an Intel Mac', href: `${RELEASE}/Ender-mac-x64.dmg` },
@@ -57,6 +59,7 @@ const downloadSection = (system, level = 2) => {
 
 	return [
 		new SectionLabel({ level, textContent: `Download for ${download.label}` }),
+		...(download.requires ? [new Meta({ tag: 'p', textContent: `Needs ${download.requires}.` })] : []),
 		new Row({ style: { flexWrap: 'wrap' }, append: download.files.map(downloadButton) }),
 		new Meta({ tag: 'p', textContent: download.steps }),
 	];
