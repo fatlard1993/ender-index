@@ -6,8 +6,73 @@
 	"archived": false,
 	"license": "CC-BY-SA-4.0",
 	"created": "2025-11-22T11:56:45Z",
-	"pushed": "2026-06-11T17:07:27Z",
+	"pushed": "2026-11-19T13:11:47Z",
 	"releases": [
+		{
+			"tag": "2.1.6-1.21.1",
+			"published": "2026-11-19T13:16:29Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 767762065,
+					"name": "contactquests-2.1.6-1.21.1.jar",
+					"url": "https://github.com/NightFrost42/ContactQuests/releases/download/2.1.6-1.21.1/contactquests-2.1.6-1.21.1.jar",
+					"size": 6154604,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "e9501ac7a34ef93f361b3c02fc3a6ce3660909c9e30a3a89a75ede5e16bae815",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "contactquests",
+							"version": "2.1.6-1.21.1",
+							"name": "ContactQuests",
+							"description": "A bridge mod connecting Contact (Logistics) and FTB Quests. Adds immersive mail-delivery tasks, parcel rewards, and customizable NPC interactions/replies.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"kotlinforforge",
+								"ftbquests",
+								"contact",
+								"ftblibrary"
+							],
+							"suggests": [
+								"jade",
+								"kubejs"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"team binding card"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 246,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/creeperyang/contactquests/llm/NpcLlmTransport.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### 🇨🇳 中文更新日志\n\n#### ✨ 新增功能\n- **明信片选择奖励（`contactquests:parcel_choice`）**：新增第六类邮件奖励。玩家点击奖励后可在选择界面挑选关联奖励表中的条目，并进入回信引导界面查看预设信件内容（支持一键复制或一键填充到背包内空白明信片）。通过邮筒向对应 NPC 寄回该明信片后，即可收到所选奖励。\n  - 支持在奖励编辑中设置模板分组（`template_group`）与自定义选项名称（`option_labels`），并默认排除在“一键全部领取”之外。\n  - 服务端配置文件 `config/contactquests/choice_templates.json` 支持按玩家客户端语言自动选用英文（`en_us`）或默认中文信件模板，支持 `{recipient}`、`{player}`、`{quest}`、`{task_goal}`、`{reward}` 占位符，并随 `/reload` 热重载。\n- **盲盒 / 神秘包裹隐藏内容（`hide_contents`）**：所有邮件奖励均支持勾选 `hide_contents`（隐藏奖励内容）。开启后，玩家在任务界面将看到密封包裹图标、“神秘包裹”标题与提示文案，领取并寄达后才揭晓具体内容（处于任务编辑权限下仍可直接预览完整奖励）。\n- **可选 AI NPC 书信往来与动态发任务（`config/contactquests/npc_llm.json`）**：新增纯服务端 OpenAI 兼容大模型 NPC 交互配置（默认关闭，需管理员显式配置并启用）。\n  - **密钥与传输安全**：`providers` 中仅填写服务端环境变量名 `apiKeyEnv`，凭证永不下发至客户端；支持 `mock`（测试）与 `openai_compatible`（HTTPS 远端或本机回环 HTTP）传输。\n  - **沉浸式书信体验**：支持按玩家（`player`）或按 FTB 队伍（`team`）隔离对话记忆（`historyTurns`），超长回信按 Contact 明信片渲染区域与 1024 字符上限自动分卡连寄，支持来信附件保留（`keep`）、退回（`return`）、随下次领奖一并寄回（`withReward`）与丢弃（`discard`）四种处置策略。\n  - **结构化任务工具与防剧透**：可通过工具白名单开放 `get_quest` 与 `publish_quest`（结合 `chapterId`、`questPrefix`、`maxPublishedQuests`），由 NPC 在当前对话上下文中发布带专属解锁标签的新任务；未解锁对应任务且无历史对话且 `autoFill: false` 时，邮筒地址补全不会提前剧透 NPC 名称；AI NPC 同样严格遵守 `deliveryTime` 邮寄延迟规则。\n- **KubeJS 持久化任务图谱构建 API 与状态变更事件（可选联动）**：\n  - `ContactQuests` 全局对象新增持久化章节、任务、子任务与奖励增删改查及原子发布接口：`createChapter`、`createQuest`、`publishQuest`、`getChapter`/`Quest`/`Task`/`Reward`、`listChapters`/`Quests`/`Tasks`/`Rewards`、`updateChapter`/`Quest`/`Task`/`Reward`、`moveQuest`、`deleteChapter`/`Quest`/`Task`/`Reward`，支持内联奖励表 `table_data` 跨存档重载保留与完整任务属性/依赖折线控制点设置。\n  - `ContactEvents` 新增 `tagUnlocked`、`mutexChanged`、`scriptBlockChanged` 三个服务端状态事件（`QuestStateEventJS`），安全暴露 16 位十六进制对象 ID、`teamId`、`playerId`、`before`/`after` 状态、`cause` 与递增 `sequence`。\n\n#### 🔧 优化与调整\n- **同收件人多任务公平分配**：向同一 NPC 寄出可同时匹配多个进行中任务的物品时，按单次提交推进完成度百分比最大者优先分配（比值相同时按任务 ID 排序），剩余未消耗物品再交由 NPC 后续处理策略或 AI NPC。\n- **NPC 错信配置与多堆叠奖品改进**：\n  - `npc_config.json` 的 `styleType: \"Same\"` 现会优先沿用玩家来信明信片样式，来信无样式时再回退规则 `style`。\n  - 包裹与红包奖励（包含团队人数倍率计算后）超过单组堆叠上限（64）时自动拆分并分包投递；随机奖励包裹支持单抽项 `only_one`（玩家背包已有相同物品时不再重复发放）。\n  - 队伍任务缓存保留动态 `<player_name>`，改由实际交付或领奖玩家实时解析，防止多人同队互盖名字。\n- **邮箱团队归属、UI 与兼容体验提升**：\n  - 单人队伍玩家使用团队邮箱绑定器也会持久化个人队伍 UUID；邮箱顶部 3D 队伍悬浮标记仅对同队成员可见；已绑定坐标在邮箱被破坏、爆炸、脚本移除或区块卸载期间队伍解散时自动清理绑定。\n  - 新增 Jade 邮箱队伍提示自动换行与未知队伍兼容；新增可选 JEI 任务提交页面配方查看桥接；修复窗口短暂占用系统剪贴板导致复制全文失败的问题，加入退避重试。\n  - `/reload` 同步重载自选信件模板、AI NPC 配置、占位符注册与任务索引；保持无 KubeJS 与无 JEI 环境下的零依赖独立运行。\n\n#### 🐛 问题修复\n- 修复 **ContactQuests Tag 设置** 中 `mode = ANY` 判定反转导致无法正常按“任一标签”解锁的问题，并使 FTB Quests **灵活进度（`FLEXIBLE`）** 章节严格遵守标签锁、互斥锁与脚本锁定规则。\n- 修复 `/contactquests admin getcount <npc> [player]` 因错误读取不存在的参数导致无法查询触发次数的问题。\n- 修复玩家与队伍同名引起的可重复刷取/翻倍邮箱物品漏洞及历史双归属别名残留，并补充 `CollectionSavedData` 与 `RewardDeliverySavedData` 从早期按维度分存到全局主世界的惰性合并迁移。\n- 修复 `npc_config.json` 中 `WithReward` 在暂存/返还阶段的触发次数与回复时机（改错信时静默托管、领奖时连同回信一并寄回并直接按当前计数匹配阈值）、修复 `Discard` 漏传当次物品导致回信占位符读取为空，并持久化记录来信样式供 `\"Same\"` 样式继承。\n- 修复明信片样式需精准匹配规范化样式 ID、红包任务禁止空壳红包误推进度并修剪祝福语首尾空白，以及纯客户端 UI / Mixin 类在专用服务端错误加载的问题。\n\n#### 📦 前置与兼容环境\n- **Minecraft**：`1.21.1` · **NeoForge**：`[21.1.266, 21.2)`（基于 `21.1.267` 构建）\n- **必需依赖**：Contact `[1.2.3,)` · FTB Quests `[2101.1.38, 2101.2)` · FTB Library `[2101.1.39, 2101.2)` · FTB Teams `2101.1.12+` · Kotlin for Forge `[5.12.0, 6)` · OELib · Architectury API\n- **可选联动**：KubeJS · Jade `[15,)` · JEI\n\n---\n\n### 🇺🇸 English Changelog\n\n#### ✨ New Features\n- **Postcard Choice Reward (`contactquests:parcel_choice`)**: Added the sixth mail reward type. Clicking the reward opens a selection screen for the linked Reward Table, then displays a postcard preparation screen where players can copy the letter text or auto-fill a writable Contact postcard. Sending that postcard to the assigned NPC delivers the chosen reward.\n  - Supports custom `template_group`, `option_labels`, and is excluded from \"Claim All\" by default.\n\n..."
+		},
 		{
 			"tag": "2.1.5-1.21.1",
 			"published": "2026-06-11T17:09:59Z",
@@ -18,7 +83,7 @@
 					"name": "contactquests-2.1.5-1.21.1.jar",
 					"url": "https://github.com/NightFrost42/ContactQuests/releases/download/2.1.5-1.21.1/contactquests-2.1.5-1.21.1.jar",
 					"size": 5776822,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "b5bca79faec2abdf00186f50cfe27f44a8cd1fd07ec698f68358b2f31690bb4e",
 					"mods": [
@@ -76,7 +141,7 @@
 					"name": "contactquests-2.1.0-1.20.1.jar",
 					"url": "https://github.com/NightFrost42/ContactQuests/releases/download/2.1.0-1.20.1/contactquests-2.1.0-1.20.1.jar",
 					"size": 5867581,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "073fb171e89bb9361ae889ff45b655bea30f680442209d18b617792de7c2eec3",
 					"mods": [
@@ -133,7 +198,7 @@
 					"name": "contactquests-2.1.4-1.21.1.jar",
 					"url": "https://github.com/NightFrost42/ContactQuests/releases/download/2.1.4-1.21.1/contactquests-2.1.4-1.21.1.jar",
 					"size": 5776848,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "6634a401be33d313baccce252e08eb051caa23c3341810486391fcd826461583",
 					"mods": [
@@ -248,7 +313,7 @@
 					"name": "contactquests-2.1.3-1.21.1.jar",
 					"url": "https://github.com/NightFrost42/ContactQuests/releases/download/2.1.3-1.21.1/contactquests-2.1.3-1.21.1.jar",
 					"size": 5776777,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "1f04756ea4486ef8b0b61b0ee103f216d4d9be36c3b15acdff227d5767442379",
 					"mods": [
