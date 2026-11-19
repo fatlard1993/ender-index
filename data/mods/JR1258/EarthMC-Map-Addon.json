@@ -6,8 +6,472 @@
 	"archived": false,
 	"license": "Apache-2.0",
 	"created": "2026-05-26T10:54:37Z",
-	"pushed": "2026-11-07T15:10:25Z",
+	"pushed": "2026-11-19T11:01:57Z",
 	"releases": [
+		{
+			"tag": "v1.4.12-26.3",
+			"published": "2026-11-19T11:01:58Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 767342997,
+					"name": "earthmc-map-addon-26.3-1.4.12.jar",
+					"url": "https://github.com/JR1258/EarthMC-Map-Addon/releases/download/v1.4.12-26.3/earthmc-map-addon-26.3-1.4.12.jar",
+					"size": 1429445,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "3193a5dbf441b83b9a434decd3bfb22df414807522026e27a1f91b57fc9bcefb",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "townymapaddon",
+							"version": "1.4.12",
+							"name": "EarthMC Map Addon",
+							"description": "Overlays EarthMC Towny town borders and online players on Xaero's WorldMap.",
+							"minecraft": ">=26.3 <26.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaerominimap",
+								"xaeroworldmap"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "71f9803596b6e9933241f8efe345f86d9c32ceb36a0166d948bc910a17509898.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 159,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"net/townymap/api/AllianceClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/ArchiveClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/BlocklistClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/EarthMcApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/SquaremapApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/integration/CustomOverlayManager.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/PlayerHeadImages.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/SquaremapTileRenderer.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"map.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"api.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/EarthMcApiClient.class"
+							],
+							"breakthebot.sparked.network": [
+								"net/townymap/api/AllianceClient.class"
+							],
+							"web.archive.org": [
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"raw.githubusercontent.com": [
+								"net/townymap/api/BlocklistClient.class",
+								"net/townymap/integration/CustomOverlayManager.class"
+							],
+							"discord.com": [
+								"net/townymap/gui/BlockedScreen.class"
+							],
+							"mc-heads.net": [
+								"net/townymap/render/PlayerHeadImages.class"
+							],
+							"discord.gg": [
+								"net/townymap/util/DiscordUrl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**EarthMC API key**\n- EarthMC now requires an API key on its API, as of 19 November. Run `/api key create` in game and paste it into Settings -> Advanced -> EarthMC API Key. It is sent only to api.earthmc.net, is never written to the log, and survives \"Reset All\".\n- Without one, everything the live map carries still works: borders, nation colours, town names, players, the imagery layer, hover, search, nation panels and the capital stars.\n\n**Towns**\n- Town cards now work without a key, from the town endpoint EarthMC published the same day: mayor, nation, board, founded, PVP, Public, the full resident roll, bank balance and its own claim count. Only Open / For sale, the claim limit and the active resident count still need one.\n- Right-clicking a town always pulls its current data instead of reusing a card up to a minute old, and cards no longer flash a shorter version before the real one arrives.\n- The residents line leads with the active count -- \"Residents: 30 (Inactive: 102)\" -- which is the figure that earns chunks, and a town's size counts its Moon claims again.\n\n**Search**\n- Your last ten searches sit under the search bar, newest first, and lead to wherever that town, nation or player is now. \"Reset All\" no longer clears them.\n\n**Performance**\n- Took the measured waste off the minimap, hover and search paths.\n- Live player positions now come from the map, spending no API budget. Caches no longer grow for a whole session or keep towns that have left the map.\n\n**Fixes**\n- A blank EarthMC imagery layer now says which stage is failing instead of going dark in silence.\n- The \"Xaero's World Map is incompatible\" warning no longer fires when it is not, and can now fire for the one part that actually breaks.\n- A town's nation is no longer stored as \"Capital of X\", which had split nations into two rows in Stats, mis-coloured capital residents and broken nation links.\n- On a server the addon is idle on it leaves Xaero's map alone instead of moving it to another world, and the Nether and End show the Nether and End.\n- The minimap no longer draws a second player arrow on top of Xaero's by default.\n\nAvailable for Minecraft **1.21.11**, **26.1.x**, **26.2** and **26.3**."
+		},
+		{
+			"tag": "v1.4.12-26.2",
+			"published": "2026-11-19T11:01:55Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 767342805,
+					"name": "earthmc-map-addon-26.2-1.4.12.jar",
+					"url": "https://github.com/JR1258/EarthMC-Map-Addon/releases/download/v1.4.12-26.2/earthmc-map-addon-26.2-1.4.12.jar",
+					"size": 1429098,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "195fa650e01b8d2a6b4e29471f0f82aaabec96c6d8fa2be818b0467e81cdb67b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "townymapaddon",
+							"version": "1.4.12",
+							"name": "EarthMC Map Addon",
+							"description": "Overlays EarthMC Towny town borders and online players on Xaero's WorldMap.",
+							"minecraft": ">=26.2 <26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaerominimap",
+								"xaeroworldmap"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "71f9803596b6e9933241f8efe345f86d9c32ceb36a0166d948bc910a17509898.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 159,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"net/townymap/api/AllianceClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/ArchiveClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/BlocklistClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/EarthMcApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/SquaremapApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/integration/CustomOverlayManager.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/PlayerHeadImages.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/SquaremapTileRenderer.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"map.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"api.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/EarthMcApiClient.class"
+							],
+							"breakthebot.sparked.network": [
+								"net/townymap/api/AllianceClient.class"
+							],
+							"web.archive.org": [
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"raw.githubusercontent.com": [
+								"net/townymap/api/BlocklistClient.class",
+								"net/townymap/integration/CustomOverlayManager.class"
+							],
+							"discord.com": [
+								"net/townymap/gui/BlockedScreen.class"
+							],
+							"mc-heads.net": [
+								"net/townymap/render/PlayerHeadImages.class"
+							],
+							"discord.gg": [
+								"net/townymap/util/DiscordUrl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**EarthMC API key**\n- EarthMC now requires an API key on its API, as of 19 November. Run `/api key create` in game and paste it into Settings -> Advanced -> EarthMC API Key. It is sent only to api.earthmc.net, is never written to the log, and survives \"Reset All\".\n- Without one, everything the live map carries still works: borders, nation colours, town names, players, the imagery layer, hover, search, nation panels and the capital stars.\n\n**Towns**\n- Town cards now work without a key, from the town endpoint EarthMC published the same day: mayor, nation, board, founded, PVP, Public, the full resident roll, bank balance and its own claim count. Only Open / For sale, the claim limit and the active resident count still need one.\n- Right-clicking a town always pulls its current data instead of reusing a card up to a minute old, and cards no longer flash a shorter version before the real one arrives.\n- The residents line leads with the active count -- \"Residents: 30 (Inactive: 102)\" -- which is the figure that earns chunks, and a town's size counts its Moon claims again.\n\n**Search**\n- Your last ten searches sit under the search bar, newest first, and lead to wherever that town, nation or player is now. \"Reset All\" no longer clears them.\n\n**Performance**\n- Took the measured waste off the minimap, hover and search paths.\n- Live player positions now come from the map, spending no API budget. Caches no longer grow for a whole session or keep towns that have left the map.\n\n**Fixes**\n- A blank EarthMC imagery layer now says which stage is failing instead of going dark in silence.\n- The \"Xaero's World Map is incompatible\" warning no longer fires when it is not, and can now fire for the one part that actually breaks.\n- A town's nation is no longer stored as \"Capital of X\", which had split nations into two rows in Stats, mis-coloured capital residents and broken nation links.\n- On a server the addon is idle on it leaves Xaero's map alone instead of moving it to another world, and the Nether and End show the Nether and End.\n- The minimap no longer draws a second player arrow on top of Xaero's by default.\n\nAvailable for Minecraft **1.21.11**, **26.1.x**, **26.2** and **26.3**."
+		},
+		{
+			"tag": "v1.4.12-26.1.x",
+			"published": "2026-11-19T11:01:52Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 767342655,
+					"name": "earthmc-map-addon-26.1.2-1.4.12.jar",
+					"url": "https://github.com/JR1258/EarthMC-Map-Addon/releases/download/v1.4.12-26.1.x/earthmc-map-addon-26.1.2-1.4.12.jar",
+					"size": 1428912,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "883fd091233002ea9645cf2f414c419a52d48c56eeb585709d8f48ed4b2e602c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "townymapaddon",
+							"version": "1.4.12",
+							"name": "EarthMC Map Addon",
+							"description": "Overlays EarthMC Towny town borders and online players on Xaero's WorldMap.",
+							"minecraft": ">=26.1 <26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaerominimap",
+								"xaeroworldmap"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "71f9803596b6e9933241f8efe345f86d9c32ceb36a0166d948bc910a17509898.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 159,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"net/townymap/api/AllianceClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/ArchiveClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/BlocklistClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/EarthMcApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/SquaremapApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/integration/CustomOverlayManager.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/PlayerHeadImages.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/SquaremapTileRenderer.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"map.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"api.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/EarthMcApiClient.class"
+							],
+							"breakthebot.sparked.network": [
+								"net/townymap/api/AllianceClient.class"
+							],
+							"web.archive.org": [
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"raw.githubusercontent.com": [
+								"net/townymap/api/BlocklistClient.class",
+								"net/townymap/integration/CustomOverlayManager.class"
+							],
+							"discord.com": [
+								"net/townymap/gui/BlockedScreen.class"
+							],
+							"mc-heads.net": [
+								"net/townymap/render/PlayerHeadImages.class"
+							],
+							"discord.gg": [
+								"net/townymap/util/DiscordUrl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**EarthMC API key**\n- EarthMC now requires an API key on its API, as of 19 November. Run `/api key create` in game and paste it into Settings -> Advanced -> EarthMC API Key. It is sent only to api.earthmc.net, is never written to the log, and survives \"Reset All\".\n- Without one, everything the live map carries still works: borders, nation colours, town names, players, the imagery layer, hover, search, nation panels and the capital stars.\n\n**Towns**\n- Town cards now work without a key, from the town endpoint EarthMC published the same day: mayor, nation, board, founded, PVP, Public, the full resident roll, bank balance and its own claim count. Only Open / For sale, the claim limit and the active resident count still need one.\n- Right-clicking a town always pulls its current data instead of reusing a card up to a minute old, and cards no longer flash a shorter version before the real one arrives.\n- The residents line leads with the active count -- \"Residents: 30 (Inactive: 102)\" -- which is the figure that earns chunks, and a town's size counts its Moon claims again.\n\n**Search**\n- Your last ten searches sit under the search bar, newest first, and lead to wherever that town, nation or player is now. \"Reset All\" no longer clears them.\n\n**Performance**\n- Took the measured waste off the minimap, hover and search paths.\n- Live player positions now come from the map, spending no API budget. Caches no longer grow for a whole session or keep towns that have left the map.\n\n**Fixes**\n- A blank EarthMC imagery layer now says which stage is failing instead of going dark in silence.\n- The \"Xaero's World Map is incompatible\" warning no longer fires when it is not, and can now fire for the one part that actually breaks.\n- A town's nation is no longer stored as \"Capital of X\", which had split nations into two rows in Stats, mis-coloured capital residents and broken nation links.\n- On a server the addon is idle on it leaves Xaero's map alone instead of moving it to another world, and the Nether and End show the Nether and End.\n- The minimap no longer draws a second player arrow on top of Xaero's by default.\n\nAvailable for Minecraft **1.21.11**, **26.1.x**, **26.2** and **26.3**."
+		},
+		{
+			"tag": "v1.4.12",
+			"published": "2026-11-19T11:01:49Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 767342520,
+					"name": "earthmc-map-addon-1.21.11-1.4.12.jar",
+					"url": "https://github.com/JR1258/EarthMC-Map-Addon/releases/download/v1.4.12/earthmc-map-addon-1.21.11-1.4.12.jar",
+					"size": 1436498,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "d8fef65078b758fb504421249e56c4dac1de0a77a2b02bc15508eeb8bd41fb79",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "townymapaddon",
+							"version": "1.4.12",
+							"name": "EarthMC Map Addon",
+							"description": "Overlays EarthMC Towny town borders and online players on Xaero's WorldMap.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"xaerominimap",
+								"xaeroworldmap"
+							],
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "71f9803596b6e9933241f8efe345f86d9c32ceb36a0166d948bc910a17509898.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 161,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"net/townymap/api/AllianceClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/ArchiveClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/BlocklistClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/EarthMcApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/api/SquaremapApiClient.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"net/townymap/integration/CustomOverlayManager.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/PlayerHeadImages.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/townymap/render/SquaremapTileRenderer.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								]
+							}
+						},
+						"hosts": {
+							"api.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/EarthMcApiClient.class"
+							],
+							"map.earthmc.net": [
+								"net/townymap/TownyMapConfig.class",
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"breakthebot.sparked.network": [
+								"net/townymap/api/AllianceClient.class"
+							],
+							"web.archive.org": [
+								"net/townymap/api/ArchiveClient.class"
+							],
+							"raw.githubusercontent.com": [
+								"net/townymap/api/BlocklistClient.class",
+								"net/townymap/integration/CustomOverlayManager.class"
+							],
+							"discord.com": [
+								"net/townymap/gui/BlockedScreen.class"
+							],
+							"mc-heads.net": [
+								"net/townymap/render/PlayerHeadImages.class"
+							],
+							"discord.gg": [
+								"net/townymap/util/DiscordUrl.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**EarthMC API key**\n- EarthMC now requires an API key on its API, as of 19 November. Run `/api key create` in game and paste it into Settings -> Advanced -> EarthMC API Key. It is sent only to api.earthmc.net, is never written to the log, and survives \"Reset All\".\n- Without one, everything the live map carries still works: borders, nation colours, town names, players, the imagery layer, hover, search, nation panels and the capital stars.\n\n**Towns**\n- Town cards now work without a key, from the town endpoint EarthMC published the same day: mayor, nation, board, founded, PVP, Public, the full resident roll, bank balance and its own claim count. Only Open / For sale, the claim limit and the active resident count still need one.\n- Right-clicking a town always pulls its current data instead of reusing a card up to a minute old, and cards no longer flash a shorter version before the real one arrives.\n- The residents line leads with the active count -- \"Residents: 30 (Inactive: 102)\" -- which is the figure that earns chunks, and a town's size counts its Moon claims again.\n\n**Search**\n- Your last ten searches sit under the search bar, newest first, and lead to wherever that town, nation or player is now. \"Reset All\" no longer clears them.\n\n**Performance**\n- Took the measured waste off the minimap, hover and search paths.\n- Live player positions now come from the map, spending no API budget. Caches no longer grow for a whole session or keep towns that have left the map.\n\n**Fixes**\n- A blank EarthMC imagery layer now says which stage is failing instead of going dark in silence.\n- The \"Xaero's World Map is incompatible\" warning no longer fires when it is not, and can now fire for the one part that actually breaks.\n- A town's nation is no longer stored as \"Capital of X\", which had split nations into two rows in Stats, mis-coloured capital residents and broken nation links.\n- On a server the addon is idle on it leaves Xaero's map alone instead of moving it to another world, and the Nether and End show the Nether and End.\n- The minimap no longer draws a second player arrow on top of Xaero's by default.\n\nAvailable for Minecraft **1.21.11**, **26.1.x**, **26.2** and **26.3**."
+		},
 		{
 			"tag": "v1.4.11-26.3",
 			"published": "2026-11-04T14:30:24Z",
