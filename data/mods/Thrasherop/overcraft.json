@@ -4,8 +4,103 @@
 	"stars": 0,
 	"archived": false,
 	"created": "2026-10-25T18:29:20Z",
-	"pushed": "2026-11-19T07:58:05Z",
+	"pushed": "2026-11-19T17:54:48Z",
 	"releases": [
+		{
+			"tag": "v0.3.131-test.378",
+			"published": "2026-11-19T17:54:48Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 768678844,
+					"name": "Overcraft-0.3.131.jar",
+					"url": "https://github.com/Thrasherop/overcraft/releases/download/v0.3.131-test.378/Overcraft-0.3.131.jar",
+					"size": 2896368,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "d4921d015c2db21ae98bfa8380ae17cff3e3152878281b34527f9e295f5bf688",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "overcraft",
+							"version": "0.3.131",
+							"name": "Overcraft",
+							"description": "Overwatch heroes in Minecraft: pick a hero when you join a world; hotbar slot 1 holds the hero's weapons and abilities.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Healing Ofuda",
+								"Kiriko's Kunai & Ofuda",
+								"Kunai",
+								"Protection Suzu",
+								"Sonic Amplifier round"
+							],
+							"entity": [
+								"ASHE",
+								"B.O.B.",
+								"CASSIDY",
+								"Dynamite",
+								"Grappling Hook",
+								"Healing Blossom",
+								"Healing Ofuda",
+								"JUNKRAT",
+								"Kitsune",
+								"Kunai",
+								"Molten slag",
+								"PHARAH",
+								"Petal Platform",
+								"Petal seed",
+								"Protection Suzu",
+								"Rivet",
+								"Rivet Gun pellet",
+								"SOJOURN",
+								"Seed",
+								"Sonic Amplifier round",
+								"TORBJÖRN",
+								"TRACER",
+								"Thorn",
+								"Tree of Life",
+								"Turret",
+								"Venom Mine",
+								"WIDOWMAKER"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 846,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/overcraft/client/dev/DevServer.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Test build.** It becomes a release only once it's moved to the `production` branch.\n\n## 2026-11-19: 0.3.131\n\n- **Ashe's comms wheel voice lines (#174):** the wheel showed raw keys (\"overcraft.voiceline.ashe.girl_who_has_everything\")\n  and played nothing: her line list was in the local pack but her sounds and names weren't (a pack sounds build from before\n  she joined it). Rebuilt with `build_asset_pack.py sounds`: her 42 lines, nothing else lost (3081 -> 3123 events). The wheel\n  now lists only lines the pack has a sound for, so a list without its sounds can't show raw keys again. Played: the voice\n  page shows \"Spell on You\", \"Life Is a Highway\"..., and picking one says \"Ashe: Life is a highway.\" **A player's asset zip\n  needs rebuilding for her lines.**\n\n- **Ashe's and Widowmaker's scopes slow the mouse (#173):** fully scoped, Ashe turns at 60 % and Widowmaker at 30 % (the data's\n  zoomed-aim sensitivity: Ashe 14FC #565 0.6, once read as a move speed; Widow 001B #115 0.3), as Ana (30 %) and Silver\n  Bullet (60 %) already did. Reproduced: a 100 px mouse move turned 15 degrees scoped and unscoped for both. After: 9 for Ashe,\n  4.5 for Widowmaker, 15 unscoped, five runs each.\n- **Ashe's voice lines (#174):** her own moments had no cooldowns, and five were never said. Now: \"Step it up, Bob!\" /\n  \"Thanks, Bob\" as B.O.B. ends without or with a kill, \"They got Bob!\" when he's destroyed, her dynamite kill line, and her\n  Coach Gun kill line. Played with subtitles on; before, B.O.B.'s end said nothing. A Coach Gun kill in the same instant\n  as the shot stays silent: her Coach Gun grunt outranks the kill line in the data (60 against 50) and holds her voice.\n- **Gamerule `overcraft:enemy_hero_cap` (#175):** at most this many enemy heroes around a player for another to come, 0-64,\n  default 2; 0 stops them. The cap is now counted out to 128 m, Minecraft's spawn reach: counted to 64 m, heroes spawned\n  past 64 m never saw each other (played at chance 100 and cap 6: 12 within 64 m, 23 within 128). After: cap 6 held at 6\n  for a minute of night; cap 0 let none come while zombies kept spawning. Both enemy-hero gamerules have names in the list.\n- **Junkrat's mine jumps stack (#176):** his mine's launch adds to his speed (the data's add-a-vector kind, 096A #262), not\n  sets it, so mines in a row build on each other; on the ground Minecraft's small resting fall speed isn't taken off. One\n  mine out at a time stays: a throw removes the mine already out without a blast (096A #231 -> message 0511 -> 096B #263).\n  Same keys and timing: the triple went 17.05 m before, 18.75 m now; one ground mine 6.4 m both.\n- **The menu doesn't hint at the POTG (#177):** no Highlights item and no Highlights key screen until the world's dragon has\n  died (\"Kill the Ender Dragon to unlock your highlights\" showed before). After the kill it comes back at once: Minecraft's\n  own \"killed\" flag stayed false until a reload, so the mod keeps its own (overcraft/potg/dragon_killed). The key is now\n  just \"Highlights\". Played: hidden in a fresh world, there right after a kill, the list opened.\n\n\n---\nBuilt from `c695814` on `main`: Merge next into main: build 0.3.131 (scoped mouse for Ashe and Widowmaker #173, Ashe's voice lines and comms wheel #174, enemy_hero_cap game rule #175, Junkrat's mine jumps stack #176, Highlights hidden until the dragon dies #177)"
+		},
 		{
 			"tag": "v0.3.130-test.372",
 			"published": "2026-11-19T04:32:56Z",
@@ -16,7 +111,7 @@
 					"name": "Overcraft-0.3.130.jar",
 					"url": "https://github.com/Thrasherop/overcraft/releases/download/v0.3.130-test.372/Overcraft-0.3.130.jar",
 					"size": 2892910,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "14eb8d6f9324bdf84b39eeaa6398d81293691d40831695823cc98f1acee90840",
 					"mods": [
