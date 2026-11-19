@@ -6,8 +6,64 @@
 	"archived": false,
 	"license": "NOASSERTION",
 	"created": "2026-04-09T16:26:29Z",
-	"pushed": "2026-11-19T05:13:17Z",
+	"pushed": "2026-11-19T06:25:26Z",
 	"releases": [
+		{
+			"tag": "0.6.7-beta",
+			"published": "2026-11-19T06:30:07Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 766534606,
+					"name": "pulsar-0.6.7-beta-mcp.jar",
+					"url": "https://github.com/Sumire-Labs/Pulsar/releases/download/0.6.7-beta/pulsar-0.6.7-beta-mcp.jar",
+					"size": 642301,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "fb1e3bb445d302849eed6b1511776cb484189868cec75d4310e6cadf866f69a9",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 311,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 766534613,
+					"name": "pulsar-0.6.7-beta.jar",
+					"url": "https://github.com/Sumire-Labs/Pulsar/releases/download/0.6.7-beta/pulsar-0.6.7-beta.jar",
+					"size": 648505,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "81aa93fc9227fbfff5b1fc1f9e9165191296cd0b417ac24978901c3d3b19f52b",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 311,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Added\n\n- Expand RGB presets across 20 mods to cover more crystals, luminous plants,\n  candles, lanterns, working machines and glowing fluids, including sources from\n  Actually Additions, Botania, Thaumcraft, Quark and Thermal Foundation.\n  Presets preserve native light levels, contextual on/off behavior and custom color APIs.\n\n### Fixed\n\n- Register Thaumic Augmentation's Ancient Light using the actual stone block\n  state, and add its glowing crusted stone variant.\n- Apply Quark crystal-pane colors to the nine separately registered pane blocks.\n- Prevent failed lighting tasks and exhausted retries from marking chunks ready\n  or allowing incomplete light to be sent or saved as a valid cache.\n- Stop RGB edge retries at their configured limit and report failed relights to\n  waiting callers. Failures from older relight requests no longer affect newer ones.\n- Publish RGB color data before announcing completed lighting in VANILLA gameplay\n  light mode."
+		},
 		{
 			"tag": "0.6.6-beta",
 			"published": "2026-11-16T14:17:23Z",
@@ -18,7 +74,7 @@
 					"name": "pulsar-0.6.6-beta-mcp.jar",
 					"url": "https://github.com/Sumire-Labs/Pulsar/releases/download/0.6.6-beta/pulsar-0.6.6-beta-mcp.jar",
 					"size": 634882,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "26c64746feeb9eb9d36da5f75c74922afe07572decc3b3991e14256774875eba",
 					"mods": [],
@@ -42,7 +98,7 @@
 					"name": "pulsar-0.6.6-beta.jar",
 					"url": "https://github.com/Sumire-Labs/Pulsar/releases/download/0.6.6-beta/pulsar-0.6.6-beta.jar",
 					"size": 641104,
-					"downloads": 1,
+					"downloads": 7,
 					"inspection": 2,
 					"sha256": "79614749a7b4b6040232561533bb2817aa5da7e49159736aefc3aa0666b2bfeb",
 					"mods": [],
@@ -118,7 +174,7 @@
 					}
 				}
 			],
-			"notes": "### Changed\n\n- Update CleanroomDevEnv to `6b24e5c`, with Kotlin DSL build scripts and parallel\n  configuration caching. Native compatibility tests support configuration caching;\n  the standalone API publication and production JAR checks remain available.\n- Apply version tokens to all compiled classes and check class constant pools\n  for unresolved tokens, avoiding false matches in binary data.\n- Select JVM runtime variants when resolving embedded dependencies.\n- Move Spotless profiles to `gradle/spotless` and extend Renovate dependency coverage.\n- Validate release-note extraction and retain support for resuming interrupted\n  uploads. GitHub Releases continue to use the pre-release flag disabled.\n- Add LGPL-3.0-only source headers while preserving upstream copyright notices\n  and the CleanroomDevEnv MIT notice. The API publication declares its LGPL license.\n\n### Removed\n\n- Remove Actinium-specific renderer integration. Actinium targets Cleanroom 0.6.x;\n  Pulsar requires Cleanroom 0.7.14-alpha or newer within the 0.7.x series.\n- Remove Felt build tooling and its header-management configuration.\n\n### Fixed\n\n- Respect closed outgoing block faces during SCALAR and RGB light recalculation,\n  avoiding false mismatches and unnecessary relighting at chunk boundaries near\n  slabs and other sided blocks.\n- Release completed tasks and their chunk references from stale priority indexes\n  when a lighting queue drains.\n- Clear partially initialized engine caches after setup failures, so reused\n  engines do not retain stale chunk data.\n- Reject invalid saved light-nibble states on load, allowing corrupt caches to\n  relight before they can cause errors on later saves."
+			"notes": "### Changed\n\n- Update DevEnv.\n\n### Removed\n\n- Remove Actinium-specific renderer integration. Actinium targets Cleanroom 0.6.x;\n  Pulsar requires Cleanroom 0.7.14-alpha or newer within the 0.7.x series.\n\n### Fixed\n\n- Respect closed outgoing block faces during SCALAR and RGB light recalculation,\n  avoiding false mismatches and unnecessary relighting at chunk boundaries near\n  slabs and other sided blocks.\n- Release completed tasks and their chunk references from stale priority indexes\n  when a lighting queue drains.\n- Clear partially initialized engine caches after setup failures, so reused\n  engines do not retain stale chunk data.\n- Reject invalid saved light-nibble states on load, allowing corrupt caches to\n  relight before they can cause errors on later saves."
 		},
 		{
 			"tag": "0.6.4-beta",
@@ -174,7 +230,7 @@
 					}
 				}
 			],
-			"notes": "### Changed\n\n- Update Gradle to 9.9.0 and actions/setup-java to v6.2.0.\n- Publish beta-tagged builds as beta files on CurseForge and Modrinth while\n  keeping the GitHub Release's pre-release flag disabled.\n- Use the matching CHANGELOG entry as the release notes on all distribution sites.\n\n### Fixed\n\n- Block light crossing the sealed horizontal boundary between adjacent upper\n  and lower opaque slabs in SCALAR and RGB lighting (issue #29).\n- Avoid dark bands on exposed wall faces next to slabs by sampling their visible\n  cavity instead of the opaque wall's interior at covered vertices (issue #29).\n- Rebuild older saved lighting with cache version 15 to remove leaked slab light."
+			"notes": "### Changed\n\n- Update DevEnv.\n\n### Fixed\n\n- Block light crossing the sealed horizontal boundary between adjacent upper\n  and lower opaque slabs in SCALAR and RGB lighting (issue #29).\n- Avoid dark bands on exposed wall faces next to slabs by sampling their visible\n  cavity instead of the opaque wall's interior at covered vertices (issue #29).\n- Rebuild older saved lighting with cache version 15 to remove leaked slab light."
 		},
 		{
 			"tag": "0.6.3-beta",
@@ -230,7 +286,7 @@
 					}
 				}
 			],
-			"notes": "**Full Changelog**: https://github.com/Sumire-Labs/Pulsar/compare/0.6.2...0.6.3-beta"
+			"notes": "### Added\n\n- Add RGB source-color presets identified through ColoredLux's 1.12.2 Lux Packs:\n  Quark candles, crystals and lanterns; Inspirations lights; Embers and Embers Construct;\n  Immersive Engineering lanterns and balloons; Charm lamps; NetherEx and TAIGA sources;\n  Deep Mob Learning; HarvestCraft candles; Coloured Sea Lanterns; Advanced Chimneys;\n  Exotic Birds; Tinker I/O; and Tinkers' Construct's glowing block.\n- Add an end-portal-colored preset for end gateways. All new presets retain the\n  original contextual brightness and lit/unlit behavior, without creating new light sources.\n\n### Changed\n\n- Update DevEnv.\n- Require Java 25 and Cleanroom Loader 0.7.14-alpha or newer within the 0.7.x series.\n\n### Fixed\n\n- Preserve the runtime name of Forge's five-argument `BufferBuilder.putColorRGBA`\n  method when building production Mixins.\n- Use the LWJGL texture-environment query supported by the new Cleanroom environment."
 		},
 		{
 			"tag": "0.6.2",
