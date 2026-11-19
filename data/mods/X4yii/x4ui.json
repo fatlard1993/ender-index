@@ -5,8 +5,77 @@
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2026-08-21T23:52:03Z",
-	"pushed": "2026-11-18T23:37:08Z",
+	"pushed": "2026-11-19T00:11:01Z",
 	"releases": [
+		{
+			"tag": "r1.0b7",
+			"published": "2026-11-18T23:56:56Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 765490203,
+					"name": "x4ui-r1.0b7.jar",
+					"url": "https://github.com/X4yii/x4ui/releases/download/r1.0b7/x4ui-r1.0b7.jar",
+					"size": 2499187,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "07132104fc569ae7d78a3063c3c9e72c53bb93306d422b4d4e8887b33f43d2c7",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 1143,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/DirectMemoryVideoDecoder$DecoderThread.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/DirectMemoryVideoDecoder.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/backend/ffmpeg/FFmpegAudioDecoder$AudioDecoderThread.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/impl/client/media/MediaPipeline.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/x4yi/x4ui/shaded/jcodec/testing/TestTool.class": [
+									"java/lang/Runtime.exec"
+								]
+							},
+							"network": {
+								"com/x4yi/x4ui/impl/client/resource/network/SecurityUtils.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"unsafe": {
+								"com/x4yi/x4ui/common/platform/PlatformBridge.class": [
+									"\"sun.misc.Unsafe\" by name"
+								],
+								"META-INF/versions/21/com/x4yi/x4ui/common/platform/PlatformBridge.class": [
+									"\"sun.misc.Unsafe\" by name"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Screen Architecture & Side Panels (`ScreenHost` & `GuiBaseContainer`)\n- **New `ScreenHost`:** Extracts and unifies the shared controller behind `GuiBaseScreen` and `GuiBaseContainer` (component tree, overlays, RPCs, toasts, input routing, and lifecycle).\n- **Full `GuiBaseContainer` parity:**\n  - Native support for `attachSidePanel(DockSide, ...)` (`requestSidePanelLayout()`, `layoutSidePanelsAndSync()`), `createCenteredWindow(maxWidth, maxHeight)`, `hasClickedOutside(...)` (clean JEI and side-panel hit-testing), `removeComponent(...)`, and `setAnimateOpen(boolean)`.\n- **New fluent `GuiBuilder`:** Rewritten non-generic declarative builder (replacing the old `GuiBuilder<T>`) with modern helpers for windows, panels, buttons, and reactive bindings.\n\n### Layout Engine, Geometry & New Containers\n- **Constraints & Flexbox in `GuiComponent` + `FlexLayout`:**\n  - `GuiComponent` adds `minWidth`, `maxWidth`, `minHeight`, `maxHeight`, `baseWidth`/`baseHeight`, `flexGrow`, `flexShrink`, and fluent setters (`withMinWidth`, `withMaxWidth`, `withMinSize`, `withMaxSize`, `withFlexGrow`, `withFlexShrink`, `withFlex`), plus `add(child, Consumer<T>)`, `invalidateAbs()`, `isClippedBy(IGraphics)`, and `onBoundsChanged()`.\n  - `FlexLayout` implements water-filling distribution for `flexGrow`/`flexShrink` respecting `min`/`max` constraints and fixing bounds and padding calculations.\n- **`CornerRadii`, `BorderSides` & `DockSide` primitives:**\n  - `IGraphics` and `GLGraphics` add per-corner rounding (`CornerRadii`) and selective border rendering (`BorderSides`).\n  - `GuiPanel` supports `CornerRadii`, `BorderSides`, `suppressChrome`, and themed cards.\n- **`GuiGridPanel`:** New grid container with `autoColumns` for responsive card or slot grids.\n- **`GuiUnionPanel`:** New container that visually merges docked panels (`DockSide`) with continuous corners and borders.\n\n### Components, Rendering & Themes\n- **`GuiDropdown`:** Full keyboard navigation (`onKeyPress` with arrow keys, Enter, and Escape), `highlightedIndex`, static `GuiDropdown.of(State<T>, List<T>)`, and hit-testing/overlay fixes.\n- **Widget & Render Fixes:** Clipping, focus, state, and rendering fixes across `GuiAnimator`, `GuiToastManager`, `GuiOverlayManager`, `GuiVideo`, `GuiAudio`, `GuiVirtualList`, `GuiModelRender`, `GuiMarkdown`, `GuiTextInput`, `GuiButton`, `GuiImage`, `GuiLabel`, `GuiScrollPanel`, `GuiSlot`, `GuiToggle`, `DefaultTheme`, and typed sliders (`GuiSlider*`).\n\n### Security, Networking, Media & Runtime\n- **Security & Network Hardening (`SecurityUtils`, `ActionGuard`, `Packet*`, `UIChannels`):**\n  - `SecurityUtils` hardens SSRF checks (blocking private, loopback, link-local, and multicast IPv4/IPv6 ranges), unsafe redirects, and path-traversal attempts.\n  - `ActionGuard`, `PacketGuiAction`, `PacketGuiRpc`, `PacketHandshake`, and `StateContainerListener` enforce stricter payload, bounds, and session checks.\n  - `UIChannels`, `UINetwork`, `ClientSessionTracker`, `ClientProxy`, and `CommonProxy` streamline channel management and session cleanup.\n- **Reactive State & Media Pipeline:**\n  - `State<T>` isolates per-listener exceptions during `set(T)` delivery, and `UIStateBus` enforces scope (`SCREEN`/`SESSION`/`GLOBAL`) and type safety.\n  - `MediaPipeline`, `OpenALAudioSink`, `DirectMemoryVideoDecoder`, `FFmpegAudioDecoder`, and `JCodecVideoDecoder` fix native buffer/process leaks, A/V sync edge cases, and idempotent cleanup.\n  - `PlatformBridge` (Java 8 & Java 21) improves native resource cleanup and CleanroomMC compatibility.\n\n### Breaking Changes & Beta Cleanup\n- **Dead/Legacy Code Removal:** removed `IMediaService`, `MediaService`, `IMediaAsset`, `AssetCallback`, `RemoteResourceManager`, `DownloadManager`, `FFmpegProcessDecoder`, `IGuiActionSender`, `GuiCard`, `GuiTooltip`, `GuiBaseScreen.drawTitle()`/`drawBackground()`, legacy static helpers in `GuiComponent`, and the old `GuiBuilder<T>`.\n\n..."
+		},
 		{
 			"tag": "r1.0b6",
 			"published": "2026-11-14T06:17:38Z",
@@ -17,7 +86,7 @@
 					"name": "x4ui-r1.0b6.jar",
 					"url": "https://github.com/X4yii/x4ui/releases/download/r1.0b6/x4ui-r1.0b6.jar",
 					"size": 2475173,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "1805186193dc85398612a5623e523e8dd693e8cbc7f8970f29b3015463ba4189",
 					"mods": [],
