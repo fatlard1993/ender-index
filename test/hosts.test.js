@@ -187,6 +187,23 @@ describe('a gist', () => {
 			if (token === undefined) delete process.env.GITHUB_TOKEN;
 		}
 	});
+
+	test('answered 403 is left for later at the reset GitHub gives, not failed', async () => {
+		const original = globalThis.fetch;
+
+		globalThis.fetch = async () =>
+			new Response('{}', { status: 403, headers: { 'x-ratelimit-remaining': '7', 'x-ratelimit-reset': '1795216739' } });
+
+		try {
+			const { gist } = await import('../src/github');
+			const error = await gist('abc').catch(caught => caught);
+
+			expect(error).toBeInstanceOf(RateLimited);
+			expect(error.resetAt).toBe(1795216739 * 1000);
+		} finally {
+			globalThis.fetch = original;
+		}
+	});
 });
 
 describe('a readme', () => {
@@ -455,17 +472,24 @@ describe("one host's rate limit", () => {
 	});
 });
 
-test("a gist pack is crawled under GitHub's rate limit", async () => {
+test('a gist limited holds back no GitHub repository, and is left for the next crawl rather than failed', async () => {
 	const asked = [];
-	const outcome = await crawlEach(['gist:abc123', 'a/b'], {
+	const outcome = await crawlEach(['gist:abc123', 'gist:def456', 'a/b'], {
 		crawlRepo: async line => {
 			asked.push(line);
+
+			if (line === 'gist:abc123') throw new RateLimited("GitHub's gists answered 403", Date.now() + 3_600_000);
 		},
 		deadline: Date.now() + 60_000,
 	});
 
 	expect(asked).toEqual(['gist:abc123', 'a/b']);
-	expect(outcome).toEqual({ failures: [], stopped: [] });
+	expect(outcome).toEqual({
+		failures: [],
+		stopped: [
+			"GitHub's gists answered 403, past the time budget; 2 of Gist's repositories are crawled first next time",
+		],
+	});
 });
 
 describe('a crawl held up', () => {

@@ -425,11 +425,24 @@ export const searchRepositories = (query, page = 1) =>
 /**
  * A gist, with each of its files' contents: a file over a megabyte comes truncated, with a raw_url to the whole of it.
  * It is asked for with no token: GitHub refuses an App's installation token the gists API, and an answer without one
- * counts against an allowance apart from the crawl's, so it is kept out of what the crawl has spent.
+ * counts against an allowance apart from the crawl's, so it is kept out of what the crawl has spent. That allowance is
+ * the runner's address's, shared with whoever else it serves, so a 403 is read as it running out, whatever it says.
  */
 export const gist = async id => {
 	const path = `/gists/${id}`;
 	const response = await fetchSteady(`${API}${path}`, { headers: { accept: 'application/vnd.github+json' } });
+
+	if (response.status === 403 || response.status === 429) {
+		const reset = response.headers.get('x-ratelimit-reset');
+		const resetAt = reset
+			? Number(reset) * 1000
+			: Date.now() + Number(response.headers.get('retry-after') ?? 60) * 1000;
+
+		throw new RateLimited(
+			`GitHub's gists answered ${response.status} until ${new Date(resetAt).toISOString()}`,
+			resetAt,
+		);
+	}
 
 	if (!response.ok)
 		throw Object.assign(new Error(`GitHub ${response.status} for ${path}`), { status: response.status });

@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 
 import { readContent, readIcon, readLinks, readMods } from 'ender-launcher/metadata';
-import { HOSTS as HOST_NAMES } from 'ender-launcher/rank';
+import { HOSTS as HOST_TITLES } from 'ender-launcher/rank';
 import { scanJar } from 'ender-launcher/scan';
 
 import * as codeberg from './codeberg';
@@ -753,8 +753,11 @@ const minutes = wait => `${Math.ceil(wait / 60_000)} ${Math.ceil(wait / 60_000) 
  */
 export const REPO_LIMIT = 15 * 60 * 1000;
 
-/** The host whose rate limit a line is read under: a gist pack is read from GitHub's API. */
-const limitedBy = line => (GIST_LINE.test(line) ? 'github' : parseLine(line).host);
+/** Gists are asked for with no token, under an allowance apart from the repositories', so one runs out without the other. */
+const HOST_NAMES = { ...HOST_TITLES, gist: 'Gist' };
+
+/** The host whose rate limit a line is read under. */
+const limitedBy = line => (GIST_LINE.test(line) ? 'gist' : parseLine(line).host);
 
 class TookTooLong extends Error {}
 
