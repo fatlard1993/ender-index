@@ -5,8 +5,65 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-31T05:41:45Z",
-	"pushed": "2026-11-20T05:14:43Z",
+	"pushed": "2026-11-20T19:51:31Z",
 	"releases": [
+		{
+			"tag": "v1.24.3",
+			"published": "2026-11-20T19:51:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 773131477,
+					"name": "nexium-1.24.3.jar",
+					"url": "https://github.com/darrisbutcher/Nexium/releases/download/v1.24.3/nexium-1.24.3.jar",
+					"size": 3122141,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "d0dfdb06c2277511265c1f5452de4c9bc05ec188fc93d67032e324e44255a20b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "nexium",
+							"version": "1.24.3",
+							"name": "Nexium",
+							"description": "Drawers, a simple storage network, cross-dimensional tablets and links, Ender IO-style item and fluid conduits, all-in-one tools (AIOTs) that keep the enchantments of the five tools they are made from, with a tool menu to switch Silk Touch and Fortune and to fit modules (Nexus Link to send drops to the storage network, 3x3 mining), vein mining, and Nexium, a tier above netherite with Haste II tools, a spear and armor with switchable set bonuses (fire resistance, full-speed mining underwater and in the air, no knockback, restocking from the storage network, night vision). Also includes Essentials: no creeper/ghast block damage, endermen leave blocks alone, an item and XP magnet with its own trinket slot, a wings slot so an elytra and chestplate can be worn together, protection enchantments on elytra, netherite counts as gold for piglins, a bedrock-breaking elixir, picking up mobs as items, Fortune on ancient debris, and a 1-block iron farm.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [],
+							"suggests": [
+								"jei",
+								"roughlyenoughitems"
+							]
+						}
+					],
+					"icon": "59a1963a4938bba89aec7ef24600b9516c294af731fbaafe280c849ab78a1259.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 535,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "A maintenance release: fixes found by reviewing the code, each with a test.\n\n* **Energy conduits no longer leak memory.** The energy network cache was a map that was never emptied, so every conduit, and the whole\n  level with them, stayed in memory after a chunk unloaded or you left a world (in singleplayer, until the game was closed). A conduit\n  now holds its own network, which goes with it, and the conduits beside a removed or unloaded one find their network again without it.\n* **Storage networks never load chunks.** Scanning a network looked at blocks in the next chunk without checking it was loaded, which\n  loads it. The scan now stops at the edge of what is loaded, and picks the rest up once it loads.\n* **Builder Undo asks first.** It now respects spawn protection and the world border, as building does: blocks where you may not change\n  blocks are left as they are.\n* **A settings file with a mistake is kept.** If `config/nexium.json` can't be read, say after a typo, it is no longer replaced by the\n  defaults and lost: it is moved to `nexium.json.broken-<date>-<time>` (and the log says so) before the defaults are written.\n* **Dimensional Anchors drop their old-world migration.** It could release chunks someone else had forced with `/forceload`, and only\n  applied to saves from before 1.1.4, which can't be loaded since 1.23.0 anyway. Anchors never touch the forced-chunk flag now."
+		},
 		{
 			"tag": "v1.24.2",
 			"published": "2026-11-20T05:14:43Z",
@@ -17,7 +74,7 @@
 					"name": "nexium-1.24.2.jar",
 					"url": "https://github.com/darrisbutcher/Nexium/releases/download/v1.24.2/nexium-1.24.2.jar",
 					"size": 3121703,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "8c836bfddc8a1ac02483211f8b9c661ab382f8b47abe760b7ce2e0faa3602f6d",
 					"mods": [
