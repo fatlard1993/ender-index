@@ -6,8 +6,102 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-05T17:52:44Z",
-	"pushed": "2026-11-09T04:42:34Z",
+	"pushed": "2026-11-20T22:56:52Z",
 	"releases": [
+		{
+			"tag": "v1.6.3",
+			"published": "2026-11-20T22:42:11Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 773600890,
+					"name": "packupdater.jar",
+					"url": "https://github.com/Jammersmurph/PackUpdater/releases/download/v1.6.3/packupdater.jar",
+					"size": 138113,
+					"downloads": 14,
+					"inspection": 2,
+					"sha256": "2a424fafefbdaa3fa74cc048916bfcab4d78810d7745dc3a3ffa015065c99b74",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "packupdater",
+							"version": "1.6.3",
+							"name": "PackUpdater",
+							"description": "A NeoForge mod that updates a PackWiz modpack before the game starts, including the installer's optional mods. Configured entirely through <gameDir>/config/packupdater.properties, so no JVM arguments are needed. Falls back to a silent update on platforms that cannot open a window from a child process.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 78,
+						"jars": [
+							"updater/packupdater-bootstrap.jar"
+						],
+						"capabilities": {
+							"network": {
+								"dev/packupdater/OptionalModFilter.class": [
+									"java/net/http/HttpClient.send"
+								],
+								"dev/packupdater/UpdaterBootstrap.class": [
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"dev/packupdater/InProcessInstaller.class": [
+									"java/net/http/HttpClient"
+								],
+								"updater/packupdater-bootstrap.jar!link/infra/packwiz/installer/bootstrap/Bootstrap.class": [
+									"java/net/URL.openConnection"
+								]
+							},
+							"exec": {
+								"dev/packupdater/UpdaterBootstrap.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.start"
+								],
+								"dev/packupdater/GuiCapability.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start"
+								],
+								"updater/packupdater-bootstrap.jar!link/infra/packwiz/installer/bootstrap/ChainloadHandler.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.command",
+									"java/lang/ProcessBuilder.inheritIO",
+									"java/lang/ProcessBuilder.start"
+								]
+							},
+							"classloading": {
+								"updater/packupdater-bootstrap.jar!link/infra/packwiz/installer/bootstrap/LoadJAR.class": [
+									"java/net/URLClassLoader.<init>"
+								]
+							}
+						},
+						"hosts": {
+							"github.com": [
+								"dev/packupdater/UpdaterConfig.class"
+							],
+							"api.github.com": [
+								"dev/packupdater/UpdaterConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's new\n\n- **PackUpdater's standard desktop experience:** purple-themed updating, automatic pack names, custom pack artwork, searchable optional-mod selection, collapsible groups, activity logs, and download-error details.\n- **Maintained installer by default:** the compiled-in default and bundled configuration now select [PackUpdater's companion installer](https://github.com/Jammersmurph/packwiz-installer). These features are part of the supported PackUpdater experience; replacing the installer remains an advanced option.\n- **Optional-mod group example:** `optional-groups.toml` is now attached to releases and included in the mod JAR as an authoring example.\n- **Developer guides:** [Optional-mod groups](https://github.com/Jammersmurph/PackUpdater/wiki/Optional-mod-groups) and [branding, installer configuration, and migration](https://github.com/Jammersmurph/PackUpdater/wiki/Installer-and-branding).\n- Regression tests keep the built-in installer URL, shipped config, and example assets consistent. All 45 tests passed locally.\n\n## Interface and customization\n\n- The window adopts your pack's `pack.toml` name and closes automatically after successful updating. Existing optional-mod reminders and error dialogs still apply; there is no new routine post-update completion click.\n- Groups support bulk enable/disable, individual overrides, mixed-selection indicators, enabled counts, and search. Save applies choices; Cancel discards unsaved changes.\n- Artwork supports PNG, WebP, JPEG, GIF (first frame), and BMP, detected by content rather than extension. Put exactly one `icon.png`, `icon.webp`, `icon.jpg`, `icon.jpeg`, `icon.gif`, or `icon.bmp` beside `pack.toml`. Multiple matches use the default square PackUpdater logo.\n- Icons retain their aspect ratio and must be at most 1 MiB and 2048×2048 pixels. Remote artwork lookups share a three-second deadline.\n\n## For existing packs\n\nExisting `config/packupdater.properties` files are **not overwritten**. If your pack explicitly selects the original installer, change that line in your pack repository to:\n\n```properties\npackupdater.installer-url=https://api.github.com/repos/Jammersmurph/packwiz-installer/releases/latest\n```\n\nConfigurations without an explicit installer URL use the new default. JVM overrides still take precedence. No client files need to be edited by hand when the pack distributes its configuration normally.\n\n## Using optional groups\n\n1. Download `optional-groups.toml` below.\n2. Replace its example paths with your pack's actual optional `.pw.toml` metadata paths.\n3. Host it **beside your `pack.toml`**, on the same branch and in the same directory—not in the client's `config/` folder.\n4. Open **Optional mods** in the installer. Players can expand groups and enable or disable their members together.\n\nNo changes to the Packwiz tool or index entry are needed for the groups file. A mod must already be optional to appear; grouping preserves saved choices and individual defaults. Restricted/headless-platform behavior is unchanged.\n\n## Assets\n\n- `packupdater.jar` — the NeoForge mod.\n- `packupdater.pw.toml` — Packwiz metadata; place in your pack's `mods/` directory.\n- `packupdater.properties` — client configuration; place in your pack's `config/` directory and set your pack URL.\n- `optional-groups.toml` — optional authoring template; place beside the hosted `pack.toml` and customize.\n\n**Full changelog:** https://github.com/Jammersmurph/PackUpdater/compare/v1.6.2...v1.6.3\n\n**Detailed release notes and migration reference:** https://github.com/Jammersmurph/PackUpdater/blob/main/CHANGELOG.md"
+		},
 		{
 			"tag": "v1.6.2",
 			"published": "2026-11-09T04:48:18Z",
@@ -18,7 +112,7 @@
 					"name": "packupdater.jar",
 					"url": "https://github.com/Jammersmurph/PackUpdater/releases/download/v1.6.2/packupdater.jar",
 					"size": 137291,
-					"downloads": 706,
+					"downloads": 1077,
 					"inspection": 2,
 					"sha256": "e5a149da7ed889dadd7e484346755e85f5183c3980223d0b2e3744474ee20909",
 					"mods": [
@@ -112,7 +206,7 @@
 					"name": "packupdater.jar",
 					"url": "https://github.com/Jammersmurph/PackUpdater/releases/download/v1.6.1/packupdater.jar",
 					"size": 137012,
-					"downloads": 1079,
+					"downloads": 1203,
 					"inspection": 2,
 					"sha256": "42a06133d54a017838ce98d713137b2654a106f24f137ac05fa8edf0e36433f7",
 					"mods": [
