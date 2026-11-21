@@ -22,6 +22,7 @@ import { ownerName } from 'ender-launcher/support';
 import { collection } from './collection';
 import { loadExplanations, loadListing, loadPacks, loadShots, loadVersions } from './data';
 import { explainUrl, rescanUrl } from './forms';
+import { libraryOf } from './libraries';
 import { packCard } from './packs';
 import { shareUrl } from './shots';
 import {
@@ -237,15 +238,19 @@ const authorsWord = note =>
 			]
 		: [];
 
-/** The bundled jar a class came in, by the file's name, or none for the mod's own code. */
-const bundledIn = where => (where.includes('!') ? where.split('!')[0].split('/').at(-1) : undefined);
-
-/** The classes behind a finding, the mod's own first, then those of each jar it bundles under that jar's name. */
+/**
+ * The classes behind a finding, the mod's own first, then those of each library it bundles under that library's name:
+ * a jar inside it for certain, or a package that looks like a library's, which is said to be a guess.
+ */
 const evidenceLines = classes => {
-	const own = Object.entries(classes).filter(([where]) => !bundledIn(where));
+	const own = Object.entries(classes).filter(([where]) => !libraryOf(where));
 	const bundled = Object.groupBy(
-		Object.entries(classes).filter(([where]) => bundledIn(where)),
-		([where]) => bundledIn(where),
+		Object.entries(classes).filter(([where]) => libraryOf(where)),
+		([where]) => {
+			const { name, certain } = libraryOf(where);
+
+			return certain ? `In ${name}, a library it bundles:` : `In what looks like ${name}, a library it bundles:`;
+		},
 	);
 	const line = ([where, via]) =>
 		new Meta({
@@ -256,8 +261,8 @@ const evidenceLines = classes => {
 
 	return [
 		...own.map(line),
-		...Object.entries(bundled).flatMap(([jar, lines]) => [
-			new Meta({ tag: 'div', style: { marginLeft: theme.space.md }, textContent: `In ${jar}, a library it bundles:` }),
+		...Object.entries(bundled).flatMap(([heading, lines]) => [
+			new Meta({ tag: 'div', style: { marginLeft: theme.space.md }, textContent: heading }),
 			...lines.map(line),
 		]),
 	];
@@ -266,7 +271,9 @@ const evidenceLines = classes => {
 /** One finding folded: its name and what it means, a link to more, the classes behind it, and its author's word. */
 const findingDetails = ({ chip, about, part, linkText, classes, note }) => {
 	const details = new Component({ tag: 'details' });
-	const onlyBundled = Object.keys(classes).length > 0 && Object.keys(classes).every(bundledIn);
+	const libraries = Object.keys(classes).map(libraryOf);
+	const onlyBundled = libraries.length > 0 && libraries.every(Boolean);
+	const surely = libraries.every(library => library?.certain);
 
 	details.append(
 		new Component({
@@ -274,7 +281,16 @@ const findingDetails = ({ chip, about, part, linkText, classes, note }) => {
 			append: [
 				new Chip({ addClass: 'finding', textContent: chip }),
 				` ${about ?? ''}`,
-				...(onlyBundled ? [new Meta({ tag: 'span', textContent: ' · only in libraries it bundles' })] : []),
+				...(onlyBundled
+					? [
+							new Meta({
+								tag: 'span',
+								textContent: surely
+									? ' · only in libraries it bundles'
+									: ' · only in what look like libraries it bundles',
+							}),
+						]
+					: []),
 			],
 		}),
 		new Link({ href: findingsPath(part), textContent: linkText }),

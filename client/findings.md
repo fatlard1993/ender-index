@@ -4,7 +4,7 @@ Every jar the index lists is downloaded once and scanned for what its code can r
 
 Where its author has explained a finding, the explanation shows beside it, marked as theirs: the index looked it over before it showed, but has not checked what it says.
 
-A finding that only comes from a library the jar bundles inside itself, like a database driver, says so: the mod's own code does not reach it, though the library is still part of what runs.
+A finding that only comes from a library the jar bundles, like a database driver, says so: the mod's own code does not reach it, though the library is still part of what runs. A jar carried inside the mod is a library for certain. A package a well-known library keeps, like `org.sqlite` or `okhttp3`, or one a build moved into a folder like `shadow` or `deps` under the mod's own, only looks like one, and the page says so in those words: an author could name their own code that way.
 
 ## How the scan works
 
@@ -168,7 +168,7 @@ Classes in the release's jar that reach the network, other programs, native code
 
 Its code names where other programs keep what lets someone sign in as you: Discord's login token, a browser's saved logins and cookies, a cryptocurrency wallet, Telegram's session, Steam's sign in.
 
-No mod has a reason to name these, which is why this is not a warning but an alarm: shown at the top of the mod's page, in red on its search card, and **ender will not install the jar** unless the command is run again with `--trust`, which allows that jar alone, by its hash, so a later build is asked about again.
+No mod has a reason to name these, which is why this is not a warning but an alarm: shown at the top of the mod's page, in red on its search card, and **ender will not install the jar** unless the command is run again with `--trust`, or, in ender web, its offer to install it anyway is pressed twice; either allows that jar alone, by its hash, so a later build is asked about again.
 
 If you installed a jar with this finding, treat what it names as taken: sign out of Discord everywhere and change your password, change the passwords a browser saved, and move what a wallet holds.
 

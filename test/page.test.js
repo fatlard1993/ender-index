@@ -76,6 +76,7 @@ beforeAll(async () => {
 									capabilities: {
 										exec: {
 											'META-INF/jars/sqlite-jdbc.jar!org/sqlite/util/OSInfo.class': ['java/lang/ProcessBuilder.start'],
+											'x/shadow/org/h2/tools/Server.class': ['java/lang/Runtime.exec'],
 										},
 									},
 									signals: { webhook: { 'x/Send.class': ['https://discord.com/api/webhooks/1'] } },
@@ -345,8 +346,9 @@ describe("a mod's page", () => {
 
 		expect(text).toContain("Its code names where Discord's login token is kept. No mod has a reason to");
 		expect(text).toContain('warns of webhook');
-		expect(exec.textContent).toContain('only in libraries it bundles');
+		expect(exec.textContent).toContain('only in what look like libraries it bundles');
 		expect(exec.textContent).toContain('In sqlite-jdbc.jar, a library it bundles:');
+		expect(exec.textContent).toContain('In what looks like org.h2, a library it bundles:');
 		expect(text).toContain('10.0.0.7 (an address, not a name)');
 		expect(text).toContain("New since v4: exec, webhook, names Discord's login token");
 		expect(text).toContain('broken.jar, in v5, could not be read or scanned');
