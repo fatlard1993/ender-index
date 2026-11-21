@@ -62,6 +62,8 @@ export const ROUTES = Object.freeze({
 	get: '/get',
 	authors: '/authors',
 	authorsPart: '/authors/:part',
+	findings: '/findings',
+	findingsPart: '/findings/:part',
 	instances: '/instances',
 	settings: '/settings',
 	mine: '/mine',

@@ -64,7 +64,7 @@ Each mod has a page, made from what the repository already holds:
 
 ## Explaining a finding
 
-Each jar's findings show on its page: what its code can reach beyond the game, like the network, and the hosts its strings name. You can answer one two ways. Change the mod so the finding goes away, or explain it: [open an Explain a finding issue](https://github.com/fatlard1993/ender-index/issues/new?template=explain.yml) naming the mod, the finding, and what the code does with it. It shows beside that finding on every jar that has it, labelled as yours and with the release it was written for, because the index has not checked it. Say what a player would want to know: why the mod opens a connection, and to where.
+Each jar's findings show on its page: what its code can reach beyond the game, like the network, and the hosts its strings name. [What each finding means](https://fatlard1993.github.io/ender-index/findings) says what grants it and what players read into it. You can answer one two ways. Change the mod so the finding goes away, or explain it: [open an Explain a finding issue](https://github.com/fatlard1993/ender-index/issues/new?template=explain.yml) naming the mod, the finding, and what the code does with it. It shows beside that finding on every jar that has it, labelled as yours and with the release it was written for, because the index has not checked it. Say what a player would want to know: why the mod opens a connection, and to where.
 
 The issue has to come from the account that owns the repository, or one that made at least half its commits, and for now only mods on GitHub can be explained this way. Edit the issue to change what shows, or empty the explanation to take it down.
 

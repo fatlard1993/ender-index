@@ -63,6 +63,8 @@ The same scanner runs in the client when it updates a mod, so a finding here and
 
 With the releases, each repository is recorded with where its readme and pictures are, its contributors and how each takes support, its author's support links, and the project it was forked from. All but the last are read again weekly.
 
+[What each finding means](https://fatlard1993.github.io/ender-index/findings), for players and for authors, is a page of the index. Its source is [`client/findings.md`](client/findings.md).
+
 **These are findings, not verdicts.** An update checker reaches the network; a performance mod uses `Unsafe`. Nothing here is approved or rejected. The one exception is [`data/known-bad.json`](data/known-bad.json), a list of hashes with the reason each is there, which is a fact rather than a judgement.
 
 **A release changed after it was published is recorded.** Assets are tracked by their host's asset id, so a jar re-uploaded under the same name is downloaded again. If the bytes differ, the old hash is kept under `replaced` and the crawl reports it as `swapped`. A jar deleted from its release is kept with the date it went missing under `gone`.

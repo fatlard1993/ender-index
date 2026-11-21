@@ -210,6 +210,9 @@ export const LAUNCHER = hrefOf(ROUTES.get);
 /** Where the index tells mod authors what it reads from their repositories, or one part of that. */
 export const authorsPath = part => hrefOf(part ? routeTo('authorsPart', { part }) : ROUTES.authors);
 
+/** Where the index says what each finding of its scan means, or one of them. */
+export const findingsPath = part => hrefOf(part ? routeTo('findingsPart', { part }) : ROUTES.findings);
+
 /**
  * Shown only on a page ender is not serving: there it is the launcher's own, and the way to get ender is no news.
  * Hidden until that is known, so it does not show and vanish.

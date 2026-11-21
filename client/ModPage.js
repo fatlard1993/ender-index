@@ -86,6 +86,7 @@ import {
 	lightbox,
 	plainClick,
 	forStrangers,
+	findingsPath,
 	siteBar,
 	stat,
 	loadJson,
@@ -243,6 +244,7 @@ const capabilityList = (scan, explained) =>
 					` ${CAPABILITIES[capability] ?? ''}`,
 				],
 			}),
+			new Link({ href: findingsPath(capability), textContent: `What reaching ${capability} means` }),
 			...Object.entries(classes).map(
 				([className, calls]) =>
 					new Meta({
@@ -499,7 +501,12 @@ const findings = (scan, explained, entry) => {
 			}),
 		}),
 		...capabilityList(scan, explained),
-		...(hosts.length > 0 ? [new Meta({ tag: 'div', textContent: `Names hosts: ${hosts.join(', ')}` })] : []),
+		...(hosts.length > 0
+			? [
+					new Meta({ tag: 'div', textContent: `Names hosts: ${hosts.join(', ')}` }),
+					new Link({ href: findingsPath('hosts'), textContent: 'What the hosts mean' }),
+				]
+			: []),
 		...authorsWord(hosts.length > 0 && explained.hosts),
 		...((entry.host ?? 'github') === 'github'
 			? [
@@ -993,8 +1000,10 @@ export default class ModPage extends View {
 				append: [
 					new Meta({
 						tag: 'p',
-						textContent:
-							'The newest releases with jars, each jar downloaded and read by the crawl. What its code can reach is a finding, not a verdict: an update checker reaches the network.',
+						append: [
+							'The newest releases with jars, each jar downloaded and read by the crawl. What its code can reach is a finding, not a verdict: an update checker reaches the network. ',
+							new Link({ href: findingsPath(), textContent: 'What each finding means' }),
+						],
 					}),
 					...downloads.panel,
 				],

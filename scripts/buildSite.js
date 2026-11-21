@@ -101,6 +101,7 @@ export const sitePages = ({ shell, site, mods, packs }) => {
 		[ROUTES.packs, 'Packs'],
 		[ROUTES.get, 'Get ender'],
 		[ROUTES.authors, 'For authors'],
+		[ROUTES.findings, 'What findings mean'],
 		[ROUTES.instances, 'Instances'],
 		[ROUTES.mine, 'Your mods'],
 	])

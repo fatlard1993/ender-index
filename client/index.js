@@ -1,6 +1,7 @@
 import { Page, Router, View } from '@vanilla-bean/components';
 
 import AuthorsPage from './AuthorsPage';
+import FindingsPage from './FindingsPage';
 import CollectionBar from './CollectionBar';
 import GetPage from './GetPage';
 import InstancesPage from './InstancesPage';
@@ -46,6 +47,8 @@ new Page({
 					[ROUTES.get]: GetPage,
 					[ROUTES.authors]: AuthorsPage,
 					[ROUTES.authorsPart]: AuthorsPage,
+					[ROUTES.findings]: FindingsPage,
+					[ROUTES.findingsPart]: FindingsPage,
 					[ROUTES.instances]: InstancesPage,
 					[ROUTES.settings]: SettingsPage,
 					[ROUTES.mine]: MinePage,

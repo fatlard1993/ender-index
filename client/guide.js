@@ -1,6 +1,7 @@
 import { marked } from 'marked';
 
 import guide from './authors.md' with { type: 'text' };
+import findings from './findings.md' with { type: 'text' };
 import { slug } from './search';
 
 /**
@@ -28,3 +29,5 @@ export const renderGuide = markdown => {
 };
 
 export const guideMarkup = () => renderGuide(guide);
+
+export const findingsMarkup = () => renderGuide(findings);

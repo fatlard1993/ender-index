@@ -1,29 +1,6 @@
-import { Content, View, theme } from '@vanilla-bean/components';
-
+import { guidePage } from './GuidePage';
 import { guideMarkup } from './guide';
-import { Prose } from './ModPage';
-import { authorsPath, siteBar } from './ui';
+import { authorsPath } from './ui';
 
-/** What a mod author's repository can hold for the index to make the most of: linked by part, as authors/funding. */
-export default class AuthorsPage extends View {
-	build() {
-		const { part } = this.options;
-		const prose = new Prose();
-
-		prose.elem.innerHTML = guideMarkup();
-		document.title = 'For mod authors :: ender index';
-
-		this.content([
-			siteBar(undefined, ...(part ? [{ label: 'For authors', href: authorsPath() }] : []), {
-				label: part ? (prose.elem.querySelector(`#${CSS.escape(part)}`)?.textContent ?? part) : 'For authors',
-			}),
-			new Content({
-				column: 900,
-				style: { paddingBlock: theme.space.md },
-				append: prose,
-			}),
-		]);
-
-		if (part) requestAnimationFrame(() => prose.elem.querySelector(`#${CSS.escape(part)}`)?.scrollIntoView());
-	}
-}
+/** What a mod author's repository can hold for the index to make the most of. */
+export default guidePage({ markup: guideMarkup, title: 'For mod authors', label: 'For authors', path: authorsPath });

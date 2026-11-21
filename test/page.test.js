@@ -313,6 +313,7 @@ describe("a mod's page", () => {
 
 		expect(finding().textContent).toContain('From its author, jellysquid3, written for 1.0');
 		expect(finding().textContent).toContain('Their own words, which the index has not checked.');
+		expect(finding().querySelector('a[href$="findings/network"]')?.textContent).toBe('What reaching network means');
 		expect(document.body.textContent).toContain('its author explains');
 		expect(
 			[...document.querySelectorAll('a')].some(link => link.textContent.startsWith('Explain a finding, as its author')),

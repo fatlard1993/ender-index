@@ -64,6 +64,7 @@ import {
 	count,
 	date,
 	fetchReadme,
+	findingsPath,
 	siteBar,
 	loadJson,
 	screenshots,
@@ -625,6 +626,7 @@ export default class SearchPage extends View {
 
 					return chip;
 				}),
+				new Link({ href: findingsPath(), textContent: 'What these mean' }),
 			],
 		});
 
