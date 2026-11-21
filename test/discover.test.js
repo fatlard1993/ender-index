@@ -47,7 +47,9 @@ describe('the code search for mod metadata', () => {
 		expect(found.size).toBe(2500);
 		expect(state.slices.length).toBeGreaterThan(2);
 		expect(state.slices.every(({ from, to }) => to >= from)).toBe(true);
-		expect(state.slices.map(({ from }) => from)).toEqual(state.slices.map(({ from }) => from).toSorted((a, b) => a - b));
+		expect(state.slices.map(({ from }) => from)).toEqual(
+			state.slices.map(({ from }) => from).toSorted((a, b) => a - b),
+		);
 	});
 
 	test('splits a band with no upper end at twice its start', async () => {

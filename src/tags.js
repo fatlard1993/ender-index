@@ -28,7 +28,8 @@ const NOISE = new Set(
 );
 
 /** What every mod runs on or is built with, which says nothing of what it is about. */
-const PLATFORM = /^(minecraft|java|fabricloader|fabric-loader|fabric-api|fabric|quilt_loader|quilted_fabric_api|qsl|forge|neoforge|javafml|fabric-.*-v\d|fabric-language-.*|.*config.*|.*-lib|.*lib|architectury.*|cloth.*|kotlin.*)$/;
+const PLATFORM =
+	/^(minecraft|java|fabricloader|fabric-loader|fabric-api|fabric|quilt_loader|quilted_fabric_api|qsl|forge|neoforge|javafml|fabric-.*-v\d|fabric-language-.*|.*config.*|.*-lib|.*lib|architectury.*|cloth.*|kotlin.*)$/;
 
 /** A plural read as its singular, so a mod of `ships` and one of a `ship` share it. */
 export const stem = word => {
@@ -39,7 +40,11 @@ export const stem = word => {
 };
 
 export const words = text =>
-	(String(text ?? '').toLowerCase().match(/[a-z][a-z\d]{2,}/g) ?? [])
+	(
+		String(text ?? '')
+			.toLowerCase()
+			.match(/[a-z][a-z\d]{2,}/g) ?? []
+	)
 		.filter(word => !NOISE.has(word))
 		.map(stem)
 		.filter(word => !NOISE.has(word));

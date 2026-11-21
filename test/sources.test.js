@@ -4,7 +4,8 @@ import { RateLimited } from '../src/fetch';
 import { summarize } from '../src/search';
 import { checkSources, gameVersionOf, queryFor, sourceOf, sourceRecord } from '../src/sources';
 
-const fabricMod = fields => JSON.stringify({ id: 'boats', version: '${version}', depends: { minecraft: '~${minecraft_version}' }, ...fields });
+const fabricMod = fields =>
+	JSON.stringify({ id: 'boats', version: '${version}', depends: { minecraft: '~${minecraft_version}' }, ...fields });
 
 const answer = (files = {}, fields = {}) => ({
 	nameWithOwner: 'a/boats',
@@ -35,9 +36,9 @@ describe("a repository's source", () => {
 	test('does not when a zip of it would not hold all it builds from', () => {
 		expect(sourceOf(answer({ gradlew: null })).why).toBe('no gradle wrapper');
 		expect(sourceOf(answer({ gitmodules: { text: '[submodule "x"]' } })).why).toContain('submodules');
-		expect(sourceOf(answer({ settings: { text: "include ':lib'\nproject(':lib').projectDir = new File('../lib')" } })).why).toBe(
-			'builds with projects outside it',
-		);
+		expect(
+			sourceOf(answer({ settings: { text: "include ':lib'\nproject(':lib').projectDir = new File('../lib')" } })).why,
+		).toBe('builds with projects outside it');
 	});
 
 	test('does not when it is no named Minecraft mod of its own', () => {
@@ -45,7 +46,8 @@ describe("a repository's source", () => {
 		expect(sourceOf(answer({ fabric: { text: fabricMod({ id: '${mod_id}' }) } })).why).toContain('filled in');
 		expect(sourceOf(answer({ fabric: { text: fabricMod({ id: 'modid' }) } })).why).toContain('template');
 		expect(
-			sourceOf(answer({ properties: { text: '' }, fabric: { text: fabricMod({ depends: { cosmic_reach: '*' } }) } })).why,
+			sourceOf(answer({ properties: { text: '' }, fabric: { text: fabricMod({ depends: { cosmic_reach: '*' } }) } }))
+				.why,
 		).toBe('names no Minecraft version');
 	});
 });
@@ -146,7 +148,10 @@ test('a repository known only by its source is listed by it, marked so, with wha
 	const entry = summarize(sourceRecord(answer(), sourceOf(answer()).source, '2026-10-29'));
 
 	expect(entry.fromSource).toBe(true);
-	expect(entry.latest).toMatchObject({ tag: 'c0ffee', mods: [{ loader: 'fabric', id: 'boats', minecraft: '~1.21.4' }] });
+	expect(entry.latest).toMatchObject({
+		tag: 'c0ffee',
+		mods: [{ loader: 'fabric', id: 'boats', minecraft: '~1.21.4' }],
+	});
 	expect(entry.targets).toEqual([{ loader: 'fabric', minecraft: '~1.21.4' }]);
 	expect(summarize({ ...sourceRecord(answer(), sourceOf(answer()).source), source: undefined }).latest).toBeUndefined();
 });
