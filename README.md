@@ -58,7 +58,8 @@ For the newest five releases that carry a jar, and past those the newest that na
 - what it adds: its blocks, items, entities and the like by name, the kinds of data it carries, like recipes, loot tables and worldgen, and whether it has shaders
 - its icon, its download count, and the support links in its metadata
 - what its code can reach, by [ender](https://github.com/fatlard1993/ender-launcher)'s scanner: `exec`, `classloading`, `native`, `network`, `unsafe`, each with the classes and calls that grant it, plus the hosts its strings name
-- what it warns of, which can go either way: a chat `webhook`, the `session` token, `persistence` past the game, the `clipboard`, and code `hidden` under other names
+- what it warns of, which can go either way: a chat `webhook`, the `session` token, `persistence` past the game, the `clipboard`, code `hidden` under other names, an entry point reaching anything in its static `initializer`, and a `zip` two readers would read differently
+- on GitHub, the classes reaching the network or other programs that the repository at the release's tag has no source for, beside code that does have it (`unsourced`): one request for the tag's files per new release
 - where other programs keep logins, if its code names any: Discord's token, a browser's saved logins, a wallet. No mod has a reason to, so ender will not install such a jar unless its player trusts it
 - the version of the scanner that read it
 

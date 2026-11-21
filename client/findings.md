@@ -8,7 +8,7 @@ A finding that only comes from a library the jar bundles inside itself, like a d
 
 ## How the scan works
 
-The scan reads the compiled classes in the jar, and in any jar nested inside it, for the Java calls that grant each capability. It does not run the mod. A class that calls `java.net.http.HttpClient`, for example, is a network finding, and the mod's page lists that class and the call under it.
+The scan reads the compiled classes in the jar, and in any jar nested inside it, for the Java calls that grant each capability. It does not run the mod. A class that calls `java.net.http.HttpClient`, for example, is a network finding, and the mod's page lists that class, the call, and the method that makes it, like `HttpClient.send in checkForUpdates`.
 
 So a finding means the code is there, not that it runs. A mod that checks for updates only when its setting is on still reaches the network, because the code to do it is in the jar.
 
@@ -114,7 +114,7 @@ Its code reads Minecraft's session token, the key that lets a program play and j
 
 **What to look at:** taking the session token is what most Minecraft malware is for. A mod that is not about accounts has no reason to touch it, and one that is should be the one you meant to install.
 
-**What grants it:** `User.getAccessToken` and `getSessionId`, by Minecraft's own names on Minecraft 26 and on NeoForge, and by Fabric's names on 1.21 and before; and strings naming `launcher_accounts.json`.
+**What grants it:** `User.getAccessToken` and `getSessionId`, by Minecraft's own names on Minecraft 26 and on NeoForge, by Fabric's names on 1.21 and before, and by Forge's SRG names from 1.17 to 1.20.4 and before 1.17; and strings naming `launcher_accounts.json`.
 
 ### Persistence
 
@@ -140,6 +140,30 @@ The jar holds another jar or a class file under the name of some other kind of f
 
 **What to look at:** this is how a payload hides from anything that reads only `.class` and `.jar` files. Paired with a [classloading](#classloading) finding, it is worth asking the author about.
 
+### Initializer
+
+Code in a mod's entry point that runs as soon as its class loads, in a static initializer, reaches the network, other programs, native code, or new classes. The entry point is the class its `fabric.mod.json` or `quilt.mod.json` names, or a NeoForge or Forge mod's `@Mod` class.
+
+**Why a mod might:** rarely. Mods do their setup when the loader calls them, not as the class loads.
+
+**What to look at:** this is exactly where fractureiser put its first stage: a few lines added to a mod's main class that fetched the rest the moment the game loaded it. On a mod that never had it, it is the strongest sign in this list short of a secrets alarm.
+
+### Zip
+
+The jar's archive would be read differently by different tools: an entry named twice, or a jar or class present in the file that its directory does not list. The scan reads the directory, as Java does; a tool going through the file entry by entry would find more.
+
+**Why a mod might:** a broken build tool, almost never on purpose.
+
+**What to look at:** an archive built to show one thing to a scanner and another to something else is built to hide.
+
+### Unsourced
+
+Classes in the release's jar that reach the network, other programs, native code, or new classes, and that the repository at that release's tag has no source for, in a package where the rest of the mod's code does have its source. Only mods on GitHub are checked.
+
+**Why a mod might:** its release was built from a branch other than the one tagged, or a class is generated while it builds. Generated classes rarely reach any of these, which is why only those that do are told of.
+
+**What to look at:** a class slipped into a build, rather than written in the repository, is what a compromised build machine or a stolen release account produces. The page lists the classes.
+
 ## Secrets
 
 Its code names where other programs keep what lets someone sign in as you: Discord's login token, a browser's saved logins and cookies, a cryptocurrency wallet, Telegram's session, Steam's sign in.
@@ -156,7 +180,7 @@ A class in the jar that the scan could not read. A build tool can write one by m
 
 ## Scanner versions
 
-Each jar's findings say which version of the scanner read them. When the scanner learns a new check, jars read before keep their findings, which are still true; they just were not looked at for the new things. A mod's page offers a rescan for any jar an older scanner read, and anyone can [ask for one](https://github.com/fatlard1993/ender-index/issues/new?template=rescan.yml): its jars are read again within minutes.
+Each jar's findings say which version of the scanner read them. Version 3 added which method makes each call, the [initializer](#initializer) and [zip](#zip) warnings, and Forge's older names for the session token. When the scanner learns a new check, jars read before keep their findings, which are still true; they just were not looked at for the new things. A mod's page offers a rescan for any jar an older scanner read, and anyone can [ask for one](https://github.com/fatlard1993/ender-index/issues/new?template=rescan.yml): its jars are read again within minutes.
 
 ## For authors
 
