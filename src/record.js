@@ -27,13 +27,13 @@ const versionsNamed = (release, gameVersions) =>
 	);
 
 /**
- * The releases worth downloading: the newest few, and the newest naming each game version. A project
- * releasing per game version pushes its builds for older versions off the first page within weeks,
- * and those are what most instances run. The name only chooses what is downloaded; what a jar
- * supports is still read from the jar.
+ * The releases worth downloading: the newest few, and the newest naming each game version, leaving out any whose notes
+ * opt it out. A project releasing per game version pushes its builds for older versions off the first page within
+ * weeks, and those are what most instances run. The name only chooses what is downloaded; what a jar supports is still
+ * read from the jar.
  */
 export const watchedReleases = (releases, gameVersions = new Set()) => {
-	const candidates = releases.filter(release => !release.draft && modAssets(release).length > 0);
+	const candidates = releases.filter(release => !release.draft && !release.opted_out && modAssets(release).length > 0);
 	const watched = new Set(candidates.slice(0, WINDOW));
 	const covered = new Set();
 
@@ -89,12 +89,17 @@ export const notesOf = body => {
  * is inspected once, when first seen, and again only when the host reports a different asset under the
  * same name, or the same asset leading somewhere else: a GitLab link keeps its id when its URL is edited.
  * Different bytes from either keep the old hash in `replaced`, because a release changed after people
- * installed it is the thing most worth knowing about.
+ * installed it is the thing most worth knowing about. A release whose notes opt it out is dropped from the record.
  */
 export const updateRecord = async ({ record, repo, releases, now, inspect, host = 'github', gameVersions }) => {
 	const events = [];
 	const known = new Map(structuredClone(record?.releases ?? []).map(release => [release.tag, release]));
 	const watched = watchedReleases(releases, gameVersions);
+
+	for (const release of releases) {
+		if (release.opted_out && known.delete(release.tag_name))
+			events.push({ type: 'left', repo: repo.full_name, tag: release.tag_name });
+	}
 
 	for (const release of watched) {
 		const recorded = known.get(release.tag_name) ?? {

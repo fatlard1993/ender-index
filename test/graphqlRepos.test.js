@@ -67,12 +67,19 @@ describe('a repository read over GraphQL', () => {
 			pushed_at: '2026-10-01T00:00:00Z',
 			parent: undefined,
 			fork: false,
+			topics: [],
 		});
 		expect(releases[0].assets.map(asset => [asset.name, asset.id])).toEqual([
 			['LICENSE', 1234],
 			['mod.jar', 686551511],
 		]);
-		expect(releases[0]).toMatchObject({ tag_name: '1.0', prerelease: false, draft: false, body: 'Notes' });
+		expect(releases[0]).toMatchObject({
+			tag_name: '1.0',
+			prerelease: false,
+			draft: false,
+			body: 'Notes',
+			opted_out: false,
+		});
 		expect(
 			fromGraphql(node('a/fork', { isFork: true, parent: { nameWithOwner: 'o/mod' } }), notesOf).repo,
 		).toMatchObject({

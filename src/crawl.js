@@ -11,6 +11,7 @@ import { fetchSteady, RateLimited } from './fetch';
 import * as github from './github';
 import * as gitlab from './gitlab';
 import { ASSETS, detailsQuery, repoOf } from './graphqlRepos';
+import { OPTED_OUT, optedOutOn, optsOut } from './optOut';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
 import { GIST_LINE, buildPacks, crawlPack, packDemand, packPage } from './packs';
 import { buildSearch, latestAssets, themesOf } from './search';
@@ -81,6 +82,9 @@ export const restingOn = (checked, now = Date.now()) =>
 	checked !== undefined && now - Date.parse(checked) < RECHECK_DAYS * DAY;
 
 export const readNoJars = () => readJson(join(DATA, NO_JARS), {});
+
+/** The repositories found opting out of the index, each by the day it was last seen doing so. */
+export const readOptedOut = () => readJson(join(DATA, OPTED_OUT), {});
 
 /**
  * The repositories known only from a Modrinth project's source link, crawled after every one found on its host. Those
@@ -562,7 +566,7 @@ export const picturesOf = async ({ host, name, recorded, now }) => {
 	}
 };
 
-const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, people, renames }) => {
+const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, people, renames, optedOut }) => {
 	const { host, name } = parseLine(line);
 	const path = recordPath({ host, name });
 	const record = await readJson(path);
@@ -580,6 +584,16 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, peo
 		return result.events;
 	}
 
+	if (optsOut(repo)) {
+		await rm(path, { force: true });
+		await rm(recordPath({ host, name: repo.full_name ?? name }), { force: true });
+		optedOut.set(line, now.slice(0, 10));
+
+		return [{ type: 'left', repo: repo.full_name ?? name }];
+	}
+
+	optedOut.delete(line);
+
 	// A renamed repository answers under its new name; its record is kept under that one, where search
 	// and the launcher look for it.
 	const canonical = recordPath({ host, name: repo.full_name ?? name });
@@ -594,6 +608,7 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, peo
 	}
 
 	const result = await updateRecord({ record: recorded, repo, releases: listed, now, inspect, host, gameVersions });
+	const everyReleaseOptedOut = result.record === undefined && recorded?.releases.length > 0;
 
 	if (result.record) {
 		await fillIcons(result.record, scratch);
@@ -621,6 +636,8 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, peo
 			...contributed,
 			history: HISTORY,
 		});
+	} else if (everyReleaseOptedOut) {
+		await rm(canonical, { force: true });
 	}
 	if (canonical !== path) {
 		renames.set(line, lineFor({ host, name: repo.full_name }));
@@ -1009,7 +1026,9 @@ export const crawl = async ({ only } = {}) => {
 				lines: uniqueRepositories([...found, ...fromModrinth, ...Object.values(await readPackLines()).flat()]),
 			});
 	const noJars = only ? {} : await readNoJars();
-	const notResting = line => !restingOn(noJars[line]) || changed.has(line);
+	const optedOut = new Map(Object.entries(await readOptedOut()));
+	const notResting = line =>
+		(!restingOn(noJars[line]) || changed.has(line)) && (only !== undefined || !optedOutOn(optedOut.get(line)));
 	const repos = crawlOrder(
 		found.filter(notResting),
 		fromModrinth.filter(notResting),
@@ -1066,6 +1085,7 @@ export const crawl = async ({ only } = {}) => {
 					owners,
 					people,
 					renames,
+					optedOut,
 				})) {
 					console.log(
 						[event.type.padEnd(7), event.repo, event.tag, event.asset, event.error && `:: ${event.error}`]
@@ -1100,6 +1120,8 @@ export const crawl = async ({ only } = {}) => {
 		);
 		console.log(`${renames.size === 1 ? 'One repository was' : `${renames.size} repositories were`} found renamed`);
 	}
+
+	await writeJson(join(DATA, OPTED_OUT), Object.fromEntries([...optedOut].sort(([a], [b]) => a.localeCompare(b))));
 
 	const { records, packs } = await writeLists();
 

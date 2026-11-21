@@ -1,4 +1,5 @@
 import { fetchSteady, limitedBy } from './fetch';
+import { releaseOptsOut } from './optOut';
 
 /** Codeberg runs Forgejo, whose API answers in nearly GitHub's shapes. */
 const API = 'https://codeberg.org/api/v1';
@@ -23,6 +24,7 @@ export const repository = async fullName => {
 		archived: repo.archived,
 		created_at: repo.created_at,
 		pushed_at: repo.updated_at,
+		topics: repo.topics ?? [],
 	};
 };
 
@@ -59,6 +61,7 @@ export const releases = async (fullName, page = 1) =>
 		published_at: release.published_at,
 		prerelease: release.prerelease,
 		body: release.body,
+		opted_out: releaseOptsOut(release.body),
 		draft: release.draft,
 		assets: (release.assets ?? []).map(({ id, name, size, browser_download_url, download_count }) => ({
 			id,

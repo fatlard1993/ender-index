@@ -62,6 +62,15 @@ Each mod has a page, made from what the repository already holds:
 - **Pictures:** on GitHub, up to forty images in the repository outside its source, build and texture folders, and not named `icon`, `logo`, `badge` or `banner`. Players can add screenshots of their own.
 - **What its code reaches.** Each jar is scanned for what it can do beyond the game, like reaching the network or running programs. That is a finding, not a verdict: an update checker reaches the network.
 
+## Opting out
+
+A mod is in the index because its repository publishes it, and its author says otherwise in the same place: no account, and no one to ask.
+
+- **The whole repository:** add the topic `ender-index-opt-out` to it. The next crawl to reach it, usually within an hour or two, drops its page, its releases and its place in search, and leaves it alone after; it is looked at again weekly, and listed again once the topic is gone. A pack repository with the topic is dropped the same way.
+- **One release:** put `ender-index-opt-out` anywhere in its notes, as `<!-- ender-index-opt-out -->` to keep it out of sight. Its jars are not downloaded, and a release read before is dropped from the record, while the rest of the mod stays listed. Notes edited after publishing are read within the week; [open a List a mod issue](https://github.com/fatlard1993/ender-index/issues/new?template=mod.yml) to have them read now. Only the newest thirty releases' notes are read.
+
+Opting out takes a mod out of the index, not off your releases: a player who names your repository, as `ender add gh:owner/repo`, still installs from it.
+
 ## Notices
 
 Players can ask for two things on a mod's page: a way to pay its author, when the index knows none, and a built release, when it has only its source. Each player is counted once, and the count shows on the mod's page. The index posts nothing on your repository for it; when enough players have asked, it reaches out to you itself.

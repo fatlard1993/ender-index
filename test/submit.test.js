@@ -108,4 +108,18 @@ describe('a submitted mod', () => {
 		expect(failed).toMatchObject({ listed: false, failed: true });
 		expect(unread.say).toStartWith('`not a repo` is not');
 	});
+
+	test('that opts out is told so, not that it has no jar, and not kept', async () => {
+		const kept = [];
+		const result = await submitMod(form('you/private'), {
+			crawlOne: async () => 0,
+			listed: async () => undefined,
+			keep: async line => kept.push(line),
+			optedOut: async line => line === 'you/private',
+		});
+
+		expect(result).toMatchObject({ listed: false });
+		expect(result.say).toStartWith('you/private opts out of the index with the `ender-index-opt-out` topic');
+		expect(kept).toEqual([]);
+	});
 });

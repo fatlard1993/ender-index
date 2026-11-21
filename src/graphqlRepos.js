@@ -1,3 +1,5 @@
+import { releaseOptsOut } from './optOut';
+
 /** A release's assets asked for: more than any mod's release attaches, under GraphQL's limit on nodes. */
 export const ASSETS = 50;
 
@@ -31,7 +33,7 @@ export const assetIdOf = nodeId => {
 };
 
 const DETAILS =
-	'nameWithOwner description stargazerCount isArchived isFork parent { nameWithOwner } licenseInfo { spdxId } createdAt pushedAt';
+	'nameWithOwner description stargazerCount isArchived isFork parent { nameWithOwner } licenseInfo { spdxId } createdAt pushedAt repositoryTopics(first: 20) { nodes { topic { name } } }';
 
 const queryEach = (names, fields) =>
 	`query { ${names
@@ -68,6 +70,7 @@ export const repoOf = node => ({
 	pushed_at: node.pushedAt,
 	parent: node.parent ? { full_name: node.parent.nameWithOwner } : undefined,
 	fork: node.isFork,
+	topics: node.repositoryTopics?.nodes.map(({ topic }) => topic.name) ?? [],
 });
 
 /**
@@ -82,6 +85,7 @@ export const fromGraphql = (node, notes) => ({
 		prerelease: release.isPrerelease,
 		draft: release.isDraft,
 		body: notes(release.description),
+		opted_out: releaseOptsOut(release.description),
 		assets: release.releaseAssets.nodes
 			.map(asset => ({
 				id: assetIdOf(asset.id),

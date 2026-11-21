@@ -6,6 +6,7 @@ import { readSourceMods } from 'ender-launcher/metadata';
 import { DATA, parseLine, readJson, readRepos, recordPath, writeJson } from './crawl.js';
 import { RateLimited } from './fetch.js';
 import * as github from './github.js';
+import { optsOut } from './optOut.js';
 
 /** The repositories looked at for a source to build, each by the day it was and what was found. */
 export const SOURCE_CHECKS = 'source-checks.json';
@@ -42,7 +43,7 @@ export const queryFor = names =>
 				.map(([key, path]) => `${key}: object(expression: ${JSON.stringify(`HEAD:${path}`)}) { ... on Blob { text } }`)
 				.join(' ');
 
-			return `r${at}: repository(owner: ${JSON.stringify(owner)}, name: ${JSON.stringify(repository)}) { nameWithOwner description stargazerCount isArchived isFork createdAt pushedAt licenseInfo { spdxId } defaultBranchRef { target { ... on Commit { oid committedDate } } } ${files} }`;
+			return `r${at}: repository(owner: ${JSON.stringify(owner)}, name: ${JSON.stringify(repository)}) { nameWithOwner description stargazerCount isArchived isFork createdAt pushedAt licenseInfo { spdxId } repositoryTopics(first: 20) { nodes { topic { name } } } defaultBranchRef { target { ... on Commit { oid committedDate } } } ${files} }`;
 		})
 		.join(' ')} }`;
 
@@ -81,11 +82,15 @@ const REACHES_OUT = /\.\.[/\\]|includeBuild/;
 export const sourceOf = answer => {
 	const text = key => answer[key]?.text;
 
+	if (optsOut({ topics: answer.repositoryTopics?.nodes.map(({ topic }) => topic.name) })) {
+		return { why: 'opts out of the index' };
+	}
 	if (answer.isArchived) return { why: 'archived' };
 	if (answer.isFork) return { why: 'a fork, whose mod is listed where it came from' };
 	if (text('gradlew') === undefined) return { why: 'no gradle wrapper' };
 	if (answer.gitmodules) return { why: 'git submodules, which a zip of its source leaves out' };
-	if (REACHES_OUT.test(text('settings') ?? text('settingsKts') ?? '')) return { why: 'builds with projects outside it' };
+	if (REACHES_OUT.test(text('settings') ?? text('settingsKts') ?? ''))
+		return { why: 'builds with projects outside it' };
 
 	const properties = readProperties(text('properties'));
 	let mods;
@@ -227,9 +232,7 @@ export const checkSources = async ({
 		}
 	}
 
-	log(
-		`${counts.builds} build from source and are listed so, ${counts.not} do not, ${counts.failed} went unanswered`,
-	);
+	log(`${counts.builds} build from source and are listed so, ${counts.not} do not, ${counts.failed} went unanswered`);
 
 	return kept;
 };

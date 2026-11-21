@@ -8,12 +8,14 @@ import {
 	parseLine,
 	readJson,
 	readLines,
+	readOptedOut,
 	readRenames,
 	renamedLine,
 	writeJson,
 	writeLists,
 } from './crawl';
 import { lineOf } from './modrinth';
+import { OPT_OUT } from './optOut';
 import { crawlPack } from './packs';
 
 const SITE = 'https://fatlard1993.github.io/ender-index';
@@ -121,6 +123,9 @@ const listingOf = async line => {
 	return entries.find(entry => (entry.host ?? 'github') === host && entry.repo.toLowerCase() === name.toLowerCase());
 };
 
+/** Whether the crawl just found this repository opting out. */
+const optingOut = async line => renamedLine(await readRenames(), line) in (await readOptedOut());
+
 /** A line kept in repos.txt, which a line added by hand opts into, so every crawl after reads it too. */
 const optIn = async line => {
 	const path = join(DATA, 'repos.txt');
@@ -139,7 +144,7 @@ const optIn = async line => {
  */
 export const submitMod = async (
 	body,
-	{ crawlOne = line => crawl({ only: [line] }), listed = listingOf, keep = optIn } = {},
+	{ crawlOne = line => crawl({ only: [line] }), listed = listingOf, keep = optIn, optedOut = optingOut } = {},
 ) => {
 	const answer = answerOf(body, 'Mod');
 	const line = answer && modLineOf(answer);
@@ -153,6 +158,13 @@ export const submitMod = async (
 
 	if ((await crawlOne(line)) !== 0)
 		return { listed: false, failed: true, say: `${line} could not be crawled just now.` };
+
+	if (await optedOut(line)) {
+		return {
+			listed: false,
+			say: `${line} opts out of the index with the \`${OPT_OUT}\` topic, so it is not listed. Once its author removes the topic, edit the issue and it is read again.`,
+		};
+	}
 
 	const entry = await listed(line);
 

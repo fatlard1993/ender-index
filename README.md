@@ -41,6 +41,10 @@ The [guide for mod authors](https://fatlard1993.github.io/ender-index/authors) h
 
 Discovery finds a mod nightly, by that metadata or by a topic; [Being found](https://fatlard1993.github.io/ender-index/authors/being-found) says which. To be listed now, [open a List a mod issue](https://github.com/fatlard1993/ender-index/issues/new?template=mod.yml): the repository is crawled and listed within minutes, or the issue says why not. A pull request adding a line to [`data/repos.txt`](data/repos.txt) works too: `owner/repo` for GitHub, `codeberg:owner/repo`, or `gitlab:group/project`.
 
+### Opting out
+
+A repository with the topic `ender-index-opt-out` is dropped from the index and left alone, and a release with `ender-index-opt-out` in its notes is never downloaded. The guide's [Opting out](https://fatlard1993.github.io/ender-index/authors/opting-out) has the details. The repositories found opting out are kept in `data/opted-out.json`, so the crawl looks at each again only weekly.
+
 ### Packs
 
 A pack repository on GitHub is found by an `ender.pack.json` or a packwiz `pack.toml`, or by the topics `minecraft-modpack`, `mrpack` or `packwiz`. A pack in a gist, where `ender export --gist` puts one, or in a repository discovery has not found, is listed by [opening a List a pack issue](https://github.com/fatlard1993/ender-index/issues/new?template=pack.yml).
@@ -87,6 +91,7 @@ data/packs.json                 one summary per pack, for listing
 data/pack-pages/<owner>/<repo>.json  a pack's page: each mod it names and where it comes from
 data/shots.json                 the player shots published, by the mods they show
 data/interest.json              the players who asked, by mod and by what they asked for
+data/opted-out.json             repositories found opting out, each by the day it was last seen doing so
 ```
 
 A record, trimmed:

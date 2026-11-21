@@ -8,6 +8,7 @@ import { packwizMetafiles, packwizPack } from 'ender-launcher/packwiz';
 import { fetchSteady, limitedBy } from './fetch';
 import * as github from './github';
 import { lineOf, projectsByHash, projectsById } from './modrinth';
+import { optsOut } from './optOut';
 import { rawUrl } from './raw';
 
 /** The largest .mrpack downloaded whole, when its host will not serve it by ranges. */
@@ -294,7 +295,7 @@ export const crawlPack = async (
 		throw error;
 	});
 
-	if (repo === undefined) return undefined;
+	if (repo === undefined || optsOut(repo)) return undefined;
 
 	const formats =
 		recorded?.pushed !== undefined && recorded.pushed === repo.pushed_at

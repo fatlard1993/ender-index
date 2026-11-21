@@ -1,6 +1,7 @@
 import { basename } from 'node:path';
 
 import { fetchSteady, limitedBy } from './fetch';
+import { releaseOptsOut } from './optOut';
 
 const API = 'https://gitlab.com/api/v4';
 
@@ -37,6 +38,7 @@ export const repository = async fullName => {
 		created_at: repo.created_at,
 		pushed_at: repo.last_activity_at,
 		readme: readmePath(repo.readme_url),
+		topics: repo.topics ?? repo.tag_list ?? [],
 	};
 };
 
@@ -69,6 +71,7 @@ export const releases = async (fullName, page = 1) =>
 		published_at: release.released_at,
 		prerelease: Boolean(release.upcoming_release),
 		body: release.description,
+		opted_out: releaseOptsOut(release.description),
 		draft: false,
 		assets: (release.assets?.links ?? []).map(assetOf),
 	}));

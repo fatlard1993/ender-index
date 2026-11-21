@@ -8,6 +8,7 @@ import {
 	parseLine,
 	readModrinthRepos,
 	readNoJars,
+	readOptedOut,
 	readRenames,
 	readRepos,
 	recordPath,
@@ -15,6 +16,7 @@ import {
 } from './crawl.js';
 import { RateLimited } from './fetch.js';
 import * as github from './github.js';
+import { optedOutOn } from './optOut.js';
 
 /** Repositories asked about in one query: fifty with ten releases each cost GitHub's GraphQL limit six points. */
 export const BATCH = 50;
@@ -53,6 +55,7 @@ export const jarsIn = (data, names) =>
 export const triage = async ({
 	lines,
 	noJars,
+	optedOut = {},
 	now = Date.now(),
 	ask = github.graphql,
 	indexed = async name => Bun.file(recordPath({ host: 'github', name })).exists(),
@@ -68,7 +71,8 @@ export const triage = async ({
 	for (const line of lines) {
 		const { host, name } = parseLine(line);
 
-		if (host === 'github' && !restingOn(kept[name], now) && !(await indexed(name))) todo.push(name);
+		if (host !== 'github' || restingOn(kept[name], now) || optedOutOn(optedOut[line], now)) continue;
+		if (!(await indexed(name))) todo.push(name);
 	}
 
 	const batches = [];
@@ -136,6 +140,11 @@ if (import.meta.main) {
 	const minutes = Number(process.env.TRIAGE_MINUTES ?? Infinity);
 
 	await writeNoJars(
-		await triage({ lines: await triageLines(), noJars: await readNoJars(), deadline: Date.now() + minutes * 60_000 }),
+		await triage({
+			lines: await triageLines(),
+			noJars: await readNoJars(),
+			optedOut: await readOptedOut(),
+			deadline: Date.now() + minutes * 60_000,
+		}),
 	);
 }

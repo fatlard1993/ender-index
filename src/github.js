@@ -4,6 +4,7 @@ import { dirname, join } from 'node:path';
 import { appTokens } from './appToken';
 import { fetchSteady, RateLimited } from './fetch';
 import { fromGraphql, repositoriesQuery } from './graphqlRepos';
+import { releaseOptsOut } from './optOut';
 import { notesOf } from './record';
 
 const API = 'https://api.github.com';
@@ -208,6 +209,7 @@ const repositoryFields = repo => ({
 	pushed_at: repo.pushed_at,
 	parent: repo.parent && { full_name: repo.parent.full_name },
 	fork: repo.fork,
+	topics: repo.topics ?? [],
 });
 
 const releaseFields = list =>
@@ -217,6 +219,7 @@ const releaseFields = list =>
 		prerelease: release.prerelease,
 		draft: release.draft,
 		body: notesOf(release.body),
+		opted_out: releaseOptsOut(release.body),
 		assets: (release.assets ?? []).map(({ id, name, size, browser_download_url, download_count }) => ({
 			id,
 			name,
