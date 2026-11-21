@@ -78,6 +78,7 @@ export const Alarm = styled.Component(
 		display: flex;
 		flex-direction: column;
 		gap: ${space.xs};
+		overflow-wrap: anywhere;
 	`,
 );
 
@@ -85,6 +86,7 @@ export const Warning = styled.Component(
 	({ colors, fontSize }) => `
 		color: ${colors.warning};
 		font-size: ${fontSize.sm};
+		overflow-wrap: anywhere;
 	`,
 );
 

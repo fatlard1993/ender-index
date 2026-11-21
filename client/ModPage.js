@@ -273,7 +273,7 @@ const onItsOwnLine = link => new Component({ tag: 'div', append: link });
 
 /** One finding folded: its name and what it means, a link to more, the classes behind it, and its author's word. */
 const findingDetails = ({ chip, about, part, linkText, classes, note }) => {
-	const details = new Component({ tag: 'details' });
+	const details = new Component({ tag: 'details', style: { overflowWrap: 'anywhere' } });
 	const libraries = Object.keys(classes).map(libraryOf);
 	const onlyBundled = libraries.length > 0 && libraries.every(Boolean);
 	const surely = libraries.every(library => library?.certain);
@@ -624,7 +624,7 @@ const findings = ({ scan, unsourced }, explained, entry) => {
 	if (reached.length + warned.length + hosts.length + unreadable.length === 0) return secretsAlarm(scan, explained);
 
 	const answered = [...reached, ...warned, ...(hosts.length > 0 ? ['hosts'] : [])].some(finding => explained[finding]);
-	const details = new Component({ tag: 'details' });
+	const details = new Component({ tag: 'details', style: { overflowWrap: 'anywhere' } });
 
 	details.append(
 		new Component({
@@ -723,7 +723,7 @@ const RELEASES_SHOWN = 3;
 const releaseNotes = (release, sources) => {
 	if (!release.notes) return [];
 
-	const details = new Component({ tag: 'details' });
+	const details = new Component({ tag: 'details', style: { overflowWrap: 'anywhere' } });
 	const prose = new Prose();
 
 	prose.elem.innerHTML = renderReadme(release.notes, sources);
