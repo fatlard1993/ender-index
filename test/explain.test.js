@@ -155,3 +155,22 @@ describe('an author explaining a finding', () => {
 		expect((await run(issue())).refine).toBe(false);
 	});
 });
+
+test('a warning is explained as a capability is, and a jar warning of it counts as having it', async () => {
+	const warned = {
+		...record,
+		releases: [{ tag: '2.0', assets: [{ scan: { capabilities: {}, signals: { webhook: { 'a/A.class': ['x'] } } } }] }],
+	};
+	const { shown, say } = await explain(
+		{
+			body: '### Mod\n\nAuthor/boats\n\n### Finding\n\nwebhook: its code names a chat webhook\n\n### The finding is\n\nRight, and this says why\n\n### Explanation\n\nIt posts server chat to our Discord.',
+			user: { login: 'Author' },
+			labels: [{ name: 'approved' }],
+			html_url: 'https://example.invalid/1',
+		},
+		{ explanations: {}, action: 'labeled', labelled: 'approved', readRecord: async () => warned },
+	);
+
+	expect(shown).toBe(true);
+	expect(say).not.toContain('shows once one does');
+});

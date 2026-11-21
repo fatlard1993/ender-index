@@ -10,8 +10,30 @@ export const EXPLANATIONS = 'explanations.json';
 /** The issue form's fields, by the labels GitHub writes as headings into the issue it files. */
 export const FIELDS = { mod: 'Mod', finding: 'Finding', verdict: 'The finding is', explanation: 'Explanation' };
 
-/** What a scan finds that an author can answer: each capability, and the hosts its strings name. */
-export const FINDINGS = ['exec', 'classloading', 'native', 'network', 'unsafe', 'hosts'];
+/** What a scan finds that an author can answer: each capability, each warning, other programs' secrets, and hosts. */
+export const FINDINGS = [
+	'exec',
+	'classloading',
+	'native',
+	'network',
+	'unsafe',
+	'webhook',
+	'session',
+	'persistence',
+	'clipboard',
+	'hidden',
+	'secrets',
+	'hosts',
+];
+
+/** Whether a jar's scan has this finding. */
+const hasFinding = (scan, finding) => {
+	if (finding === 'hosts') return Object.keys(scan?.hosts ?? {}).length > 0;
+	if (finding === 'hidden') return (scan?.hidden ?? []).length > 0;
+	if (finding === 'secrets') return Object.keys(scan?.secrets ?? {}).length > 0;
+
+	return scan?.capabilities?.[finding] !== undefined || scan?.signals?.[finding] !== undefined;
+};
 
 /** The most of an explanation kept: a few sentences, which a page shows whole beside the finding. */
 export const EXPLANATION_KEPT = 1000;
@@ -43,11 +65,7 @@ export const findingOf = answer => FINDINGS.find(finding => answer?.trim().toLow
 
 /** Whether any jar recorded for the repository has this finding. */
 const found = (record, finding) =>
-	record.releases.some(({ assets }) =>
-		assets.some(({ scan }) =>
-			finding === 'hosts' ? Object.keys(scan?.hosts ?? {}).length > 0 : scan?.capabilities?.[finding] !== undefined,
-		),
-	);
+	record.releases.some(({ assets }) => assets.some(({ scan }) => hasFinding(scan, finding)));
 
 /**
  * An issue explaining a finding, applied to the explanations kept. One from someone who speaks for the repository
