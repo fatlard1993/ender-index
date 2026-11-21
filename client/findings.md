@@ -1,8 +1,10 @@
-Every jar the index lists is downloaded once and scanned for what its code can reach beyond the game: the network, other programs, native code, memory past Java's checks, and classes it defines while running. Each thing found is a finding. ender runs the same scan on your own machine when it updates a mod, so a finding here and a finding there mean the same thing.
+Every jar the index lists is downloaded once and scanned for what its code can reach beyond the game: the network, other programs, native code, memory past Java's checks, and classes it defines while running. Each thing found is a finding. The scan also warns of what can go either way, like a chat webhook or the session token, and says outright when a jar names where other programs keep their logins. ender runs the same scan on your own machine when it installs and updates a mod, so a finding here and a finding there mean the same thing.
 
 **A finding is not a verdict.** An update checker reaches the network; a performance mod uses `Unsafe`. Most findings have an ordinary reason, and the index approves and rejects nothing. What a finding tells you is where a mod's code can go, so you can ask whether that fits what the mod is for. A decorative blocks mod that reaches the network is worth a second look; a voice chat mod that does not would be strange.
 
-Where its author has explained a finding, the explanation shows beside it, marked as theirs: the index has not checked it.
+Where its author has explained a finding, the explanation shows beside it, marked as theirs: the index looked it over before it showed, but has not checked what it says.
+
+A finding that only comes from a library the jar bundles inside itself, like a database driver, says so: the mod's own code does not reach it, though the library is still part of what runs.
 
 ## How the scan works
 
@@ -30,7 +32,7 @@ Its code can open network connections: an HTTP request, a socket, a URL opened a
 
 **What to look at:** whether the mod has a reason to, and the [hosts](#hosts) its strings name. A network finding that appears in an update to a mod that never had one is the pattern to stop on.
 
-**What grants it:** `java.net.URL.openConnection`, `java.net.URL.openStream`, `java.net.Socket`, `java.net.DatagramSocket`, `java.net.http.HttpClient`, `java.nio.channels.SocketChannel`.
+**What grants it:** `java.net.URL.openConnection`, `openStream` and `getContent`, `java.net.Socket`, `ServerSocket`, `DatagramSocket` and `MulticastSocket`, `java.net.http.HttpClient`, the socket and datagram channels of `java.nio.channels`, `com.sun.net.httpserver.HttpServer`, and Netty's `Bootstrap` and `ServerBootstrap`, which Minecraft provides, so a mod can connect with them and no `java.net` call of its own.
 
 **For its author:** an update checker is the most common network finding, and ender and Modrinth already tell players when a mod has a newer version, so one can often go. Otherwise, [explain it](#for-authors): what the mod connects to, and why.
 
@@ -42,7 +44,7 @@ Its code can start other programs on the player's computer.
 
 **What to look at:** this is the rarest finding and the one with the least room for doubt about what code can do once it has it. Few mods need it, and a content mod almost never does.
 
-**What grants it:** `java.lang.Runtime.exec`, `java.lang.ProcessBuilder`.
+**What grants it:** `java.lang.Runtime.exec`, `java.lang.ProcessBuilder`, and `java.awt.Desktop`'s `browse`, `open` and `edit`, which hand a file or a link to whatever program the system picks.
 
 **For its author:** to open a folder or a link, Minecraft's own `Util` does it for you (`Util.getPlatform().openUri` in Mojang's names, `Util.getOperatingSystem().open` in Yarn's), and its code is not part of your jar, so the finding goes away.
 
@@ -54,7 +56,7 @@ Its code can load a native library: machine code for one system, outside Java al
 
 **What to look at:** native code is outside anything the scan can read, so once it loads, the scan cannot say what it does. Prefer mods that ship well-known libraries, and be wary of one that loads a library it downloaded.
 
-**What grants it:** `java.lang.System.load`, `java.lang.System.loadLibrary`, `java.lang.Runtime.load`, `java.lang.Runtime.loadLibrary`.
+**What grants it:** `System.load` and `loadLibrary`, and the same on `Runtime`; Java 22's `java.lang.foreign.Linker` and `SymbolLookup.libraryLookup`, which reach native code with no library loaded the old way; JNA's `Native` and `NativeLibrary`; and LWJGL's `Library.loadNative` and `loadSystem`, which Minecraft provides.
 
 **For its author:** say which library it is and where it comes from, since that is what a player cannot see for themselves.
 
@@ -78,7 +80,7 @@ Its code can define new classes while it runs, from bytes it holds or fetches.
 
 **What to look at:** code defined while the mod runs can be code no scan has read, so this finding is the scan saying where it stops. With a [network](#network) finding beside it, a mod can fetch code and run it; that is what fractureiser's payload did, and the pairing deserves a clear reason.
 
-**What grants it:** `ClassLoader.defineClass`, `SecureClassLoader.defineClass`, `java.net.URLClassLoader`, `MethodHandles.Lookup.defineClass` and `defineHiddenClass`, and any class extending one of those class loaders.
+**What grants it:** `ClassLoader.defineClass`, `SecureClassLoader.defineClass`, `java.net.URLClassLoader`, `MethodHandles.Lookup.defineClass` and `defineHiddenClass`, and any class extending one of those class loaders; `java.lang.instrument.Instrumentation` and `com.sun.tools.attach.VirtualMachine`, which change classes already loaded or attach to the running game; and `javax.script.ScriptEngineManager`, which runs scripts no scan of the jar reads.
 
 **For its author:** say what the mod defines classes from, and whether any of it comes over the network.
 
@@ -92,11 +94,75 @@ The web addresses named in its code's strings, like `api.modrinth.com`. This is 
 
 **For its author:** say which hosts the mod connects to and which are only links it shows.
 
+## Warnings
+
+These are things code can do for a good reason as easily as a bad one. Each is shown as a finding, beside what the code reaches.
+
+### Webhook
+
+Its code names a Discord webhook or a Telegram bot address: a way to post messages into a chat without signing in.
+
+**Why a mod might:** a server mod that relays chat or alerts into its community's Discord.
+
+**What to look at:** a webhook is also how stolen accounts are most often sent away, so on a client mod, or beside a [session](#session) warning, it deserves a clear reason.
+
+### Session
+
+Its code reads Minecraft's session token, the key that lets a program play and join servers as you, or names a launcher's saved accounts file.
+
+**Why a mod might:** an account switcher or a sign-in helper, whose whole job is the session.
+
+**What to look at:** taking the session token is what most Minecraft malware is for. A mod that is not about accounts has no reason to touch it, and one that is should be the one you meant to install.
+
+**What grants it:** `User.getAccessToken` and `getSessionId`, by Minecraft's own names on Minecraft 26 and on NeoForge, and by Fabric's names on 1.21 and before; and strings naming `launcher_accounts.json`.
+
+### Persistence
+
+Its code names a place that starts programs when the computer starts: the Windows Startup folder or Run key, an autostart or systemd user entry on Linux, a LaunchAgent on macOS.
+
+**Why a mod might:** almost never. A launcher or a companion app might.
+
+**What to look at:** this is how fractureiser kept running after the game closed. A mod naming one deserves a reason that says why it needs to outlive the game.
+
+### Clipboard
+
+Its code reads or writes the system clipboard through Java's own toolkit, rather than through Minecraft.
+
+**Why a mod might:** copying coordinates or a share link, or pasting into a text field.
+
+**What to look at:** malware swaps a copied wallet address for its own. Copying is ordinary; reading the clipboard without being asked is not.
+
+### Hidden
+
+The jar holds another jar or a class file under the name of some other kind of file, like `data.bin`.
+
+**Why a mod might:** rarely, a build tool packs things oddly.
+
+**What to look at:** this is how a payload hides from anything that reads only `.class` and `.jar` files. Paired with a [classloading](#classloading) finding, it is worth asking the author about.
+
+## Secrets
+
+Its code names where other programs keep what lets someone sign in as you: Discord's login token, a browser's saved logins and cookies, a cryptocurrency wallet, Telegram's session, Steam's sign in.
+
+No mod has a reason to name these, which is why this is not a warning but an alarm: shown at the top of the mod's page, in red on its search card, and **ender will not install the jar** unless the command is run again with `--trust`, which allows that jar alone, by its hash, so a later build is asked about again.
+
+If you installed a jar with this finding, treat what it names as taken: sign out of Discord everywhere and change your password, change the passwords a browser saved, and move what a wallet holds.
+
+If you are its author and the finding is wrong, [say so in an Explain a finding issue](https://github.com/fatlard1993/ender-index/issues/new?template=explain.yml): it is how the check gets refined.
+
+## Unreadable
+
+A class in the jar that the scan could not read. A build tool can write one by mistake; an obfuscator can write one on purpose, since what the scan cannot read, it cannot report. The page lists which.
+
+## Scanner versions
+
+Each jar's findings say which version of the scanner read them. When the scanner learns a new check, jars read before keep their findings, which are still true; they just were not looked at for the new things. A mod's page offers a rescan for any jar an older scanner read, and anyone can [ask for one](https://github.com/fatlard1993/ender-index/issues/new?template=rescan.yml): its jars are read again within minutes.
+
 ## For authors
 
 A finding has two answers.
 
-- **Change the mod** so the code that grants it is gone: drop the dependency that brings it, or use what Minecraft or the loader already does. A setting that turns the code off does not remove the finding, because the scan reads what is in the jar.
+- **Change the mod** so the code that grants it is gone: drop the dependency that brings it, or use what Minecraft or the loader already does. A setting that turns the code off does not remove the finding, because the scan reads what is in the jar. Once a new release is out, its findings replace the old on your page within the hour.
 - **Explain it** in your own words, shown beside the finding on your mod's page: [open an Explain a finding issue](https://github.com/fatlard1993/ender-index/issues/new?template=explain.yml) from your GitHub account. The [authors guide](https://fatlard1993.github.io/ender-index/authors/explaining-a-finding) says who can and how to change it later.
 
 Each finding on your mod's page lists the classes that have it and the calls that grant it, which is where to start looking.

@@ -58,8 +58,11 @@ For the newest five releases that carry a jar, and past those the newest that na
 - what it adds: its blocks, items, entities and the like by name, the kinds of data it carries, like recipes, loot tables and worldgen, and whether it has shaders
 - its icon, its download count, and the support links in its metadata
 - what its code can reach, by [ender](https://github.com/fatlard1993/ender-launcher)'s scanner: `exec`, `classloading`, `native`, `network`, `unsafe`, each with the classes and calls that grant it, plus the hosts its strings name
+- what it warns of, which can go either way: a chat `webhook`, the `session` token, `persistence` past the game, the `clipboard`, and code `hidden` under other names
+- where other programs keep logins, if its code names any: Discord's token, a browser's saved logins, a wallet. No mod has a reason to, so ender will not install such a jar unless its player trusts it
+- the version of the scanner that read it
 
-The same scanner runs in the client when it updates a mod, so a finding here and a finding there mean the same thing.
+The same scanner runs in the client when it installs and updates a mod, so a finding here and a finding there mean the same thing. A jar keeps the findings of the scanner that read it: when the scanner learns more, old findings stay true, and a jar is read again only when someone [asks for a rescan](.github/ISSUE_TEMPLATE/rescan.yml) of its mod, or the `RESCAN` repository variable is set to `full` or `throttled` (a share of old jars each crawl, so new releases never wait), until it is removed.
 
 With the releases, each repository is recorded with where its readme and pictures are, its contributors and how each takes support, its author's support links, and the project it was forked from. All but the last are read again weekly.
 
