@@ -4,7 +4,7 @@ Every jar the index lists is downloaded once and scanned for what its code can r
 
 Where its author has explained a finding, the explanation shows beside it, marked as theirs: the index looked it over before it showed, but has not checked what it says.
 
-A finding that only comes from a library the jar bundles, like a database driver, says so: the mod's own code does not reach it, though the library is still part of what runs. A jar carried inside the mod is a library for certain. A package a well-known library keeps, like `org.sqlite` or `okhttp3`, or one a build moved into a folder like `shadow` or `deps` under the mod's own, only looks like one, and the page says so in those words: an author could name their own code that way.
+A finding that only comes from a library the jar bundles, like a database driver, says so: the mod's own code does not reach it, though the library is still part of what runs. A jar carried inside the mod is a library for certain, shown as "In sqlite-jdbc.jar, a library it bundles". A class can also look like a library's without being in a jar of its own, shown as "In what looks like org.h2, a library it bundles": its package is one a well-known library keeps, like `org.sqlite` or `okhttp3`, or it sits under a folder a build moves libraries into, like `shadow`, `shaded`, `deps`, `libs` or `relocated`, inside the mod's own package. That is a guess from the package's name alone, which the mod's author chooses, so a mod's own code can trigger it; a folder as plain as `lib` does not count, since mods keep their own helpers there. A finding only in such packages says "only in what look like libraries it bundles", and its classes are listed all the same.
 
 ## How the scan works
 
