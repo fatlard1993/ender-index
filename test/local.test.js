@@ -27,6 +27,21 @@ describe('the local server', () => {
 		expect(allowed(request('/api/instances/a/add', { method: 'POST' }), 7460)).toBe(false);
 	});
 
+	test('refuses another site trusting a jar, or a rebound name doing it, before ender is asked anything', async () => {
+		const trust = init =>
+			handle(
+				new Request(`http://${init.host ?? 'localhost:7460'}/api/trust`, {
+					method: 'POST',
+					headers: { host: 'localhost:7460', 'content-type': 'application/json', ...init },
+					body: JSON.stringify({ sha256: 'ab'.repeat(32) }),
+				}),
+			);
+
+		expect((await trust({ origin: 'https://evil.example' })).status).toBe(403);
+		expect((await trust({ host: 'evil.example:7460', origin: 'http://evil.example:7460' })).status).toBe(403);
+		expect((await trust({})).status).toBe(403);
+	});
+
 	test('refuses a name rebound to this address', () => {
 		expect(allowed(request('/api/instances', { host: 'evil.example:7460' }), 7460)).toBe(false);
 	});
