@@ -28,7 +28,7 @@ export const SORTS = {
 	name: 'Name',
 };
 
-const REACHABLE = ['network', 'exec', 'native', 'classloading', 'unsafe'];
+const REACHABLE = ['network', 'exec', 'native', 'classloading', 'unsafe', 'warnings'];
 
 const oneOf = (value, choices) => (value in choices ? value : undefined);
 
@@ -131,7 +131,8 @@ export const refine = (
 			(!author || ownerOf(entry) === author) &&
 			(!tag || (entry.tags ?? []).includes(tag)) &&
 			(!starredKeys || starredKeys.has(starKey(entry))) &&
-			!(entry.latest?.capabilities ?? []).some(capability => avoid.includes(capability)),
+			!(entry.latest?.capabilities ?? []).some(capability => avoid.includes(capability)) &&
+			!(avoid.includes('warnings') && (entry.latest?.warnings?.length > 0 || entry.latest?.secrets?.length > 0)),
 	);
 
 	if (sort === 'name') return kept.toSorted((a, b) => titleOf(a.entry).localeCompare(titleOf(b.entry)));
@@ -275,6 +276,38 @@ export const CAPABILITIES = {
 	network: 'Its code can open network connections',
 	unsafe: "Its code uses Unsafe, which reaches memory past Java's checks",
 };
+
+/** What a scan warns of: things code does that have an innocent reason as often as not. */
+export const WARNINGS = {
+	webhook: 'Its code names a chat webhook, a way to post messages into Discord or Telegram',
+	session: "Its code reads Minecraft's session token, or a launcher's saved accounts",
+	persistence: 'Its code names a place that starts programs when the computer starts',
+	clipboard: 'Its code reads or writes the system clipboard',
+	hidden: 'It holds a jar or a class under the name of some other kind of file',
+};
+
+/** What the filters can hide a mod for: each thing its code reaches, and any warning at all. */
+export const AVOIDABLE = {
+	...CAPABILITIES,
+	warnings: 'It warns of something, or names where other programs keep logins',
+};
+
+/** Where other programs keep their logins, by the name a scan gives each. */
+export const SECRET_STORES = {
+	discord: "Discord's login token",
+	browser: "a browser's saved logins and cookies",
+	wallet: 'a cryptocurrency wallet',
+	telegram: "Telegram's session",
+	steam: "Steam's sign in",
+};
+
+/** What it means that a jar's code names other programs' secret stores, which no mod has a reason to. */
+export const secretsSentence = stores =>
+	`Its code names where ${stores.map(store => SECRET_STORES[store] ?? store).join(', ')} ${stores.length === 1 ? 'is' : 'are'} kept. No mod has a reason to, and stealing those is what Minecraft malware is for; ender will not install it unless you trust it.`;
+
+/** A finding by the name the search listing gives it, as a person would read it. */
+export const findingLabel = name =>
+	name.startsWith('secrets:') ? `names ${SECRET_STORES[name.slice(8)] ?? name.slice(8)}` : name;
 
 /** A repository's page here. A GitLab owner can be a nested group, so it is one encoded segment. */
 export const modPath = entry => {

@@ -24,7 +24,11 @@ import { loadListing, loadThemes, loadVersions } from './data';
 import { local } from './local';
 import {
 	BUILT_FROM_SOURCE,
+	AVOIDABLE,
 	CAPABILITIES,
+	WARNINGS,
+	findingLabel,
+	secretsSentence,
 	INDEX,
 	LOADERS,
 	RELEASED,
@@ -240,9 +244,25 @@ const cautionsOf = (entry, { sharing, unproven }) =>
 			text: `Few stars, and ${unproven}. Any jar can claim a mod's name: make sure this is the one you mean`,
 		},
 		sharing && { label: 'possible duplicate', text: `It ${sharing}: check you have the one you mean` },
+		entry.latest?.secrets?.length > 0 && {
+			label: 'names secrets',
+			text: secretsSentence(entry.latest.secrets),
+			alarm: true,
+		},
+		entry.latest?.gained?.length > 0 && {
+			label: `new: ${entry.latest.gained.map(findingLabel).join(', ')}`,
+			text: `Found in its newest release, ${entry.latest.tag}, and not in the release before it`,
+		},
 		entry.replaced && { label: 'jar changed', text: 'A jar in one of its releases was changed after publishing' },
 		entry.fromSource && { label: 'no built release', text: BUILT_FROM_SOURCE },
 	].filter(Boolean);
+
+/** A card's edge: danger for what no mod has a reason to do, the warning color for any other caution. */
+const accentOf = cautions => {
+	if (cautions.some(({ alarm }) => alarm)) return theme.colors.danger;
+
+	return cautions.length > 0 ? theme.colors.warning : undefined;
+};
 
 /** A click on a card's own surface, not on a link, a button, a command to select, or after selecting text. */
 const opensCard = event =>
@@ -307,7 +327,7 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 
 	const card = new Card(
 		{
-			accent: cautions.length > 0 ? theme.colors.warning : undefined,
+			accent: accentOf(cautions),
 			onPointerPress: event => opensCard(event) && setOpen(!open.has(key)),
 		},
 		new Row({
@@ -339,7 +359,8 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 						new Row({
 							append: [
 								...cautions.map(
-									({ label, text }) => new Chip({ addClass: 'finding', textContent: label, tooltip: text }),
+									({ label, text, alarm }) =>
+										new Chip({ addClass: alarm ? 'alarm' : 'finding', textContent: label, tooltip: text }),
 								),
 								...loadersOf(entry).map(loader => new Chip({ textContent: loader })),
 								...themeChips(entry, pickTheme),
@@ -357,6 +378,14 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 											addClass: 'finding',
 											textContent: `reaches ${capability}`,
 											tooltip: CAPABILITIES[capability],
+										}),
+								),
+								...(entry.latest?.warnings ?? []).map(
+									warning =>
+										new Chip({
+											addClass: 'finding',
+											textContent: `warns of ${warning}`,
+											tooltip: WARNINGS[warning],
 										}),
 								),
 							],
@@ -609,11 +638,11 @@ export default class SearchPage extends View {
 				supporting,
 				starring,
 				new Meta({ textContent: 'Hide what reaches' }),
-				...Object.keys(CAPABILITIES).map(capability => {
+				...Object.keys(AVOIDABLE).map(capability => {
 					const chip = new Button({
 						variant: 'chip',
 						textContent: capability,
-						tooltip: CAPABILITIES[capability],
+						tooltip: AVOIDABLE[capability],
 						pressed: state.avoid.includes(capability),
 						onPointerPress: () => {
 							state.avoid = state.avoid.includes(capability)

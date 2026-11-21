@@ -16,16 +16,20 @@ import {
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import { HOSTS, authorOf, ownerOf, sharing } from 'ender-launcher/rank';
+import { SCANNER_VERSION } from 'ender-launcher/scannerVersion';
 import { ownerName } from 'ender-launcher/support';
 
 import { collection } from './collection';
 import { loadExplanations, loadListing, loadPacks, loadShots, loadVersions } from './data';
-import { explainUrl } from './explain';
+import { explainUrl, rescanUrl } from './forms';
 import { packCard } from './packs';
 import { shareUrl } from './shots';
 import {
 	BUILT_FROM_SOURCE,
 	CAPABILITIES,
+	WARNINGS,
+	findingLabel,
+	secretsSentence,
 	INDEX,
 	collectionKey,
 	contributorSupportOf,
@@ -69,6 +73,7 @@ import {
 import { askControl, collectButton, installControls, starButton } from './controls';
 import { local } from './local';
 import {
+	Alarm,
 	Chip,
 	Command,
 	Meta,
@@ -232,32 +237,125 @@ const authorsWord = note =>
 			]
 		: [];
 
-const capabilityList = (scan, explained) =>
-	Object.entries(scan?.capabilities ?? {}).map(([capability, classes]) => {
-		const details = new Component({ tag: 'details' });
+/** The bundled jar a class came in, by the file's name, or none for the mod's own code. */
+const bundledIn = where => (where.includes('!') ? where.split('!')[0].split('/').at(-1) : undefined);
 
-		details.append(
-			new Component({
-				tag: 'summary',
-				append: [
-					new Chip({ addClass: 'finding', textContent: `reaches ${capability}` }),
-					` ${CAPABILITIES[capability] ?? ''}`,
-				],
-			}),
-			new Link({ href: findingsPath(capability), textContent: `What reaching ${capability} means` }),
-			...Object.entries(classes).map(
-				([className, calls]) =>
-					new Meta({
-						tag: 'div',
-						style: { marginLeft: theme.space.md },
-						textContent: `${className}: ${calls.join(', ')}`,
-					}),
-			),
-			...authorsWord(explained[capability]),
-		);
+/** The classes behind a finding, the mod's own first, then those of each jar it bundles under that jar's name. */
+const evidenceLines = classes => {
+	const own = Object.entries(classes).filter(([where]) => !bundledIn(where));
+	const bundled = Object.groupBy(
+		Object.entries(classes).filter(([where]) => bundledIn(where)),
+		([where]) => bundledIn(where),
+	);
+	const line = ([where, via]) =>
+		new Meta({
+			tag: 'div',
+			style: { marginLeft: theme.space.md },
+			textContent: `${where.split('!').at(-1)}: ${via.join(', ')}`,
+		});
 
-		return details;
-	});
+	return [
+		...own.map(line),
+		...Object.entries(bundled).flatMap(([jar, lines]) => [
+			new Meta({ tag: 'div', style: { marginLeft: theme.space.md }, textContent: `In ${jar}, a library it bundles:` }),
+			...lines.map(line),
+		]),
+	];
+};
+
+/** One finding folded: its name and what it means, a link to more, the classes behind it, and its author's word. */
+const findingDetails = ({ chip, about, part, linkText, classes, note }) => {
+	const details = new Component({ tag: 'details' });
+	const onlyBundled = Object.keys(classes).length > 0 && Object.keys(classes).every(bundledIn);
+
+	details.append(
+		new Component({
+			tag: 'summary',
+			append: [
+				new Chip({ addClass: 'finding', textContent: chip }),
+				` ${about ?? ''}`,
+				...(onlyBundled ? [new Meta({ tag: 'span', textContent: ' · only in libraries it bundles' })] : []),
+			],
+		}),
+		new Link({ href: findingsPath(part), textContent: linkText }),
+		...evidenceLines(classes),
+		...authorsWord(note),
+	);
+
+	return details;
+};
+
+const capabilityList = (scan, explained) => [
+	...Object.entries(scan?.capabilities ?? {}).map(([capability, classes]) =>
+		findingDetails({
+			chip: `reaches ${capability}`,
+			about: CAPABILITIES[capability],
+			part: capability,
+			linkText: `What reaching ${capability} means`,
+			classes,
+			note: explained[capability],
+		}),
+	),
+	...Object.entries(scan?.signals ?? {}).map(([signal, classes]) =>
+		findingDetails({
+			chip: `warns of ${signal}`,
+			about: WARNINGS[signal],
+			part: signal,
+			linkText: `What a ${signal} warning means`,
+			classes,
+			note: explained[signal],
+		}),
+	),
+	...((scan?.hidden ?? []).length > 0
+		? [
+				findingDetails({
+					chip: 'warns of hidden',
+					about: WARNINGS.hidden,
+					part: 'hidden',
+					linkText: 'What hidden code means',
+					classes: Object.fromEntries(scan.hidden.map(where => [where, ['a jar or class by its bytes']])),
+					note: explained.hidden,
+				}),
+			]
+		: []),
+];
+
+/** What no mod has a reason to do, said outright beside the jar rather than folded among the findings. */
+const secretsAlarm = scan => {
+	const stores = Object.keys(scan?.secrets ?? {});
+
+	if (stores.length === 0) return [];
+
+	return [
+		new Alarm({
+			append: [
+				new Component({ tag: 'strong', textContent: secretsSentence(stores) }),
+				...stores.flatMap(store => evidenceLines(scan.secrets[store])),
+				new Link({ href: findingsPath('secrets'), textContent: 'What this means, and what to do' }),
+			],
+		}),
+	];
+};
+
+/** Which scanner read a jar, with a way to have the newest read it when that is not the one. */
+const scannerLine = (asset, entry) => {
+	const version = asset.scan?.version ?? 1;
+
+	if (!asset.scan || version >= SCANNER_VERSION) return [];
+
+	return [
+		new Meta({
+			tag: 'div',
+			append: [
+				`Read by scanner version ${version}; the newest, version ${SCANNER_VERSION}, looks for more. `,
+				new Link({ href: rescanUrl(entry), target: '_blank', textContent: 'Ask for a rescan' }),
+			],
+		}),
+	];
+};
+
+/** A host given as a bare address names no one, which is worth seeing apart from a host with a name. */
+const hostLabel = host => (/^\d{1,3}(\.\d{1,3}){3}$/.test(host) ? `${host} (an address, not a name)` : host);
 
 const groupLabel = (label, mods) =>
 	new SectionLabel({
@@ -475,15 +573,19 @@ const playerShotsOf = (entry, title, { shared, byKey, loading, problem }, retry)
 const fitsLabel = ({ minecraft, loader }) =>
 	[minecraft && `Minecraft ${minecraft}`, loader && LOADERS[loader]].filter(Boolean).join(' with ') || 'any version';
 
-/** What a jar's code reaches, folded: a finding to look into, not something every reader needs open. */
+/**
+ * What a jar's scan found, folded: findings to look into, not something every reader needs open. What no mod has a
+ * reason to do comes first and is never folded.
+ */
 const findings = (scan, explained, entry) => {
 	const reached = Object.keys(scan?.capabilities ?? {});
+	const warned = [...Object.keys(scan?.signals ?? {}), ...((scan?.hidden ?? []).length > 0 ? ['hidden'] : [])];
 	const hosts = Object.keys(scan?.hosts ?? {});
+	const unreadable = scan?.unreadable ?? [];
 
-	if (reached.length === 0 && hosts.length === 0) return [];
+	if (reached.length + warned.length + hosts.length + unreadable.length === 0) return secretsAlarm(scan);
 
-	const answered = [...reached, ...(hosts.length > 0 ? ['hosts'] : [])].some(finding => explained[finding]);
-
+	const answered = [...reached, ...warned, ...(hosts.length > 0 ? ['hosts'] : [])].some(finding => explained[finding]);
 	const details = new Component({ tag: 'details' });
 
 	details.append(
@@ -493,7 +595,10 @@ const findings = (scan, explained, entry) => {
 				tag: 'span',
 				textContent: [
 					reached.length > 0 && `Its code reaches ${reached.join(', ')}`,
+					warned.length > 0 && `warns of ${warned.join(', ')}`,
 					hosts.length > 0 && `names ${hosts.length === 1 ? 'a host' : `${hosts.length} hosts`}`,
+					unreadable.length > 0 &&
+						`has ${unreadable.length === 1 ? 'a class' : `${unreadable.length} classes`} it could not read`,
 					answered && 'its author explains',
 				]
 					.filter(Boolean)
@@ -503,11 +608,17 @@ const findings = (scan, explained, entry) => {
 		...capabilityList(scan, explained),
 		...(hosts.length > 0
 			? [
-					new Meta({ tag: 'div', textContent: `Names hosts: ${hosts.join(', ')}` }),
+					new Meta({ tag: 'div', textContent: `Names hosts: ${hosts.map(hostLabel).join(', ')}` }),
 					new Link({ href: findingsPath('hosts'), textContent: 'What the hosts mean' }),
 				]
 			: []),
 		...authorsWord(hosts.length > 0 && explained.hosts),
+		...(unreadable.length > 0
+			? [
+					new Meta({ tag: 'div', textContent: `Could not read: ${unreadable.join(', ')}` }),
+					new Link({ href: findingsPath('unreadable'), textContent: 'What an unreadable class means' }),
+				]
+			: []),
 		...((entry.host ?? 'github') === 'github'
 			? [
 					new Link({
@@ -520,7 +631,7 @@ const findings = (scan, explained, entry) => {
 			: []),
 	);
 
-	return [details];
+	return [...secretsAlarm(scan), details];
 };
 
 const downloadRow = ({ asset }, explained, entry) => {
@@ -561,6 +672,7 @@ const downloadRow = ({ asset }, explained, entry) => {
 					]
 				: []),
 			...findings(asset.scan, explained, entry),
+			...scannerLine(asset, entry),
 		],
 	});
 };
@@ -583,8 +695,41 @@ const releaseNotes = (release, sources) => {
 	return [details];
 };
 
+/** A release's findings by name, as the search listing names them: what its jars reach, warn of, and name of secrets. */
+const findingNamesOf = release =>
+	new Set(
+		release.assets.flatMap(({ scan }) => [
+			...Object.keys(scan?.capabilities ?? {}),
+			...Object.keys(scan?.signals ?? {}),
+			...((scan?.hidden ?? []).length > 0 ? ['hidden'] : []),
+			...Object.keys(scan?.secrets ?? {}).map(store => `secrets:${store}`),
+		]),
+	);
+
+/**
+ * What each release found that the release before it did not, by release: the change a quietly compromised release
+ * makes, and the one worth seeing before installing it. A first release has nothing to compare against.
+ */
+export const gainedByRelease = record => {
+	const read = (record.releases ?? []).filter(release => release.assets.some(asset => asset.scan));
+	const gained = new Map();
+
+	read.forEach((release, at) => {
+		const previous = read[at + 1];
+
+		if (!previous) return;
+
+		const before = findingNamesOf(previous);
+		const fresh = [...findingNamesOf(release)].filter(name => !before.has(name));
+
+		if (fresh.length > 0) gained.set(release, { from: previous.tag, fresh });
+	});
+
+	return gained;
+};
+
 /** The jars that match, under the release each came in, newest first; past the first few, folded until asked for. */
-const downloadList = (entry, matching, sources, explained) => {
+const downloadList = (entry, matching, sources, explained, gained = new Map()) => {
 	const releases = [...new Set(matching.map(({ release }) => release))];
 	const cards = releases.map(
 		release =>
@@ -604,9 +749,26 @@ const downloadList = (entry, matching, sources, explained) => {
 								...(release.prerelease ? [new Chip({ textContent: 'prerelease' })] : []),
 							],
 						}),
+						...(gained.has(release)
+							? [
+									new Warning({
+										tag: 'div',
+										textContent: `New since ${gained.get(release).from}: ${gained.get(release).fresh.map(findingLabel).join(', ')}`,
+									}),
+								]
+							: []),
 						...matching
 							.filter(download => download.release === release)
 							.map(download => downloadRow(download, explained, entry)),
+						...release.assets
+							.filter(asset => asset.error !== undefined && !asset.gone)
+							.map(
+								asset =>
+									new Warning({
+										tag: 'div',
+										textContent: `${asset.name} could not be read or scanned, so nothing here says what its code reaches: ${asset.error}`,
+									}),
+							),
 						...releaseNotes(release, sources),
 					],
 				}),
@@ -640,6 +802,7 @@ const downloadsPanel = (entry, record) => {
 	const shown = new Meta();
 	const list = new Stack();
 	let explained = {};
+	const gained = gainedByRelease(record);
 
 	const draw = () => {
 		const found = bestDownload(downloads, choice);
@@ -666,7 +829,7 @@ const downloadsPanel = (entry, record) => {
 		shown.content(`${count(matching.length)} of ${count(downloads.length)} jars`);
 		list.content(
 			matching.length > 0
-				? downloadList(entry, matching, sources, explained)
+				? downloadList(entry, matching, sources, explained, gained)
 				: new EmptyState({
 						icon: 'magnifying-glass',
 						title: 'No jar matches',
@@ -1129,6 +1292,27 @@ export default class ModPage extends View {
 					}),
 				],
 			}),
+			...(entry.latest?.secrets?.length > 0
+				? [
+						new Alarm({
+							append: [
+								new Component({ tag: 'strong', textContent: secretsSentence(entry.latest.secrets) }),
+								new Meta({
+									tag: 'div',
+									textContent: `Found in ${entry.latest.tag}; the Downloads tab shows the classes that name them.`,
+								}),
+								new Link({ href: findingsPath('secrets'), textContent: 'What this means, and what to do' }),
+							],
+						}),
+					]
+				: []),
+			...(entry.latest?.gained?.length > 0
+				? [
+						new Warning({
+							textContent: `Its newest release, ${entry.latest.tag}, found what the release before it did not: ${entry.latest.gained.map(findingLabel).join(', ')}`,
+						}),
+					]
+				: []),
 			...(shares ? [new Warning({ textContent: `It ${shares}: check you have the one you mean` })] : []),
 			...(entry.replaced
 				? [new Warning({ textContent: 'A jar in one of its releases was changed after publishing' })]

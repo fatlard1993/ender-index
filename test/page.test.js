@@ -61,6 +61,44 @@ beforeAll(async () => {
 					},
 				],
 			},
+			'/mods/copy/client.json': {
+				repo: 'copy/client',
+				releases: [
+					{
+						tag: 'v5',
+						assets: [
+							{
+								name: 'client.jar',
+								url: 'https://example.invalid/client.jar',
+								mods: [mod('sodium', 'Sodium')],
+								scan: {
+									version: 1,
+									capabilities: {
+										exec: {
+											'META-INF/jars/sqlite-jdbc.jar!org/sqlite/util/OSInfo.class': ['java/lang/ProcessBuilder.start'],
+										},
+									},
+									signals: { webhook: { 'x/Send.class': ['https://discord.com/api/webhooks/1'] } },
+									secrets: { discord: { 'x/Grab.class': ['\\discord\\Local Storage\\leveldb'] } },
+									hosts: { '10.0.0.7': ['x/Send.class'] },
+									unreadable: [],
+								},
+							},
+							{ name: 'broken.jar', url: 'https://example.invalid/broken.jar', error: 'not a zip' },
+						],
+					},
+					{
+						tag: 'v4',
+						assets: [
+							{
+								name: 'client-4.jar',
+								mods: [mod('sodium', 'Sodium')],
+								scan: { capabilities: {}, hosts: {}, unreadable: [] },
+							},
+						],
+					},
+				],
+			},
 			'/explanations.json': {
 				'github:CaffeineMC/lithium': {
 					network: {
@@ -261,6 +299,31 @@ describe('pages that send the visitor somewhere', () => {
 });
 
 describe("a mod's page", () => {
+	test('says outright when a jar names where other programs keep logins, and lays out every other finding', async () => {
+		document.body.innerHTML = '';
+
+		const { default: ModPage } = await import('../client/ModPage');
+		const page = new ModPage({ appendTo: document.body, host: 'github', owner: 'copy', name: 'client' });
+
+		await settle(() => document.body.textContent.includes("Discord's login token"));
+
+		const text = document.body.textContent;
+		const exec = [...document.querySelectorAll('details')].find(details =>
+			details.querySelector('summary')?.textContent.includes('reaches exec'),
+		);
+
+		expect(text).toContain("Its code names where Discord's login token is kept. No mod has a reason to");
+		expect(text).toContain('warns of webhook');
+		expect(exec.textContent).toContain('only in libraries it bundles');
+		expect(exec.textContent).toContain('In sqlite-jdbc.jar, a library it bundles:');
+		expect(text).toContain('10.0.0.7 (an address, not a name)');
+		expect(text).toContain("New since v4: exec, webhook, names Discord's login token");
+		expect(text).toContain('broken.jar could not be read or scanned');
+		expect(text).toContain('Read by scanner version 1');
+		expect(document.querySelector('a[href*="template=rescan.yml"]')?.textContent).toBe('Ask for a rescan');
+		page.destroy();
+	});
+
 	test('opens a picture of the gallery large when it is pressed, rather than following its link', async () => {
 		document.body.innerHTML = '';
 

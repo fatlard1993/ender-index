@@ -52,10 +52,32 @@ export const Chip = styled(
 			color: ${colors.warning};
 		}
 
+		&.alarm {
+			border-color: ${colors.danger};
+			background: ${colors.alpha(colors.danger, 0.15)};
+			color: ${colors.danger};
+			font-weight: bold;
+		}
+
 		&.installed {
 			border-color: ${colors.alpha(colors.success, 0.6)};
 			color: ${colors.success};
 		}
+	`,
+);
+
+/** What no mod has a reason to do, said where it cannot be missed: never folded away. */
+export const Alarm = styled.Component(
+	({ colors, fontSize, radius, space }) => `
+		color: ${colors.danger};
+		border: 1px solid ${colors.danger};
+		background: ${colors.alpha(colors.danger, 0.1)};
+		border-radius: ${radius.md};
+		padding: ${space.sm} ${space.md};
+		font-size: ${fontSize.sm};
+		display: flex;
+		flex-direction: column;
+		gap: ${space.xs};
 	`,
 );
 
