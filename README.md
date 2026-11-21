@@ -80,7 +80,7 @@ data/mods/gitlab.com/...        and for GitLab
 data/icons/<sha256>.<ext>       mods' icons, named by the hash of the image as kept
 data/search.json                one summary per repository, for listing without fetching every record
 data/tags.json                  the themes search offers, each with the tags folded into it and how many mods carry it
-data/sources.json               mods listed by their source, with no built release: mod id to repository
+data/sources.json               each Modrinth mod's source repository, by its slug, to point a mod not indexed at its source
 data/source-checks.json         when each such repository's source was last checked, and whether it builds
 data/modrinth-funding.json      donation links from Modrinth, by repository
 data/packs.txt                  pack repositories found on their hosts
