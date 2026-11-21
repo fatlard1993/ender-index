@@ -1,9 +1,10 @@
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { describe, expect, test } from 'bun:test';
+import { afterAll, beforeAll, describe, expect, test } from 'bun:test';
 
 import { copyLibraryStylesheets } from '../scripts/buildSite';
+
 import {
 	avatarUrl,
 	collectionKey,
@@ -38,6 +39,7 @@ import {
 	contributorSupportOf,
 	shareOf,
 } from '../client/search';
+import { browser } from './dom';
 
 const entry = (extra = {}) => ({
 	repo: 'CaffeineMC/lithium',
@@ -357,6 +359,14 @@ describe('a collection', () => {
 });
 
 describe('the Get ender page', () => {
+	let restore;
+
+	beforeAll(() => {
+		restore = browser();
+	});
+
+	afterAll(() => restore());
+
 	test("offers first what the visitor's own system installs from", async () => {
 		const { DOWNLOADS, installFor, systemOf } = await import('../client/GetPage');
 

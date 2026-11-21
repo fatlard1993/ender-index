@@ -38,7 +38,11 @@ beforeAll(async () => {
 	enderPanel = await import('../client/enderPanel');
 });
 
-afterAll(() => restore());
+afterAll(() => {
+	// The page's own record of being served by ender is a module's state, which the next test file would inherit
+	local.local.askAgain();
+	restore();
+});
 
 describe('the players panel', () => {
 	test('lists who can play, marks the active one, and offers Microsoft sign in with nothing to set up first', async () => {
