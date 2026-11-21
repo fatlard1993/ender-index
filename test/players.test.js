@@ -467,6 +467,24 @@ describe('a jar ender held back', () => {
 		}
 	});
 
+	test('is offered again when the page opens afresh, from the newest job of its instance, and not from an older one', async () => {
+		responses['/api/ender'] = { version: '0.3.0' };
+		responses['/api/instances'] = [{ name: 'survival', type: 'client', minecraft: '26.3', loader: { type: 'fabric' } }];
+		responses['/api/jobs'] = [
+			{ id: 'newest', title: 'Adding to survival', instance: 'survival', state: 'failed' },
+			{ id: 'older', title: 'Adding to survival', instance: 'survival', state: 'failed' },
+		];
+		responses['/api/jobs/newest?from=0'] = { lines: failed.lines, next: 1 };
+		responses['/api/jobs/older?from=0'] = { lines: failed.lines, next: 1 };
+		local.local.askAgain();
+		sent.length = 0;
+
+		expect(await local.local.ready()).toBe(true);
+		expect(local.local.jobFor('survival')?.id).toBe('newest');
+		expect(local.heldBack(local.local.jobFor('survival'))).toEqual([hash]);
+		expect(sent.some(([, address]) => address.includes('jobs/older'))).toBe(false);
+	});
+
 	test('is offered beside its instance only after a second press, said in full first', async () => {
 		const { trustOffer } = await import('../client/InstancesPage');
 		const ran = [];

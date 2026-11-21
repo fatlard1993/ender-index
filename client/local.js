@@ -173,10 +173,36 @@ const detect = async () => {
 	const jobs = await call('GET', 'jobs').catch(() => []);
 
 	for (const job of jobs.filter(each => each.state === 'running').toReversed()) track(job);
+	await recallHeldBack(jobs);
 
 	keepAlive();
 
 	return true;
+};
+
+/**
+ * Each instance's newest finished job, when it held a jar back: the offer to trust it outlasts the page it was made
+ * on, as ender web started from its icon is opened afresh. Its lines are read once, from the start.
+ */
+const recallHeldBack = async jobs => {
+	const newest = new Map();
+
+	for (const job of jobs) if (job.instance && !newest.has(job.instance)) newest.set(job.instance, job);
+
+	for (const job of newest.values()) {
+		if (job.state === 'running' || state.jobs.has(job.id)) continue;
+
+		const { lines = [], next = 0 } = await call('GET', `jobs/${encodeURIComponent(job.id)}?from=0`).catch(() => ({}));
+
+		if (heldBack({ lines }).length === 0) continue;
+
+		const kept = { ...job, lines, next };
+
+		kept.done = Promise.resolve(kept);
+		state.jobs.set(job.id, kept);
+	}
+
+	notifyJobs();
 };
 
 let detected;
