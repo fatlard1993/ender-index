@@ -202,7 +202,7 @@ const instanceCard = (instance, signal) => {
 
 		status.elem.textContent = jobLine(job);
 		trusting.content(
-			job?.state === 'failed' && heldBack(job).length > 0 ? trustOffer(job, (...args) => runJob(...args)) : [],
+			job && job.state !== 'running' && heldBack(job).length > 0 ? trustOffer(job, (...args) => runJob(...args)) : [],
 		);
 		showProgress(bar, job);
 		showOutput(output, job, open.output);
