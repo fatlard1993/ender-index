@@ -94,6 +94,9 @@ jobs:
           CRAWL_RESERVE: ${{ !vars.CRAWL_APP_ID && secrets.CRAWL_TOKEN && '1000' || '0' }}
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
           CRAWL_MINUTES: 45
+          # Unset, old findings stand. Set the RESCAN variable to full or throttled to read again what an older scanner
+          # read, and remove it once done
+          CRAWL_RESCAN: ${{ vars.RESCAN }}
       # Again from what is on disk: a crawl stopped by its step's limit wrote records but never listed them
       - name: lists
         if: always() && steps.crawl.outcome != 'success'

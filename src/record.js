@@ -1,8 +1,16 @@
+import { SCANNER_VERSION } from 'ender-launcher/scannerVersion';
+
 /** Gradle publishes these beside the real artifact; none of them is a mod. */
 const NOT_A_MOD = /-(sources|javadoc|dev|api|slim|shadow)\.jar$/i;
 
 /** Raised when what an inspection records changes, so assets already recorded are read again. */
 export const INSPECTION = 2;
+
+/** The version of the scanner that read an asset: one read before scans said so was read by the first. */
+export const scannedBy = asset => asset.scan?.version ?? 1;
+
+/** Whether a newer scanner than the one that read this asset exists. */
+export const outdated = asset => asset.scan !== undefined && scannedBy(asset) < SCANNER_VERSION;
 
 /** Releases looked at per crawl, newest first. Older ones stay recorded but are no longer watched. */
 export const WINDOW = 5;
@@ -90,8 +98,18 @@ export const notesOf = body => {
  * same name, or the same asset leading somewhere else: a GitLab link keeps its id when its URL is edited.
  * Different bytes from either keep the old hash in `replaced`, because a release changed after people
  * installed it is the thing most worth knowing about. A release whose notes opt it out is dropped from the record.
+ * An asset read by an older scanner is read again only when `rescan` asks for it.
  */
-export const updateRecord = async ({ record, repo, releases, now, inspect, host = 'github', gameVersions }) => {
+export const updateRecord = async ({
+	record,
+	repo,
+	releases,
+	now,
+	inspect,
+	host = 'github',
+	gameVersions,
+	rescan = () => false,
+}) => {
 	const events = [];
 	const known = new Map(structuredClone(record?.releases ?? []).map(release => [release.tag, release]));
 	const watched = watchedReleases(releases, gameVersions);
@@ -128,7 +146,8 @@ export const updateRecord = async ({ record, repo, releases, now, inspect, host 
 				existing.url === asset.browser_download_url &&
 				existing.inspection === INSPECTION &&
 				existing.metadataError === undefined &&
-				!readerFailed(existing)
+				!readerFailed(existing) &&
+				!(outdated(existing) && rescan(existing))
 			) {
 				if (asset.download_count !== undefined) existing.downloads = asset.download_count;
 
@@ -178,6 +197,8 @@ export const updateRecord = async ({ record, repo, releases, now, inspect, host 
 			recorded.assets[recorded.assets.indexOf(existing)] = entry;
 
 			if (changed) events.push({ type: 'swapped', repo: repo.full_name, tag: release.tag_name, asset: asset.name });
+			else if (entry.scan?.version !== existing.scan?.version)
+				events.push({ type: 'rescan', repo: repo.full_name, tag: release.tag_name, asset: asset.name });
 		}
 
 		for (const asset of recorded.assets) {

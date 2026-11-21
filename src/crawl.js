@@ -566,7 +566,7 @@ export const picturesOf = async ({ host, name, recorded, now }) => {
 	}
 };
 
-const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, people, renames, optedOut }) => {
+const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, people, renames, optedOut, rescan }) => {
 	const { host, name } = parseLine(line);
 	const path = recordPath({ host, name });
 	const record = await readJson(path);
@@ -607,7 +607,16 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, peo
 		}
 	}
 
-	const result = await updateRecord({ record: recorded, repo, releases: listed, now, inspect, host, gameVersions });
+	const result = await updateRecord({
+		record: recorded,
+		repo,
+		releases: listed,
+		now,
+		inspect,
+		host,
+		gameVersions,
+		rescan,
+	});
 	const everyReleaseOptedOut = result.record === undefined && recorded?.releases.length > 0;
 
 	if (result.record) {
@@ -645,6 +654,22 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, peo
 	}
 
 	return result.events;
+};
+
+/** Jars a throttled rescan reads again in one crawl, so new releases never wait behind it. */
+export const RESCAN_SHARE = 200;
+
+/**
+ * Whether to read a jar again that an older scanner read: every one for a full rescan, a share each crawl for a
+ * throttled one, and none otherwise. Old findings stay valid; a rescan is asked for, never assumed.
+ */
+export const rescanner = (mode, share = RESCAN_SHARE) => {
+	if (mode === 'full') return () => true;
+	if (mode !== 'throttled') return () => false;
+
+	let left = share;
+
+	return () => left-- > 0;
 };
 
 /** Repositories asked about in one GraphQL query; a hundred with their details and newest release cost a point or two. */
@@ -1012,7 +1037,7 @@ export const writeLists = async () => {
 	return { records, packs };
 };
 
-export const crawl = async ({ only } = {}) => {
+export const crawl = async ({ only, rescan: rescanMode = process.env.CRAWL_RESCAN } = {}) => {
 	const now = new Date().toISOString();
 	const known = await readRenames();
 	const found = currentLines(only ?? (await readRepos()), known);
@@ -1044,6 +1069,12 @@ export const crawl = async ({ only } = {}) => {
 	);
 	const scratch = await mkdtemp(join(tmpdir(), 'ender-index-'));
 	const inspect = inspector(scratch, knownBad);
+	const rescan = rescanner(rescanMode);
+
+	if (rescanMode === 'full' || rescanMode === 'throttled')
+		console.log(
+			`Rescanning jars an older scanner read: ${rescanMode === 'full' ? 'all of them' : `up to ${RESCAN_SHARE}`}`,
+		);
 	const gameVersions = await releasedGameVersions();
 	// An owner's FUNDING.yml stands for each of their repositories without one, so it is read once a crawl
 	const owners = new Map();
@@ -1086,6 +1117,7 @@ export const crawl = async ({ only } = {}) => {
 					people,
 					renames,
 					optedOut,
+					rescan,
 				})) {
 					console.log(
 						[event.type.padEnd(7), event.repo, event.tag, event.asset, event.error && `:: ${event.error}`]
