@@ -349,11 +349,18 @@ export const local = {
 	remove: name => start('DELETE', named(name)),
 	dropFrom: (name, specs) => start('POST', `${named(name)}/drop`, { specs }),
 	finished,
-	/** Trust the jars a failed job held back, then run it again as it was started; answers the job that runs it. */
+	/**
+	 * Trust the jars a finished job held back, then install them; answers the job that does. When ender web has nothing
+	 * it can run for that, the jars are trusted all the same, and the error it throws says so, marked `trusted`.
+	 */
 	trustAndRetry: async job => {
 		for (const sha256 of heldBack(job)) await call('POST', 'trust', { sha256 });
 
-		return start('POST', `jobs/${encodeURIComponent(job.id)}/again`);
+		try {
+			return await start('POST', `jobs/${encodeURIComponent(job.id)}/again`);
+		} catch (error) {
+			throw Object.assign(error, { trusted: error.status === 409 });
+		}
 	},
 	jobFor: name => [...state.jobs.values()].findLast(job => job.instance === name),
 	watchJobs: (listener, signal) => listen(jobListeners, listener, signal),

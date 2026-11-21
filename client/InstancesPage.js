@@ -217,7 +217,7 @@ const instanceCard = (instance, signal) => {
 
 			if (!quietWhenDone) told('success', done ?? `${job.title}: done`, { anchor: card });
 		} catch (error) {
-			told('danger', `${instance.name}: ${error.message}`, { anchor: card });
+			told(error.trusted ? 'info' : 'danger', `${instance.name}: ${error.message}`, { anchor: card });
 		}
 	};
 	const showMods = async () => {
@@ -402,7 +402,8 @@ const runInto = async (status, starting, trusting) => {
 		// Long after the press: beside the status line it is about
 		told('success', `${job.title}: done`, { anchor: status });
 	} catch (error) {
-		status.elem.textContent = `It did not work: ${error.message}`;
+		status.elem.textContent = error.trusted ? error.message : `It did not work: ${error.message}`;
+		trusting?.content([]);
 
 		if (trusting && heldBack(error.job).length > 0)
 			trusting.content(trustOffer(error.job, again => runInto(status, again, trusting)));

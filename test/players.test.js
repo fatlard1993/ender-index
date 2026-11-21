@@ -446,6 +446,27 @@ describe('a jar ender held back', () => {
 		]);
 	});
 
+	test('is trusted even when ender web has nothing it can run to install it, which is said as that, not a failure', async () => {
+		const original = globalThis.fetch;
+
+		globalThis.fetch = async (address, options = {}) =>
+			String(address).endsWith('/again')
+				? Response.json(
+						{ error: 'Trusted. The instance it made installs it the next time it is updated, from its card.' },
+						{ status: 409 },
+					)
+				: original(address, options);
+
+		try {
+			const error = await local.local.trustAndRetry(failed).catch(caught => caught);
+
+			expect(error.trusted).toBe(true);
+			expect(error.message).toStartWith('Trusted.');
+		} finally {
+			globalThis.fetch = original;
+		}
+	});
+
 	test('is offered beside its instance only after a second press, said in full first', async () => {
 		const { trustOffer } = await import('../client/InstancesPage');
 		const ran = [];
