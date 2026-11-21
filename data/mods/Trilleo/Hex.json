@@ -6,8 +6,99 @@
 	"archived": false,
 	"license": "CC0-1.0",
 	"created": "2026-07-17T03:36:54Z",
-	"pushed": "2026-09-22T14:04:59Z",
+	"pushed": "2026-11-21T15:14:43Z",
 	"releases": [
+		{
+			"tag": "v1.12.2",
+			"published": "2026-11-21T15:16:43Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 775965543,
+					"name": "hex-1.12.2.jar",
+					"url": "https://github.com/Trilleo/Hex/releases/download/v1.12.2/hex-1.12.2.jar",
+					"size": 1759708,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "30e21b62bfc591d724c76bb7bd27838c6cbb8fa6d27118a44b015ac14564a535",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "hex",
+							"version": "1.12.2",
+							"name": "Hex",
+							"description": "A Hypixel Skyblock utility mod",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": "6689c5795db8ff972dc33db91819e588927c68e14f0b16ea6e922a1cc5c341fe.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 690,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"net/trilleo/sync/TrilleoApi.class": [
+									"java/net/http/HttpClient.send",
+									"java/net/http/HttpClient.newBuilder"
+								],
+								"net/trilleo/update/UpdateChecker.class": [
+									"java/net/http/HttpClient.send"
+								],
+								"net/trilleo/update/UpdateDownloader.class": [
+									"java/net/http/HttpClient.send"
+								],
+								"net/trilleo/update/UpdateHttp.class": [
+									"java/net/http/HttpClient.newBuilder"
+								]
+							},
+							"exec": {
+								"net/trilleo/update/UpdateStaging.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.start"
+								]
+							}
+						},
+						"hosts": {
+							"textures.minecraft.net": [
+								"net/trilleo/itemcustom/ItemCustomizer.class"
+							],
+							"api.trilleo.net": [
+								"net/trilleo/sync/SyncConfig.class",
+								"net/trilleo/sync/SyncSettings.class",
+								"net/trilleo/sync/TrilleoApi.class"
+							],
+							"github.com": [
+								"net/trilleo/sync/TrilleoApi.class",
+								"net/trilleo/update/UpdateChecker.class",
+								"net/trilleo/update/UpdateDownloader.class",
+								"net/trilleo/update/UpdateFeature.class",
+								"net/trilleo/update/UpdateHttp.class"
+							],
+							"api.github.com": [
+								"net/trilleo/update/UpdateChecker.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### New Features\n\n#### trilleo.net Sync\n\n+ Added **trilleo.net sync**: Hex reads your attribute levels and Hunting Box in game and uploads them to your\n  [trilleo.net](https://www.trilleo.net) account, one collection per Skyblock profile.\n    + Link once with `/hexa sync link`: Hex shows a code in chat and a link to confirm it on the site. No password is\n      ever typed into Minecraft.\n    + Open `/attributemenu` or `/huntingbox` and page through it. A few seconds after you close it, the changes go up,\n      at most once a minute. A chat line says how many levels and counts changed; hover it for the list.\n    + Reading every page sends the whole list. Skipping a page, or searching the Hunting Box, sends only the shards you\n      saw, so nothing you did not look at is touched.\n    + `/hexa sync` shows the link and the profile Hex sees, `/hexa sync now` uploads at once, and `/hexa sync unlink`\n      revokes the token. All of it is also in the new **trilleo.net Sync** tab of `/hexa config`.\n\n### Technical Details\n\n#### trilleo.net Sync\n\n+ New `net.trilleo.sync` package: `ShardReader` polls open container screens, `MenuSession` decides between the API's\n  `replace` and `merge` modes, `SyncQueue` debounces, batches and retries on one background thread, and\n  `TrilleoAccount` runs the device-code link flow.\n+ The token is stored in `config/hex/trilleo-account.json`, keyed by API address. That file is deliberately not\n  registered with `ConfigRegistry`, so profiles and the clipboard export never contain it. It is written owner-readable\n  only where the filesystem supports that, and never logged.\n+ Shard names are resolved to Hypixel item IDs with the site's `GET /v1/skyblock/shards` list, because 17 shards are\n  named differently from their IDs. `SHARD_<NAME>` is the fallback.\n+ New shared `skyblock.SkyblockProfile` reader: profile ID from the `Profile ID:` chat line, name from the profile chat\n  messages or the tab list, game mode from the sidebar or tab list symbols. `Sidebar` now exposes its title.\n+ Retries reuse the request's `syncKey`, so a sync whose answer was lost is never applied twice."
+		},
 		{
 			"tag": "v1.12.1",
 			"published": "2026-09-22T14:07:16Z",
@@ -18,7 +109,7 @@
 					"name": "hex-1.12.1.jar",
 					"url": "https://github.com/Trilleo/Hex/releases/download/v1.12.1/hex-1.12.1.jar",
 					"size": 1651990,
-					"downloads": 7,
+					"downloads": 8,
 					"inspection": 2,
 					"sha256": "bb1ebc9b0d8f04c7ed32fe7189b6744e9f2c6a8d4433be63377a6818f175bb74",
 					"mods": [
@@ -99,7 +190,7 @@
 					"name": "hex-1.12.0.jar",
 					"url": "https://github.com/Trilleo/Hex/releases/download/v1.12.0/hex-1.12.0.jar",
 					"size": 1649594,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "22e5ce7a47b18f5988ee56f117a91ea902ef7d7b84aa9d8d5fde02e3e7f8a195",
 					"mods": [
@@ -180,7 +271,7 @@
 					"name": "hex-1.11.3.jar",
 					"url": "https://github.com/Trilleo/Hex/releases/download/v1.11.3/hex-1.11.3.jar",
 					"size": 1491495,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "823d7507c8d8178ed3c95118100d602b1e582a5c420b2925839a06e4cfc1995c",
 					"mods": [
@@ -261,7 +352,7 @@
 					"name": "hex-1.11.2.jar",
 					"url": "https://github.com/Trilleo/Hex/releases/download/v1.11.2/hex-1.11.2.jar",
 					"size": 1450630,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "58176bee6bc46eeda126d7e75ddef42bf9090258065e854c12d4ae6f621d21bb",
 					"mods": [
@@ -342,7 +433,7 @@
 					"name": "hex-1.11.1.jar",
 					"url": "https://github.com/Trilleo/Hex/releases/download/v1.11.1/hex-1.11.1.jar",
 					"size": 1395476,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "2b9eed72f3c535a57e573dc3c1ef7db90512da42f50886b9a12067ba56e763f4",
 					"mods": [
@@ -423,7 +514,7 @@
 					"name": "hex-1.10.2.jar",
 					"url": "https://github.com/Trilleo/Hex/releases/download/v1.10.2/hex-1.10.2.jar",
 					"size": 1255322,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "6b16c98ea83308a55c3e7a7e5a6eb36301e38d50035cc81fe679e0696cce84d4",
 					"mods": [
@@ -504,7 +595,7 @@
 					"name": "hex-1.10.1.jar",
 					"url": "https://github.com/Trilleo/Hex/releases/download/v1.10.1/hex-1.10.1.jar",
 					"size": 1251737,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "fbfef8c4add4835c4161f605f9b9a8b3b098188b2f4ee760637f6fb8ecad7e02",
 					"mods": [
@@ -585,7 +676,7 @@
 					"name": "hex-1.9.3.jar",
 					"url": "https://github.com/Trilleo/Hex/releases/download/v1.9.3/hex-1.9.3.jar",
 					"size": 960022,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "d996bb283b4e771276eda7e3184a549437791f9603c18fa3b1ef30204ceb4150",
 					"mods": [
@@ -666,7 +757,7 @@
 					"name": "hex-1.9.2.jar",
 					"url": "https://github.com/Trilleo/Hex/releases/download/v1.9.2/hex-1.9.2.jar",
 					"size": 960024,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "4270e346b8b49c158a5d6583151d325be360280fc018f7a6f1c33765adc450de",
 					"mods": [
@@ -747,7 +838,7 @@
 					"name": "hex-1.9.1.jar",
 					"url": "https://github.com/Trilleo/Hex/releases/download/v1.9.1/hex-1.9.1.jar",
 					"size": 888801,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "91ff9f9325f008cdb6b5b1eec37eb4ed07bd80371fc2b6b880d5e2a9be796d0a",
 					"mods": [
