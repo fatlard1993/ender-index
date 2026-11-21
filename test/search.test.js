@@ -31,6 +31,39 @@ describe('the search file', () => {
 		expect(entry.replaced).toBe(false);
 	});
 
+	test('lists what the newest release warns of, whose secrets it names, and what it found that the one before did not', () => {
+		const entries = buildSearch([
+			record('a/quiet', [{ tag: '1.0', prerelease: false, assets: [asset()] }]),
+			record('a/loud', [
+				{
+					tag: '1.1',
+					prerelease: false,
+					assets: [
+						asset({
+							scan: {
+								capabilities: { network: {}, exec: {} },
+								signals: { webhook: {} },
+								secrets: { discord: {} },
+								hidden: ['data.bin'],
+							},
+						}),
+					],
+				},
+				{ tag: '1.0', prerelease: false, assets: [asset()] },
+			]),
+		]);
+		const quiet = entries.find(({ repo }) => repo === 'a/quiet');
+		const loud = entries.find(({ repo }) => repo === 'a/loud');
+
+		expect(quiet.latest).not.toHaveProperty('warnings');
+		expect(quiet.latest).not.toHaveProperty('gained');
+		expect(loud.latest).toMatchObject({
+			warnings: ['hidden', 'webhook'],
+			secrets: ['discord'],
+			gained: ['exec', 'hidden', 'secrets:discord', 'webhook'],
+		});
+	});
+
 	test('lists every loader and game range any watched release targets', () => {
 		const [entry] = buildSearch([
 			record('a/mod', [

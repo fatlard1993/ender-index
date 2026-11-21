@@ -39,6 +39,40 @@ export const latestAssets = record => {
 	return latest ? live(latest) : [];
 };
 
+/** A list under its name when it has anything in it: search.json is fetched whole, and most mods warn of nothing. */
+const listed = (name, items) => (items.length > 0 ? { [name]: items } : {});
+
+/** What a jar's scan warns of: its signals, and code hidden under other names. */
+export const warningsOf = asset => [
+	...Object.keys(asset.scan?.signals ?? {}),
+	...((asset.scan?.hidden ?? []).length > 0 ? ['hidden'] : []),
+];
+
+/** Every finding of a release's jars by name: what their code reaches, what they warn of, and whose secrets they name. */
+export const findingNames = assets =>
+	new Set(
+		assets.flatMap(asset => [
+			...Object.keys(asset.scan?.capabilities ?? {}),
+			...warningsOf(asset),
+			...Object.keys(asset.scan?.secrets ?? {}).map(store => `secrets:${store}`),
+		]),
+	);
+
+/**
+ * What the release a repository is listed by found that the release before it did not: the change a quietly
+ * compromised release makes. None for a first release, whose findings are all there is to compare.
+ */
+export const gainedFindings = record => {
+	const latest = latestRelease(record);
+	const previous = latest && record.releases.slice(record.releases.indexOf(latest) + 1).find(usable);
+
+	if (!latest || !previous) return [];
+
+	const before = findingNames(live(previous));
+
+	return [...findingNames(live(latest))].filter(name => !before.has(name)).sort();
+};
+
 /** Every mod jar a record has read, still published or not, which a download count is summed over. */
 const jars = record => record.releases.flatMap(release => release.assets.filter(asset => asset.mods?.length > 0));
 
@@ -134,6 +168,9 @@ export const summarize = (record, donations = []) => {
 			),
 			provides: [...new Set(assets.flatMap(asset => (asset.mods ?? []).flatMap(mod => mod.provides ?? [])))].sort(),
 			capabilities: [...new Set(assets.flatMap(asset => Object.keys(asset.scan?.capabilities ?? {})))].sort(),
+			...listed('warnings', [...new Set(assets.flatMap(warningsOf))].sort()),
+			...listed('secrets', [...new Set(assets.flatMap(asset => Object.keys(asset.scan?.secrets ?? {})))].sort()),
+			...listed('gained', gainedFindings(record)),
 		},
 	};
 };
