@@ -24,19 +24,23 @@ const issue = ({
 	text = 'It checks Modrinth for a newer version, once a day.',
 	by = 'Author',
 	labels = [],
+	verdict = 'Right, and this says why',
 } = {}) => ({
-	body: `### Mod\n\n${mod}\n\n### Finding\n\n${finding}\n\n### Explanation\n\n${text || '_No response_'}`,
+	body: `### Mod\n\n${mod}\n\n### Finding\n\n${finding}\n\n### The finding is\n\n${verdict}\n\n### Explanation\n\n${text || '_No response_'}`,
 	user: { login: by },
 	labels: labels.map(name => ({ name })),
 	html_url: 'https://github.com/fatlard1993/ender-index/issues/9',
 });
 
-const run = (filed, explanations = {}, now = '2026-11-21T00:00:00Z') =>
+const run = (filed, explanations = {}, now = '2026-11-21T00:00:00Z', event = {}) =>
 	explain(filed, {
 		explanations,
 		now,
+		...event,
 		readRecord: async name => (name.toLowerCase() === 'author/boats' ? record : undefined),
 	});
+
+const approving = { action: 'labeled', labelled: 'approved' };
 
 describe('an author explaining a finding', () => {
 	test('speaks for the repository as its owner, or as a contributor who made at least half its commits', () => {
@@ -53,8 +57,18 @@ describe('an author explaining a finding', () => {
 		expect(findingOf('_No response_')).toBeUndefined();
 	});
 
-	test('is shown, with who wrote it and the release it was written for', async () => {
-		const { explanations, shown, say } = await run(issue());
+	test('waits to be looked over, then shows with who wrote it and the release it was written for', async () => {
+		const waiting = await run(issue());
+
+		expect(waiting).toMatchObject({ explanations: {}, shown: false, reviewAgain: false });
+		expect(waiting.say).toContain('looks over each explanation');
+
+		const { explanations, shown, say } = await run(
+			issue({ labels: ['explain', 'approved'] }),
+			{},
+			undefined,
+			approving,
+		);
 
 		expect(shown).toBe(true);
 		expect(explanations).toEqual({
@@ -72,16 +86,20 @@ describe('an author explaining a finding', () => {
 		expect(say).not.toContain('shows once one does');
 	});
 
-	test('keeps when and for which release it was written while its words stay the same', async () => {
-		const first = await run(issue());
-		const again = await run(issue(), first.explanations, '2026-12-01T00:00:00Z');
-		const edited = await run(issue({ text: 'Only when asked.' }), first.explanations, '2026-12-01T00:00:00Z');
+	test('keeps the approved words shown when they are changed after, and asks for approval again', async () => {
+		const approved = issue({ labels: ['explain', 'approved'] });
+		const first = await run(approved, {}, undefined, approving);
+		const untouched = await run(approved, first.explanations, '2026-12-01T00:00:00Z', { action: 'edited' });
+		const edited = await run(
+			issue({ labels: ['explain', 'approved'], text: 'Only when asked.' }),
+			first.explanations,
+			'2026-12-01T00:00:00Z',
+			{ action: 'edited' },
+		);
 
-		expect(again.explanations['github:Author/boats'].network.at).toBe('2026-11-21T00:00:00Z');
-		expect(edited.explanations['github:Author/boats'].network).toMatchObject({
-			text: 'Only when asked.',
-			at: '2026-12-01T00:00:00Z',
-		});
+		expect(untouched).toMatchObject({ say: '', reviewAgain: false, explanations: first.explanations });
+		expect(edited).toMatchObject({ reviewAgain: true, shown: false, explanations: first.explanations });
+		expect(edited.say).toContain('stay shown until these are looked over');
 	});
 
 	test('is refused from anyone who does not speak for the repository', async () => {
@@ -93,7 +111,7 @@ describe('an author explaining a finding', () => {
 	});
 
 	test('is taken down when its author empties it, or the index labels it withdrawn', async () => {
-		const { explanations } = await run(issue());
+		const { explanations } = await run(issue({ labels: ['explain', 'approved'] }), {}, undefined, approving);
 		const emptied = await run(issue({ text: '' }), explanations);
 		const withdrawn = await run(issue({ by: 'Stranger', labels: ['explain', 'withdrawn'] }), explanations);
 
@@ -121,9 +139,19 @@ describe('an author explaining a finding', () => {
 	});
 
 	test('of a finding none of its jars has yet is kept, and says it shows once one does', async () => {
-		const { shown, say } = await run(issue({ finding: 'exec: its code can start other programs' }));
+		const { shown, say } = await run(
+			issue({ finding: 'exec: its code can start other programs', labels: ['explain', 'approved'] }),
+			{},
+			undefined,
+			approving,
+		);
 
 		expect(shown).toBe(true);
 		expect(say).toContain('shows once one does');
+	});
+
+	test('that says the finding is wrong is marked as a check to refine', async () => {
+		expect((await run(issue({ verdict: 'Wrong: the code does not do this' }))).refine).toBe(true);
+		expect((await run(issue())).refine).toBe(false);
 	});
 });

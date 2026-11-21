@@ -8,7 +8,7 @@ import { modLineOf, modUrl } from './submit';
 export const EXPLANATIONS = 'explanations.json';
 
 /** The issue form's fields, by the labels GitHub writes as headings into the issue it files. */
-export const FIELDS = { mod: 'Mod', finding: 'Finding', explanation: 'Explanation' };
+export const FIELDS = { mod: 'Mod', finding: 'Finding', verdict: 'The finding is', explanation: 'Explanation' };
 
 /** What a scan finds that an author can answer: each capability, and the hosts its strings name. */
 export const FINDINGS = ['exec', 'classloading', 'native', 'network', 'unsafe', 'hosts'];
@@ -18,6 +18,9 @@ export const EXPLANATION_KEPT = 1000;
 
 /** The label that takes an explanation down, whoever wrote it. */
 export const WITHDRAWN = 'withdrawn';
+
+/** The label that publishes an explanation, as its words stood when it was given. */
+export const APPROVED = 'approved';
 
 /**
  * Whether this GitHub account speaks for the repository: its owner, or a contributor who made at least half its
@@ -47,9 +50,11 @@ const found = (record, finding) =>
 	);
 
 /**
- * An issue explaining a finding, applied to the explanations kept: published when its author speaks for the
- * repository, changed when they edit it, and taken down when they empty it or the issue is labelled withdrawn. Answers
- * the explanations, what to tell the issue, and whether it is shown.
+ * An issue explaining a finding, applied to the explanations kept. One from someone who speaks for the repository
+ * waits to be looked over, and is published as its words stand when it is labelled approved; words changed after that
+ * leave the approved ones shown and ask for approval again. Emptying it, or the withdrawn label, takes it down at once.
+ * Answers the explanations; what to tell the issue, if anything; whether it is shown; whether the approval is to be
+ * taken back; and whether its author says the finding is wrong, which is a check to refine.
  */
 export const explain = async (
 	issue,
@@ -58,12 +63,21 @@ export const explain = async (
 		now = new Date().toISOString(),
 		readRecord = name => readJson(recordPath({ host: 'github', name })),
 		renames = {},
+		action = 'opened',
+		labelled,
 	},
 ) => {
 	const fields = fieldsOf(issue.body);
 	const line = modLineOf(fields[FIELDS.mod] ?? '');
 	const kept = structuredClone(explanations);
-	const answer = (say, shown = false) => ({ explanations: kept, say, shown });
+	const refine = /^wrong/i.test(fields[FIELDS.verdict] ?? '');
+	const answer = (say, { shown = false, reviewAgain = false } = {}) => ({
+		explanations: kept,
+		say,
+		shown,
+		reviewAgain,
+		refine,
+	});
 
 	if (!line)
 		return answer('The form names no repository: give its link on GitHub. Edit the issue and it is read again.');
@@ -117,6 +131,24 @@ export const explain = async (
 	}
 
 	const before = kept[key]?.[finding];
+	const approved = issue.labels?.some(label => (label.name ?? label) === APPROVED);
+
+	if (!approved) {
+		return answer(
+			`Thank you. The index looks over each explanation before it shows beside ${finding} on ${record.repo}'s page, and says here when it does.`,
+		);
+	}
+
+	if (!(action === 'labeled' && labelled === APPROVED)) {
+		if (before?.text === text) return answer('');
+
+		return answer(
+			before
+				? 'Changed after it was approved: the words approved before stay shown until these are looked over too.'
+				: 'Changed after it was approved, so these words are looked over before they show.',
+			{ reviewAgain: true },
+		);
+	}
 
 	(kept[key] ??= {})[finding] = {
 		text,
@@ -132,8 +164,8 @@ export const explain = async (
 		: `\n\nNone of its jars the index has read has this finding yet, so it shows once one does.`;
 
 	return answer(
-		`Shown beside ${finding} on ${page}, as your words. Edit this issue to change it, or empty the explanation to take it down.${notYetFound}`,
-		true,
+		`Shown beside ${finding} on ${page}, as your words. Changed words are looked over again before they show; empty the explanation to take it down at once.${notYetFound}`,
+		{ shown: true },
 	);
 };
 
@@ -144,15 +176,24 @@ export const writeExplanations = explanations =>
 		Object.fromEntries(Object.entries(explanations).sort(([a], [b]) => a.localeCompare(b))),
 	);
 
-/** Exits 3 when the issue changed nothing shown: it is told why. */
+/**
+ * Exits 3 when the issue changed nothing shown. What to tell the issue goes to SUBMIT_SAY, empty when there is nothing
+ * new to say, and what to do to its labels to EXPLAIN_FLAGS: review, refine, one to a line.
+ */
 if (import.meta.main) {
 	const issue = JSON.parse(process.env.EXPLAIN_EVENT);
-	const { explanations, say, shown } = await explain(issue, {
+	const { explanations, say, shown, reviewAgain, refine } = await explain(issue, {
 		explanations: await readJson(join(DATA, EXPLANATIONS), {}),
 		renames: await readRenames(),
+		action: process.env.EXPLAIN_ACTION,
+		labelled: process.env.EXPLAIN_LABEL,
 	});
 
 	await writeExplanations(explanations);
-	await Bun.write(process.env.SUBMIT_SAY ?? Bun.stdout, `${say}\n`);
+	await Bun.write(process.env.SUBMIT_SAY ?? Bun.stdout, say ? `${say}\n` : '');
+	await Bun.write(
+		process.env.EXPLAIN_FLAGS ?? Bun.stdout,
+		[reviewAgain && 'review', refine && 'refine'].filter(Boolean).join('\n'),
+	);
 	process.exit(shown ? 0 : 3);
 }

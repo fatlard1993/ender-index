@@ -13,10 +13,10 @@ concurrency: explain-${{ github.event.issue.number }}
 
 jobs:
   explain:
-    # An edit to a closed issue counts too: that is how an author changes or takes down what shows. Of labels, only the
-    # one that takes an explanation down
+    # An edit to a closed issue counts too: that is how an author changes or takes down what shows. Of labels, only
+    # those that publish an explanation or take it down
     if: >-
-      (contains(github.event.issue.labels.*.name, 'explain') || github.event.issue.title == 'Explain a finding') && (github.event.action != 'labeled' || github.event.label.name == 'withdrawn')
+      (contains(github.event.issue.labels.*.name, 'explain') || github.event.issue.title == 'Explain a finding') && (github.event.action != 'labeled' || github.event.label.name == 'approved' || github.event.label.name == 'withdrawn')
 
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -42,7 +42,10 @@ jobs:
           EXPLAIN_EVENT: ${{ toJSON(github.event.issue) }}
           EXPLAIN_ISSUE: ${{ github.event.issue.number }}
           EXPLAIN_STATE: ${{ github.event.issue.state }}
+          EXPLAIN_ACTION: ${{ github.event.action }}
+          EXPLAIN_LABEL: ${{ github.event.label.name }}
           SUBMIT_SAY: ${{ runner.temp }}/say.md
+          EXPLAIN_FLAGS: ${{ runner.temp }}/flags
         run: |
           git config user.name 'ender-index'
           git config user.email 'ender-index@users.noreply.github.com'
@@ -57,10 +60,12 @@ jobs:
             git push -q && break
             code=1
           done
-          if [ "$code" != 0 ] && [ "$code" != 3 ] || [ ! -s "$SUBMIT_SAY" ]; then
+          if [ "$code" != 0 ] && [ "$code" != 3 ]; then
             gh issue comment "$EXPLAIN_ISSUE" --body 'The index could not read this just now; it is looked into from the failed run.'
             exit 1
           fi
-          gh issue comment "$EXPLAIN_ISSUE" --body-file "$SUBMIT_SAY"
+          grep -qx review "$EXPLAIN_FLAGS" && gh issue edit "$EXPLAIN_ISSUE" --remove-label approved
+          grep -qx refine "$EXPLAIN_FLAGS" && gh issue edit "$EXPLAIN_ISSUE" --add-label refine
+          [ -s "$SUBMIT_SAY" ] && gh issue comment "$EXPLAIN_ISSUE" --body-file "$SUBMIT_SAY"
           [ "$code" = 0 ] && [ "$EXPLAIN_STATE" = open ] && gh issue close "$EXPLAIN_ISSUE" --reason completed
           exit 0

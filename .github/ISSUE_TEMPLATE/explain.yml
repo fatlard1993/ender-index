@@ -8,7 +8,7 @@ body:
       value: |
         The index scans each jar for what its code can reach beyond the game, and shows that on the mod's page as a finding. Changing the mod so a finding goes away answers it one way; this answers it another, in your own words beside it. [What each finding means](https://fatlard1993.github.io/ender-index/findings), and what grants it, is on the index.
 
-        Only the mod's author can explain its findings: this issue has to come from the GitHub account that owns the repository, or one that made at least half its commits. It shows labelled as yours, with the release it was written for, so players know the index has not checked it. Edit the issue to change what shows; empty the explanation to take it down.
+        Only the mod's author can explain its findings: this issue has to come from the GitHub account that owns the repository, or one that made at least half its commits. The index looks each one over before it shows. It shows labelled as yours, with the release it was written for, so players know the index has not checked it. Changed words are looked over again; empty the explanation to take it down at once.
   - type: input
     id: mod
     attributes:
@@ -28,6 +28,16 @@ body:
         - 'unsafe: its code uses Unsafe'
         - 'classloading: its code can define classes while running'
         - 'hosts: the hosts its strings name'
+    validations:
+      required: true
+  - type: dropdown
+    id: verdict
+    attributes:
+      label: The finding is
+      description: A finding that is wrong is a check for the index to refine, so say so here
+      options:
+        - 'Right, and this says why'
+        - 'Wrong: the code does not do this'
     validations:
       required: true
   - type: textarea
