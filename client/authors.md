@@ -2,7 +2,7 @@ The index lists Minecraft mods from the repositories their authors keep, on GitH
 
 ## Releases
 
-Attach the built jar to a release. A release is where the index and ender take a mod from; a jar in a branch, a CI artifact or a download link in the readme is not read.
+Attach the built jar to a release. A release is where the index and ender take a mod from; a jar in a branch, a CI artifact or a download link in the readme is not read. On GitHub, if you publish with `mc-publish`, its `github-token` input does this; on GitLab, a release link whose URL ends in the jar's file name counts.
 
 - **One release, one or more jars.** Each jar is downloaded and read: what loader and game versions it supports comes from its own `fabric.mod.json`, `quilt.mod.json` or `mods.toml`, not from the release's name.
 - **Name the game version** in the tag or the jar's name, like `mymod-1.4.0+1.21.4.jar`. The crawl reads the newest five releases, and past those the newest that names each game version, so a mod released per game version keeps its older builds installable.
@@ -59,7 +59,7 @@ Each mod has a page, made from what the repository already holds:
 
 - **The jar's metadata:** its name, description, icon, authors, and the game versions and mods it depends on, which the search filters by.
 - **The readme**, rendered as the repository shows it.
-- **Pictures:** images in the repository outside `src` and `build` and not named `icon`, `logo`, `badge` or `banner`. Players can add screenshots of their own.
+- **Pictures:** on GitHub, up to forty images in the repository outside its source, build and texture folders, and not named `icon`, `logo`, `badge` or `banner`. Players can add screenshots of their own.
 - **What its code reaches.** Each jar is scanned for what it can do beyond the game, like reaching the network or running programs. That is a finding, not a verdict: an update checker reaches the network.
 
 ## Notices
