@@ -4,8 +4,103 @@
 	"stars": 0,
 	"archived": false,
 	"created": "2026-10-25T18:29:20Z",
-	"pushed": "2026-11-19T17:54:48Z",
+	"pushed": "2026-11-21T01:57:00Z",
 	"releases": [
+		{
+			"tag": "v0.3.132-test.380",
+			"published": "2026-11-21T01:57:00Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 774074946,
+					"name": "Overcraft-0.3.132.jar",
+					"url": "https://github.com/Thrasherop/overcraft/releases/download/v0.3.132-test.380/Overcraft-0.3.132.jar",
+					"size": 2898691,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "81d89bd94a059841ffef947c383883168833dd790859ccfc8ed16b1add026bde",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "overcraft",
+							"version": "0.3.132",
+							"name": "Overcraft",
+							"description": "Overwatch heroes in Minecraft: pick a hero when you join a world; hotbar slot 1 holds the hero's weapons and abilities.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Healing Ofuda",
+								"Kiriko's Kunai & Ofuda",
+								"Kunai",
+								"Protection Suzu",
+								"Sonic Amplifier round"
+							],
+							"entity": [
+								"ASHE",
+								"B.O.B.",
+								"CASSIDY",
+								"Dynamite",
+								"Grappling Hook",
+								"Healing Blossom",
+								"Healing Ofuda",
+								"JUNKRAT",
+								"Kitsune",
+								"Kunai",
+								"Molten slag",
+								"PHARAH",
+								"Petal Platform",
+								"Petal seed",
+								"Protection Suzu",
+								"Rivet",
+								"Rivet Gun pellet",
+								"SOJOURN",
+								"Seed",
+								"Sonic Amplifier round",
+								"TORBJÖRN",
+								"TRACER",
+								"Thorn",
+								"Tree of Life",
+								"Turret",
+								"Venom Mine",
+								"WIDOWMAKER"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 848,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/overcraft/client/dev/DevServer.class": [
+									"java/net/Socket.getInputStream",
+									"java/net/Socket.getOutputStream",
+									"java/net/Socket.close"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Test build.** It becomes a release only once it's moved to the `production` branch.\n\n## 2026-11-20: 0.3.132\n\n- **Server freezes of several seconds in multiplayer (#178):** the Play of the Game recorder, when a player's recording\n  started (joining, picking a hero, every portal trip, a respawn into another dimension, everyone at once after a POTG\n  showing), loaded every chunk in view that wasn't loaded yet, one after another on the server thread: 4.6-6.7 s each,\n  measured (67-126 chunks). It now records only loaded chunks; the rest are recorded when the game sends them normally.\n  Hitscan and other block rays (88 of them, every hero) also loaded each chunk they crossed: a Cassidy shot into fresh\n  land cost 140-225 ms. They now read unloaded chunks as empty (`Rays.clip`). Played (dev client, view distance 16, fresh\n  world): join 2.1 s (one-off new-world startup; was 5.7-6.6 s), into the Nether 0.8 s (was 4.6 s), back to the Overworld\n  at 4000,4000 0.55 s (was 6.2 s), four Cassidy shots level into fresh land: no tick over 100 ms (was 140-225 ms each). A\n  POTG played afterwards shows the spawn area complete, chunks that weren't loaded when its recording began included. Not\n  tried: a dedicated server, several players.\n\n\n---\nBuilt from `ca8bef7` on `main`: Merge next into main: build 0.3.132 (no chunk loads in the POTG snapshot or hitscan rays: multiplayer freezes #178)"
+		},
 		{
 			"tag": "v0.3.131-test.378",
 			"published": "2026-11-19T17:54:48Z",
@@ -16,7 +111,7 @@
 					"name": "Overcraft-0.3.131.jar",
 					"url": "https://github.com/Thrasherop/overcraft/releases/download/v0.3.131-test.378/Overcraft-0.3.131.jar",
 					"size": 2896368,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "d4921d015c2db21ae98bfa8380ae17cff3e3152878281b34527f9e295f5bf688",
 					"mods": [
