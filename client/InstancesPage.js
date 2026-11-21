@@ -384,8 +384,9 @@ const instanceCard = (instance, signal) => {
 	return card;
 };
 
-const runInto = async (status, starting) => {
+const runInto = async (status, starting, trusting) => {
 	status.elem.textContent = 'Asking ender';
+	trusting?.content([]);
 
 	const controller = new AbortController();
 
@@ -402,6 +403,9 @@ const runInto = async (status, starting) => {
 		told('success', `${job.title}: done`, { anchor: status });
 	} catch (error) {
 		status.elem.textContent = `It did not work: ${error.message}`;
+
+		if (trusting && heldBack(error.job).length > 0)
+			trusting.content(trustOffer(error.job, again => runInto(status, again, trusting)));
 	} finally {
 		controller.abort();
 	}
@@ -419,6 +423,7 @@ const listProblem = text => {
 
 const newInstance = signal => {
 	const status = new Meta({ style: { whiteSpace: 'pre-wrap' } });
+	const trusting = new Stack();
 	// Why what was pasted is not one pack to import, shown on the field until what is in it changes
 	let refused;
 	const source = new Input({
@@ -482,7 +487,7 @@ const newInstance = signal => {
 		source.validate();
 
 		if (pack) {
-			runInto(status, () => local.importPack(pack));
+			runInto(status, () => local.importPack(pack), trusting);
 
 			return;
 		}
@@ -506,13 +511,16 @@ const newInstance = signal => {
 			...readPasted(String(specs ?? ''), { bare: 'mod' }).mods,
 		];
 
-		runInto(status, () =>
-			local.create({
-				name: instanceNameOf(name),
-				...(minecraft ? { minecraft } : {}),
-				loader,
-				specs: [...new Set(listed)],
-			}),
+		runInto(
+			status,
+			() =>
+				local.create({
+					name: instanceNameOf(name),
+					...(minecraft ? { minecraft } : {}),
+					loader,
+					specs: [...new Set(listed)],
+				}),
+			trusting,
 		);
 	};
 
@@ -565,6 +573,7 @@ const newInstance = signal => {
 					append: [new Button({ icon: 'plus', textContent: 'Make it', onPointerPress: make }), packOfCollected],
 				}),
 				status,
+				trusting,
 			],
 		}),
 	);
