@@ -321,7 +321,7 @@ const capabilityList = (scan, explained) => [
 ];
 
 /** What no mod has a reason to do, said outright beside the jar rather than folded among the findings. */
-const secretsAlarm = scan => {
+const secretsAlarm = (scan, explained = {}) => {
 	const stores = Object.keys(scan?.secrets ?? {});
 
 	if (stores.length === 0) return [];
@@ -332,6 +332,7 @@ const secretsAlarm = scan => {
 				new Component({ tag: 'strong', textContent: secretsSentence(stores) }),
 				...stores.flatMap(store => evidenceLines(scan.secrets[store])),
 				new Link({ href: findingsPath('secrets'), textContent: 'What this means, and what to do' }),
+				...authorsWord(explained.secrets),
 			],
 		}),
 	];
@@ -583,7 +584,7 @@ const findings = (scan, explained, entry) => {
 	const hosts = Object.keys(scan?.hosts ?? {});
 	const unreadable = scan?.unreadable ?? [];
 
-	if (reached.length + warned.length + hosts.length + unreadable.length === 0) return secretsAlarm(scan);
+	if (reached.length + warned.length + hosts.length + unreadable.length === 0) return secretsAlarm(scan, explained);
 
 	const answered = [...reached, ...warned, ...(hosts.length > 0 ? ['hosts'] : [])].some(finding => explained[finding]);
 	const details = new Component({ tag: 'details' });
@@ -631,7 +632,7 @@ const findings = (scan, explained, entry) => {
 			: []),
 	);
 
-	return [...secretsAlarm(scan), details];
+	return [...secretsAlarm(scan, explained), details];
 };
 
 const downloadRow = ({ asset }, explained, entry) => {
