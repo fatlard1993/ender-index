@@ -113,10 +113,7 @@ export const terminalRow = terminal => {
 		}),
 		new Row({
 			style: { flexWrap: 'wrap' },
-			append: [
-				new Meta({ textContent: 'or paste' }),
-				new Command({ code: terminal.line, copyButton: true }),
-			],
+			append: [new Meta({ textContent: 'or paste' }), new Command({ code: terminal.line, copyButton: true })],
 		}),
 	];
 };
