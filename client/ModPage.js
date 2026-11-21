@@ -268,6 +268,9 @@ const evidenceLines = classes => {
 	];
 };
 
+/** A link that stands for a line of its own, rather than running on from whatever is beside it. */
+const onItsOwnLine = link => new Component({ tag: 'div', append: link });
+
 /** One finding folded: its name and what it means, a link to more, the classes behind it, and its author's word. */
 const findingDetails = ({ chip, about, part, linkText, classes, note }) => {
 	const details = new Component({ tag: 'details' });
@@ -279,7 +282,7 @@ const findingDetails = ({ chip, about, part, linkText, classes, note }) => {
 		new Component({
 			tag: 'summary',
 			append: [
-				new Chip({ addClass: 'finding', textContent: chip }),
+				new Chip({ addClass: 'finding', textContent: chip, style: { display: 'inline-block' } }),
 				` ${about ?? ''}`,
 				...(onlyBundled
 					? [
@@ -293,7 +296,7 @@ const findingDetails = ({ chip, about, part, linkText, classes, note }) => {
 					: []),
 			],
 		}),
-		new Link({ href: findingsPath(part), textContent: linkText }),
+		onItsOwnLine(new Link({ href: findingsPath(part), textContent: linkText })),
 		...evidenceLines(classes),
 		...authorsWord(note),
 	);
@@ -317,7 +320,7 @@ const capabilityList = (scan, explained, unsourced) => [
 			chip: `warns of ${signal}`,
 			about: WARNINGS[signal],
 			part: signal,
-			linkText: `What a ${signal} warning means`,
+			linkText: `What ${/^[aeiou]/.test(signal) ? 'an' : 'a'} ${signal} warning means`,
 			classes,
 			note: explained[signal],
 		}),
@@ -644,24 +647,26 @@ const findings = ({ scan, unsourced }, explained, entry) => {
 		...(hosts.length > 0
 			? [
 					new Meta({ tag: 'div', textContent: `Names hosts: ${hosts.map(hostLabel).join(', ')}` }),
-					new Link({ href: findingsPath('hosts'), textContent: 'What the hosts mean' }),
+					onItsOwnLine(new Link({ href: findingsPath('hosts'), textContent: 'What the hosts mean' })),
 				]
 			: []),
 		...authorsWord(hosts.length > 0 && explained.hosts),
 		...(unreadable.length > 0
 			? [
 					new Meta({ tag: 'div', textContent: `Could not read: ${unreadable.join(', ')}` }),
-					new Link({ href: findingsPath('unreadable'), textContent: 'What an unreadable class means' }),
+					onItsOwnLine(new Link({ href: findingsPath('unreadable'), textContent: 'What an unreadable class means' })),
 				]
 			: []),
 		...((entry.host ?? 'github') === 'github'
 			? [
-					new Link({
-						href: explainUrl(entry),
-						target: '_blank',
-						textContent: 'Explain a finding, as its author',
-						tooltip: 'Your words shown beside the finding, marked as yours',
-					}),
+					onItsOwnLine(
+						new Link({
+							href: explainUrl(entry),
+							target: '_blank',
+							textContent: 'Explain a finding, as its author',
+							tooltip: 'Your words shown beside the finding, marked as yours',
+						}),
+					),
 				]
 			: []),
 	);

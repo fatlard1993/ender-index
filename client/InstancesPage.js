@@ -141,6 +141,18 @@ const modList = (manifest, onDrop) =>
 	});
 
 /**
+ * What a finished job that held jars back says beside its instance, in place of ender's own refusal: the offer below it
+ * explains, and the output keeps every line ender printed. Undefined for any other job.
+ */
+const heldBackLine = job => {
+	const count = job && job.state !== 'running' ? heldBack(job).length : 0;
+
+	return count > 0
+		? `${job.title} stopped: ender held back ${count === 1 ? 'a jar' : `${count} jars`}, as below`
+		: undefined;
+};
+
+/**
  * What a sync held back for naming where other programs keep logins, beside the instance whose job it was, with the
  * one way past it: trusting those jars by their hashes, asked twice so it is never a slip, and running the job again.
  */
@@ -200,7 +212,7 @@ const instanceCard = (instance, signal) => {
 
 		for (const button of actions) button.options.disabled = working;
 
-		status.elem.textContent = jobLine(job);
+		status.elem.textContent = heldBackLine(job) ?? jobLine(job);
 		trusting.content(
 			job && job.state !== 'running' && heldBack(job).length > 0 ? trustOffer(job, (...args) => runJob(...args)) : [],
 		);
@@ -217,7 +229,10 @@ const instanceCard = (instance, signal) => {
 
 			if (!quietWhenDone) told('success', done ?? `${job.title}: done`, { anchor: card });
 		} catch (error) {
-			told(error.trusted ? 'info' : 'danger', `${instance.name}: ${error.message}`, { anchor: card });
+			told(error.trusted ? 'info' : 'danger', `${instance.name}: ${error.message}`, {
+				anchor: card,
+				...(error.trusted ? { timeout: 0 } : {}),
+			});
 		}
 	};
 	const showMods = async () => {
@@ -402,7 +417,8 @@ const runInto = async (status, starting, trusting) => {
 		// Long after the press: beside the status line it is about
 		told('success', `${job.title}: done`, { anchor: status });
 	} catch (error) {
-		status.elem.textContent = error.trusted ? error.message : `It did not work: ${error.message}`;
+		status.elem.textContent =
+			(error.trusted ? error.message : heldBackLine(error.job)) ?? `It did not work: ${error.message}`;
 		trusting?.content([]);
 
 		if (trusting && heldBack(error.job).length > 0)

@@ -74,7 +74,11 @@ const offerTrust = (named, job) =>
 						await local.finished(await local.trustAndRetry(job));
 						new Notify({ intent: 'success', content: `Installed ${named}, trusted by its hash` });
 					} catch (error) {
-						new Notify({ intent: 'danger', content: `${named}: ${error.message}` });
+						new Notify({
+							intent: error.trusted ? 'info' : 'danger',
+							content: `${named}: ${error.message}`,
+							...(error.trusted ? { timeout: 0 } : {}),
+						});
 					}
 				},
 			},
