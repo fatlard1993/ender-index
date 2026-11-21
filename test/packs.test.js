@@ -1,10 +1,10 @@
-import { describe, expect, setSystemTime, test } from 'bun:test';
 
-import { packsFrom } from '../src/discover';
 import { randomBytes } from 'node:crypto';
 import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { describe, expect, setSystemTime, test } from 'bun:test';
+import { packsFrom } from '../src/discover';
 
 import { orphanedPacks } from '../src/crawl';
 import { RateLimited } from '../src/fetch';

@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { DATA, fillIcons, pruneIcons, recordFiles, writeJson, writeJsonLines } from '../src/crawl';
 import { buildSearch } from '../src/search';
 
-/** Read icons for every record at once, rather than as each nightly crawl reaches it. Only release downloads are made, which the GitHub rate limit does not count. */
+/** Read icons for every record at once, rather than as each crawl reaches it. Only release downloads are made, which the GitHub rate limit does not count. */
 const files = await recordFiles();
 const scratch = await mkdtemp(join(tmpdir(), 'ender-icons-'));
 const records = [];
