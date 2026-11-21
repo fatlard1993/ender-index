@@ -1,0 +1,68 @@
+name: rescan
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: write
+  issues: write
+
+# One group per issue: GitHub keeps one pending run per group and cancels the rest, which in a shared group would drop
+# an issue opened while two others waited. Runs for different issues meet at the push, which retries from the newest
+concurrency: rescan-${{ github.event.issue.number }}
+
+jobs:
+  rescan:
+    # By label from the form, or by title
+    if: >-
+      github.event.issue.state == 'open' && (contains(github.event.issue.labels.*.name, 'rescan') || github.event.issue.title == 'Rescan a mod')
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ender-index
+      - uses: actions/checkout@v4
+        with:
+          repository: fatlard1993/ender-launcher
+          path: ender-launcher
+      # By its download address: asked for by version, setup-bun asks GitHub's API where it is, which a crawl running
+      # alongside may have spent the repository's hour of
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-download-url: https://github.com/oven-sh/bun/releases/download/bun-v1.4.0/bun-linux-x64.zip
+      - run: bun install
+        working-directory: ender-index
+      - name: rescan
+        working-directory: ender-index
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          RESCAN_BODY: ${{ github.event.issue.body }}
+          RESCAN_ISSUE: ${{ github.event.issue.number }}
+          SUBMIT_SAY: ${{ runner.temp }}/say.md
+        run: |
+          git config user.name 'ender-index'
+          git config user.email 'ender-index@users.noreply.github.com'
+          # From the newest data each time: a crawl pushing alongside rebuilt the same lists
+          for attempt in 1 2 3; do
+            git fetch -q origin main && git reset -q --hard origin/main
+            code=0
+            bun src/submit.js || code=$?
+            [ "$code" = 0 ] || break
+            git add data
+            git diff --cached --quiet && break
+            git commit -qm "Rescan: from #$RESCAN_ISSUE"
+            git push -q && break
+            code=1
+          done
+          if [ "$code" = 1 ] || [ ! -s "$SUBMIT_SAY" ]; then
+            gh issue comment "$RESCAN_ISSUE" --body 'The index could not rescan this just now; it is looked into from the failed run.'
+            exit 1
+          fi
+          gh issue comment "$RESCAN_ISSUE" --body-file "$SUBMIT_SAY"
+          [ "$code" = 0 ] && gh issue close "$RESCAN_ISSUE" --reason completed
+          exit 0

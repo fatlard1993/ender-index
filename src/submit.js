@@ -1,5 +1,6 @@
 import { join } from 'node:path';
 
+import { SCANNER_VERSION } from 'ender-launcher/scannerVersion';
 import {
 	DATA,
 	SUBMITTED_PACKS,
@@ -184,13 +185,47 @@ export const submitMod = async (
 };
 
 /**
+ * Read the mod an issue names again, every jar an older scanner read read by the newest. Anyone may ask: it costs one
+ * repository's downloads, and changes no finding but by reading the jar again.
+ */
+export const submitRescan = async (
+	body,
+	{ crawlOne = line => crawl({ only: [line], rescan: 'full' }), listed = listingOf } = {},
+) => {
+	const answer = answerOf(body, 'Mod');
+	const line = answer && modLineOf(answer);
+
+	if (!line) {
+		return {
+			listed: false,
+			say: `${answer ? `\`${answer}\` is not` : 'The form names no'} repository the index can read: give its link on GitHub, Codeberg or GitLab. Edit the issue and it is read again.`,
+		};
+	}
+
+	if (!(await listed(line))) return { listed: false, say: `${line} is not in the index, so it has nothing to rescan.` };
+	if ((await crawlOne(line)) !== 0)
+		return { listed: false, failed: true, say: `${line} could not be crawled just now.` };
+
+	const entry = await listed(line);
+
+	return {
+		listed: true,
+		say: `Read again with scanner version ${SCANNER_VERSION}: ${modUrl(entry)}\n\nEach jar's findings on its page say which scanner read them.`,
+	};
+};
+
+/**
  * Exits 3 when the issue names no mod or pack it can list: the issue is told why, and stays open to be edited. Exits 1
  * when the crawl could not finish.
  */
 if (import.meta.main) {
-	const { listed, failed, say } = process.env.MOD_BODY
-		? await submitMod(process.env.MOD_BODY)
-		: await submitPack(process.env.PACK_BODY, { scratch: join(DATA, '..', '.cache', 'submit') });
+	const answering = async () => {
+		if (process.env.MOD_BODY) return submitMod(process.env.MOD_BODY);
+		if (process.env.RESCAN_BODY) return submitRescan(process.env.RESCAN_BODY);
+
+		return submitPack(process.env.PACK_BODY, { scratch: join(DATA, '..', '.cache', 'submit') });
+	};
+	const { listed, failed, say } = await answering();
 
 	await Bun.write(process.env.SUBMIT_SAY ?? Bun.stdout, `${say}\n`);
 	if (failed) process.exit(1);

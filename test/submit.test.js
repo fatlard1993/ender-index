@@ -1,6 +1,8 @@
 import { describe, expect, test } from 'bun:test';
 
-import { answerOf, modLineOf, packLineOf, submitMod, submitPack } from '../src/submit';
+import { SCANNER_VERSION } from 'ender-launcher/scannerVersion';
+
+import { answerOf, modLineOf, packLineOf, submitMod, submitPack, submitRescan } from '../src/submit';
 
 const form = pack => `### Pack\n\n${pack}\n`;
 
@@ -121,5 +123,32 @@ describe('a submitted mod', () => {
 		expect(result).toMatchObject({ listed: false });
 		expect(result.say).toStartWith('you/private opts out of the index with the `ender-index-opt-out` topic');
 		expect(kept).toEqual([]);
+	});
+});
+
+describe('a rescan', () => {
+	const form = mod => `### Mod\n\n${mod}`;
+
+	test('reads a listed mod again with the newest scanner, and says which', async () => {
+		const crawled = [];
+		const result = await submitRescan(form('https://github.com/You/Mod'), {
+			crawlOne: async line => (crawled.push(line), 0),
+			listed: async () => ({ host: 'github', repo: 'You/Mod' }),
+		});
+
+		expect(crawled).toEqual(['You/Mod']);
+		expect(result).toMatchObject({ listed: true });
+		expect(result.say).toStartWith(`Read again with scanner version ${SCANNER_VERSION}`);
+	});
+
+	test('refuses a mod the index does not list, and one that names no repository', async () => {
+		const unlisted = await submitRescan(form('you/nothing'), {
+			crawlOne: async () => 0,
+			listed: async () => undefined,
+		});
+		const unread = await submitRescan(form('not a repo'), { crawlOne: async () => 0 });
+
+		expect(unlisted.say).toBe('you/nothing is not in the index, so it has nothing to rescan.');
+		expect(unread.say).toStartWith('`not a repo` is not');
 	});
 });
