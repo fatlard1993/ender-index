@@ -408,6 +408,22 @@ export const releases = async (fullName, page = 1) => {
 	);
 };
 
+/**
+ * Every file path in a repository at a tag, read once and not kept: a tag's files do not change. Undefined when GitHub
+ * has no such tag, or would answer only part of a tree that large.
+ */
+export const filesAt = async (fullName, tag) => {
+	try {
+		const { tree, truncated } = await request(`/repos/${fullName}/git/trees/${encodeURIComponent(tag)}?recursive=1`);
+
+		return truncated ? undefined : tree.filter(({ type }) => type === 'blob').map(({ path }) => path);
+	} catch (error) {
+		if (error.status === 404 || error.status === 409 || error.status === 422) return undefined;
+
+		throw error;
+	}
+};
+
 /** The path of the readme GitHub shows for a repository, or null when it has none. */
 export const readme = async fullName => {
 	try {

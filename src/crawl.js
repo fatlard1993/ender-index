@@ -4,6 +4,7 @@ import { dirname, join } from 'node:path';
 
 import { readContent, readIcon, readLinks, readMods } from 'ender-launcher/metadata';
 import { HOSTS as HOST_TITLES } from 'ender-launcher/rank';
+import { listEntries } from 'ender-launcher/archive';
 import { scanJar } from 'ender-launcher/scan';
 
 import * as codeberg from './codeberg';
@@ -12,6 +13,7 @@ import * as github from './github';
 import * as gitlab from './gitlab';
 import { ASSETS, detailsQuery, repoOf } from './graphqlRepos';
 import { OPTED_OUT, optedOutOn, optsOut } from './optOut';
+import { UNSOURCED_KEPT, reachingUnsourced, releaseOf, unsourcedClasses } from './sourced';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
 import { GIST_LINE, buildPacks, crawlPack, packDemand, packPage } from './packs';
 import { buildSearch, latestAssets, themesOf } from './search';
@@ -259,44 +261,78 @@ const jarFunding = async jar => supportLinks(await readLinks(jar).catch(() => []
 const jarContent = async jar => readContent(jar).catch(() => null);
 
 /** Download one asset, hash it on the way in, read its mods and icon and scan it. */
-const inspector = (scratch, knownBad) => async asset => {
-	if (asset.size > MAX_DOWNLOAD) throw new Error(`${asset.size} bytes is past the ${MAX_DOWNLOAD} byte limit`);
+/**
+ * The classes of a GitHub release jar its repository at that tag has no source for, beside classes it does, that reach
+ * what a payload must; or none when the repository says nothing either way. Each release's files are asked for once a
+ * crawl, however many jars it carries; one GitHub will not answer now is left without a verdict rather than holding
+ * the jar up.
+ */
+const unsourcedIn = async (path, url, trees, scan) => {
+	const release = releaseOf(url);
 
-	const path = join(scratch, `${asset.id}.jar`);
+	if (!release) return undefined;
 
-	try {
-		const sha256 = await download(asset.browser_download_url, path);
-		let mods;
-		let metadataError;
+	const key = `${release.repo}@${release.tag}`;
 
-		try {
-			mods = await readMods(path);
-		} catch (error) {
-			metadataError = error.message;
-		}
+	if (!trees.has(key))
+		trees.set(
+			key,
+			github.filesAt(release.repo, release.tag).catch(() => undefined),
+		);
 
-		const icon = await keepIcon(path);
-		const funding = await jarFunding(path);
-		const content = await jarContent(path);
+	const files = await trees.get(key);
 
-		try {
-			return {
-				sha256,
-				mods,
-				metadataError,
-				icon,
-				funding,
-				content,
-				scan: await scanJar(path),
-				knownBad: knownBad.get(sha256),
-			};
-		} catch (error) {
-			return { sha256, error: error.message, knownBad: knownBad.get(sha256) };
-		}
-	} finally {
-		await rm(path, { force: true });
-	}
+	if (!files) return undefined;
+
+	const classes = reachingUnsourced(unsourcedClasses(await listEntries(path), files), scan);
+
+	return classes.length > 0 ? { count: classes.length, classes: classes.slice(0, UNSOURCED_KEPT) } : undefined;
 };
+
+const inspector =
+	(scratch, knownBad, trees = new Map()) =>
+	async asset => {
+		if (asset.size > MAX_DOWNLOAD) throw new Error(`${asset.size} bytes is past the ${MAX_DOWNLOAD} byte limit`);
+
+		const path = join(scratch, `${asset.id}.jar`);
+
+		try {
+			const sha256 = await download(asset.browser_download_url, path);
+			let mods;
+			let metadataError;
+
+			try {
+				mods = await readMods(path);
+			} catch (error) {
+				metadataError = error.message;
+			}
+
+			const icon = await keepIcon(path);
+			const funding = await jarFunding(path);
+			const content = await jarContent(path);
+
+			try {
+				const scan = await scanJar(path);
+				const unsourced = await unsourcedIn(path, asset.browser_download_url, trees, scan).catch(() => undefined);
+
+				return {
+					sha256,
+					mods,
+					metadataError,
+					icon,
+					funding,
+					content,
+					scan,
+					...(unsourced ? { unsourced } : {}),
+					knownBad: knownBad.get(sha256),
+				};
+			} catch (error) {
+				return { sha256, error: error.message, knownBad: knownBad.get(sha256) };
+			}
+		} finally {
+			await rm(path, { force: true });
+		}
+	};
 
 /**
  * Jars of the release a repository is listed by that were read before icons were, given theirs. Only that release's
