@@ -2,7 +2,7 @@ import { Button, Component, Dialog, Link, Notify, Select } from '@vanilla-bean/c
 import { specFor } from 'ender-launcher/spec';
 
 import { collection } from './collection';
-import { local } from './local';
+import { heldBack, local } from './local';
 import { loadInterest } from './data';
 import { BUILT_FROM_SOURCE, askUrl, askedUrl, askedCount, hasAsked, titleOf } from './search';
 import { Chip, Meta } from './ui';
@@ -52,9 +52,34 @@ export const runLocally = async (verb, entries) => {
 
 		return output;
 	} catch (error) {
+		if (heldBack(error.job).length > 0) return offerTrust(named, error.job);
+
 		new Notify({ intent: 'danger', content: `${named}: ${error.message}` });
 	}
 };
+
+/**
+ * Say that ender held a jar back for naming where other programs keep logins, and offer the one way past it: trusting
+ * that jar by its hash and running the install again. Pressing it is the player's own decision, said in full first.
+ */
+const offerTrust = (named, job) =>
+	new Notify({
+		intent: 'danger',
+		content: `${named} was not installed: its code names where other programs keep logins, such as Discord's token or a browser's saved passwords. No mod has a reason to. Install it only if you are sure of where it came from.`,
+		actions: [
+			{
+				textContent: 'I trust it: install anyway',
+				onPointerPress: async () => {
+					try {
+						await local.finished(await local.trustAndRetry(job));
+						new Notify({ intent: 'success', content: `Installed ${named}, trusted by its hash` });
+					} catch (error) {
+						new Notify({ intent: 'danger', content: `${named}: ${error.message}` });
+					}
+				},
+			},
+		],
+	});
 
 const BUTTON_LOOKS = {
 	busy: { icon: 'spinner', text: 'Working' },

@@ -57,6 +57,16 @@ export const failureOf = job =>
 	job.error ??
 	`${job.title} did not finish (ender exited ${job.code})${job.lines.length > 0 ? `: ${job.lines.slice(-3).join('\n')}` : ''}`;
 
+/**
+ * The jars a failed job's sync held back for naming where other programs keep logins, by the hash ender printed for
+ * each: what the player can trust, one jar at a time, and nothing else.
+ */
+export const heldBack = job => [
+	...new Set(
+		(job?.lines ?? []).flatMap(line => [...line.matchAll(/\[sha256:([0-9a-f]{64})\]/g)].map(([, hash]) => hash)),
+	),
+];
+
 const call = async (method, path, body) => {
 	const response = await fetch(`./api/${path}`, {
 		method,
@@ -175,7 +185,7 @@ const finished = async (job, { reloading = true } = {}) => {
 	await job.done;
 
 	if (reloading) await reload();
-	if (job.state !== 'done') throw new Error(failureOf(job));
+	if (job.state !== 'done') throw Object.assign(new Error(failureOf(job)), { job });
 
 	return job;
 };
@@ -339,6 +349,12 @@ export const local = {
 	remove: name => start('DELETE', named(name)),
 	dropFrom: (name, specs) => start('POST', `${named(name)}/drop`, { specs }),
 	finished,
+	/** Trust the jars a failed job held back, then run it again as it was started; answers the job that runs it. */
+	trustAndRetry: async job => {
+		for (const sha256 of heldBack(job)) await call('POST', 'trust', { sha256 });
+
+		return start('POST', `jobs/${encodeURIComponent(job.id)}/again`);
+	},
 	jobFor: name => [...state.jobs.values()].findLast(job => job.instance === name),
 	watchJobs: (listener, signal) => listen(jobListeners, listener, signal),
 	publishInstance: (name, { fresh = false } = {}) => call('POST', `${named(name)}/gist`, fresh ? { fresh } : {}),

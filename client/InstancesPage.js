@@ -19,13 +19,13 @@ import { specFor } from 'ender-launcher/spec';
 
 import { collection } from './collection';
 import { loadVersions } from './data';
-import { lastSaid, local } from './local';
+import { heldBack, lastSaid, local } from './local';
 import { listingButton } from './controls';
 import { instanceNameOf, packDialog } from './packMaker';
 import { packOrMods, readPasted } from './pasted';
 import { playerChoice } from './playersPanel';
 import { LOADERS } from './search';
-import { Chip, Command, LAUNCHER, Meta, Row, Stack, Title, siteBar } from './ui';
+import { Alarm, Chip, Command, LAUNCHER, Meta, Row, Stack, Title, siteBar } from './ui';
 
 const NAMEABLE_SOURCES = new Set(['github', 'codeberg', 'gitlab', 'modrinth', 'curseforge']);
 
@@ -140,9 +140,49 @@ const modList = (manifest, onDrop) =>
 		});
 	});
 
+/**
+ * What a sync held back for naming where other programs keep logins, beside the instance whose job it was, with the
+ * one way past it: trusting those jars by their hashes, asked twice so it is never a slip, and running the job again.
+ */
+export const trustOffer = (job, runJob) => {
+	const confirm = new Button({
+		variant: 'flat',
+		textContent: 'I trust it: install anyway',
+		style: { display: 'none' },
+		onPointerPress: () =>
+			runJob(() => local.trustAndRetry(job), { done: `${job.title}: done, trusting what was held back` }),
+	});
+	const first = new Button({
+		variant: 'flat',
+		textContent: 'Install it anyway',
+		onPointerPress: () => {
+			first.elem.style.display = 'none';
+			confirm.elem.style.display = '';
+		},
+	});
+
+	return [
+		new Alarm({
+			append: [
+				new Component({
+					tag: 'strong',
+					textContent: `ender held back ${heldBack(job).length === 1 ? 'a jar' : `${heldBack(job).length} jars`} whose code names where other programs keep logins, such as Discord's token or a browser's saved passwords. No mod has a reason to.`,
+				}),
+				new Meta({
+					tag: 'div',
+					textContent:
+						'Install it only if you are sure of where it came from. Trusting it allows this jar alone, by its hash.',
+				}),
+				new Row({ append: [first, confirm] }),
+			],
+		}),
+	];
+};
+
 const instanceCard = (instance, signal) => {
 	const open = openedFor(instance.name);
 	const status = new Meta();
+	const trusting = new Stack();
 	const bar = progressView();
 	const output = outputView();
 	const mods = new Stack({ style: { display: open.mods ? '' : 'none', gap: theme.space.xs } });
@@ -161,6 +201,9 @@ const instanceCard = (instance, signal) => {
 		for (const button of actions) button.options.disabled = working;
 
 		status.elem.textContent = jobLine(job);
+		trusting.content(
+			job?.state === 'failed' && heldBack(job).length > 0 ? trustOffer(job, (...args) => runJob(...args)) : [],
+		);
 		showProgress(bar, job);
 		showOutput(output, job, open.output);
 	};
@@ -328,6 +371,7 @@ const instanceCard = (instance, signal) => {
 					],
 				}),
 				status,
+				trusting,
 				bar,
 				output,
 				mods,

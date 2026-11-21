@@ -416,3 +416,53 @@ describe('the instances page', () => {
 		page.destroy();
 	});
 });
+
+describe('a jar ender held back', () => {
+	const hash = 'cd'.repeat(32);
+	const failed = {
+		id: 'j1',
+		title: 'Adding to family',
+		state: 'failed',
+		lines: [`!! github:x/y :: not installed: its code names where Discord's login token is kept [sha256:${hash}]`],
+	};
+
+	test('is found in a failed job by the hash ender printed, once however often it is said', () => {
+		expect(local.heldBack({ ...failed, lines: [...failed.lines, ...failed.lines] })).toEqual([hash]);
+		expect(local.heldBack({ lines: ['ok done'] })).toEqual([]);
+		expect(local.heldBack(undefined)).toEqual([]);
+	});
+
+	test('is trusted by its hash alone, and the job run again as it was started', async () => {
+		responses['/api/trust'] = { trusted: hash };
+		responses['/api/jobs/j1/again'] = { job: { id: 'j2', title: 'Adding to family', state: 'done', lines: [] } };
+		sent.length = 0;
+
+		const job = await local.local.trustAndRetry(failed);
+
+		expect(job.id).toBe('j2');
+		expect(sent.map(([method, address, body]) => [method, address.replace(/^.*\/api\//, ''), body])).toEqual([
+			['POST', 'trust', JSON.stringify({ sha256: hash })],
+			['POST', 'jobs/j1/again', undefined],
+		]);
+	});
+
+	test('is offered beside its instance only after a second press, said in full first', async () => {
+		const { trustOffer } = await import('../client/InstancesPage');
+		const ran = [];
+		const holder = document.createElement('div');
+
+		document.body.append(holder);
+		for (const part of trustOffer(failed, starting => ran.push(starting))) holder.append(part.elem);
+
+		const named = text => [...holder.querySelectorAll('button')].find(button => button.textContent.includes(text));
+
+		expect(holder.textContent).toContain('names where other programs keep logins');
+		expect(named('I trust it').style.display).toBe('none');
+		named('Install it anyway').click();
+		expect(named('I trust it').style.display).toBe('');
+		expect(ran).toEqual([]);
+		named('I trust it').click();
+		expect(ran).toHaveLength(1);
+		holder.remove();
+	});
+});
