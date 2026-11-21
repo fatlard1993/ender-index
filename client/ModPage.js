@@ -285,7 +285,7 @@ const findingDetails = ({ chip, about, part, linkText, classes, note }) => {
 	return details;
 };
 
-const capabilityList = (scan, explained) => [
+const capabilityList = (scan, explained, unsourced) => [
 	...Object.entries(scan?.capabilities ?? {}).map(([capability, classes]) =>
 		findingDetails({
 			chip: `reaches ${capability}`,
@@ -315,6 +315,20 @@ const capabilityList = (scan, explained) => [
 					linkText: 'What hidden code means',
 					classes: Object.fromEntries(scan.hidden.map(where => [where, ['a jar or class by its bytes']])),
 					note: explained.hidden,
+				}),
+			]
+		: []),
+	...(unsourced
+		? [
+				findingDetails({
+					chip: 'warns of unsourced',
+					about: WARNINGS.unsourced,
+					part: 'unsourced',
+					linkText: 'What unsourced classes mean',
+					classes: Object.fromEntries(
+						unsourced.classes.map(where => [where, ['no source for it in the repository at this release']]),
+					),
+					note: explained.unsourced,
 				}),
 			]
 		: []),
@@ -578,9 +592,13 @@ const fitsLabel = ({ minecraft, loader }) =>
  * What a jar's scan found, folded: findings to look into, not something every reader needs open. What no mod has a
  * reason to do comes first and is never folded.
  */
-const findings = (scan, explained, entry) => {
+const findings = ({ scan, unsourced }, explained, entry) => {
 	const reached = Object.keys(scan?.capabilities ?? {});
-	const warned = [...Object.keys(scan?.signals ?? {}), ...((scan?.hidden ?? []).length > 0 ? ['hidden'] : [])];
+	const warned = [
+		...Object.keys(scan?.signals ?? {}),
+		...((scan?.hidden ?? []).length > 0 ? ['hidden'] : []),
+		...(unsourced ? ['unsourced'] : []),
+	];
 	const hosts = Object.keys(scan?.hosts ?? {});
 	const unreadable = scan?.unreadable ?? [];
 
@@ -606,7 +624,7 @@ const findings = (scan, explained, entry) => {
 					.join('; '),
 			}),
 		}),
-		...capabilityList(scan, explained),
+		...capabilityList(scan, explained, unsourced),
 		...(hosts.length > 0
 			? [
 					new Meta({ tag: 'div', textContent: `Names hosts: ${hosts.map(hostLabel).join(', ')}` }),
@@ -672,7 +690,7 @@ const downloadRow = ({ asset }, explained, entry) => {
 						}),
 					]
 				: []),
-			...findings(asset.scan, explained, entry),
+			...findings(asset, explained, entry),
 			...scannerLine(asset, entry),
 		],
 	});
@@ -699,10 +717,11 @@ const releaseNotes = (release, sources) => {
 /** A release's findings by name, as the search listing names them: what its jars reach, warn of, and name of secrets. */
 const findingNamesOf = release =>
 	new Set(
-		release.assets.flatMap(({ scan }) => [
+		release.assets.flatMap(({ scan, unsourced }) => [
 			...Object.keys(scan?.capabilities ?? {}),
 			...Object.keys(scan?.signals ?? {}),
 			...((scan?.hidden ?? []).length > 0 ? ['hidden'] : []),
+			...(unsourced ? ['unsourced'] : []),
 			...Object.keys(scan?.secrets ?? {}).map(store => `secrets:${store}`),
 		]),
 	);
@@ -727,6 +746,29 @@ export const gainedByRelease = record => {
 	});
 
 	return gained;
+};
+
+/**
+ * The jars the crawl could not read, said whatever the filters choose: a jar with no mods read from it fits no game
+ * version, so filtering would hide exactly what nothing could vouch for.
+ */
+const unreadJars = record => {
+	const unread = (record.releases ?? []).flatMap(release =>
+		release.assets.filter(asset => asset.error !== undefined && !asset.gone).map(asset => ({ release, asset })),
+	);
+
+	if (unread.length === 0) return [];
+
+	return [
+		new SectionLabel({ textContent: 'Jars the crawl could not read' }),
+		...unread.map(
+			({ release, asset }) =>
+				new Warning({
+					tag: 'div',
+					textContent: `${asset.name}, in ${release.tag}, could not be read or scanned, so nothing here says what its code reaches: ${asset.error}`,
+				}),
+		),
+	];
 };
 
 /** The jars that match, under the release each came in, newest first; past the first few, folded until asked for. */
@@ -761,15 +803,7 @@ const downloadList = (entry, matching, sources, explained, gained = new Map()) =
 						...matching
 							.filter(download => download.release === release)
 							.map(download => downloadRow(download, explained, entry)),
-						...release.assets
-							.filter(asset => asset.error !== undefined && !asset.gone)
-							.map(
-								asset =>
-									new Warning({
-										tag: 'div',
-										textContent: `${asset.name} could not be read or scanned, so nothing here says what its code reaches: ${asset.error}`,
-									}),
-							),
+
 						...releaseNotes(release, sources),
 					],
 				}),
@@ -802,6 +836,7 @@ const downloadsPanel = (entry, record) => {
 	const best = new Row();
 	const shown = new Meta();
 	const list = new Stack();
+	const unread = unreadJars(record);
 	let explained = {};
 	const gained = gainedByRelease(record);
 
@@ -895,7 +930,7 @@ const downloadsPanel = (entry, record) => {
 	return {
 		best,
 		count: downloads.length,
-		panel: [new Row({ append: [minecraft, loader, text] }), shown, list],
+		panel: [new Row({ append: [minecraft, loader, text] }), shown, list, ...unread],
 		explain: found => {
 			explained = found;
 			draw();

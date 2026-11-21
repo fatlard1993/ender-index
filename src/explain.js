@@ -22,12 +22,16 @@ export const FINDINGS = [
 	'persistence',
 	'clipboard',
 	'hidden',
+	'initializer',
+	'zip',
+	'unsourced',
 	'secrets',
 	'hosts',
 ];
 
-/** Whether a jar's scan has this finding. */
-const hasFinding = (scan, finding) => {
+/** Whether a jar has this finding. */
+const hasFinding = ({ scan, unsourced }, finding) => {
+	if (finding === 'unsourced') return unsourced !== undefined;
 	if (finding === 'hosts') return Object.keys(scan?.hosts ?? {}).length > 0;
 	if (finding === 'hidden') return (scan?.hidden ?? []).length > 0;
 	if (finding === 'secrets') return Object.keys(scan?.secrets ?? {}).length > 0;
@@ -65,7 +69,7 @@ export const findingOf = answer => FINDINGS.find(finding => answer?.trim().toLow
 
 /** Whether any jar recorded for the repository has this finding. */
 const found = (record, finding) =>
-	record.releases.some(({ assets }) => assets.some(({ scan }) => hasFinding(scan, finding)));
+	record.releases.some(({ assets }) => assets.some(asset => hasFinding(asset, finding)));
 
 /**
  * An issue explaining a finding, applied to the explanations kept. One from someone who speaks for the repository

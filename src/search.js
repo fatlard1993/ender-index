@@ -46,6 +46,7 @@ const listed = (name, items) => (items.length > 0 ? { [name]: items } : {});
 export const warningsOf = asset => [
 	...Object.keys(asset.scan?.signals ?? {}),
 	...((asset.scan?.hidden ?? []).length > 0 ? ['hidden'] : []),
+	...(asset.unsourced ? ['unsourced'] : []),
 ];
 
 /** Every finding of a release's jars by name: what their code reaches, what they warn of, and whose secrets they name. */

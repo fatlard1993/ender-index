@@ -85,6 +85,13 @@ beforeAll(async () => {
 								},
 							},
 							{ name: 'broken.jar', url: 'https://example.invalid/broken.jar', error: 'not a zip' },
+							{
+								name: 'extra.jar',
+								url: 'https://example.invalid/extra.jar',
+								mods: [mod('sodium', 'Sodium')],
+								unsourced: { count: 1, classes: ['x/Send.class'] },
+								scan: { version: 3, capabilities: {}, hosts: {}, unreadable: [] },
+							},
 						],
 					},
 					{
@@ -299,6 +306,30 @@ describe('pages that send the visitor somewhere', () => {
 });
 
 describe("a mod's page", () => {
+	test('tells of classes the source does not have, and keeps unread jars in view whatever the filters', async () => {
+		document.body.innerHTML = '';
+		history.replaceState(null, '', '/ender-index/mod/github/copy/client?mc=1.2.5');
+
+		const { default: ModPage } = await import('../client/ModPage');
+		const page = new ModPage({ appendTo: document.body, host: 'github', owner: 'copy', name: 'client' });
+
+		await settle(() => document.body.textContent.includes('Jars the crawl could not read'));
+
+		expect(document.body.textContent).toContain('No jar matches');
+		expect(document.body.textContent).toContain('broken.jar, in v5, could not be read or scanned');
+		page.destroy();
+		history.replaceState(null, '', '/ender-index/');
+
+		document.body.innerHTML = '';
+
+		const again = new ModPage({ appendTo: document.body, host: 'github', owner: 'copy', name: 'client' });
+
+		await settle(() => document.body.textContent.includes('warns of unsourced'));
+
+		expect(document.body.textContent).toContain('x/Send.class: no source for it in the repository at this release');
+		again.destroy();
+	});
+
 	test('says outright when a jar names where other programs keep logins, and lays out every other finding', async () => {
 		document.body.innerHTML = '';
 
@@ -318,7 +349,7 @@ describe("a mod's page", () => {
 		expect(exec.textContent).toContain('In sqlite-jdbc.jar, a library it bundles:');
 		expect(text).toContain('10.0.0.7 (an address, not a name)');
 		expect(text).toContain("New since v4: exec, webhook, names Discord's login token");
-		expect(text).toContain('broken.jar could not be read or scanned');
+		expect(text).toContain('broken.jar, in v5, could not be read or scanned');
 		expect(text).toContain('Read by scanner version 1');
 		expect(document.querySelector('a[href*="template=rescan.yml"]')?.textContent).toBe('Ask for a rescan');
 		page.destroy();

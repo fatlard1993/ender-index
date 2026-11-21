@@ -284,6 +284,10 @@ export const WARNINGS = {
 	persistence: 'Its code names a place that starts programs when the computer starts',
 	clipboard: 'Its code reads or writes the system clipboard',
 	hidden: 'It holds a jar or a class under the name of some other kind of file',
+	initializer: 'Code its entry point runs as it loads, in a static initializer, reaches what a payload would',
+	zip: 'Its archive would be read differently by different tools, which can hide a class from a scan',
+	unsourced:
+		"It has classes reaching the network or other programs that its repository's source at that release does not",
 };
 
 /** What the filters can hide a mod for: each thing its code reaches, and any warning at all. */
