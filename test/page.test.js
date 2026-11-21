@@ -51,9 +51,25 @@ beforeAll(async () => {
 				releases: [
 					{
 						tag: '1.0',
-						assets: [{ name: 'lithium.jar', mods: [{ id: 'lithium', depends: ['fabricloader', 'sodium'] }] }],
+						assets: [
+							{
+								name: 'lithium.jar',
+								mods: [{ id: 'lithium', depends: ['fabricloader', 'sodium'] }],
+								scan: { capabilities: { network: { 'me/Check.class': ['java/net/http/HttpClient.send'] } } },
+							},
+						],
 					},
 				],
+			},
+			'/explanations.json': {
+				'github:CaffeineMC/lithium': {
+					network: {
+						text: 'It asks Modrinth whether a newer version is out.',
+						by: 'jellysquid3',
+						release: '1.0',
+						issue: 'https://github.com/fatlard1993/ender-index/issues/9',
+					},
+				},
 			},
 			'/pack-pages/me/family.json': {
 				host: 'github',
@@ -280,6 +296,27 @@ describe("a mod's page", () => {
 		expect(crumbs).toEqual(['ender index']);
 		expect(document.querySelector('nav[aria-label="Breadcrumb"] [aria-current]')).toBeNull();
 		expect(document.querySelector('h1')).toBeNull();
+		page.destroy();
+	});
+
+	test("shows its author's explanation beside the finding it answers, as theirs and unchecked", async () => {
+		document.body.innerHTML = '';
+
+		const { default: ModPage } = await import('../client/ModPage');
+		const page = new ModPage({ appendTo: document.body, host: 'github', owner: 'CaffeineMC', name: 'lithium' });
+		const finding = () =>
+			[...document.querySelectorAll('details')].find(details =>
+				details.querySelector('summary')?.textContent.includes('reaches network'),
+			);
+
+		await settle(() => finding()?.textContent.includes('It asks Modrinth'));
+
+		expect(finding().textContent).toContain('From its author, jellysquid3, written for 1.0');
+		expect(finding().textContent).toContain('Their own words, which the index has not checked.');
+		expect(document.body.textContent).toContain('its author explains');
+		expect(
+			[...document.querySelectorAll('a')].some(link => link.textContent.startsWith('Explain a finding, as its author')),
+		).toBe(true);
 		page.destroy();
 	});
 });

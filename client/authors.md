@@ -60,7 +60,13 @@ Each mod has a page, made from what the repository already holds:
 - **The jar's metadata:** its name, description, icon, authors, and the game versions and mods it depends on, which the search filters by.
 - **The readme**, rendered as the repository shows it.
 - **Pictures:** on GitHub, up to forty images in the repository outside its source, build and texture folders, and not named `icon`, `logo`, `badge` or `banner`. Players can add screenshots of their own.
-- **What its code reaches.** Each jar is scanned for what it can do beyond the game, like reaching the network or running programs. That is a finding, not a verdict: an update checker reaches the network.
+- **What its code reaches.** Each jar is scanned for what it can do beyond the game, like reaching the network or running programs. That is a finding, not a verdict: an update checker reaches the network. You can [explain a finding](#explaining-a-finding) beside it.
+
+## Explaining a finding
+
+Each jar's findings show on its page: what its code can reach beyond the game, like the network, and the hosts its strings name. You can answer one two ways. Change the mod so the finding goes away, or explain it: [open an Explain a finding issue](https://github.com/fatlard1993/ender-index/issues/new?template=explain.yml) naming the mod, the finding, and what the code does with it. It shows beside that finding on every jar that has it, labelled as yours and with the release it was written for, because the index has not checked it. Say what a player would want to know: why the mod opens a connection, and to where.
+
+The issue has to come from the account that owns the repository, or one that made at least half its commits, and for now only mods on GitHub can be explained this way. Edit the issue to change what shows, or empty the explanation to take it down.
 
 ## Opting out
 

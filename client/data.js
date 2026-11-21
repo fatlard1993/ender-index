@@ -61,6 +61,21 @@ export const loadPackPage = async (host, repo) => {
 	return response.json();
 };
 
+let explanations;
+
+/** The authors' explanations of their mods' findings, by mod and then by finding; none before any are given. */
+export const loadExplanations = () => {
+	explanations ??= fetch(`${INDEX}/explanations.json`, { cache: 'no-cache' }).then(async response => {
+		if (response.status === 404) return {};
+		if (!response.ok) throw new Error(`${INDEX}/explanations.json answered ${response.status}`);
+
+		return response.json();
+	});
+	explanations.catch(() => (explanations = undefined));
+
+	return explanations;
+};
+
 let shots;
 
 /**

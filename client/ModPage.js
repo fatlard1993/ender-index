@@ -19,7 +19,8 @@ import { HOSTS, authorOf, ownerOf, sharing } from 'ender-launcher/rank';
 import { ownerName } from 'ender-launcher/support';
 
 import { collection } from './collection';
-import { loadListing, loadPacks, loadShots, loadVersions } from './data';
+import { loadExplanations, loadListing, loadPacks, loadShots, loadVersions } from './data';
+import { explainUrl } from './explain';
 import { packCard } from './packs';
 import { shareUrl } from './shots';
 import {
@@ -198,7 +199,39 @@ export const renderReadme = (markdown, sources, root = window) => {
 	});
 };
 
-const capabilityList = scan =>
+/** An author's explanation of a finding, set apart from it and said to be theirs: the index has not checked it. */
+const AuthorsWord = styled.Component(
+	({ colors, space }) => `
+		margin-left: ${space.md};
+		padding-left: ${space.md};
+		border-left: 3px solid ${colors.accent};
+		display: flex;
+		flex-direction: column;
+		gap: ${space.xs};
+	`,
+);
+
+const authorsWord = note =>
+	note
+		? [
+				new AuthorsWord({
+					append: [
+						new Meta({
+							tag: 'div',
+							append: [
+								'From its author, ',
+								new Link({ href: note.issue, target: '_blank', textContent: note.by }),
+								note.release ? `, written for ${note.release}` : '',
+							],
+						}),
+						new Component({ tag: 'p', textContent: note.text, style: { margin: 0, whiteSpace: 'pre-line' } }),
+						new Meta({ tag: 'div', textContent: 'Their own words, which the index has not checked.' }),
+					],
+				}),
+			]
+		: [];
+
+const capabilityList = (scan, explained) =>
 	Object.entries(scan?.capabilities ?? {}).map(([capability, classes]) => {
 		const details = new Component({ tag: 'details' });
 
@@ -218,6 +251,7 @@ const capabilityList = scan =>
 						textContent: `${className}: ${calls.join(', ')}`,
 					}),
 			),
+			...authorsWord(explained[capability]),
 		);
 
 		return details;
@@ -440,11 +474,13 @@ const fitsLabel = ({ minecraft, loader }) =>
 	[minecraft && `Minecraft ${minecraft}`, loader && LOADERS[loader]].filter(Boolean).join(' with ') || 'any version';
 
 /** What a jar's code reaches, folded: a finding to look into, not something every reader needs open. */
-const findings = scan => {
+const findings = (scan, explained, entry) => {
 	const reached = Object.keys(scan?.capabilities ?? {});
 	const hosts = Object.keys(scan?.hosts ?? {});
 
 	if (reached.length === 0 && hosts.length === 0) return [];
+
+	const answered = [...reached, ...(hosts.length > 0 ? ['hosts'] : [])].some(finding => explained[finding]);
 
 	const details = new Component({ tag: 'details' });
 
@@ -456,19 +492,31 @@ const findings = scan => {
 				textContent: [
 					reached.length > 0 && `Its code reaches ${reached.join(', ')}`,
 					hosts.length > 0 && `names ${hosts.length === 1 ? 'a host' : `${hosts.length} hosts`}`,
+					answered && 'its author explains',
 				]
 					.filter(Boolean)
 					.join('; '),
 			}),
 		}),
-		...capabilityList(scan),
+		...capabilityList(scan, explained),
 		...(hosts.length > 0 ? [new Meta({ tag: 'div', textContent: `Names hosts: ${hosts.join(', ')}` })] : []),
+		...authorsWord(hosts.length > 0 && explained.hosts),
+		...((entry.host ?? 'github') === 'github'
+			? [
+					new Link({
+						href: explainUrl(entry),
+						target: '_blank',
+						textContent: 'Explain a finding, as its author',
+						tooltip: 'Your words shown beside the finding, marked as yours',
+					}),
+				]
+			: []),
 	);
 
 	return [details];
 };
 
-const downloadRow = ({ asset }) => {
+const downloadRow = ({ asset }, explained, entry) => {
 	const mods = asset.mods ?? [];
 	const loaders = [...new Set(mods.map(mod => mod.loader).filter(Boolean))];
 	const ranges = [...new Set(mods.map(mod => mod.minecraft).filter(Boolean))];
@@ -505,7 +553,7 @@ const downloadRow = ({ asset }) => {
 						}),
 					]
 				: []),
-			...findings(asset.scan),
+			...findings(asset.scan, explained, entry),
 		],
 	});
 };
@@ -529,7 +577,7 @@ const releaseNotes = (release, sources) => {
 };
 
 /** The jars that match, under the release each came in, newest first; past the first few, folded until asked for. */
-const downloadList = (entry, matching, sources) => {
+const downloadList = (entry, matching, sources, explained) => {
 	const releases = [...new Set(matching.map(({ release }) => release))];
 	const cards = releases.map(
 		release =>
@@ -549,7 +597,9 @@ const downloadList = (entry, matching, sources) => {
 								...(release.prerelease ? [new Chip({ textContent: 'prerelease' })] : []),
 							],
 						}),
-						...matching.filter(download => download.release === release).map(downloadRow),
+						...matching
+							.filter(download => download.release === release)
+							.map(download => downloadRow(download, explained, entry)),
 						...releaseNotes(release, sources),
 					],
 				}),
@@ -582,6 +632,7 @@ const downloadsPanel = (entry, record) => {
 	const best = new Row();
 	const shown = new Meta();
 	const list = new Stack();
+	let explained = {};
 
 	const draw = () => {
 		const found = bestDownload(downloads, choice);
@@ -608,7 +659,7 @@ const downloadsPanel = (entry, record) => {
 		shown.content(`${count(matching.length)} of ${count(downloads.length)} jars`);
 		list.content(
 			matching.length > 0
-				? downloadList(entry, matching, sources)
+				? downloadList(entry, matching, sources, explained)
 				: new EmptyState({
 						icon: 'magnifying-glass',
 						title: 'No jar matches',
@@ -674,6 +725,10 @@ const downloadsPanel = (entry, record) => {
 		best,
 		count: downloads.length,
 		panel: [new Row({ append: [minecraft, loader, text] }), shown, list],
+		explain: found => {
+			explained = found;
+			draw();
+		},
 	};
 };
 
@@ -1006,6 +1061,9 @@ export default class ModPage extends View {
 			})
 			.catch(() => {});
 		loadPlayerShots();
+		loadExplanations()
+			.then(byMod => !signal.aborted && byMod[collectionKey(entry)] && downloads.explain(byMod[collectionKey(entry)]))
+			.catch(() => {});
 
 		const shares = entry.shares ?? sharing(entry, listing);
 		const author = authorOf(entry, listing);
