@@ -4,7 +4,7 @@ Minecraft mods found where their source lives, described by their own jars, and 
 
 Search it at **[fatlard1993.github.io/ender-index](https://fatlard1993.github.io/ender-index/)**, or from a terminal with [ender](https://github.com/fatlard1993/ender-launcher)'s `ender search`. Both rank the same way.
 
-There is nothing to sign up for and nothing to describe twice. A repository is in the index because it looks like a mod and ships like one: loader metadata in its source tree, and jars attached to its releases on GitHub, Codeberg or GitLab. Everything else is read from what it already publishes.
+There is nothing to sign up for and nothing to describe twice. A repository is in the index because it looks like a mod and ships like one: loader metadata in its source tree, and jars attached to its releases on GitHub, Codeberg or GitLab. Everything else is read from what it already publishes, and an author who would rather their mod were not listed says so the same way, with a topic on the repository: see [Getting out](#getting-out).
 
 ## What it shows
 
@@ -41,13 +41,18 @@ The [guide for mod authors](https://fatlard1993.github.io/ender-index/authors) h
 
 Discovery finds a mod nightly, by that metadata or by a topic; [Being found](https://fatlard1993.github.io/ender-index/authors/being-found) says which. To be listed now, [open a List a mod issue](https://github.com/fatlard1993/ender-index/issues/new?template=mod.yml): the repository is crawled and listed within minutes, or the issue says why not. A pull request adding a line to [`data/repos.txt`](data/repos.txt) works too: `owner/repo` for GitHub, `codeberg:owner/repo`, or `gitlab:group/project`.
 
-### Opting out
-
-A repository with the topic `ender-index-opt-out`, on any of the three hosts, is dropped from the index and left alone, and a release with `ender-index-opt-out` in its notes is never downloaded. The guide's [Opting out](https://fatlard1993.github.io/ender-index/authors/opting-out) has the details. The repositories found opting out are kept in `data/opted-out.json`, so the crawl looks at each again only weekly.
-
 ### Packs
 
 A pack repository on GitHub is found by an `ender.pack.json` or a packwiz `pack.toml`, or by the topics `minecraft-modpack`, `mrpack` or `packwiz`. A pack in a gist, where `ender export --gist` puts one, or in a repository discovery has not found, is listed by [opening a List a pack issue](https://github.com/fatlard1993/ender-index/issues/new?template=pack.yml).
+
+## Getting out
+
+An author takes a mod out of the index where it was found, with no account and no one to ask:
+
+- **The whole repository:** the topic `ender-index-opt-out`, on GitHub, Codeberg or GitLab. The next crawl to reach it drops its page, its releases and its place in search, usually within an hour or two, or within the week for a mod listed only by its source; a pack repository is dropped the same way. It is looked at again weekly, and listed again once the topic is gone, or at once by a List a mod issue.
+- **One release:** `ender-index-opt-out` anywhere in its notes, as `<!-- ender-index-opt-out -->` to keep it out of sight. Its jars are never downloaded, and one read before is dropped, while the rest of the mod stays listed.
+
+Opting out takes a mod out of the index, not off its releases: `ender add gh:owner/repo` still installs from them. What the index keeps of a repository that opts out is its name and the day it was last seen opting out, in [`data/opted-out.json`](data/opted-out.json), so it knows to leave it alone; records kept before stay in this repository's history. The guide's [Opting out](https://fatlard1993.github.io/ender-index/authors/opting-out) has the rest.
 
 ## What is recorded
 
@@ -189,7 +194,7 @@ Each crawl asks GitHub for a repository's details and releases conditionally, ag
 
 An [Explain a finding](.github/ISSUE_TEMPLATE/explain.yml) issue is read by [`explain.yml`](.github/workflows/explain.yml) when it is opened or edited: from the repository's owner, or a contributor with at least half its commits, it waits for the `approved` label, which publishes its words as they stand. Words changed after that take the label off again, the `withdrawn` label takes it down, and one saying the finding is wrong is labelled `refine`.
 
-The asks are counted by [`interest.yml`](.github/workflows/interest.yml), on each ask and every six hours. It posts no notice to an author unless the `NOTICES` variable says `draft`, for a notice posted here, or `live`, for one on the mod's own repository with the `NOTICE_TOKEN` secret.
+The asks are counted by [`interest.yml`](.github/workflows/interest.yml), on each ask and every six hours. The index posts nothing on a mod's repository, as the guide promises its authors: the count shows on the mod's page, and this repository's owner reaches out to its author once enough players have asked. With the `NOTICES` variable set to `draft`, the workflow drafts each notice as an issue here, for the owner to read before sending; `live`, which would post it on the mod's own repository with the `NOTICE_TOKEN` secret, stays off, and the guide's [Notices](https://fatlard1993.github.io/ender-index/authors/notices) would have to say otherwise before it is turned on.
 
 ## License
 
