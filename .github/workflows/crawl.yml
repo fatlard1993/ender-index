@@ -51,7 +51,7 @@ jobs:
       - name: discover
         id: discover
         if: inputs.discover || github.event.schedule == '17 4 * * *'
-        run: bun run discover
+        run: exec bun src/discover.js
         working-directory: ender-index
         continue-on-error: true
         timeout-minutes: 40
@@ -64,7 +64,7 @@ jobs:
       - name: triage
         id: triage
         if: ${{ !(inputs.discover || github.event.schedule == '17 4 * * *') }}
-        run: bun src/triage.js
+        run: exec bun src/triage.js
         working-directory: ender-index
         continue-on-error: true
         timeout-minutes: 15
@@ -76,7 +76,7 @@ jobs:
       # The repositories found with no release, looked at for a source that builds; each is due weekly or monthly
       - name: sources
         id: sources
-        run: bun run sources
+        run: exec bun src/sources.js
         working-directory: ender-index
         continue-on-error: true
         timeout-minutes: 20
@@ -87,7 +87,7 @@ jobs:
       # Under the job's limit, so a crawl that overruns its budget is stopped here and the lists and commit below still run
       - name: crawl
         id: crawl
-        run: bun run crawl
+        run: exec bun src/crawl.js
         working-directory: ender-index
         continue-on-error: true
         timeout-minutes: 60
@@ -103,10 +103,18 @@ jobs:
           # Unset, old findings stand. Set the RESCAN variable to full or throttled to read again what an older scanner
           # read, and remove it once done
           CRAWL_RESCAN: ${{ vars.RESCAN }}
+      # A step's time limit stops its shell, and each runs its script with exec so the script is what stops; this makes
+      # sure nothing is left writing records while they are listed and committed
+      - name: stop what a timed-out step left running
+        if: always()
+        run: |
+          pgrep -af '^bun src/(discover|triage|sources|crawl)\.js' || exit 0
+          pkill -f '^bun src/(discover|triage|sources|crawl)\.js'
+          sleep 5
       # Again from what is on disk: a crawl stopped by its step's limit wrote records but never listed them
       - name: lists
         if: always() && steps.crawl.outcome != 'success'
-        run: bun run lists
+        run: exec bun src/lists.js
         working-directory: ender-index
         timeout-minutes: 20
       - name: commit
