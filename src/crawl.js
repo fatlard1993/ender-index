@@ -655,6 +655,12 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, peo
 	});
 	const everyReleaseOptedOut = result.record === undefined && recorded?.releases.length > 0;
 
+	// Before writing: where a filesystem does not tell the old spelling from the new, the two are one file
+	if (canonical !== path) {
+		renames.set(line, lineFor({ host, name: repo.full_name }));
+		await rm(path, { force: true });
+	}
+
 	if (result.record) {
 		await fillIcons(result.record, scratch);
 		await fillJars(result.record, scratch);
@@ -683,10 +689,6 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, peo
 		});
 	} else if (everyReleaseOptedOut) {
 		await rm(canonical, { force: true });
-	}
-	if (canonical !== path) {
-		renames.set(line, lineFor({ host, name: repo.full_name }));
-		await rm(path, { force: true });
 	}
 
 	return result.events;

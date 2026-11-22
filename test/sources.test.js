@@ -103,6 +103,26 @@ describe('checking sources', () => {
 		expect(asked).toEqual([]);
 	});
 
+	test("keeps a source's record under the name GitHub gives it now, dropping the one under the name it was found by", async () => {
+		const done = [];
+		await checkSources({
+			lines: ['CodeFlusher/boats'],
+			checks: {},
+			now: Date.parse('2026-10-29'),
+			ask: async () => ({ r0: answer({}, { nameWithOwner: 'codeflusher/boats' }) }),
+			recorded: async () => ({ releases: [], source: { commit: 'old' } }),
+			write: async name => done.push(['write', name]),
+			remove: async name => done.push(['remove', name]),
+			log: () => {},
+			sleep: async () => {},
+		});
+
+		expect(done).toEqual([
+			['remove', 'CodeFlusher/boats'],
+			['write', 'codeflusher/boats'],
+		]);
+	});
+
 	test('drops the record of a source that stopped building', async () => {
 		const { removed } = await run({
 			records: { 'a/boats': { releases: [], source: { commit: 'old' } } },

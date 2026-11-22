@@ -227,8 +227,11 @@ export const checkSources = async ({
 			kept[name] = { checked: today, builds: source !== undefined, ...(why ? { why } : {}) };
 			counts[source ? 'builds' : 'not']++;
 
-			if (source) await write(answer.nameWithOwner, sourceRecord(answer, source, today));
-			else if (sourced.has(name)) await remove(name);
+			if (source) {
+				// Before writing: where a filesystem does not tell the spellings apart, the two are one file
+				if (answer.nameWithOwner !== name) await remove(name);
+				await write(answer.nameWithOwner, sourceRecord(answer, source, today));
+			} else if (sourced.has(name)) await remove(name);
 		}
 	}
 
