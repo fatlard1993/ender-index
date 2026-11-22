@@ -154,12 +154,20 @@ jobs:
         run: gh workflow run crawl.yml --repo ${{ github.repository }} --ref main -f discover=$([ "$(date -u +%H)" = 04 ] && echo true || echo false)
         env:
           GH_TOKEN: ${{ github.token }}
+      # What was committed, held to the schemas launchers build on; a crawl's push starts no CI, so it is checked here
+      - name: schemas
+        id: schemas
+        if: ${{ !cancelled() && steps.crawl.outcome != 'skipped' }}
+        continue-on-error: true
+        working-directory: ender-index
+        timeout-minutes: 10
+        run: exec bun test ./test/schema.test.js
       # Last, after the commit and the next crawl's start: each step before runs on past a failure, so its failure is
       # said here, and the run fails so it is seen
       - name: report a failed step
         if: ${{ !cancelled() }}
         env:
-          OUTCOMES: discover=${{ steps.discover.outcome }} triage=${{ steps.triage.outcome }} sources=${{ steps.sources.outcome }} crawl=${{ steps.crawl.outcome }}
+          OUTCOMES: discover=${{ steps.discover.outcome }} triage=${{ steps.triage.outcome }} sources=${{ steps.sources.outcome }} crawl=${{ steps.crawl.outcome }} schemas=${{ steps.schemas.outcome }}
         run: |
           failed=$(printf '%s\n' $OUTCOMES | { grep '=failure$' || true; } | cut -d= -f1 | tr '\n' ' ')
           [ -z "$failed" ] && exit 0

@@ -13,6 +13,7 @@ import * as github from './github';
 import * as gitlab from './gitlab';
 import { ASSETS, detailsQuery, repoOf } from './graphqlRepos';
 import { OPTED_OUT, optedOutOn, optsOut } from './optOut';
+import { manifest } from './manifest';
 import { readWithheld, withheldReason } from './withheld';
 import { UNSOURCED_KEPT, reachingUnsourced, releaseOf, unsourcedClasses } from './sourced';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
@@ -1141,6 +1142,7 @@ export const writeLists = async () => {
 
 	for (const pack of built) await writeJson(join(PACK_PAGES, `${packPage(pack)}.json`), pack);
 	await writeJson(join(DATA, 'tags.json'), themes.themes);
+	await writeJson(join(DATA, 'index.json'), manifest());
 	await pruneIcons(records);
 
 	return { records, packs };

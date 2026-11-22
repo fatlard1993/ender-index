@@ -1,0 +1,180 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://raw.githubusercontent.com/fatlard1993/ender-index/main/schemas/search.schema.json",
+	"title": "The ender-index search listing",
+	"description": "data/search.json: one summary per listed repository, for listing without fetching every record. Fields may be added at any time; ignore those you do not know.",
+	"type": "array",
+	"items": {
+		"type": "object",
+		"required": ["repo", "host", "stars", "latest"],
+		"properties": {
+			"repo": {
+				"type": "string"
+			},
+			"host": {
+				"type": "string",
+				"enum": ["github", "codeberg", "gitlab"]
+			},
+			"description": {
+				"type": "string"
+			},
+			"stars": {
+				"type": "number"
+			},
+			"downloads": {
+				"type": "number"
+			},
+			"archived": {
+				"type": "boolean"
+			},
+			"license": {
+				"type": "string"
+			},
+			"pushed": {
+				"type": "string",
+				"description": "An ISO 8601 date or time"
+			},
+			"author": {
+				"type": "string"
+			},
+			"icon": {
+				"type": "string"
+			},
+			"summary": {
+				"type": "object",
+				"properties": {
+					"text": {
+						"type": "string"
+					},
+					"from": {
+						"type": "string"
+					}
+				}
+			},
+			"tags": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
+			},
+			"environment": {
+				"type": "string"
+			},
+			"fromSource": {
+				"type": "boolean",
+				"description": "True when it has no built release, only source the index found it could build"
+			},
+			"targets": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"loader": {
+							"type": "string"
+						},
+						"minecraft": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"latest": {
+				"type": "object",
+				"description": "Its newest listed release",
+				"required": ["tag", "mods"],
+				"properties": {
+					"tag": {
+						"type": "string"
+					},
+					"published": {
+						"type": "string",
+						"description": "An ISO 8601 date or time"
+					},
+					"prerelease": {
+						"type": "boolean"
+					},
+					"mods": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": ["loader"],
+							"properties": {
+								"loader": {
+									"type": "string"
+								},
+								"id": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"minecraft": {
+									"type": "string"
+								},
+								"environment": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"provides": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"capabilities": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"warnings": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"secrets": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"gained": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"knownBad": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"description": "Reasons a jar of this release is on the known-bad list"
+					}
+				}
+			},
+			"funding": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"required": ["url"],
+					"properties": {
+						"platform": {
+							"type": "string"
+						},
+						"url": {
+							"type": "string"
+						},
+						"from": {
+							"type": "string",
+							"description": "Where the link was read: funding (FUNDING.yml), readme, jar, modrinth"
+						}
+					}
+				}
+			}
+		}
+	}
+}
