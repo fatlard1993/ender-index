@@ -1,6 +1,6 @@
 import { Content, Link, SectionLabel, View, theme } from '@vanilla-bean/components';
 
-import { Command, Meta, Row, Stack, siteBar } from './ui';
+import { Command, Meta, Row, Stack, siteBar, siteFooter } from './ui';
 
 const SCRIPTS = 'https://raw.githubusercontent.com/fatlard1993/ender-launcher/main';
 
@@ -144,6 +144,7 @@ export default class GetPage extends View {
 							}),
 						],
 					}),
+					siteFooter(),
 				],
 			}),
 		]);

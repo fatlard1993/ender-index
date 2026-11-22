@@ -72,6 +72,7 @@ import {
 	siteBar,
 	loadJson,
 	screenshots,
+	siteFooter,
 } from './ui';
 import { ROUTES, hrefOf } from './route';
 
@@ -773,6 +774,7 @@ export default class SearchPage extends View {
 				localBar,
 				status,
 				new Stack({ style: { marginTop: space.md }, append: [results, more] }),
+				siteFooter(),
 			],
 		});
 

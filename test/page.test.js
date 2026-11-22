@@ -488,3 +488,12 @@ describe("a pack's page", () => {
 		page.destroy();
 	});
 });
+
+test("closes a page with the index's license and whose work it shows", async () => {
+	const { siteFooter } = await import('../client/ui');
+	const footer = siteFooter();
+
+	expect(footer.elem.textContent).toContain("The index's code and records are under the MIT license");
+	expect(footer.elem.textContent).toContain("A mod's name, description, icon and readme belong to its author");
+	expect(footer.elem.querySelector('a[href$="/blob/main/LICENSE"]')?.textContent).toBe('MIT license');
+});

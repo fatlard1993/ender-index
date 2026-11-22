@@ -12,7 +12,7 @@ import {
 	sortPacks,
 	writePackQuery,
 } from './search';
-import { Meta, Row, Stack, count, siteBar } from './ui';
+import { Meta, Row, Stack, count, siteBar, siteFooter } from './ui';
 
 const PAGE_SIZE = 25;
 
@@ -112,6 +112,7 @@ export default class PacksPage extends View {
 					}),
 					status,
 					new Stack({ append: [results, more] }),
+					siteFooter(),
 				],
 			}),
 		]);

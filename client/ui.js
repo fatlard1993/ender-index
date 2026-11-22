@@ -579,3 +579,24 @@ export const lightbox = (title, pictures, start = 0) => {
 
 	return dialog;
 };
+
+/**
+ * What closes every page: whose work the index shows. Its own code and records are MIT; a mod's name, icon and readme
+ * stay its author's, a shot its player's, and every jar is fetched from its author's own release.
+ */
+export const siteFooter = () =>
+	new Component({
+		tag: 'footer',
+		style: { paddingBlock: theme.space.lg },
+		append: new Meta({
+			tag: 'p',
+			style: { margin: 0, textAlign: 'center' },
+			append: [
+				"The index's code and records are under the ",
+				new Link({ href: `${REPOSITORY}/blob/main/LICENSE`, target: '_blank', textContent: 'MIT license' }),
+				". A mod's name, description, icon and readme belong to its author, and a shot to the player who shared it. Jars come from their authors' own releases and are never copied here. ",
+				new Link({ href: REPOSITORY, target: '_blank', textContent: 'Its source is on GitHub' }),
+				'.',
+			],
+		}),
+	});

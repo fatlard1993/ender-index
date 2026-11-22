@@ -25,7 +25,7 @@ import { instanceNameOf, packDialog } from './packMaker';
 import { packOrMods, readPasted } from './pasted';
 import { playerChoice } from './playersPanel';
 import { LOADERS } from './search';
-import { Alarm, Chip, Command, LAUNCHER, Meta, Row, Stack, Title, siteBar } from './ui';
+import { Alarm, Chip, Command, LAUNCHER, Meta, Row, Stack, Title, siteBar, siteFooter } from './ui';
 
 const NAMEABLE_SOURCES = new Set(['github', 'codeberg', 'gitlab', 'modrinth', 'curseforge']);
 
@@ -604,7 +604,7 @@ export default class InstancesPage extends View {
 
 		this.content([
 			siteBar('instances'),
-			new Content({ column: 900, style: { paddingBlock: theme.space.md }, append: body }),
+			new Content({ column: 900, style: { paddingBlock: theme.space.md }, append: [body, siteFooter()] }),
 		]);
 
 		const list = new Stack();

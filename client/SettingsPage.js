@@ -3,7 +3,7 @@ import { Content, EmptyState, Link, View, theme } from '@vanilla-bean/components
 import { enderPanel } from './enderPanel';
 import { local } from './local';
 import { playersPanel } from './playersPanel';
-import { Command, LAUNCHER, Row, Stack, siteBar } from './ui';
+import { Command, LAUNCHER, Row, Stack, siteBar, siteFooter } from './ui';
 
 /** The ender serving this page, kept apart from the instances it keeps: its version and update, and who plays. */
 export default class SettingsPage extends View {
@@ -14,7 +14,7 @@ export default class SettingsPage extends View {
 
 		this.content([
 			siteBar('settings'),
-			new Content({ column: 900, style: { paddingBlock: theme.space.md }, append: body }),
+			new Content({ column: 900, style: { paddingBlock: theme.space.md }, append: [body, siteFooter()] }),
 		]);
 
 		local.ready().then(served => {

@@ -34,6 +34,7 @@ import {
 	siteBar,
 	stat,
 	tiles,
+	siteFooter,
 } from './ui';
 import { ROUTES, hrefOf, navigate } from './route';
 
@@ -221,7 +222,10 @@ export default class PackPage extends View {
 		const body = new Stack({ append: new EmptyState({ loading: true, title: `Loading ${repo}` }) });
 		const bar = siteBar('packs', { label: repo });
 
-		this.content([bar, new Content({ column: 900, style: { paddingBlock: theme.space.md }, append: body })]);
+		this.content([
+			bar,
+			new Content({ column: 900, style: { paddingBlock: theme.space.md }, append: [body, siteFooter()] }),
+		]);
 
 		Promise.all([loadPackPage(host, repo), loadListing().catch(() => [])])
 			.then(([pack, listing]) => {

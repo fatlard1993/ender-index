@@ -15,7 +15,7 @@ import { loadInterest, loadListing } from './data';
 import { local } from './local';
 import { yourMods } from './mine';
 import { modPath, pictureUrl, titleOf } from './search';
-import { Meta, Row, Stack, Title, Warning, authorsPath, avatar, count, date, siteBar } from './ui';
+import { Meta, Row, Stack, Title, Warning, authorsPath, avatar, count, date, siteBar, siteFooter } from './ui';
 import { hrefOf } from './route';
 
 /** What each lack costs a mod, said to its author, with the part of the guide that says how to mend it. */
@@ -127,7 +127,7 @@ export default class MinePage extends View {
 		document.title = 'Your mods :: ender index';
 		this.content([
 			siteBar(undefined, { label: 'Your mods' }),
-			new Content({ column: 900, style: { paddingBlock: theme.space.md }, append: body }),
+			new Content({ column: 900, style: { paddingBlock: theme.space.md }, append: [body, siteFooter()] }),
 		]);
 
 		this.show(body).catch(error =>

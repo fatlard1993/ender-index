@@ -98,6 +98,7 @@ import {
 	loadJson,
 	TILES,
 	tiles,
+	siteFooter,
 } from './ui';
 import { hrefOf } from './route';
 
@@ -1151,7 +1152,10 @@ export default class ModPage extends View {
 		const body = new Stack({ append: new EmptyState({ loading: true, title: `Loading ${repo}` }) });
 
 		this.bar = siteBar('mods', { label: repo });
-		this.content([this.bar, new Content({ column: 900, style: { paddingBlock: theme.space.md }, append: body })]);
+		this.content([
+			this.bar,
+			new Content({ column: 900, style: { paddingBlock: theme.space.md }, append: [body, siteFooter()] }),
+		]);
 
 		const { signal } = this;
 

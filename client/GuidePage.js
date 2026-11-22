@@ -1,7 +1,7 @@
 import { Content, View, theme } from '@vanilla-bean/components';
 
 import { Prose } from './ModPage';
-import { siteBar } from './ui';
+import { siteBar, siteFooter } from './ui';
 
 /**
  * A page of the index's prose, linked by part as authors/funding: its markup, the title its tab takes, the name its bar
@@ -23,7 +23,7 @@ export const guidePage = ({ markup, title, label, path }) =>
 				new Content({
 					column: 900,
 					style: { paddingBlock: theme.space.md },
-					append: prose,
+					append: [prose, siteFooter()],
 				}),
 			]);
 
