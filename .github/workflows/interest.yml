@@ -36,7 +36,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-download-url: https://github.com/oven-sh/bun/releases/download/bun-v1.4.0/bun-linux-x64.zip
-      - run: bun install --frozen-lockfile
+      - run: bun install
         working-directory: ender-index
       - name: count, and post or update each notice
         id: count
@@ -62,6 +62,8 @@ jobs:
           git add data
           git diff --cached --quiet && exit 0
           git commit -qm 'Interest: counted the open asks'
+          # Only data is committed, so nothing else the run left changed may stop the pull below
+          git checkout -- .
           for attempt in 1 2 3; do
             git pull -q --rebase origin main && git push -q && exit 0
             sleep 5
