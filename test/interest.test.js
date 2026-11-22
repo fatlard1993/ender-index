@@ -47,6 +47,17 @@ describe('the mod a player names', () => {
 			host: 'codeberg',
 			name: 'a/b',
 		});
+		// The site's own path, ender web's, and a name the site writes encoded
+		expect(modOf('https://fatlard1993.github.io/ender-index/mod/codeberg/a/b')).toEqual({
+			host: 'codeberg',
+			name: 'a/b',
+		});
+		expect(modOf('http://localhost:7460/mod/github/a/b')).toEqual({ host: 'github', name: 'a/b' });
+		expect(modOf('https://fatlard1993.github.io/ender-index/mod/github/a/b.c')).toEqual({
+			host: 'github',
+			name: 'a/b.c',
+		});
+		expect(modOf('https://fatlard1993.github.io/ender-index/mod/github/a/..')).toBeUndefined();
 		expect(modOf('gh:a/b')).toEqual({ host: 'github', name: 'a/b' });
 		expect(modOf('gitlab:g/sub/p')).toEqual({ host: 'gitlab', name: 'g/sub/p' });
 		expect(modOf('a/b')).toEqual({ host: 'github', name: 'a/b' });
@@ -206,7 +217,7 @@ describe('a notice to an author', () => {
 		);
 		expect(github.repos['a/boats'] ?? []).toEqual([]);
 		expect(draft.body).toContain('One player looking at Big Boats on the index asked how they could pay you');
-		expect(draft.body).toContain('#/authors/funding');
+		expect(draft.body).toContain('ender-index/authors/funding');
 		expect(draft.body).toEndWith(markerOf('github:a/boats', 'fund'));
 		expect(result.notices['github:a/boats'].fund).toEqual({
 			at: '2026-10-30',

@@ -53,7 +53,12 @@ export const answerOf = (body, heading) => {
 	return found && found !== '_No response_' ? found : undefined;
 };
 
-export const pageUrl = pack => `${SITE}/#/pack/${pack.host}/${pack.repo}`;
+/** A pack's page on the site, by the path the site routes, as it spells it: pack/host/owner/name. */
+export const pageUrl = pack => {
+	const split = pack.repo.indexOf('/');
+
+	return `${SITE}/pack/${pack.host ?? 'github'}/${encodeURIComponent(pack.repo.slice(0, split))}/${encodeURIComponent(pack.repo.slice(split + 1))}`;
+};
 
 /**
  * Read the pack an issue submits and, when there is one, list it: its line kept in submitted-packs.txt for every
@@ -119,7 +124,7 @@ export const modLineOf = answer => {
 export const modUrl = ({ host = 'github', repo }) => {
 	const split = repo.lastIndexOf('/');
 
-	return `${SITE}/#/mod/${host}/${encodeURIComponent(repo.slice(0, split))}/${encodeURIComponent(repo.slice(split + 1))}`;
+	return `${SITE}/mod/${host}/${encodeURIComponent(repo.slice(0, split))}/${encodeURIComponent(repo.slice(split + 1))}`;
 };
 
 const listingOf = async line => {

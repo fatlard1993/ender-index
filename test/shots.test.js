@@ -97,6 +97,12 @@ describe('a shot', () => {
 		expect(modNamed('https://fatlard1993.github.io/ender-index/#/mod/github/fatlard1993/big-boats', LISTING)).toBe(
 			'github:fatlard1993/big-boats',
 		);
+		expect(modNamed('https://fatlard1993.github.io/ender-index/mod/github/fatlard1993/big-boats', LISTING)).toBe(
+			'github:fatlard1993/big-boats',
+		);
+		expect(modNamed('http://localhost:7460/mod/github/fatlard1993/big-boats', LISTING)).toBe(
+			'github:fatlard1993/big-boats',
+		);
 		expect(modNamed('- lithium', LISTING)).toBe('github:CaffeineMC/lithium');
 		expect(modNamed('big boats', LISTING)).toBe('github:fatlard1993/big-boats');
 		expect(modNamed('Sodium', LISTING)).toBeUndefined();

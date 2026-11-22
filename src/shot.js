@@ -59,7 +59,8 @@ export const modNamed = (line, listing) => {
 
 	if (spelled) return asKey(SPECS[spelled[1]] ?? spelled[1], spelled[2]);
 
-	const page = text.match(/#\/mod\/(github|codeberg|gitlab)\/([^/]+)\/([^/?#\s]+)/);
+	// An index page, as the site's path, ender web's, or a link of the old kind, #/mod/...
+	const page = text.match(/\/mod\/(github|codeberg|gitlab)\/([^/?#\s]+)\/([^/?#\s]+)/);
 
 	if (page) return asKey(page[1], `${decodeURIComponent(page[2])}/${decodeURIComponent(page[3])}`);
 

@@ -6,7 +6,7 @@ import { DATA, readJson, recordPath, writeJson } from './crawl';
 import { fetchSteady } from './fetch';
 import { DONATIONS, donationsOf } from './funding';
 import { summarize } from './search';
-import { answerOf } from './submit';
+import { answerOf, modUrl } from './submit';
 
 const SITE = 'https://fatlard1993.github.io/ender-index';
 
@@ -21,8 +21,16 @@ const NAME = /^[\w.-]+(\/[\w.-]+)+$/;
 /** The mod an answer names: its page on the index, `github:owner/repo` and the like, or `owner/repo` on GitHub. */
 export const modOf = answer => {
 	const text = (answer ?? '').trim().replace(/\/$/, '');
-	const [, pageHost, pageName] = text.match(/#\/mod\/(\w+)\/(.+)$/) ?? [];
-	const [, prefix, prefixed] = text.match(/^(\w+):(.+)$/) ?? [];
+	// An index page, as the site's path, ender web's, or a link of the old kind, #/mod/...
+	const page = text.match(/\/mod\/(\w+)\/([^?#\s]+)$/);
+	const pageHost = page?.[1];
+	const pageName =
+		page &&
+		page[2]
+			.split('/')
+			.map(part => decodeURIComponent(part))
+			.join('/');
+	const [, prefix, prefixed] = page ? [] : (text.match(/^(\w+):(.+)$/) ?? []);
 	const host = pageHost ?? (prefix ? HOSTS[prefix] : 'github');
 	const name = pageName ?? prefixed ?? text;
 
@@ -34,9 +42,9 @@ export const modOf = answer => {
 
 const keyOf = ({ host, name }) => `${host}:${name}`;
 
-const pageOf = ({ host, name }) => `${SITE}/#/mod/${host}/${name}`;
+const pageOf = ({ host, name }) => modUrl({ host, repo: name });
 
-const guide = part => `${SITE}/#/authors/${part}`;
+const guide = part => `${SITE}/authors/${part}`;
 
 const players = (count, { opening = false } = {}) =>
 	count === 1 ? `${opening ? 'One' : '1'} player` : `${count} players`;

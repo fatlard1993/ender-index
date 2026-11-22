@@ -89,7 +89,7 @@ describe('a submitted mod', () => {
 		});
 
 		expect(result.listed).toBe(true);
-		expect(result.say).toStartWith('Listed: https://fatlard1993.github.io/ender-index/#/mod/github/You/Mod');
+		expect(result.say).toStartWith('Listed: https://fatlard1993.github.io/ender-index/mod/github/You/Mod');
 		expect(crawled).toEqual(['You/Mod']);
 		expect(kept).toEqual(['You/Mod']);
 	});
@@ -151,4 +151,19 @@ describe('a rescan', () => {
 		expect(unlisted.say).toBe('you/nothing is not in the index, so it has nothing to rescan.');
 		expect(unread.say).toStartWith('`not a repo` is not');
 	});
+});
+
+test("links a mod's and a pack's page by the path the site routes, as a gist pack too", async () => {
+	const { modUrl, pageUrl } = await import('../src/submit');
+
+	expect(modUrl({ repo: 'You/Mod' })).toBe('https://fatlard1993.github.io/ender-index/mod/github/You/Mod');
+	expect(modUrl({ host: 'gitlab', repo: 'group/sub/mod' })).toBe(
+		'https://fatlard1993.github.io/ender-index/mod/gitlab/group%2Fsub/mod',
+	);
+	expect(pageUrl({ host: 'github', repo: 'p/pack' })).toBe(
+		'https://fatlard1993.github.io/ender-index/pack/github/p/pack',
+	);
+	expect(pageUrl({ host: 'gist', repo: 'me/a1db98319884288ad3d83a0db854291f' })).toBe(
+		'https://fatlard1993.github.io/ender-index/pack/gist/me/a1db98319884288ad3d83a0db854291f',
+	);
 });
