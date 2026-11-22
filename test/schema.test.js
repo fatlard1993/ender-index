@@ -41,6 +41,24 @@ describe('the published schemas', () => {
 		expect(failures.slice(0, 10)).toEqual([]);
 	}, 120_000);
 
+	test('hold every pack record and pack page', async () => {
+		for (const [glob, name] of [
+			['data/packs/**/*.json', 'pack-record.schema.json'],
+			['data/pack-pages/**/*.json', 'pack-page.schema.json'],
+		]) {
+			const validate = await validator(name);
+			const failures = [];
+
+			for await (const file of new Bun.Glob(glob).scan(root)) {
+				const errors = errorsOf(validate, await Bun.file(join(root, file)).json());
+
+				if (errors.length > 0) failures.push(`${file}: ${errors.slice(0, 3).join('; ')}`);
+			}
+
+			expect(failures.slice(0, 10)).toEqual([]);
+		}
+	}, 120_000);
+
 	test('hold the search listing and the lists a launcher honors', async () => {
 		for (const [file, name] of [
 			['search.json', 'search.schema.json'],
@@ -49,6 +67,7 @@ describe('the published schemas', () => {
 			['opted-out.json', 'opted-out.schema.json'],
 			['renames.json', 'renames.schema.json'],
 			['explanations.json', 'explanations.schema.json'],
+			['packs.json', 'packs.schema.json'],
 		]) {
 			const published = Bun.file(join(root, 'data', file));
 

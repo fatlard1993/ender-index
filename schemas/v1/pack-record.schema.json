@@ -1,0 +1,147 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://raw.githubusercontent.com/fatlard1993/ender-index/main/schemas/v1/pack-record.schema.json",
+	"title": "An ender-index pack record",
+	"description": "data/packs/<owner>/<repo>.json: a pack repository and the pack in each format it has. Fields may be added at any time.",
+	"type": "object",
+	"required": ["repo", "host", "pushed", "formats"],
+	"properties": {
+		"repo": {
+			"type": "string"
+		},
+		"host": {
+			"type": "string"
+		},
+		"description": {
+			"type": "string"
+		},
+		"stars": {
+			"type": "number"
+		},
+		"pushed": {
+			"type": "string"
+		},
+		"formats": {
+			"type": "object",
+			"description": "The pack by format: ender, packwiz, mrpack; more may be added",
+			"additionalProperties": {
+				"type": "object",
+				"required": ["minecraft", "loader", "mods"],
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"version": {
+						"type": "string"
+					},
+					"author": {
+						"type": "string"
+					},
+					"minecraft": {
+						"type": "string"
+					},
+					"loader": {
+						"type": "string"
+					},
+					"loaderVersion": {
+						"type": "string"
+					},
+					"summary": {
+						"type": "string"
+					},
+					"memory": {
+						"type": "number"
+					},
+					"tag": {
+						"type": "string"
+					},
+					"asset": {
+						"type": "number"
+					},
+					"url": {
+						"type": "string"
+					},
+					"servers": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": ["name", "address"],
+							"properties": {
+								"name": {
+									"type": "string"
+								},
+								"address": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"resourcepacks": {
+						"type": "array"
+					},
+					"shaderpacks": {
+						"type": "array"
+					},
+					"mods": {
+						"type": "array",
+						"items": {
+							"oneOf": [
+								{
+									"type": "string"
+								},
+								{
+									"type": "object",
+									"properties": {
+										"name": {
+											"type": "string"
+										},
+										"file": {
+											"type": "string"
+										},
+										"url": {
+											"type": "string"
+										},
+										"sha1": {
+											"type": "string"
+										},
+										"side": {
+											"type": "string"
+										},
+										"modrinth": {
+											"type": "string"
+										},
+										"curseforge": {
+											"type": "string"
+										},
+										"slug": {
+											"type": "string"
+										},
+										"title": {
+											"type": "string"
+										},
+										"source": {
+											"type": "string"
+										},
+										"kind": {
+											"type": "string"
+										},
+										"optional": {
+											"type": "boolean"
+										},
+										"description": {
+											"type": "string"
+										},
+										"default": {
+											"type": "boolean",
+											"description": "On until a player turns it off"
+										}
+									}
+								}
+							]
+						}
+					}
+				}
+			}
+		}
+	}
+}

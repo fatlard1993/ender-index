@@ -215,7 +215,7 @@ The index is meant to be built on: any launcher can read it the way ender does. 
 - **Two lists are closed:** `host` (`github`, `codeberg`, `gitlab`) and a mod's `environment` (`*`, `client`, `server`). A launcher needs every value of both to find a record and to decide what to install, so a new value in either raises `schema`.
 - **A change that could break you raises `schema`:** a field removed or renamed, a type or meaning changed, or a file moved. It is announced below at least 30 days before it is published.
 - **The schemas are the contract,** and the tests hold every published file to them.
-- **Covered:** `index.json`, `search.json`, `mods/`, `known-bad.json`, `withheld.json`, `opted-out.json`, `renames.json` and `explanations.json`. **Not covered yet:** `packs.json`, `packs/` and `pack-pages/` are published and ender reads them, but they have no schema and may change without notice.
+- **Covered:** `index.json`, `search.json`, `mods/`, `known-bad.json`, `withheld.json`, `opted-out.json`, `renames.json`, `explanations.json`, `packs.json`, `packs/` and `pack-pages/`: every file a launcher reads.
 
 Changes announced: none.
 

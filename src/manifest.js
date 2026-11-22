@@ -11,8 +11,6 @@ const SCHEMAS = `https://raw.githubusercontent.com/fatlard1993/ender-index/main/
 /** data/index.json: the shape version, and each file a launcher reads, with its schema. */
 export const manifest = () => ({
 	schema: SCHEMA_VERSION,
-	notCovered:
-		'packs.json, packs/ and pack-pages/ are published but not yet held to a schema or to the stability policy.',
 	stability:
 		'Fields are only added; ignore those you do not know. A change that could break a consumer raises schema, announced in the README at least 30 days ahead.',
 	files: {
@@ -46,6 +44,21 @@ export const manifest = () => ({
 			path: 'explanations.json',
 			schema: `${SCHEMAS}/explanations.schema.json`,
 			description: "Authors' explanations of findings, by mod and finding; absent until one is approved",
+		},
+		packs: {
+			path: 'packs.json',
+			schema: `${SCHEMAS}/packs.schema.json`,
+			description: 'One summary per listed pack',
+		},
+		packRecord: {
+			path: 'packs/{owner}/{repo}.json',
+			schema: `${SCHEMAS}/pack-record.schema.json`,
+			description: 'A pack repository and the pack in each format it has',
+		},
+		packPage: {
+			path: 'pack-pages/{owner}/{repo}.json',
+			schema: `${SCHEMAS}/pack-page.schema.json`,
+			description: 'A pack summary with every mod it names',
 		},
 		renames: {
 			path: 'renames.json',
