@@ -367,11 +367,14 @@ export const FINDING_GUIDE = {
 	},
 };
 
-/** The findings of a list, most serious first, each with its guide. */
-export const byLevel = names =>
-	names
-		.filter(name => FINDING_GUIDE[name])
-		.toSorted((a, b) => levelRank(FINDING_GUIDE[b].level) - levelRank(FINDING_GUIDE[a].level));
+/**
+ * A finding's guide, or for one the guide does not know yet, as a scanner newer than this page can name, the finding's
+ * own name at Worth a look: shown plainly rather than left out, since leaving out a finding hides it.
+ */
+export const guideOf = name => FINDING_GUIDE[name] ?? { level: 'notable', label: name, meaning: '' };
+
+/** The findings of a list, most serious first, every one of them. */
+export const byLevel = names => names.toSorted((a, b) => levelRank(guideOf(b).level) - levelRank(guideOf(a).level));
 
 const levelRank = level => Object.keys(LEVELS).indexOf(level);
 
@@ -382,7 +385,7 @@ export const AVOIDABLE = {
 };
 
 /** Each thing the filters hide a mod for, in the words its chip uses on a card. */
-export const avoidLabel = name => FINDING_GUIDE[name]?.label ?? 'has any warning';
+export const avoidLabel = name => (name === 'warnings' ? 'has any warning' : guideOf(name).label);
 
 /** Where other programs keep their logins, by the name a scan gives each. */
 export const SECRET_STORES = {
@@ -399,9 +402,7 @@ export const secretsSentence = stores =>
 
 /** A finding by the name the search listing gives it, as a person would read it. */
 export const findingLabel = name =>
-	name.startsWith('secrets:')
-		? `names ${SECRET_STORES[name.slice(8)] ?? name.slice(8)}`
-		: (FINDING_GUIDE[name]?.label ?? name);
+	name.startsWith('secrets:') ? `names ${SECRET_STORES[name.slice(8)] ?? name.slice(8)}` : guideOf(name).label;
 
 /** A repository's page here. A GitLab owner can be a nested group, so it is one encoded segment. */
 export const modPath = entry => {

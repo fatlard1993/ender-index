@@ -29,10 +29,10 @@ import { shareUrl } from './shots';
 import {
 	BUILT_FROM_SOURCE,
 	CAPABILITIES,
-	FINDING_GUIDE,
 	LEVELS,
 	WARNINGS,
 	byLevel,
+	guideOf,
 	findingLabel,
 	secretsSentence,
 	INDEX,
@@ -299,8 +299,8 @@ const capitalized = text => `${text[0].toUpperCase()}${text.slice(1)}`;
 /** A finding's level, as a chip colored by how much it should make a player look. */
 const levelChip = name =>
 	new Chip({
-		addClass: FINDING_GUIDE[name]?.level ?? 'notable',
-		textContent: LEVELS[FINDING_GUIDE[name]?.level ?? 'notable'],
+		addClass: guideOf(name).level,
+		textContent: LEVELS[guideOf(name).level],
 		style: { display: 'inline-block' },
 	});
 
@@ -309,7 +309,7 @@ const levelChip = name =>
  * more, the classes behind it, and its author's word.
  */
 const findingDetails = ({ asset, name, technical, linkText, classes, note }) => {
-	const guide = FINDING_GUIDE[name];
+	const guide = guideOf(name);
 	const details = new Component({ tag: 'details', style: { overflowWrap: 'anywhere' } });
 	const libraries = Object.keys(classes).map(libraryOf);
 	const onlyBundled = libraries.length > 0 && libraries.every(Boolean);
@@ -321,8 +321,8 @@ const findingDetails = ({ asset, name, technical, linkText, classes, note }) => 
 			append: [
 				levelChip(name),
 				' ',
-				new Component({ tag: 'strong', textContent: guide ? capitalized(guide.label) : name }),
-				guide ? `: ${guide.meaning}` : '',
+				new Component({ tag: 'strong', textContent: capitalized(guide.label) }),
+				guide.meaning ? `: ${guide.meaning}` : '',
 				...(onlyBundled
 					? [
 							new Meta({
@@ -335,7 +335,7 @@ const findingDetails = ({ asset, name, technical, linkText, classes, note }) => 
 					: []),
 			],
 		}),
-		new Meta({ tag: 'div', textContent: `${name}: ${technical ?? ''}` }),
+		new Meta({ tag: 'div', textContent: technical ? `${name}: ${technical}` : name }),
 		onItsOwnLine(new Link({ href: findingsPath(name), textContent: linkText })),
 		...evidenceLines(classes),
 		...authorsWord(note, asset, name),
@@ -658,13 +658,13 @@ const fitsLabel = ({ minecraft, loader }) =>
  * common ones they do not, as a capability a later release picks up has no explanation of its own.
  */
 const plainSummary = (found, explained) => {
-	const groups = Object.entries(Object.groupBy(found, name => FINDING_GUIDE[name].level))
+	const groups = Object.entries(Object.groupBy(found, name => guideOf(name).level))
 		.toSorted(([a], [b]) => Object.keys(LEVELS).indexOf(b) - Object.keys(LEVELS).indexOf(a))
-		.map(([level, names]) => `${LEVELS[level]}: ${names.map(name => FINDING_GUIDE[name].label).join(', ')}`);
-	const answered = found.filter(name => explained[name]).map(name => FINDING_GUIDE[name].label);
+		.map(([level, names]) => `${LEVELS[level]}: ${names.map(name => guideOf(name).label).join(', ')}`);
+	const answered = found.filter(name => explained[name]).map(name => guideOf(name).label);
 	const unanswered = found
-		.filter(name => !explained[name] && FINDING_GUIDE[name].level !== 'common')
-		.map(name => FINDING_GUIDE[name].label);
+		.filter(name => !explained[name] && guideOf(name).level !== 'common')
+		.map(name => guideOf(name).label);
 	const explaining =
 		answered.length === 0
 			? []

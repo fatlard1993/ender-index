@@ -26,9 +26,9 @@ import {
 	BUILT_FROM_SOURCE,
 	AVOIDABLE,
 	avoidLabel,
-	FINDING_GUIDE,
 	LEVELS,
 	byLevel,
+	guideOf,
 	findingLabel,
 	secretsSentence,
 	INDEX,
@@ -378,9 +378,9 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 								...byLevel([...capabilities, ...(entry.latest?.warnings ?? [])]).map(
 									name =>
 										new Chip({
-											addClass: FINDING_GUIDE[name].level,
-											textContent: FINDING_GUIDE[name].label,
-											tooltip: `${LEVELS[FINDING_GUIDE[name].level]}: ${FINDING_GUIDE[name].meaning}`,
+											addClass: guideOf(name).level,
+											textContent: guideOf(name).label,
+											tooltip: [LEVELS[guideOf(name).level], guideOf(name).meaning].filter(Boolean).join(': '),
 										}),
 								),
 							],

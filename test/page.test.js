@@ -79,7 +79,10 @@ beforeAll(async () => {
 											'x/shadow/org/h2/tools/Server.class': ['java/lang/Runtime.exec'],
 										},
 									},
-									signals: { webhook: { 'x/Send.class': ['https://discord.com/api/webhooks/1'] } },
+									signals: {
+										webhook: { 'x/Send.class': ['https://discord.com/api/webhooks/1'] },
+										beacon: { 'x/Ping.class': ['a call a newer scanner names'] },
+									},
 									secrets: { discord: { 'x/Grab.class': ['\\discord\\Local Storage\\leveldb'] } },
 									hosts: { '10.0.0.7': ['x/Send.class'] },
 									unreadable: [],
@@ -365,9 +368,13 @@ describe("a mod's page", () => {
 		expect(exec.textContent).toContain(
 			'Written for v4, it does not cover what this jar has since: java/lang/Runtime.exec',
 		);
-		expect(text).toContain('its author explains starts other programs; not posts into a chat');
+		expect(text).toContain('its author explains starts other programs; not posts into a chat, beacon');
+		expect(text).toContain('Worth a look: posts into a chat, beacon');
+		expect(text).toContain('Worth a look Beacon');
 		expect(text).toContain('10.0.0.7 (an address, not a name)');
-		expect(text).toContain("New since v4: starts other programs, posts into a chat, names Discord's login token");
+		expect(text).toContain(
+			"New since v4: starts other programs, posts into a chat, beacon, names Discord's login token",
+		);
 		expect(text).toContain('broken.jar, in v5, could not be read or scanned');
 		expect(text).toContain('Read by scanner version 1');
 		expect(document.querySelector('a[href*="template=rescan.yml"]')?.textContent).toBe('Ask for a rescan');
