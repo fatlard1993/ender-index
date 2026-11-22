@@ -452,6 +452,27 @@ describe('a source build ender held for changed build scripts', () => {
 		]);
 	});
 
+	test("shows the diff in its dialog as text, whatever markup a project's scripts hold", async () => {
+		const { confirmHeldBuilds } = await import('../client/controls');
+
+		responses['/api/builds?key=github%3Aa%2Fb&commit=beef000000'] = {
+			diff: '+<img src=x onerror="alert(1)">\n+<script>alert(2)</script>',
+		};
+
+		const asked = confirmHeldBuilds(failed);
+
+		await Bun.sleep(20);
+
+		const dialog = [...document.querySelectorAll('dialog')].at(-1);
+
+		expect(dialog.textContent).toContain('<img src=x onerror="alert(1)">');
+		expect(dialog.querySelector('pre img, pre script')).toBeNull();
+		expect(dialog.textContent).toContain('changed: build.gradle');
+
+		[...dialog.querySelectorAll('button')].find(button => button.textContent === 'Cancel').click();
+		expect(await asked).toBe(false);
+	});
+
 	test('is offered beside its instance, naming the scripts that changed', async () => {
 		const { heldBuildOffer } = await import('../client/InstancesPage');
 		const holder = document.createElement('div');
