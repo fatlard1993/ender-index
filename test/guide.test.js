@@ -19,6 +19,7 @@ test("the guide's links leave the index in a new tab, and a link to one of its p
 test("the findings page has a part for each finding, by the word the mod page's link names it with", () => {
 	expect(ids(findingsMarkup())).toEqual(
 		expect.arrayContaining([
+			'how-much-each-matters',
 			'network',
 			'exec',
 			'native',

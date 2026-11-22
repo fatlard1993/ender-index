@@ -6,6 +6,16 @@ Where its author has explained a finding, the explanation shows beside it, marke
 
 A finding that only comes from a library the jar bundles, like a database driver, says so: the mod's own code does not reach it, though the library is still part of what runs. A jar carried inside the mod is a library for certain, shown as "In sqlite-jdbc.jar, a library it bundles". A class can also look like a library's without being in a jar of its own, shown as "In what looks like org.h2, a library it bundles": its package is one a well-known library keeps, like `org.sqlite` or `okhttp3`, or it sits under a folder a build moves libraries into, like `shadow`, `shaded`, `deps`, `libs` or `relocated`, inside the mod's own package. That is a guess from the package's name alone, which the mod's author chooses, so a mod's own code can trigger it; a folder as plain as `lib` does not count, since mods keep their own helpers there. A finding only in such packages says "only in what look like libraries it bundles", and its classes are listed all the same.
 
+## How much each matters
+
+Each finding on a mod's page says how much it should make you stop and look, in a word, with what it usually means beside it:
+
+- **Common:** many good mods have it, and it usually means what it says: [talks to the internet](#network), [goes past Java's memory checks](#unsafe), [names web addresses](#hosts).
+- **Worth a look:** fine for some mods and odd for others, so ask whether it fits this one: [loads code while it runs](#classloading), [runs native code](#native), [posts into a chat](#webhook), [reads your login token](#session), [uses your clipboard](#clipboard), [has code its source does not](#unsourced), [has code the scan could not read](#unreadable).
+- **Unusual:** few mods have any reason for it: [starts other programs](#exec), [starts with your computer](#persistence), [hides code](#hidden), [reaches out as it loads](#initializer), [is built to read two ways](#zip).
+
+Apart from these, a jar that [names where other programs keep logins](#secrets) is an alarm, not a level: ender will not install it unless you trust it.
+
 ## How the scan works
 
 The scan reads the compiled classes in the jar, and in any jar nested inside it, for the Java calls that grant each capability. It does not run the mod. A class that calls `java.net.http.HttpClient`, for example, is a network finding, and the mod's page lists that class, the call, and the method that makes it, like `HttpClient.send in checkForUpdates`.

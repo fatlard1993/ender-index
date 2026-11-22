@@ -210,8 +210,8 @@ describe('the search page', () => {
 			[...document.querySelectorAll('button')].find(found => found.textContent.trim().startsWith(label));
 
 		expect(button('Takes support').getAttribute('aria-pressed')).toBe('true');
-		expect(button('network').getAttribute('aria-pressed')).toBe('true');
-		expect(button('exec').getAttribute('aria-pressed')).toBe('false');
+		expect(button('talks to the internet').getAttribute('aria-pressed')).toBe('true');
+		expect(button('starts other programs').getAttribute('aria-pressed')).toBe('false');
 
 		button('Takes support').click();
 		expect(button('Takes support').getAttribute('aria-pressed')).toBe('false');
@@ -341,16 +341,20 @@ describe("a mod's page", () => {
 
 		const text = document.body.textContent;
 		const exec = [...document.querySelectorAll('details')].find(details =>
-			details.querySelector('summary')?.textContent.includes('reaches exec'),
+			details.querySelector('summary')?.textContent.includes('Starts other programs'),
 		);
 
 		expect(text).toContain("Its code names where Discord's login token is kept. No mod has a reason to");
-		expect(text).toContain('warns of webhook');
+		expect(text).toContain('Posts into a chat: normal for a server relaying chat to Discord');
+		expect(exec.querySelector('summary').textContent).toStartWith(
+			'Unusual Starts other programs: usually to open a folder or a link',
+		);
+		expect(text).toContain('Unusual: starts other programs · Worth a look: posts into a chat');
 		expect(exec.textContent).toContain('only in what look like libraries it bundles');
 		expect(exec.textContent).toContain('In sqlite-jdbc.jar, a library it bundles:');
 		expect(exec.textContent).toContain('In what looks like org.h2, a library it bundles:');
 		expect(text).toContain('10.0.0.7 (an address, not a name)');
-		expect(text).toContain("New since v4: exec, webhook, names Discord's login token");
+		expect(text).toContain("New since v4: starts other programs, posts into a chat, names Discord's login token");
 		expect(text).toContain('broken.jar, in v5, could not be read or scanned');
 		expect(text).toContain('Read by scanner version 1');
 		expect(document.querySelector('a[href*="template=rescan.yml"]')?.textContent).toBe('Ask for a rescan');
@@ -402,7 +406,7 @@ describe("a mod's page", () => {
 		const page = new ModPage({ appendTo: document.body, host: 'github', owner: 'CaffeineMC', name: 'lithium' });
 		const finding = () =>
 			[...document.querySelectorAll('details')].find(details =>
-				details.querySelector('summary')?.textContent.includes('reaches network'),
+				details.querySelector('summary')?.textContent.includes('Talks to the internet'),
 			);
 
 		await settle(() => finding()?.textContent.includes('It asks Modrinth'));
@@ -410,7 +414,7 @@ describe("a mod's page", () => {
 		expect(finding().textContent).toContain('From its author, jellysquid3, written for 1.0');
 		expect(finding().textContent).toContain('Their own words, which the index has not checked.');
 		expect(finding().querySelector('a[href$="findings/network"]')?.textContent).toBe('What reaching network means');
-		expect(document.body.textContent).toContain('its author explains');
+		expect(document.body.textContent).toContain('its author explains talks to the internet');
 		expect(
 			[...document.querySelectorAll('a')].some(link => link.textContent.startsWith('Explain a finding, as its author')),
 		).toBe(true);

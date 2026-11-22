@@ -28,7 +28,10 @@ import { shareUrl } from './shots';
 import {
 	BUILT_FROM_SOURCE,
 	CAPABILITIES,
+	FINDING_GUIDE,
+	LEVELS,
 	WARNINGS,
+	byLevel,
 	findingLabel,
 	secretsSentence,
 	INDEX,
@@ -273,7 +276,22 @@ const evidenceLines = classes => {
 const onItsOwnLine = link => new Component({ tag: 'div', append: link });
 
 /** One finding folded: its name and what it means, a link to more, the classes behind it, and its author's word. */
-const findingDetails = ({ chip, about, part, linkText, classes, note }) => {
+const capitalized = text => `${text[0].toUpperCase()}${text.slice(1)}`;
+
+/** A finding's level, as a chip colored by how much it should make a player look. */
+const levelChip = name =>
+	new Chip({
+		addClass: FINDING_GUIDE[name]?.level ?? 'notable',
+		textContent: LEVELS[FINDING_GUIDE[name]?.level ?? 'notable'],
+		style: { display: 'inline-block' },
+	});
+
+/**
+ * One finding folded: how much it matters and what it usually means, in plain words; opened, its own name, a link to
+ * more, the classes behind it, and its author's word.
+ */
+const findingDetails = ({ name, technical, linkText, classes, note }) => {
+	const guide = FINDING_GUIDE[name];
 	const details = new Component({ tag: 'details', style: { overflowWrap: 'anywhere' } });
 	const libraries = Object.keys(classes).map(libraryOf);
 	const onlyBundled = libraries.length > 0 && libraries.every(Boolean);
@@ -283,8 +301,10 @@ const findingDetails = ({ chip, about, part, linkText, classes, note }) => {
 		new Component({
 			tag: 'summary',
 			append: [
-				new Chip({ addClass: 'finding', textContent: chip, style: { display: 'inline-block' } }),
-				` ${about ?? ''}`,
+				levelChip(name),
+				' ',
+				new Component({ tag: 'strong', textContent: guide ? capitalized(guide.label) : name }),
+				guide ? `: ${guide.meaning}` : '',
 				...(onlyBundled
 					? [
 							new Meta({
@@ -297,7 +317,8 @@ const findingDetails = ({ chip, about, part, linkText, classes, note }) => {
 					: []),
 			],
 		}),
-		onItsOwnLine(new Link({ href: findingsPath(part), textContent: linkText })),
+		new Meta({ tag: 'div', textContent: `${name}: ${technical ?? ''}` }),
+		onItsOwnLine(new Link({ href: findingsPath(name), textContent: linkText })),
 		...evidenceLines(classes),
 		...authorsWord(note),
 	);
@@ -308,9 +329,8 @@ const findingDetails = ({ chip, about, part, linkText, classes, note }) => {
 const capabilityList = (scan, explained, unsourced) => [
 	...Object.entries(scan?.capabilities ?? {}).map(([capability, classes]) =>
 		findingDetails({
-			chip: `reaches ${capability}`,
-			about: CAPABILITIES[capability],
-			part: capability,
+			name: capability,
+			technical: CAPABILITIES[capability],
 			linkText: `What reaching ${capability} means`,
 			classes,
 			note: explained[capability],
@@ -318,9 +338,8 @@ const capabilityList = (scan, explained, unsourced) => [
 	),
 	...Object.entries(scan?.signals ?? {}).map(([signal, classes]) =>
 		findingDetails({
-			chip: `warns of ${signal}`,
-			about: WARNINGS[signal],
-			part: signal,
+			name: signal,
+			technical: WARNINGS[signal],
 			linkText: `What ${/^[aeiou]/.test(signal) ? 'an' : 'a'} ${signal} warning means`,
 			classes,
 			note: explained[signal],
@@ -329,9 +348,8 @@ const capabilityList = (scan, explained, unsourced) => [
 	...((scan?.hidden ?? []).length > 0
 		? [
 				findingDetails({
-					chip: 'warns of hidden',
-					about: WARNINGS.hidden,
-					part: 'hidden',
+					name: 'hidden',
+					technical: WARNINGS.hidden,
 					linkText: 'What hidden code means',
 					classes: Object.fromEntries(scan.hidden.map(where => [where, ['a jar or class by its bytes']])),
 					note: explained.hidden,
@@ -341,9 +359,8 @@ const capabilityList = (scan, explained, unsourced) => [
 	...(unsourced
 		? [
 				findingDetails({
-					chip: 'warns of unsourced',
-					about: WARNINGS.unsourced,
-					part: 'unsourced',
+					name: 'unsourced',
+					technical: WARNINGS.unsourced,
 					linkText: 'What unsourced classes mean',
 					classes: Object.fromEntries(
 						unsourced.classes.map(where => [where, ['no source for it in the repository at this release']]),
@@ -609,6 +626,19 @@ const fitsLabel = ({ minecraft, loader }) =>
 	[minecraft && `Minecraft ${minecraft}`, loader && LOADERS[loader]].filter(Boolean).join(' with ') || 'any version';
 
 /**
+ * A jar's findings in a line a player can read at a glance: grouped by how much each should make them look, most
+ * serious first, each in a few plain words, and which of them its author explains.
+ */
+const plainSummary = (found, explained) => {
+	const groups = Object.entries(Object.groupBy(found, name => FINDING_GUIDE[name].level))
+		.toSorted(([a], [b]) => Object.keys(LEVELS).indexOf(b) - Object.keys(LEVELS).indexOf(a))
+		.map(([level, names]) => `${LEVELS[level]}: ${names.map(name => FINDING_GUIDE[name].label).join(', ')}`);
+	const answered = found.filter(name => explained[name]).map(name => FINDING_GUIDE[name].label);
+
+	return [...groups, ...(answered.length > 0 ? [`its author explains ${answered.join(', ')}`] : [])].join(' · ');
+};
+
+/**
  * What a jar's scan found, folded: findings to look into, not something every reader needs open. What no mod has a
  * reason to do comes first and is never folded.
  */
@@ -624,25 +654,18 @@ const findings = ({ scan, unsourced }, explained, entry) => {
 
 	if (reached.length + warned.length + hosts.length + unreadable.length === 0) return secretsAlarm(scan, explained);
 
-	const answered = [...reached, ...warned, ...(hosts.length > 0 ? ['hosts'] : [])].some(finding => explained[finding]);
+	const found = byLevel([
+		...reached,
+		...warned,
+		...(hosts.length > 0 ? ['hosts'] : []),
+		...(unreadable.length > 0 ? ['unreadable'] : []),
+	]);
 	const details = new Component({ tag: 'details', style: { overflowWrap: 'anywhere' } });
 
 	details.append(
 		new Component({
 			tag: 'summary',
-			append: new Meta({
-				tag: 'span',
-				textContent: [
-					reached.length > 0 && `Its code reaches ${reached.join(', ')}`,
-					warned.length > 0 && `warns of ${warned.join(', ')}`,
-					hosts.length > 0 && `names ${hosts.length === 1 ? 'a host' : `${hosts.length} hosts`}`,
-					unreadable.length > 0 &&
-						`has ${unreadable.length === 1 ? 'a class' : `${unreadable.length} classes`} it could not read`,
-					answered && 'its author explains',
-				]
-					.filter(Boolean)
-					.join('; '),
-			}),
+			append: new Meta({ tag: 'span', textContent: plainSummary(found, explained) }),
 		}),
 		...capabilityList(scan, explained, unsourced),
 		...(hosts.length > 0

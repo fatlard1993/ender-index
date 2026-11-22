@@ -26,6 +26,7 @@ module.exports = {
 		'forge',
 		'forgejo',
 		'fortawesome',
+		'fractureiser',
 		'gfm',
 		'gh',
 		'gists',

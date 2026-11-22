@@ -25,8 +25,10 @@ import { local } from './local';
 import {
 	BUILT_FROM_SOURCE,
 	AVOIDABLE,
-	CAPABILITIES,
-	WARNINGS,
+	avoidLabel,
+	FINDING_GUIDE,
+	LEVELS,
+	byLevel,
 	findingLabel,
 	secretsSentence,
 	INDEX,
@@ -373,20 +375,12 @@ const resultCard = ({ entry, sharing, unproven, author }, versions, state, entri
 											}),
 										]
 									: []),
-								...capabilities.map(
-									capability =>
+								...byLevel([...capabilities, ...(entry.latest?.warnings ?? [])]).map(
+									name =>
 										new Chip({
-											addClass: 'finding',
-											textContent: `reaches ${capability}`,
-											tooltip: CAPABILITIES[capability],
-										}),
-								),
-								...(entry.latest?.warnings ?? []).map(
-									warning =>
-										new Chip({
-											addClass: 'finding',
-											textContent: `warns of ${warning}`,
-											tooltip: WARNINGS[warning],
+											addClass: FINDING_GUIDE[name].level,
+											textContent: FINDING_GUIDE[name].label,
+											tooltip: `${LEVELS[FINDING_GUIDE[name].level]}: ${FINDING_GUIDE[name].meaning}`,
 										}),
 								),
 							],
@@ -638,11 +632,11 @@ export default class SearchPage extends View {
 			append: [
 				supporting,
 				starring,
-				new Meta({ textContent: 'Hide what reaches' }),
+				new Meta({ textContent: 'Hide what' }),
 				...Object.keys(AVOIDABLE).map(capability => {
 					const chip = new Button({
 						variant: 'chip',
-						textContent: capability,
+						textContent: avoidLabel(capability),
 						tooltip: AVOIDABLE[capability],
 						pressed: state.avoid.includes(capability),
 						onPointerPress: () => {

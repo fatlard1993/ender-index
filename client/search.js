@@ -290,11 +290,99 @@ export const WARNINGS = {
 		"It has classes reaching the network or other programs that its repository's source at that release does not",
 };
 
+/** How much a finding should make a player stop and look, from least to most; secrets are an alarm apart from these. */
+export const LEVELS = { common: 'Common', notable: 'Worth a look', unusual: 'Unusual' };
+
+/**
+ * Each finding as a player would want it said: how much it should make them look, a few words for it, and what it
+ * usually means. The finding's own name and the calls behind it stay one press away, on the mod's page.
+ */
+export const FINDING_GUIDE = {
+	network: {
+		level: 'common',
+		label: 'talks to the internet',
+		meaning: 'usually update checks, skins, voice chat or telemetry',
+	},
+	unsafe: {
+		level: 'common',
+		label: "goes past Java's memory checks",
+		meaning: 'usually for speed, often in a library it bundles',
+	},
+	hosts: { level: 'common', label: 'names web addresses', meaning: 'links it shows, or services it calls' },
+	classloading: {
+		level: 'notable',
+		label: 'loads code while it runs',
+		meaning: 'usually a framework or scripting; code loaded later is code no scan has read',
+	},
+	native: {
+		level: 'notable',
+		label: 'runs native code',
+		meaning: 'usually audio, voice or speed libraries; nothing here can read what native code does',
+	},
+	webhook: {
+		level: 'notable',
+		label: 'posts into a chat',
+		meaning: 'normal for a server relaying chat to Discord, odd in a mod that runs on your game',
+	},
+	session: {
+		level: 'notable',
+		label: 'reads your login token',
+		meaning: 'expected in account and login mods, and nowhere else',
+	},
+	clipboard: { level: 'notable', label: 'uses your clipboard', meaning: 'usually a copy button' },
+	unsourced: {
+		level: 'notable',
+		label: 'has code its source does not',
+		meaning: 'often a release built from another branch; a class slipped into a build looks the same',
+	},
+	unreadable: {
+		level: 'notable',
+		label: 'has code the scan could not read',
+		meaning: 'usually a build tool quirk; what cannot be read cannot be reported',
+	},
+	exec: {
+		level: 'unusual',
+		label: 'starts other programs',
+		meaning: 'usually to open a folder or a link; few mods need it',
+	},
+	persistence: {
+		level: 'unusual',
+		label: 'starts with your computer',
+		meaning: 'almost no mod has a reason to keep running after the game closes',
+	},
+	hidden: {
+		level: 'unusual',
+		label: 'hides code',
+		meaning: 'a jar or class kept under the name of some other kind of file',
+	},
+	initializer: {
+		level: 'unusual',
+		label: 'reaches out as it loads',
+		meaning: 'where fractureiser hid its first step; mods rarely do anything there',
+	},
+	zip: {
+		level: 'unusual',
+		label: 'is built to read two ways',
+		meaning: 'different tools would see different files in it',
+	},
+};
+
+/** The findings of a list, most serious first, each with its guide. */
+export const byLevel = names =>
+	names
+		.filter(name => FINDING_GUIDE[name])
+		.toSorted((a, b) => levelRank(FINDING_GUIDE[b].level) - levelRank(FINDING_GUIDE[a].level));
+
+const levelRank = level => Object.keys(LEVELS).indexOf(level);
+
 /** What the filters can hide a mod for: each thing its code reaches, and any warning at all. */
 export const AVOIDABLE = {
 	...CAPABILITIES,
 	warnings: 'It warns of something, or names where other programs keep logins',
 };
+
+/** Each thing the filters hide a mod for, in the words its chip uses on a card. */
+export const avoidLabel = name => FINDING_GUIDE[name]?.label ?? 'has any warning';
 
 /** Where other programs keep their logins, by the name a scan gives each. */
 export const SECRET_STORES = {
@@ -311,7 +399,9 @@ export const secretsSentence = stores =>
 
 /** A finding by the name the search listing gives it, as a person would read it. */
 export const findingLabel = name =>
-	name.startsWith('secrets:') ? `names ${SECRET_STORES[name.slice(8)] ?? name.slice(8)}` : name;
+	name.startsWith('secrets:')
+		? `names ${SECRET_STORES[name.slice(8)] ?? name.slice(8)}`
+		: (FINDING_GUIDE[name]?.label ?? name);
 
 /** A repository's page here. A GitLab owner can be a nested group, so it is one encoded segment. */
 export const modPath = entry => {

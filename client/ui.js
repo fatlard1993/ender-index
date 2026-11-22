@@ -52,6 +52,21 @@ export const Chip = styled(
 			color: ${colors.warning};
 		}
 
+		&.common {
+			border-color: ${colors.border};
+			color: ${colors.muted};
+		}
+
+		&.notable {
+			border-color: ${colors.alpha(colors.warning, 0.6)};
+			color: ${colors.warning};
+		}
+
+		&.unusual {
+			border-color: ${colors.alpha(colors.danger, 0.7)};
+			color: ${colors.danger};
+		}
+
 		&.alarm {
 			border-color: ${colors.danger};
 			background: ${colors.alpha(colors.danger, 0.15)};
