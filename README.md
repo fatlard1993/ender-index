@@ -189,7 +189,7 @@ Each file a launcher reads has a JSON Schema in [`schemas/v1/`](schemas/v1), and
 
 ## For launchers
 
-The index is meant to be built on: any launcher can read it the way ender does. Everything is static JSON under `https://raw.githubusercontent.com/fatlard1993/ender-index/main/data/`, served with ETags, so an unchanged file costs one small request. Start from `index.json`, and refuse a `schema` your code does not know.
+The index is meant to be built on: any launcher can read it the way ender does. Everything is static JSON under `https://raw.githubusercontent.com/fatlard1993/ender-index/main/data/`, served with ETags, so an unchanged file costs one small request. Start from `index.json` and compare its `schema` with the version your code reads. ender, the reference consumer, says so when the index's is newer and reads on, since fields are added without raising it; refusing is as fair a choice.
 
 **From a mod id, a loader and a game version to a jar:**
 
