@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     # The crawl's own budget is 45 minutes, after a discovery of up to forty and a source check of up to twenty; a job
     # the runner stops commits nothing
-    timeout-minutes: 150
+    timeout-minutes: 170
     steps:
       - uses: actions/checkout@v4
         with:
@@ -47,10 +47,13 @@ jobs:
           path: ender-index/.cache
           key: crawl-${{ github.run_id }}
           restore-keys: crawl-
+      # Held to its share of the job's time, which an overrun would take from the crawl and then from the next start
       - name: discover
         if: inputs.discover || github.event.schedule == '17 4 * * *'
         run: bun run discover
         working-directory: ender-index
+        continue-on-error: true
+        timeout-minutes: 40
         env:
           GITHUB_TOKEN: ${{ secrets.CRAWL_TOKEN || secrets.GITHUB_TOKEN }}
           CRAWL_APP_ID: ${{ vars.CRAWL_APP_ID }}
@@ -133,10 +136,10 @@ jobs:
         with:
           path: ender-index/.cache
           key: crawl-${{ github.run_id }}
-      # Not after a cancelled crawl, so cancelling one stops the chain. The one started in the 04:00 UTC hour discovers,
-      # as the schedule's 04:17 crawl is as often skipped
+      # Not after a cancelled run, so cancelling one stops the chain; a step that ran out of its own time still starts
+      # the next. The one started in the 04:00 UTC hour discovers, as the schedule's 04:17 crawl is as often skipped
       - name: start the next crawl
-        if: always() && (steps.crawl.outcome == 'success' || steps.crawl.outcome == 'failure')
+        if: ${{ !cancelled() && steps.crawl.outcome != 'skipped' }}
         run: gh workflow run crawl.yml --repo ${{ github.repository }} --ref main -f discover=$([ "$(date -u +%H)" = 04 ] && echo true || echo false)
         env:
           GH_TOKEN: ${{ github.token }}
