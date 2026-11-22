@@ -573,3 +573,39 @@ describe('a jar ender held back', () => {
 		holder.remove();
 	});
 });
+
+describe("what an instance's pack offers as optional", () => {
+	test('shows beside each optional mod or pack whether it is on, what it adds, and turning it on or off', async () => {
+		const { optionalControls, packList } = await import('../client/InstancesPage');
+		const toggled = [];
+		const manifest = {
+			mods: [],
+			chosen: ['modrinth:zoom'],
+			resourcepacks: [{ source: 'modrinth', id: 'faithful', optional: true, description: 'Sharper textures' }],
+			shaderpacks: [{ source: 'modrinth', id: 'bsl' }],
+		};
+		const holder = document.createElement('div');
+
+		for (const part of optionalControls(manifest, { source: 'modrinth', id: 'zoom', optional: true }, (...args) =>
+			toggled.push(args),
+		))
+			holder.append(part.elem);
+
+		expect(holder.textContent).toContain('optional, on');
+		[...holder.querySelectorAll('button')].find(button => button.textContent === 'Turn off').click();
+		expect(toggled).toEqual([['modrinth:zoom', false]]);
+		expect(optionalControls(manifest, { source: 'modrinth', id: 'sodium' }, () => {})).toEqual([]);
+
+		const packs = document.createElement('div');
+
+		for (const row of packList(manifest, (...args) => toggled.push(args))) packs.append(row.elem);
+
+		expect(packs.textContent).toContain('faithful');
+		expect(packs.textContent).toContain('resource pack');
+		expect(packs.textContent).toContain('Sharper textures');
+		expect(packs.textContent).toContain('bsl');
+		expect(packs.textContent).toContain('shader pack');
+		[...packs.querySelectorAll('button')].find(button => button.textContent === 'Turn on').click();
+		expect(toggled.at(-1)).toEqual(['modrinth:faithful', true]);
+	});
+});

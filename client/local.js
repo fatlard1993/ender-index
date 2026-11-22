@@ -401,6 +401,8 @@ export const local = {
 	launch: (name, { update = false } = {}) => start('POST', `${named(name)}/launch`, { update }),
 	remove: name => start('DELETE', named(name)),
 	dropFrom: (name, specs) => start('POST', `${named(name)}/drop`, { specs }),
+	/** Turn an optional entry a pack offers on or off, by the key ender lists it under; answers the job that syncs it. */
+	setOptional: (name, key, on) => start('POST', `${named(name)}/optional`, { key, on }),
 	finished,
 	/**
 	 * Trust the jars a finished job held back, then install them; answers the job that does. When ender web has nothing

@@ -116,16 +116,58 @@ const openedFor = name => {
 	return opened.get(name);
 };
 
-const modList = (manifest, onDrop) =>
+const keyOf = entry => `${entry.source}:${entry.id ?? entry.path ?? entry.url}`;
+
+/**
+ * Beside an entry a pack offers as optional: what it adds, in the pack's words, and turning it on or off. Nothing for
+ * an entry every player gets.
+ */
+export const optionalControls = (manifest, entry, onToggle) => {
+	if (!entry.optional) return [];
+
+	const on = (manifest.chosen ?? []).includes(keyOf(entry));
+
+	return [
+		new Chip({ addClass: on ? 'installed' : undefined, textContent: on ? 'optional, on' : 'optional, off' }),
+		...(entry.description ? [new Meta({ textContent: entry.description })] : []),
+		new Button({
+			variant: 'flat',
+			textContent: on ? 'Turn off' : 'Turn on',
+			title: on ? 'Leave it out at the next sync' : 'Install it at the next sync',
+			onPointerPress: () => onToggle(keyOf(entry), !on),
+		}),
+	];
+};
+
+/** The resource and shader packs an instance declares, each with its kind and, when optional, its controls. */
+export const packList = (manifest, onToggle) =>
+	[
+		['resourcepacks', 'resource pack'],
+		['shaderpacks', 'shader pack'],
+	].flatMap(([kind, word]) =>
+		(manifest[kind] ?? []).map(
+			entry =>
+				new Row({
+					append: [
+						new Chip({ textContent: entry.id ?? entry.url }),
+						new Meta({ textContent: word }),
+						...optionalControls(manifest, entry, onToggle),
+					],
+				}),
+		),
+	);
+
+const modList = (manifest, onDrop, onToggle = () => {}) =>
 	(manifest.mods ?? []).map(mod => {
 		const shareable = NAMEABLE_SOURCES.has(mod.source);
 		const spec = shareable ? specFor(mod.source, mod.id) : undefined;
-		const shown = manifest.installed?.find(found => found.key === `${mod.source}:${mod.id ?? mod.path ?? mod.url}`);
+		const shown = manifest.installed?.find(found => found.key === keyOf(mod));
 
 		return new Row({
 			append: [
 				new Chip({ textContent: shown?.name ?? spec ?? mod.path ?? mod.url ?? mod.id }),
 				...(mod.version ? [new Meta({ textContent: `pinned at ${mod.version}` })] : []),
+				...optionalControls(manifest, mod, onToggle),
 				...(shareable
 					? [
 							new Button({
@@ -284,17 +326,27 @@ const instanceCard = (instance, signal) => {
 		try {
 			const manifest = await local.details(instance.name);
 
-			mods.content(
-				(manifest.mods ?? []).length === 0
-					? new EmptyState({
-							icon: 'puzzle-piece',
-							title: 'No mods chosen yet',
-							message: 'Add them from the Mods page',
-						})
-					: modList(manifest, spec =>
-							runJob(() => local.dropFrom(instance.name, [spec]), { done: `Removed ${spec}` }).then(showMods),
-						),
-			);
+			const toggle = (key, on) =>
+				runJob(() => local.setOptional(instance.name, key, on), {
+					done: `${on ? 'Turned on' : 'Turned off'} ${key}`,
+				}).then(showMods);
+
+			mods.content([
+				...((manifest.mods ?? []).length === 0
+					? [
+							new EmptyState({
+								icon: 'puzzle-piece',
+								title: 'No mods chosen yet',
+								message: 'Add them from the Mods page',
+							}),
+						]
+					: modList(
+							manifest,
+							spec => runJob(() => local.dropFrom(instance.name, [spec]), { done: `Removed ${spec}` }).then(showMods),
+							toggle,
+						)),
+				...packList(manifest, toggle),
+			]);
 		} catch (error) {
 			mods.content(
 				new EmptyState({
