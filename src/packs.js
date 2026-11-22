@@ -52,14 +52,23 @@ const packwizMods = async (name, index, read) => {
 
 	const mods = [];
 
-	for (const source of sources) {
+	for (const [at, source] of sources.entries()) {
 		if (source === undefined) continue;
 
 		const mod = Bun.TOML.parse(source);
+		const kind = ['resourcepacks', 'shaderpacks'].find(folder => metafiles[at].startsWith(`${folder}/`));
 
 		mods.push({
 			name: mod.name,
 			file: mod.filename,
+			...(kind ? { kind } : {}),
+			...(mod.option?.optional === true
+				? {
+						optional: true,
+						...(typeof mod.option.description === 'string' ? { description: mod.option.description } : {}),
+						...(mod.option.default === true ? { default: true } : {}),
+					}
+				: {}),
 			...(mod.download?.url ? { url: mod.download.url } : {}),
 			...(mod.side && mod.side !== 'both' ? { side: mod.side } : {}),
 			...(mod.update?.modrinth?.['mod-id'] ? { modrinth: mod.update.modrinth['mod-id'] } : {}),
@@ -158,6 +167,9 @@ export const zipEntryByRanges = async (url, size, name, { read = bytesOf } = {})
 	throw new Error(`no ${name} in it`);
 };
 
+/** What an mrpack record holds: 2 keeps its resource and shader packs and optional files. */
+const MRPACK_SHAPE = 2;
+
 const readMrpack = async (asset, scratch) => {
 	try {
 		return JSON.parse(
@@ -254,8 +266,11 @@ const readHeadFormats = async (name, read) => {
 
 		formats.packwiz = {
 			name: pack.name,
+			...(pack.version ? { version: pack.version } : {}),
+			...(pack.author ? { author: pack.author } : {}),
 			minecraft: pack.minecraft,
 			loader: pack.loader.type,
+			...(pack.loader.version ? { loaderVersion: pack.loader.version } : {}),
 			mods: await packwizMods(name, index, read),
 		};
 	}
@@ -307,7 +322,8 @@ export const crawlPack = async (
 	if (found) {
 		const kept = recorded?.formats?.mrpack;
 
-		if (kept?.asset === found.asset.id) formats.mrpack = kept;
+		// A record read before it kept resource and shader packs and optional files is read again, once
+		if (kept?.asset === found.asset.id && kept.shape === MRPACK_SHAPE) formats.mrpack = kept;
 		else {
 			const index = await readMrpack(found.asset, scratch);
 			const dependencies = index.dependencies ?? {};
@@ -321,11 +337,15 @@ export const crawlPack = async (
 				tag: found.release.tag_name,
 				asset: found.asset.id,
 				url: found.asset.browser_download_url,
+				...(dependencies[loader] ? { loaderVersion: dependencies[loader] } : {}),
+				shape: MRPACK_SHAPE,
 				mods: (index.files ?? [])
-					.filter(file => file.path?.startsWith('mods/'))
+					.filter(file => /^(mods|resourcepacks|shaderpacks)\//.test(file.path ?? ''))
 					.map(file => ({
 						file: basename(file.path),
 						url: file.downloads?.[0],
+						...(file.path.startsWith('mods/') ? {} : { kind: file.path.split('/')[0] }),
+						...(file.env?.client === 'optional' ? { optional: true } : {}),
 						...(file.hashes?.sha1 ? { sha1: file.hashes.sha1.toLowerCase() } : {}),
 					})),
 			};
@@ -509,16 +529,34 @@ export const buildPacks = (packs, entries, records, modrinthIds = {}) => {
 
 			if (!format) return undefined;
 
-			const mods = format.mods
-				.map(mod => (typeof mod === 'string' ? { spec: mod } : mod))
+			const listed = format.mods.map(mod => (typeof mod === 'string' ? { spec: mod } : mod));
+			const offered = mod =>
+				mod.optional
+					? {
+							optional: true,
+							...(mod.description ? { description: mod.description } : {}),
+							...(mod.default || mod.chosen ? { default: true } : {}),
+						}
+					: {};
+			const mods = listed
+				.filter(mod => !mod.kind)
 				.map(mod => {
 					const key = match(mod);
 					const name = mod.title ?? mod.name ?? mod.spec ?? mod.file;
 
 					return key
-						? { name, key }
-						: { name, ...(mod.file ? { file: mod.file } : {}), ...whereFrom(mod, modrinthIds) };
+						? { name, key, ...offered(mod) }
+						: { name, ...(mod.file ? { file: mod.file } : {}), ...whereFrom(mod, modrinthIds), ...offered(mod) };
 				});
+			// Resource and shader packs: an ender pack's own lists, and the ones a packwiz pack or an mrpack lists among its files
+			const extras = [
+				...listed
+					.filter(mod => mod.kind)
+					.map(mod => ({ kind: mod.kind, name: mod.title ?? mod.name ?? mod.file, ...offered(mod) })),
+				...['resourcepacks', 'shaderpacks'].flatMap(kind =>
+					(format[kind] ?? []).map(entry => ({ kind, name: entry.id ?? entry.url, ...offered(entry) })),
+				),
+			];
 			const others = mods.filter(mod => !mod.key);
 			const matched = [...new Set(mods.map(mod => mod.key).filter(Boolean))];
 
@@ -533,6 +571,11 @@ export const buildPacks = (packs, entries, records, modrinthIds = {}) => {
 				minecraft: format.minecraft,
 				loader: format.loader,
 				...(format.version ? { version: format.version } : {}),
+				...(format.author ? { author: format.author } : {}),
+				...(format.loaderVersion ? { loaderVersion: format.loaderVersion } : {}),
+				...(format.memory ? { memory: format.memory } : {}),
+				...(format.servers?.length > 0 ? { servers: format.servers } : {}),
+				...(extras.length > 0 ? { extras } : {}),
 				count: mods.length,
 				matched,
 				faces: facesOf(matched.map(key => byKey.get(key))),

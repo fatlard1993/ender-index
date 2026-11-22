@@ -226,6 +226,85 @@ describe('the pack listing', () => {
 		expect(both[1].install).toBe('ender import https://github.com/p/released/releases/download/v1/r.mrpack');
 	});
 
+	test('keeps what a pack carries beside its mods: its byline, pins, servers, resource and shader packs, and optional entries', () => {
+		const [ender, wiz, released] = buildPacks(
+			[
+				{
+					repo: 'p/ender',
+					host: 'github',
+					stars: 3,
+					formats: {
+						ender: {
+							name: 'House',
+							version: '3',
+							author: 'Ada',
+							minecraft: '26.3',
+							loader: 'fabric',
+							loaderVersion: '0.20.1',
+							memory: 6144,
+							mods: [
+								{ spec: 'gh:b/named' },
+								{ spec: 'mr:zoomify', optional: true, description: 'Zoom with C', chosen: true },
+							],
+							resourcepacks: [{ source: 'modrinth', id: 'faithful-32x', optional: true }],
+							shaderpacks: [{ source: 'url', url: 'https://example.com/s.zip' }],
+							servers: [{ name: 'Ours', address: 'play.example.com' }],
+						},
+					},
+				},
+				{
+					repo: 'p/wiz',
+					host: 'github',
+					stars: 2,
+					formats: {
+						packwiz: {
+							name: 'Wiz',
+							minecraft: '26.3',
+							loader: 'fabric',
+							loaderVersion: '0.20.0',
+							mods: [
+								{ name: 'Minimap', file: 'map.jar', optional: true, default: true },
+								{ name: 'Faithful', file: 'f.zip', kind: 'resourcepacks' },
+							],
+						},
+					},
+				},
+				{
+					repo: 'p/released',
+					host: 'github',
+					stars: 1,
+					formats: {
+						mrpack: {
+							name: 'Released',
+							url: 'https://github.com/p/released/releases/download/v1/r.mrpack',
+							mods: [{ file: 'a.jar' }, { file: 'Look.zip', kind: 'resourcepacks', optional: true }],
+						},
+					},
+				},
+			],
+			entries,
+			records,
+		);
+
+		expect(ender).toMatchObject({ version: '3', author: 'Ada', loaderVersion: '0.20.1', memory: 6144, count: 2 });
+		expect(ender.servers).toEqual([{ name: 'Ours', address: 'play.example.com' }]);
+		expect(ender.mods[1]).toMatchObject({
+			name: 'mr:zoomify',
+			optional: true,
+			description: 'Zoom with C',
+			default: true,
+		});
+		expect(ender.extras).toEqual([
+			{ kind: 'resourcepacks', name: 'faithful-32x', optional: true },
+			{ kind: 'shaderpacks', name: 'https://example.com/s.zip' },
+		]);
+		expect(wiz).toMatchObject({ loaderVersion: '0.20.0', count: 1 });
+		expect(wiz.mods[0]).toMatchObject({ name: 'Minimap', optional: true, default: true });
+		expect(wiz.extras).toEqual([{ kind: 'resourcepacks', name: 'Faithful' }]);
+		expect(released.count).toBe(1);
+		expect(released.extras).toEqual([{ kind: 'resourcepacks', name: 'Look.zip', optional: true }]);
+	});
+
 	test('reads an ender pack published to a gist, installed and paged by the gist, not by a repository', async () => {
 		const pack = { name: 'Gisted', minecraft: '26.3', loader: 'fabric', mods: ['gh:b/named'] };
 		const body = {

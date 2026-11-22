@@ -525,3 +525,45 @@ test("closes a page with the index's license and whose work it shows", async () 
 	expect(footer.elem.textContent).toContain("A mod's name, description, icon and readme belong to its author");
 	expect(footer.elem.querySelector('a[href$="/blob/main/LICENSE"]')?.textContent).toBe('MIT license');
 });
+
+describe('a pack page', () => {
+	test('says who made a pack, what it pins and asks for, and what it carries beside its mods', async () => {
+		const { packByline, packExtras } = await import('../client/PackPage');
+		const pack = {
+			version: '3',
+			author: 'Ada',
+			loader: 'fabric',
+			loaderVersion: '0.20.1',
+			memory: 6144,
+			mods: [
+				{ name: 'gh:b/named', key: 'github:b/named' },
+				{ name: 'Zoomify', optional: true, description: 'Zoom with C' },
+			],
+			extras: [{ kind: 'shaderpacks', name: 'complementary', optional: true, default: true }],
+			servers: [{ name: 'Ours', address: 'play.example.com' }],
+		};
+		const holder = document.createElement('div');
+
+		for (const part of [...packByline(pack), ...packExtras(pack)]) holder.append(part.elem);
+
+		for (const said of [
+			'version 3',
+			'by Ada',
+			'fabric 0.20.1, pinned',
+			'asks for 6 GB of memory',
+			'Optional mods (1)',
+			'Zoomify',
+			'optional, off unless turned on',
+			'Zoom with C',
+			'Resource and shader packs (1)',
+			'shader pack',
+			'optional, on unless turned off',
+			'Servers (1)',
+			'play.example.com',
+		]) {
+			expect(holder.textContent).toContain(said);
+		}
+
+		expect(packExtras({ mods: [{ name: 'a' }] })).toEqual([]);
+	});
+});

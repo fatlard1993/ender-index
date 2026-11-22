@@ -133,6 +133,73 @@ const group = (title, explained, content) =>
 		],
 	});
 
+const KIND_WORDS = { resourcepacks: 'resource pack', shaderpacks: 'shader pack' };
+
+/** A line naming an entry, with its optional mark and what it adds when the pack offers it as a choice. */
+const offeredLine = (name, entry, more = []) =>
+	new Row({
+		append: [
+			new Chip({ textContent: name }),
+			...more,
+			...(entry.optional
+				? [
+						new Meta({
+							textContent: entry.default ? 'optional, on unless turned off' : 'optional, off unless turned on',
+						}),
+						...(entry.description ? [new Meta({ textContent: entry.description })] : []),
+					]
+				: []),
+		],
+	});
+
+/**
+ * What a pack carries beside the mods every player gets: the mods it offers as a choice, its resource and shader
+ * packs, and the servers it adds to the multiplayer list. Nothing for a pack with none of them.
+ */
+export const packExtras = pack => {
+	const optional = pack.mods.filter(mod => mod.optional);
+	const extras = pack.extras ?? [];
+	const servers = pack.servers ?? [];
+
+	return [
+		...(optional.length > 0
+			? [
+					group(
+						`Optional mods (${count(optional.length)})`,
+						'Each player chooses these: ender optional turns one on or off, and ender web has a switch for each.',
+						optional.map(mod => offeredLine(mod.name, mod)),
+					),
+				]
+			: []),
+		...(extras.length > 0
+			? [
+					group(
+						`Resource and shader packs (${count(extras.length)})`,
+						'Installed beside its mods into their own folders, and turned on when they are new to an instance.',
+						extras.map(entry => offeredLine(entry.name, entry, [new Meta({ textContent: KIND_WORDS[entry.kind] })])),
+					),
+				]
+			: []),
+		...(servers.length > 0
+			? [
+					group(
+						`Servers (${count(servers.length)})`,
+						"Added to the game's multiplayer list after a player's own, and taken off when the pack drops them.",
+						servers.map(server => offeredLine(server.name, {}, [new Meta({ textContent: server.address })])),
+					),
+				]
+			: []),
+	];
+};
+
+/** What a pack pins and asks for, beside its version: who made it, its loader's exact version, and its memory. */
+export const packByline = pack => [
+	...(pack.version ? [new Meta({ textContent: `version ${pack.version}` })] : []),
+	...(pack.author ? [new Meta({ textContent: `by ${pack.author}` })] : []),
+	...(pack.loaderVersion ? [new Meta({ textContent: `${pack.loader} ${pack.loaderVersion}, pinned` })] : []),
+	...(pack.memory ? [new Meta({ textContent: `asks for ${Math.round(pack.memory / 1024)} GB of memory` })] : []),
+];
+
 /** Every mod the pack names, those matching what is typed alone, in the index first and then by where their jar is. */
 const modsPanel = (pack, byKey) => {
 	const filter = new Input({
@@ -304,7 +371,7 @@ export default class PackPage extends View {
 										href: `${hrefOf(ROUTES.packs)}${writePackQuery({ query: owner })}`,
 										textContent: `Every pack of ${owner}'s`,
 									}),
-									...(pack.version ? [new Meta({ textContent: `version ${pack.version}` })] : []),
+									...packByline(pack),
 								],
 							}),
 							...about(pack.description ? { text: pack.description } : undefined),
@@ -334,6 +401,7 @@ export default class PackPage extends View {
 				],
 			}),
 			coverage(pack.mods),
+			...packExtras(pack),
 			tabs,
 			...Object.values(panels),
 		]);
