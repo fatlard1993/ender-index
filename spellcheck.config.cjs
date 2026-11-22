@@ -108,6 +108,8 @@ module.exports = {
 		'sponsors',
 		'subarray',
 		'submodules',
+		'takedown',
+		'takedowns',
 		'thirdparty',
 		'tidelift',
 		'toml',

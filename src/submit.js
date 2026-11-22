@@ -17,6 +17,7 @@ import {
 } from './crawl';
 import { lineOf } from './modrinth';
 import { OPT_OUT } from './optOut';
+import { readWithheld, withheldReason } from './withheld';
 import { crawlPack } from './packs';
 
 const SITE = 'https://fatlard1993.github.io/ender-index';
@@ -145,7 +146,13 @@ const optIn = async line => {
  */
 export const submitMod = async (
 	body,
-	{ crawlOne = line => crawl({ only: [line] }), listed = listingOf, keep = optIn, optedOut = optingOut } = {},
+	{
+		crawlOne = line => crawl({ only: [line] }),
+		listed = listingOf,
+		keep = optIn,
+		optedOut = optingOut,
+		withheld = () => readWithheld(DATA),
+	} = {},
 ) => {
 	const answer = answerOf(body, 'Mod');
 	const line = answer && modLineOf(answer);
@@ -156,6 +163,10 @@ export const submitMod = async (
 			say: `${answer ? `\`${answer}\` is not` : 'The form names no'} repository the index can read: give its link on GitHub, Codeberg or GitLab. Edit the issue and it is read again.`,
 		};
 	}
+
+	const withheldFor = withheldReason(await withheld(), renamedLine(await readRenames(), line));
+
+	if (withheldFor !== undefined) return { listed: false, say: `${line} is withheld from the index: ${withheldFor}` };
 
 	if ((await crawlOne(line)) !== 0)
 		return { listed: false, failed: true, say: `${line} could not be crawled just now.` };

@@ -7,6 +7,7 @@ import { DATA, parseLine, readJson, readRepos, recordPath, writeJson } from './c
 import { RateLimited } from './fetch.js';
 import * as github from './github.js';
 import { optsOut } from './optOut.js';
+import { readWithheld, withheldReason } from './withheld.js';
 
 /** The repositories looked at for a source to build, each by the day it was and what was found. */
 export const SOURCE_CHECKS = 'source-checks.json';
@@ -247,9 +248,11 @@ export const writeChecks = async checks =>
 	);
 
 if (import.meta.main) {
+	const withheld = await readWithheld(DATA);
+
 	await writeChecks(
 		await checkSources({
-			lines: await readRepos(),
+			lines: (await readRepos()).filter(line => withheldReason(withheld, line) === undefined),
 			checks: await readJson(join(DATA, SOURCE_CHECKS), {}),
 			deadline: Date.now() + MINUTES * 60 * 1000,
 		}),

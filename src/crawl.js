@@ -13,6 +13,7 @@ import * as github from './github';
 import * as gitlab from './gitlab';
 import { ASSETS, detailsQuery, repoOf } from './graphqlRepos';
 import { OPTED_OUT, optedOutOn, optsOut } from './optOut';
+import { readWithheld, withheldReason } from './withheld';
 import { UNSOURCED_KEPT, reachingUnsourced, releaseOf, unsourcedClasses } from './sourced';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
 import { GIST_LINE, buildPacks, crawlPack, packDemand, packPage } from './packs';
@@ -1015,7 +1016,11 @@ export const orphanedPacks = (files, kept) => {
  * of them are kept.
  */
 const crawlPacks = async ({ deadline, scratch, parallel }) => {
-	const { found, fromModrinth } = await readPackLines();
+	const withheld = await readWithheld(DATA);
+	const kept = line => withheldReason(withheld, line) === undefined;
+	const { found: allFound, fromModrinth: allFromModrinth } = await readPackLines();
+	const found = allFound.filter(kept);
+	const fromModrinth = allFromModrinth.filter(kept);
 	const ages = await agesOf([...found, ...fromModrinth]);
 	const lines = crawlOrder(found, fromModrinth, line => ages.get(line));
 
@@ -1080,9 +1085,30 @@ export const markKnownBad = (record, knownBad) => {
 	return changed;
 };
 
+/**
+ * Remove the records of withheld repositories, mods and packs alike, so a takedown leaves nothing to list. Answers the
+ * records and files that remain.
+ */
+export const dropWithheld = async (files, records, withheld) => {
+	const kept = { files: [], records: [] };
+
+	for (const [at, record] of records.entries()) {
+		if (withheldReason(withheld, lineFor({ host: record.host ?? 'github', name: record.repo })) === undefined) {
+			kept.files.push(files[at]);
+			kept.records.push(record);
+		} else await rm(files[at], { force: true });
+	}
+
+	return kept;
+};
+
 export const writeLists = async () => {
-	const files = await recordFiles();
-	const records = await Promise.all(files.map(file => Bun.file(file).json()));
+	const withheld = await readWithheld(DATA);
+	const { files, records } = await dropWithheld(
+		await recordFiles(),
+		await Promise.all((await recordFiles()).map(file => Bun.file(file).json())),
+		withheld,
+	);
 	const knownBad = new Map(
 		(await readJson(join(DATA, 'known-bad.json'), [])).map(entry => [entry.sha256, entry.reason]),
 	);
@@ -1096,7 +1122,12 @@ export const writeLists = async () => {
 		await readJson(join(DATA, 'sources.json'), {}),
 		await readJson(join(DATA, DONATIONS), {}),
 	);
-	const packs = await readPacks();
+	const packFileList = await packFiles();
+	const { records: packs } = await dropWithheld(
+		packFileList,
+		await Promise.all(packFileList.map(file => Bun.file(file).json())),
+		withheld,
+	);
 
 	await writeJsonLines(join(DATA, 'search.json'), search);
 	const built = buildPacks(packs, search, records, await readJson(join(DATA, 'modrinth-ids.json'), {}));
@@ -1129,8 +1160,11 @@ export const crawl = async ({ only, rescan: rescanMode = process.env.CRAWL_RESCA
 			});
 	const noJars = only ? {} : await readNoJars();
 	const optedOut = new Map(Object.entries(await readOptedOut()));
+	const withheld = await readWithheld(DATA);
 	const notResting = line =>
-		(!restingOn(noJars[line]) || changed.has(line)) && (only !== undefined || !optedOutOn(optedOut.get(line)));
+		(!restingOn(noJars[line]) || changed.has(line)) &&
+		(only !== undefined || !optedOutOn(optedOut.get(line))) &&
+		withheldReason(withheld, line) === undefined;
 	const repos = crawlOrder(
 		found.filter(notResting),
 		fromModrinth.filter(notResting),
