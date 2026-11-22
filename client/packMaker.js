@@ -1,4 +1,5 @@
 import { Button, Dialog, Input, Label, Link, Select, copyToClipboard } from '@vanilla-bean/components';
+import { assetEntry } from 'ender-launcher/enderPack';
 import { specFor } from 'ender-launcher/spec';
 
 import { listingButton } from './controls';
@@ -7,12 +8,58 @@ import { lastSaid, local } from './local';
 import { LOADERS, readQuery } from './search';
 import { Command, Meta, Row, Stack } from './ui';
 
-export const packOf = ({ name, minecraft, loader, items }) => ({
+const words = text => (text ?? '').split(/[\s,]+/).filter(Boolean);
+
+/** The servers typed one to a line, a name then its address, as a pack lists them; a line with no address is skipped. */
+export const serversTyped = text =>
+	(text ?? '')
+		.split('\n')
+		.map(line => line.trim().split(/\s+/))
+		.filter(parts => parts.length >= 2 && /^[\w.-]+(:\d{1,5})?$/.test(parts.at(-1)))
+		.map(parts => ({ name: parts.slice(0, -1).join(' '), address: parts.at(-1) }));
+
+/** The resource or shader packs typed, each a spec an ender pack takes: mr:, cf: or an https link. */
+export const packsTyped = text => words(text).filter(spec => assetEntry(spec) !== undefined);
+
+/**
+ * A pack of the mods chosen, and what the maker adds to it: who made it and its version, a pinned loader, the memory it
+ * asks for, mods offered as optional, resource and shader packs, and servers. Only what is given is written.
+ */
+export const packOf = ({
 	name,
 	minecraft,
 	loader,
-	mods: items.map(item => specFor(item.host ?? 'github', item.repo)),
-});
+	items,
+	version,
+	author,
+	loaderVersion,
+	memory,
+	optional = new Set(),
+	resourcepacks,
+	shaderpacks,
+	servers,
+}) => {
+	const text = value => (value?.trim() ? value.trim() : undefined);
+	const assets = { resourcepacks: packsTyped(resourcepacks), shaderpacks: packsTyped(shaderpacks) };
+	const listed = serversTyped(servers);
+
+	return {
+		name,
+		...(text(version) ? { version: text(version) } : {}),
+		...(text(author) ? { author: text(author) } : {}),
+		minecraft,
+		loader,
+		...(text(loaderVersion) && loader !== 'vanilla' ? { loaderVersion: text(loaderVersion) } : {}),
+		...(memory ? { memory } : {}),
+		mods: items.map(item => {
+			const spec = specFor(item.host ?? 'github', item.repo);
+
+			return optional.has(spec) ? { spec, optional: true } : spec;
+		}),
+		...Object.fromEntries(Object.entries(assets).filter(([, specs]) => specs.length > 0)),
+		...(listed.length > 0 ? { servers: listed } : {}),
+	};
+};
 
 /** Held to ender's rule for instance names. */
 export const instanceNameOf = name =>
@@ -89,7 +136,7 @@ const publish = async (pack, result) => {
 
 export const packDialog = items => {
 	const asked = readQuery(location.search);
-	const choice = { name: 'My pack', minecraft: asked.minecraft, loader: asked.loader ?? 'fabric' };
+	const choice = { name: 'My pack', minecraft: asked.minecraft, loader: asked.loader ?? 'fabric', optional: new Set() };
 	const preview = new Command({
 		multiline: true,
 		language: 'json',
@@ -125,6 +172,72 @@ export const packDialog = items => {
 		},
 	});
 	const local_ = new Stack();
+	const typed = (key, label, placeholder, tag = 'input') =>
+		new Label(
+			{ label },
+			new Input({
+				tag,
+				placeholder,
+				onInput: ({ target: { value } }) => {
+					choice[key] = value;
+					draw();
+				},
+			}),
+		);
+	const memory = new Select({
+		options: [
+			{ label: 'Not asked', value: '' },
+			...[4, 6, 8, 12].map(gigabytes => ({ label: `${gigabytes} GB`, value: String(gigabytes * 1024) })),
+		],
+		value: '',
+		onChange: ({ target: { value } }) => {
+			choice.memory = value ? Number(value) : undefined;
+			draw();
+		},
+	});
+	const optionalChoices = items.map(item => {
+		const spec = specFor(item.host ?? 'github', item.repo);
+
+		return new Label(
+			{ label: `${item.title ?? item.repo} is optional`, variant: 'inline-after' },
+			new Input({
+				type: 'checkbox',
+				value: false,
+				onChange: ({ target: { checked } }) => {
+					if (checked) choice.optional.add(spec);
+					else choice.optional.delete(spec);
+
+					draw();
+				},
+			}),
+		);
+	});
+	const more = new Stack({
+		style: { display: 'none', gap: 'var(--space-sm, 8px)' },
+		append: [
+			new Row({
+				append: [
+					typed('version', 'Version', '1.0'),
+					typed('author', 'Author', 'who made it'),
+					typed('loaderVersion', 'Loader version', 'the newest, unless pinned'),
+					new Label({ label: 'Memory' }, memory),
+				],
+			}),
+			typed('resourcepacks', 'Resource packs', 'mr:faithful-32x, cf:…, or https links'),
+			typed('shaderpacks', 'Shader packs', 'mr:complementary-reimagined'),
+			typed('servers', 'Servers, one to a line', 'Our server play.example.com:25565', 'textarea'),
+			new Meta({ tag: 'p', textContent: 'Optional mods are off until a player turns them on.' }),
+			...optionalChoices,
+		],
+	});
+	const moreToggle = new Button({
+		variant: 'flat',
+		icon: 'chevron-down',
+		textContent: 'More: version, loader, memory, packs, servers, optional mods',
+		onPointerPress: () => {
+			more.elem.style.display = more.elem.style.display === 'none' ? '' : 'none';
+		},
+	});
 
 	loadVersions()
 		.then(versions => {
@@ -142,7 +255,12 @@ export const packDialog = items => {
 	local.ready().then(served => {
 		if (!served) return;
 
-		local_.content(
+		local_.content([
+			new Meta({
+				tag: 'p',
+				textContent:
+					'An instance made here takes the mods; download or publish the pack, then import it, to carry the rest.',
+			}),
 			new Button({
 				icon: 'plus',
 				textContent: 'Make an instance of it',
@@ -171,7 +289,7 @@ export const packDialog = items => {
 					}
 				},
 			}),
-		);
+		]);
 	});
 
 	draw();
@@ -192,6 +310,8 @@ export const packDialog = items => {
 					tag: 'p',
 					textContent: 'Only the mods chosen go in: ender resolves what they need where the pack is installed.',
 				}),
+				moreToggle,
+				more,
 				preview,
 				result,
 				local_,

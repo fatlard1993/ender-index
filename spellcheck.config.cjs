@@ -93,6 +93,7 @@ module.exports = {
 		'ratelimit',
 		'readmes',
 		'referrerpolicy',
+		'reimagined',
 		'renderer',
 		'repack',
 		'repackaged',

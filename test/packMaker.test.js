@@ -133,3 +133,62 @@ describe('what the instances page says of a job', () => {
 		);
 	});
 });
+
+test('writes what the maker adds only where given: byline, pinned loader, memory, optional mods, packs and servers', async () => {
+	const { packOf, serversTyped, packsTyped } = await import('../client/packMaker');
+	const items = [{ repo: 'a/b' }, { repo: 'c/d', host: 'codeberg' }];
+
+	expect(packOf({ name: 'P', minecraft: '26.3', loader: 'fabric', items })).toEqual({
+		name: 'P',
+		minecraft: '26.3',
+		loader: 'fabric',
+		mods: ['gh:a/b', 'cb:c/d'],
+	});
+	expect(
+		packOf({
+			name: 'P',
+			minecraft: '26.3',
+			loader: 'fabric',
+			items,
+			version: ' 2 ',
+			author: 'Ada',
+			loaderVersion: '0.20.1',
+			memory: 6144,
+			optional: new Set(['cb:c/d']),
+			resourcepacks: 'mr:faithful-32x, gh:not/a-pack https://example.com/r.zip',
+			shaderpacks: '',
+			servers: 'Our place play.example.com:25570\nno address here!\n',
+		}),
+	).toEqual({
+		name: 'P',
+		version: '2',
+		author: 'Ada',
+		minecraft: '26.3',
+		loader: 'fabric',
+		loaderVersion: '0.20.1',
+		memory: 6144,
+		mods: ['gh:a/b', { spec: 'cb:c/d', optional: true }],
+		resourcepacks: ['mr:faithful-32x', 'https://example.com/r.zip'],
+		servers: [{ name: 'Our place', address: 'play.example.com:25570' }],
+	});
+	expect(packOf({ name: 'V', minecraft: '26.3', loader: 'vanilla', items: [], loaderVersion: '1' })).not.toHaveProperty(
+		'loaderVersion',
+	);
+	const { parseEnderPack } = await import('ender-launcher/enderPack');
+	const full = packOf({
+		name: 'P',
+		minecraft: '26.3',
+		loader: 'fabric',
+		items,
+		loaderVersion: '0.20.1',
+		memory: 4096,
+		optional: new Set(['gh:a/b']),
+		resourcepacks: 'mr:faithful-32x',
+		shaderpacks: 'https://example.com/s.zip',
+		servers: 'Ours play.example.com',
+	});
+
+	expect(() => parseEnderPack(JSON.stringify(full))).not.toThrow();
+	expect(serversTyped('justone')).toEqual([]);
+	expect(packsTyped('mr:.. mr:ok')).toEqual(['mr:ok']);
+});
