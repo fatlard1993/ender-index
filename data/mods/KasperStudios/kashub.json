@@ -6,7 +6,7 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2025-12-14T11:27:41Z",
-	"pushed": "2026-10-28T20:40:10Z",
+	"pushed": "2026-11-22T12:07:18Z",
 	"releases": [
 		{
 			"tag": "v1.0.0-FSR",
@@ -14,13 +14,13 @@
 			"prerelease": true,
 			"assets": [
 				{
-					"id": 685249070,
+					"id": 778941242,
 					"name": "kashub-1.0.0-FSR.jar",
 					"url": "https://github.com/KasperStudios/kashub/releases/download/v1.0.0-FSR/kashub-1.0.0-FSR.jar",
-					"size": 11356279,
-					"downloads": 1,
+					"size": 11394885,
+					"downloads": 0,
 					"inspection": 2,
-					"sha256": "83389524c7d01c63b5e1b951a2a890a84ee38134162d20dd745922723c65b8fe",
+					"sha256": "709606bffb5d90afeee6a6b7b7f20bb1369115f6d2f28ef2d9a2da979f4394e5",
 					"mods": [
 						{
 							"loader": "fabric",
@@ -89,10 +89,11 @@
 						"shaders": false
 					},
 					"scan": {
-						"classes": 1820,
+						"version": 3,
+						"classes": 1831,
 						"jars": [
 							"META-INF/jars/DiscordIPC-0.9.1.jar",
-							"META-INF/jars/khgui-fabric-1.0.10.jar",
+							"META-INF/jars/khgui-fabric-1.0.11.jar",
 							"META-INF/jars/khwrapper-common-1.0.17.jar",
 							"META-INF/jars/khwrapper-fabric-1.0.17.jar",
 							"META-INF/jars/kotlin-stdlib-1.9.21.jar",
@@ -102,14 +103,14 @@
 						"capabilities": {
 							"exec": {
 								"META-INF/jars/DiscordIPC-0.9.1.jar!com/jagrosh/discordipc/entities/pipe/UnixPipe.class": [
-									"java/lang/ProcessBuilder.<init>",
-									"java/lang/ProcessBuilder.environment",
-									"java/lang/ProcessBuilder.start"
+									"java/lang/ProcessBuilder.<init> in registerApp",
+									"java/lang/ProcessBuilder.environment in registerApp",
+									"java/lang/ProcessBuilder.start in registerApp"
 								]
 							},
 							"network": {
 								"META-INF/jars/kotlin-stdlib-1.9.21.jar!kotlin/io/TextStreamsKt.class": [
-									"java/net/URL.openStream"
+									"java/net/URL.openStream in readBytes"
 								],
 								"META-INF/jars/okhttp-4.12.0.jar!okhttp3/internal/connection/ExchangeFinder.class": [
 									"java/net/Socket"
@@ -121,51 +122,65 @@
 									"java/net/Socket"
 								],
 								"META-INF/jars/okhttp-4.12.0.jar!okhttp3/internal/connection/RealConnection.class": [
-									"java/net/Socket.<init>",
-									"java/net/Socket.setSoTimeout",
-									"java/net/Socket.isClosed",
-									"java/net/Socket.isInputShutdown",
-									"java/net/Socket.isOutputShutdown"
+									"java/net/Socket.<init> in connectSocket",
+									"java/net/Socket.setSoTimeout in connectSocket, startHttp2, newCodec$okhttp, newWebSocketStreams$okhttp",
+									"java/net/Socket.isClosed in isHealthy",
+									"java/net/Socket.isInputShutdown in isHealthy",
+									"java/net/Socket.isOutputShutdown in isHealthy"
 								],
 								"META-INF/jars/okhttp-4.12.0.jar!okhttp3/internal/platform/AndroidPlatform.class": [
-									"java/net/Socket.connect"
+									"java/net/Socket.connect in connectSocket"
 								],
 								"META-INF/jars/okhttp-4.12.0.jar!okhttp3/internal/platform/Platform.class": [
-									"java/net/Socket.connect"
+									"java/net/Socket.connect in connectSocket"
 								],
 								"META-INF/jars/okhttp-4.12.0.jar!okhttp3/internal/http2/Http2Connection$Builder.class": [
 									"java/net/Socket"
 								],
 								"META-INF/jars/okhttp-4.12.0.jar!okhttp3/internal/http2/Http2Connection.class": [
-									"java/net/Socket.close"
+									"java/net/Socket.close in close$okhttp"
 								],
 								"META-INF/jars/okhttp-4.12.0.jar!okhttp3/internal/Util.class": [
-									"java/net/Socket.getRemoteSocketAddress",
-									"java/net/Socket.getSoTimeout",
-									"java/net/Socket.setSoTimeout",
-									"java/net/Socket.close"
+									"java/net/Socket.getRemoteSocketAddress in peerName",
+									"java/net/Socket.getSoTimeout in isHealthy",
+									"java/net/Socket.setSoTimeout in isHealthy",
+									"java/net/Socket.close in closeQuietly",
+									"java/net/ServerSocket.close in closeQuietly"
 								],
 								"META-INF/jars/okio-jvm-3.6.0.jar!okio/Okio__JvmOkioKt.class": [
-									"java/net/Socket.getOutputStream",
-									"java/net/Socket.getInputStream"
+									"java/net/Socket.getOutputStream in sink",
+									"java/net/Socket.getInputStream in source"
 								],
 								"META-INF/jars/okio-jvm-3.6.0.jar!okio/SocketAsyncTimeout.class": [
-									"java/net/Socket.close"
+									"java/net/Socket.close in timedOut"
+								],
+								"kasperstudios/kashub/api/server/KashubAPIServer.class": [
+									"com/sun/net/httpserver/HttpServer.create in start",
+									"com/sun/net/httpserver/HttpServer.setExecutor in start",
+									"com/sun/net/httpserver/HttpServer.start in start",
+									"com/sun/net/httpserver/HttpServer.stop in stop",
+									"com/sun/net/httpserver/HttpServer.createContext in registerEndpoints"
 								],
 								"kasperstudios/kashub/api/server/KashubWebSocketServer$WebSocketClient.class": [
-									"java/net/Socket.close"
+									"java/net/Socket.close in close"
 								],
 								"kasperstudios/kashub/api/server/KashubWebSocketServer.class": [
-									"java/net/Socket.getInputStream",
-									"java/net/Socket.getOutputStream",
-									"java/net/Socket.close",
-									"java/net/Socket.isClosed"
+									"java/net/ServerSocket.close in stop",
+									"java/net/Socket.getInputStream in handleConnection",
+									"java/net/Socket.getOutputStream in handleConnection",
+									"java/net/Socket.close in handleConnection",
+									"java/net/Socket.isClosed in handleConnection",
+									"java/net/ServerSocket.<init> in lambda$start$1",
+									"java/net/ServerSocket.accept in lambda$start$1"
 								],
 								"kasperstudios/kashub/util/ResourceManager.class": [
-									"java/net/URL.openStream"
+									"java/net/URL.openStream in getResource"
 								]
 							}
 						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
 						"hosts": {
 							"cdn.discordapp.com": [
 								"META-INF/jars/DiscordIPC-0.9.1.jar!com/jagrosh/discordipc/entities/User.class"
@@ -181,10 +196,341 @@
 							]
 						},
 						"unreadable": []
+					},
+					"replaced": [
+						{
+							"id": 685249070,
+							"sha256": "83389524c7d01c63b5e1b951a2a890a84ee38134162d20dd745922723c65b8fe",
+							"until": "2026-11-22T14:12:28.677Z"
+						}
+					]
+				},
+				{
+					"id": 778941223,
+					"name": "kashub-neoforge-1.0.0-FSR.jar",
+					"url": "https://github.com/KasperStudios/kashub/releases/download/v1.0.0-FSR/kashub-neoforge-1.0.0-FSR.jar",
+					"size": 12828270,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "3cb1fb12f85a47f6d0bae3705cee356dd0e425b388a18b50d01d73e3dc47f3d5",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "kashub",
+							"version": "1.0.0-FSR",
+							"name": "Kashub",
+							"description": "Next-gen scripting mod with modern UI. Automate gameplay with KHScript - featuring Vision API, Script Marketplace, runtime task manager, and a stunning code editor with 15+ themes.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"architectury"
+							],
+							"suggests": [
+								"curios"
+							]
+						},
+						{
+							"loader": "neoforge",
+							"id": "khgui",
+							"version": "1.0.6",
+							"name": "KHGui (Embedded)",
+							"description": "Embedded GUI framework for Kashub.",
+							"environment": "*",
+							"depends": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Neuro-Implant (Tier 1)",
+								"Neuro-Implant (Tier 2)"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 2073,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"kasperstudios/kashub/api/server/KashubWebSocketServer$WebSocketClient.class": [
+									"java/net/Socket.close in close"
+								],
+								"kasperstudios/kashub/api/server/KashubWebSocketServer.class": [
+									"java/net/ServerSocket.close in stop",
+									"java/net/Socket.getInputStream in handleConnection",
+									"java/net/Socket.getOutputStream in handleConnection",
+									"java/net/Socket.close in handleConnection",
+									"java/net/Socket.isClosed in handleConnection",
+									"java/net/ServerSocket.<init> in lambda$start$1",
+									"java/net/ServerSocket.accept in lambda$start$1"
+								],
+								"kasperstudios/kashub/api/server/KashubAPIServer.class": [
+									"com/sun/net/httpserver/HttpServer.create in start",
+									"com/sun/net/httpserver/HttpServer.setExecutor in start",
+									"com/sun/net/httpserver/HttpServer.start in start",
+									"com/sun/net/httpserver/HttpServer.stop in stop",
+									"com/sun/net/httpserver/HttpServer.createContext in registerEndpoints"
+								],
+								"kasperstudios/kashub/util/ResourceManager.class": [
+									"java/net/URL.openStream in getResource"
+								],
+								"kasperstudios/kashub/shaded/okhttp3/internal/connection/ExchangeFinder.class": [
+									"java/net/Socket"
+								],
+								"kasperstudios/kashub/shaded/okhttp3/internal/connection/RealConnectionPool.class": [
+									"java/net/Socket"
+								],
+								"kasperstudios/kashub/shaded/okhttp3/internal/connection/RealCall.class": [
+									"java/net/Socket"
+								],
+								"kasperstudios/kashub/shaded/okhttp3/internal/connection/RealConnection.class": [
+									"java/net/Socket.<init> in connectSocket",
+									"java/net/Socket.setSoTimeout in connectSocket, startHttp2, newCodec$okhttp, newWebSocketStreams$okhttp",
+									"java/net/Socket.isClosed in isHealthy",
+									"java/net/Socket.isInputShutdown in isHealthy",
+									"java/net/Socket.isOutputShutdown in isHealthy"
+								],
+								"kasperstudios/kashub/shaded/okhttp3/internal/platform/AndroidPlatform.class": [
+									"java/net/Socket.connect in connectSocket"
+								],
+								"kasperstudios/kashub/shaded/okhttp3/internal/platform/Platform.class": [
+									"java/net/Socket.connect in connectSocket"
+								],
+								"kasperstudios/kashub/shaded/okhttp3/internal/http2/Http2Connection$Builder.class": [
+									"java/net/Socket"
+								],
+								"kasperstudios/kashub/shaded/okhttp3/internal/http2/Http2Connection.class": [
+									"java/net/Socket.close in close$okhttp"
+								],
+								"kasperstudios/kashub/shaded/okhttp3/internal/Util.class": [
+									"java/net/Socket.getRemoteSocketAddress in peerName",
+									"java/net/Socket.getSoTimeout in isHealthy",
+									"java/net/Socket.setSoTimeout in isHealthy",
+									"java/net/Socket.close in closeQuietly",
+									"java/net/ServerSocket.close in closeQuietly"
+								],
+								"kasperstudios/kashub/shaded/okio/Okio__JvmOkioKt.class": [
+									"java/net/Socket.getOutputStream in sink",
+									"java/net/Socket.getInputStream in source"
+								],
+								"kasperstudios/kashub/shaded/okio/SocketAsyncTimeout.class": [
+									"java/net/Socket.close in timedOut"
+								],
+								"kasperstudios/kashub/shaded/kotlin/io/TextStreamsKt.class": [
+									"java/net/URL.openStream in readBytes"
+								],
+								"org/newsclub/net/unix/AFDatagramChannel.class": [
+									"java/nio/channels/DatagramChannel.<init> in <init>"
+								],
+								"org/newsclub/net/unix/AFServerSocket.class": [
+									"java/net/ServerSocket.<init> in <init>",
+									"java/net/ServerSocket.isClosed in isClosed",
+									"java/net/ServerSocket.close in close"
+								],
+								"org/newsclub/net/unix/AFServerSocketChannel.class": [
+									"java/nio/channels/ServerSocketChannel.<init> in <init>"
+								],
+								"org/newsclub/net/unix/AFSocket.class": [
+									"java/net/Socket.<init> in <init>",
+									"java/net/Socket.isBound in isBound",
+									"java/net/Socket.isConnected in isConnected",
+									"java/net/Socket.connect in internalDummyConnect",
+									"java/net/Socket.bind in internalDummyBind",
+									"java/net/Socket.isClosed in isClosed",
+									"java/net/Socket.close in close"
+								],
+								"org/newsclub/net/unix/AFSocketChannel.class": [
+									"java/nio/channels/SocketChannel.<init> in <init>"
+								],
+								"org/newsclub/net/unix/AFSocketFactory$FixedAddressSocketFactory$1.class": [
+									"java/net/Socket.<init> in <init>",
+									"java/net/Socket.connect in connect"
+								],
+								"org/newsclub/net/unix/AFSocketFactory$FixedAddressSocketFactory.class": [
+									"java/net/Socket.connect in connectTo"
+								],
+								"org/newsclub/net/unix/AFSocketFactory.class": [
+									"java/net/Socket.<init> in connectTo",
+									"java/net/Socket.connect in connectTo"
+								],
+								"org/newsclub/net/unix/AFUNIXSocket.class": [
+									"java/nio/channels/SocketChannel.read in lambda$miniSelftest$0",
+									"java/nio/channels/SocketChannel.write in lambda$miniSelftest$0",
+									"java/nio/channels/SocketChannel.close in lambda$miniSelftest$0"
+								],
+								"org/newsclub/net/unix/AFUNIXSocketCredentials.class": [
+									"java/net/Socket"
+								],
+								"org/newsclub/net/unix/DatagramSocketShim.class": [
+									"java/net/DatagramSocket.<init> in <init>"
+								],
+								"org/newsclub/net/unix/FileDescriptorCast.class": [
+									"java/net/Socket in registerGenericSocketSupport",
+									"java/net/DatagramSocket in registerGenericSocketSupport"
+								],
+								"org/newsclub/net/unix/NativeLibraryLoader$ClasspathLibraryCandidate.class": [
+									"java/net/URL.openStream in load"
+								],
+								"org/newsclub/net/unix/NativeLibraryLoader.class": [
+									"java/net/URL.openStream in validateResourceURL"
+								]
+							},
+							"exec": {
+								"com/jagrosh/discordipc/entities/pipe/UnixPipe.class": [
+									"java/lang/ProcessBuilder.<init> in registerApp",
+									"java/lang/ProcessBuilder.environment in registerApp",
+									"java/lang/ProcessBuilder.start in registerApp"
+								],
+								"org/newsclub/net/unix/FileDescriptorCast$2$8.class": [
+									"java/lang/ProcessBuilder"
+								],
+								"org/newsclub/net/unix/FileDescriptorCast$2.class": [
+									"java/lang/ProcessBuilder"
+								],
+								"org/newsclub/net/unix/NativeUnixSocket.class": [
+									"java/lang/ProcessBuilder"
+								]
+							},
+							"native": {
+								"org/newsclub/net/unix/NativeLibraryLoader$ClasspathLibraryCandidate.class": [
+									"java/lang/System.load in load"
+								],
+								"org/newsclub/net/unix/NativeLibraryLoader$StandardLibraryCandidate.class": [
+									"java/lang/System.loadLibrary in load"
+								],
+								"org/newsclub/net/unix/NativeLibraryLoader.class": [
+									"java/lang/System.load in loadLibraryOverride"
+								]
+							},
+							"classloading": {
+								"net/lenni0451/reflect/Agents.class": [
+									"java/lang/instrument/Instrumentation in getInstrumentation"
+								]
+							},
+							"unsafe": {
+								"net/lenni0451/reflect/Arrays.class": [
+									"sun/misc/Unsafe.putInt in setLength, fill",
+									"sun/misc/Unsafe.setMemory in fill",
+									"sun/misc/Unsafe.putShort in fill",
+									"sun/misc/Unsafe.putChar in fill",
+									"sun/misc/Unsafe.putLong in fill",
+									"sun/misc/Unsafe.putFloat in fill",
+									"sun/misc/Unsafe.putDouble in fill"
+								],
+								"net/lenni0451/reflect/Classes.class": [
+									"sun/misc/Unsafe in lambda$static$2"
+								],
+								"net/lenni0451/reflect/ClassLoaders.class": [
+									"sun/misc/Unsafe in lambda$static$4, lambda$static$3"
+								],
+								"net/lenni0451/reflect/Fields.class": [
+									"sun/misc/Unsafe.staticFieldOffset in offset",
+									"sun/misc/Unsafe.objectFieldOffset in offset",
+									"sun/misc/Unsafe.getBoolean in getBoolean",
+									"sun/misc/Unsafe.putBoolean in setBoolean",
+									"sun/misc/Unsafe.getByte in getByte",
+									"sun/misc/Unsafe.putByte in setByte",
+									"sun/misc/Unsafe.getShort in getShort",
+									"sun/misc/Unsafe.putShort in setShort",
+									"sun/misc/Unsafe.getChar in getChar",
+									"sun/misc/Unsafe.putChar in setChar",
+									"sun/misc/Unsafe.getInt in getInt",
+									"sun/misc/Unsafe.putInt in setInt",
+									"sun/misc/Unsafe.getLong in getLong",
+									"sun/misc/Unsafe.putLong in setLong",
+									"sun/misc/Unsafe.getFloat in getFloat",
+									"sun/misc/Unsafe.putFloat in setFloat",
+									"sun/misc/Unsafe.getDouble in getDouble",
+									"sun/misc/Unsafe.putDouble in setDouble",
+									"sun/misc/Unsafe.getObject in getObject",
+									"sun/misc/Unsafe.putObject in setObject"
+								],
+								"net/lenni0451/reflect/JavaBypass.class": [
+									"sun/misc/Unsafe.staticFieldOffset in getTrustedLookup",
+									"sun/misc/Unsafe.getObject in getTrustedLookup"
+								],
+								"net/lenni0451/reflect/Objects$BooleanHeaderClass.class": [
+									"sun/misc/Unsafe.objectFieldOffset in getHeaderSize"
+								],
+								"net/lenni0451/reflect/Objects$CompressedOopsClass.class": [
+									"sun/misc/Unsafe.objectFieldOffset in getOopSize"
+								],
+								"net/lenni0451/reflect/Objects.class": [
+									"sun/misc/Unsafe.getInt in toJVMAddress, getKlass",
+									"sun/misc/Unsafe.getLong in toJVMAddress, getKlass",
+									"sun/misc/Unsafe.putInt in fromJVMAddress, cast",
+									"sun/misc/Unsafe.putLong in fromJVMAddress, cast",
+									"sun/misc/Unsafe.copyMemory in copyMemory",
+									"sun/misc/Unsafe.allocateInstance in getKlass, allocate",
+									"sun/misc/Unsafe.arrayBaseOffset in <clinit>",
+									"sun/misc/Unsafe.arrayIndexScale in <clinit>",
+									"sun/misc/Unsafe.addressSize in <clinit>"
+								],
+								"net/lenni0451/reflect/JVMConstants.class": [
+									"\"jdk.internal.misc.Unsafe\" by name"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"marketplace.kashub.dev": [
+								"kasperstudios/kashub/marketplace/MarketplaceAPI.class"
+							],
+							"github.com": [
+								"kasperstudios/kashub/marketplace/MarketplaceConfig.class"
+							],
+							"cdn.discordapp.com": [
+								"com/jagrosh/discordipc/entities/User.class"
+							],
+							"discord.com": [
+								"com/jagrosh/discordipc/entities/User.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 778941221,
+					"name": "kashub-server-plugin-1.0.0-FSR.jar",
+					"url": "https://github.com/KasperStudios/kashub/releases/download/v1.0.0-FSR/kashub-server-plugin-1.0.0-FSR.jar",
+					"size": 67081,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "b338205f2d82645b098bdac96f93425c36452ad29a956230eb4508b72ff52d0c",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 35,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
 					}
 				}
 			],
-			"notes": "# 🚀 KasHub v1.0.0-FSR — First Stable Release\n\nAfter 9 months of active architecture refinement and testing, we are proud to introduce **KasHub v1.0.0-FSR (First Stable Release)**!\n\n### 🌟 Key Highlights & Major Additions\n- **🔀 Multi-Loader Core (Fabric & NeoForge):** Full parity powered by `KHWrapper` and `Architectury`.\n- **🖥️ ComputerCraft: Tweaked Deep Integration:**\n  - Automatic peripheral discovery & in-game deep scanner overlay.\n  - VFS (Virtual File System) cross-mounting: access in-game disk structures directly inside KHScript.\n- **💻 Khinux In-Game Terminal:**\n  - Complete POSIX-style shell environment within Minecraft.\n  - Interactive commands, script execution, file manipulation, and process monitoring.\n- **🧠 Neuro-Implant Progression (Tier 1 & Tier 2):**\n  - Native integration with **Curios** and **Trinkets** API slots.\n  - Survival access gating and perceptual upgrades.\n- **🛡️ Access Policy & Sandbox Hardening:**\n  - Role-based capabilities (Survival, Casual, Creative).\n  - Robust Fair-Play enforcement for multiplayer environments.\n- **🎨 Complete UI Overhaul:**\n  - Built-in modern code editor with VSCode-style themes and auto-completion.\n  - Integrated syntax definitions and snippet library.\n- **🤖 MCP Integration:**\n  - Model Context Protocol server bridge included for external agentic interaction.\n\n---\n### 📦 Downloads & Verification\nAll compiled jars are built using OpenJDK 21 and verified with GitHub Actions CI."
+			"notes": "## 🚀 KasHub v1.0.0-FSR — First Stable Release\n\nThe First Stable Release of Kashub brings a unified multi-loader engine (Fabric + NeoForge 1.21.1), full in-game script editing, live packet-hooked events, and professional IDE/MCP integration.\n\n### 🪟 Editor & UI (KHGui 1.0.11)\n- **Tab-bar geometry unified** — new `TabBarLayout` owns tab widths, label ellipsis, close glyph and close hitbox; rendering, clicking, scrolling and clamping all read the same rects. Fixes the close `x` drifting onto the filename once the strip overflowed.\n- **Overflow now scrolls** — the strip reserves real toolbar space, shrinks tabs to a 64px minimum, then scrolls horizontally (mouse wheel over the tab bar) with a slim accent scrollbar; tabs are scissored so they can never paint over the toolbar buttons.\n- **Close button works** — a 16px hitbox around the 12px glyph means clicking `x` closes instead of re-focusing the tab.\n- **Phantom dirty flag removed** — `getContent()` no longer fabricates `\"\\n\"` for empty files, so freshly opened files stop showing the `• ` marker and stop refusing to close.\n- **No more content bleeding** — tab switches/closes persist the buffer into the tab it belongs to (`lastTabIndex`) and funnel through one `syncFromContext()`, so reopening the editor no longer duplicates one script's text into every tab.\n- **In-Game Docs Generator** — dynamically generates documentation sections directly from registered game objects and methods, with per-method one-click `COPY` code snippet buttons.\n\n### ⚡ Scripting Engine & Core Runtime\n- **Operators & Syntax** — Added post-increment/decrement (`i++`, `i--`) and compound assignments (`+=`, `-=`, `*=`, `/=`, `%=`). Block headers without parentheses (e.g. `while i == 5 {`) are supported.\n- **Stack Overflow Guard** — Recursion depth is strictly bounded (200 calls), producing a clean script error instead of crashing the client VM.\n- **Task Control & Real Pause** — Task pausing now completely halts background loop execution instead of only updating state labels; stopped tasks cleanly unregister event handlers.\n- **VFS & Script Paths** — Tilde expansion (`~`) resolved cleanly to the user scripts directory; path traversal attacks (`..`) blocked.\n- **Pathfinding** — Armed stuck detection with automatic re-planning when no forward progress is made.\n\n### 📡 Event Subsystem\n- **Packet Hooks** — All gameplay events (`onPlayerJoin`, `onPlayerLeave`, `onRespawn`, `onDamage`, `onDeath`, `onHunger`, `onHeal`, `onTick`, `onJump`, `onSneak`, `onSprint`, `onItemUse`, `onInventoryChange`) wired to live network packets and game hooks.\n- **Lifecycle & Deduplication** — Handler leaks eliminated when re-running tasks; double-firing of `onPlayerJoin` fixed; finished tasks owning handlers stay alive without memory corruption.\n\n### 🛠️ Tooling, Debugger & Server Bridge\n- **VS Code DAP Debugger** — Breakpoints now pause execution in the interpreter loop before lines run; stepping and resume fully synchronized with the VS Code extension.\n- **Model Context Protocol (MCP)** — Fixed `list_scripts` recursive directory scanning, `get_logs` reading the active instance log, and `scan_target_peripheral` frame responses.\n- **Server Plugin (Paper/Spigot)** — Updated server bridge to support v2 syntax (`System.print`) and dynamic command metadata discovery.\n- **NeoForge Compatibility** — Full build parity with Fabric under NeoForge 1.21.1 and bundled `libs/` for offline/CI builds.\n\n### 🧹 Multi-Loader Core & Progression\n- **Multi-Loader Core** — Full Fabric + NeoForge baseline abstraction via `KHWrapper` and `Architectury`.\n- **Neuro-Implant & Progression** — Support for **Curios** and **Trinkets** neural implant slots with tiered access policies.\n- **ComputerCraft: Tweaked (CC:T)** — Automatic peripheral mounting to `/mnt/cc/<id>/` and in-game terminal integration.\n\n---\n\n### 📦 Artifacts in this release:\n- `kashub-1.0.0-FSR.jar` — Fabric 1.21.1 client/server mod\n\n..."
 		},
 		{
 			"tag": "v0.9.0-beta",
@@ -196,7 +542,7 @@
 					"name": "kashub-v0.9.0-beta.jar",
 					"url": "https://github.com/KasperStudios/kashub/releases/download/v0.9.0-beta/kashub-v0.9.0-beta.jar",
 					"size": 6662333,
-					"downloads": 9,
+					"downloads": 10,
 					"inspection": 2,
 					"sha256": "483cd7efd411a56b3833068ddcd9de5020cb0787b10e11c639e111291cc1f453",
 					"mods": [
@@ -739,24 +1085,24 @@
 	],
 	"readme": "README.md",
 	"funding": [],
-	"fundingChecked": "2026-11-14T21:24:06.359Z",
+	"fundingChecked": "2026-11-22T14:12:28.677Z",
 	"pictures": [
 		"implant.png",
 		"kashub-vscode/images/khicon.png"
 	],
-	"picturesChecked": "2026-11-14T21:24:06.359Z",
+	"picturesChecked": "2026-11-22T14:12:28.677Z",
 	"contributors": {
-		"commits": 44,
+		"commits": 71,
 		"more": 0,
 		"people": [
 			{
 				"login": "kasper-studios",
-				"commits": 44,
+				"commits": 71,
 				"name": "𝓚𝓪𝓼𝓹𝓮𝓻𝓮𝓷𝓸𝓚",
 				"funding": []
 			}
 		]
 	},
-	"contributorsChecked": "2026-11-14T21:24:06.359Z",
+	"contributorsChecked": "2026-11-22T14:12:28.677Z",
 	"history": 1
 }

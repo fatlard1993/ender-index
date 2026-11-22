@@ -5,8 +5,76 @@
 	"archived": false,
 	"license": "LGPL-3.0",
 	"created": "2026-03-09T15:29:06Z",
-	"pushed": "2026-07-17T18:16:44Z",
+	"pushed": "2026-11-22T02:11:34Z",
 	"releases": [
+		{
+			"tag": "v2.2.16",
+			"published": "2026-11-21T23:30:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 777210480,
+					"name": "autotorch-enhanced-mc26.3-2.2.16+build.8.jar",
+					"url": "https://github.com/VeritasShield/minecraft-autotorch/releases/download/v2.2.16/autotorch-enhanced-mc26.3-2.2.16%2Bbuild.8.jar",
+					"size": 1057003,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "77988bcb100834e09d5a9b85a7f1a469eb4d9e21424effc16f39a7692b6f7c00",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "autotorch",
+							"version": "2.2.16+build.8",
+							"name": "Auto Torch Enhanced",
+							"description": "Automatically places torches with advanced server-friendly features.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": [
+								"cloth-config"
+							],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "4925b8a550b63728acb0dc8b48fd0fd72e4e32f139513613d72b315c6a8fd95f.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 651,
+						"jars": [
+							"META-INF/jars/cloth-config-fabric-26.3.159.jar",
+							"META-INF/jars/cloth-config-fabric-26.3.159.jar!META-INF/jars/basic-math-0.6.1.jar"
+						],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"yaml.org": [
+								"META-INF/jars/cloth-config-fabric-26.3.159.jar!me/shedaniel/cloth/clothconfig/shadowed/org/yaml/snakeyaml/DumperOptions.class"
+							],
+							"shedaniel.gitbook.io": [
+								"META-INF/jars/cloth-config-fabric-26.3.159.jar!me/shedaniel/clothconfig2/ClothConfigDemo.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Auto Torch Enhanced v2.2.16 (Minecraft 26.3)\n\nMajor upgrade and stabilization release bringing **Auto Torch Enhanced** to **Minecraft 26.3** and **Java 25** (consolidated changelog covering all changes since `v2.2.13`).\n\n## Platform Upgrade & Broadened Compatibility (`Minecraft 26.3` / `Java 25`)\n* **Minecraft `26.3` & Java `25`:** Ported cleanly to Minecraft `26.3`'s native unobfuscated Mojang Mappings (`net.fabricmc.fabric-loom 1.19.4`, Gradle `9.8.2`) and updated Swing, Screen (`client.gui.screen()`), and `InputConstants.Type.KEYBOARD` bindings.\n* **Broadened Fabric API Support (`\"fabric-api\": \"*\"` on `minecraft ~26.3`):** Resolves the Fabric Loader `HARD_DEP_NO_CANDIDATE` launch error on earlier `26.3` builds such as `0.165.0+26.3`, supporting every `26.3` Fabric API release (`0.153.1+26.3` through `0.166.2+26.3+`).\n* **Verified Fabric Loader Floor (`\"fabricloader\": \">=0.18.4\"`):** Set to the verified earliest `26.3` Fabric Loader supporting `JAVA_25` SpongePowered Mixin compatibility (compiled against `0.20.1`), while strictly enforcing `\"minecraft\": \"~26.3\"` and `\"java\": \">=25\"`.\n* **Companion Mods & Clean Packaging:** Updated bundled **Cloth Config API (`26.3.159`)** via Jar-in-Jar (no external install required), widened optional **ModMenu** compatibility (`>=21.0.0`, compiled against `21.0.1`), and standardized release artifact names (`autotorch-enhanced-mc26.3-<version>`).\n\n## Anti-Cheat Packet Synchronization & Placement Hardening\n* **Single-Movement-Packet-Per-Tick Sync (`LocalPlayerMixin`):** Hooks `LocalPlayer.sendChanges()` (`HEAD`/`RETURN`) so look-angle spoofing piggybacks directly on Minecraft `26.3`'s single per-tick `sendPosition()` movement packet without emitting duplicate rotation packets or corrupting collision flags.\n* **Passenger & Camera Safety (`RotationSpoofController`):** Skips rotation spoofing while mounted (`player.isPassenger()`), respects manual camera movement on the next tick, and guarantees fail-safe camera restoration (`try/finally` + end-of-tick fallback).\n* **Face-Aware Raycast Verification (`RaycastUtils`):** Raycasts directly against the intended support block face with front half-plane validation and opposite-face verification to prevent through-wall or behind-the-back placements.\n\n## Inventory Safety, Zones, Keybinds & Code Quality\n* **Server-Authoritative Inventory Swap (`InventorySwapController`):** Guards `ContainerInput.SWAP` strictly to idle player inventory states (`containerMenu == inventoryMenu && client.gui.screen() == null`), classifies swap outcomes (`SYNCED`, `REJECTED_NO_OP`, `PARTIAL_DESYNC`) without overwriting server slots on desync, and verifies displaced stacks before reverting.\n* **Exact Weapon Identifier Token Matching (`TorchInventoryClassifier`):** Uses tokenized registry path matching paired with static Item Tags (`#c:swords`, `#c:axes`, `#c:bows`), fixing false-positive combat pauses on items such as `waxed_copper_block`, `waxed_*`, `*_pickaxe`, `bowl`, and `rainbow_*` while protecting genuine vanilla and modded weapons.\n* **Dimension-Scoped Anti-Torch Zones & Configurable Keybinds (`ZoneManager`, `KeybindManager`):** Stores exclusion zones per dimension (`<dimension>@x1,y1,z1|x2,y2,z2`) with legacy entry compatibility, adds dedicated configurable `Delete Current Zone` and `Clear All Zones` keybinds, caps particle rendering density (`SelectionRenderer`), removes `[AutoTorch Log]` debug spam introduced in `v2.2.13`, and backs core modules with `28 / 28` JUnit 5 tests (including `ModMetadataTest` SemVer predicate and Mixin target verification).\n\n---\n\n# Auto Torch Enhanced v2.2.15 (Minecraft 26.3)\n\nUpgrade release targeting **Minecraft 26.3** (Java 25, native unobfuscated Mojang Mappings), modularizing the placement engine and hardening Anti-Cheat packet cadence, inventory synchronization, and weapon classification.\n\n## Platform & Toolchain Upgrade\n\n..."
+		},
 		{
 			"tag": "v2.2.14",
 			"published": "2026-07-17T18:16:44Z",
@@ -17,7 +85,7 @@
 					"name": "autotorch-enhanced-mc26.2-mc26.2-2.2.14.jar",
 					"url": "https://github.com/VeritasShield/minecraft-autotorch/releases/download/v2.2.14/autotorch-enhanced-mc26.2-mc26.2-2.2.14.jar",
 					"size": 1032706,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "bbb62cac8d98fd48e2a6a93e07930b63df98e8b4cf4e293a060d2f3b678f7637",
 					"mods": [
@@ -78,7 +146,7 @@
 					"name": "autotorch-enhanced-mc26.2-mc26.2-2.2.13.jar",
 					"url": "https://github.com/VeritasShield/minecraft-autotorch/releases/download/v2.2.13/autotorch-enhanced-mc26.2-mc26.2-2.2.13.jar",
 					"size": 1033300,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "0cdb346c588df9ebce4ab96b5a8d716d3aae44d3c87f7e8fcc4bc8efe3f1320c",
 					"mods": [
@@ -139,7 +207,7 @@
 					"name": "autotorch-enhanced-mc26.2-mc26.2-2.2.12.jar",
 					"url": "https://github.com/VeritasShield/minecraft-autotorch/releases/download/v2.2.12/autotorch-enhanced-mc26.2-mc26.2-2.2.12.jar",
 					"size": 1032061,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "8be9371bbee4bd580d2a858b42b7c96d4bfcbdb925ccb204e33e3ef3843decae",
 					"mods": [
@@ -200,7 +268,7 @@
 					"name": "autotorch-enhanced-mc26.2-mc26.2-2.2.5.jar",
 					"url": "https://github.com/VeritasShield/minecraft-autotorch/releases/download/v2.2.5/autotorch-enhanced-mc26.2-mc26.2-2.2.5.jar",
 					"size": 1026685,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "1d66fc9faedb104ecd8a8091d35d5e85447e4eca20fe55a0d4c0964327692f0e",
 					"mods": [
@@ -322,7 +390,7 @@
 					"name": "autotorch-enhanced-mc1.21.11-2.1.7.jar",
 					"url": "https://github.com/VeritasShield/minecraft-autotorch/releases/download/v2.1.6/autotorch-enhanced-mc1.21.11-2.1.7.jar",
 					"size": 1038242,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "f1a397dddb0b2143e79dd916c540512e9bc18e1e144a5e770b84433a32177fd3",
 					"mods": [
@@ -377,16 +445,16 @@
 	"readme": "README.md",
 	"readmeSummary": "This is a heavily improved and modernized fork of the original AutoTorch by necessary129.",
 	"funding": [],
-	"fundingChecked": "2026-11-15T03:22:37.354Z",
+	"fundingChecked": "2026-11-22T14:12:28.677Z",
 	"pictures": [],
-	"picturesChecked": "2026-11-15T03:22:37.354Z",
+	"picturesChecked": "2026-11-22T14:12:28.677Z",
 	"contributors": {
-		"commits": 40,
+		"commits": 46,
 		"more": 0,
 		"people": [
 			{
 				"login": "VeritasShield",
-				"commits": 40,
+				"commits": 46,
 				"funding": [
 					{
 						"platform": "github",
@@ -396,6 +464,6 @@
 			}
 		]
 	},
-	"contributorsChecked": "2026-11-15T03:22:37.354Z",
+	"contributorsChecked": "2026-11-22T14:12:28.677Z",
 	"history": 1
 }
