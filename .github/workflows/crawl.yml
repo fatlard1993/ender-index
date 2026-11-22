@@ -49,6 +49,7 @@ jobs:
           restore-keys: crawl-
       # Held to its share of the job's time, which an overrun would take from the crawl and then from the next start
       - name: discover
+        id: discover
         if: inputs.discover || github.event.schedule == '17 4 * * *'
         run: bun run discover
         working-directory: ender-index
@@ -61,6 +62,7 @@ jobs:
       # Every repository with no record looked at for a jar over GraphQL, so the crawl spends no REST request on those
       # with none; discovery does this itself
       - name: triage
+        id: triage
         if: ${{ !(inputs.discover || github.event.schedule == '17 4 * * *') }}
         run: bun src/triage.js
         working-directory: ender-index
@@ -73,6 +75,7 @@ jobs:
           TRIAGE_MINUTES: 10
       # The repositories found with no release, looked at for a source that builds; each is due weekly or monthly
       - name: sources
+        id: sources
         run: bun run sources
         working-directory: ender-index
         continue-on-error: true
@@ -143,6 +146,14 @@ jobs:
         run: gh workflow run crawl.yml --repo ${{ github.repository }} --ref main -f discover=$([ "$(date -u +%H)" = 04 ] && echo true || echo false)
         env:
           GH_TOKEN: ${{ github.token }}
-      - name: report a failed crawl
-        if: steps.crawl.outcome == 'failure'
-        run: exit 1
+      # Last, after the commit and the next crawl's start: each step before runs on past a failure, so its failure is
+      # said here, and the run fails so it is seen
+      - name: report a failed step
+        if: ${{ !cancelled() }}
+        env:
+          OUTCOMES: discover=${{ steps.discover.outcome }} triage=${{ steps.triage.outcome }} sources=${{ steps.sources.outcome }} crawl=${{ steps.crawl.outcome }}
+        run: |
+          failed=$(printf '%s\n' $OUTCOMES | { grep '=failure$' || true; } | cut -d= -f1 | tr '\n' ' ')
+          [ -z "$failed" ] && exit 0
+          echo "::error::These steps failed, and the crawl went on past them: $failed"
+          exit 1
