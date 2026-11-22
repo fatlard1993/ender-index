@@ -112,13 +112,13 @@ jobs:
           git add data
           git diff --cached --quiet && exit 0
           git commit -m "Crawl $(date -u +%F)"
-          # Only data is committed, so nothing else the run left changed may stop the pull below
-          git checkout -- .
+          # Only data is committed: whatever else the run left changed is said here, and set aside by the pull's autostash
+          git status --porcelain
           # A pack listed while the crawl ran rebuilt the same lists: the crawl's records win, and the lists are built
           # again from both, only when the pull brought data. A push landing meanwhile is pulled in the same way
           for attempt in 1 2 3 4 5; do
             base=$(git rev-parse HEAD~1)
-            git pull --rebase -X theirs
+            git pull --rebase --autostash -X theirs
             if ! git diff --quiet "$base" HEAD~1 -- data; then
               bun run lists
               git add data

@@ -63,10 +63,10 @@ jobs:
           git add data
           git diff --cached --quiet && exit 0
           git commit -qm 'Interest: counted the open asks'
-          # Only data is committed, so nothing else the run left changed may stop the pull below
-          git checkout -- .
+          # Only data is committed: whatever else the run left changed is said here, and set aside by the autostash below
+          git status --porcelain
           for attempt in 1 2 3; do
-            git pull -q --rebase origin main && git push -q && exit 0
+            git pull -q --rebase --autostash origin main && git push -q && exit 0
             sleep 5
           done
           exit 1

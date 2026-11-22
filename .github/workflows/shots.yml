@@ -43,7 +43,7 @@ jobs:
           git add data/shots data/shots.json
           git diff --cached --quiet && exit 0
           git commit -m 'Shots'
-          # Only the shots are committed, so nothing else the run left changed may stop the pull
-          git checkout -- .
-          git pull --rebase
+          # Only the shots are committed: whatever else the run left changed is said here, and set aside by the autostash
+          git status --porcelain
+          git pull --rebase --autostash
           git push
