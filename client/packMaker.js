@@ -255,12 +255,7 @@ export const packDialog = items => {
 	local.ready().then(served => {
 		if (!served) return;
 
-		local_.content([
-			new Meta({
-				tag: 'p',
-				textContent:
-					'An instance made here takes the mods; download or publish the pack, then import it, to carry the rest.',
-			}),
+		local_.content(
 			new Button({
 				icon: 'plus',
 				textContent: 'Make an instance of it',
@@ -269,12 +264,7 @@ export const packDialog = items => {
 					const watching = new AbortController();
 
 					try {
-						const job = await local.create({
-							name: wanted,
-							minecraft: choice.minecraft,
-							loader: choice.loader,
-							specs: current().mods,
-						});
+						const job = await local.importMadePack(current(), wanted);
 
 						local.watchJobs(
 							() => result.content(new Meta({ textContent: lastSaid(job.lines) || `Making ${wanted}` })),
@@ -289,7 +279,7 @@ export const packDialog = items => {
 					}
 				},
 			}),
-		]);
+		);
 	});
 
 	draw();

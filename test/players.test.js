@@ -609,3 +609,23 @@ describe("what an instance's pack offers as optional", () => {
 		expect(toggled.at(-1)).toEqual(['modrinth:faithful', true]);
 	});
 });
+
+describe("a pack the index's pack maker made", () => {
+	test('is handed to ender web whole, with the name the instance takes', async () => {
+		const pack = {
+			name: 'House',
+			minecraft: '26.3',
+			loader: 'fabric',
+			mods: ['gh:a/b'],
+			servers: [{ name: 'O', address: 'o.example' }],
+		};
+
+		responses['/api/import'] = { job: { id: 'm1', title: 'Making house', state: 'running', lines: [] } };
+		sent.length = 0;
+
+		expect((await local.local.importMadePack(pack, 'house')).id).toBe('m1');
+		expect(
+			sent.map(([method, address, body]) => [method, address.replace(/^.*\/api\//, ''), JSON.parse(body)]),
+		).toEqual([['POST', 'import', { pack, name: 'house' }]]);
+	});
+});

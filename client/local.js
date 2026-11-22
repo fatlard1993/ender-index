@@ -397,6 +397,8 @@ export const local = {
 	/** Each of these starts a job and answers it; finished(job) waits for it to end. */
 	create: wanted => start('POST', 'instances', wanted),
 	importPack: source => start('POST', 'import', { source }),
+	/** Make an instance of a pack the page made, whole, under this name; answers the job that imports it. */
+	importMadePack: (pack, name) => start('POST', 'import', { pack, name }),
 	update: name => start('POST', `${named(name)}/update`),
 	launch: (name, { update = false } = {}) => start('POST', `${named(name)}/launch`, { update }),
 	remove: name => start('DELETE', named(name)),
