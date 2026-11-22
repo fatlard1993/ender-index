@@ -397,6 +397,22 @@ const capabilityList = (asset, explained) => {
 	];
 };
 
+/** A jar on the index's known-bad list, said where it cannot be missed, with the reason it is there. */
+const knownBadAlarm = asset =>
+	asset.knownBad
+		? [
+				new Alarm({
+					append: [
+						new Component({
+							tag: 'strong',
+							textContent: `This jar is on the index's known-bad list: ${asset.knownBad}. ender will not install it.`,
+						}),
+						new Link({ href: findingsPath('known-bad'), textContent: 'What this means, and what to do' }),
+					],
+				}),
+			]
+		: [];
+
 /** What no mod has a reason to do, said outright beside the jar rather than folded among the findings. */
 const secretsAlarm = (asset, explained = {}) => {
 	const { scan } = asset;
@@ -771,6 +787,7 @@ const downloadRow = ({ asset }, explained, entry) => {
 						}),
 					]
 				: []),
+			...knownBadAlarm(asset),
 			...findings(asset, explained, entry),
 			...scannerLine(asset, entry),
 		],
@@ -1412,6 +1429,19 @@ export default class ModPage extends View {
 					}),
 				],
 			}),
+			...(entry.latest?.knownBad?.length > 0
+				? [
+						new Alarm({
+							append: [
+								new Component({
+									tag: 'strong',
+									textContent: `Its newest release, ${entry.latest.tag}, has a jar on the index's known-bad list: ${entry.latest.knownBad.join('; ')}. ender will not install it.`,
+								}),
+								new Link({ href: findingsPath('known-bad'), textContent: 'What this means, and what to do' }),
+							],
+						}),
+					]
+				: []),
 			...(entry.latest?.secrets?.length > 0
 				? [
 						new Alarm({

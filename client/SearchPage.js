@@ -247,6 +247,11 @@ const cautionsOf = (entry, { sharing, unproven }) =>
 			text: `Few stars, and ${unproven}. Any jar can claim a mod's name: make sure this is the one you mean`,
 		},
 		sharing && { label: 'possible duplicate', text: `It ${sharing}: check you have the one you mean` },
+		entry.latest?.knownBad?.length > 0 && {
+			label: 'known bad',
+			text: `A jar of its newest release is on the index's known-bad list: ${entry.latest.knownBad.join('; ')}`,
+			alarm: true,
+		},
 		entry.latest?.secrets?.length > 0 && {
 			label: 'names secrets',
 			text: secretsSentence(entry.latest.secrets),

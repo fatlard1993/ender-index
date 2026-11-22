@@ -94,6 +94,7 @@ beforeAll(async () => {
 								url: 'https://example.invalid/extra.jar',
 								mods: [mod('sodium', 'Sodium')],
 								unsourced: { count: 1, classes: ['x/Send.class'] },
+								knownBad: 'a payload reported and confirmed',
 								scan: { version: 3, capabilities: {}, hosts: {}, unreadable: [] },
 							},
 						],
@@ -340,6 +341,9 @@ describe("a mod's page", () => {
 		await settle(() => document.body.textContent.includes('warns of unsourced'));
 
 		expect(document.body.textContent).toContain('x/Send.class: no source for it in the repository at this release');
+		expect(document.body.textContent).toContain(
+			"This jar is on the index's known-bad list: a payload reported and confirmed. ender will not install it.",
+		);
 		again.destroy();
 	});
 

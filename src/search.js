@@ -172,6 +172,7 @@ export const summarize = (record, donations = []) => {
 			...listed('warnings', [...new Set(assets.flatMap(warningsOf))].sort()),
 			...listed('secrets', [...new Set(assets.flatMap(asset => Object.keys(asset.scan?.secrets ?? {})))].sort()),
 			...listed('gained', gainedFindings(record)),
+			...listed('knownBad', [...new Set(assets.map(asset => asset.knownBad).filter(Boolean))]),
 		},
 	};
 };

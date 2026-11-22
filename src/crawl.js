@@ -1058,8 +1058,37 @@ export const recordFiles = async () =>
  * What the site reads, from every record and pack on disk: the search, the packs and the tags. Kept apart from the
  * crawl so a crawl stopped partway still leaves the site the records it wrote.
  */
+/**
+ * Mark each recorded jar the known-bad list names, with the list's reason, and clear the mark it no longer names: a hash
+ * added after a jar was read reaches it here, on the next list, rather than only when the jar is read again. Answers
+ * whether the record changed.
+ */
+export const markKnownBad = (record, knownBad) => {
+	let changed = false;
+
+	for (const asset of record.releases.flatMap(release => release.assets)) {
+		const reason = asset.sha256 === undefined ? undefined : knownBad.get(asset.sha256);
+
+		if (reason === asset.knownBad) continue;
+
+		if (reason === undefined) delete asset.knownBad;
+		else asset.knownBad = reason;
+
+		changed = true;
+	}
+
+	return changed;
+};
+
 export const writeLists = async () => {
-	const records = await Promise.all((await recordFiles()).map(file => Bun.file(file).json()));
+	const files = await recordFiles();
+	const records = await Promise.all(files.map(file => Bun.file(file).json()));
+	const knownBad = new Map(
+		(await readJson(join(DATA, 'known-bad.json'), [])).map(entry => [entry.sha256, entry.reason]),
+	);
+
+	for (const [at, record] of records.entries()) if (markKnownBad(record, knownBad)) await writeJson(files[at], record);
+
 	const themes = themesOf(records);
 	const search = buildSearch(
 		records,
