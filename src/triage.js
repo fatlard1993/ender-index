@@ -17,6 +17,7 @@ import {
 import { RateLimited } from './fetch.js';
 import * as github from './github.js';
 import { optedOutOn } from './optOut.js';
+import { readWithheld, withheldReason } from './withheld.js';
 
 /** Repositories asked about in one query: fifty with ten releases each cost GitHub's GraphQL limit six points. */
 export const BATCH = 50;
@@ -138,10 +139,11 @@ export const triageLines = async () =>
 
 if (import.meta.main) {
 	const minutes = Number(process.env.TRIAGE_MINUTES ?? Infinity);
+	const withheld = await readWithheld(DATA);
 
 	await writeNoJars(
 		await triage({
-			lines: await triageLines(),
+			lines: (await triageLines()).filter(line => withheldReason(withheld, line) === undefined),
 			noJars: await readNoJars(),
 			optedOut: await readOptedOut(),
 			deadline: Date.now() + minutes * 60_000,

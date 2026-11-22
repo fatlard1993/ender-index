@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { expect, test } from 'bun:test';
 
 import { dropWithheld } from '../src/crawl';
-import { submitMod } from '../src/submit';
+import { submitMod, submitPack } from '../src/submit';
 import { readWithheld, withheldReason } from '../src/withheld';
 
 test('reads the withheld list by repository, whatever the case it was written in', async () => {
@@ -65,4 +65,15 @@ test('a List a mod issue naming a withheld repository is told so and why, and no
 
 	expect(crawled).toEqual([]);
 	expect(result).toEqual({ listed: false, say: 'Some/Mod is withheld from the index: a takedown notice, 2026-11-22' });
+});
+
+test('a List a pack issue naming a withheld pack is told so and why, and the pack is not read', async () => {
+	const read = [];
+	const result = await submitPack('### Pack\n\nhttps://github.com/Some/Pack', {
+		crawl: async line => (read.push(line), undefined),
+		withheld: async () => new Map([['some/pack', 'a takedown notice, 2026-11-22']]),
+	});
+
+	expect(read).toEqual([]);
+	expect(result).toEqual({ listed: false, say: 'Some/Pack is withheld from the index: a takedown notice, 2026-11-22' });
 });

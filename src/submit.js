@@ -59,7 +59,7 @@ export const pageUrl = pack => `${SITE}/#/pack/${pack.host}/${pack.repo}`;
  * Read the pack an issue submits and, when there is one, list it: its line kept in submitted-packs.txt for every
  * crawl after, its record written, and the site's lists rebuilt. Answers what to tell the issue, and whether it is done.
  */
-export const submitPack = async (body, { scratch, crawl = crawlPack } = {}) => {
+export const submitPack = async (body, { scratch, crawl = crawlPack, withheld = () => readWithheld(DATA) } = {}) => {
 	const answer = answerOf(body, 'Pack');
 	const line = answer && packLineOf(answer);
 
@@ -69,6 +69,10 @@ export const submitPack = async (body, { scratch, crawl = crawlPack } = {}) => {
 			say: `${answer ? `\`${answer}\` is not` : 'The form names no'} pack the index can read: give a gist's link, or a GitHub repository's. Edit the issue and it is read again.`,
 		};
 	}
+
+	const withheldFor = withheldReason(await withheld(), line);
+
+	if (withheldFor !== undefined) return { listed: false, say: `${line} is withheld from the index: ${withheldFor}` };
 
 	const pack = await crawl(line, { scratch });
 
