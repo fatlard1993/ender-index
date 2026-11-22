@@ -68,7 +68,7 @@ Each jar's findings show on its page: what its code can reach beyond the game, l
 
 An explanation covers the finding as it stood in the release it was approved against: the calls behind it, and for a network or hosts finding, the hosts its code names. When a later jar reaches past that, with a call or a host the explanation never covered, the page says so beside it, until it is looked over again against that jar or rewritten.
 
-The issue has to come from the account that owns the repository, or one that made at least half its commits, and for now only mods on GitHub can be explained this way. Changed words are looked over again before they replace what shows; emptying the explanation takes it down at once. If the finding is wrong, say so on the form: that is how the index learns which checks to refine.
+The issue has to come from someone GitHub shows can speak for the repository: the account that owns it, one that made at least half its commits, one that published one of its releases, or a public member of the organization owning it who made some of its commits. GitHub tells a repository's permissions only to those who can push to it, so these are what anyone can see; a member whose membership is private can make it public on the organization's People page. For now only mods on GitHub can be explained this way. Changed words are looked over again before they replace what shows; emptying the explanation takes it down at once. If the finding is wrong, say so on the form: that is how the index learns which checks to refine.
 
 ## Opting out
 

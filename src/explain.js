@@ -2,6 +2,7 @@ import { join } from 'node:path';
 
 import { coveredBy } from '../client/evidence';
 import { DATA, parseLine, readJson, readRenames, recordPath, renamedLine, writeJson } from './crawl';
+import * as github from './github';
 import { fieldsOf } from './shot';
 import { modLineOf, modUrl } from './submit';
 
@@ -50,8 +51,8 @@ export const WITHDRAWN = 'withdrawn';
 export const APPROVED = 'approved';
 
 /**
- * Whether this GitHub account speaks for the repository: its owner, or a contributor who made at least half its
- * commits, as an author's own links in a readme are told apart.
+ * Whether the record alone shows this GitHub account speaks for the repository: its owner, or a contributor who made at
+ * least half its commits, as an author's own links in a readme are told apart.
  */
 export const speaksFor = (login, record) => {
 	const name = login?.toLowerCase();
@@ -64,6 +65,37 @@ export const speaksFor = (login, record) => {
 
 	return person !== undefined && commits > 0 && person.commits * 2 >= commits;
 };
+
+/** Whether an account has made any of a repository's commits, as far as its record counted them. */
+const contributed = (login, record) =>
+	(record.contributors?.people ?? []).some(person => person.login.toLowerCase() === login.toLowerCase());
+
+/**
+ * Whether GitHub shows this account can push to the repository, for an organization's mod or a team's, where no one
+ * owns it by name or made half its commits: it published one of its releases, or it is a public member of the
+ * organization owning it and made some of its commits. GitHub tells a repository's permissions only to those who can
+ * push to it, so these are what anyone can see of them.
+ */
+export const canPush = async (
+	login,
+	record,
+	{
+		publishers = github.releasePublishers,
+		publicMember = (org, user) => github.answers(`/orgs/${org}/public_members/${user}`),
+	} = {},
+) => {
+	if (!login) return false;
+
+	const name = login.toLowerCase();
+
+	if ((await publishers(record.repo)).some(publisher => publisher.toLowerCase() === name)) return true;
+
+	return contributed(login, record) && (await publicMember(record.repo.split('/')[0], login));
+};
+
+/** Whether this GitHub account speaks for the repository, by its record or, failing that, by what GitHub shows. */
+export const speaksForRepo = async (login, record, access) =>
+	speaksFor(login, record) || (await canPush(login, record, access));
 
 /** The finding an answer names, as the form's options start with it. */
 export const findingOf = answer => FINDINGS.find(finding => answer?.trim().toLowerCase().startsWith(finding));
@@ -88,6 +120,7 @@ export const explain = async (
 		renames = {},
 		action = 'opened',
 		labelled,
+		access,
 	},
 ) => {
 	const fields = fieldsOf(issue.body);
@@ -133,9 +166,9 @@ export const explain = async (
 		return answer(`Taken down: the explanation of ${finding} no longer shows on ${record.repo}'s page.`);
 	}
 
-	if (!speaksFor(issue.user?.login, record)) {
+	if (!(await speaksForRepo(issue.user?.login, record, access))) {
 		return answer(
-			`Only ${record.repo}'s author can explain its findings: this issue has to come from the account that owns the repository, or one that made at least half its commits.`,
+			`Only ${record.repo}'s author can explain its findings: this issue has to come from the account that owns the repository, one that made at least half its commits, one that published one of its releases, or a public member of the organization owning it who made some of its commits. A member whose membership is private can make it public on the organization's People page, or ask whoever publishes its releases to open the issue.`,
 		);
 	}
 

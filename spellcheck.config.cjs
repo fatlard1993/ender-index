@@ -80,6 +80,7 @@ module.exports = {
 		'okio',
 		'ol',
 		'opencollective',
+		'orgs',
 		'otc',
 		'packwiz',
 		'patreon',

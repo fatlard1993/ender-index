@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { EXPLANATION_KEPT, explain, findingOf, speaksFor } from '../src/explain';
+import { canPush, EXPLANATION_KEPT, explain, findingOf, speaksFor } from '../src/explain';
 
 const record = {
 	repo: 'Author/boats',
@@ -32,12 +32,16 @@ const issue = ({
 	html_url: 'https://github.com/fatlard1993/ender-index/issues/9',
 });
 
+/** GitHub as it answers for a repository no one else publishes releases of, owned by no organization. */
+const nobodyElse = { publishers: async () => [], publicMember: async () => false };
+
 const run = (filed, explanations = {}, now = '2026-11-21T00:00:00Z', event = {}) =>
 	explain(filed, {
 		explanations,
 		now,
-		...event,
+		access: nobodyElse,
 		readRecord: async name => (name.toLowerCase() === 'author/boats' ? record : undefined),
+		...event,
 	});
 
 const approving = { action: 'labeled', labelled: 'approved' };
@@ -49,6 +53,27 @@ describe('an author explaining a finding', () => {
 		expect(speaksFor('Passerby', record)).toBe(false);
 		expect(speaksFor('Stranger', record)).toBe(false);
 		expect(speaksFor(undefined, record)).toBe(false);
+	});
+
+	test("speaks for an organization's or a team's repository by publishing its releases, or as a public member of the organization who made some of its commits", async () => {
+		const team = { ...record, repo: 'Team/boats' };
+		const access = {
+			publishers: async repo => (repo === 'Team/boats' ? ['Releaser'] : []),
+			publicMember: async (org, user) => org === 'Team' && ['passerby', 'outsider'].includes(user.toLowerCase()),
+		};
+
+		expect(await canPush('releaser', team, access)).toBe(true);
+		expect(await canPush('Passerby', team, access)).toBe(true);
+		expect(await canPush('Outsider', team, access)).toBe(false);
+		expect(await canPush('Stranger', team, access)).toBe(false);
+		expect(await canPush(undefined, team, access)).toBe(false);
+
+		const { say } = await run(issue({ by: 'Passerby' }), {}, undefined, {
+			readRecord: async () => team,
+			access,
+		});
+
+		expect(say).not.toContain('Only');
 	});
 
 	test('names the finding by the word its option starts with', () => {

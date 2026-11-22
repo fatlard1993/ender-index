@@ -229,6 +229,30 @@ const releaseFields = list =>
 		})),
 	}));
 
+/** Whether GitHub has what a path names, for a question it answers with a status and no body: yes or no, never kept. */
+export const answers = async path => {
+	const response = await fetchSteady(`${API}${path}`, {
+		headers: { accept: 'application/vnd.github+json', authorization: `Bearer ${await token()}` },
+	});
+
+	note(path, response);
+
+	if (response.status === 404) return false;
+	if (response.ok) return true;
+
+	throw Object.assign(new Error(`GitHub ${response.status} for ${path}`), { status: response.status });
+};
+
+/** The accounts that published a repository's newest hundred releases, which only one with push access can do. */
+export const releasePublishers = async fullName => {
+	const list = await request(`/repos/${fullName}/releases?per_page=100`).catch(error => {
+		if (error.status === 404) return [];
+		throw error;
+	});
+
+	return [...new Set(list.map(release => release.author?.login).filter(Boolean))];
+};
+
 export const repositoryPath = fullName => `/repos/${fullName}`;
 
 const releasesPath = fullName => `/repos/${fullName}/releases?per_page=30`;
