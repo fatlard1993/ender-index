@@ -72,10 +72,12 @@ The issue has to come from the account that owns the repository, or one that mad
 
 A mod is in the index because its repository publishes it, and its author says otherwise in the same place: no account, and no one to ask.
 
-- **The whole repository:** add the topic `ender-index-opt-out` to it. The next crawl to reach it, usually within an hour or two, drops its page, its releases and its place in search, and leaves it alone after; it is looked at again weekly, and listed again once the topic is gone. A pack repository with the topic is dropped the same way.
+- **The whole repository:** add the topic `ender-index-opt-out` to it, on GitHub, Codeberg or GitLab. The next crawl to reach it drops its page, its releases and its place in search, and leaves it alone after: usually within an hour or two, or within the week for a mod listed by its source with no release yet. It is looked at again weekly, and listed again once the topic is gone; [open a List a mod issue](https://github.com/fatlard1993/ender-index/issues/new?template=mod.yml) after removing it to be listed straight away. A pack repository with the topic is dropped the same way.
 - **One release:** put `ender-index-opt-out` anywhere in its notes, as `<!-- ender-index-opt-out -->` to keep it out of sight. Its jars are not downloaded, and a release read before is dropped from the record, while the rest of the mod stays listed. Notes edited after publishing are read within the week; [open a List a mod issue](https://github.com/fatlard1993/ender-index/issues/new?template=mod.yml) to have them read now. Only the newest thirty releases' notes are read.
 
 Opting out takes a mod out of the index, not off your releases: a player who names your repository, as `ender add gh:owner/repo`, still installs from it.
+
+What the index keeps of a repository that opts out is its name and the day it was last seen opting out, in [`data/opted-out.json`](https://github.com/fatlard1993/ender-index/blob/main/data/opted-out.json), so it knows to leave it alone. The records it kept before stay in the index repository's history, as anything committed to git does.
 
 ## Notices
 

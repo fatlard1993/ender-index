@@ -43,7 +43,7 @@ Discovery finds a mod nightly, by that metadata or by a topic; [Being found](htt
 
 ### Opting out
 
-A repository with the topic `ender-index-opt-out` is dropped from the index and left alone, and a release with `ender-index-opt-out` in its notes is never downloaded. The guide's [Opting out](https://fatlard1993.github.io/ender-index/authors/opting-out) has the details. The repositories found opting out are kept in `data/opted-out.json`, so the crawl looks at each again only weekly.
+A repository with the topic `ender-index-opt-out`, on any of the three hosts, is dropped from the index and left alone, and a release with `ender-index-opt-out` in its notes is never downloaded. The guide's [Opting out](https://fatlard1993.github.io/ender-index/authors/opting-out) has the details. The repositories found opting out are kept in `data/opted-out.json`, so the crawl looks at each again only weekly.
 
 ### Packs
 
