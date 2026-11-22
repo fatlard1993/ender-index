@@ -54,6 +54,13 @@ An author takes a mod out of the index where it was found, with no account and n
 
 Opting out takes a mod out of the index, not off its releases: `ender add gh:owner/repo` still installs from them. What the index keeps of a repository that opts out is its name and the day it was last seen opting out, in [`data/opted-out.json`](data/opted-out.json), so it knows to leave it alone; records kept before stay in this repository's history. The guide's [Opting out](https://fatlard1993.github.io/ender-index/authors/opting-out) has the rest.
 
+## Reports and takedowns
+
+- **A jar that does harm:** [open a report](https://github.com/fatlard1993/ender-index/issues/new?template=report.yml). Once confirmed, its sha256 goes in [`data/known-bad.json`](data/known-bad.json) with the reason; on the next list every copy of it in the index is marked, its page says so in red, and ender refuses to install it.
+- **Something shown that should not be,** as a takedown from someone other than the mod's author: open a report the same way. The repository goes in [`data/withheld.json`](data/withheld.json) with the reason; the crawl leaves it alone, and its record, mod or pack, is gone on the next list. An author needs none of this: a topic takes their mod out, as [Getting out](#getting-out) says.
+- **A player shot:** open a report, or comment on the shot's issue, linked beside it; taking the `shown` label off takes it down on the next run.
+- **An author's explanation:** the `withdrawn` label takes it down at once.
+
 ## What is recorded
 
 For the newest five releases that carry a jar, and past those the newest that names each game version in its tag or a jar's name, so a mod released per game version keeps its older builds installable. Every mod jar among them is downloaded once and recorded with:
@@ -78,13 +85,23 @@ With the releases, each repository is recorded with where its readme and picture
 
 **A release changed after it was published is recorded.** Assets are tracked by their host's asset id, so a jar re-uploaded under the same name is downloaded again. If the bytes differ, the old hash is kept under `replaced` and the crawl reports it as `swapped`. A jar deleted from its release is kept with the date it went missing under `gone`.
 
+### How findings are shown
+
+On a mod's page and its search card, each finding says how much it should make a player look, **Common**, **Worth a look** or **Unusual**, with what it usually means in a few plain words: "talks to the internet: usually update checks, skins, voice chat or telemetry". Opened, it gives the finding's own name, the classes and calls behind it, and the method each call is in. [What each finding means](https://fatlard1993.github.io/ender-index/findings) has the scale and every finding.
+
+- **Alarms**, in red at the top of the page: a jar whose code names where other programs keep logins, and a jar on the known-bad list. ender will not install either unless its player trusts it.
+- **Libraries**: a finding only in a jar the mod carries says so, and one only in a package that looks like a library's says that is a guess.
+- **Changes**: a release that found something the one before did not says so, and each jar says which scanner read it, with a way to ask for a rescan.
+- **Author explanations**: a mod's author can explain a finding in their own words, looked over and approved before it shows, labelled as theirs and with the release it was written for. When a later jar reaches past what it covered, a call or a host it never mentioned, the page says so beside it.
+
 ## The data
 
 ```
 data/repos.txt                  what is crawled, one owner/repo per line
 data/modrinth-repos.txt         repositories known only from a Modrinth project's source link, crawled after the rest
 data/renames.json               repositories renamed on their host, old name to new
-data/known-bad.json             [{ "sha256", "reason" }]
+data/known-bad.json             jars confirmed to do harm: [{ "sha256", "reason" }]
+data/withheld.json              repositories withheld by hand, as takedowns: { "owner/repo": "reason" }
 data/mods/<owner>/<repo>.json   a GitHub repository and its watched releases
 data/mods/codeberg.org/...      the same for Codeberg
 data/mods/gitlab.com/...        and for GitLab

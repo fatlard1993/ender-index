@@ -35,6 +35,7 @@ test("the findings page has a part for each finding, by the word the mod page's 
 			'zip',
 			'unsourced',
 			'secrets',
+			'known-bad',
 			'unreadable',
 			'scanner-versions',
 			'for-authors',
