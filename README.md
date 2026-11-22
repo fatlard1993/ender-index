@@ -97,6 +97,7 @@ On a mod's page and its search card, each finding says how much it should make a
 ## The data
 
 ```
+data/index.json                 the data's shape version and each file a launcher reads, with its schema
 data/repos.txt                  what is crawled, one owner/repo per line
 data/modrinth-repos.txt         repositories known only from a Modrinth project's source link, crawled after the rest
 data/renames.json               repositories renamed on their host, old name to new
@@ -183,6 +184,38 @@ A record, trimmed:
 ```
 
 An asset may instead carry `error` (it could not be fetched or scanned), `metadataError` (its metadata could not be read), `knownBad`, `replaced` or `gone`. A repository with no built release carries `source`: the commit read and the mods its source declares. Jars are never rehosted: `url` is the author's own release.
+
+Each file a launcher reads has a JSON Schema in [`schemas/`](schemas), and [`data/index.json`](data/index.json) names them. The tests check every published file against its schema, so data that breaks one fails CI before it is published.
+
+## For launchers
+
+The index is meant to be built on: any launcher can read it the way ender does. Everything is static JSON under `https://raw.githubusercontent.com/fatlard1993/ender-index/main/data/`, served with ETags, so an unchanged file costs one small request. Start from `index.json`, and refuse a `schema` your code does not know.
+
+**From a mod id, a loader and a game version to a jar:**
+
+1. **Find the repository.** Each entry in `search.json` names the mod ids its newest release declares, in `latest.mods[].id` and `latest.provides`, and its record by `repo` and `host`. More than one repository can claim an id, such as a fork or a copy, so keep the repository a player chose once they have chosen.
+2. **Read its record:** `mods/<owner>/<repo>.json` on GitHub, `mods/codeberg.org/<owner>/<repo>.json` and `mods/gitlab.com/<path>.json` elsewhere. An old name is in `renames.json`.
+3. **Pick a release.** Go newest first by `published`, and skip `prerelease` unless the player wants one.
+4. **Pick a jar.** Skip any asset with `error`, `gone` or `knownBad`. A jar fits when one of its `mods` has your loader (a Fabric mod loads on Quilt too) and its `minecraft` range takes your game version. The range is the jar's own, verbatim: a Fabric or Quilt range with `||` between alternatives, or a Forge or NeoForge Maven range like `[1.20.1,1.21)`. ender's reading of both is [`src/mods/range.js`](https://github.com/fatlard1993/ender-launcher/blob/main/src/mods/range.js) in ender-launcher. A jar that declares no range says nothing: ender takes it only when nothing declares a fit.
+5. **Download and check it.** Download `url`, the author's own release asset, and refuse it unless it matches `sha256`. An asset with `replaced` was re-uploaded once; `sha256` is the jar it is now.
+6. **Resolve what it needs.** `depends` holds the mod ids it requires; resolve each the same way.
+
+**What a consumer is expected to honor:**
+
+- **Known-bad jars.** Refuse to install any jar whose sha256 is in `known-bad.json`, wherever it came from, not only the index. Records mark these with `knownBad` too, but the list is the authority.
+- **Opt-outs and takedowns are already applied.** A repository that opted out or was withheld is in neither `search.json` nor `mods/`. A copy you cached is not: when a repository leaves `search.json`, stop offering it. `opted-out.json` and `withheld.json` say why it left.
+- **Findings are evidence, not verdicts.** `scan` records what a jar's code reaches. Show it or not; [What each finding means](https://fatlard1993.github.io/ender-index/findings) explains each. The one ender refuses without the player's word is `secrets`.
+- **Authors' work stays theirs.** Link to a mod's repository, and credit its author for its name, description and icon, as [License](#license) says.
+
+## Stability
+
+`schema` in `data/index.json` is the version of the data's shape. It is 1.
+
+- **Fields are only added.** A new field, a new finding name, or a new value where a list is open, such as a funding platform, can appear in any crawl. Ignore what you do not know.
+- **A change that could break you raises `schema`:** a field removed or renamed, a type or meaning changed, or a file moved. It is announced below at least 30 days before it is published.
+- **The schemas are the contract,** and the tests hold every published file to them.
+
+Changes announced: none.
 
 ## Running it
 
