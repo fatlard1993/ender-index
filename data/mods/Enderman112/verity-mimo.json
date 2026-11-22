@@ -5,8 +5,190 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-08-17T13:33:25Z",
-	"pushed": "2026-10-23T16:52:19Z",
+	"pushed": "2026-11-22T05:52:25Z",
 	"releases": [
+		{
+			"tag": "v1.5.1",
+			"published": "2026-11-22T05:52:26Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 778040699,
+					"name": "Verity-MiMo-Addon.jar",
+					"url": "https://github.com/Enderman112/verity-mimo/releases/download/v1.5.1/Verity-MiMo-Addon.jar",
+					"size": 470524,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "3885ee5ca6ae121789cd4e8653dee13495612a220b89e6c2d01786bddcf761d3",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "verity_mimo",
+							"version": "1.5.1",
+							"name": "Verity MiMo Addon",
+							"description": "Adds Xiaomi MiMo TTS and ASR to Verity + Smiley's Better Voice without modifying either mod.\n\nFeatures:\n- MiMo TTS: takes over Verity's speech while Smiley's Better Voice is installed (toggle in this addon)\n- MiMo ASR: takes over Verity's speech recognition (Chinese/English)\n- Configure API key, voice, speed, style and language in this addon's own config screen\n\nRequires Verity 6.0.0-beta.9 AND Smiley's Better Voice 6.0.0-beta.9: the TTS hook lives\ninside Better Voice's handleSpeech, so the addon cannot work without it, and Better\nVoice beta.9 itself only accepts Verity 6.0.0-beta.9. On Verity 6.0.0 use\nVerity-MiMo-Direct instead.\nGet a MiMo API key at https://platform.xiaomimimo.com/#/console/api-keys",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"cloth_config",
+								"verity",
+								"smileys_better_voice"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 18,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/veritymimo/tts/DeepSeekTtsService.class": [
+									"java/net/http/HttpClient.newBuilder in httpClient",
+									"java/net/http/HttpClient.send in lambda$synthesizeAndPlay$0"
+								],
+								"com/veritymimo/tts/MimoTtsService.class": [
+									"java/net/http/HttpClient.newBuilder in lambda$synthesizeAndPlay$0",
+									"java/net/http/HttpClient.send in lambda$synthesizeAndPlay$0"
+								],
+								"com/veritymimo/stt/DeepSeekSttService.class": [
+									"java/net/http/HttpClient.newBuilder in transcribe",
+									"java/net/http/HttpClient.send in transcribe"
+								],
+								"com/veritymimo/stt/MimoSttService.class": [
+									"java/net/http/HttpClient.newBuilder in transcribe",
+									"java/net/http/HttpClient.send in transcribe"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"api.xiaomimimo.com": [
+								"com/veritymimo/config/MimoAddonConfig.class",
+								"com/veritymimo/client/MimoAddonClient.class"
+							],
+							"api.deepseek.com": [
+								"com/veritymimo/config/MimoAddonConfig.class",
+								"com/veritymimo/client/MimoAddonClient.class"
+							],
+							"platform.xiaomimimo.com": [
+								"com/veritymimo/config/MimoAddonConfig.class",
+								"com/veritymimo/tts/MimoTtsService.class",
+								"com/veritymimo/client/MimoAddonClient.class"
+							],
+							"platform.deepseek.com": [
+								"com/veritymimo/config/MimoAddonConfig.class",
+								"com/veritymimo/client/MimoAddonClient.class"
+							],
+							"token-plan-": [
+								"com/veritymimo/config/MimoAddonConfig.class"
+							],
+							"token-plan-cn.xiaomimimo.com": [
+								"com/veritymimo/client/MimoAddonClient.class"
+							]
+						},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 778040702,
+					"name": "Verity-MiMo-Direct.jar",
+					"url": "https://github.com/Enderman112/verity-mimo/releases/download/v1.5.1/Verity-MiMo-Direct.jar",
+					"size": 470229,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "f40352c8d16fee1721e137bcf3c2d265883e53ba698bc30e8a3d81b8b455c9b9",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "verity_mimo_direct",
+							"version": "1.5.1",
+							"name": "Verity MiMo Direct",
+							"description": "Adds Xiaomi MiMo TTS and ASR directly to Verity (no Smiley's Better Voice involved).\n\n- MiMo TTS: takes over Verity's speech (toggle in the \"Xiaomi MiMo\" category of Verity's own config)\n- MiMo ASR: takes over Verity's speech recognition (Chinese/English)\n- All MiMo settings appear in Verity's own config menu (new \"Xiaomi MiMo\" category)\n- 3D positional audio via Verity's apply3DEffect\n\nBuilt for Verity 6.0.0 (also works on 6.0.0-beta.7+), which routes all speech through varmite.verity.client.audio.TTSHandler.\nMiMo transcripts are passed through Verity's sanitizeTranscript on 6.0.0+.\nGet a MiMo API key at https://platform.xiaomimimo.com/#/console/api-keys",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"verity",
+								"yet_another_config_lib_v3"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 18,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/veritymimo/direct/tts/DeepSeekTtsService.class": [
+									"java/net/http/HttpClient.newBuilder in httpClient",
+									"java/net/http/HttpClient.send in lambda$synthesizeAndPlay$0"
+								],
+								"com/veritymimo/direct/tts/MimoTtsService.class": [
+									"java/net/http/HttpClient.newBuilder in httpClient",
+									"java/net/http/HttpClient.send in lambda$synthesizeAndPlay$0"
+								],
+								"com/veritymimo/direct/stt/DeepSeekSttService.class": [
+									"java/net/http/HttpClient.newBuilder in transcribe",
+									"java/net/http/HttpClient.send in transcribe"
+								],
+								"com/veritymimo/direct/stt/MimoSttService.class": [
+									"java/net/http/HttpClient.newBuilder in transcribe",
+									"java/net/http/HttpClient.send in transcribe"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"api.xiaomimimo.com": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class",
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							],
+							"api.deepseek.com": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class",
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							],
+							"platform.xiaomimimo.com": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class",
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							],
+							"platform.deepseek.com": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class",
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							],
+							"token-plan-": [
+								"com/veritymimo/direct/config/MimoDirectConfig.class"
+							],
+							"token-plan-cn.xiaomimimo.com": [
+								"com/veritymimo/direct/mixin/VerityConfigUIMixin.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## English\n\n**New: DeepSeek as an optional TTS/ASR backend**\n\nTTS and ASR can now pick their backend independently. The default is still Xiaomi MiMo, so existing configs keep working.\n\n- `ttsBackend`: `MIMO` (default) or `DEEPSEEK`\n- `sttBackend`: `MIMO` (default) or `DEEPSEEK`\n- `deepseekApiKey`: DeepSeek API key, separate from the MiMo key\n- `deepseekBaseUrl`: optional, defaults to `https://api.deepseek.com`\n- `deepseekTtsVoice`: `STELLA` (female) or `TIDE` (male)\n\nDeepSeek TTS calls `POST /v1/tools/tts` and receives raw wav bytes; ASR posts a multipart file to `POST /v1/tools/asr` and auto-detects the language. Backends can be mixed, for example MiMo recognition + DeepSeek speech.\n\nNote: DeepSeek has no speech-rate parameter, so `mimoTtsSpeed` and voice cloning only apply to MiMo.\n\n**Verity-MiMo-Direct 1.5.1 (Verity 6.0.0)**\n\n- Targets Verity 6.0.0 release; TTS and ASR go through `TTSHandler`\n- ASR results pass through Verity 6.0.0's `sanitizeTranscript` cleanup\n- Shared `TtsPlayback` layer: no overlapping lines, 3D effect and interruption preserved\n- Only requires Verity (+ YACL); config lives in Verity's \"Xiaomi MiMo\" category\n\n**Verity-MiMo-Addon 1.5.1 (Verity 6.0.0-beta.9 only)**\n\n- Requires Verity 6.0.0-beta.9 AND Smiley's Better Voice 6.0.0-beta.9, both pinned\n- Forge refuses to load it on Verity 6.0.0; use the Direct build there\n- ASR also runs `sanitizeTranscript`\n- TTS hooks Better Voice's `handleSpeech`; audio playback is handled by this mod\n\n**Fixes**\n\n- A new line no longer overlaps with the previous unfinished one\n- No longer cancels Verity's native TTS for blank text or when `USE_TTS` is off\n- Reuses one HTTP client; fixed stale UI/config wording\n\n**Upgrading**\n\n- Direct: drop in the new jar, backends default to MiMo\n- DeepSeek: set `deepseekApiKey`, then switch the backend you want\n- Do not install both jars at the same time\n\n---\n\n## 中文\n\n**新增：DeepSeek 作为可选的 TTS/ASR 后端**\n\nTTS 与 ASR 现在可以各自独立选择后端，默认仍是小米 MiMo，旧配置不受影响。\n\n- `ttsBackend`：`MIMO`（默认）或 `DEEPSEEK`\n- `sttBackend`：`MIMO`（默认）或 `DEEPSEEK`\n- `deepseekApiKey`：DeepSeek API key，与 MiMo key 相互独立\n- `deepseekBaseUrl`：可选，留空即 `https://api.deepseek.com`\n- `deepseekTtsVoice`：`STELLA`（海星，女声）或 `TIDE`（暗潮，男声）\n\nDeepSeek TTS 走 `POST /v1/tools/tts`，响应直接是 wav 音频字节；ASR 走 `POST /v1/tools/asr`，multipart 上传、自动识别语言。两个后端可以混搭，例如 MiMo 识别 + DeepSeek 合成。\n\n注意：DeepSeek 没有语速参数，`mimoTtsSpeed` 与克隆音色只对 MiMo 生效。\n\n**Verity-MiMo-Direct 1.5.1（适配 Verity 6.0.0）**\n\n- 适配 Verity 6.0.0 正式版，TTS/ASR 全部经由 `TTSHandler`\n- ASR 结果经过 Verity 6.0.0 新增的 `sanitizeTranscript` 纠错（\"Verity/verdi/birdie\"）\n- 播放层统一为 `TtsPlayback`：连续多句不叠音，保留 3D 音效与打断\n- 只依赖 Verity 本体（+ YACL），配置入口在 Verity 配置菜单的 \"Xiaomi MiMo\" 分类\n\n**Verity-MiMo-Addon 1.5.1（仅限 Verity 6.0.0-beta.9）**\n\n- 需要 Verity 6.0.0-beta.9 与 Smiley's Better Voice 6.0.0-beta.9，两者均精确匹配\n- 在 Verity 6.0.0 上 Forge 会直接拒绝加载，请改用 Direct 版\n- ASR 同样接入 `sanitizeTranscript` 纠错\n- TTS 接入点在 Better Voice 的 `handleSpeech`，音频播放由本 mod 完成\n\n**修复**\n\n- 新的一句不再和上一句未播完的语音叠在一起\n- 空文本或 Verity 的 `USE_TTS` 关闭时，不再误取消原生 TTS\n- 复用单个 HTTP 客户端，修正过期的界面/配置文案\n\n**升级提示**\n\n- Direct 版：直接替换 jar，后端默认 MiMo\n- 想用 DeepSeek：填 `deepseekApiKey`，再把需要切换的 Backend 改成 `DEEPSEEK`\n- 两个 jar 不要同时安装\n\n---\n\n## Downloads / 下载\n\n| File | Use with |\n| --- | --- |\n| `Verity-MiMo-Addon.jar` | Verity 6.0.0-beta.9 + Smiley's Better Voice 6.0.0-beta.9 |\n| `Verity-MiMo-Direct.jar` | Verity 6.0.0 (release) |\n\nBoth jars share the same version number (1.5.1). Do not install both at once. / 两个 jar 版本号一致（1.5.1），不要同时安装。\n\nAddon commit: `f6f3e83` (branch `addon`) · Direct commit: `584f23d` (branch `direct`)"
+		},
 		{
 			"tag": "v1.4.1",
 			"published": "2026-10-23T16:52:19Z",
@@ -161,7 +343,7 @@
 					"name": "Verity-MiMo-Direct.jar",
 					"url": "https://github.com/Enderman112/verity-mimo/releases/download/v1.3.0/Verity-MiMo-Direct.jar",
 					"size": 456177,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "cb2fefc59ce569e3b9dc285716693ec1bee538d288ae3dc473a4273de8397475",
 					"mods": [

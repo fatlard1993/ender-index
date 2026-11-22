@@ -4,8 +4,110 @@
 	"stars": 0,
 	"archived": false,
 	"created": "2026-10-25T18:29:20Z",
-	"pushed": "2026-11-21T06:16:34Z",
+	"pushed": "2026-11-21T21:52:51Z",
 	"releases": [
+		{
+			"tag": "v0.3.135-test.389",
+			"published": "2026-11-21T21:52:52Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 776980919,
+					"name": "Overcraft-0.3.135.jar",
+					"url": "https://github.com/Thrasherop/overcraft/releases/download/v0.3.135-test.389/Overcraft-0.3.135.jar",
+					"size": 2921838,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "7275d05972f2588c07fbc5d473519452c9ad0dfedc4441557a09753edc2e084c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "overcraft",
+							"version": "0.3.135",
+							"name": "Overcraft",
+							"description": "Overwatch heroes in Minecraft: pick a hero when you join a world; hotbar slot 1 holds the hero's weapons and abilities.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Healing Ofuda",
+								"Kiriko's Kunai & Ofuda",
+								"Kunai",
+								"Protection Suzu",
+								"Sonic Amplifier round"
+							],
+							"entity": [
+								"ASHE",
+								"B.O.B.",
+								"CASSIDY",
+								"Dynamite",
+								"Grappling Hook",
+								"Healing Blossom",
+								"Healing Ofuda",
+								"JUNKRAT",
+								"Kitsune",
+								"Kunai",
+								"Molten slag",
+								"PHARAH",
+								"Petal Platform",
+								"Petal seed",
+								"Protection Suzu",
+								"Rivet",
+								"Rivet Gun pellet",
+								"SOJOURN",
+								"Seed",
+								"Sonic Amplifier round",
+								"TORBJÖRN",
+								"TRACER",
+								"Thorn",
+								"Tree of Life",
+								"Turret",
+								"Venom Mine",
+								"WIDOWMAKER"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 854,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/overcraft/client/dev/DevServer.class": [
+									"java/net/ServerSocket.<init> in serve",
+									"java/net/ServerSocket.accept in serve",
+									"java/net/Socket.getInputStream in serve",
+									"java/net/Socket.getOutputStream in serve",
+									"java/net/Socket.close in serve",
+									"java/net/ServerSocket.close in serve"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Test build.** It becomes a release only once it's moved to the `production` branch.\n\n## 2026-11-21: 0.3.135\n\n- **Cassidy walks as himself (#179).** Out of Deadeye he walked in Deadeye's hunched, gun-forward stance. His move tree has two\n  walk sets; measured by pose, the one we played is Deadeye's. Now his own walk plays, and Deadeye's only during Deadeye.\n- **Enemy heroes lag far less (#180).** Eight enemy heroes in view took the game from 30 fps to 13 (each hero's whole mesh is\n  built on the CPU every frame). Heroes far enough away now draw a lighter copy of their mesh, chosen to be about one screen pixel\n  of detail at their distance, so it isn't seen (a scope's zoom keeps the detail). Hero shadows fade out by 16 m, as Minecraft's\n  own do. Measured: the same eight, 25-26 fps (the window's 30 cap); the mesh's share 30 ms a frame down to 11.\n- **No more crumpled heroes on the POTG end screen (#181).** Sojourn (and Ana, Brigitte) stood hunched. Several heroes' select\n  poses are named differently in their data and weren't found, so they stood in their combat stance; the cards also took a frame\n  100 s into the pose. Now every hero with a select pose shows it on the cards and the select screen (Sojourn, Cassidy, Pharah,\n  Torbjorn, Sigma, Junkrat newly), a couple of seconds in. Tracer keeps her idle: in her select pose the pistol floated (#183).\n- **Tab scoreboard (#182).** In hero mode, holding Tab shows each player's hero, eliminations, deaths, damage and healing for\n  this run (since the last dragon), your team on top and any other team below. Minecraft mode keeps Minecraft's list. No\n  assists or mitigation yet: they aren't counted.\n- Played, one dev client, real keys and mouse:\n  - Cassidy: walked forward, back and sideways in third person (upright, gun at his side); Q, then walked (Deadeye's set).\n    Before the fix the same walk showed the hunch.\n  - Lag: eight enemy heroes 8-14 m out at night, 13 fps before; with the change 25-26, switching it off and on twice\n    (`timing lod off|on`); the same view side by side showed no difference.\n  - End screen: every hero three at a time (dev `endcards`) before and after. Before: Sojourn, Ana, Brigitte hunched. After:\n    all upright; Tracer's floating pistol found and kept out. The select screen checked for Sojourn, Cassidy, Tracer, Ana.\n  - Tab: zeros at first; shot a zombie with the revolver (4 shots), Tab: E 1, DMG 250; died, Tab: D 1; G to Minecraft mode,\n    Tab: no scoreboard.\n  - Not tried: a second player on the scoreboard or another team's rows, a real POTG's end screen (the dev one shows the\n    same cards), lag on a slower machine.\n- General play before main (fresh client, fresh survival world `general135`, real keys and mouse):\n  - Every hero (all 20) picked on the select screen with H at a bed, each firing its primary at a NoAI mob: each took\n    damage (health read after). Shots that read no damage were checked: a miss, a target spawned in a tree trunk, the snow\n    ledge blocking Brigitte's flail (it hit at 2 m in the open), Kiriko's ofuda on the right button (the kunai hit).\n  - Mercy's beam healed a hurt villager 5 to 16.9 of 20. Died four ways (a fall, slain by wild zombies twice, burned by\n    a spreading forest fire), respawned with the button each time; hero mode came back, Minecraft mode stayed.\n  - Save and leave, Singleplayer, rejoin: the select screen on join, Kiriko picked from it; Tab kept the run (D 3,\n    DMG 4,436, H 190).\n  - Minecraft mode in survival: mined with a wooden pickaxe, crafted planks in the 2x2 grid, placed planks and a chest,\n    stored the planks and found them on reopening.\n  - Found: clicks at the window's right side went to another window over it (the harness, not the game). Not explained:\n    what lit the tree that burned (no ability places fire blocks).\n\n\n---\nBuilt from `ddc0dea` on `main`: Merge next: 0.3.135 (Cassidy's walk, far-hero LOD, end-screen showcases, Tab scoreboard)"
+		},
 		{
 			"tag": "v0.3.134-test.386",
 			"published": "2026-11-21T06:16:34Z",
@@ -16,7 +118,7 @@
 					"name": "Overcraft-0.3.134.jar",
 					"url": "https://github.com/Thrasherop/overcraft/releases/download/v0.3.134-test.386/Overcraft-0.3.134.jar",
 					"size": 2906864,
-					"downloads": 0,
+					"downloads": 1,
 					"inspection": 2,
 					"sha256": "c61eacc7edf8166fb200067617eaf5c11ad304f0d8630a19acbac95d041b66c7",
 					"mods": [
@@ -111,7 +213,7 @@
 					"name": "Overcraft-0.3.134.jar",
 					"url": "https://github.com/Thrasherop/overcraft/releases/download/v0.3.134-test.384/Overcraft-0.3.134.jar",
 					"size": 2906864,
-					"downloads": 0,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "c61eacc7edf8166fb200067617eaf5c11ad304f0d8630a19acbac95d041b66c7",
 					"mods": [
@@ -206,7 +308,7 @@
 					"name": "Overcraft-0.3.133.jar",
 					"url": "https://github.com/Thrasherop/overcraft/releases/download/v0.3.133-test.382/Overcraft-0.3.133.jar",
 					"size": 2902040,
-					"downloads": 2,
+					"downloads": 3,
 					"inspection": 2,
 					"sha256": "7f2b4cc8311137aad3d3dfbb68f7a9ee847577048e11dda4caa079719b05c3c7",
 					"mods": [

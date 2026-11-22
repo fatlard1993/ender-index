@@ -1,13 +1,92 @@
 {
 	"repo": "Dainsleif233/ViaResourcePack",
 	"host": "github",
-	"description": "A Fabric client-side mod that automatically converts resource packs to the running Minecraft version when they are loaded. Both local and server-provided packs are covered.",
+	"description": "让更早版本的资源包照常工作。Makes resource packs from older Minecraft versions work.",
 	"stars": 0,
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2026-09-06T13:02:32Z",
-	"pushed": "2026-09-06T13:06:08Z",
+	"pushed": "2026-11-22T09:42:36Z",
 	"releases": [
+		{
+			"tag": "2.0.0-rc.1",
+			"published": "2026-11-22T09:42:36Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 778522533,
+					"name": "ViaResourcePack-2.0.0-rc.1.jar",
+					"url": "https://github.com/Dainsleif233/ViaResourcePack/releases/download/2.0.0-rc.1/ViaResourcePack-2.0.0-rc.1.jar",
+					"size": 516445,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "2f026b89fd2544126342c531a621d39fce17462e6e9d9be473cf3ec00afd9568",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "viarp",
+							"version": "2.0.0-rc.1",
+							"name": "ViaResourcePack",
+							"description": "Automatically converts resource packs to the running Minecraft version when they are loaded, for both local packs and server-sent packs.",
+							"minecraft": ">=1.14.4",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"viarp-adapter-mc"
+							],
+							"provides": [
+								"viarp-adapter-mc",
+								"viarp-adapter-mc",
+								"viarp-adapter-mc",
+								"viarp-adapter-mc",
+								"viarp-adapter-mc",
+								"viarp-adapter-mc",
+								"viarp-adapter-mc",
+								"viarp-adapter-mc"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 175,
+						"jars": [
+							"META-INF/jars/viarp-adapter-mc-1.14.4-2.0.0-rc.1.jar",
+							"META-INF/jars/viarp-adapter-mc-1.16-2.0.0-rc.1.jar",
+							"META-INF/jars/viarp-adapter-mc-1.19.3-2.0.0-rc.1.jar",
+							"META-INF/jars/viarp-adapter-mc-1.19.4-2.0.0-rc.1.jar",
+							"META-INF/jars/viarp-adapter-mc-1.20.2-2.0.0-rc.1.jar",
+							"META-INF/jars/viarp-adapter-mc-1.20.3-2.0.0-rc.1.jar",
+							"META-INF/jars/viarp-adapter-mc-1.20.5-2.0.0-rc.1.jar",
+							"META-INF/jars/viarp-adapter-mc-26.1-2.0.0-rc.1.jar"
+						],
+						"capabilities": {
+							"classloading": {
+								"META-INF/jars/viarp-adapter-mc-1.14.4-2.0.0-rc.1.jar!top/syshub/viarp/adapter/ReloadUi$NativeScreen.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/viarp-adapter-mc-1.16-2.0.0-rc.1.jar!top/syshub/viarp/adapter/ReloadUi$NativeScreen.class": [
+									"extends java/lang/ClassLoader"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# ViaResourcePack 2.0.0-rc.1\n\n转换器改为内置实现，只做向上迁移，客户端 1.14.4–26.3 可直接加载更早版本（含经典纹理包）的资源包。\n\n## 主要变化\n- **内置迁移引擎取代上游转换器**：不再随包携带第三方转换库，全程本地离线转换。\n- **只向上、按完整 `pack_format` 判定**：旧包升到当前版本，新包保持原样，不再有降级路径。\n- **源格式下探到经典纹理包时代**：`terrain.png` 时代的图集、方块状态与模型、GUI 与控制件、字体、声音事件、全景图、画作、地图、出生蛋、特殊物品姿态等按已知对应关系迁移。\n- 客户端覆盖 1.14.4–26.3，单个 universal jar 通用，仍不需要 Fabric API。\n\n## 界面与缓存\n- 多个资源包改为**后台并行准备**，加载界面显示转换进度，不再逐个阻塞渲染线程。\n- **已缓存且有效的包不再提示版本不兼容**，只有确实需要转换或无法转换时才出现原版警告。\n- 中英文双语说明取代原版「为更旧版本打造」的提示文本。\n- 临时文件、占位包与转换缓存移入 `resourcepacks/.viaresourcepack/`，缓存按 4 GiB 软预算自动清理。\n- 重启后保留已启用的已转换包，无需重新勾选。\n\n## 诊断\n- 每个缓存条目生成 `warnings.txt`：未映射的图集格子、被移除的资源、无法保真的模型/着色器等，日志会给出路径。\n- 详细迁移日志在默认 INFO 级别可见。\n\n## 依赖\nGradle 9.9.2、Loom 1.19.4、Fabric Loader 0.20.1、MixinExtras 0.5.5、Sponge Mixin 0.17.5、Gson 2.15.0、SLF4J 2.0.20；测试栈 JUnit 6.1.3 / AssertJ 3.27.7。\n\n## 兼容性\n- 数据包与内置包（vanilla、Programmer Art、高对比度）不处理。\n- 与加速资源包加载的模组（如 PackForge）组合尚未验证。\n- 无法自动迁移的内容仍需手动调整；无报告不代表全部素材可用。\n\n---\n\n# ViaResourcePack 2.0.0-rc.1\n\nThe converter is now built in and upgrades only, so clients 1.14.4–26.3 can load packs made for earlier versions, including classic texture packs.\n\n## Highlights\n- **Built-in upgrade engine replaces the upstream converter** — no third-party conversion library is bundled, and everything runs offline.\n- **Upgrades only, decided per full `pack_format`** — older packs are lifted to the running version, newer packs are left untouched, and there is no downgrade path.\n- **Covers packs as far back as classic textures**: atlas-era `terrain.png`, blockstates and models, GUI atlases and widgets, fonts, sound events, panoramas, paintings, maps, spawn eggs, special item poses, and more migrate through known correspondences.\n- Clients 1.14.4–26.3 with one universal jar; still no Fabric API required.\n\n## UI and cache\n- Packs are **prepared in the background in parallel** with progress on the loading screen, no longer blocking the render thread one pack at a time.\n- **Valid cached packs no longer trigger the outdated-version warning**; the vanilla prompt appears only when a conversion is genuinely needed or impossible.\n- Localized Chinese/English text replaces the vanilla “made for an older version” prompt.\n- Temporary files, stubs, and converted packs live in `resourcepacks/.viaresourcepack/`, pruned against a 4 GiB soft budget.\n- Converted packs stay enabled after a restart — no re-select needed.\n\n## Diagnostics\n- Each cache entry writes `warnings.txt` covering unmapped atlas cells, removed assets, and models/shaders that cannot be reproduced faithfully; the log points to it.\n- Detailed migration logging is visible at the default INFO level.\n\n## Dependencies\nGradle 9.9.2, Loom 1.19.4, Fabric Loader 0.20.1, MixinExtras 0.5.5, Sponge Mixin 0.17.5, Gson 2.15.0, SLF4J 2.0.20; test stack JUnit 6.1.3 / AssertJ 3.27.7.\n\n## Compatibility\n- Data packs and built-in packs (vanilla, Programmer Art, High Contrast) are not processed.\n- Combinations with pack-loading accelerators such as PackForge are unverified.\n- Assets without a known equivalent still need manual work; the absence of a report does not guarantee every asset works."
+		},
 		{
 			"tag": "1.0.0",
 			"published": "2026-09-06T13:06:08Z",
@@ -18,7 +97,7 @@
 					"name": "ViaResourcePack-1.0.0.jar",
 					"url": "https://github.com/Dainsleif233/ViaResourcePack/releases/download/1.0.0/ViaResourcePack-1.0.0.jar",
 					"size": 797011,
-					"downloads": 9,
+					"downloads": 11,
 					"inspection": 2,
 					"sha256": "9ee9852de5a3022065df13aff07663d8c3ce66f98534f92253a6647f0ca33798",
 					"mods": [
