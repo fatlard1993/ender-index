@@ -127,7 +127,7 @@ const askedLine = asked => {
 							new Link({
 								href: note.issue.url,
 								target: '_blank',
-								textContent: note.draft ? 'a draft of the note to its author' : 'the note to its author',
+								textContent: 'a draft of the note to its author',
 							}),
 						]
 					: []),
@@ -138,19 +138,10 @@ const askedLine = asked => {
 	return line;
 };
 
-const closedNote = closed =>
-	new Meta({
-		tag: 'span',
-		append: [
-			`Its author closed the index's note on ${closed.on}, so it asks no more: `,
-			new Link({ href: closed.url, target: '_blank', textContent: 'the note' }),
-		],
-	});
-
 /**
- * Ask the index for a way to pay a mod's author, or for a built release, beside how many have asked; or, once its
- * author closed the index's note on it, that. Served by ender signed in to GitHub, one press files the ask as that
- * account; otherwise it opens the issue form, filled in, for the player to send.
+ * Ask the index for a way to pay a mod's author, or for a built release, beside how many have asked. Served by ender
+ * signed in to GitHub, one press files the ask as that account; otherwise it opens the issue form, filled in, for the
+ * player to send.
  */
 export const askControl = (entry, kind, { textContent, tooltip, variant }) => {
 	const holder = new Component({
@@ -162,16 +153,14 @@ export const askControl = (entry, kind, { textContent, tooltip, variant }) => {
 		.catch(() => ({ interest: {}, count: 0 }));
 	const control = new Component({ tag: 'span', append: [holder, askedLine(asked)] });
 
-	asked.then(({ closed }) => closed && holder.content(closedNote(closed)));
-
 	local.ready().then(async served => {
 		if (!served) return;
 
 		await local.loadAccount();
 
-		const { interest, closed } = await asked;
+		const { interest } = await asked;
 
-		if (!local.login || closed) return;
+		if (!local.login) return;
 
 		if (hasAsked(interest, entry, kind, local.login)) {
 			holder.content(

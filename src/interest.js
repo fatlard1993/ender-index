@@ -192,8 +192,8 @@ const postedBefore = async (api, placed, marker) => {
 };
 
 /**
- * Post a notice, or bring the one posted before up to date; one its author closed is left as it is. Answers where it
- * is, and when it was closed.
+ * Draft a notice, or bring the one drafted before up to date; one closed on the index is left as it is. Answers where
+ * it is, and when it was closed.
  */
 export const postNotice = async ({ api, placed, marker, recorded }) => {
 	const existing =

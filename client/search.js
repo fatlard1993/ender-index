@@ -660,8 +660,9 @@ export const askedUrl = (entry, login) =>
 	`${REPOSITORY}/issues?${new URLSearchParams({ q: `is:issue author:${login} "${collectionKey(entry)}"` })}`;
 
 /**
- * How many players the index has counted asking this of a mod, its note to the author while that is open, and when the
- * author closed it. A draft closed on the index is not its author's answer.
+ * How many players the index has counted asking this of a mod, and its note to the author while that is open. A note
+ * is a draft on the index, which its owner closes once they have reached out; that is no answer from the author, so
+ * players are still asked and counted.
  */
 export const askedCount = (interest, notices, entry, kind) => {
 	const note = notices[collectionKey(entry)]?.[kind];
@@ -669,7 +670,6 @@ export const askedCount = (interest, notices, entry, kind) => {
 	return {
 		count: interest[collectionKey(entry)]?.[kind]?.length ?? 0,
 		...(note?.issue && !note.closed ? { note } : {}),
-		...(note?.issue && note.closed && !note.draft ? { closed: { on: note.closed, url: note.issue.url } } : {}),
 	};
 };
 

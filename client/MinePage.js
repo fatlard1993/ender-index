@@ -27,13 +27,11 @@ const LACKS = {
 
 const ASKED = { funding: 'would pay you', releases: 'asked for a built release' };
 
-const needLine = ({ need, asked, told, closed }) =>
+const needLine = ({ need, asked }) =>
 	new Warning({
 		append: [
 			`${LACKS[need]} `,
 			...(asked > 0 ? [`${count(asked)} ${asked === 1 ? 'player' : 'players'} ${ASKED[need]}. `] : []),
-			...(told ? [`The index told you on ${told}. `] : []),
-			...(closed ? [`You closed its note on ${closed}, so it passes on no more asks. `] : []),
 			new Link({ href: authorsPath(need), textContent: 'How to fix that' }),
 		],
 	});
@@ -171,8 +169,8 @@ export default class MinePage extends View {
 			return;
 		}
 
-		const [entries, { interest, notices }] = await Promise.all([loadListing(), loadInterest()]);
-		const mods = yourMods({ entries, login: local.login, interest, notices });
+		const [entries, { interest }] = await Promise.all([loadListing(), loadInterest()]);
+		const mods = yourMods({ entries, login: local.login, interest });
 		const lacking = mods.filter(({ needs }) => needs.length > 0).length;
 
 		if (this.signal.aborted) return;
