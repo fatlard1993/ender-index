@@ -2,7 +2,7 @@ import { Button, Component, Dialog, Link, Notify, Select } from '@vanilla-bean/c
 import { specFor } from 'ender-launcher/spec';
 
 import { collection } from './collection';
-import { heldBack, local } from './local';
+import { heldBack, heldBuilds, local } from './local';
 import { loadInterest } from './data';
 import { BUILT_FROM_SOURCE, askUrl, askedUrl, askedCount, hasAsked, titleOf } from './search';
 import { Chip, Meta } from './ui';
@@ -36,6 +36,63 @@ const allowsBuilding = async entries => {
 	});
 };
 
+/**
+ * Ask the player to allow the build scripts a job was held for, showing which changed and the diff of them: they run
+ * on this machine with the player's permissions. Answers whether they allowed them.
+ */
+export const confirmHeldBuilds = async job => {
+	const held = heldBuilds(job);
+	const diffs = await Promise.all(held.map(build => local.buildDiff(build).catch(() => undefined)));
+	const body = new Component({
+		tag: 'div',
+		append: held.flatMap((build, at) => [
+			new Component({
+				tag: 'p',
+				textContent: `${build.key}'s build scripts changed since you allowed building it. They run on this machine with your permissions when it builds, so read what changed before allowing them.`,
+			}),
+			...build.changes.map(change => new Meta({ tag: 'div', textContent: change })),
+			new Component({
+				tag: 'pre',
+				textContent:
+					diffs[at] ??
+					'ender could not show the diff here (it uses git); the output above names both copies to compare.',
+				style: { maxHeight: '50vh', overflow: 'auto', whiteSpace: 'pre', fontSize: '0.85em' },
+			}),
+		]),
+	});
+
+	return Dialog.confirm({
+		header:
+			held.length === 1 ? `Allow ${held[0].key}'s new build scripts?` : `Allow ${held.length} mods' new build scripts?`,
+		body,
+		confirmLabel: 'Allow and build',
+		intent: 'warning',
+	});
+};
+
+/** Offer the review of a held build, and on the player's word allow its scripts and run the job again. */
+const offerHeldBuild = (named, job) =>
+	new Notify({
+		intent: 'warning',
+		content: `${named} was not installed: its build scripts changed since you allowed building it.`,
+		timeout: 0,
+		actions: [
+			{
+				textContent: 'See what changed',
+				onPointerPress: async () => {
+					if (!(await confirmHeldBuilds(job))) return;
+
+					try {
+						await local.finished(await local.allowBuildsAndRetry(job));
+						new Notify({ intent: 'success', content: `Installed ${named}, with its new build scripts allowed` });
+					} catch (error) {
+						new Notify({ intent: 'danger', content: `${named}: ${error.message}` });
+					}
+				},
+			},
+		],
+	});
+
 export const runLocally = async (verb, entries) => {
 	const named = entries.length === 1 ? titleOf(entries[0]) : `${entries.length} mods`;
 	const building = verb === 'add' && entries.some(entry => entry.fromSource);
@@ -53,6 +110,7 @@ export const runLocally = async (verb, entries) => {
 		return output;
 	} catch (error) {
 		if (heldBack(error.job).length > 0) return offerTrust(named, error.job);
+		if (heldBuilds(error.job).length > 0) return offerHeldBuild(named, error.job);
 
 		new Notify({ intent: 'danger', content: `${named}: ${error.message}` });
 	}

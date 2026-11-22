@@ -23,6 +23,7 @@ const state = {
 	stars: undefined,
 	starsError: undefined,
 	login: undefined,
+	organizations: [],
 	accountError: undefined,
 	players: undefined,
 	playersError: undefined,
@@ -66,6 +67,31 @@ export const heldBack = job => [
 		(job?.lines ?? []).flatMap(line => [...line.matchAll(/\[sha256:([0-9a-f]{64})\]/g)].map(([, hash]) => hash)),
 	),
 ];
+
+/**
+ * The source builds a failed job held because their build scripts changed since the player allowed them, by the mod
+ * and commit ender printed for each, with the scripts it said were added, changed or removed.
+ */
+export const heldBuilds = job => {
+	const lines = job?.lines ?? [];
+	const held = new Map();
+
+	for (const line of lines) {
+		for (const [, key, commit] of line.matchAll(/\[build-scripts:([^\]@\s]+)@([0-9a-f]+)\]/g))
+			held.set(`${key}@${commit}`, { key, commit });
+	}
+
+	const changes = lines
+		.map(line =>
+			line
+				.trim()
+				.match(/^(added|changed|removed): (.+)$/)
+				?.slice(1),
+		)
+		.filter(Boolean);
+
+	return [...held.values()].map(build => ({ ...build, changes: changes.map(([what, paths]) => `${what}: ${paths}`) }));
+};
 
 const call = async (method, path, body) => {
 	const response = await fetch(`./api/${path}`, {
@@ -194,7 +220,7 @@ const recallHeldBack = async jobs => {
 
 		const { lines = [], next = 0 } = await call('GET', `jobs/${encodeURIComponent(job.id)}?from=0`).catch(() => ({}));
 
-		if (heldBack({ lines }).length === 0) continue;
+		if (heldBack({ lines }).length === 0 && heldBuilds({ lines }).length === 0) continue;
 
 		const kept = { ...job, lines, next };
 
@@ -256,8 +282,9 @@ let accountAsked;
 /** Who ender signs in to GitHub as, asked once; an ender too old to say answers 404, and the page asks nothing as them. */
 const loadAccount = () =>
 	(accountAsked ??= call('GET', 'account')
-		.then(({ login }) => {
+		.then(({ login, organizations = [] }) => {
 			state.login = login;
+			state.organizations = organizations;
 		})
 		.catch(error => {
 			if (error.status !== 404) state.accountError = error.message;
@@ -388,6 +415,15 @@ export const local = {
 			throw Object.assign(error, { trusted: error.status === 409 });
 		}
 	},
+	/** What changed in a held build's scripts, as git prints a diff; undefined when ender cannot say. */
+	buildDiff: async ({ key, commit }) =>
+		(await call('GET', `builds?${new URLSearchParams({ key, commit })}`)).diff ?? undefined,
+	/** Allow the build scripts a finished job was held for, as they were held, then run it again; answers that job. */
+	allowBuildsAndRetry: async job => {
+		for (const { key, commit } of heldBuilds(job)) await call('POST', 'builds', { key, commit });
+
+		return start('POST', `jobs/${encodeURIComponent(job.id)}/again`);
+	},
 	jobFor: name => [...state.jobs.values()].findLast(job => job.instance === name),
 	watchJobs: (listener, signal) => listen(jobListeners, listener, signal),
 	publishInstance: (name, { fresh = false } = {}) => call('POST', `${named(name)}/gist`, fresh ? { fresh } : {}),
@@ -422,6 +458,10 @@ export const local = {
 	/** The GitHub login ender acts as, or undefined until it has said, or when it has none. */
 	get login() {
 		return state.login;
+	},
+	/** The organizations that GitHub login belongs to, as its own token sees them; none from an ender too old to say. */
+	get organizations() {
+		return state.organizations;
 	},
 	get accountError() {
 		return state.accountError;

@@ -417,6 +417,53 @@ describe('the instances page', () => {
 	});
 });
 
+describe('a source build ender held for changed build scripts', () => {
+	const failed = {
+		id: 'b1',
+		title: 'Adding gh:a/b',
+		instance: 'family',
+		state: 'failed',
+		lines: [
+			"xx github:a/b's build scripts changed since you allowed building it at c0ffee0:",
+			'added: mod.gradle',
+			'changed: build.gradle',
+			'Compare them with: git diff --no-index /x /y',
+			'They run on this machine with your permissions; ender add github:a/b --build allows these. [build-scripts:github:a/b@beef000000]',
+		],
+	};
+
+	test('is found in a failed job by the mod and commit ender printed, with the scripts it named', () => {
+		expect(local.heldBuilds(failed)).toEqual([
+			{ key: 'github:a/b', commit: 'beef000000', changes: ['added: mod.gradle', 'changed: build.gradle'] },
+		]);
+		expect(local.heldBuilds({ lines: ['Mods changed: 3'] })).toEqual([]);
+		expect(local.heldBuilds(undefined)).toEqual([]);
+	});
+
+	test('is allowed by its mod and commit, as held, and the job run again', async () => {
+		responses['/api/builds'] = { allowed: 'github:a/b' };
+		responses['/api/jobs/b1/again'] = { job: { id: 'b2', title: 'Adding gh:a/b', state: 'done', lines: [] } };
+		sent.length = 0;
+
+		expect((await local.local.allowBuildsAndRetry(failed)).id).toBe('b2');
+		expect(sent.map(([method, address, body]) => [method, address.replace(/^.*\/api\//, ''), body])).toEqual([
+			['POST', 'builds', JSON.stringify({ key: 'github:a/b', commit: 'beef000000' })],
+			['POST', 'jobs/b1/again', undefined],
+		]);
+	});
+
+	test('is offered beside its instance, naming the scripts that changed', async () => {
+		const { heldBuildOffer } = await import('../client/InstancesPage');
+		const holder = document.createElement('div');
+
+		for (const part of heldBuildOffer(failed, () => {})) holder.append(part.elem);
+
+		expect(holder.textContent).toContain("github:a/b's build scripts changed since you allowed building it.");
+		expect(holder.textContent).toContain('changed: build.gradle');
+		expect([...holder.querySelectorAll('button')].map(button => button.textContent)).toContain('See what changed');
+	});
+});
+
 describe('a jar ender held back', () => {
 	const hash = 'cd'.repeat(32);
 	const failed = {

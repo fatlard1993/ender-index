@@ -19,13 +19,13 @@ import { specFor } from 'ender-launcher/spec';
 
 import { collection } from './collection';
 import { loadVersions } from './data';
-import { heldBack, lastSaid, local } from './local';
-import { listingButton } from './controls';
+import { heldBack, heldBuilds, lastSaid, local } from './local';
+import { confirmHeldBuilds, listingButton } from './controls';
 import { instanceNameOf, packDialog } from './packMaker';
 import { packOrMods, readPasted } from './pasted';
 import { playerChoice } from './playersPanel';
 import { LOADERS } from './search';
-import { Alarm, Chip, Command, LAUNCHER, Meta, Row, Stack, Title, siteBar, siteFooter } from './ui';
+import { Alarm, Chip, Command, LAUNCHER, Meta, Row, Stack, Title, Warning, siteBar, siteFooter } from './ui';
 
 const NAMEABLE_SOURCES = new Set(['github', 'codeberg', 'gitlab', 'modrinth', 'curseforge']);
 
@@ -145,11 +145,56 @@ const modList = (manifest, onDrop) =>
  * explains, and the output keeps every line ender printed. Undefined for any other job.
  */
 const heldBackLine = job => {
-	const count = job && job.state !== 'running' ? heldBack(job).length : 0;
+	if (!job || job.state === 'running') return undefined;
 
-	return count > 0
-		? `${job.title} stopped: ender held back ${count === 1 ? 'a jar' : `${count} jars`}, as below`
-		: undefined;
+	const count = heldBack(job).length;
+
+	if (count > 0) return `${job.title} stopped: ender held back ${count === 1 ? 'a jar' : `${count} jars`}, as below`;
+	if (heldBuilds(job).length > 0) return `${job.title} stopped: a mod's build scripts changed, as below`;
+
+	return undefined;
+};
+
+/**
+ * A source build held because its build scripts changed, beside the instance whose job it was: which changed, and the
+ * one way past it, reading the diff and allowing them, which runs the job again.
+ */
+export const heldBuildOffer = (job, runJob) => [
+	new Warning({
+		append: [
+			...heldBuilds(job).flatMap(build => [
+				new Component({
+					tag: 'strong',
+					textContent: `${build.key}'s build scripts changed since you allowed building it.`,
+				}),
+				...build.changes.map(change => new Meta({ tag: 'div', textContent: change })),
+			]),
+			new Row({
+				append: [
+					new Button({
+						variant: 'flat',
+						textContent: 'See what changed',
+						onPointerPress: async () => {
+							if (await confirmHeldBuilds(job)) {
+								runJob(() => local.allowBuildsAndRetry(job), {
+									done: `${job.title}: done, with the new build scripts allowed`,
+								});
+							}
+						},
+					}),
+				],
+			}),
+		],
+	}),
+];
+
+/** Whatever a finished job held for the player to decide, with its way past. */
+const heldOffer = (job, runJob) => {
+	if (!job || job.state === 'running') return [];
+	if (heldBack(job).length > 0) return trustOffer(job, runJob);
+	if (heldBuilds(job).length > 0) return heldBuildOffer(job, runJob);
+
+	return [];
 };
 
 /**
@@ -213,9 +258,7 @@ const instanceCard = (instance, signal) => {
 		for (const button of actions) button.options.disabled = working;
 
 		status.elem.textContent = heldBackLine(job) ?? jobLine(job);
-		trusting.content(
-			job && job.state !== 'running' && heldBack(job).length > 0 ? trustOffer(job, (...args) => runJob(...args)) : [],
-		);
+		trusting.content(heldOffer(job, (...args) => runJob(...args)));
 		showProgress(bar, job);
 		showOutput(output, job, open.output);
 	};
@@ -421,8 +464,7 @@ const runInto = async (status, starting, trusting) => {
 			(error.trusted ? error.message : heldBackLine(error.job)) ?? `It did not work: ${error.message}`;
 		trusting?.content([]);
 
-		if (trusting && heldBack(error.job).length > 0)
-			trusting.content(trustOffer(error.job, again => runInto(status, again, trusting)));
+		if (trusting) trusting.content(heldOffer(error.job, again => runInto(status, again, trusting)));
 	} finally {
 		controller.abort();
 	}
