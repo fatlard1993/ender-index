@@ -514,6 +514,21 @@ describe('a crawl held up', () => {
 		]);
 	});
 
+	test('gives a repository started near the end only the budget left, and leaves it for the next crawl to go first', async () => {
+		setSystemTime();
+
+		const started = Date.now();
+		const outcome = await crawlEach(['a/huge-release'], {
+			crawlRepo: () => new Promise(() => {}),
+			deadline: started + 80,
+			repoLimit: 15 * 60_000,
+		});
+
+		expect(Date.now() - started).toBeLessThan(1000);
+		expect(outcome.failures).toEqual([]);
+		expect(outcome.stopped).toEqual(['Stopped at the time budget with 1 of 1 left; they are crawled first next time']);
+	});
+
 	test('a request that never answers is given up on at its limit and asked again', async () => {
 		const { fetchSteady } = await import('../src/fetch');
 		let asked = 0;

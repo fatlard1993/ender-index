@@ -861,6 +861,7 @@ export const crawlEach = async (
 	const slow = [];
 	const limits = new Map();
 	let waiting = repos;
+	let outOfTime = false;
 
 	while (waiting.length > 0) {
 		const later = [];
@@ -873,9 +874,18 @@ export const crawlEach = async (
 				return;
 			}
 
+			const byBudget = deadline - Date.now() < repoLimit;
+
 			try {
-				await within(crawlRepo(line), repoLimit);
+				await within(crawlRepo(line), byBudget ? deadline - Date.now() : repoLimit);
 			} catch (error) {
+				if (error instanceof TookTooLong && byBudget) {
+					outOfTime = true;
+					later.push(line);
+
+					return;
+				}
+
 				if (error instanceof TookTooLong) {
 					slow.push(line);
 					console.log(`set aside ${line} :: ${error.message}`);
@@ -907,7 +917,7 @@ export const crawlEach = async (
 
 		if (later.length === 0) break;
 
-		if (Date.now() > deadline) {
+		if (outOfTime || Date.now() > deadline) {
 			stopped.push(
 				`Stopped at the time budget with ${later.length} of ${repos.length} left; they are crawled first next time`,
 			);
