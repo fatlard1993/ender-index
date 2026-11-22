@@ -7,7 +7,15 @@ const ids = markup => [...markup.matchAll(/<h[2-6] id="([^"]+)"/g)].map(([, id])
 
 test("the guide's parts are linked by name, so a link to one keeps landing there", () => {
 	expect(ids(renderGuide(guide))).toEqual(
-		expect.arrayContaining(['releases', 'funding', 'being-found', 'explaining-a-finding', 'opting-out', 'notices']),
+		expect.arrayContaining([
+			'releases',
+			'funding',
+			'being-found',
+			'explaining-a-finding',
+			'opting-out',
+			'reports-and-takedowns',
+			'notices',
+		]),
 	);
 });
 
