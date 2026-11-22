@@ -6,8 +6,82 @@
 	"archived": false,
 	"license": "Apache-2.0",
 	"created": "2026-10-24T19:10:41Z",
-	"pushed": "2026-11-19T13:04:02Z",
+	"pushed": "2026-11-22T14:28:12Z",
 	"releases": [
+		{
+			"tag": "v0.5.2",
+			"published": "2026-11-22T14:28:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 779327211,
+					"name": "pure-metal-0.5.2.jar",
+					"url": "https://github.com/imCinq/pure-metal/releases/download/v0.5.2/pure-metal-0.5.2.jar",
+					"size": 605607,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "8fa1f13d4f6eb33dc80b271657c12c6e1f0a458edc5228b28340614a653e3e7e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "puremetal",
+							"version": "0.5.2",
+							"name": "Pure Metal",
+							"description": "A native Metal renderer for Minecraft on Apple Silicon Macs. Same visuals as vanilla, rendered through Metal instead of OpenGL. Works with Sodium. Terrain LOD for extra FPS at long render distances, plus optional Render Scale.",
+							"minecraft": "26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java"
+							],
+							"provides": [],
+							"suggests": [
+								"sodium"
+							]
+						}
+					],
+					"icon": "e19c8e4726b2080579e855f0f9fa9586f896c3dc60accc579d4c195b674f4593.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"version": 3,
+						"classes": 185,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"io/github/imcinq/puremetal/backend/MetalNative.class": [
+									"java/lang/foreign/SymbolLookup.libraryLookup in load",
+									"java/lang/foreign/Linker.nativeLinker in fn",
+									"java/lang/foreign/Linker.downcallHandle in fn"
+								]
+							},
+							"exec": {
+								"io/github/imcinq/puremetal/bench/UserBench.class": [
+									"java/lang/ProcessBuilder.<init> in sysctl",
+									"java/lang/ProcessBuilder.redirectErrorStream in sysctl",
+									"java/lang/ProcessBuilder.start in sysctl"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"github.com": [
+								"io/github/imcinq/puremetal/scale/SodiumStarWidget.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Fixes\n\n- MetalFX Temporal: fixed vertical motion vectors and sub-pixel jitter signs. Fast camera movement no longer ghosts the way it did before, and distant edges stay steady below 100% Render Scale.\n- Metal 4: allocations freed and reused across frames stay in the residency set while still in use, failed command encoders close their command buffer cleanly, and the Metal 4 shader compiler initializes safely across threads.\n- Unaligned writes and copies to GPU-written buffers now use a GPU byte-copy fallback instead of corrupting adjacent bytes, and partial region clears check both color and depth targets before queuing work (with `RG16_FLOAT` support added).\n- Fixed a potential crash on shutdown after Metal 3 profiling splits and cleared worker-thread references when Sodium Terrain LOD meshing finishes.\n\n## Improvements\n\n- Starting the game with an Intel (x86_64) Java runtime under Rosetta now explains that Pure Metal needs an ARM64 (Apple Silicon) Java 25 build instead of reporting an unsupported Mac.\n- When Pure Metal is inactive, the F3 line shows the active graphics backend instead of always saying OpenGL.\n- Error details written to `puremetal-benchmark.txt` now redact personal paths.\n- Removed the fast-motion ghosting note from the MetalFX Temporal descriptions in the README and Video Settings.\n\n## Requirements\n\n- Apple Silicon Mac, macOS 14 or newer (macOS 15 or newer for Fast Terrain, macOS 26 for Metal 4)\n- Minecraft 26.3, Fabric Loader 0.19+, Java 25 (ARM64 / Apple Silicon build)\n- Sodium is optional; Iris and shader packs are not supported."
+		},
 		{
 			"tag": "v0.5.1",
 			"published": "2026-11-19T12:53:14Z",
@@ -18,7 +92,7 @@
 					"name": "pure-metal-0.5.1.jar",
 					"url": "https://github.com/imCinq/pure-metal/releases/download/v0.5.1/pure-metal-0.5.1.jar",
 					"size": 603061,
-					"downloads": 1,
+					"downloads": 23,
 					"inspection": 2,
 					"sha256": "1e727f919d61bc3540b90face98096d60b3f7c38df38e89badb2fc74f4896e83",
 					"mods": [
@@ -81,7 +155,7 @@
 					"name": "pure-metal-0.5.1-benchmark.jar",
 					"url": "https://github.com/imCinq/pure-metal/releases/download/benchmark-0.5.1/pure-metal-0.5.1-benchmark.jar",
 					"size": 599623,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "80eb8dc19b2faba40666141ad43a510f947d48d17ec960da51fdb390e18ebda8",
 					"mods": [

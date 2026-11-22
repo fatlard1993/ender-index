@@ -6,8 +6,96 @@
 	"archived": false,
 	"license": "LGPL-2.1",
 	"created": "2020-11-02T13:43:12Z",
-	"pushed": "2026-11-20T17:40:18Z",
+	"pushed": "2026-11-22T15:11:32Z",
 	"releases": [
+		{
+			"tag": "12.5",
+			"published": "2026-11-22T15:15:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 779464454,
+					"name": "mixinbooter-12.5.jar",
+					"url": "https://github.com/CleanroomMC/MixinBooter/releases/download/12.5/mixinbooter-12.5.jar",
+					"size": 2581401,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "933c527a140eac9a9f52b18d6acc80ab908de6368684c6295295c49305d940e5",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 1374,
+						"jars": [],
+						"capabilities": {
+							"unsafe": {
+								"com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe in <clinit>"
+								]
+							},
+							"network": {
+								"com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream in findBootstrapClass"
+								],
+								"org/spongepowered/asm/mixin/CleanroomUtil.class": [
+									"java/net/URL.openConnection in findCompatibilityResource",
+									"java/net/URL.openStream in loadCompatibilities"
+								],
+								"org/spongepowered/asm/mixin/transformer/MixinConfig.class": [
+									"java/net/URL.openConnection in findSource"
+								],
+								"zone/rong/mixinbooter/MixinBooterModContainer.class": [
+									"java/net/URL.openStream in loadMetadata"
+								]
+							},
+							"classloading": {
+								"org/jetbrains/java/decompiler/modules/decompiler/ClasspathHelper$1.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"org/spongepowered/tools/agent/MixinAgent$Transformer.class": [
+									"java/lang/instrument/Instrumentation.getAllLoadedClasses in reApplyMixins",
+									"java/lang/instrument/Instrumentation.redefineClasses in reApplyMixins"
+								],
+								"org/spongepowered/tools/agent/MixinAgent.class": [
+									"java/lang/instrument/Instrumentation.addTransformer in initTransformer",
+									"java/lang/instrument/Instrumentation.isRedefineClassesSupported in init"
+								],
+								"org/spongepowered/tools/agent/MixinAgentClassLoader.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"zone/rong/mixinbooter/MixinBooterPlugin.class": [
+									"java/net/URLClassLoader in injectSelfIntoAppClassLoader"
+								],
+								"zone/rong/mixinbooter/service/BytecodeProvider.class": [
+									"java/net/URLClassLoader.<init> in getClassBytes",
+									"java/net/URLClassLoader.getResourceAsStream in getClassBytes"
+								],
+								"zone/rong/mixinbooter/service/ClassLoadTracer.class": [
+									"\"java.lang.ClassLoader\" by name",
+									"\"java.security.SecureClassLoader\" by name"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"github.com": [
+								"com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### Fixed\n- Crash reports never listing the mixins applied to classes in the stacktrace\n- Crash report mixin metadata missing on 1.8.x, it is no longer skipped there\n- INIT phase never starting on time on Forge 1.8 to 1.10.2, which lack `FMLLog#log`\n- Bare versions in version ranges (such as `1.2`) matching every version instead of exactly that version\n- `config/mixinbooter.cfg` being read from the working directory instead of the game directory\n- A `mcmod.info` entry without a `modid` dropping every other mod listed in the same file\n- `before:` entries in mod dependencies being treated as the mod needing that mod\n- Early loading and `ClassNotFoundException`s from `maven-artifact`, which is now shaded in\n### Changed\n- Updated CleanMix to 0.10.0\n  - Lower memory usage, `ClassInfo` objects are smaller and refmap strings are deduplicated and interned\n  - Less work per class transform, configs for later phases are no longer prepared early\n  - Mixin hotswapping works again\n  - A mixin config that throws while preparing is dropped instead of crashing the game\n  - Config sources that are not jars no longer crash\n  - Fixed a race between phase changes and class transformation on other threads\n  - Ported upstream fixes for generic signatures with bounded type parameters and nested arrays\n\n**Full changelog between 12.4 and 12.5**: https://github.com/CleanroomMC/MixinBooter/compare/12.4...12.5"
+		},
 		{
 			"tag": "12.4",
 			"published": "2026-11-17T16:44:33Z",
@@ -18,7 +106,7 @@
 					"name": "mixinbooter-12.4.jar",
 					"url": "https://github.com/CleanroomMC/MixinBooter/releases/download/12.4/mixinbooter-12.4.jar",
 					"size": 2545811,
-					"downloads": 1,
+					"downloads": 25,
 					"inspection": 2,
 					"sha256": "d31ec8552876b69c1dbda3cd6891e1a3bcbfc5155083ca7a6f887804a4f24b91",
 					"mods": [],
@@ -94,7 +182,7 @@
 					"name": "mixinbooter-12.2.jar",
 					"url": "https://github.com/CleanroomMC/MixinBooter/releases/download/12.2/mixinbooter-12.2.jar",
 					"size": 2545604,
-					"downloads": 95,
+					"downloads": 96,
 					"inspection": 2,
 					"sha256": "e070a36c789a11bf98e3bf0e1ee7f72cfb91c00ed4634005bc6aa211a19db716",
 					"mods": [],
@@ -166,7 +254,7 @@
 					"name": "mixinbooter-12.1.jar",
 					"url": "https://github.com/CleanroomMC/MixinBooter/releases/download/12.1/mixinbooter-12.1.jar",
 					"size": 2545592,
-					"downloads": 9,
+					"downloads": 10,
 					"inspection": 2,
 					"sha256": "1cfe1f93b158c5f33ca54a18ac606c40eb8ceb5407810b69b9fa5b41866ffe59",
 					"mods": [],
@@ -238,7 +326,7 @@
 					"name": "mixinbooter-11.18.jar",
 					"url": "https://github.com/CleanroomMC/MixinBooter/releases/download/11.18/mixinbooter-11.18.jar",
 					"size": 2451781,
-					"downloads": 80,
+					"downloads": 84,
 					"inspection": 2,
 					"sha256": "ac6779132ca4df1a4f6319f3edc605c9d9b6c8ff6889e851472e2b41ecce273e",
 					"mods": [],
