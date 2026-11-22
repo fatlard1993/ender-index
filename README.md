@@ -185,7 +185,7 @@ A record, trimmed:
 
 An asset may instead carry `error` (it could not be fetched or scanned), `metadataError` (its metadata could not be read), `knownBad`, `replaced` or `gone`. A repository with no built release carries `source`: the commit read and the mods its source declares. Jars are never rehosted: `url` is the author's own release.
 
-Each file a launcher reads has a JSON Schema in [`schemas/v1/`](schemas/v1), and [`data/index.json`](data/index.json) names them. Each shape version keeps its own folder, so version 1's schemas stay where they are after a version 2. The tests check every published file against its schema, so data that breaks one fails CI before it is published.
+Each file a launcher reads has a JSON Schema in [`schemas/v1/`](schemas/v1), and [`data/index.json`](data/index.json) names them. Each shape version keeps its own folder, so version 1's schemas stay where they are after a version 2. The tests check every published file against its schema. A change to the code fails CI before it is published; a crawl publishes its data first and checks it right after, so data that breaks a schema turns that crawl's run red within the hour.
 
 ## For launchers
 
@@ -212,6 +212,7 @@ The index is meant to be built on: any launcher can read it the way ender does. 
 `schema` in `data/index.json` is the version of the data's shape. It is 1.
 
 - **Fields are only added.** A new field, a new finding name, or a new value where a list is open, such as a funding platform, can appear in any crawl. Ignore what you do not know.
+- **Two lists are closed:** `host` (`github`, `codeberg`, `gitlab`) and a mod's `environment` (`*`, `client`, `server`). A launcher needs every value of both to find a record and to decide what to install, so a new value in either raises `schema`.
 - **A change that could break you raises `schema`:** a field removed or renamed, a type or meaning changed, or a file moved. It is announced below at least 30 days before it is published.
 - **The schemas are the contract,** and the tests hold every published file to them.
 - **Covered:** `index.json`, `search.json`, `mods/`, `known-bad.json`, `withheld.json`, `opted-out.json`, `renames.json` and `explanations.json`. **Not covered yet:** `packs.json`, `packs/` and `pack-pages/` are published and ender reads them, but they have no schema and may change without notice.
