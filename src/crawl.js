@@ -1104,9 +1104,10 @@ export const dropWithheld = async (files, records, withheld) => {
 
 export const writeLists = async () => {
 	const withheld = await readWithheld(DATA);
+	const found = await recordFiles();
 	const { files, records } = await dropWithheld(
-		await recordFiles(),
-		await Promise.all((await recordFiles()).map(file => Bun.file(file).json())),
+		found,
+		await Promise.all(found.map(file => Bun.file(file).json())),
 		withheld,
 	);
 	const knownBad = new Map(
