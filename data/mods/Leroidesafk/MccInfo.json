@@ -2,12 +2,108 @@
 	"repo": "Leroidesafk/MccInfo",
 	"host": "github",
 	"description": "Client-side Fabric Qol mod for MCC Island",
-	"stars": 2,
+	"stars": 3,
 	"archived": false,
 	"license": "NOASSERTION",
 	"created": "2026-10-31T17:02:21Z",
-	"pushed": "2026-11-18T09:54:30Z",
+	"pushed": "2026-11-22T16:50:34Z",
 	"releases": [
+		{
+			"tag": "v1.1.8",
+			"published": "2026-11-22T16:50:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 779744556,
+					"name": "mccinfo-26.2+1.1.8.jar",
+					"url": "https://github.com/Leroidesafk/MccInfo/releases/download/v1.1.8/mccinfo-26.2%2B1.1.8.jar",
+					"size": 1294956,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "01c3179b9041c52285c28abf38091a7d2660e3315d77a5da335bd6297fff5aa0",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "mccinfo",
+							"version": "1.1.8",
+							"name": "MccInfo",
+							"description": "Utility mod for MCC Island.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"noxesium"
+							],
+							"provides": [],
+							"suggests": [
+								"voicechat"
+							],
+							"breaks": [
+								"mccfishheart"
+							],
+							"breaksVersions": {
+								"mccfishheart": "*"
+							}
+						}
+					],
+					"icon": "2dfc8ea2ebcc5be7cce01dcab7c2c6f48b12351dfee30f18ea9d300de7613bf9.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"version": 3,
+						"classes": 432,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"leroidesafk/mccinfo/client/chat/MccApi.class": [
+									"java/net/http/HttpClient.sendAsync in flush",
+									"java/net/http/HttpClient.newBuilder in <clinit>"
+								],
+								"leroidesafk/mccinfo/client/emote/EmoteLibrary.class": [
+									"java/net/http/HttpClient.send in download"
+								],
+								"leroidesafk/mccinfo/client/gui/SettingsInfo.class": [
+									"java/net/http/HttpClient.sendAsync in load"
+								],
+								"leroidesafk/mccinfo/client/relay/SpotSync.class": [
+									"java/net/http/HttpClient.newBuilder in relayHttpClient",
+									"java/net/http/HttpClient.newWebSocketBuilder in connect"
+								]
+							}
+						},
+						"signals": {
+							"session": {
+								"leroidesafk/mccinfo/client/relay/SpotSync.class": [
+									"net/minecraft/client/User.getAccessToken"
+								]
+							}
+						},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"api.mccisland.net": [
+								"leroidesafk/mccinfo/client/chat/MccApi.class"
+							],
+							"gateway.noxcrew.com": [
+								"leroidesafk/mccinfo/client/gui/SettingsPages.class"
+							],
+							"modrinth.com": [
+								"leroidesafk/mccinfo/client/gui/SettingsPages.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 1.1.8 - GUI Scale Fixes\n\n### New\n- **Utils**: new option \"Better Item Amounts\" (on by default). In the menus where the item list can be shown (Infinibag, Island Exchange...) and in a few other menus (Fishing Supplies, where your equipped bait shows how many are left, Summary...), each item shows its real amount instead of the vanilla stack count, in the MCC font on a dark frame, shortened to 3 characters (1.5k, 12k, 0.1M, 2.5B...).\n- **Fishing**: new option \"Show Perk Levels\" (on by default). In the Fishing Perks menu, each perk shows its level (and in the Fishing Supplies menu, the Hook, Magnet, Rod and Unstable Overclocks) in the bottom right corner, in the same style as the item amounts. Two styles: \"Level Only\" (default, normal size, only your level) or \"Small Level/Max\" (smaller text with the max level, like 12/40). Perks at level 0 are shown in red.\n- **Fishing**: new option \"Show Tides and Winds in the Navigator\" (on by default). In the Fishing Islands menu, each island shows its active tide in the bottom right corner and its active winds in the bottom left corner.\n- **Settings**: new \"Discord\" link, to join the MccInfo Discord server.\n- **Wipe to Black**: new \"Iris\" transition. A black circle closes on the middle of the screen, like at the end of old cartoons, and opens again once you arrive.\n- **Parkour**: new option \"In Fishing Messages\" under Show Improvements (on by default). When Fishing Messages is on in the settings, your split times and improvements go in its box instead of the chat. The box opens by itself if it was hidden or if you are not in a fishing instance.\n\n### Changes\n- **Mcc JEI**: the Cosmetic Preview always shows the normal version of a cosmetic (the one you can wear). Locking a token or a blueprint locks the normal version and highlights all three. Middle-Click on a cosmetic group opens it and locks the normal version. The cosmetics you are wearing (like your cloak) now show their full item and tooltip.\n- **Updates**: the mod no longer installs new versions by itself (was only for beta-testers anyways). When a new version is needed, the update box gives you the download link, and you replace the jar yourself.\n- **Updates**: when a new version comes out, a recent older version can keep all its features for a while. The update box still suggests the new version.\n- **Fishing**: in the Fishing Perks menu, the upgrade arrow on the perks you can upgrade is now in the top right corner of the slot.\n\n### Fixes\n- **Utils**: at a small GUI Scale, the icons on the items (missing materials, not owned, maxed, best island, upgradable perks, fish checkmarks...) were too big and covered the slots next to them. They now get smaller with the slots.\n- **Quest Lock**: Shift-Clicking quests very fast could still reroll a locked quest. After a reroll, the quest slot now waits for the new quest before taking another Shift-Click.\n- **Mcc JEI**: 3-star weapons now show their evolved model, and the Cosmetic Preview shows the star count you hover instead of always the 0-star version.\n- **Mcc JEI**: the Cosmetic Preview now gets smaller when there is not enough room, instead of losing its tint panel or disappearing.\n- **MccInfo Chat**: pressing the Up Arrow in the chat moved the focus to the MCCINFO button, so you could not edit the old message without clicking the text box. It now only brings back your last message.\n- **Updates**: after pressing Later, the update box came back each time you changed server (lobby to a game...). It now stays closed until you leave MCC Island."
+		},
 		{
 			"tag": "v1.1.7",
 			"published": "2026-11-18T09:50:43Z",
@@ -18,7 +114,7 @@
 					"name": "mccinfo-26.2+1.1.7.jar",
 					"url": "https://github.com/Leroidesafk/MccInfo/releases/download/v1.1.7/mccinfo-26.2%2B1.1.7.jar",
 					"size": 1287375,
-					"downloads": 1,
+					"downloads": 21,
 					"inspection": 2,
 					"sha256": "baaa8985738c4529602146d54c1fb24331de246b810d3449fc165b0621e8b8ef",
 					"mods": [
