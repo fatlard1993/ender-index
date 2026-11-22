@@ -66,6 +66,8 @@ Each mod has a page, made from what the repository already holds:
 
 Each jar's findings show on its page: what its code can reach beyond the game, like the network, what it warns of, like a chat webhook, and the hosts its strings name. [What each finding means](https://fatlard1993.github.io/ender-index/findings) says what grants it and what players read into it. You can answer one two ways. Change the mod so the finding goes away, or explain it: [open an Explain a finding issue](https://github.com/fatlard1993/ender-index/issues/new?template=explain.yml) naming the mod, the finding, and what the code does with it. Once the index has looked it over, it shows beside that finding on every jar that has it, labelled as yours and with the release it was written for, because the index has not checked what it says. Say what a player would want to know: why the mod opens a connection, and to where.
 
+An explanation covers the finding as it stood in the release it was approved against: the calls behind it, and for a network or hosts finding, the hosts its code names. When a later jar reaches past that, with a call or a host the explanation never covered, the page says so beside it, until it is looked over again against that jar or rewritten.
+
 The issue has to come from the account that owns the repository, or one that made at least half its commits, and for now only mods on GitHub can be explained this way. Changed words are looked over again before they replace what shows; emptying the explanation takes it down at once. If the finding is wrong, say so on the form: that is how the index learns which checks to refine.
 
 ## Opting out

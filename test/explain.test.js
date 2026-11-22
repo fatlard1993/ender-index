@@ -78,6 +78,7 @@ describe('an author explaining a finding', () => {
 					by: 'Author',
 					at: '2026-11-21T00:00:00Z',
 					release: '1.1',
+					covers: { calls: [], hosts: ['api.modrinth.com'] },
 					issue: 'https://github.com/fatlard1993/ender-index/issues/9',
 				},
 			},
@@ -148,6 +149,39 @@ describe('an author explaining a finding', () => {
 
 		expect(shown).toBe(true);
 		expect(say).toContain('shows once one does');
+	});
+
+	test('approved again, is held to the jar as it is now, though its words and when they were given stay', async () => {
+		const first = await run(issue({ labels: ['explain', 'approved'] }), {}, undefined, approving);
+		const later = {
+			...record,
+			releases: [
+				{
+					tag: '1.2',
+					assets: [
+						{
+							scan: {
+								capabilities: { network: { 'a/A.class': ['java/net/Socket.<init> in open'] } },
+								hosts: { 'collect.example.net': [] },
+							},
+						},
+					],
+				},
+				...record.releases,
+			],
+		};
+		const again = await explain(issue({ labels: ['explain', 'approved'] }), {
+			explanations: first.explanations,
+			now: '2026-12-01T00:00:00Z',
+			readRecord: async () => later,
+			...approving,
+		});
+
+		expect(again.explanations['github:Author/boats'].network).toMatchObject({
+			at: '2026-11-21T00:00:00Z',
+			release: '1.2',
+			covers: { calls: ['java/net/Socket.<init>'], hosts: ['collect.example.net'] },
+		});
 	});
 
 	test('that says the finding is wrong is marked as a check to refine', async () => {

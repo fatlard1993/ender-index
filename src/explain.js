@@ -1,5 +1,6 @@
 import { join } from 'node:path';
 
+import { coveredBy } from '../client/evidence';
 import { DATA, parseLine, readJson, readRenames, recordPath, renamedLine, writeJson } from './crawl';
 import { fieldsOf } from './shot';
 import { modLineOf, modUrl } from './submit';
@@ -172,11 +173,14 @@ export const explain = async (
 		);
 	}
 
+	const unchanged = before?.text === text;
+
 	(kept[key] ??= {})[finding] = {
 		text,
 		by: issue.user.login,
-		at: before?.text === text ? before.at : now,
-		release: before?.text === text ? before.release : record.releases[0]?.tag,
+		at: unchanged ? before.at : now,
+		release: record.releases[0]?.tag,
+		covers: coveredBy(record.releases[0]?.assets ?? [], finding),
 		issue: issue.html_url,
 	};
 

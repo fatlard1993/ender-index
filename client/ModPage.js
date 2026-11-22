@@ -22,6 +22,7 @@ import { ownerName } from 'ender-launcher/support';
 import { collection } from './collection';
 import { loadExplanations, loadListing, loadPacks, loadShots, loadVersions } from './data';
 import { explainUrl, rescanUrl } from './forms';
+import { uncovered } from './evidence';
 import { libraryOf } from './libraries';
 import { packCard } from './packs';
 import { shareUrl } from './shots';
@@ -222,8 +223,14 @@ const AuthorsWord = styled.Component(
 	`,
 );
 
-const authorsWord = note =>
-	note
+/**
+ * An author's explanation beside the finding it answers, and, when the jar holds more of that finding than the
+ * explanation covered when it was approved, what it does not cover: a host it never named, a call it never made.
+ */
+const authorsWord = (note, asset, finding) => {
+	const drift = note ? uncovered(asset, finding, note.covers) : [];
+
+	return note
 		? [
 				new AuthorsWord({
 					append: [
@@ -237,10 +244,21 @@ const authorsWord = note =>
 						}),
 						new Component({ tag: 'p', textContent: note.text, style: { margin: 0, whiteSpace: 'pre-line' } }),
 						new Meta({ tag: 'div', textContent: 'Their own words, which the index has not checked.' }),
+						...(drift.length > 0
+							? [
+									new Warning({
+										tag: 'div',
+										textContent: `Written for ${note.release ?? 'an earlier release'}, it does not cover what this jar has since: ${drift.slice(0, DRIFT_SHOWN).join(', ')}${drift.length > DRIFT_SHOWN ? `, and ${drift.length - DRIFT_SHOWN} more` : ''}`,
+									}),
+								]
+							: []),
 					],
 				}),
 			]
 		: [];
+};
+
+const DRIFT_SHOWN = 5;
 
 /**
  * The classes behind a finding, the mod's own first, then those of each library it bundles under that library's name:
@@ -290,7 +308,7 @@ const levelChip = name =>
  * One finding folded: how much it matters and what it usually means, in plain words; opened, its own name, a link to
  * more, the classes behind it, and its author's word.
  */
-const findingDetails = ({ name, technical, linkText, classes, note }) => {
+const findingDetails = ({ asset, name, technical, linkText, classes, note }) => {
 	const guide = FINDING_GUIDE[name];
 	const details = new Component({ tag: 'details', style: { overflowWrap: 'anywhere' } });
 	const libraries = Object.keys(classes).map(libraryOf);
@@ -320,59 +338,68 @@ const findingDetails = ({ name, technical, linkText, classes, note }) => {
 		new Meta({ tag: 'div', textContent: `${name}: ${technical ?? ''}` }),
 		onItsOwnLine(new Link({ href: findingsPath(name), textContent: linkText })),
 		...evidenceLines(classes),
-		...authorsWord(note),
+		...authorsWord(note, asset, name),
 	);
 
 	return details;
 };
 
-const capabilityList = (scan, explained, unsourced) => [
-	...Object.entries(scan?.capabilities ?? {}).map(([capability, classes]) =>
-		findingDetails({
-			name: capability,
-			technical: CAPABILITIES[capability],
-			linkText: `What reaching ${capability} means`,
-			classes,
-			note: explained[capability],
-		}),
-	),
-	...Object.entries(scan?.signals ?? {}).map(([signal, classes]) =>
-		findingDetails({
-			name: signal,
-			technical: WARNINGS[signal],
-			linkText: `What ${/^[aeiou]/.test(signal) ? 'an' : 'a'} ${signal} warning means`,
-			classes,
-			note: explained[signal],
-		}),
-	),
-	...((scan?.hidden ?? []).length > 0
-		? [
-				findingDetails({
-					name: 'hidden',
-					technical: WARNINGS.hidden,
-					linkText: 'What hidden code means',
-					classes: Object.fromEntries(scan.hidden.map(where => [where, ['a jar or class by its bytes']])),
-					note: explained.hidden,
-				}),
-			]
-		: []),
-	...(unsourced
-		? [
-				findingDetails({
-					name: 'unsourced',
-					technical: WARNINGS.unsourced,
-					linkText: 'What unsourced classes mean',
-					classes: Object.fromEntries(
-						unsourced.classes.map(where => [where, ['no source for it in the repository at this release']]),
-					),
-					note: explained.unsourced,
-				}),
-			]
-		: []),
-];
+const capabilityList = (asset, explained) => {
+	const { scan, unsourced } = asset;
+
+	return [
+		...Object.entries(scan?.capabilities ?? {}).map(([capability, classes]) =>
+			findingDetails({
+				asset,
+				name: capability,
+				technical: CAPABILITIES[capability],
+				linkText: `What reaching ${capability} means`,
+				classes,
+				note: explained[capability],
+			}),
+		),
+		...Object.entries(scan?.signals ?? {}).map(([signal, classes]) =>
+			findingDetails({
+				asset,
+				name: signal,
+				technical: WARNINGS[signal],
+				linkText: `What ${/^[aeiou]/.test(signal) ? 'an' : 'a'} ${signal} warning means`,
+				classes,
+				note: explained[signal],
+			}),
+		),
+		...((scan?.hidden ?? []).length > 0
+			? [
+					findingDetails({
+						asset,
+						name: 'hidden',
+						technical: WARNINGS.hidden,
+						linkText: 'What hidden code means',
+						classes: Object.fromEntries(scan.hidden.map(where => [where, ['a jar or class by its bytes']])),
+						note: explained.hidden,
+					}),
+				]
+			: []),
+		...(unsourced
+			? [
+					findingDetails({
+						asset,
+						name: 'unsourced',
+						technical: WARNINGS.unsourced,
+						linkText: 'What unsourced classes mean',
+						classes: Object.fromEntries(
+							unsourced.classes.map(where => [where, ['no source for it in the repository at this release']]),
+						),
+						note: explained.unsourced,
+					}),
+				]
+			: []),
+	];
+};
 
 /** What no mod has a reason to do, said outright beside the jar rather than folded among the findings. */
-const secretsAlarm = (scan, explained = {}) => {
+const secretsAlarm = (asset, explained = {}) => {
+	const { scan } = asset;
 	const stores = Object.keys(scan?.secrets ?? {});
 
 	if (stores.length === 0) return [];
@@ -383,7 +410,7 @@ const secretsAlarm = (scan, explained = {}) => {
 				new Component({ tag: 'strong', textContent: secretsSentence(stores) }),
 				...stores.flatMap(store => evidenceLines(scan.secrets[store])),
 				new Link({ href: findingsPath('secrets'), textContent: 'What this means, and what to do' }),
-				...authorsWord(explained.secrets),
+				...authorsWord(explained.secrets, asset, 'secrets'),
 			],
 		}),
 	];
@@ -627,22 +654,31 @@ const fitsLabel = ({ minecraft, loader }) =>
 
 /**
  * A jar's findings in a line a player can read at a glance: grouped by how much each should make them look, most
- * serious first, each in a few plain words, and which of them its author explains.
+ * serious first, each in a few plain words; and, once its author explains any, which they explain and which past the
+ * common ones they do not, as a capability a later release picks up has no explanation of its own.
  */
 const plainSummary = (found, explained) => {
 	const groups = Object.entries(Object.groupBy(found, name => FINDING_GUIDE[name].level))
 		.toSorted(([a], [b]) => Object.keys(LEVELS).indexOf(b) - Object.keys(LEVELS).indexOf(a))
 		.map(([level, names]) => `${LEVELS[level]}: ${names.map(name => FINDING_GUIDE[name].label).join(', ')}`);
 	const answered = found.filter(name => explained[name]).map(name => FINDING_GUIDE[name].label);
+	const unanswered = found
+		.filter(name => !explained[name] && FINDING_GUIDE[name].level !== 'common')
+		.map(name => FINDING_GUIDE[name].label);
+	const explaining =
+		answered.length === 0
+			? []
+			: [`its author explains ${answered.join(', ')}${unanswered.length > 0 ? `; not ${unanswered.join(', ')}` : ''}`];
 
-	return [...groups, ...(answered.length > 0 ? [`its author explains ${answered.join(', ')}`] : [])].join(' · ');
+	return [...groups, ...explaining].join(' · ');
 };
 
 /**
  * What a jar's scan found, folded: findings to look into, not something every reader needs open. What no mod has a
  * reason to do comes first and is never folded.
  */
-const findings = ({ scan, unsourced }, explained, entry) => {
+const findings = (asset, explained, entry) => {
+	const { scan, unsourced } = asset;
 	const reached = Object.keys(scan?.capabilities ?? {});
 	const warned = [
 		...Object.keys(scan?.signals ?? {}),
@@ -652,7 +688,7 @@ const findings = ({ scan, unsourced }, explained, entry) => {
 	const hosts = Object.keys(scan?.hosts ?? {});
 	const unreadable = scan?.unreadable ?? [];
 
-	if (reached.length + warned.length + hosts.length + unreadable.length === 0) return secretsAlarm(scan, explained);
+	if (reached.length + warned.length + hosts.length + unreadable.length === 0) return secretsAlarm(asset, explained);
 
 	const found = byLevel([
 		...reached,
@@ -667,14 +703,14 @@ const findings = ({ scan, unsourced }, explained, entry) => {
 			tag: 'summary',
 			append: new Meta({ tag: 'span', textContent: plainSummary(found, explained) }),
 		}),
-		...capabilityList(scan, explained, unsourced),
+		...capabilityList(asset, explained),
 		...(hosts.length > 0
 			? [
 					new Meta({ tag: 'div', textContent: `Names hosts: ${hosts.map(hostLabel).join(', ')}` }),
 					onItsOwnLine(new Link({ href: findingsPath('hosts'), textContent: 'What the hosts mean' })),
 				]
 			: []),
-		...authorsWord(hosts.length > 0 && explained.hosts),
+		...authorsWord(hosts.length > 0 && explained.hosts, asset, 'hosts'),
 		...(unreadable.length > 0
 			? [
 					new Meta({ tag: 'div', textContent: `Could not read: ${unreadable.join(', ')}` }),
@@ -695,7 +731,7 @@ const findings = ({ scan, unsourced }, explained, entry) => {
 			: []),
 	);
 
-	return [...secretsAlarm(scan, explained), details];
+	return [...secretsAlarm(asset, explained), details];
 };
 
 const downloadRow = ({ asset }, explained, entry) => {

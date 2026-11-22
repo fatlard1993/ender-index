@@ -108,6 +108,15 @@ beforeAll(async () => {
 				],
 			},
 			'/explanations.json': {
+				'github:copy/client': {
+					exec: {
+						text: 'It asks the system which platform it is on.',
+						by: 'copy',
+						release: 'v4',
+						covers: { calls: ['java/lang/ProcessBuilder.start'], hosts: [] },
+						issue: 'https://github.com/fatlard1993/ender-index/issues/10',
+					},
+				},
 				'github:CaffeineMC/lithium': {
 					network: {
 						text: 'It asks Modrinth whether a newer version is out.',
@@ -353,6 +362,10 @@ describe("a mod's page", () => {
 		expect(exec.textContent).toContain('only in what look like libraries it bundles');
 		expect(exec.textContent).toContain('In sqlite-jdbc.jar, a library it bundles:');
 		expect(exec.textContent).toContain('In what looks like org.h2, a library it bundles:');
+		expect(exec.textContent).toContain(
+			'Written for v4, it does not cover what this jar has since: java/lang/Runtime.exec',
+		);
+		expect(text).toContain('its author explains starts other programs; not posts into a chat');
 		expect(text).toContain('10.0.0.7 (an address, not a name)');
 		expect(text).toContain("New since v4: starts other programs, posts into a chat, names Discord's login token");
 		expect(text).toContain('broken.jar, in v5, could not be read or scanned');
