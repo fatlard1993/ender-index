@@ -1,0 +1,52 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://raw.githubusercontent.com/fatlard1993/ender-index/main/schemas/v1/explanations.schema.json",
+	"title": "Authors' explanations of their mods' findings",
+	"description": "data/explanations.json: by the index's key for a mod (host:owner/repo), then by finding, the explanation its author gave and the index approved. It is the author's word, not the index's, and is shown as theirs. Absent until an explanation is approved.",
+	"type": "object",
+	"additionalProperties": {
+		"type": "object",
+		"additionalProperties": {
+			"type": "object",
+			"required": ["text", "by", "at"],
+			"properties": {
+				"text": {
+					"type": "string"
+				},
+				"by": {
+					"type": "string",
+					"description": "The GitHub login that wrote it"
+				},
+				"at": {
+					"type": "string",
+					"description": "When these words were first approved"
+				},
+				"release": {
+					"type": "string",
+					"description": "The release it was written for"
+				},
+				"covers": {
+					"type": "object",
+					"description": "What the release held of the finding when approved: a later jar reaching past it is no longer covered",
+					"properties": {
+						"calls": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"hosts": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"issue": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}

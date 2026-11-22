@@ -5,11 +5,14 @@
  */
 export const SCHEMA_VERSION = 1;
 
-const SCHEMAS = 'https://raw.githubusercontent.com/fatlard1993/ender-index/main/schemas';
+/** Each shape version's schemas keep their own folder, so version 1's addresses go on serving version 1. */
+const SCHEMAS = `https://raw.githubusercontent.com/fatlard1993/ender-index/main/schemas/v${SCHEMA_VERSION}`;
 
 /** data/index.json: the shape version, and each file a launcher reads, with its schema. */
 export const manifest = () => ({
 	schema: SCHEMA_VERSION,
+	notCovered:
+		'packs.json, packs/ and pack-pages/ are published but not yet held to a schema or to the stability policy.',
 	stability:
 		'Fields are only added; ignore those you do not know. A change that could break a consumer raises schema, announced in the README at least 30 days ahead.',
 	files: {
@@ -38,6 +41,11 @@ export const manifest = () => ({
 			path: 'opted-out.json',
 			schema: `${SCHEMAS}/opted-out.schema.json`,
 			description: 'Repositories that opted out; already left out of every list',
+		},
+		explanations: {
+			path: 'explanations.json',
+			schema: `${SCHEMAS}/explanations.schema.json`,
+			description: "Authors' explanations of findings, by mod and finding; absent until one is approved",
 		},
 		renames: {
 			path: 'renames.json',
