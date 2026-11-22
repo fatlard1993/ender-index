@@ -170,7 +170,7 @@ export default class MinePage extends View {
 		}
 
 		const [entries, { interest }] = await Promise.all([loadListing(), loadInterest()]);
-		const mods = yourMods({ entries, login: local.login, interest });
+		const mods = yourMods({ entries, login: local.login, organizations: local.organizations, interest });
 		const lacking = mods.filter(({ needs }) => needs.length > 0).length;
 
 		if (this.signal.aborted) return;
@@ -179,12 +179,12 @@ export default class MinePage extends View {
 			mods.length > 0
 				? new Meta({
 						tag: 'p',
-						textContent: `Signed in to GitHub as ${local.login}: ${count(mods.length)} of your repositories are in the index, ${lacking > 0 ? `${count(lacking)} of them with something the index cannot do for players` : 'and each has what players need'}.`,
+						textContent: `Signed in to GitHub as ${local.login}: ${count(mods.length)} of your repositories${local.organizations.length > 0 ? ` and your organizations'` : ''} are in the index, ${lacking > 0 ? `${count(lacking)} of them with something the index cannot do for players` : 'and each has what players need'}.`,
 					})
 				: new EmptyState({
 						icon: 'cube',
 						title: 'No mods of yours in the index yet',
-						message: `Signed in to GitHub as ${local.login}. Mods kept under an organization are listed under it; name one of yours below to list it now.`,
+						message: `Signed in to GitHub as ${local.login}. Mods of the organizations you belong to are listed here too, when your sign-in may read them (gh auth refresh -s read:org); name one of yours below to list it now.`,
 					}),
 			new Link({ href: authorsPath(), textContent: 'What the index reads from your repositories' }),
 			...mods.map(modCard),

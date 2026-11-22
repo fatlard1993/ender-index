@@ -25,3 +25,13 @@ test("an account's mods are listed with what each lacks and the asks for it, a d
 	]);
 	expect(mods[2].needs).toEqual([]);
 });
+
+test("an organization the account belongs to has its mods listed too, and no other organization's", () => {
+	const entries = [entry('me/mine'), entry('Our-Team/shared'), entry('their-team/other')];
+
+	expect(yourMods({ entries, login: 'me', organizations: ['our-team'] }).map(({ entry: { repo } }) => repo)).toEqual([
+		'me/mine',
+		'Our-Team/shared',
+	]);
+	expect(yourMods({ entries, login: 'me' }).map(({ entry: { repo } }) => repo)).toEqual(['me/mine']);
+});

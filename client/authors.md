@@ -94,7 +94,7 @@ Neither is how an author leaves: a topic does that, as [Opting out](#opting-out)
 
 Players can ask for two things on a mod's page: a way to pay its author, when the index knows none, and a built release, when it has only its source. Each player is counted once, and the count shows on the mod's page. The index posts nothing on your repository for it; when enough players have asked, it reaches out to you itself.
 
-To see where your mods stand, run `ender web` signed in to GitHub (`gh auth login`) and open **Your mods** from its search page: each of your mods, what the index cannot do for it, and how many players have asked.
+To see where your mods stand, run `ender web` signed in to GitHub (`gh auth login`) and open **Your mods** from its search page: each of your mods, and those of the organizations you belong to when your sign-in may read them (`gh auth refresh -s read:org`), what the index cannot do for it, and how many players have asked.
 
 ## Questions
 

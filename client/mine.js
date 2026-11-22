@@ -12,12 +12,14 @@ const NEEDS = {
 const ASKS = { funding: 'fund', releases: 'release' };
 
 /**
- * The mods a GitHub account keeps in the index, each with what it lacks and how many players asked for that; those
- * lacking most, and most asked after, first.
+ * The mods a GitHub account keeps in the index, under its own name or an organization it belongs to, each with what it
+ * lacks and how many players asked for that; those lacking most, and most asked after, first.
  */
-export const yourMods = ({ entries, login, interest = {} }) =>
-	entries
-		.filter(entry => ownerOf(entry) === `github:${login.toLowerCase()}`)
+export const yourMods = ({ entries, login, organizations = [], interest = {} }) => {
+	const owners = new Set([login, ...organizations].map(owner => `github:${owner.toLowerCase()}`));
+
+	return entries
+		.filter(entry => owners.has(ownerOf(entry)))
 		.map(entry => {
 			const key = collectionKey(entry);
 			const needs = Object.keys(NEEDS).filter(need => NEEDS[need](entry));
@@ -36,3 +38,4 @@ export const yourMods = ({ entries, login, interest = {} }) =>
 				b.needs.reduce((sum, { asked }) => sum + asked, 0) - a.needs.reduce((sum, { asked }) => sum + asked, 0) ||
 				a.entry.repo.localeCompare(b.entry.repo),
 		);
+};
