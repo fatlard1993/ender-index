@@ -129,30 +129,28 @@ export const recordInterest = async ({
 	};
 };
 
+/** Where each host keeps a repository, for the line that says where a draft's author is. */
+const REPOSITORY_SITES = {
+	github: 'https://github.com',
+	codeberg: 'https://codeberg.org',
+	gitlab: 'https://gitlab.com',
+};
+
 /** What marks the index's notice for a mod and an ask, wherever it is posted, so a run finds the one it posted. */
 export const markerOf = (key, kind) => `<!-- ender-index notice ${key} ${kind} -->`;
 
 /**
- * Where a mod's notice goes, and as what. Live, on the mod's own repository; as a draft, and for a mod not on GitHub,
- * on the index, under a line saying where it would be posted, the notice itself as it would be posted.
+ * A mod's notice, drafted on the index for its owner to send to the author themselves: the index posts nothing on a
+ * mod's repository, as its authors guide promises.
  */
-export const placeNotice = ({ key, kind, title, count, live }) => {
+export const placeNotice = ({ key, kind, title, count }) => {
 	const mod = modOf(key);
 	const notice = KINDS[kind].notice(title, count);
 	const marker = markerOf(key, kind);
-
-	if (live && mod.host === 'github') {
-		return { repo: mod.name, draft: false, title: notice.title, body: `${notice.body}\n\n${marker}` };
-	}
-
-	const where =
-		mod.host === 'github'
-			? `Live, this is posted as an issue on https://github.com/${mod.name}, and kept up to date as players ask.`
-			: `The index cannot post on ${mod.host} yet, so this stays here even live.`;
+	const where = `A draft for the index's owner to send its author, at ${REPOSITORY_SITES[mod.host]}/${mod.name}; the index posts nothing there itself.`;
 
 	return {
 		repo: INDEX_REPOSITORY,
-		draft: true,
 		labels: ['notice-draft'],
 		title: `Draft for ${key}: ${notice.title}`,
 		body: `> ${where}\n\n${notice.body}\n\n${marker}`,
@@ -183,12 +181,12 @@ export const githubApi = token => async (method, path, body) => {
 	return response.status === 204 ? undefined : response.json();
 };
 
-/** The notice posted before under this marker: by its label on the index, by who posted it elsewhere. */
+/** The notice drafted before under this marker, found by its label on the index. */
 const postedBefore = async (api, placed, marker) => {
-	const filter = placed.draft
-		? `labels=${placed.labels.join(',')}`
-		: `creator=${encodeURIComponent((await api('GET', '/user')).login)}`;
-	const issues = await api('GET', `/repos/${placed.repo}/issues?${filter}&state=all&per_page=100`);
+	const issues = await api(
+		'GET',
+		`/repos/${placed.repo}/issues?labels=${placed.labels.join(',')}&state=all&per_page=100`,
+	);
 
 	return issues.find(issue => issue.body?.includes(marker));
 };
@@ -246,11 +244,9 @@ export const askOf = issue => {
 
 const noteLine = notice => {
 	if (!notice?.issue) return '';
-	if (notice.closed) return ` Its author closed the index's note on ${notice.closed}; the count is kept on the index.`;
+	if (notice.closed) return ` The index closed its note to this mod's author on ${notice.closed}; the count is kept.`;
 
-	return notice.draft
-		? ` The note to its author, kept on the index as a draft for now: ${notice.issue.url}`
-		: ` The index's note to its author, kept up to date with the count: ${notice.issue.url}`;
+	return ` The note to its author, drafted on the index: ${notice.issue.url}`;
 };
 
 /**
@@ -260,9 +256,7 @@ const noteLine = notice => {
  */
 export const processAsks = async ({
 	indexApi,
-	noticeApi = indexApi,
 	post = true,
-	live = false,
 	interest: counted = {},
 	notices: kept = {},
 	read = async mod => readJson(recordPath(mod)),
@@ -290,14 +284,13 @@ export const processAsks = async ({
 	for (const [key, kinds] of post ? Object.entries(interest) : []) {
 		for (const [kind, logins] of Object.entries(kinds)) {
 			const recorded = notices[key]?.[kind];
-			const target = live && key.startsWith('github:') ? key.slice('github:'.length) : INDEX_REPOSITORY;
-			const inPlace = recorded?.issue?.repo === target;
+			const inPlace = recorded?.issue?.repo === INDEX_REPOSITORY;
 
 			if (inPlace && recorded.closed) continue;
 
 			if (inPlace && recorded.count === logins.length) {
 				try {
-					const closed = await closedOn(recorded.draft ? indexApi : noticeApi, recorded.issue);
+					const closed = await closedOn(indexApi, recorded.issue);
 
 					if (closed) notices[key] = { ...notices[key], [kind]: { ...recorded, closed } };
 				} catch (error) {
@@ -311,11 +304,11 @@ export const processAsks = async ({
 
 			if (!described || described.settled) continue;
 
-			const placed = placeNotice({ key, kind, title: described.title, count: logins.length, live });
+			const placed = placeNotice({ key, kind, title: described.title, count: logins.length });
 
 			try {
 				const posted = await postNotice({
-					api: placed.draft ? indexApi : noticeApi,
+					api: indexApi,
 					placed,
 					marker: markerOf(key, kind),
 					recorded,
@@ -326,7 +319,6 @@ export const processAsks = async ({
 					[kind]: {
 						at: inPlace ? recorded.at : now.slice(0, 10),
 						count: logins.length,
-						draft: placed.draft,
 						...posted,
 					},
 				};
@@ -359,16 +351,14 @@ export const reply = async ({ indexApi, replies }) => {
 };
 
 /**
- * `count` counts the open asks, writing the counts and the replies, and posts their notices when NOTICES asks for them,
- * exiting 2 when one failed; `reply` answers and closes the asks, once the counts are kept. NOTICES=draft posts each
- * notice on the index as a draft, NOTICES=live on the mod's own repository with NOTICE_TOKEN; unset, none is posted.
+ * `count` counts the open asks, writing the counts and the replies, and with NOTICES=draft drafts each notice on the
+ * index, exiting 2 when one failed; `reply` answers and closes the asks, once the counts are kept.
  */
 if (import.meta.main) {
 	const interestPath = join(DATA, INTEREST);
 	const noticesPath = join(DATA, NOTICES);
 	const indexApi = githubApi(process.env.GH_TOKEN);
-	const live = process.env.NOTICES === 'live';
-	const post = live || process.env.NOTICES === 'draft';
+	const post = process.env.NOTICES === 'draft';
 
 	if (process.argv[2] === 'reply') {
 		await reply({ indexApi, replies: await Bun.file(process.env.INTEREST_REPLIES).json() });
@@ -377,9 +367,7 @@ if (import.meta.main) {
 
 	const result = await processAsks({
 		indexApi,
-		noticeApi: live ? githubApi(process.env.NOTICE_TOKEN) : indexApi,
 		post,
-		live,
 		interest: await readJson(interestPath, {}),
 		notices: await readJson(noticesPath, {}),
 		donations: await readJson(join(DATA, DONATIONS), {}),

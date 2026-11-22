@@ -195,27 +195,29 @@ describe('a notice to an author', () => {
 		]);
 	});
 
-	test('is posted on the first ask, as a draft on the index under a line saying where it would go live', async () => {
+	test("is drafted on the first ask on the index, for its owner to send, and never posted on the mod's repository", async () => {
 		const github = fakeGithub({ issues: { [INDEX]: [askIssue(2, 'ann')] } });
 		const result = await processing(github);
 		const [draft] = notices(github);
 
 		expect(draft.title).toBe('Draft for github:a/boats: 1 player would like to support Big Boats');
-		expect(draft.body).toStartWith('> Live, this is posted as an issue on https://github.com/a/boats');
+		expect(draft.body).toStartWith(
+			"> A draft for the index's owner to send its author, at https://github.com/a/boats; the index posts nothing there itself.",
+		);
+		expect(github.repos['a/boats'] ?? []).toEqual([]);
 		expect(draft.body).toContain('One player looking at Big Boats on the index asked how they could pay you');
 		expect(draft.body).toContain('#/authors/funding');
 		expect(draft.body).toEndWith(markerOf('github:a/boats', 'fund'));
 		expect(result.notices['github:a/boats'].fund).toEqual({
 			at: '2026-10-30',
 			count: 1,
-			draft: true,
 			issue: { repo: INDEX, number: draft.number, url: draft.html_url },
 		});
 		expect(result.replies).toEqual([
 			{
 				number: 2,
 				counted: true,
-				say: `Counted: 1 player would pay its author of Big Boats. The note to its author, kept on the index as a draft for now: ${draft.html_url}`,
+				say: `Counted: 1 player would pay its author of Big Boats. The note to its author, drafted on the index: ${draft.html_url}`,
 			},
 		]);
 	});
@@ -255,77 +257,42 @@ describe('a notice to an author', () => {
 		expect(notices(github)[0].title).toContain('2 players');
 	});
 
-	test("live, is posted on the mod's own repository and kept up to date there, the draft left where it was", async () => {
-		const github = fakeGithub({ issues: { [INDEX]: [askIssue(2, 'ann')] } });
-		const drafted = await processing(github);
-		const author = fakeGithub();
+	test('closed on the index is left closed, and the player told so', async () => {
+		const closed = {
+			number: 5,
+			html_url: `https://github.com/${INDEX}/issues/5`,
+			state: 'closed',
+			closed_at: '2026-10-29T08:00:00Z',
+			labels: [{ name: 'notice-draft' }],
+			user: { login: 'ender-index' },
+			title: 'Draft for github:a/boats: 1 player would like to support Big Boats',
+			body: `Hi!\n\n${markerOf('github:a/boats', 'fund')}`,
+		};
+		const github = fakeGithub({ issues: { [INDEX]: [closed, askIssue(3, 'bo')] } });
+		const result = await processing(github, { interest: { 'github:a/boats': { fund: ['ann'] } } });
 
-		github.repos[INDEX].push(askIssue(3, 'bo'));
-
-		const result = await processing(
-			github,
-			{ interest: drafted.interest, notices: drafted.notices },
-			{ live: true, noticeApi: author.api },
-		);
-		const [posted] = author.repos['a/boats'];
-
-		expect(author.repos['a/boats']).toHaveLength(1);
-		expect(posted.title).toBe('2 players would like to support Big Boats');
-		expect(posted.body).toStartWith('Hi! This is the [ender index]');
-		expect(posted.body).toEndWith(markerOf('github:a/boats', 'fund'));
-		expect(notices(github)[0].title).toContain('1 player');
-		expect(result.notices['github:a/boats'].fund).toMatchObject({ count: 2, draft: false, issue: { repo: 'a/boats' } });
-		expect(result.replies.at(-1).say).toContain(`kept up to date with the count: ${posted.html_url}`);
-	});
-
-	test('its author closed is left closed, and the player told so', async () => {
-		const author = fakeGithub({
-			issues: {
-				'a/boats': [
-					{
-						number: 5,
-						html_url: 'https://github.com/a/boats/issues/5',
-						state: 'closed',
-						closed_at: '2026-10-29T08:00:00Z',
-						labels: [],
-						user: { login: 'notice-bot' },
-						title: '1 player would like to support Big Boats',
-						body: `Hi!\n\n${markerOf('github:a/boats', 'fund')}`,
-					},
-				],
-			},
-		});
-		const github = fakeGithub({ issues: { [INDEX]: [askIssue(3, 'bo')] } });
-		const result = await processing(
-			github,
-			{ interest: { 'github:a/boats': { fund: ['ann'] } } },
-			{ live: true, noticeApi: author.api },
-		);
-
-		expect(author.calls.filter(call => !call.startsWith('GET'))).toEqual([]);
+		expect(github.calls.filter(call => call.startsWith('PATCH') && call.includes('/issues/5'))).toEqual([]);
 		expect(result.notices['github:a/boats'].fund).toMatchObject({ closed: '2026-10-29', count: 2 });
-		expect(result.replies[0].say).toContain("Its author closed the index's note on 2026-10-29");
+		expect(result.replies[0].say).toContain("The index closed its note to this mod's author on 2026-10-29");
 	});
 
-	test('closed by its author with no ask since is learned on the next run', async () => {
+	test('closed on the index with no ask since is learned on the next run, and nothing more is asked of it', async () => {
 		const github = fakeGithub({ issues: { [INDEX]: [askIssue(2, 'ann')] } });
-		const author = fakeGithub();
-		const first = await processing(github, {}, { live: true, noticeApi: author.api });
-		const [posted] = author.repos['a/boats'];
+		const first = await processing(github);
+		const [drafted] = notices(github);
 
-		Object.assign(posted, { state: 'closed', closed_at: '2026-10-31T09:00:00Z' });
+		Object.assign(drafted, { state: 'closed', closed_at: '2026-10-31T09:00:00Z' });
 
-		const live = { live: true, noticeApi: author.api };
-		const quiet = await processing(github, { interest: first.interest, notices: first.notices }, live);
+		const quiet = await processing(github, { interest: first.interest, notices: first.notices });
 
 		expect(quiet.notices['github:a/boats'].fund).toMatchObject({ closed: '2026-10-31', count: 1 });
 
-		author.calls.length = 0;
+		github.calls.length = 0;
 
-		const next = await processing(github, { interest: quiet.interest, notices: quiet.notices }, live);
+		const next = await processing(github, { interest: quiet.interest, notices: quiet.notices });
 
 		expect(next.notices).toEqual(quiet.notices);
-		expect(author.calls).toEqual([]);
+		expect(github.calls.filter(call => call.includes('/issues/') && !call.includes('?'))).toEqual([]);
 	});
 
 	test('that GitHub refuses is a failure the run reports, and the count is kept', async () => {
