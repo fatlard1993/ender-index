@@ -455,7 +455,7 @@ describe('a pack read again', () => {
 		const read = async (name, path) => files[path];
 
 		expect((await crawling('2026-10-29T00:00:00Z', read)).formats).toEqual({
-			ender: { minecraft: '1.21.1', loader: 'fabric', mods: [{ spec: 'sodium' }] },
+			ender: { format: 1, minecraft: '1.21.1', loader: 'fabric', mods: [{ spec: 'sodium' }] },
 		});
 	});
 });

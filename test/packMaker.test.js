@@ -30,6 +30,7 @@ describe('making a pack', () => {
 				],
 			}),
 		).toEqual({
+			format: 1,
 			name: 'Family',
 			minecraft: '26.3',
 			loader: 'fabric',
@@ -139,6 +140,7 @@ test('writes what the maker adds only where given: byline, pinned loader, memory
 	const items = [{ repo: 'a/b' }, { repo: 'c/d', host: 'codeberg' }];
 
 	expect(packOf({ name: 'P', minecraft: '26.3', loader: 'fabric', items })).toEqual({
+		format: 1,
 		name: 'P',
 		minecraft: '26.3',
 		loader: 'fabric',
@@ -160,6 +162,7 @@ test('writes what the maker adds only where given: byline, pinned loader, memory
 			servers: 'Our place play.example.com:25570\nno address here!\n',
 		}),
 	).toEqual({
+		format: 1,
 		name: 'P',
 		version: '2',
 		author: 'Ada',

@@ -1,5 +1,5 @@
 import { Button, Dialog, Input, Label, Link, Select, copyToClipboard } from '@vanilla-bean/components';
-import { assetEntry } from 'ender-launcher/enderPack';
+import { assetEntry, PACK_FORMAT } from 'ender-launcher/enderPack';
 import { specFor } from 'ender-launcher/spec';
 
 import { listingButton } from './controls';
@@ -44,6 +44,7 @@ export const packOf = ({
 	const listed = serversTyped(servers);
 
 	return {
+		format: PACK_FORMAT,
 		name,
 		...(text(version) ? { version: text(version) } : {}),
 		...(text(author) ? { author: text(author) } : {}),
