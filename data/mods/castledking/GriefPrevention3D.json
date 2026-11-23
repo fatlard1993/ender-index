@@ -6,9 +6,93 @@
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2025-07-20T07:11:54Z",
-	"pushed": "2026-11-15T15:43:44Z",
+	"pushed": "2026-11-23T03:39:33Z",
 	"forkOf": "GriefPrevention/GriefPrevention",
 	"releases": [
+		{
+			"tag": "v19.1.1",
+			"published": "2026-11-23T03:39:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 781398788,
+					"name": "GriefPrevention3D.jar",
+					"url": "https://github.com/castledking/GriefPrevention3D/releases/download/v19.1.1/GriefPrevention3D.jar",
+					"size": 2559051,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "0b64e9cca430bdd8822d66dab7eb0c915604dc8fc1db2741465f386fcd0fd569",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "griefprevention3d",
+							"version": "19.1.1",
+							"name": "GriefPrevention3D",
+							"description": "Native Fabric adapter for GriefPrevention3D claim protection.",
+							"minecraft": ">=26.1 <26.4- || >=1.21.2 <1.21.12-",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api-base",
+								"fabric-command-api-v2",
+								"fabric-events-interaction-v0",
+								"fabric-lifecycle-events-v1",
+								"fabric-message-api-v1",
+								"fabric-networking-api-v1",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 1014,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/griefprevention/metrics/Metrics$MetricsBase.class": [
+									"java/net/URL.openConnection in sendData"
+								]
+							},
+							"classloading": {
+								"me/ryanhamshire/GriefPrevention/DatabaseConnectionPool.class": [
+									"java/net/URLClassLoader.<init> in loadExternalDriver",
+									"java/net/URLClassLoader.close in loadExternalDriver, close"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"yaml.org": [
+								"com/griefprevention/internal/lib/snakeyaml/DumperOptions.class"
+							],
+							"bstats.org": [
+								"com/griefprevention/metrics/Metrics$MetricsBase.class",
+								"com/griefprevention/metrics/Metrics.class"
+							],
+							"github.com": [
+								"me/ryanhamshire/GriefPrevention/Alias.class"
+							],
+							"dev.bukkit.org": [
+								"me/ryanhamshire/GriefPrevention/GriefPrevention.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# GriefPrevention3D v19.1.1\n\n**Wiki:** https://github.com/castledking/GriefPrevention3D/wiki\n\nBack up `GriefPreventionData` before updating.\n\n## Folia-Supported MySQL & MariaDB Storage\n\nDatabase storage on Bukkit, Paper, Purpur, and **Folia** has been rebuilt for regionized\nmultithreading and modern MySQL/MariaDB servers without inflating the universal JAR:\n\n- **Thread-safe JDBC connection pool:** Replaces the legacy single shared `Connection` with a\n  bounded, zero-dependency connection pool (`poolSize` default `8`, automatically `1` for SQLite).\n  Idle connections are validated against `maxLifetimeMs` / `idleTimeoutMs`, dead connections dropped\n  by MySQL `wait_timeout` are transparently replaced with automatic single-retry recovery, and every\n  write executes inside an atomic JDBC transaction (`commit` / `rollback`) so a mid-save disconnect\n  can no longer lose claims or player data.\n- **Non-blocking async write pipeline:** Claim saves, batched `saveClaims` writes, claim deletions,\n  player claim-block updates, group bonus blocks, and `nextClaimID` updates capture immutable\n  snapshots on the calling thread and execute asynchronously on an ordered background writer thread.\n  Folia region threads and global tick threads no longer stall on MySQL round-trips, rapid edits to\n  the same claim/player coalesce into a single write, pending writes are cancelled on delete, and\n  all queued changes drain cleanly on server shutdown.\n- **Async player pre-login preload:** Player claim blocks and preferences are preloaded from the\n  database during `AsyncPlayerPreLoginEvent` before the player enters a Folia region, while rapid\n  relogs read directly from any unflushed pending write to prevent stale data.\n- **Real MySQL 5.7/8.0/8.4 & MariaDB compatibility:** Replaced MariaDB-only\n  `ALTER TABLE ... ADD COLUMN IF NOT EXISTS` and MySQL-illegal `TEXT DEFAULT ''` migrations with\n  catalog-scoped JDBC metadata checks so schema upgrades work cleanly across MySQL, MariaDB, and\n  SQLite (even on multi-database MySQL servers).\n- **Flat-file parity & safer migration:** Added database persistence for manual `neighbors`,\n  `allowallneighbors`, and per-player `glowenabled` (`/gpglow`), restored `parentId`-first\n  subdivision attachment for nested and 3D subdivisions, and updated flat-file-to-database migration\n  to migrate nested subdivisions recursively and flush all committed data before backing up\n  `ClaimData` and `PlayerData`.\n- **External driver fallback:** Uses server-bundled MySQL/SQLite JDBC drivers automatically and\n  also scans `plugins/GriefPreventionData/drivers/*.jar` if a custom or standalone driver is needed.\n- **Clean shutdown on database startup failure:** Guarded `onDisable()` against a null `dataStore`\n  so an invalid database configuration disables the plugin cleanly without throwing a\n  `NullPointerException`.\n\n## Configuration\n\nCreate `plugins/GriefPreventionData/database.properties` to enable database storage:\n\n```properties\njdbcUrl=jdbc:mysql://127.0.0.1:3306/griefprevention\nusername=your_user\npassword=your_password\npoolSize=8\nconnectionTimeoutMs=10000\nidleTimeoutMs=300000\nmaxLifetimeMs=1800000\nvalidationTimeoutSeconds=3\n```\n\n- Existing credentials configured under `GriefPrevention.Database.*` in\n  `plugins/GriefPreventionData/config.yml` are automatically migrated into\n  `plugins/GriefPreventionData/database.properties` on startup so passwords stay out of `config.yml`.\n- Backwards-compatible fallback to `database.*` in `plugins/GriefPrevention3D/config.yml` is also\n  preserved.\n\n## Upgrade notes\n\n- Restart the server after replacing the jar.\n- Both platforms continue to ship in one universal `GriefPrevention3D.jar`: Spigot/Paper/Purpur/Folia\n  (1.8 through modern) and Fabric (1.21.2 through 1.21.11, and 26.1 through 26.3). Fabric requires\n  Fabric API.\n- Existing MySQL/MariaDB/SQLite databases gain missing columns (`neighbors`, `allowallneighbors`,\n  `glowenabled`, etc.) automatically on first startup."
+		},
 		{
 			"tag": "v19.1.0",
 			"published": "2026-11-14T21:44:44Z",
@@ -19,7 +103,7 @@
 					"name": "GriefPrevention3D.jar",
 					"url": "https://github.com/castledking/GriefPrevention3D/releases/download/v19.1.0/GriefPrevention3D.jar",
 					"size": 2532763,
-					"downloads": 20,
+					"downloads": 39,
 					"inspection": 2,
 					"sha256": "215fb4e8a92ef64b00a8eefd976f20bbdc15efb6e2bbe85efd69b652f268f0ca",
 					"mods": [
@@ -765,11 +849,9 @@
 			"url": "https://www.paypal.com/ncp/payment/GU2G67R85XEBA"
 		}
 	],
-	"fundingChecked": "2026-11-17T22:19:30.253Z",
 	"pictures": [
 		"gp logo 170x170.png"
 	],
-	"picturesChecked": "2026-11-22T13:12:25.857Z",
 	"contributors": {
 		"commits": 1645,
 		"more": 59,
@@ -860,6 +942,5 @@
 			}
 		]
 	},
-	"contributorsChecked": "2026-11-22T13:12:25.857Z",
 	"history": 1
 }
