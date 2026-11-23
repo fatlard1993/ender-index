@@ -4,7 +4,7 @@ The index lists Minecraft mods from the repositories their authors keep, on GitH
 
 Attach the built jar to a release. A release is where the index and ender take a mod from; a jar in a branch, a CI artifact or a download link in the readme is not read. On GitHub, if you publish with `mc-publish`, its `github-token` input does this; on GitLab, a release link whose URL ends in the jar's file name counts.
 
-- **One release, one or more jars.** Each jar is downloaded and read: what loader and game versions it supports comes from its own `fabric.mod.json`, `quilt.mod.json` or `mods.toml`, not from the release's name.
+- **One release, one or more jars.** Each jar is downloaded and read: what loader and game versions it supports comes from its own `fabric.mod.json`, `quilt.mod.json`, `mods.toml` or `neoforge.mods.toml`, not from the release's name.
 - **Name the game version** in the tag or the jar's name, like `mymod-1.4.0+1.21.4.jar`. The crawl reads the newest five releases, and past those the newest that names each game version, so a mod released per game version keeps its older builds installable.
 - **Publish the mod jar plain.** Jars ending `-sources`, `-javadoc`, `-dev`, `-api`, `-slim` or `-shadow` are skipped as gradle's by-products.
 - **Drafts are not read; prereleases are**, and a stable release is offered before them.
@@ -12,7 +12,7 @@ Attach the built jar to a release. A release is where the index and ender take a
 
 ### No release yet
 
-A mod on GitHub with no jar on its releases is listed by its source, when that builds on its own: one gradle project with its wrapper, its metadata in `src/main/resources`, no submodules, and nothing in `settings.gradle` reaching outside the repository. Its page says it has no built release, and a player installing it has ender build its default branch on their own machine, with a JDK ender fetches. That works, but it is slow, and it asks every player to run your build scripts, so a release is better for everyone.
+A mod on GitHub with no jar on its releases is listed by its source, when that builds on its own: one gradle project with its wrapper, its metadata in `src/main/resources`, no submodules, and nothing in `settings.gradle` reaching outside the repository. Its page says it has no built release, and a player installing it has ender build the commit the index last read, checked again each week, on their own machine, with a JDK ender fetches. A player allows that once for your build scripts as they are: the wrapper, every `.gradle` file, `gradle.properties`, `gradle/`, `buildSrc` and `build-logic`. A commit that changes any of them is held until they read what changed and allow it again. A repository that is archived or a fork, or whose mod id or game version is filled in by the build, is not listed by its source. Building works, but it is slow, and it asks every player to run your build scripts, so a release is better for everyone.
 
 ## Funding
 

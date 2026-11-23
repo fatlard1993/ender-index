@@ -14,7 +14,7 @@ Each finding on a mod's page says how much it should make you stop and look, in 
 - **Worth a look:** fine for some mods and odd for others, so ask whether it fits this one: [loads code while it runs](#classloading), [runs native code](#native), [posts into a chat](#webhook), [reads your login token](#session), [uses your clipboard](#clipboard), [has code its source does not](#unsourced), [has code the scan could not read](#unreadable).
 - **Unusual:** few mods have any reason for it: [starts other programs](#exec), [starts with your computer](#persistence), [hides code](#hidden), [reaches out as it loads](#initializer), [is built to read two ways](#zip).
 
-Apart from these, a jar that [names where other programs keep logins](#secrets) is an alarm, not a level: ender will not install it unless you trust it.
+Apart from these, two are alarms, not levels: a jar that [names where other programs keep logins](#secrets), which ender will not install unless you trust it, and a jar on the [known-bad list](#known-bad), which ender refuses from any source.
 
 ## How the scan works
 
@@ -192,7 +192,7 @@ If you installed it, remove it and treat what its finding names as taken. To rep
 
 ## Unreadable
 
-A class in the jar that the scan could not read. A build tool can write one by mistake; an obfuscator can write one on purpose, since what the scan cannot read, it cannot report. The page lists which.
+A class in the jar that the scan could not read. A build tool can write one by mistake; an obfuscator can write one on purpose, since what the scan cannot read, it cannot report. The page lists which. It cannot be explained: a build whose classes read cleanly answers it.
 
 ## Scanner versions
 

@@ -53,12 +53,12 @@ export const manifest = () => ({
 		packRecord: {
 			path: 'packs/{owner}/{repo}.json',
 			schema: `${SCHEMAS}/pack-record.schema.json`,
-			description: 'A pack repository and the pack in each format it has',
+			description: 'A pack repository and the pack in each format it has; packs/gist/{id}.json for a pack in a gist',
 		},
 		packPage: {
 			path: 'pack-pages/{owner}/{repo}.json',
 			schema: `${SCHEMAS}/pack-page.schema.json`,
-			description: 'A pack summary with every mod it names',
+			description: 'A pack summary with every mod it names; pack-pages/gist/{owner}/{id}.json for a pack in a gist',
 		},
 		renames: {
 			path: 'renames.json',
