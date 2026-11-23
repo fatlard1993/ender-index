@@ -1,4 +1,4 @@
-import { mkdir } from 'node:fs/promises';
+import { mkdir, rm } from 'node:fs/promises';
 import { dirname, join, relative } from 'node:path';
 
 import { LIBRARY_STYLESHEETS, buildClient } from '@vanilla-bean/components/app';
@@ -137,6 +137,16 @@ const writePages = async (site, out = OUT) => {
 	return pages.size;
 };
 
+/**
+ * The listing, beside the pages GitHub Pages serves, so the site's visitors are served it from Pages and not from where
+ * the index's data is, which every launcher reads; as old as the build, which follows each crawl.
+ */
+export const copyListing = async (out = OUT) => {
+	const listing = Bun.file(join(DATA, 'search.json'));
+
+	if (await listing.exists()) await Bun.write(join(out, 'search.json'), listing);
+};
+
 if (import.meta.main) {
 	const [flag, site] = process.argv.slice(2);
 
@@ -158,5 +168,11 @@ if (import.meta.main) {
 
 	console.log(`Built the search page into ${OUT}`);
 
-	if (site) console.log(`Wrote ${await writePages(site)} pages for ${site}, one a mod, pack and place`);
+	if (site) {
+		console.log(`Wrote ${await writePages(site)} pages for ${site}, one a mod, pack and place`);
+		await copyListing();
+	} else {
+		// One a Pages build left would be read in place of the index's, by ender web serving this checkout's build
+		await rm(join(OUT, 'search.json'), { force: true });
+	}
 }

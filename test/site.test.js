@@ -430,3 +430,41 @@ describe('an ask already made', () => {
 		expect(url.searchParams.get('q')).toBe('is:issue author:me "github:FabricMC/fabric-api"');
 	});
 });
+
+describe("the site's listing", () => {
+	test('is read from beside the pages where the build put one, and from the index where it did not', async () => {
+		const { INDEX } = await import('../client/search');
+		const { firstListing } = await import('../client/data');
+		const reading = answers => {
+			const asked = [];
+
+			return {
+				asked,
+				read: async url => {
+					asked.push(url);
+
+					if (answers[url] instanceof Error) throw answers[url];
+
+					return answers[url];
+				},
+			};
+		};
+		const beside = reading({ 'search.json': [{ repo: 'a/b' }] });
+
+		expect(await firstListing(beside.read)).toEqual([{ repo: 'a/b' }]);
+		expect(beside.asked).toEqual(['search.json']);
+
+		// ender web, and a local build, serve no listing beside the pages: 404, or a page that is not one
+		const index = reading({
+			'search.json': new Error('search.json answered 404'),
+			[`${INDEX}/search.json`]: [{ repo: 'c/d' }],
+		});
+
+		expect(await firstListing(index.read)).toEqual([{ repo: 'c/d' }]);
+		expect(index.asked).toEqual(['search.json', `${INDEX}/search.json`]);
+
+		const neither = reading({ 'search.json': new Error('404'), [`${INDEX}/search.json`]: new Error('offline') });
+
+		await expect(firstListing(neither.read)).rejects.toThrow('offline');
+	});
+});

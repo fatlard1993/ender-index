@@ -6,9 +6,38 @@ let versions;
 let themes;
 let packs;
 
+/**
+ * The listing the site's own build put beside its pages, so a visitor to the site is not served it from where the
+ * index's data is, which every launcher reads. ender web and a local build have none, and read the index's.
+ */
+export const LISTING_BESIDE = 'search.json';
+
+const listed = async url => {
+	const entries = await loadJson(url);
+
+	if (!Array.isArray(entries)) throw new Error(`${url} is not a listing`);
+
+	return entries;
+};
+
+/** The listing from the first of these that answers with one: beside the pages, then where the index's data is. */
+export const firstListing = async (read = listed, sources = [LISTING_BESIDE, `${INDEX}/search.json`]) => {
+	let failure;
+
+	for (const source of sources) {
+		try {
+			return await read(source);
+		} catch (error) {
+			failure = error;
+		}
+	}
+
+	throw failure;
+};
+
 /** The index's listing, fetched once however many pages ask: it is the size of every repository's summary. */
 export const loadListing = () => {
-	listing ??= loadJson(`${INDEX}/search.json`).then(entries => entries.filter(entry => !entry.archived));
+	listing ??= firstListing().then(entries => entries.filter(entry => !entry.archived));
 	listing.catch(() => (listing = undefined));
 
 	return listing;
