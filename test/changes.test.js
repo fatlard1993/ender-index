@@ -26,9 +26,17 @@ describe("a record's releases", () => {
 	test('are the same when only counts, the scan or the readme moved, and differ for anything a launcher installs by', () => {
 		const before = fingerprint(record([jar()]));
 
+		expect(fingerprint(record([jar()], { source: { commit: 'c1' } }))).not.toBe(
+			fingerprint(record([jar()], { source: { commit: 'c2' } })),
+		);
+
 		expect(fingerprint(record([jar({ downloads: 99, scan: { v: 3 } })], { stars: 40, readme: 'new' }))).toBe(before);
 
 		for (const changed of [
+			record([jar()], { source: { commit: 'c2' } }),
+			record([jar({ gone: '2026-11-22' })]),
+			record([jar({ error: 'not a jar' })]),
+			record([jar({ replaced: '2026-11-21' })]),
 			record([jar({ sha256: 'bb' })]),
 			record([jar({ knownBad: 'steals logins' })]),
 			record([jar(), jar({ id: 2, name: 'b-1.0-forge.jar' })]),

@@ -12,9 +12,13 @@ export const CHANGES_WINDOW = 7 * 24 * 60 * 60 * 1000;
 /** Of an asset, what changes without changing what a launcher installs: counts and the index's own findings. */
 const UNRESOLVED = ['downloads', 'scan', 'inspection', 'icon', 'funding'];
 
-/** What of a record a launcher resolves a jar by: whether it is gone, and its releases. */
+/**
+ * What of a record a launcher resolves a jar by: whether it is gone, the source commit a build is made from, and its
+ * releases. Everything a record's releases file keeps (releases.js) is here, so that file and changes.json follow it.
+ */
 export const releasesOf = record => ({
 	gone: record.gone,
+	source: record.source,
 	releases: (record.releases ?? []).map(release => ({
 		...release,
 		assets: (release.assets ?? []).map(asset =>

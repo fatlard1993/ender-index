@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, test } from 'bun:test';
 
+import { fingerprint } from '../src/changes';
 import { releasesPath, slimRecord, writeReleases } from '../src/releases';
 
 const record = {
@@ -98,4 +99,36 @@ describe("a record's releases file", () => {
 			await rm(data, { recursive: true, force: true });
 		}
 	});
+});
+
+test("keeps nothing the change tracker's fingerprint leaves out, so it and changes.json follow every change to it", () => {
+	const full = {
+		...record,
+		gone: '2026-11-20',
+		source: {
+			commit: 'c1',
+			committed: '2026-11-01T00:00:00Z',
+			mods: [{ id: 'b', loader: 'fabric', minecraft: '~26.3', environment: '*', depends: [] }],
+		},
+	};
+	full.releases[0].assets[0] = { ...full.releases[0].assets[0], error: 'e', gone: 'g', replaced: 'r' };
+
+	// Every value the releases file keeps, by its path into the record
+	const leaves = (value, path = []) =>
+		value !== null && typeof value === 'object'
+			? Object.entries(value).flatMap(([key, inner]) => leaves(inner, [...path, key]))
+			: [path];
+	const changed = path => {
+		const copy = structuredClone(full);
+		let at = copy;
+
+		for (const key of path.slice(0, -1)) at = at[key];
+		at[path.at(-1)] = `${at[path.at(-1)]}, changed`;
+
+		return copy;
+	};
+	const before = fingerprint(full);
+	const missed = leaves(slimRecord(full)).filter(path => fingerprint(changed(path)) === before);
+
+	expect(missed).toEqual([]);
 });
