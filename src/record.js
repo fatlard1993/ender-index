@@ -75,6 +75,28 @@ const about = (repo, host) => ({
 	forkOf: repo.parent?.full_name,
 });
 
+/**
+ * Keep a record's stars, last push and download counts as recorded until they are COUNTS_EVERY old: they move with
+ * every crawl, and taken hourly they made most of the index's history. Releases and jars are untouched, so a new one
+ * lands as soon as it is seen. Answers whether the counts were taken now, so the caller notes when.
+ */
+export const holdCounts = (record, recorded, countedAt, now, every) => {
+	if (!recorded || !countedAt || Date.parse(now) - Date.parse(countedAt) >= every) return true;
+
+	record.stars = recorded.stars;
+	record.pushed = recorded.pushed;
+
+	const downloads = new Map(
+		(recorded.releases ?? []).flatMap(release => release.assets ?? []).map(asset => [asset.id, asset.downloads]),
+	);
+
+	for (const asset of record.releases.flatMap(release => release.assets ?? [])) {
+		if (downloads.get(asset.id) !== undefined) asset.downloads = downloads.get(asset.id);
+	}
+
+	return false;
+};
+
 /** The most of a release's notes kept: a changelog generated from every commit can run to tens of thousands. */
 export const NOTES_KEPT = 4000;
 

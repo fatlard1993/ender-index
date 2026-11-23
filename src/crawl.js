@@ -13,11 +13,12 @@ import * as github from './github';
 import * as gitlab from './gitlab';
 import { ASSETS, detailsQuery, repoOf } from './graphqlRepos';
 import { OPTED_OUT, optedOutOn, optsOut } from './optOut';
+import { COUNTS_EVERY, readChecks, writeChecks } from './checks';
 import { manifest } from './manifest';
 import { buildProviders, providersText } from './providers';
 import { readWithheld, withheldReason } from './withheld';
 import { UNSOURCED_KEPT, reachingUnsourced, releaseOf, unsourcedClasses } from './sourced';
-import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
+import { HISTORY, PAGE, PAGES, holdCounts, updateRecord, vanish } from './record';
 import { GIST_LINE, buildPacks, crawlPack, packDemand, packPage } from './packs';
 import { buildSearch, latestAssets, themesOf } from './search';
 import { contributorsOf } from './contributors';
@@ -605,7 +606,10 @@ export const picturesOf = async ({ host, name, recorded, now }) => {
 	}
 };
 
-const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, people, renames, optedOut, rescan }) => {
+const crawlOne = async (
+	line,
+	{ now, inspect, gameVersions, scratch, owners, people, renames, optedOut, rescan, checks = new Map() },
+) => {
 	const { host, name } = parseLine(line);
 	const path = recordPath({ host, name });
 	const record = await readJson(path);
@@ -670,26 +674,43 @@ const crawlOne = async (line, { now, inspect, gameVersions, scratch, owners, peo
 		const readme = await readmeOf({ host, name, repo, recorded });
 		const current = repo.full_name ?? name;
 		const text = readmeText(host, current, readme);
+		const key = lineFor({ host, name: current });
+		const looked = checks.get(key) ?? {};
+		// When each was last looked at, from checks.json; a record from before it kept them still carries its own
+		const seen = {
+			...recorded,
+			contributorsChecked: looked.contributors ?? recorded?.contributorsChecked,
+			fundingChecked: looked.funding ?? recorded?.fundingChecked,
+			picturesChecked: looked.pictures ?? recorded?.picturesChecked,
+		};
+		const countedAt = holdCounts(result.record, recorded, looked.counts, now, COUNTS_EVERY) ? now : looked.counts;
 		const contributed =
-			host === 'github' ? await contributorsOf({ name: current, recorded, now, people, readme: text }) : {};
-
-		await writeJson(canonical, {
+			host === 'github' ? await contributorsOf({ name: current, recorded: seen, now, people, readme: text }) : {};
+		const { contributorsChecked, fundingChecked, picturesChecked, ...kept } = {
 			...result.record,
 			readme,
 			readmeSummary: await readmeSummaryOf({ host, name, repo, recorded, readme }),
 			...(await fundingOf({
 				host,
 				name: current,
-				recorded,
+				recorded: seen,
 				now,
 				owners,
 				readme: text,
 				contributors: contributed.contributors,
 			})),
-			...(await picturesOf({ host, name: current, recorded, now })),
+			...(await picturesOf({ host, name: current, recorded: seen, now })),
 			...contributed,
 			history: HISTORY,
+		};
+
+		checks.set(key, {
+			...(contributorsChecked ? { contributors: contributorsChecked } : {}),
+			...(fundingChecked ? { funding: fundingChecked } : {}),
+			...(picturesChecked ? { pictures: picturesChecked } : {}),
+			...(countedAt ? { counts: countedAt } : {}),
 		});
+		await writeJson(canonical, kept);
 	} else if (everyReleaseOptedOut) {
 		await rm(canonical, { force: true });
 	}
@@ -1171,6 +1192,7 @@ export const crawl = async ({ only, rescan: rescanMode = process.env.CRAWL_RESCA
 			});
 	const noJars = only ? {} : await readNoJars();
 	const optedOut = new Map(Object.entries(await readOptedOut()));
+	const checks = await readChecks(DATA);
 	const withheld = await readWithheld(DATA);
 	const notResting = line =>
 		(!restingOn(noJars[line]) || changed.has(line)) &&
@@ -1240,6 +1262,7 @@ export const crawl = async ({ only, rescan: rescanMode = process.env.CRAWL_RESCA
 					renames,
 					optedOut,
 					rescan,
+					checks,
 				})) {
 					console.log(
 						[event.type.padEnd(7), event.repo, event.tag, event.asset, event.error && `:: ${event.error}`]
@@ -1276,6 +1299,7 @@ export const crawl = async ({ only, rescan: rescanMode = process.env.CRAWL_RESCA
 	}
 
 	await writeJson(join(DATA, OPTED_OUT), Object.fromEntries([...optedOut].sort(([a], [b]) => a.localeCompare(b))));
+	await writeChecks(DATA, checks);
 
 	const { records, packs } = await writeLists();
 
