@@ -38,6 +38,11 @@ export const manifest = ({ data = DATA_SERVED_AT } = {}) => ({
 			schema: `${SCHEMAS}/providers.schema.json`,
 			description: "Each mod id's claimants with what placing a dependency weighs, a fifth of search.json's size",
 		},
+		changes: {
+			path: 'changes.json',
+			schema: `${SCHEMAS}/changes.schema.json`,
+			description: 'Records whose releases changed in the last week, and when, so a launcher asks only for those',
+		},
 		knownBad: {
 			path: 'known-bad.json',
 			schema: `${SCHEMAS}/known-bad.schema.json`,

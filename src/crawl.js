@@ -1,6 +1,6 @@
 import { mkdir, mkdtemp, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 
 import { readContent, readIcon, readLinks, readMods } from 'ender-launcher/metadata';
 import { HOSTS as HOST_TITLES } from 'ender-launcher/rank';
@@ -14,6 +14,7 @@ import * as gitlab from './gitlab';
 import { ASSETS, detailsQuery, repoOf } from './graphqlRepos';
 import { OPTED_OUT, optedOutOn, optsOut } from './optOut';
 import { COUNTS_EVERY, readChecks, writeChecks } from './checks';
+import { CHANGES, SEEN, changesOf, fingerprint, readSeen, seenText, track } from './changes';
 import { manifest } from './manifest';
 import { buildProviders, providersText } from './providers';
 import { readWithheld, withheldReason } from './withheld';
@@ -1144,6 +1145,17 @@ export const writeLists = async () => {
 	);
 
 	for (const [at, record] of records.entries()) if (markKnownBad(record, knownBad)) await writeJson(files[at], record);
+
+	// Which records' releases changed, so a launcher asks only for those; after the marks, which change what it installs
+	const now = new Date().toISOString();
+	const seen = track(
+		await readSeen(DATA),
+		new Map(records.map((record, at) => [relative(DATA, files[at]), fingerprint(record)])),
+		now,
+	);
+
+	await Bun.write(join(DATA, SEEN), seenText(seen));
+	await writeJson(join(DATA, CHANGES), changesOf(seen, now));
 
 	const themes = themesOf(records);
 	const search = buildSearch(

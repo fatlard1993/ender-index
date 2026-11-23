@@ -1,0 +1,25 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://raw.githubusercontent.com/fatlard1993/ender-index/main/schemas/v1/changes.schema.json",
+	"title": "Records whose releases changed lately",
+	"description": "data/changes.json: every record whose releases, or gone mark, changed from since on, and records added or removed, by the path it is read at, with when the lists saw it. A launcher that read a record at or after since, and finds it here with no later time, has it as it is now and need not ask; one that read it before since asks, as this file cannot tell. Counts, scans and the readme change without a record being listed. Fields may be added at any time.",
+	"type": "object",
+	"required": ["since", "generated", "records"],
+	"properties": {
+		"since": {
+			"type": "string",
+			"description": "From when this file lists every change: a week before generated, or when the lists began tracking changes if later"
+		},
+		"generated": {
+			"type": "string",
+			"description": "When the lists wrote this file, which is the time each change listed in it was seen at or before"
+		},
+		"records": {
+			"type": "object",
+			"description": "A record's path, such as mods/owner/repo.json, to when its releases last changed; a removed record's path too, which now answers 404",
+			"additionalProperties": {
+				"type": "string"
+			}
+		}
+	}
+}

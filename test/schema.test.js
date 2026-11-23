@@ -28,6 +28,17 @@ describe('the published schemas', () => {
 		expect(errorsOf(await validator('index.schema.json'), listed)).toEqual([]);
 	});
 
+	test('hold the change file the lists write', async () => {
+		const { changesOf, track } = await import('../src/changes');
+		const seen = track(
+			track(undefined, new Map([['mods/a/b.json', 'x']]), '2026-11-23T00:00:00.000Z'),
+			new Map([['mods/a/b.json', 'y']]),
+			'2026-11-23T05:00:00.000Z',
+		);
+
+		expect(errorsOf(await validator('changes.schema.json'), changesOf(seen, '2026-11-23T05:00:00.000Z'))).toEqual([]);
+	});
+
 	test('the manifest names where the data moved only once it has, and only an https address', async () => {
 		const validate = await validator('index.schema.json');
 
