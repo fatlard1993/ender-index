@@ -28,6 +28,17 @@ describe('the published schemas', () => {
 		expect(errorsOf(await validator('index.schema.json'), listed)).toEqual([]);
 	});
 
+	test('the manifest names where the data moved only once it has, and only an https address', async () => {
+		const validate = await validator('index.schema.json');
+
+		expect(manifest()).not.toHaveProperty('data');
+		expect(manifest({ data: 'https://cdn.example/ender' }).data).toBe('https://cdn.example/ender');
+		expect(errorsOf(validate, manifest({ data: 'https://cdn.example/ender' }))).toEqual([]);
+		expect(errorsOf(validate, manifest({ data: 'http://cdn.example/ender' }))).toEqual([
+			'.data should match pattern "^https://"',
+		]);
+	});
+
 	test('hold every record the index keeps', async () => {
 		const validate = await validator('record.schema.json');
 		const failures = [];

@@ -214,6 +214,8 @@ Each file a launcher reads has a JSON Schema in [`schemas/v1/`](schemas/v1), and
 
 The index is meant to be built on: any launcher can read it the way ender does. Everything is static JSON under `https://raw.githubusercontent.com/fatlard1993/ender-index/data/`, the `data` branch, served with ETags, so an unchanged file costs one small request. Start from `index.json` and compare its `schema` with the version your code reads. ender, the reference consumer, says so when the index's is newer and reads on, since fields are added without raising it; refusing is as fair a choice.
 
+**Start from `index.json`.** When it names `data`, an https address, that is where every other file is served now: read them there, and remember it for when the manifest cannot be read. It is how the data can move to another host with no launcher release; ender follows it, and reads an address its player set as it is.
+
 **From a mod id, a loader and a game version to a jar:**
 
 1. **Find the repository.** Each entry in `search.json` names the mod ids its newest release declares, in `latest.mods[].id` and `latest.provides`, and its record by `repo` and `host`. More than one repository can claim an id, such as a fork or a copy, so keep the repository a player chose once they have chosen. An entry with `fromSource` has no built release: its record's `source` names the commit read and the mods it declares. Skip it, or build it only when the player allows, as ender does.

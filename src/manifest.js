@@ -8,9 +8,17 @@ export const SCHEMA_VERSION = 1;
 /** Each shape version's schemas keep their own folder, so version 1's addresses go on serving version 1. */
 const SCHEMAS = `https://raw.githubusercontent.com/fatlard1993/ender-index/main/schemas/v${SCHEMA_VERSION}`;
 
-/** data/index.json: the shape version, and each file a launcher reads, with its schema. */
-export const manifest = () => ({
+/**
+ * Where the data is served when that is not beside index.json on the data branch: an https address that ender, and any
+ * launcher reading the index as the README says, reads every other file from. Setting it is how the data moves to a
+ * domain or a CDN with no launcher release; undefined while it is served where it is published.
+ */
+export const DATA_SERVED_AT = undefined;
+
+/** data/index.json: the shape version, where the data is served if it moved, and each file a launcher reads. */
+export const manifest = ({ data = DATA_SERVED_AT } = {}) => ({
 	schema: SCHEMA_VERSION,
+	...(data ? { data } : {}),
 	stability:
 		'Fields are only added; ignore those you do not know. A change that could break a consumer raises schema, announced in the README at least 30 days ahead.',
 	files: {
