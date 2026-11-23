@@ -23,9 +23,9 @@ concurrency: crawl
 jobs:
   crawl:
     runs-on: ubuntu-latest
-    # The crawl's own budget is 45 minutes, after a discovery of up to forty and a source check of up to twenty; a job
-    # the runner stops commits nothing
-    timeout-minutes: 170
+    # The crawl's own budget is 45 minutes, after a source check of up to twenty, and once a day a discovery of up to
+    # forty and Modrinth's source links of up to forty-five; a job the runner stops commits nothing
+    timeout-minutes: 220
     steps:
       - uses: actions/checkout@v4
         with:
@@ -66,11 +66,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.CRAWL_TOKEN || secrets.GITHUB_TOKEN }}
           CRAWL_APP_ID: ${{ vars.CRAWL_APP_ID }}
           CRAWL_APP_KEY: ${{ secrets.CRAWL_APP_KEY }}
+      # Every Modrinth mod's source link, once a day: half an hour that discovery's forty minutes have no room for
+      - name: modrinth sources
+        id: modrinth
+        if: inputs.discover || github.event.schedule == '17 4 * * *'
+        run: exec bun src/discover.js --modrinth
+        working-directory: ender-index
+        continue-on-error: true
+        timeout-minutes: 45
       # Every repository with no record looked at for a jar over GraphQL, so the crawl spends no REST request on those
-      # with none; discovery does this itself
+      # with none: those discovery and Modrinth's links just found too, once a day
       - name: triage
         id: triage
-        if: ${{ !(inputs.discover || github.event.schedule == '17 4 * * *') }}
         run: exec bun src/triage.js
         working-directory: ender-index
         continue-on-error: true
@@ -156,7 +163,7 @@ jobs:
       - name: report a failed step
         if: ${{ !cancelled() }}
         env:
-          OUTCOMES: discover=${{ steps.discover.outcome }} triage=${{ steps.triage.outcome }} sources=${{ steps.sources.outcome }} crawl=${{ steps.crawl.outcome }} schemas=${{ steps.schemas.outcome }}
+          OUTCOMES: discover=${{ steps.discover.outcome }} modrinth=${{ steps.modrinth.outcome }} triage=${{ steps.triage.outcome }} sources=${{ steps.sources.outcome }} crawl=${{ steps.crawl.outcome }} schemas=${{ steps.schemas.outcome }}
         run: |
           failed=$(printf '%s\n' $OUTCOMES | { grep '=failure$' || true; } | cut -d= -f1 | tr '\n' ' ')
           [ -z "$failed" ] && exit 0

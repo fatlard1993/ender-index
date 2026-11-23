@@ -4,7 +4,6 @@ import {
 	DATA,
 	readJson,
 	readLines,
-	readNoJars,
 	readPacks,
 	readRenames,
 	readRepos,
@@ -19,7 +18,6 @@ import { searchCode, searchRepositories } from './github';
 import * as gitlab from './gitlab';
 import { modrinthSources, renamedSources } from './modrinth';
 import { releasedByPacks } from './packs';
-import { triage, triageLines, writeNoJars } from './triage';
 
 /** Where each loader keeps its metadata in a source tree. Finding one is how a repository says it is a mod. */
 export const MANIFESTS = [
@@ -212,12 +210,13 @@ export const searchSlices = async ({ state, search, deadline, sleep = Bun.sleep,
 
 /**
  * The minutes discovery has: the crawl's discover step stops at forty, and a step stopped there writes nothing, so a
- * phase that would not fit in what is left waits for the next night instead.
+ * phase that would not fit in what is left waits for the next night instead. Reading every Modrinth mod's source link
+ * takes half an hour more, and is a step of its own (`--modrinth`).
  */
 const DISCOVERY_MINUTES = 37;
 
-/** What reading every Modrinth mod's source link takes, as it says when it starts. */
-const MODRINTH_MINUTES = 11;
+/** What searching GitHub for pack repositories takes, after the topics. */
+const PACKS_MINUTES = 5;
 
 /**
  * Search each host without code search by topic, until the deadline. A host that rate-limits the search is left for the
@@ -254,7 +253,6 @@ export const searchTopics = async ({ hosts, topics, found, deadline, log = conso
 export const discover = async () => {
 	const slicesPath = join(DATA, SLICES);
 	const started = Date.now();
-	const left = () => DISCOVERY_MINUTES - (Date.now() - started) / 60_000;
 	const existing = await readRepos();
 	const released = releasedByPacks(await readPacks());
 	const keepFound = async found => {
@@ -279,13 +277,13 @@ export const discover = async () => {
 	// Kept now: the search has moved on past what it found, so a step stopped later would lose it for a whole round
 	await keepFound(found);
 
-	// Codeberg and GitLab offer no code search across repositories, so there a topic is the sign. Ending with time left
-	// for the Modrinth sources, which every pack's mods are matched by
+	// Codeberg and GitLab offer no code search across repositories, so there a topic is the sign; ending with time left to
+	// search for packs
 	await searchTopics({
 		hosts: { codeberg, gitlab },
 		topics: TOPICS,
 		found,
-		deadline: started + (DISCOVERY_MINUTES - MODRINTH_MINUTES - 2) * 60_000,
+		deadline: started + (DISCOVERY_MINUTES - PACKS_MINUTES) * 60_000,
 	});
 
 	const merged = await keepFound(found);
@@ -299,17 +297,24 @@ export const discover = async () => {
 	await writeList('packs.txt', packs, '# Pack repositories found on their hosts');
 	console.log(`${packs.length} pack repositories found on their hosts`);
 
+	console.log(`${merged.length - existing.length} new repositories; ${merged.length} found on their hosts`);
+
+	return 0;
+};
+
+/**
+ * Every Modrinth mod's and modpack's source link, read apart from discovery as it takes half an hour: kept apart from
+ * what was found on the hosts themselves, which repos.txt and packs.txt hold.
+ */
+export const modrinthStep = async () => {
+	const merged = await readRepos();
+	const packs = await readLines('packs.txt');
+
 	// Most Modrinth projects link their source. Those on a host the index crawls are kept apart from what was found on
 	// the hosts themselves, which comes first; a mod's slug and id are kept with its source, so a mod needed but not
 	// indexed can be pointed at its source, and a pack's Modrinth mods matched to the index.
 	try {
-		if (left() < MODRINTH_MINUTES) {
-			throw new Error(
-				`${Math.floor(left())} minutes were left of discovery's ${DISCOVERY_MINUTES}, not the ten it takes`,
-			);
-		}
-
-		console.log('Reading the source links of every Modrinth mod and modpack; this takes about ten minutes');
+		console.log('Reading the source links of every Modrinth mod and modpack; this takes about half an hour');
 
 		const renames = await readRenames();
 		const renamed = line => renamedLine(renames, line);
@@ -340,15 +345,7 @@ export const discover = async () => {
 		console.error(`Modrinth sources :: ${error.message}; discovery went on without them`);
 	}
 
-	try {
-		await writeNoJars(await triage({ lines: await triageLines(), noJars: await readNoJars() }));
-	} catch (error) {
-		console.error(`Triage :: ${error.message}; the crawl reads every Modrinth-only repository until it runs`);
-	}
-
-	console.log(`${merged.length - existing.length} new repositories; ${merged.length} found on their hosts`);
-
 	return 0;
 };
 
-if (import.meta.main) process.exit(await discover());
+if (import.meta.main) process.exit(process.argv.includes('--modrinth') ? await modrinthStep() : await discover());
