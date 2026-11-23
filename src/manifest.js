@@ -25,6 +25,11 @@ export const manifest = () => ({
 			description:
 				'A repository and its releases; mods/codeberg.org/{owner}/{repo}.json and mods/gitlab.com/{path}.json off GitHub',
 		},
+		providers: {
+			path: 'providers.json',
+			schema: `${SCHEMAS}/providers.schema.json`,
+			description: "Each mod id's claimants with what placing a dependency weighs, a fifth of search.json's size",
+		},
 		knownBad: {
 			path: 'known-bad.json',
 			schema: `${SCHEMAS}/known-bad.schema.json`,

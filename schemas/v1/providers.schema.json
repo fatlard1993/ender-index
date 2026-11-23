@@ -1,0 +1,61 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://raw.githubusercontent.com/fatlard1993/ender-index/main/schemas/v1/providers.schema.json",
+	"title": "Who provides each mod id",
+	"description": "data/providers.json: each mod id the listing's repositories claim, with its claimants in the order ender weighs them, so a launcher places a mod's dependencies without fetching search.json. A claimant is trusted when it is established (50 stars or more), shares an owner with the mod requiring it, or is marked author; ender takes the first trusted one whose targets fit the instance. Fields may be added at any time.",
+	"type": "object",
+	"required": ["repositories", "ids"],
+	"properties": {
+		"repositories": {
+			"type": "array",
+			"description": "Each claimant once",
+			"items": {
+				"type": "object",
+				"required": ["host", "repo", "targets"],
+				"properties": {
+					"host": {
+						"type": "string",
+						"enum": ["github", "codeberg", "gitlab"]
+					},
+					"repo": {
+						"type": "string"
+					},
+					"author": {
+						"type": "boolean",
+						"description": "True when its author keeps an established repository whose mods it names, as ender trusts it"
+					},
+					"targets": {
+						"type": "array",
+						"description": "The loaders and game versions it has releases for, as search.json's targets",
+						"items": {
+							"type": "object",
+							"properties": {
+								"loader": {
+									"type": "string"
+								},
+								"minecraft": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"established": {
+						"type": "boolean",
+						"description": "True when it has 50 stars or more, as ender trusts it"
+					}
+				}
+			}
+		},
+		"ids": {
+			"type": "object",
+			"description": "A mod id to its claimants, as positions in repositories, in the order ender weighs them",
+			"additionalProperties": {
+				"type": "array",
+				"items": {
+					"type": "integer",
+					"minimum": 0
+				}
+			}
+		}
+	}
+}

@@ -122,6 +122,7 @@ data/mods/codeberg.org/...      the same for Codeberg
 data/mods/gitlab.com/...        and for GitLab
 data/icons/<sha256>.<ext>       mods' icons, named by the hash of the image as kept
 data/search.json                one summary per repository, for listing without fetching every record
+data/providers.json             each mod id's claimants, as placing a dependency weighs them, a fifth of search.json's size
 data/tags.json                  the themes search offers, each with the tags folded into it and how many mods carry it
 data/sources.json               each Modrinth mod's source repository, by its slug, to point a mod not indexed at its source
 data/source-checks.json         when each such repository's source was last checked, and whether it builds
@@ -219,7 +220,7 @@ The index is meant to be built on: any launcher can read it the way ender does. 
 3. **Pick a release.** Go newest first by `published`, and skip `prerelease` unless the player wants one.
 4. **Pick a jar.** Skip any asset with `error`, `gone` or `knownBad`. A jar fits when one of its `mods` has your loader (a Fabric mod loads on Quilt too) and its `minecraft` range takes your game version. The range is the jar's own, verbatim: a Fabric or Quilt range with `||` between alternatives, or a Forge or NeoForge Maven range like `[1.20.1,1.21)`. ender's reading of both is [`src/mods/range.js`](https://github.com/fatlard1993/ender-launcher/blob/main/src/mods/range.js) in ender-launcher. A jar that declares no range is taken only when nothing declares a fit, and then only when its file name names the game version or its repository never declares one.
 5. **Download and check it.** Download `url`, the author's own release asset, and refuse it unless it matches `sha256`. An asset with `replaced` was re-uploaded once; `sha256` is the jar it is now.
-6. **Resolve what it needs.** `depends` holds the mod ids it requires; resolve each the same way.
+6. **Resolve what it needs.** `depends` holds the mod ids it requires. `providers.json` places each without `search.json`: an id's claimants are in the order ender weighs them, and ender takes the first whose `targets` fit the instance and that is `established`, marked `author`, or has the same owner as the mod requiring it. Any jar can declare any mod id, so a claim alone is not taken.
 
 **What a consumer is expected to honor:**
 
@@ -236,7 +237,7 @@ The index is meant to be built on: any launcher can read it the way ender does. 
 - **Two lists are closed:** a mod's `host` (`github`, `codeberg`, `gitlab`) and its `environment` (`*`, `client`, `server`). A pack's `host` is open: `github` or `gist` so far. A launcher needs every value of both to find a record and to decide what to install, so a new value in either raises `schema`.
 - **A change that could break you raises `schema`:** a field removed or renamed, a type or meaning changed, or a file moved. It is announced below at least 30 days before it is published.
 - **The schemas are the contract,** and the tests hold every published file to them.
-- **Covered:** `index.json`, `search.json`, `mods/`, `known-bad.json`, `withheld.json`, `opted-out.json`, `renames.json`, `explanations.json`, `packs.json`, `packs/` and `pack-pages/`: every file a launcher reads.
+- **Covered:** `index.json`, `search.json`, `mods/`, `known-bad.json`, `withheld.json`, `opted-out.json`, `renames.json`, `explanations.json`, `providers.json`, `packs.json`, `packs/` and `pack-pages/`: every file a launcher reads.
 
 Changes announced: none.
 

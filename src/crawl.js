@@ -14,6 +14,7 @@ import * as gitlab from './gitlab';
 import { ASSETS, detailsQuery, repoOf } from './graphqlRepos';
 import { OPTED_OUT, optedOutOn, optsOut } from './optOut';
 import { manifest } from './manifest';
+import { buildProviders, providersText } from './providers';
 import { readWithheld, withheldReason } from './withheld';
 import { UNSOURCED_KEPT, reachingUnsourced, releaseOf, unsourcedClasses } from './sourced';
 import { HISTORY, PAGE, PAGES, updateRecord, vanish } from './record';
@@ -1138,6 +1139,7 @@ export const writeLists = async () => {
 	);
 
 	await writeJsonLines(join(DATA, 'search.json'), search);
+	await Bun.write(join(DATA, 'providers.json'), providersText(buildProviders(search)));
 	const built = buildPacks(packs, search, records, await readJson(join(DATA, 'modrinth-ids.json'), {}));
 
 	await writeJsonLines(

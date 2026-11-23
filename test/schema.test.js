@@ -68,6 +68,7 @@ describe('the published schemas', () => {
 			['renames.json', 'renames.schema.json'],
 			['explanations.json', 'explanations.schema.json'],
 			['packs.json', 'packs.schema.json'],
+			['providers.json', 'providers.schema.json'],
 		]) {
 			const published = Bun.file(join(root, 'data', file));
 
