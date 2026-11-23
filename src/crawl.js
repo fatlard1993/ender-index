@@ -1094,7 +1094,13 @@ export const dropWithheld = async (files, records, withheld) => {
 	const kept = { files: [], records: [] };
 
 	for (const [at, record] of records.entries()) {
-		if (withheldReason(withheld, lineFor({ host: record.host ?? 'github', name: record.repo })) === undefined) {
+		// A gist's line names the gist alone, gist:<id>, though its record's repo is owner/id
+		const line =
+			record.host === 'gist'
+				? `gist:${record.repo.split('/').at(-1)}`
+				: lineFor({ host: record.host ?? 'github', name: record.repo });
+
+		if (withheldReason(withheld, line) === undefined) {
 			kept.files.push(files[at]);
 			kept.records.push(record);
 		} else await rm(files[at], { force: true });

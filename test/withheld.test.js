@@ -27,11 +27,12 @@ test("removes a withheld repository's record and keeps the rest, a mod on any ho
 	const directory = await mkdtemp(join(tmpdir(), 'withheld-'));
 
 	try {
-		const files = ['a.json', 'b.json', 'c.json'].map(name => join(directory, name));
+		const files = ['a.json', 'b.json', 'c.json', 'd.json'].map(name => join(directory, name));
 		const records = [
 			{ repo: 'Some/Mod', host: 'github' },
 			{ repo: 'kept/mod', host: 'github' },
 			{ repo: 'group/pack', host: 'gitlab' },
+			{ repo: 'me/a1db98319884288ad3d83a0db854291f', host: 'gist' },
 		];
 
 		for (const file of files) await Bun.write(file, '{}');
@@ -42,6 +43,7 @@ test("removes a withheld repository's record and keeps the rest, a mod on any ho
 			new Map([
 				['some/mod', 'a takedown'],
 				['gitlab:group/pack', 'a takedown'],
+				['gist:a1db98319884288ad3d83a0db854291f', 'a takedown'],
 			]),
 		);
 
@@ -49,6 +51,7 @@ test("removes a withheld repository's record and keeps the rest, a mod on any ho
 		expect(kept.files).toEqual([files[1]]);
 		expect(await Bun.file(files[0]).exists()).toBe(false);
 		expect(await Bun.file(files[2]).exists()).toBe(false);
+		expect(await Bun.file(files[3]).exists()).toBe(false);
 	} finally {
 		await rm(directory, { recursive: true, force: true });
 	}
