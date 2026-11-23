@@ -742,6 +742,13 @@ export const RELEASE_BATCH = 100;
 /** Queries asked at once: each takes seconds, and tens of thousands of repositories make hundreds of them. */
 const RELEASE_QUERIES = 4;
 
+/**
+ * The most of a crawl's time its release check may take. It takes half an hour, a hundred repositories to a query, and
+ * counted outside the crawl's time it ran every crawl past its step's limit; past this share, the rest are read in full
+ * in their turn, as a failed query's are.
+ */
+export const CHECK_SHARE = 2 / 3;
+
 /** How long a repository whose releases look unchanged goes before they are read in full anyway. */
 export const FULL_READ_DAYS = 7;
 
@@ -774,6 +781,8 @@ export const checkReleases = async ({
 	sleep = Bun.sleep,
 	log = console.log,
 	now = Date.now(),
+	until = Infinity,
+	clock = Date.now,
 }) => {
 	const checking = [];
 
@@ -795,7 +804,10 @@ export const checkReleases = async ({
 	for (let at = 0; at < checking.length; at += RELEASE_BATCH) batches.push(checking.slice(at, at + RELEASE_BATCH));
 
 	const work = async () => {
-		for (let batch = batches.shift(); batch && !limited; batch = batches.shift()) {
+		// Its time and the limit are looked at before a batch is taken, so one taken is always asked
+		while (!limited && clock() < until && batches.length > 0) {
+			const batch = batches.shift();
+
 			try {
 				const data = await github.waitingOut(() => ask(detailsQuery(batch.map(({ line }) => line))), sleep);
 
@@ -818,6 +830,11 @@ export const checkReleases = async ({
 	};
 
 	await Promise.all(Array.from({ length: RELEASE_QUERIES }, work));
+
+	// Unasked at its time limit, these are read in full in their turn, as those a failed query leaves are
+	const unasked = batches.reduce((sum, batch) => sum + batch.length, 0);
+
+	if (unasked > 0 && clock() >= until) log(`Left ${unasked} repositories to their turn: the check's time ran out`);
 
 	log(
 		`${changed.size} have a release the index has not read, crawled first; ${steady.size} have releases as it read them, refreshed from this check alone`,
@@ -1192,6 +1209,11 @@ export const writeLists = async () => {
 };
 
 export const crawl = async ({ only, rescan: rescanMode = process.env.CRAWL_RESCAN } = {}) => {
+	// A crawl the runner kills commits nothing, so it stops itself while there is time to commit: its time runs from here,
+	// as the step's does, and the release check below takes a share of it
+	const started = Date.now();
+	const minutes = Number(process.env.CRAWL_MINUTES ?? Infinity);
+	const deadline = started + minutes * 60_000;
 	const now = new Date().toISOString();
 	const known = await readRenames();
 	const found = currentLines(only ?? (await readRepos()), known);
@@ -1203,6 +1225,7 @@ export const crawl = async ({ only, rescan: rescanMode = process.env.CRAWL_RESCA
 		? { changed: new Set(), steady: new Map() }
 		: await checkReleases({
 				lines: uniqueRepositories([...found, ...fromModrinth, ...Object.values(await readPackLines()).flat()]),
+				until: Math.min(deadline, started + minutes * CHECK_SHARE * 60_000),
 			});
 	const noJars = only ? {} : await readNoJars();
 	const optedOut = new Map(Object.entries(await readOptedOut()));
@@ -1238,9 +1261,6 @@ export const crawl = async ({ only, rescan: rescanMode = process.env.CRAWL_RESCA
 	const owners = new Map();
 	const people = new Map();
 	const renames = new Map();
-	// A crawl the runner kills commits nothing, so it stops itself while there is time to commit.
-	const minutes = Number(process.env.CRAWL_MINUTES ?? Infinity);
-	const deadline = Date.now() + minutes * 60_000;
 
 	console.log(
 		`Crawling ${repos.length === 1 ? 'one repository' : `${repos.length} repositories`}; each new release jar is downloaded and scanned, so this takes a while`,

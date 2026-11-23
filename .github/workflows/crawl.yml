@@ -23,8 +23,9 @@ concurrency: crawl
 jobs:
   crawl:
     runs-on: ubuntu-latest
-    # The crawl's own budget is 45 minutes, after a source check of up to twenty, and once a day a discovery of up to
-    # forty and Modrinth's source links of up to forty-five; a job the runner stops commits nothing
+    # The crawl's own budget is 55 minutes, its release check included, after a source check of up to twenty, and once a
+    # day a discovery of up to forty and Modrinth's source links of up to forty-five; a job the runner stops commits
+    # nothing
     timeout-minutes: 220
     steps:
       - uses: actions/checkout@v4
@@ -113,7 +114,9 @@ jobs:
           # the crawl's alone
           CRAWL_RESERVE: ${{ !vars.CRAWL_APP_ID && secrets.CRAWL_TOKEN && '1000' || '0' }}
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
-          CRAWL_MINUTES: 45
+          # From the crawl's start, its half-hour release check included, so it stops itself with time to list and commit
+          # inside the step's sixty
+          CRAWL_MINUTES: 55
           # Unset, old findings stand. Set the RESCAN variable to full or throttled to read again what an older scanner
           # read, and remove it once done
           CRAWL_RESCAN: ${{ vars.RESCAN }}

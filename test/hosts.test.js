@@ -795,4 +795,30 @@ describe("the check on each repository's releases", () => {
 		expect(asked).toBeLessThan(12);
 		expect(logged.filter(line => line.startsWith('Left'))).toHaveLength(asked);
 	});
+
+	// On a day GitHub answered slowly, the check took half an hour and left the crawl no time inside its step
+	test('asks no more once its share of the crawl is spent, leaving the rest to their turn', async () => {
+		const lines = Array.from({ length: RELEASE_BATCH * 12 }, (_, at) => `a/r${at}`);
+		let clock = 0;
+		let asked = 0;
+		const logged = [];
+		await checkReleases({
+			lines,
+			known: async () => cached(['1.0']),
+			ask: async query => {
+				asked += 1;
+				clock += 10 * 60_000;
+
+				return answer(query);
+			},
+			sleep: async () => {},
+			log: line => logged.push(line),
+			now,
+			until: 11 * 60_000,
+			clock: () => clock,
+		});
+
+		expect(asked).toBe(4);
+		expect(logged).toContain(`Left ${RELEASE_BATCH * 8} repositories to their turn: the check's time ran out`);
+	});
 });

@@ -267,7 +267,7 @@ bun run lists                  build search.json, packs.json and the rest again 
 bun test
 ```
 
-A GitHub token is required, because code search refuses anonymous requests: `GITHUB_TOKEN`, or the `gh` CLI's. `GITLAB_TOKEN` is used for GitLab when set. `CRAWL_MINUTES` gives a crawl a budget, and `CRAWL_PART=packs` crawls the packs alone.
+A GitHub token is required, because code search refuses anonymous requests: `GITHUB_TOKEN`, or the `gh` CLI's. `GITLAB_TOKEN` is used for GitLab when set. `CRAWL_MINUTES` gives a crawl a budget, from its start and its release check included, and `CRAWL_PART=packs` crawls the packs alone.
 
 ender is a sibling checkout (`../ender-launcher`), so the scanner is always the one the client runs.
 
