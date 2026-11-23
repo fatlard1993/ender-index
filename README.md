@@ -51,7 +51,7 @@ The [guide for mod authors](https://fatlard1993.github.io/ender-index/authors) h
 1. Keep your loader's metadata where your build expects it: `src/main/resources/fabric.mod.json`, `quilt.mod.json`, or `META-INF/mods.toml` / `META-INF/neoforge.mods.toml`.
 2. Attach the built jar to each release. On GitHub, if you publish with `mc-publish`, that is its `github-token` input. On GitLab, a release link whose URL ends in the jar's file name.
 
-Discovery finds a mod nightly, by that metadata or by a topic; [Being found](https://fatlard1993.github.io/ender-index/authors/being-found) says which. To be listed now, [open a List a mod issue](https://github.com/fatlard1993/ender-index/issues/new?template=mod.yml): the repository is crawled and listed within minutes, or the issue says why not. A pull request adding a line to [`data/repos.txt`](data/repos.txt) works too: `owner/repo` for GitHub, `codeberg:owner/repo`, or `gitlab:group/project`.
+Discovery finds a mod nightly, by that metadata or by a topic; [Being found](https://fatlard1993.github.io/ender-index/authors/being-found) says which. To be listed now, [open a List a mod issue](https://github.com/fatlard1993/ender-index/issues/new?template=mod.yml): the repository is crawled and listed within minutes, or the issue says why not. A pull request adding a line to [`data/repos.txt`](https://github.com/fatlard1993/ender-index/blob/data/repos.txt) works too: `owner/repo` for GitHub, `codeberg:owner/repo`, or `gitlab:group/project`.
 
 ### Packs
 
@@ -66,12 +66,12 @@ An author takes a mod out of the index where it was found, with no account and n
 - **The whole repository:** the topic `ender-index-opt-out`, on GitHub, Codeberg or GitLab. The next crawl to reach it drops its page, its releases and its place in search, usually within an hour or two, or within the week for a mod listed only by its source; a pack repository is dropped the same way. It is looked at again weekly, and listed again once the topic is gone, or at once by a List a mod issue.
 - **One release:** `ender-index-opt-out` anywhere in its notes, as `<!-- ender-index-opt-out -->` to keep it out of sight. Its jars are never downloaded, and one read before is dropped, while the rest of the mod stays listed.
 
-Opting out takes a mod out of the index, not off its releases: `ender add gh:owner/repo` still installs from them. What the index keeps of a repository that opts out is its name and the day it was last seen opting out, in [`data/opted-out.json`](data/opted-out.json), so it knows to leave it alone; records kept before stay in this repository's history. The guide's [Opting out](https://fatlard1993.github.io/ender-index/authors/opting-out) has the rest.
+Opting out takes a mod out of the index, not off its releases: `ender add gh:owner/repo` still installs from them. What the index keeps of a repository that opts out is its name and the day it was last seen opting out, in [`data/opted-out.json`](https://github.com/fatlard1993/ender-index/blob/data/opted-out.json), so it knows to leave it alone; records kept before stay in this repository's history. The guide's [Opting out](https://fatlard1993.github.io/ender-index/authors/opting-out) has the rest.
 
 ## Reports and takedowns
 
-- **A jar that does harm:** [open a report](https://github.com/fatlard1993/ender-index/issues/new?template=report.yml). Once confirmed, its sha256 goes in [`data/known-bad.json`](data/known-bad.json) with the reason; on the next list every copy of it in the index is marked, its page says so in red, and ender refuses to install it.
-- **Something shown that should not be,** as a takedown from someone other than the mod's author: open a report the same way. The repository goes in [`data/withheld.json`](data/withheld.json) with the reason; the crawl leaves it alone, and its record, mod or pack, is gone on the next list. An author needs none of this: a topic takes their mod out, as [Getting out](#getting-out) says.
+- **A jar that does harm:** [open a report](https://github.com/fatlard1993/ender-index/issues/new?template=report.yml). Once confirmed, its sha256 goes in [`data/known-bad.json`](https://github.com/fatlard1993/ender-index/blob/data/known-bad.json) with the reason; on the next list every copy of it in the index is marked, its page says so in red, and ender refuses to install it.
+- **Something shown that should not be,** as a takedown from someone other than the mod's author: open a report the same way. The repository goes in [`data/withheld.json`](https://github.com/fatlard1993/ender-index/blob/data/withheld.json) with the reason; the crawl leaves it alone, and its record, mod or pack, is gone on the next list. An author needs none of this: a topic takes their mod out, as [Getting out](#getting-out) says.
 - **A player shot:** open a report, or comment on the shot's issue, linked beside it; taking the `shown` label off takes it down on the next run.
 - **An author's explanation:** the `withdrawn` label takes it down at once.
 
@@ -95,7 +95,7 @@ With the releases, each repository is recorded with where its readme and picture
 
 [What each finding means](https://fatlard1993.github.io/ender-index/findings), for players and for authors, is a page of the index. Its source is [`client/findings.md`](client/findings.md).
 
-**These are findings, not verdicts.** An update checker reaches the network; a performance mod uses `Unsafe`. Nothing here is approved or rejected. The one exception is [`data/known-bad.json`](data/known-bad.json), a list of hashes with the reason each is there, which is a fact rather than a judgement.
+**These are findings, not verdicts.** An update checker reaches the network; a performance mod uses `Unsafe`. Nothing here is approved or rejected. The one exception is [`data/known-bad.json`](https://github.com/fatlard1993/ender-index/blob/data/known-bad.json), a list of hashes with the reason each is there, which is a fact rather than a judgement.
 
 **A release changed after it was published is recorded.** Assets are tracked by their host's asset id, so a jar re-uploaded under the same name is downloaded again. If the bytes differ, the old hash is kept under `replaced` and the crawl reports it as `swapped`. A jar deleted from its release is kept with the date it went missing under `gone`.
 
@@ -208,11 +208,11 @@ A record, trimmed:
 
 An asset may instead carry `error` (it could not be fetched or scanned), `metadataError` (its metadata could not be read), `knownBad`, `replaced` or `gone`. A repository with no built release carries `source`: the commit read and the mods its source declares. Jars are never rehosted: `url` is the author's own release.
 
-Each file a launcher reads has a JSON Schema in [`schemas/v1/`](schemas/v1), and [`data/index.json`](data/index.json) names them. Each shape version keeps its own folder, so version 1's schemas stay where they are after a version 2. The tests check every published file against its schema. A change to the code fails CI before it is published; a crawl publishes its data first and checks it right after, so data that breaks a schema turns that crawl's run red within the hour.
+Each file a launcher reads has a JSON Schema in [`schemas/v1/`](schemas/v1), and [`data/index.json`](https://github.com/fatlard1993/ender-index/blob/data/index.json) names them. Each shape version keeps its own folder, so version 1's schemas stay where they are after a version 2. The tests check every published file against its schema. A change to the code fails CI before it is published; a crawl publishes its data first and checks it right after, so data that breaks a schema turns that crawl's run red within the hour.
 
 ## For launchers
 
-The index is meant to be built on: any launcher can read it the way ender does. Everything is static JSON under `https://raw.githubusercontent.com/fatlard1993/ender-index/main/data/`, served with ETags, so an unchanged file costs one small request. Start from `index.json` and compare its `schema` with the version your code reads. ender, the reference consumer, says so when the index's is newer and reads on, since fields are added without raising it; refusing is as fair a choice.
+The index is meant to be built on: any launcher can read it the way ender does. Everything is static JSON under `https://raw.githubusercontent.com/fatlard1993/ender-index/data/`, the `data` branch, served with ETags, so an unchanged file costs one small request. Start from `index.json` and compare its `schema` with the version your code reads. ender, the reference consumer, says so when the index's is newer and reads on, since fields are added without raising it; refusing is as fair a choice.
 
 **From a mod id, a loader and a game version to a jar:**
 
@@ -240,9 +240,13 @@ The index is meant to be built on: any launcher can read it the way ender does. 
 - **The schemas are the contract,** and the tests hold every published file to them.
 - **Covered:** `index.json`, `search.json`, `mods/`, `known-bad.json`, `withheld.json`, `opted-out.json`, `renames.json`, `explanations.json`, `providers.json`, `packs.json`, `packs/` and `pack-pages/`: every file a launcher reads.
 
-Changes announced: none.
+Changes announced:
+
+- **2026-11-22: the data moved to its own branch.** It is at `https://raw.githubusercontent.com/fatlard1993/ender-index/data/`, the `data` branch, whose history is made one commit each night so the repository stops growing with every crawl. The old address, `.../main/data/`, is copied there once a day until 2026-12-22 and then no longer updated. The files and their shape are the same, so `schema` stays 1; ender from 0.4 reads the new address.
 
 ## Running it
+
+`data/` is the `data` branch, which the crawl and every listing commit to. Until 2026-12-22, `main` also carries a copy of it a day old; after that, check it out where the code reads it with `git worktree add data data`, and `scripts/data-push` commits and pushes what changed there.
 
 ```
 bun install

@@ -17,14 +17,20 @@ jobs:
     # By label from the form; by title from ender, as GitHub drops the labels of an issue opened through its API by
     # anyone who cannot triage this repository
     if: >-
-      github.event.issue.state == 'open' && (contains(github.event.issue.labels.*.name, 'pack') ||
-      github.event.issue.title == 'List a pack')
+      github.event.issue.state == 'open' && (contains(github.event.issue.labels.*.name, 'pack') || github.event.issue.title == 'List a pack')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
           path: ender-index
+      # The data lives on its own branch, its history replaced nightly (data-squash.yml), and is checked out where the
+      # code reads it
+      - uses: actions/checkout@v4
+        with:
+          path: ender-index/data
+          ref: data
+          fetch-depth: 1
       - uses: actions/checkout@v4
         with:
           repository: fatlard1993/ender-launcher
@@ -45,18 +51,14 @@ jobs:
           PACK_ISSUE: ${{ github.event.issue.number }}
           SUBMIT_SAY: ${{ runner.temp }}/say.md
         run: |
-          git config user.name 'ender-index'
-          git config user.email 'ender-index@users.noreply.github.com'
           # From the newest data each time: a crawl pushing alongside rebuilt the same lists
           for attempt in 1 2 3; do
-            git fetch -q origin main && git reset -q --hard origin/main
+            # From the newest data each time, on its own branch
+            git -C data fetch -q --depth=1 origin data && git -C data reset -q --hard FETCH_HEAD
             code=0
             bun src/submit.js || code=$?
             [ "$code" = 0 ] || break
-            git add data
-            git diff --cached --quiet && break
-            git commit -qm "Packs: listed from #$PACK_ISSUE"
-            git push -q && break
+            scripts/data-push "Packs: listed from #$PACK_ISSUE" --once && break
             code=1
           done
           if [ "$code" = 1 ] || [ ! -s "$SUBMIT_SAY" ]; then

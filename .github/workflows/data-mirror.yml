@@ -1,0 +1,52 @@
+name: data-mirror
+
+# Until 2026-12-22, the data is copied once a day to where it used to live, main's data/, so an ender released before
+# it moved to the data branch keeps working while its players upgrade; README.md's Stability says so. Once a day keeps
+# main from growing as it did with a commit every hour. After that date this does nothing, and can be removed with
+# main's data/.
+
+on:
+  schedule:
+    - cron: '41 10 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency: data-mirror
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: still within the transition
+        id: within
+        run: '[ "$(date -u +%F)" \< 2026-12-23 ] && echo "yes=true" >> "$GITHUB_OUTPUT" || echo "The transition ended on 2026-12-22; main''s data/ is no longer updated"'
+      - uses: actions/checkout@v4
+        if: steps.within.outputs.yes == 'true'
+        with:
+          ref: main
+          path: main
+          fetch-depth: 1
+      - uses: actions/checkout@v4
+        if: steps.within.outputs.yes == 'true'
+        with:
+          ref: data
+          path: snapshot
+          fetch-depth: 1
+      - name: copy the data to main's data/
+        if: steps.within.outputs.yes == 'true'
+        working-directory: main
+        run: |
+          rsync -a --delete --exclude .git ../snapshot/ data/
+          git config user.name 'ender-index'
+          git config user.email 'ender-index@users.noreply.github.com'
+          git add -A data
+          git diff --cached --quiet && exit 0
+          git commit -qm "Data, copied from the data branch for an ender from before it moved, until 2026-12-22"
+          for attempt in 1 2 3; do
+            git pull -q --rebase origin main && git push -q && exit 0
+            sleep 10
+          done
+          exit 1

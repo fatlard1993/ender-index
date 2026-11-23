@@ -4,7 +4,8 @@ import { supportOf } from 'ender-launcher/support';
 
 import { ROUTES, hrefOf, routeTo } from './route';
 
-export const INDEX = 'https://raw.githubusercontent.com/fatlard1993/ender-index/main/data';
+/** The index's data: the data branch, whose history is replaced nightly so the repository does not grow with it. */
+export const INDEX = 'https://raw.githubusercontent.com/fatlard1993/ender-index/data';
 
 export const MANIFEST = 'https://piston-meta.mojang.com/mc/game/version_manifest_v2.json';
 

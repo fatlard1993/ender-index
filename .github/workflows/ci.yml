@@ -20,6 +20,13 @@ jobs:
         with:
           path: ender-index
           persist-credentials: false
+      # The data lives on its own branch, its history replaced nightly (data-squash.yml), and is checked out where the
+      # code reads it
+      - uses: actions/checkout@v4
+        with:
+          path: ender-index/data
+          ref: data
+          fetch-depth: 1
       - uses: actions/checkout@v4
         with:
           repository: fatlard1993/ender-launcher

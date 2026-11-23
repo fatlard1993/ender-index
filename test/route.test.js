@@ -77,7 +77,7 @@ describe('the pages GitHub Pages serves', () => {
 		expect(page).toContain('content="Your armor beside the hotbar, &quot;shaking&quot; when hit &amp; more."');
 		expect(page).toContain(`<meta property="og:url" content="${SITE}mod/github/fatlard1993/armor-hud" />`);
 		expect(page).toContain(
-			'<meta property="og:image" content="https://raw.githubusercontent.com/fatlard1993/ender-index/main/data/icons/abc.png" />',
+			'<meta property="og:image" content="https://raw.githubusercontent.com/fatlard1993/ender-index/data/icons/abc.png" />',
 		);
 		expect(pages.get('pack/github/a/pack.html')).toContain('<meta property="og:title" content="A Pack" />');
 	});

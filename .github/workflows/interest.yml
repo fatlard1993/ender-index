@@ -19,16 +19,20 @@ jobs:
     # By label from the form; by title from ender, as GitHub drops the labels of an issue opened through its API by
     # anyone who cannot triage this repository
     if: >-
-      github.event_name != 'issues' || (github.event.issue.state == 'open' &&
-      (contains(github.event.issue.labels.*.name, 'interest') ||
-      github.event.issue.title == 'I would pay this mod''s author' ||
-      github.event.issue.title == 'I want a built release of this mod'))
+      github.event_name != 'issues' || (github.event.issue.state == 'open' && (contains(github.event.issue.labels.*.name, 'interest') || github.event.issue.title == 'I would pay this mod''s author' || github.event.issue.title == 'I want a built release of this mod'))
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
           path: ender-index
+      # The data lives on its own branch, its history replaced nightly (data-squash.yml), and is checked out where the
+      # code reads it
+      - uses: actions/checkout@v4
+        with:
+          path: ender-index/data
+          ref: data
+          fetch-depth: 1
       - uses: actions/checkout@v4
         with:
           repository: fatlard1993/ender-launcher
@@ -56,18 +60,7 @@ jobs:
       - name: keep the counts
         working-directory: ender-index
         run: |
-          git config user.name 'ender-index'
-          git config user.email 'ender-index@users.noreply.github.com'
-          git add data
-          git diff --cached --quiet && exit 0
-          git commit -qm 'Interest: counted the open asks'
-          # Only data is committed: whatever else the run left changed is said here, and set aside by the autostash below
-          git status --porcelain
-          for attempt in 1 2 3; do
-            git pull -q --rebase --autostash origin main && git push -q && exit 0
-            sleep 5
-          done
-          exit 1
+          scripts/data-push 'Interest: counted the open asks'
       - name: answer and close each ask
         working-directory: ender-index
         env:

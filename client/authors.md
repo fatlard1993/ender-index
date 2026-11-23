@@ -79,14 +79,14 @@ A mod is in the index because its repository publishes it, and its author says o
 
 Opting out takes a mod out of the index, not off your releases: a player who names your repository, as `ender add gh:owner/repo`, still installs from it.
 
-What the index keeps of a repository that opts out is its name and the day it was last seen opting out, in [`data/opted-out.json`](https://github.com/fatlard1993/ender-index/blob/main/data/opted-out.json), so it knows to leave it alone. The records it kept before stay in the index repository's history, as anything committed to git does.
+What the index keeps of a repository that opts out is its name and the day it was last seen opting out, in [`data/opted-out.json`](https://github.com/fatlard1993/ender-index/blob/data/opted-out.json), so it knows to leave it alone. The records it kept before stay in the index repository's history, as anything committed to git does.
 
 ## Reports and takedowns
 
 Anyone can [report a jar or ask for a takedown](https://github.com/fatlard1993/ender-index/issues/new?template=report.yml); the index's owner reads each one, and nothing happens on a report alone.
 
-- **A jar confirmed to do harm** goes on the known-bad list, [`data/known-bad.json`](https://github.com/fatlard1993/ender-index/blob/main/data/known-bad.json), by its sha256 and with the reason. Its page then says so in red, and ender will not install it. The mark is on that one jar, not on your mod: a new release with a clean jar is listed as usual.
-- **A takedown** puts your repository in [`data/withheld.json`](https://github.com/fatlard1993/ender-index/blob/main/data/withheld.json) with the reason. The crawl leaves it alone and its page is gone on the next list; a List a mod issue for it is answered with that reason. If it is yours and you think it wrong, comment on the report or [open an issue](https://github.com/fatlard1993/ender-index/issues).
+- **A jar confirmed to do harm** goes on the known-bad list, [`data/known-bad.json`](https://github.com/fatlard1993/ender-index/blob/data/known-bad.json), by its sha256 and with the reason. Its page then says so in red, and ender will not install it. The mark is on that one jar, not on your mod: a new release with a clean jar is listed as usual.
+- **A takedown** puts your repository in [`data/withheld.json`](https://github.com/fatlard1993/ender-index/blob/data/withheld.json) with the reason. The crawl leaves it alone and its page is gone on the next list; a List a mod issue for it is answered with that reason. If it is yours and you think it wrong, comment on the report or [open an issue](https://github.com/fatlard1993/ender-index/issues).
 
 Neither is how an author leaves: a topic does that, as [Opting out](#opting-out) says, with no one to ask.
 

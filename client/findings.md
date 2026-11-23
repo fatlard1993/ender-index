@@ -186,7 +186,7 @@ If you are its author and the finding is wrong, [say so in an Explain a finding 
 
 ## Known bad
 
-A jar on the index's known-bad list: one reported and confirmed to do harm, with the reason beside it. Its page says so in red, its search card too, and ender will not install it. The list is [`data/known-bad.json`](https://github.com/fatlard1993/ender-index/blob/main/data/known-bad.json), by each jar's sha256, so a copy of the same jar anywhere in the index is marked the next time the lists are built.
+A jar on the index's known-bad list: one reported and confirmed to do harm, with the reason beside it. Its page says so in red, its search card too, and ender will not install it. The list is [`data/known-bad.json`](https://github.com/fatlard1993/ender-index/blob/data/known-bad.json), by each jar's sha256, so a copy of the same jar anywhere in the index is marked the next time the lists are built.
 
 If you installed it, remove it and treat what its finding names as taken. To report a jar, [open a report](https://github.com/fatlard1993/ender-index/issues/new?template=report.yml).
 

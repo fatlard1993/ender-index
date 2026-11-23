@@ -24,6 +24,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: ender-index
+      # The data lives on its own branch, its history replaced nightly (data-squash.yml), and is checked out where the
+      # code reads it
+      - uses: actions/checkout@v4
+        with:
+          path: ender-index/data
+          ref: data
+          fetch-depth: 1
       - uses: actions/checkout@v4
         with:
           repository: fatlard1993/ender-launcher
@@ -45,18 +52,14 @@ jobs:
           RESCAN_ISSUE: ${{ github.event.issue.number }}
           SUBMIT_SAY: ${{ runner.temp }}/say.md
         run: |
-          git config user.name 'ender-index'
-          git config user.email 'ender-index@users.noreply.github.com'
           # From the newest data each time: a crawl pushing alongside rebuilt the same lists
           for attempt in 1 2 3; do
-            git fetch -q origin main && git reset -q --hard origin/main
+            # From the newest data each time, on its own branch
+            git -C data fetch -q --depth=1 origin data && git -C data reset -q --hard FETCH_HEAD
             code=0
             bun src/submit.js || code=$?
             [ "$code" = 0 ] || break
-            git add data
-            git diff --cached --quiet && break
-            git commit -qm "Rescan: from #$RESCAN_ISSUE"
-            git push -q && break
+            scripts/data-push "Rescan: from #$RESCAN_ISSUE" --once && break
             code=1
           done
           if [ "$code" = 1 ] || [ ! -s "$SUBMIT_SAY" ]; then

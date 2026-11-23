@@ -1,0 +1,43 @@
+name: data-squash
+
+# The data branch takes a commit from every crawl and every listing, and each rewrites files tens of megabytes large, so
+# kept, its history would outgrow the repository within weeks. Nothing reads that history: once a night the branch is
+# made one commit of the data as it stands. Writers replay their own commit onto whatever the branch is
+# (scripts/data-push), so one that started before this runs still lands.
+
+on:
+  schedule:
+    - cron: '23 9 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency: data-squash
+
+jobs:
+  squash:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: data
+          fetch-depth: 1
+      - name: make the data branch one commit
+        run: |
+          git config user.name 'ender-index'
+          git config user.email 'ender-index@users.noreply.github.com'
+          lease=$(git rev-parse HEAD)
+          git checkout -q --orphan squashed
+          git commit -qm "Data as of $(date -u '+%F %H:%M') UTC"
+          # Only over the commit read here: a write that landed since is taken in, and the push asked again
+          for attempt in 1 2 3 4 5; do
+            git push -q --force-with-lease="data:$lease" origin squashed:data && exit 0
+            echo "a write landed while squashing; taking it in (attempt $attempt of 5)"
+            git fetch -q --depth=1 origin data
+            lease=$(git rev-parse FETCH_HEAD)
+            git read-tree -u --reset FETCH_HEAD
+            git commit -q --amend --no-edit
+          done
+          exit 1

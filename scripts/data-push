@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# Commit what changed in data/, a checkout of the data branch, and push it there.
+#
+#   scripts/data-push MESSAGE [--relist] [--once] [PATH...]
+#
+# The data branch's history is replaced nightly (data-squash.yml), so a writer cannot pull and rebase as it would on a
+# branch that only grows: its shallow checkout's root is a commit the branch may no longer have. It replays its own
+# commit alone onto the branch as it is now (git rebase --onto ... HEAD~1), which works whether or not the history was
+# replaced while it ran, and its files win where both changed, as the crawl's always have.
+#
+#   --relist   build the lists again after replaying, from this writer's records and the others' together
+#   --once     push once and stop, for a writer that rather starts again from the newest data
+#   PATH...    commit only these paths of data/, not everything changed there
+set -euo pipefail
+
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+data="$root/data"
+message="$1"
+shift
+
+relist=false
+once=false
+paths=()
+
+for argument in "$@"; do
+	case "$argument" in
+		--relist) relist=true ;;
+		--once) once=true ;;
+		*) paths+=("$argument") ;;
+	esac
+done
+
+cd "$data"
+git config user.name > /dev/null || git config user.name 'ender-index'
+git config user.email > /dev/null || git config user.email 'ender-index@users.noreply.github.com'
+
+if [ ${#paths[@]} -gt 0 ]; then git add -A -- "${paths[@]}"; else git add -A; fi
+
+if git diff --cached --quiet; then
+	echo "data: nothing changed"
+	exit 0
+fi
+
+git commit -qm "$message"
+
+for attempt in 1 2 3 4 5; do
+	git -c advice.pushUpdateRejected=false push -q origin HEAD:data && exit 0
+	$once && exit 1
+
+	echo "data moved while committing; replaying this commit onto it (attempt $attempt of 5)"
+	git fetch -q --depth=1 origin data
+	git rebase -q --onto FETCH_HEAD HEAD~1 -X theirs
+
+	if $relist; then
+		(cd "$root" && bun run lists)
+		git add -A
+		git diff --cached --quiet || git commit -q --amend --no-edit
+	fi
+done
+
+exit 1
