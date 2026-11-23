@@ -30,6 +30,21 @@ for argument in "$@"; do
 	esac
 done
 
+# Replay this writer's commit onto the branch as it is now, its side winning every conflict: -X theirs settles the ones
+# within a file, and a file one side deleted while the other changed it is settled here, as this writer left it
+replay() {
+	git rebase -q --onto FETCH_HEAD HEAD~1 -X theirs && return 0
+
+	git status --porcelain | while read -r state path; do
+		case "$state" in
+			UD) git rm -q -- "$path" ;;
+			DU | AU | UA | UU | AA) git checkout -q --theirs -- "$path" && git add -- "$path" ;;
+		esac
+	done
+
+	GIT_EDITOR=true git rebase --continue > /dev/null
+}
+
 cd "$data"
 git config user.name > /dev/null || git config user.name 'ender-index'
 git config user.email > /dev/null || git config user.email 'ender-index@users.noreply.github.com'
@@ -49,7 +64,7 @@ for attempt in 1 2 3 4 5; do
 
 	echo "data moved while committing; replaying this commit onto it (attempt $attempt of 5)"
 	git fetch -q --depth=1 origin data
-	git rebase -q --onto FETCH_HEAD HEAD~1 -X theirs
+	replay
 
 	if $relist; then
 		(cd "$root" && bun run lists)
