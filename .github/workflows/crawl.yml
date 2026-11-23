@@ -153,6 +153,17 @@ jobs:
         run: gh workflow run site.yml --repo ${{ github.repository }} --ref main
         env:
           GH_TOKEN: ${{ github.token }}
+      # The data branch made one commit, and main's copy of the data refreshed for an ender from before it moved, each
+      # once a day: their schedules are only a backstop, as GitHub drops scheduled runs, and a crawl runs every hour
+      - name: squash and mirror the data when due
+        if: ${{ !cancelled() && steps.commit.outcome == 'success' }}
+        working-directory: ender-index
+        continue-on-error: true
+        run: |
+          bun scripts/startIfDue.js data-squash.yml 23
+          bun scripts/startIfDue.js data-mirror.yml 23 --until 2026-12-22
+        env:
+          GH_TOKEN: ${{ github.token }}
       - name: start the next crawl
         if: ${{ !cancelled() && steps.crawl.outcome != 'skipped' }}
         run: gh workflow run crawl.yml --repo ${{ github.repository }} --ref main -f discover=$([ "$(date -u +%H)" = 04 ] && echo true || echo false)

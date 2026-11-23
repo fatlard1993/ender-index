@@ -3,7 +3,8 @@ name: data-squash
 # The data branch takes a commit from every crawl and every listing, and each rewrites files tens of megabytes large, so
 # kept, its history would outgrow the repository within weeks. Nothing reads that history: once a night the branch is
 # made one commit of the data as it stands. Writers replay their own commit onto whatever the branch is
-# (scripts/data-push), so one that started before this runs still lands.
+# (scripts/data-push), so one that started before this runs still lands. A crawl starts it when none has run for 23
+# hours (scripts/startIfDue.js); the schedule is a backstop, as GitHub drops scheduled runs.
 
 on:
   schedule:
