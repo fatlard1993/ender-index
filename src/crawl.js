@@ -15,6 +15,7 @@ import { ASSETS, detailsQuery, repoOf } from './graphqlRepos';
 import { OPTED_OUT, optedOutOn, optsOut } from './optOut';
 import { COUNTS_EVERY, readChecks, writeChecks } from './checks';
 import { CHANGES, SEEN, changesOf, fingerprint, readSeen, seenText, track } from './changes';
+import { writeReleases } from './releases';
 import { manifest } from './manifest';
 import { buildProviders, providersText } from './providers';
 import { readWithheld, withheldReason } from './withheld';
@@ -1156,6 +1157,7 @@ export const writeLists = async () => {
 
 	await Bun.write(join(DATA, SEEN), seenText(seen));
 	await writeJson(join(DATA, CHANGES), changesOf(seen, now));
+	await writeReleases(DATA, new Map(records.map((record, at) => [relative(DATA, files[at]), record])), seen, now);
 
 	const themes = themesOf(records);
 	const search = buildSearch(

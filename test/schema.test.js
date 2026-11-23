@@ -50,12 +50,18 @@ describe('the published schemas', () => {
 		]);
 	});
 
-	test('hold every record the index keeps', async () => {
+	test("hold every record the index keeps, and each record's releases file", async () => {
+		const { slimRecord } = await import('../src/releases');
 		const validate = await validator('record.schema.json');
+		const validateReleases = await validator('releases.schema.json');
 		const failures = [];
 
 		for await (const file of new Bun.Glob('data/mods/**/*.json').scan(root)) {
-			const errors = errorsOf(validate, await Bun.file(join(root, file)).json());
+			const kept = await Bun.file(join(root, file)).json();
+			const errors = [
+				...errorsOf(validate, kept),
+				...errorsOf(validateReleases, slimRecord(kept)).map(error => `releases ${error}`),
+			];
 
 			if (errors.length > 0) failures.push(`${file}: ${errors.slice(0, 3).join('; ')}`);
 		}

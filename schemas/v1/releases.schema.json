@@ -1,0 +1,349 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://raw.githubusercontent.com/fatlard1993/ender-index/main/schemas/v1/releases.schema.json",
+	"title": "A record's releases alone",
+	"description": "data/releases/{owner}/{repo}.json beside data/mods/{owner}/{repo}.json: what a launcher picks a jar by, whether the repository is gone, the source a build is made from, and its releases without their notes, or each jar's scan, downloads, funding and icon, or each mod's name and description. A third of the record's size; the record has the rest. Fields may be added at any time.",
+	"type": "object",
+	"required": ["releases"],
+	"properties": {
+		"gone": {
+			"type": "string",
+			"description": "When the repository was found deleted or private"
+		},
+		"source": {
+			"type": "object",
+			"description": "For a repository with no built release: the commit read and the mods its source declares",
+			"required": ["commit"],
+			"properties": {
+				"commit": {
+					"type": "string"
+				},
+				"committed": {
+					"type": "string",
+					"description": "An ISO 8601 date or time"
+				},
+				"checked": {
+					"type": "string",
+					"description": "An ISO 8601 date or time"
+				},
+				"loader": {
+					"type": "string"
+				},
+				"minecraft": {
+					"type": "string"
+				},
+				"mods": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/mod"
+					}
+				}
+			}
+		},
+		"releases": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/release"
+			}
+		}
+	},
+	"definitions": {
+		"release": {
+			"type": "object",
+			"required": ["tag", "published", "prerelease", "assets"],
+			"properties": {
+				"tag": {
+					"type": "string"
+				},
+				"published": {
+					"type": "string",
+					"description": "An ISO 8601 date or time"
+				},
+				"prerelease": {
+					"type": "boolean"
+				},
+				"notes": {
+					"type": "string"
+				},
+				"assets": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/asset"
+					}
+				}
+			}
+		},
+		"asset": {
+			"type": "object",
+			"required": ["id", "name", "url"],
+			"properties": {
+				"id": {
+					"type": "number",
+					"description": "The host's asset id"
+				},
+				"name": {
+					"type": "string"
+				},
+				"url": {
+					"type": "string",
+					"description": "The author's own release download. Jars are never rehosted"
+				},
+				"size": {
+					"type": "number"
+				},
+				"downloads": {
+					"type": "number"
+				},
+				"sha256": {
+					"type": "string",
+					"pattern": "^[0-9a-f]{64}$",
+					"description": "The hash of the jar as read; verify the download against it"
+				},
+				"inspection": {
+					"type": "number"
+				},
+				"icon": {
+					"type": ["string", "null"]
+				},
+				"mods": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/mod"
+					}
+				},
+				"funding": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": ["url"],
+						"properties": {
+							"platform": {
+								"type": "string"
+							},
+							"url": {
+								"type": "string"
+							},
+							"from": {
+								"type": "string",
+								"description": "Where the link was read: funding (FUNDING.yml), readme, jar, modrinth"
+							}
+						}
+					}
+				},
+				"content": {
+					"type": "object"
+				},
+				"scan": {
+					"$ref": "#/definitions/scan"
+				},
+				"error": {
+					"type": "string",
+					"description": "The jar could not be fetched or read; install nothing from it"
+				},
+				"metadataError": {
+					"type": "string"
+				},
+				"gone": {
+					"type": "string",
+					"description": "When the jar was found deleted from its release; it cannot be downloaded"
+				},
+				"replaced": {
+					"type": "array",
+					"description": "Earlier jars seen under this asset before it was re-uploaded",
+					"items": {
+						"type": "object",
+						"required": ["sha256"],
+						"properties": {
+							"id": {
+								"type": "number"
+							},
+							"sha256": {
+								"type": "string",
+								"pattern": "^[0-9a-f]{64}$"
+							},
+							"until": {
+								"type": "string",
+								"description": "An ISO 8601 date or time"
+							}
+						}
+					}
+				},
+				"knownBad": {
+					"type": "string",
+					"description": "Why this jar is on the known-bad list. Never install it"
+				},
+				"unsourced": {
+					"type": "object"
+				}
+			}
+		},
+		"mod": {
+			"type": "object",
+			"required": ["loader", "environment", "depends"],
+			"properties": {
+				"loader": {
+					"type": "string",
+					"description": "fabric, quilt, forge or neoforge, as the jar's own metadata says"
+				},
+				"id": {
+					"type": "string"
+				},
+				"version": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"description": {
+					"description": "As the jar declares it: a string, or a map of locale to string",
+					"oneOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "object",
+							"additionalProperties": {
+								"type": "string"
+							}
+						}
+					]
+				},
+				"minecraft": {
+					"type": "string",
+					"description": "The game versions the jar declares, verbatim: a Fabric or Quilt range (alternatives joined by \" || \") or a Forge or NeoForge Maven range. Absent when the jar declares none"
+				},
+				"environment": {
+					"type": "string",
+					"enum": ["*", "client", "server"]
+				},
+				"depends": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Mod ids the jar requires"
+				},
+				"provides": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"suggests": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"breaks": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"conflicts": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"breaksVersions": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "string"
+					}
+				},
+				"conflictsVersions": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"scan": {
+			"type": "object",
+			"required": ["classes"],
+			"properties": {
+				"version": {
+					"type": "number",
+					"description": "The scanner version that read this jar; absent for one read before scanners were versioned"
+				},
+				"classes": {
+					"type": "number"
+				},
+				"jars": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Jars nested inside this one"
+				},
+				"capabilities": {
+					"type": "object",
+					"description": "Finding name (exec, classloading, native, network, unsafe; more may be added) to the evidence",
+					"additionalProperties": {
+						"type": "object",
+						"description": "Class path (or nested-jar!class path) to the calls that showed the finding, each as owner.method, optionally followed by \" in <method>\"",
+						"additionalProperties": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"signals": {
+					"type": "object",
+					"description": "Warning name (webhook, session, persistence, clipboard, initializer, zip; more may be added) to the evidence",
+					"additionalProperties": {
+						"type": "object",
+						"description": "Class path (or nested-jar!class path) to the calls that showed the finding, each as owner.method, optionally followed by \" in <method>\"",
+						"additionalProperties": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"secrets": {
+					"type": "object",
+					"description": "Store (such as discord or browser) to the evidence: code naming where other programs keep logins",
+					"additionalProperties": {
+						"type": "object",
+						"description": "Class path (or nested-jar!class path) to the calls that showed the finding, each as owner.method, optionally followed by \" in <method>\"",
+						"additionalProperties": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"hosts": {
+					"type": "object",
+					"description": "Host named in the jar's strings to the classes naming it",
+					"additionalProperties": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				},
+				"hidden": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"unreadable": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	}
+}

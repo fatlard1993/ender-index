@@ -38,6 +38,12 @@ export const manifest = ({ data = DATA_SERVED_AT } = {}) => ({
 			schema: `${SCHEMAS}/providers.schema.json`,
 			description: "Each mod id's claimants with what placing a dependency weighs, a fifth of search.json's size",
 		},
+		releases: {
+			path: 'releases/{owner}/{repo}.json',
+			schema: `${SCHEMAS}/releases.schema.json`,
+			description:
+				"A record's releases alone, what a launcher picks a jar by, a third of the record's size; releases/codeberg.org/ and releases/gitlab.com/ off GitHub",
+		},
 		changes: {
 			path: 'changes.json',
 			schema: `${SCHEMAS}/changes.schema.json`,
