@@ -7,10 +7,8 @@ on:
   # The ranking is ender-launcher's, bundled at build time; a daily build takes up its changes
   schedule:
     - cron: '47 3 * * *'
-  # Each mod has a page of its own, so a crawl's new mods are built in once it has listed them
-  workflow_run:
-    workflows: [crawl]
-    types: [completed]
+  # Each mod has a page of its own, and the listing is copied beside them, so every crawl starts a build once it has
+  # committed (crawl.yml); a workflow_run trigger missed the crawls a crawl started itself
   workflow_dispatch:
 
 permissions:

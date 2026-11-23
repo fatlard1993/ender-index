@@ -132,6 +132,7 @@ jobs:
         working-directory: ender-index
         timeout-minutes: 20
       - name: commit
+        id: commit
         if: always()
         working-directory: ender-index
         run: |
@@ -145,6 +146,13 @@ jobs:
           key: crawl-${{ github.run_id }}
       # Not after a cancelled run, so cancelling one stops the chain; a step that ran out of its own time still starts
       # the next. The one started in the 04:00 UTC hour discovers, as the schedule's 04:17 crawl is as often skipped
+      # The site's pages and its listing are built from what was just committed; GitHub starts no workflow_run for a
+      # crawl another crawl started, which is most of them
+      - name: build the site
+        if: ${{ !cancelled() && steps.commit.outcome == 'success' }}
+        run: gh workflow run site.yml --repo ${{ github.repository }} --ref main
+        env:
+          GH_TOKEN: ${{ github.token }}
       - name: start the next crawl
         if: ${{ !cancelled() && steps.crawl.outcome != 'skipped' }}
         run: gh workflow run crawl.yml --repo ${{ github.repository }} --ref main -f discover=$([ "$(date -u +%H)" = 04 ] && echo true || echo false)
