@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { MANIFESTS, RESULT_CAP, searchSlices, sliceQuery, startingSlices } from '../src/discover';
+import { MANIFESTS, RESULT_CAP, searchSlices, searchTopics, sliceQuery, startingSlices } from '../src/discover';
 import { RateLimited } from '../src/fetch';
 import { releasedByPacks } from '../src/packs';
 
@@ -130,4 +130,50 @@ test('the repositories packs download release jars from, or name by spec, are ea
 	];
 
 	expect(releasedByPacks(packs)).toEqual(['o/a', 'o/c']);
+});
+
+describe('searching hosts by topic', () => {
+	const host = answer => {
+		const asked = [];
+
+		return { asked, adapter: { withTopic: async topic => (asked.push(topic), answer(topic)) } };
+	};
+
+	test('leaves a host that rate-limits it after the first refusal, and goes on past any other failure', async () => {
+		const refusing = host(() => {
+			throw new RateLimited('Codeberg asks to be left alone', Date.now() + 60_000);
+		});
+		const flaky = host(topic => {
+			if (topic === 'b') throw new Error('Gitlab 500 for /projects');
+
+			return [`me/${topic}`];
+		});
+		const found = await searchTopics({
+			hosts: { codeberg: refusing.adapter, gitlab: flaky.adapter },
+			topics: ['a', 'b', 'c'],
+			found: new Set(),
+			deadline: Date.now() + 60_000,
+			log: () => {},
+		});
+
+		expect(refusing.asked).toEqual(['a']);
+		expect(flaky.asked).toEqual(['a', 'b', 'c']);
+		expect([...found]).toEqual(['gitlab:me/a', 'gitlab:me/c']);
+	});
+
+	test('asks nothing once out of time, leaving the topics for the next night', async () => {
+		const late = host(topic => [topic]);
+		const said = [];
+
+		await searchTopics({
+			hosts: { gitlab: late.adapter },
+			topics: ['a'],
+			found: new Set(),
+			deadline: Date.now() - 1,
+			log: line => said.push(line),
+		});
+
+		expect(late.asked).toEqual([]);
+		expect(said[0]).toBe('gitlab topics :: out of time from a on; they wait for the next discovery');
+	});
 });

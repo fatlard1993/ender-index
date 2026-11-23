@@ -210,8 +210,60 @@ export const searchSlices = async ({ state, search, deadline, sleep = Bun.sleep,
 	return { state: { next, slices }, found };
 };
 
+/**
+ * The minutes discovery has: the crawl's discover step stops at forty, and a step stopped there writes nothing, so a
+ * phase that would not fit in what is left waits for the next night instead.
+ */
+const DISCOVERY_MINUTES = 37;
+
+/** What reading every Modrinth mod's source link takes, as it says when it starts. */
+const MODRINTH_MINUTES = 11;
+
+/**
+ * Search each host without code search by topic, until the deadline. A host that rate-limits the search is left for the
+ * next night after its first refusal: each further topic would wait out the same limit again.
+ */
+export const searchTopics = async ({ hosts, topics, found, deadline, log = console.log }) => {
+	for (const [host, adapter] of Object.entries(hosts)) {
+		for (const topic of topics) {
+			if (Date.now() >= deadline) {
+				log(`${host} topics :: out of time from ${topic} on; they wait for the next discovery`);
+
+				break;
+			}
+
+			try {
+				for (const name of await adapter.withTopic(topic)) found.add(`${host}:${name}`);
+			} catch (error) {
+				log(`${host} topic ${topic} :: ${error.message}`);
+
+				if (error instanceof RateLimited) {
+					log(`${host} topics :: left for the next discovery, as ${host} is refusing`);
+
+					break;
+				}
+			}
+		}
+
+		log(`${host} topics :: ${found.size} repositories so far`);
+	}
+
+	return found;
+};
+
 export const discover = async () => {
 	const slicesPath = join(DATA, SLICES);
+	const started = Date.now();
+	const left = () => DISCOVERY_MINUTES - (Date.now() - started) / 60_000;
+	const existing = await readRepos();
+	const released = releasedByPacks(await readPacks());
+	const keepFound = async found => {
+		const merged = sorted([...existing, ...found, ...released]);
+
+		await writeList('repos.txt', merged, '# Mod repositories found on their hosts');
+
+		return merged;
+	};
 
 	console.log(
 		`Searching code for mod metadata for up to ${MINUTES} minutes, at ten requests a minute, from where the last discovery stopped`,
@@ -224,27 +276,21 @@ export const discover = async () => {
 	});
 
 	await Bun.write(slicesPath, `${JSON.stringify(state, null, '\t')}\n`);
+	// Kept now: the search has moved on past what it found, so a step stopped later would lose it for a whole round
+	await keepFound(found);
 
-	// Codeberg and GitLab offer no code search across repositories, so there a topic is the sign.
-	for (const [host, adapter] of Object.entries({ codeberg, gitlab })) {
-		for (const topic of TOPICS) {
-			try {
-				for (const name of await adapter.withTopic(topic)) found.add(`${host}:${name}`);
-			} catch (error) {
-				console.error(`${host} topic ${topic} :: ${error.message}`);
-			}
-		}
+	// Codeberg and GitLab offer no code search across repositories, so there a topic is the sign. Ending with time left
+	// for the Modrinth sources, which every pack's mods are matched by
+	await searchTopics({
+		hosts: { codeberg, gitlab },
+		topics: TOPICS,
+		found,
+		deadline: started + (DISCOVERY_MINUTES - MODRINTH_MINUTES - 2) * 60_000,
+	});
 
-		console.log(`${host} topics :: ${found.size} repositories so far`);
-	}
-
-	const existing = await readRepos();
-	const released = releasedByPacks(await readPacks());
-	const merged = sorted([...existing, ...found, ...released]);
+	const merged = await keepFound(found);
 
 	console.log(`Packs download release jars from ${released.length} GitHub repositories, each listed with those found`);
-
-	await writeList('repos.txt', merged, '# Mod repositories found on their hosts');
 
 	console.log('Searching GitHub for pack repositories');
 
@@ -257,6 +303,12 @@ export const discover = async () => {
 	// the hosts themselves, which comes first; a mod's slug and id are kept with its source, so a mod needed but not
 	// indexed can be pointed at its source, and a pack's Modrinth mods matched to the index.
 	try {
+		if (left() < MODRINTH_MINUTES) {
+			throw new Error(
+				`${Math.floor(left())} minutes were left of discovery's ${DISCOVERY_MINUTES}, not the ten it takes`,
+			);
+		}
+
 		console.log('Reading the source links of every Modrinth mod and modpack; this takes about ten minutes');
 
 		const renames = await readRenames();
