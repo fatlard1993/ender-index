@@ -49,6 +49,9 @@ cd "$data"
 git config user.name > /dev/null || git config user.name 'ender-index'
 git config user.email > /dev/null || git config user.email 'ender-index@users.noreply.github.com'
 
+# What a write cut off before its rename left behind, never data
+find . -name '*.tmp' -type f -not -path './.git/*' -print -delete
+
 if [ ${#paths[@]} -gt 0 ]; then git add -A -- "${paths[@]}"; else git add -A; fi
 
 if git diff --cached --quiet; then

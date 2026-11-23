@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, readdir, rm } from 'node:fs/promises';
+import { mkdir, mkdtemp, readdir, rename, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join, relative } from 'node:path';
 
@@ -50,9 +50,19 @@ export const readJson = async (path, fallback) => {
 	return (await file.exists()) ? file.json() : fallback;
 };
 
+let writes = 0;
+
+/**
+ * A file written whole or not at all: through a file of its own beside it, renamed into place. A repository still
+ * being crawled when the crawl ends is stopped wherever it is, and a record cut off mid-write would not parse.
+ */
 export const writeJson = async (path, value) => {
 	await mkdir(dirname(path), { recursive: true });
-	await Bun.write(path, `${JSON.stringify(value, undefined, '\t')}\n`);
+
+	const temporary = `${path}.${process.pid}.${(writes += 1)}.tmp`;
+
+	await Bun.write(temporary, `${JSON.stringify(value, undefined, '\t')}\n`);
+	await rename(temporary, path);
 };
 
 /**
