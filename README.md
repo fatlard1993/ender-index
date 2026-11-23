@@ -4,6 +4,18 @@ Minecraft mods found where their source lives, described by their own jars, and 
 
 Search it at **[fatlard1993.github.io/ender-index](https://fatlard1993.github.io/ender-index/)**, or from a terminal with [ender](https://github.com/fatlard1993/ender-launcher)'s `ender search`. Both rank the same way.
 
+<!-- A screenshot of a mod's page here: its scan with each finding's level and plain words, beside its releases. -->
+
+|  | ender index | Modrinth, CurseForge |
+| --- | --- | --- |
+| How a mod gets in | found where its source lives, with nothing to sign up for | its author uploads it |
+| What it says of a mod | read from the jar: game versions, loaders, sides, dependencies | what its author entered |
+| What a jar's code can reach | shown on its page: network, other programs, native code, other programs' logins | not shown |
+| A new release | listed within the hour | listed once its author uploads it there |
+| Leaving | a topic on the repository, no one to ask | deleting the project |
+
+**What it covers.** 34,460 mods at the last count. 20,027 are read from the jars on their releases. The other 14,433 have no built release, and are listed by what their source says; ender builds one of those only when you allow it. Mods whose jars are on Modrinth or CurseForge alone, as many popular ones are, are found when their project links its source, and a pack's page says which of its mods come from where.
+
 There is nothing to sign up for and nothing to describe twice. A repository is in the index because it looks like a mod and ships like one: loader metadata in its source tree, and jars attached to its releases on GitHub, Codeberg or GitLab. Everything else is read from what it already publishes, and an author who would rather their mod were not listed says so the same way, with a topic on the repository: see [Getting out](#getting-out).
 
 ## What it shows
