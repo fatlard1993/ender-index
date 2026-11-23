@@ -1,4 +1,6 @@
+import { join } from 'node:path';
 import { describe, expect, test } from 'bun:test';
+import { ownerOf } from 'ender-launcher/rank';
 
 import {
 	bestDownload,
@@ -13,6 +15,7 @@ import {
 	clashesWith,
 	worksWith,
 } from '../client/related';
+import { collectionKey } from '../client/search';
 
 const entry = (repo, extra) => ({ repo, host: 'github', stars: 1, description: '', latest: { mods: [] }, ...extra });
 
@@ -94,5 +97,98 @@ describe("a mod's downloads", () => {
 	test('names the versions and loaders its jars are for', () => {
 		expect(downloadVersions(downloads, ['26.3', '26.2', '26.1'])).toEqual(['26.3', '26.2']);
 		expect(downloadLoaders(downloads)).toEqual(['fabric', 'neoforge']);
+	});
+});
+
+// The relations as the page found them by scanning the listing for each mod, to hold the looked-up ones to
+const byStars = (a, b) => (b.stars ?? 0) - (a.stars ?? 0);
+const scanning = {
+	sameAuthor: (entry, listing) =>
+		listing.filter(other => other !== entry && ownerOf(other) === ownerOf(entry)).toSorted(byStars),
+	needsOf: (entry, listing) => {
+		const byKey = new Map(listing.map(other => [collectionKey(other), other]));
+
+		return (entry.needs ?? []).map(key => byKey.get(key)).filter(Boolean);
+	},
+	neededBy: (entry, listing) => listing.filter(other => other.needs?.includes(collectionKey(entry))).toSorted(byStars),
+	declared: (entry, listing, ...fields) => {
+		const key = collectionKey(entry);
+		const byKey = new Map(listing.map(other => [collectionKey(other), other]));
+		const named = fields.flatMap(field => entry[field] ?? []).map(other => byKey.get(other));
+		const naming = listing.filter(other => fields.some(field => other[field]?.includes(key)));
+
+		return [...new Set([...named, ...naming])].filter(other => other && other !== entry).toSorted(byStars);
+	},
+	similarTo: (entry, listing, { most = 6, leaving = [] } = {}) => {
+		const themes = new Set(entry.tags ?? []);
+
+		if (themes.size === 0) return [];
+
+		const counts = new Map();
+
+		for (const other of listing) for (const tag of other.tags ?? []) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+
+		const rarity = new Map([...counts].map(([tag, count]) => [tag, Math.log(listing.length / count)]));
+		const shown = new Set([entry, ...leaving]);
+
+		return listing
+			.filter(other => !shown.has(other) && ownerOf(other) !== ownerOf(entry))
+			.map(other => ({
+				other,
+				score: (other.tags ?? []).filter(tag => themes.has(tag)).reduce((sum, tag) => sum + rarity.get(tag), 0),
+			}))
+			.filter(({ score }) => score >= Math.log(50))
+			.sort((a, b) => b.score - a.score || byStars(a.other, b.other))
+			.slice(0, most)
+			.map(({ other }) => other);
+	},
+};
+
+const keys = entries => entries.map(collectionKey);
+
+const mod = (repo, extra = {}) => ({ host: 'github', repo, stars: 1, ...extra });
+const small = [
+	mod('a/lib', { stars: 90, tags: ['tech', 'library'] }),
+	mod('a/app', { stars: 5, needs: ['github:a/lib'], suggests: ['github:b/pal'], tags: ['tech', 'storage'] }),
+	mod('b/pal', { stars: 40, breaks: ['github:c/foe'], tags: ['storage', 'tech'] }),
+	mod('c/foe', { stars: 40, conflicts: ['github:a/app'], tags: ['storage', 'rare'] }),
+	mod('d/kin', { stars: 40, needs: ['github:a/lib', 'github:a/lib'], tags: ['storage', 'rare'] }),
+];
+
+const sameAnswers = (listing, entries) => {
+	for (const entry of entries) {
+		const needs = needsOf(entry, listing);
+		const needed = neededBy(entry, listing);
+		const works = worksWith(entry, listing);
+		const clashes = clashesWith(entry, listing);
+		const leaving = [...needs, ...needed, ...works, ...clashes];
+
+		expect(keys(sameAuthor(entry, listing))).toEqual(keys(scanning.sameAuthor(entry, listing)));
+		expect(keys(needs)).toEqual(keys(scanning.needsOf(entry, listing)));
+		expect(keys(needed)).toEqual(keys(scanning.neededBy(entry, listing)));
+		expect(keys(works)).toEqual(keys(scanning.declared(entry, listing, 'suggests')));
+		expect(keys(clashes)).toEqual(keys(scanning.declared(entry, listing, 'breaks', 'conflicts')));
+		expect(keys(similarTo(entry, listing, { leaving }))).toEqual(keys(scanning.similarTo(entry, listing, { leaving })));
+	}
+};
+
+describe("a mod's relations, looked up rather than scanned for", () => {
+	test("answer as scanning the listing did, each way round and each tie in the listing's order", () => {
+		sameAnswers(small, small);
+		expect(keys(neededBy(small[0], small))).toEqual(['github:d/kin', 'github:a/app']);
+		expect(keys(clashesWith(small[2], small))).toEqual(['github:c/foe']);
+	});
+
+	test('answer as scanning did across the listing the index publishes, where there is one', async () => {
+		const file = Bun.file(join(import.meta.dir, '..', 'data', 'search.json'));
+
+		if (!(await file.exists())) return;
+
+		const listing = (await file.json()).filter(entry => !entry.archived);
+
+		sameAnswers(
+			listing,
+			listing.filter((_, at) => at % 250 === 0),
+		);
 	});
 });
