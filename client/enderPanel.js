@@ -1,6 +1,6 @@
 import { Button, Card, Link, Notify, SectionLabel, theme } from '@vanilla-bean/components';
 
-import { local, updateReady } from './local';
+import { isNewer, local, updateReady } from './local';
 import { Command, Meta, Row, Stack } from './ui';
 
 const updateButton = upgrade => {
@@ -83,7 +83,7 @@ export const restartOffer = upgrade => {
 
 const RELEASES = 'https://github.com/fatlard1993/ender-launcher/releases';
 
-const versionLine = upgrade => {
+export const versionLine = upgrade => {
 	if (!upgrade) return [];
 
 	if (upgrade.error || !upgrade.latest) {
@@ -96,7 +96,14 @@ const versionLine = upgrade => {
 	}
 
 	if (!updateReady(upgrade))
-		return [new Meta({ tag: 'p', textContent: `ender ${upgrade.current}, the newest release` })];
+		return [
+			new Meta({
+				tag: 'p',
+				textContent: isNewer(upgrade.current, upgrade.latest)
+					? `ender ${upgrade.current}, newer than the newest release, ${upgrade.latest}`
+					: `ender ${upgrade.current}, the newest release`,
+			}),
+		];
 
 	return [
 		new Row({

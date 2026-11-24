@@ -208,6 +208,12 @@ describe('bringing ender up to date', () => {
 			),
 		).toContain('has changed since it started');
 		expect(enderPanel.restartOffer(checkout(false))).toEqual([]);
+		expect(text(enderPanel.versionLine({ current: '0.4.3', latest: '0.4.2', how: 'checkout' }))).toBe(
+			'ender 0.4.3, newer than the newest release, 0.4.2',
+		);
+		expect(text(enderPanel.versionLine({ current: '0.4.2', latest: '0.4.2', how: 'self' }))).toBe(
+			'ender 0.4.2, the newest release',
+		);
 		expect(enderPanel.restartOffer({ current: '0.4.1', latest: '0.4.2', how: 'checkout' })).toEqual([]);
 
 		try {
