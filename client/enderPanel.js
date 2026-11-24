@@ -31,9 +31,54 @@ const howTo = {
 		new Meta({ textContent: 'Homebrew keeps it:' }),
 		new Command({ code: 'brew upgrade ender', copyButton: true }),
 	],
-	checkout: () => [
-		new Meta({ textContent: "It runs from a checkout: git pull in ender's folder brings it up to date" }),
-	],
+	checkout: upgrade =>
+		upgrade.checkout?.changed
+			? []
+			: [new Meta({ textContent: "It runs from a checkout: git pull in ender's folder brings it up to date" })],
+};
+
+/**
+ * For an ender run from a checkout whose folder has changed since it started, as a pull or a commit changes it: what
+ * the folder holds now, and a button restarting ender web as that.
+ */
+export const restartOffer = upgrade => {
+	const folder = upgrade?.checkout;
+
+	if (!folder?.changed) return [];
+
+	const status = new Meta();
+	const button = new Button({
+		icon: 'rotate-right',
+		textContent: 'Restart ender web',
+		onPointerPress: async () => {
+			button.options.disabled = true;
+			status.elem.textContent = 'Restarting; the page reloads once ender answers again';
+
+			try {
+				await local.restartEnder();
+			} catch (error) {
+				new Notify({ intent: 'danger', content: `ender web did not restart: ${error.message}` });
+				status.elem.textContent = '';
+				button.options.disabled = false;
+			}
+		},
+	});
+
+	return [
+		new Row({
+			style: { flexWrap: 'wrap' },
+			append: [
+				new Meta({
+					textContent:
+						folder.version && folder.version !== upgrade.current
+							? `ender's folder now holds ${folder.version}; restart to run it.`
+							: "ender's folder has changed since it started; restart to run what it holds now.",
+				}),
+				button,
+				status,
+			],
+		}),
+	];
 };
 
 const RELEASES = 'https://github.com/fatlard1993/ender-launcher/releases';
@@ -131,6 +176,7 @@ export const enderPanel = signal => {
 		drawn = shape;
 		body.content([
 			...versionLine(upgrade),
+			...restartOffer(upgrade),
 			...(ender?.installed ? [placeRow('Installed at', ender.installed)] : []),
 			...terminalRow(ender?.terminal),
 			...(ender?.data ? [placeRow('Keeps instances, worlds and downloads in', ender.data)] : []),

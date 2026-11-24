@@ -344,17 +344,23 @@ const loadUpgrade = ({ again = false } = {}) => {
 		.finally(notify));
 };
 
-/** Waits until the page is served by an ender other than `before`, asking every half second, for up to `seconds`. */
-export const servedBy = async (before, { seconds = 30, ask = () => call('GET', 'ender') } = {}) => {
+/**
+ * Waits until the page is served by an ender other than `before`, asking every half second, for up to `seconds`: by
+ * its version after an upgrade, or by when it started after a restart that kept the version.
+ */
+export const servedBy = async (
+	before,
+	{ seconds = 30, ask = () => call('GET', 'ender'), by = answer => answer?.version } = {},
+) => {
 	for (let waited = 0; waited < seconds * 2; ++waited) {
 		await new Promise(resolve => setTimeout(resolve, 500));
 
-		const answer = await ask().catch(() => undefined);
+		const now = by(await ask().catch(() => undefined));
 
-		if (answer?.version && answer.version !== before) return answer.version;
+		if (now && now !== before) return now;
 	}
 
-	throw new Error(`ender did not come back as a new version within ${seconds} seconds; open Ender again`);
+	throw new Error(`ender did not come back within ${seconds} seconds; open Ender again`);
 };
 
 /**
@@ -368,6 +374,16 @@ const upgradeEnder = async () => {
 	await finished(job, { reloading: false });
 	await call('POST', 'restart');
 	await servedBy(before);
+	window.location.reload();
+};
+
+/** Restarts ender web as what its checkout now holds, and reloads the page once the restarted one answers. */
+const restartEnder = async () => {
+	const started = answer => answer?.started;
+	const before = started(await call('GET', 'ender'));
+
+	await call('POST', 'restart');
+	await servedBy(before, { by: started });
 	window.location.reload();
 };
 
@@ -504,6 +520,7 @@ export const local = {
 	},
 	loadUpgrade,
 	upgradeEnder,
+	restartEnder,
 	/** One instance plays as this player; null returns it to the active one. */
 	assignPlayer: async (name, player) => {
 		await call('PUT', `${named(name)}/player`, { player });

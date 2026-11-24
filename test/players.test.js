@@ -188,6 +188,46 @@ describe('bringing ender up to date', () => {
 		expect(shown.elem.textContent).toContain('Update to 0.2.1');
 	});
 
+	test("offers a checkout's ender a restart once its folder holds something else, in place of git pull", async () => {
+		const kept = responses['/api/upgrade'];
+		const text = parts => parts.map(part => part.elem.textContent).join(' ');
+		const checkout = changed => ({
+			current: '0.4.1',
+			latest: '0.4.2',
+			how: 'checkout',
+			checkout: { changed, version: '0.4.2' },
+		});
+
+		expect(text(enderPanel.restartOffer(checkout(true)))).toContain(
+			"ender's folder now holds 0.4.2; restart to run it.",
+		);
+		expect(text(enderPanel.restartOffer(checkout(true)))).toContain('Restart ender web');
+		expect(
+			text(
+				enderPanel.restartOffer({ current: '0.4.2', how: 'checkout', checkout: { changed: true, version: '0.4.2' } }),
+			),
+		).toContain('has changed since it started');
+		expect(enderPanel.restartOffer(checkout(false))).toEqual([]);
+		expect(enderPanel.restartOffer({ current: '0.4.1', latest: '0.4.2', how: 'checkout' })).toEqual([]);
+
+		try {
+			responses['/api/upgrade'] = checkout(true);
+			local.local.askAgain();
+
+			const shown = enderPanel.enderPanel(new AbortController().signal);
+
+			document.body.append(shown.elem);
+			await settle(() => shown.elem.textContent.includes('Restart ender web'));
+
+			expect(shown.elem.textContent).toContain('ender 0.4.2 is out; this is 0.4.1.');
+			expect(shown.elem.textContent).not.toContain('git pull');
+			shown.elem.remove();
+		} finally {
+			responses['/api/upgrade'] = kept;
+			local.local.askAgain();
+		}
+	});
+
 	test('waits for the restarted ender to answer as another version before the page reloads', async () => {
 		const answers = [undefined, { version: '0.2.0' }, { version: '0.2.1' }];
 
@@ -195,6 +235,12 @@ describe('bringing ender up to date', () => {
 		await expect(local.servedBy('0.2.0', { seconds: 1, ask: async () => ({ version: '0.2.0' }) })).rejects.toThrow(
 			'did not come back',
 		);
+
+		const restarts = [{ version: '0.4.2', started: 'A' }, undefined, { version: '0.4.2', started: 'B' }];
+
+		expect(
+			await local.servedBy('A', { seconds: 3, ask: async () => restarts.shift(), by: answer => answer?.started }),
+		).toBe('B');
 	});
 });
 
