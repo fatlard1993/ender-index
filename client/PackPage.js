@@ -1,5 +1,6 @@
 import {
 	Button,
+	Card,
 	Component,
 	Content,
 	EmptyState,
@@ -15,6 +16,7 @@ import {
 
 import { HOSTS } from 'ender-launcher/rank';
 import { loadListing, loadPackPage, loadPacks } from './data';
+import { modrinthProjects } from './modrinthProjects';
 import { local } from './local';
 import { Prose, renderReadme } from './ModPage';
 import { installRow, packCard, packChips, packFace, packWarnings } from './packs';
@@ -25,7 +27,9 @@ import {
 	Meta,
 	Row,
 	Stack,
+	Title,
 	about,
+	avatar,
 	count,
 	date,
 	fetchReadme,
@@ -110,18 +114,45 @@ const coverage = mods => {
 
 const JARS = { modrinth: 'jar from Modrinth', link: 'jar from its own link', none: 'no jar found' };
 
-/** A mod the index has not got: its name, where its jar comes from, and its source and Modrinth page where it has them. */
-const outsideMod = mod =>
-	new Row({
-		append: [
-			new Chip({ textContent: mod.name }),
-			new Meta({ append: [new Swatch({ tag: 'span', addClass: mod.jar }), JARS[mod.jar]] }),
-			...(mod.source ? [new Link({ href: mod.source, target: '_blank', textContent: 'source' })] : []),
-			...(mod.modrinth
-				? [new Link({ href: `https://modrinth.com/mod/${mod.modrinth}`, target: '_blank', textContent: 'Modrinth' })]
-				: []),
-		],
-	});
+const away = { target: '_blank', attributes: { rel: 'noopener noreferrer' } };
+
+/**
+ * A mod the index has not got, in a few lines as one it has: its picture, name and what it is about where Modrinth says
+ * (modrinthProjects.js), where its jar comes from, and its Modrinth page and source where it has them.
+ */
+export const outsideMod = (mod, project) =>
+	new Card(
+		{},
+		new Row({
+			style: { flexWrap: 'nowrap', alignItems: 'flex-start', gap: theme.space.md },
+			append: [
+				avatar(project?.icon, 40),
+				new Stack({
+					style: { flex: '1', minWidth: '0', gap: theme.space.xs },
+					append: [
+						new Title({ textContent: project?.title ?? mod.name }),
+						...(project?.description ? [new Meta({ textContent: project.description })] : []),
+						new Meta({ append: [new Swatch({ tag: 'span', addClass: mod.jar }), JARS[mod.jar]] }),
+						new Row({
+							style: { columnGap: theme.space.md, rowGap: theme.space.xs },
+							append: [
+								...(mod.modrinth
+									? [
+											new Link({
+												href: `https://modrinth.com/project/${encodeURIComponent(mod.modrinth)}`,
+												textContent: 'Read more on Modrinth',
+												...away,
+											}),
+										]
+									: []),
+								...(mod.source ? [new Link({ href: mod.source, textContent: 'Its source', ...away })] : []),
+							],
+						}),
+					],
+				}),
+			],
+		}),
+	);
 
 const group = (title, explained, content) =>
 	new Stack({
@@ -209,13 +240,20 @@ const modsPanel = (pack, byKey) => {
 		style: { maxWidth: '320px' },
 	});
 	const shown = new Stack();
+	// What Modrinth says of the mods the index has not got, once it answers
+	let published = new Map();
 	const draw = () => {
 		const words = String(filter.options.value).toLowerCase().split(/\s+/).filter(Boolean);
 		const fits = text => words.every(word => text.toLowerCase().includes(word));
+		const projectOf = mod => (mod.modrinth ? published.get(mod.modrinth) : undefined);
 		const indexed = [...new Set(pack.mods.filter(mod => mod.key).map(mod => mod.key))]
 			.map(key => byKey.get(key))
 			.filter(entry => entry && fits(`${entry.title ?? ''} ${entry.repo} ${entry.description ?? ''}`));
-		const outside = pack.mods.filter(mod => !mod.key && fits(`${mod.name} ${mod.file ?? ''}`));
+		const outside = pack.mods.filter(
+			mod =>
+				!mod.key &&
+				fits(`${mod.name} ${mod.file ?? ''} ${projectOf(mod)?.title ?? ''} ${projectOf(mod)?.description ?? ''}`),
+		);
 		const sourced = outside.filter(mod => mod.source);
 		const noSource = outside.filter(mod => !mod.source);
 
@@ -234,7 +272,7 @@ const modsPanel = (pack, byKey) => {
 						group(
 							`Source known, not in the index (${count(sourced.length)})`,
 							'Their source is linked, but the index has no jar of theirs from it: their authors put their jars on Modrinth or elsewhere, or the crawl has not read them yet.',
-							sourced.map(outsideMod),
+							sourced.map(mod => outsideMod(mod, projectOf(mod))),
 						),
 					]
 				: []),
@@ -243,7 +281,7 @@ const modsPanel = (pack, byKey) => {
 						group(
 							`No source found (${count(noSource.length)})`,
 							'Nothing they are published with links a source the index can read.',
-							noSource.map(outsideMod),
+							noSource.map(mod => outsideMod(mod, projectOf(mod))),
 						),
 					]
 				: []),
@@ -261,6 +299,12 @@ const modsPanel = (pack, byKey) => {
 
 	filter.elem.addEventListener('input', draw);
 	draw();
+	modrinthProjects(pack.mods.filter(mod => !mod.key && mod.modrinth).map(mod => mod.modrinth))
+		.then(found => {
+			published = found;
+			if (found.size > 0) draw();
+		})
+		.catch(() => {});
 
 	return new Stack({ append: [filter, shown] });
 };

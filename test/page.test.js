@@ -527,6 +527,31 @@ test("closes a page with the index's license and whose work it shows", async () 
 });
 
 describe('a pack page', () => {
+	test('a mod the index has not got is a card of what Modrinth says of it, or its name alone when Modrinth said nothing', async () => {
+		const { outsideMod } = await import('../client/PackPage');
+		const mod = {
+			name: 'Config Manager',
+			file: 'cm.jar',
+			source: 'https://github.com/a/cm',
+			jar: 'modrinth',
+			modrinth: 'configmanager',
+		};
+		const card = outsideMod(mod, {
+			title: 'Config Manager',
+			description: 'Keeps your configs',
+			icon: 'https://cdn.example/cm.png',
+		}).elem;
+		const links = [...card.querySelectorAll('a')].map(link => [link.textContent, link.getAttribute('href')]);
+
+		expect(card.textContent).toContain('Keeps your configs');
+		expect(card.querySelector('img').getAttribute('src')).toBe('https://cdn.example/cm.png');
+		expect(links).toEqual([
+			['Read more on Modrinth', 'https://modrinth.com/project/configmanager'],
+			['Its source', 'https://github.com/a/cm'],
+		]);
+		expect(outsideMod({ name: 'Lone', jar: 'none' }).elem.textContent).toContain('Lone');
+	});
+
 	test('says who made a pack, what it pins and asks for, and what it carries beside its mods', async () => {
 		const { packByline, packExtras } = await import('../client/PackPage');
 		const pack = {
