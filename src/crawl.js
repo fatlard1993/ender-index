@@ -1160,6 +1160,11 @@ export const dropWithheld = async (files, records, withheld) => {
 	return kept;
 };
 
+/** A file a page or a launcher always asks for, written empty while there is nothing to put in it, or left as it is. */
+export const keepPresent = async (path, empty) => {
+	if (!(await Bun.file(path).exists())) await writeJson(path, empty);
+};
+
 export const writeLists = async () => {
 	const withheld = await readWithheld(DATA);
 	const found = await recordFiles();
@@ -1213,6 +1218,8 @@ export const writeLists = async () => {
 	for (const pack of built) await writeJson(join(PACK_PAGES, `${packPage(pack)}.json`), pack);
 	await writeJson(join(DATA, 'tags.json'), themes.themes);
 	await writeJson(join(DATA, 'index.json'), manifest());
+	// Every mod page asks for it; until an author's explanation is approved it would answer 404
+	await keepPresent(join(DATA, 'explanations.json'), {});
 	await pruneIcons(records);
 
 	return { records, packs };
