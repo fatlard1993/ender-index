@@ -1,6 +1,7 @@
 import { Card, Code, Component, Dialog, Link, Toolbar, TooltipWrapper, styled, theme } from '@vanilla-bean/components';
 
 import { local, updateReady } from './local';
+import { TILES } from './pageData';
 import { REPOSITORY, aboutOf, modPath, pictureUrl, readmeSources, titleOf } from './search';
 import { ROUTES, hrefOf, routeTo } from './route';
 
@@ -504,7 +505,7 @@ const Clamped = styled.Component(
 	`,
 );
 
-export const TILES = 6;
+export { TILES };
 
 /** A mod in a few lines, leading to its page. */
 const modTile = other =>

@@ -150,7 +150,7 @@ data/checks.json                when the crawl last looked at each repository's 
 data/explanations.json          authors' explanations of their mods' findings, by mod and then by finding; absent until one is approved
 ```
 
-The pages on GitHub Pages read a copy of `search.json` their build puts beside them, so their visitors are not served the listing from the `data` branch, which every launcher reads; `ender web` and a local build read the branch's.
+On GitHub Pages, a mod's page carries its own data, its entry and the mods it relates to, and its author's other mods are in a file of their own beside the pages, so a visit to a mod's page reads a few kilobytes and no listing. The search reads a copy of `search.json` the build puts beside the pages, so their visitors are not served the listing from the `data` branch, which every launcher reads. `ender web` and a local build carry neither, and read the branch's listing.
 
 A record, trimmed:
 

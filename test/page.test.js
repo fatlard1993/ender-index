@@ -567,3 +567,86 @@ describe('a pack page', () => {
 		expect(packExtras({ mods: [{ name: 'a' }] })).toEqual([]);
 	});
 });
+
+describe("a mod's page on GitHub Pages", () => {
+	// A mod listed since the listing the page read: only its own data can show it
+	const fresh = entry('new/mod', [mod('newmod', 'New Mod')], {
+		description: 'Brand new',
+		stars: 3,
+		needs: ['github:CaffeineMC/lithium'],
+	});
+	const record = { repo: 'new/mod', releases: [] };
+	const serving = (pages = {}) => {
+		const real = globalThis.fetch;
+		const asked = [];
+
+		globalThis.fetch = async (request, options) => {
+			const address = String(request?.url ?? request);
+
+			asked.push(address);
+
+			if (address.endsWith('/mods/new/mod.json')) return Response.json(record);
+
+			const page = Object.entries(pages).find(([ending]) => address.endsWith(ending));
+
+			return page ? new Response(page[1]) : real(request, options);
+		};
+
+		return { asked, restore: () => (globalThis.fetch = real) };
+	};
+	const open = async () => {
+		const { default: ModPage } = await import('../client/ModPage');
+
+		document.body.innerHTML = '';
+
+		const page = new ModPage({ appendTo: document.body, host: 'github', owner: 'new', name: 'mod' });
+
+		await settle(() => /Brand new|is not in the index/.test(document.body.textContent));
+
+		const text = document.body.textContent;
+
+		page.destroy();
+
+		return text;
+	};
+
+	test('shows a mod from the data its page carries, with no listing to find it in', async () => {
+		const { pageDataOf, pageDataScript } = await import('../client/pageData');
+		const network = serving();
+
+		document.head.insertAdjacentHTML('beforeend', pageDataScript(pageDataOf(fresh, [...listing, fresh])));
+
+		try {
+			const text = await open();
+
+			expect(text).toContain('Brand new');
+			expect(text).toContain('What it needs');
+			expect(text).not.toContain('is not in the index');
+		} finally {
+			network.restore();
+			document.getElementById('mod-page').remove();
+		}
+	});
+
+	test("opened from another page, reads the mod's data from its own page, and the listing where it has none", async () => {
+		const { pageDataOf, pageDataScript } = await import('../client/pageData');
+		const html = `<html><head>${pageDataScript(pageDataOf(fresh, [...listing, fresh]))}</head><body></body></html>`;
+		let network = serving({ '/mod/github/new/mod': html });
+
+		try {
+			expect(await open()).toContain('Brand new');
+			expect(network.asked.some(address => address.endsWith('/mod/github/new/mod'))).toBe(true);
+		} finally {
+			network.restore();
+		}
+
+		// ender web and a local build serve no such page: the listing, as before, which has not got it
+		network = serving();
+
+		try {
+			expect(await open()).toContain('new/mod is not in the index');
+		} finally {
+			network.restore();
+		}
+	});
+});

@@ -68,13 +68,10 @@ import {
 	downloadVersions,
 	downloadsOf,
 	matchingDownloads,
-	clashesWith,
-	neededBy,
-	needsOf,
+	relationsOf,
 	sameAuthor,
-	similarTo,
-	worksWith,
 } from './related';
+import { PAGE_DATA, authorFile, pageDataFrom, pageDataIn } from './pageData';
 import { askControl, collectButton, installControls, starButton } from './controls';
 import { local } from './local';
 import {
@@ -452,37 +449,63 @@ const scannerLine = (asset, entry) => {
 /** A host given as a bare address names no one, which is worth seeing apart from a host with a name. */
 const hostLabel = host => (/^\d{1,3}(\.\d{1,3}){3}$/.test(host) ? `${host} (an address, not a name)` : host);
 
-const groupLabel = (label, mods) =>
+const groupLabel = (label, total) =>
 	new SectionLabel({
-		textContent: mods.length > TILES ? `${label} (${count(mods.length)}, the most starred ${TILES})` : label,
+		textContent: total > TILES ? `${label} (${count(total)}, the most starred ${TILES})` : label,
 	});
+
+/** A listing's relations for a mod in the shape its page's data has them: how many, and the mods to show. */
+const relationsFrom = (entry, listing) =>
+	Object.fromEntries(
+		Object.entries(relationsOf(entry, listing)).map(([relation, mods]) => [
+			relation,
+			{ count: mods.length, tiles: mods },
+		]),
+	);
 
 /**
  * What it needs and what needs it, what its author or theirs says works with it or does not, and other authors' mods
  * sharing its themes: the empty ones left out.
  */
-const relatedGroups = (entry, listing) => {
-	const needs = needsOf(entry, listing);
-	const needed = neededBy(entry, listing);
-	const works = worksWith(entry, listing);
-	const clashes = clashesWith(entry, listing);
-	const alike = similarTo(entry, listing, { leaving: [...needs, ...needed, ...works, ...clashes] });
-
+const relatedGroups = (entry, relations) => {
 	const missing = notIndexed(entry);
 
 	return [
-		['What it needs', needs, missing],
-		['What needs it', needed],
-		['Works with', works],
-		['Does not work with', clashes],
-		['Alike in theme', alike],
+		['What it needs', relations.needs, missing],
+		['What needs it', relations.needed],
+		['Works with', relations.works],
+		['Does not work with', relations.clashes],
+		['Alike in theme', relations.alike],
 	]
-		.filter(([, mods, more = []]) => mods.length > 0 || more.length > 0)
-		.flatMap(([label, mods, more = []]) => [
-			groupLabel(label, mods),
+		.filter(([, { count: total }, more = []]) => total > 0 || more.length > 0)
+		.flatMap(([label, { count: total, tiles: mods }, more = []]) => [
+			groupLabel(label, total),
 			...(mods.length > 0 ? [tiles(mods)] : []),
 			...more,
 		]);
+};
+
+/** Where a mod's own page is, as the site's build wrote it: the page a link to the mod opens at. */
+const modPageUrl = mod => hrefOf(modPath(mod));
+
+const authors = new Map();
+
+/** An owner's mods as tiles, from beside the pages, kept once a page; none for an owner with none there. */
+const authorTiles = key => {
+	const file = authorFile(key);
+
+	if (!file) return Promise.resolve([]);
+
+	if (!authors.has(file)) {
+		authors.set(
+			file,
+			fetch(hrefOf(`/${file}`))
+				.then(response => (response.ok ? response.json() : []))
+				.catch(() => []),
+		);
+	}
+
+	return authors.get(file);
 };
 
 /** What it needs that the index has no repository it can trust for, each linked to its source when that is known. */
@@ -1101,11 +1124,23 @@ const ShareTrack = styled.Component(
 const takesSupport = person => person.funding?.length > 0;
 
 /** One contributor: who they are, their part of the commits, their mods here, and how they take support. */
-const contributorCard = ({ entry, person, commits, listing }) => {
+const contributorCard = ({ entry, person, commits, modsOf }) => {
 	const login = person.login.toLowerCase();
 	const theirs = { host: 'github', repo: `${person.login}/_` };
-	const mods = listing.filter(other => ownerOf(other) === ownerOf(theirs)).length;
 	const share = commits > 0 ? (person.commits / commits) * 100 : 0;
+	// How many mods of theirs the index has, as soon as it is known
+	const theirMods = new Stack();
+
+	Promise.resolve(modsOf(ownerOf(theirs))).then(mods => {
+		if (mods > 0) {
+			theirMods.content(
+				new Link({
+					href: authorPath(theirs),
+					textContent: `${count(mods)} ${mods === 1 ? 'mod' : 'mods'} of theirs in the index`,
+				}),
+			);
+		}
+	});
 
 	return new Card(
 		{ style: { height: '100%' } },
@@ -1139,14 +1174,7 @@ const contributorCard = ({ entry, person, commits, listing }) => {
 				new Meta({
 					textContent: `${count(person.commits)} ${person.commits === 1 ? 'commit' : 'commits'} · ${shareOf(person.commits, commits)} of them`,
 				}),
-				...(mods > 0
-					? [
-							new Link({
-								href: authorPath(theirs),
-								textContent: `${count(mods)} ${mods === 1 ? 'mod' : 'mods'} of theirs in the index`,
-							}),
-						]
-					: []),
+				theirMods,
 				...(takesSupport(person)
 					? [
 							new Row({
@@ -1172,11 +1200,11 @@ const contributorCard = ({ entry, person, commits, listing }) => {
  * Who made a mod, the most commits first, each on a card; with a choice of only those who take support when some do
  * and some do not, which `onlySupported` makes from outside.
  */
-const contributorsPanel = (entry, { commits, more, people }, listing) => {
+const contributorsPanel = (entry, { commits, more, people }, modsOf) => {
 	const supported = people.filter(takesSupport);
 	const grid = new ContributorGrid();
 	const draw = only =>
-		grid.content((only ? supported : people).map(person => contributorCard({ entry, person, commits, listing })));
+		grid.content((only ? supported : people).map(person => contributorCard({ entry, person, commits, modsOf })));
 	const filter =
 		supported.length > 0 && supported.length < people.length
 			? new Tabs({
@@ -1234,10 +1262,22 @@ export default class ModPage extends View {
 		]);
 
 		const { signal } = this;
+		const mod = { host, repo };
+		// Its own data, which the page it was opened at carries, or a page opened from it fetches from its own file;
+		// ender web and a local build have none, and read the listing
+		const ownData = async () =>
+			pageDataFrom(document.getElementById(PAGE_DATA)?.textContent ?? '', mod) ??
+			pageDataIn(await (await fetch(modPageUrl(mod), { signal })).text(), mod);
 
-		loadListing()
-			.then(async listing => {
-				const entry = listing.find(found => found.repo === repo && (found.host ?? 'github') === host);
+		ownData()
+			.catch(() => undefined)
+			.then(async data => {
+				if (data === undefined) return { listing: await loadListing() };
+
+				return { data };
+			})
+			.then(async ({ listing, data }) => {
+				const entry = data?.entry ?? listing.find(found => found.repo === repo && (found.host ?? 'github') === host);
 
 				if (entry === undefined) {
 					body.content(
@@ -1255,7 +1295,7 @@ export default class ModPage extends View {
 
 				if (signal.aborted) return;
 
-				this.show(entry, record, listing);
+				this.show(entry, record, { listing, data });
 			})
 			.catch(error => {
 				if (signal.aborted) return;
@@ -1273,7 +1313,7 @@ export default class ModPage extends View {
 		this.body = body;
 	}
 
-	show(entry, record, listing) {
+	show(entry, record, { listing, data }) {
 		const { signal } = this;
 		const title = titleOf(entry);
 		const command = installCommand(entry);
@@ -1284,13 +1324,22 @@ export default class ModPage extends View {
 		const controls = new Row({ append: controlsFor() });
 		const redrawControls = () => controls.content(controlsFor());
 		const downloads = downloadsPanel(entry, record);
-		const others = sameAuthor(entry, listing);
-		const related = relatedGroups(entry, listing);
+		const authorCount = data ? data.author.count : sameAuthor(entry, listing).length;
+		const others = data
+			? authorTiles(ownerOf(entry)).then(found =>
+					found.filter(other => other.repo !== entry.repo || other.host !== (entry.host ?? 'github')),
+				)
+			: Promise.resolve(sameAuthor(entry, listing));
+		const related = relatedGroups(entry, data ? data.relations : relationsFrom(entry, listing));
+		// How many mods an owner has in the index, from the listing or from beside the pages
+		const modsOf = listing
+			? key => listing.filter(other => ownerOf(other) === key).length
+			: key => authorTiles(key).then(found => found.length);
 		const owner = ownerName(entry);
 		const sources = readmeSources(entry, record.readme);
 		const pictures = (record.pictures ?? []).map(path => sources.raw(path, { root: true }));
 		const contributing = record.contributors
-			? contributorsPanel(entry, record.contributors, listing)
+			? contributorsPanel(entry, record.contributors, modsOf)
 			: { elements: [], onlySupported: () => {} };
 		const panels = {
 			readme,
@@ -1312,10 +1361,7 @@ export default class ModPage extends View {
 			packs: new Stack(),
 			contributors: new Stack({ append: contributing.elements }),
 			author: new Stack({
-				append: [
-					tiles(others, others.length),
-					new Link({ href: authorPath(entry), textContent: `Every mod of ${owner}'s, in the search` }),
-				],
+				append: [new Link({ href: authorPath(entry), textContent: `Every mod of ${owner}'s, in the search` })],
 			}),
 		};
 		const funded = (record.contributors?.people ?? []).filter(takesSupport);
@@ -1328,7 +1374,7 @@ export default class ModPage extends View {
 			...(related.length > 0 ? [{ id: 'related', label: 'Related' }] : []),
 			...(packs.length > 0 ? [{ id: 'packs', label: 'Packs', count: packs.length }] : []),
 			...(contributorCount > 0 ? [{ id: 'contributors', label: 'Contributors', count: contributorCount }] : []),
-			...(others.length > 0 ? [{ id: 'author', label: `More from ${owner}`, count: others.length }] : []),
+			...(authorCount > 0 ? [{ id: 'author', label: `More from ${owner}`, count: authorCount }] : []),
 		];
 		const tabs = new Tabs({
 			tabs: tabsFor({ shared: [], pictures }),
@@ -1336,10 +1382,22 @@ export default class ModPage extends View {
 			selected: 'readme',
 			style: { marginTop: theme.space.lg, overflowY: 'hidden' },
 		});
+		others
+			.then(found => {
+				if (!signal.aborted && found.length > 0)
+					panels.author.content([
+						tiles(found, found.length),
+						new Link({ href: authorPath(entry), textContent: `Every mod of ${owner}'s, in the search` }),
+					]);
+			})
+			.catch(() => {});
+
+		// The mods a player's shot may name beside this one: the listing's, or those this page's data has
+		const known = listing ?? [entry, ...Object.values(data.relations).flatMap(relation => relation.tiles)];
 		const shown = {
 			shared: [],
 			pictures,
-			byKey: new Map(listing.map(other => [collectionKey(other), other])),
+			byKey: new Map(known.map(other => [collectionKey(other), other])),
 			loading: true,
 		};
 		const showGallery = found => {
@@ -1351,7 +1409,18 @@ export default class ModPage extends View {
 		const loadPlayerShots = () => {
 			showGallery({ loading: true, problem: undefined });
 			loadShots()
-				.then(byMod => !signal.aborted && showGallery({ shared: byMod[collectionKey(entry)] ?? [], loading: false }))
+				.then(async byMod => {
+					const shared = byMod[collectionKey(entry)] ?? [];
+
+					// A shot naming a mod this page's data does not have reads the listing for it, as few shots do
+					if (!listing && shared.some(shot => (shot.mods ?? []).some(key => !shown.byKey.has(key)))) {
+						const everyone = await loadListing().catch(() => []);
+
+						for (const other of everyone) shown.byKey.set(collectionKey(other), other);
+					}
+
+					if (!signal.aborted) showGallery({ shared, loading: false });
+				})
 				.catch(error => !signal.aborted && showGallery({ problem: error.message, loading: false }));
 		};
 
@@ -1374,8 +1443,8 @@ export default class ModPage extends View {
 			.then(byMod => !signal.aborted && byMod[collectionKey(entry)] && downloads.explain(byMod[collectionKey(entry)]))
 			.catch(() => {});
 
-		const shares = entry.shares ?? sharing(entry, listing);
-		const author = authorOf(entry, listing);
+		const shares = entry.shares ?? sharing(entry, listing ?? []);
+		const author = authorOf(entry, listing ?? []);
 
 		document.title = `${title} :: ender index`;
 		this.bar.trail({ label: title });

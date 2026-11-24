@@ -4,6 +4,7 @@ import { dirname, join, relative } from 'node:path';
 import { LIBRARY_STYLESHEETS, buildClient } from '@vanilla-bean/components/app';
 
 import { ROUTES } from '../client/route';
+import { authorFiles, pageDataOf, pageDataScript } from '../client/pageData';
 import { aboutOf, modPath, packRoute, pictureUrl, titleOf } from '../client/search';
 
 const OUT = join(import.meta.dir, '..', 'client', 'build');
@@ -53,7 +54,7 @@ const brief = (text, most = 300) => (text.length <= most ? text : `${text.slice(
  * The site's page as one route's own: served under `site`, and naming what it shows in the tags a chat or a search
  * engine reads from a link, since neither runs the page's script to see it.
  */
-export const pageFor = (shell, site, { route, title, description, image }) => {
+export const pageFor = (shell, site, { route, title, description, image, data }) => {
 	const { pathname } = new URL(site);
 	const tags = [
 		['og:site_name', 'ender index'],
@@ -72,7 +73,7 @@ export const pageFor = (shell, site, { route, title, description, image }) => {
 		)
 		.replace(
 			'</head>',
-			`${tags.map(([property, content]) => `\t<meta property="${property}" content="${attribute(content)}" />`).join('\n')}\n\t<meta name="twitter:card" content="summary" />\n</head>`,
+			`${tags.map(([property, content]) => `\t<meta property="${property}" content="${attribute(content)}" />`).join('\n')}\n\t<meta name="twitter:card" content="summary" />\n${data ? `\t${pageDataScript(data)}\n` : ''}</head>`,
 		);
 };
 
@@ -89,6 +90,8 @@ const plainRoute = route => (route.split('/').every(part => part === decodeURICo
  */
 export const sitePages = ({ shell, site, mods, packs }) => {
 	const pages = new Map([['404.html', pageFor(shell, site, { route: ROUTES.mods })]]);
+	// What the pages list, as they list it: an archived mod's page says it is not in the index, and carries nothing
+	const listing = mods.filter(entry => !entry.archived);
 	const add = page => {
 		const route = plainRoute(page.route);
 
@@ -113,6 +116,8 @@ export const sitePages = ({ shell, site, mods, packs }) => {
 			title: titleOf(entry),
 			description: aboutOf(entry) && brief(aboutOf(entry).text),
 			image: pictureUrl(entry, 256),
+			// The mod's own entry and its relations, so its page needs no listing
+			data: entry.archived ? undefined : pageDataOf(entry, listing),
 		});
 
 	for (const pack of packs)
@@ -135,6 +140,18 @@ const writePages = async (site, out = OUT) => {
 	for (const [file, html] of pages) await Bun.write(join(out, file), html);
 
 	return pages.size;
+};
+
+/** Each owner's mods as tiles beside the pages, for a mod page's More from tab and its contributors' counts. */
+const writeAuthors = async (out = OUT) => {
+	const listing = (await Bun.file(join(DATA, 'search.json')).json()).filter(entry => !entry.archived);
+	const files = authorFiles(listing);
+
+	await rm(join(out, 'authors'), { recursive: true, force: true });
+
+	for (const [file, tiles] of files) await Bun.write(join(out, file), JSON.stringify(tiles));
+
+	return files.size;
 };
 
 /**
@@ -170,9 +187,11 @@ if (import.meta.main) {
 
 	if (site) {
 		console.log(`Wrote ${await writePages(site)} pages for ${site}, one a mod, pack and place`);
+		console.log(`Wrote ${await writeAuthors()} authors' mods beside them`);
 		await copyListing();
 	} else {
 		// One a Pages build left would be read in place of the index's, by ender web serving this checkout's build
 		await rm(join(OUT, 'search.json'), { force: true });
+		await rm(join(OUT, 'authors'), { recursive: true, force: true });
 	}
 }

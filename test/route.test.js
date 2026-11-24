@@ -62,7 +62,7 @@ describe('the pages GitHub Pages serves', () => {
 	const pages = sitePages({
 		shell,
 		site: SITE,
-		mods: [mod, { repo: 'group/sub/odd name', host: 'gitlab' }],
+		mods: [mod, { repo: 'group/sub/odd name', host: 'gitlab' }, { repo: 'old/gone', host: 'github', archived: true }],
 		packs: [
 			{ repo: 'a/pack', host: 'github', name: 'A Pack' },
 			{ repo: 'abc123', host: 'gist', name: 'Gist' },
@@ -80,6 +80,18 @@ describe('the pages GitHub Pages serves', () => {
 			'<meta property="og:image" content="https://raw.githubusercontent.com/fatlard1993/ender-index/data/icons/abc.png" />',
 		);
 		expect(pages.get('pack/github/a/pack.html')).toContain('<meta property="og:title" content="A Pack" />');
+	});
+
+	test("carry a mod's own data, so its page fetches no listing, and none for a mod the pages do not list", async () => {
+		const { pageDataIn } = await import('../client/pageData');
+		const data = pageDataIn(pages.get('mod/github/fatlard1993/armor-hud.html'), {
+			host: 'github',
+			repo: 'fatlard1993/armor-hud',
+		});
+
+		expect(data.entry.repo).toBe('fatlard1993/armor-hud');
+		expect(Object.keys(data.relations)).toEqual(['needs', 'needed', 'works', 'clashes', 'alike']);
+		expect(pages.get('mod/github/old/gone.html')).not.toContain('id="mod-page"');
 	});
 
 	test('leave a route with no plain path, and every route listed since, to 404.html, the site as it is', () => {
