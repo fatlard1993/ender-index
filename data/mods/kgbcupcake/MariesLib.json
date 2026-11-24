@@ -6,8 +6,74 @@
 	"archived": false,
 	"license": "LGPL-3.0",
 	"created": "2026-06-10T01:00:39Z",
-	"pushed": "2026-11-16T19:31:09Z",
+	"pushed": "2026-11-24T14:01:17Z",
 	"releases": [
+		{
+			"tag": "v0.1.2-beta.2",
+			"published": "2026-11-24T14:03:26Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 787458760,
+					"name": "marieslib-0.1.2-beta.2.jar",
+					"url": "https://github.com/kgbcupcake/MariesLib/releases/download/v0.1.2-beta.2/marieslib-0.1.2-beta.2.jar",
+					"size": 1705334,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "8abb9456c20a37d68cde8df4f46e4cfcd08915bc9c0151372a9701093f3567b9",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "marieslib",
+							"version": "0.1.2-beta.2",
+							"name": "Marieslib",
+							"description": "A shared library for Marie's mods.",
+							"minecraft": "[1.21.1,]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"dependsVersions": {
+								"neoforge": "[21.1.228,)",
+								"minecraft": "[1.21.1,]"
+							},
+							"suggests": [
+								"cloth_config"
+							]
+						}
+					],
+					"icon": "b3f82bc2ec8fd3d0728c36ad317848d8bbdae3570d61b6a09cd33df0ac369f31.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 808,
+						"jars": [],
+						"capabilities": {},
+						"signals": {
+							"zip": {
+								"(the jar)": [
+									"dev/marie/framework/scanner/package-info.class is named twice",
+									"dev/marie/framework/tagaudit/package-info.class is named twice",
+									"dev/marie/framework/command/package-info.class is named twice",
+									"dev/marie/framework/ui/api/package-info.class is named twice"
+								]
+							}
+						},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "> Beta release for NeoForge 1.21.1. New developer APIs are marked `@ApiStatus.Experimental` and may still change.\n\n## ✨ Added\n\n- **Datapack diagnostics show files that failed to load.** `/<modid> diagnostics` used to list only files with missing or wrong fields. It now also lists files that passed that check but still failed to load, as errors, with the full file path (for example `source_classifications/my_file.json`). Before, these only showed up in the log, and the logged path was missing its folder.\n- **Warnings for unknown item ids.** Food overrides and item source classifications now warn when an item id doesn't exist even though its mod is installed, which is usually a typo. Ids from mods that aren't installed are skipped quietly instead of filling the list with warnings.\n- **Empty tags are warnings, not errors.** A source classification that points at a tag with no items in it now shows as a warning instead of an error.\n- **Draggable scroll bar.** Long lists in option panels and the Item Editor, like Browse Items, can be scrolled by grabbing and dragging the scroll bar, not just with the mouse wheel. The whole scroll bar strip can be grabbed, not just the thin bar itself.\n\n## 🧩 For addon developers\n\n- **Synthetic recipe step.** A new optional resolver slot, `RuntimeCascadeStage.SYNTHETIC_RECIPE`, runs only when an item has no recipe (`NO_RECIPE_FOUND`). Your mod can use it to classify recipe-less foods, for example by name. Its result is merged the same way as a normal recipe result, is marked `synthetic: true` in the trace, and feeds namespace peers like recipe inheritance does. It's added after `HARD_FALLBACK`, so existing five-slot resolver arrays keep their indices.\n- **`RecipeInheritanceResolver#getRecipes(ResourceLocation)`.** Returns one ingredient list per recipe, ordered by recipe id. `getIngredients` lumps every recipe for an item into one list, so a food with furnace, smoker and campfire recipes listed its raw ingredient three times, and anything adding up ingredients counted it three times. `getIngredients` itself is unchanged, so existing results don't move.\n- **`MarieDataLoader#checkItemExists(itemId, path, field)`.** Lets your own loaders give the same \"unknown item id\" warning in diagnostics.\n\n## 🔧 Changed\n\n- **Item Editor recipe preview.** It shows one recipe again instead of cycling through every way to make the item, and the \"N/M\" counter is gone.\n- **Create machines removed as stations.** Create's Mixer, Press, Millstone and Deployer are no longer used as the station in the recipe preview. They took priority over the crafting table and always showed as a flat icon, so items with both a Create recipe and a normal crafting recipe (common with Create food addons) showed the wrong one.\n\n**Full details:** [CHANGELOG.md](https://github.com/kgbcupcake/MariesLib/blob/main/CHANGELOG.md)"
+		},
 		{
 			"tag": "v0.1.2-beta.1",
 			"published": "2026-10-27T13:24:02Z",
@@ -18,7 +84,7 @@
 					"name": "marieslib-0.1.2-beta.1.jar",
 					"url": "https://github.com/kgbcupcake/MariesLib/releases/download/v0.1.2-beta.1/marieslib-0.1.2-beta.1.jar",
 					"size": 1704665,
-					"downloads": 6,
+					"downloads": 7,
 					"inspection": 2,
 					"sha256": "069755d0ac1d2ea36ea549ca68778a937da00bb2d9e81a255363edf02563dba6",
 					"mods": [
@@ -67,7 +133,7 @@
 					"name": "marieslib-0.1.2-beta.jar",
 					"url": "https://github.com/kgbcupcake/MariesLib/releases/download/v0.1.2-beta/marieslib-0.1.2-beta.jar",
 					"size": 1504932,
-					"downloads": 13,
+					"downloads": 14,
 					"inspection": 2,
 					"sha256": "30348c656d3e884730fd1943a01c005c027d7ba1addece7a51219c5cfef68032",
 					"mods": [
@@ -116,7 +182,7 @@
 					"name": "marieslib-0.1.1-beta.5.jar",
 					"url": "https://github.com/kgbcupcake/MariesLib/releases/download/v0.1.1-beta.5/marieslib-0.1.1-beta.5.jar",
 					"size": 1206904,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "b416e913d811d2426d35bb75c2df2bbc7ee4efe529d68085020e1f92b9b3f49c",
 					"mods": [
@@ -165,7 +231,7 @@
 					"name": "marieslib-0.1.1-beta.4.jar",
 					"url": "https://github.com/kgbcupcake/MariesLib/releases/download/v0.1.1-beta.4/marieslib-0.1.1-beta.4.jar",
 					"size": 1049998,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "0c4b905106725ce56b9729345a04bd8f52569f142799a23a79c13cee69d4b10f",
 					"mods": [

@@ -44,7 +44,7 @@
 						"unreadable": []
 					},
 					"icon": "83dd1d49c71d0bc31518cbda92b8cbc08702cdc2d2b29a7d737d632506c988d7.png",
-					"downloads": 14,
+					"downloads": 15,
 					"funding": [],
 					"content": {
 						"names": {},
@@ -91,7 +91,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 7
+					"downloads": 8
 				}
 			],
 			"notes": "While I would love to say that I was able to add many new features since the last release in 2020, this update mostly focuses on some long-awaited internal rewrites and code organization that I developed on and off while dealing with IRL stuff. Fortunately, this means that I can focus more on new features and polish in future updates.\n\nFor those of you who are still using Oak Tree, thank you for your patience.\n\n- Now requires Quilt modloader.\n- `Control` methods with a generic return type have been removed; I originally wanted GUIs to be constructed in a tree-like-DSL-like fashion, but this proved to be too messy to maintain. Consequentially, `Control` and its subclasses no longer have a generic argument.\n- The overall package structure has been changed and is now a lot flatter.\n- Render call changes\n  - The positions and sizes of `Control`s in a tree are now only updated when necessary instead of every frame. Note that this is still every frame when a tooltip is visible; this will be addressed in a future update.\n  - `Control`s are now z-indexed whenever the tree is updated; this is used to call the `interact`, `prepare`, and `draw` methods non-recursively.\n- `ControlGUI` is replaced by `RootPanelControl`; this has a much cleaner interface and also inherits `PanelControl`.\n-  `InteractiveControl` has been removed and interaction has been rolled into `Control`; anything that inherited it previously now directly inherits `Control`\n    - This fixes a bug where an interactive control could capture the mouse despite being covered up.\n    - `Control`s can also have capture behavior disabled.\n- Lambda functions passed to `Control`s have had parameters removed that were no longer necessary.\n- Theming updates\n  - `ControlStyle` has been renamed to `Painter`\n  - Setting a `Painter` for different node states in a `Theme` now requires a `PainterKey` instead of a string.\n  - You can no longer set override `Painters` individually on `Control`s.\n- `SlotControl` now uses Minecraft's slot system; you will need a `BackingSlot` to use it now.\n  - Some functionality is still missing and will be added in a future update\n- `ButtonControl` and `SliderControl` can now have text.\n- Added `EntityPreviewControl` for displaying entities (Courtesy of halotroop2288)\n- Removed test code from distribution\n- A few Javadoc updates.\n- Anything previously marked as deprecated has been removed\n- Deprecations all around\n- Probably some things I missed."
@@ -130,7 +130,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 15
+					"downloads": 16
 				}
 			],
 			"notes": "- Changed the `filter` helper methods in `SlotControl` to work properly and allow for toggling between allowing or denying the passed items.\n- Added some `@ApiStatus.Internal` annotations to internal methods in `Control`."
@@ -169,7 +169,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 13
+					"downloads": 14
 				}
 			],
 			"notes": "- Update to 1.16.3\n- That's it, really."
@@ -208,7 +208,7 @@
 						"hosts": {},
 						"unreadable": []
 					},
-					"downloads": 11
+					"downloads": 12
 				}
 			],
 			"notes": "## Changelog\n\nGeneral:\n- Direct access to fields in `Control` classes have been removed; you must now use the setters and getters.\n- JetBrains `@NotNull` and `@Nullable` annotations have been used to clarify nullity in many places.\n- `ScreenVec` is now `Vector2`, `ControlDirection` is now `Direction2D`, `ScreenRect` is now `Rectangle`, and all three now reside under the `client.math` package\n- The `Key` enum is scheduled for removal because it was never used (in production) in the first place.\n- `GuiFunction` has been deprecated in favor of `BiFunction`.\n- `ControlAnchor` is now `Anchor` and resides in the `client.gui.control` package.\n- Parent controls such as `PanelControl` are now responsible for checking the visibility of their children before drawing.\n- `SplitPanelControl` was not up to standards and has been deprecated in favor of `SplitControl`.\n- Anything previously deprecated has been removed.\n- Some javadoc updates.\n- Lots of cleanup.\n- Other changes that I probably have forgotten since there were so many of them.\n\n\nRGBAColor:\n- Renamed to `Color` and moved to the `client.gui` package.\n- Is now immutable.\n- Has static methods to create it using RGB(A) or HSV(A), though it is still RGBA internally.\n- Presets for all 16 of Minecraft's font colors are now provided.\n\n\n`Theme` and `StyleBox`:\n- `StyleBox` is now `ControlStyle`\n- Default values for both have been provided and should be used instead of `null`.\n- Had all of the rendering logic moved to `RenderHelper` in the client package.\n\n\nText-based controls:\n- No longer rely on `TextControl`; all logic from that interface has been moved to `TextHelper` and `RenderHelper`.\n- `LabelControl` now supports minecraft's `Text` so you can apply formatting, though it's a bit buggy at the moment.\n- `TextEditControl` now uses a `oaktree.util.TriFunction` instead of a `TypingListener`.\n\n\nTooltips:\n- Can be added to any `InteractiveControl` and will display when hovering the mouse over them.\n- `SlotControl` will automatically set its own tooltips atm; this will likely be changed in the following update.\n\n\nSlotControl:\n- No longer has wonky rendering issues.\n- `SlotControl#canTake()` and `SlotControl#canInsert()` methods taking `TriFunction`s have been deprecated in favor of ones that take `oaktree.util.TriPredicate`s\n- Now uses a `Color` for highlighting instead of a `ControlStyle`\n\n\n## Roadmap notes:\nThis release marks the end of the alpha phase and the beginning of the beta phase for Oak Tree, which will mostly consist of major polishing and renovations in order to get it ready of 1.0.0. Originally, this was supposed to be the only beta version but I had underestimated the amount of technical debt accumulated and the size of the cleanup needed to be done and it's likely that there will be another beta version after the next one. That being said, I still have new features planned such as `TabControl` and direct support for darkmode, though it's likely that either of those won't come until version 1.0.0."

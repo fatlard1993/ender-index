@@ -6,8 +6,122 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2026-10-05T17:52:44Z",
-	"pushed": "2026-11-23T05:10:00Z",
+	"pushed": "2026-11-23T21:30:43Z",
 	"releases": [
+		{
+			"tag": "v1.7.0",
+			"published": "2026-11-23T21:31:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 784615866,
+					"name": "packupdater.jar",
+					"url": "https://github.com/Jammersmurph/PackUpdater/releases/download/v1.7.0/packupdater.jar",
+					"size": 143155,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "7219a0b3ed622a68291cf4a013f61c2d0ade8f428d8222a1ee2523169b1f0f37",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "packupdater",
+							"version": "1.7.0",
+							"name": "PackUpdater",
+							"description": "A single-jar NeoForge modpack updater for supported Minecraft releases. Updates a PackWiz pack before mods are discovered, including the installer's optional mods. Configured entirely through <gameDir>/config/packupdater.properties, so no JVM arguments are needed. Falls back to a silent update on platforms that cannot open a window from a child process.",
+							"minecraft": "[1.20.1,26.4)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							]
+						},
+						{
+							"loader": "forge",
+							"id": "packupdater",
+							"version": "1.7.0",
+							"name": "PackUpdater",
+							"description": "A single-jar NeoForge modpack updater for supported Minecraft releases. Updates a PackWiz pack before mods are discovered, including the installer's optional mods. Configured entirely through <gameDir>/config/packupdater.properties, so no JVM arguments are needed. Falls back to a silent update on platforms that cannot open a window from a child process.",
+							"minecraft": "[1.20.1,26.4)",
+							"environment": "*",
+							"depends": [
+								"minecraft"
+							],
+							"suggests": [
+								"forge",
+								"neoforge"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 82,
+						"jars": [
+							"updater/packupdater-bootstrap.jar"
+						],
+						"capabilities": {
+							"network": {
+								"dev/packupdater/InProcessInstaller.class": [
+									"java/net/http/HttpClient"
+								],
+								"dev/packupdater/OptionalModFilter.class": [
+									"java/net/http/HttpClient.send in fetchBytes, fetch"
+								],
+								"dev/packupdater/UpdaterBootstrap.class": [
+									"java/net/http/HttpClient.newBuilder in httpClient"
+								],
+								"updater/packupdater-bootstrap.jar!link/infra/packwiz/installer/bootstrap/Bootstrap.class": [
+									"java/net/URL.openConnection in requestRelease, downloadUpdate"
+								]
+							},
+							"exec": {
+								"dev/packupdater/GuiCapability.class": [
+									"java/lang/ProcessBuilder.<init> in probe",
+									"java/lang/ProcessBuilder.redirectErrorStream in probe",
+									"java/lang/ProcessBuilder.start in probe"
+								],
+								"dev/packupdater/UpdaterBootstrap.class": [
+									"java/lang/ProcessBuilder.<init> in execute",
+									"java/lang/ProcessBuilder.redirectErrorStream in execute",
+									"java/lang/ProcessBuilder.directory in execute",
+									"java/lang/ProcessBuilder.start in execute"
+								],
+								"updater/packupdater-bootstrap.jar!link/infra/packwiz/installer/bootstrap/ChainloadHandler.class": [
+									"java/lang/ProcessBuilder.<init> in runSubprocess",
+									"java/lang/ProcessBuilder.command in runSubprocess",
+									"java/lang/ProcessBuilder.inheritIO in runSubprocess",
+									"java/lang/ProcessBuilder.start in runSubprocess"
+								]
+							},
+							"classloading": {
+								"updater/packupdater-bootstrap.jar!link/infra/packwiz/installer/bootstrap/LoadJAR.class": [
+									"java/net/URLClassLoader.<init> in loadClass"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"github.com": [
+								"dev/packupdater/UpdaterConfig.class"
+							],
+							"api.github.com": [
+								"dev/packupdater/UpdaterConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "One drop-in jar now supports **NeoForge for Minecraft 1.20.1 through 26.3**.\n\n- Keep one drop-in jar and the existing ModLauncher startup path for 1.21.1.\n- Support original-namespace NeoForge 1.20.1 in the same jar, using Java 17\n  bytecode and both generations of mod metadata. No extra compatibility mod is\n  needed or bundled.\n- Add an early mod-file locator for newer NeoForge releases without ModLauncher.\n  Both integrations call the same updater and are guarded against duplicate runs.\n- Verify desktop updating on Minecraft 1.20.1 / NeoForge 47.1.106 (Java 17),\n  Minecraft 1.21 / NeoForge 21.0.167,\n  1.21.1 / NeoForge 21.1.216, and 26.3 / NeoForge 26.3.0.115.\n  These form the desktop regression checks for the broader support range.\n- Widen the jar metadata and Modrinth version list to cover NeoForge's stable\n  Minecraft releases from 1.20.1 through 26.3. Earlier metadata accepts both loader\n  identifiers and language-provider version schemes. Compatibility problems can\n  be reported through GitHub issues.\n- Replace private-field progress-bar reflection with an updater-owned bar.\n  Cosmetic progress failures cannot interrupt updating.\n- Add real-loader test suites and a visible, sequential Prism/Packwiz test\n  fixture using harmless config files, not a helper mod. The final older-version\n  change was regression-tested on 1.21. See [Compatibility](docs/Compatibility.md)\n  for coverage and limitations.\n- Publish the supported Minecraft version list to Modrinth instead of only the\n  build target.\n- Automatically tag and publish new versions after successful CI on `main`,\n  using `mod_version` from `gradle.properties`; already released versions are skipped.\n- Include these compatibility notes in the GitHub release. Modrinth publication\n  is best-effort: upload failures do not fail CI or block the GitHub release.\n\n\n**Full Changelog**: https://github.com/Jammersmurph/PackUpdater/compare/v1.6.3...v1.7.0"
+		},
 		{
 			"tag": "v1.6.3",
 			"published": "2026-11-20T22:42:11Z",
@@ -18,7 +132,7 @@
 					"name": "packupdater.jar",
 					"url": "https://github.com/Jammersmurph/PackUpdater/releases/download/v1.6.3/packupdater.jar",
 					"size": 138113,
-					"downloads": 14,
+					"downloads": 231,
 					"inspection": 2,
 					"sha256": "2a424fafefbdaa3fa74cc048916bfcab4d78810d7745dc3a3ffa015065c99b74",
 					"mods": [
@@ -112,7 +226,7 @@
 					"name": "packupdater.jar",
 					"url": "https://github.com/Jammersmurph/PackUpdater/releases/download/v1.6.2/packupdater.jar",
 					"size": 137291,
-					"downloads": 1077,
+					"downloads": 1308,
 					"inspection": 2,
 					"sha256": "e5a149da7ed889dadd7e484346755e85f5183c3980223d0b2e3744474ee20909",
 					"mods": [
@@ -206,7 +320,7 @@
 					"name": "packupdater.jar",
 					"url": "https://github.com/Jammersmurph/PackUpdater/releases/download/v1.6.1/packupdater.jar",
 					"size": 137012,
-					"downloads": 1203,
+					"downloads": 1314,
 					"inspection": 2,
 					"sha256": "42a06133d54a017838ce98d713137b2654a106f24f137ac05fa8edf0e36433f7",
 					"mods": [

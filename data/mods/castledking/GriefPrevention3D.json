@@ -1,7 +1,7 @@
 {
 	"repo": "castledking/GriefPrevention3D",
 	"host": "github",
-	"description": "A fork of GriefPrevention that adds 3D subdivisions support.",
+	"description": "A multi-platform fork of GriefPrevention with 3D subdivisions",
 	"stars": 10,
 	"archived": false,
 	"license": "GPL-3.0",
@@ -9,6 +9,112 @@
 	"pushed": "2026-11-23T03:39:33Z",
 	"forkOf": "GriefPrevention/GriefPrevention",
 	"releases": [
+		{
+			"tag": "v19.2.0",
+			"published": "2026-11-24T18:21:06Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 788331654,
+					"name": "GriefPrevention3D.jar",
+					"url": "https://github.com/castledking/GriefPrevention3D/releases/download/v19.2.0/GriefPrevention3D.jar",
+					"size": 3487877,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "60f1df40b06fbfb60724469ecd9fbabf66685ca44532c7b31a46a53de8bdfbfd",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "griefprevention3d",
+							"version": "19.2.0",
+							"name": "GriefPrevention3D",
+							"description": "Native Fabric adapter for GriefPrevention3D claim protection.",
+							"minecraft": ">=26.1 <26.4- || >=1.21.2 <1.21.12-",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api-base",
+								"fabric-command-api-v2",
+								"fabric-events-interaction-v0",
+								"fabric-lifecycle-events-v1",
+								"fabric-message-api-v1",
+								"fabric-networking-api-v1",
+								"minecraft",
+								"java"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.18.2",
+								"minecraft": ">=26.1 <26.4- || >=1.21.2 <1.21.12-",
+								"java": ">=21"
+							},
+							"provides": []
+						},
+						{
+							"loader": "neoforge",
+							"id": "griefprevention3d",
+							"version": "19.2.0",
+							"name": "GriefPrevention3D",
+							"description": "Native NeoForge adapter for GriefPrevention3D claim protection.",
+							"minecraft": "[1.21.11,1.21.12),[26.1,26.4)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"dependsVersions": {
+								"neoforge": "[21.11,21.12),[26.1,26.4)",
+								"minecraft": "[1.21.11,1.21.12),[26.1,26.4)"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 1427,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/griefprevention/metrics/Metrics$MetricsBase.class": [
+									"java/net/URL.openConnection in sendData"
+								]
+							},
+							"classloading": {
+								"me/ryanhamshire/GriefPrevention/DatabaseConnectionPool.class": [
+									"java/net/URLClassLoader.<init> in loadExternalDriver",
+									"java/net/URLClassLoader.close in loadExternalDriver, close"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"yaml.org": [
+								"com/griefprevention/internal/lib/snakeyaml/DumperOptions.class"
+							],
+							"bstats.org": [
+								"com/griefprevention/metrics/Metrics$MetricsBase.class",
+								"com/griefprevention/metrics/Metrics.class"
+							],
+							"github.com": [
+								"me/ryanhamshire/GriefPrevention/Alias.class"
+							],
+							"dev.bukkit.org": [
+								"me/ryanhamshire/GriefPrevention/GriefPrevention.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# GriefPrevention3D v19.2.0\n\n**Wiki:** https://github.com/castledking/GriefPrevention3D/wiki\n\nBack up `GriefPreventionData` before updating.\n\n## Native NeoForge Support (Universal JAR)\n\nGriefPrevention3D now supports **NeoForge** servers natively alongside Spigot/Paper/Purpur/Folia and Fabric — all shipped inside the same single universal `GriefPrevention3D.jar`:\n\n- **Supported NeoForge versions:** Minecraft **1.21.11** (Java 21) and **26.1–26.3** (Java 25), with zero extra required mod dependencies.\n- **Full feature parity with Fabric:** Shares 100% of the Mojang-mapped claim, 3D subdivision, trust, command, visualization, claim-block accrual, expiration, nature restoration, chat education, economy, and permission runtime through a loader-neutral platform bridge.\n- **Server-side only (`displayTest=\"IGNORE_ALL_VERSION\"`):** Vanilla, Fabric, and NeoForge clients can connect to NeoForge servers running GriefPrevention3D without installing anything client-side.\n- **Shared datastore compatibility:** Reads and writes the same `plugins/GriefPreventionData` layout used by Paper, Folia, and Fabric, making server migrations seamless.\n- **NeoForge addon events:** Exposes cancellable NeoForge bus events (`NeoForgeClaimEvents`) for claim creation, modification, deletion, transfer, and expiration.\n- **All 51 protection mixins verified:** Added NeoForge-aware Mixin `@Group` targets for NeoForge-patched methods (`FireBlock`, `Player`, `ServerExplosion`, and `TeleportRandomlyConsumeEffect`) while maintaining full Fabric compatibility.\n\n## Legacy Bukkit API Compatibility\n\n- **Restored removed deprecated GP 16.x/17.x API shims:** Re-added `@Deprecated` delegation methods in `GriefPrevention` (`allowBuild`, `allowBreak`) and event compatibility shims (`AccrueClaimBlocksEvent`, `ClaimExtendEvent#getClaim`, `ClaimResizeEvent#getClaim`, `PlayerKickBanEvent#getBan`) that were dropped by upstream PR #2678.\n- **Fixes older third-party integrations:** Resolves `NoSuchMethodError` crashes in plugins compiled against GriefPrevention 16.x (such as **ArtMap** calling `GriefPrevention#allowBuild`) while preserving Java 8 compatibility.\n\n## Upgrade notes\n\n- Restart the server after replacing the jar.\n- All platforms ship in one universal `GriefPrevention3D.jar`:\n  - **Spigot / Paper / Purpur / Folia:** Minecraft 1.8.8 through 26.3\n  - **Fabric:** Minecraft 1.21.2 through 1.21.11, and 26.1 through 26.3 (requires Fabric API)\n  - **NeoForge:** Minecraft 1.21.11 and 26.1 through 26.3"
+		},
 		{
 			"tag": "v19.1.1",
 			"published": "2026-11-23T03:39:33Z",

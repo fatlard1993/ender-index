@@ -4,8 +4,110 @@
 	"stars": 0,
 	"archived": false,
 	"created": "2026-10-25T18:29:20Z",
-	"pushed": "2026-11-22T20:59:02Z",
+	"pushed": "2026-11-24T01:51:34Z",
 	"releases": [
+		{
+			"tag": "v0.3.136-test.394",
+			"published": "2026-11-24T01:51:34Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 785294426,
+					"name": "Overcraft-0.3.136.jar",
+					"url": "https://github.com/Thrasherop/overcraft/releases/download/v0.3.136-test.394/Overcraft-0.3.136.jar",
+					"size": 2923571,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "2e423af43dc35c21ca8f127d10f03c3ac6ea9743cb3976c7cc461e6a4fd7def2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "overcraft",
+							"version": "0.3.136",
+							"name": "Overcraft",
+							"description": "Overwatch heroes in Minecraft: pick a hero when you join a world; hotbar slot 1 holds the hero's weapons and abilities.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-language-kotlin"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Healing Ofuda",
+								"Kiriko's Kunai & Ofuda",
+								"Kunai",
+								"Protection Suzu",
+								"Sonic Amplifier round"
+							],
+							"entity": [
+								"ASHE",
+								"B.O.B.",
+								"CASSIDY",
+								"Dynamite",
+								"Grappling Hook",
+								"Healing Blossom",
+								"Healing Ofuda",
+								"JUNKRAT",
+								"Kitsune",
+								"Kunai",
+								"Molten slag",
+								"PHARAH",
+								"Petal Platform",
+								"Petal seed",
+								"Protection Suzu",
+								"Rivet",
+								"Rivet Gun pellet",
+								"SOJOURN",
+								"Seed",
+								"Sonic Amplifier round",
+								"TORBJÖRN",
+								"TRACER",
+								"Thorn",
+								"Tree of Life",
+								"Turret",
+								"Venom Mine",
+								"WIDOWMAKER"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 855,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/overcraft/client/dev/DevServer.class": [
+									"java/net/ServerSocket.<init> in serve",
+									"java/net/ServerSocket.accept in serve",
+									"java/net/Socket.getInputStream in serve",
+									"java/net/Socket.getOutputStream in serve",
+									"java/net/Socket.close in serve",
+									"java/net/ServerSocket.close in serve"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Test build.** It becomes a release only once it's moved to the `production` branch.\n\n## 2026-11-22: 0.3.136\n\n- **Tab scoreboard: MIT (#184).** A fifth column, damage mitigated this run (Overwatch HP): what Brigitte's and Sigma's barriers\n  took (up to what they had left), what D.Va's Defense Matrix ate, what Sigma's Kinetic Grasp absorbed. Armor's reduction isn't\n  counted. Reset with the dragon like the rest.\n- **Enemy heroes no longer see stealthed Sombra (#185).** An enemy hero within 4 m in sight still spotted her (stealth's\n  close-range detection, which every mob used), and the enemy Torbjorn's turret never checked stealth at all. Now the enemy\n  heroes and that turret see her only while she's revealed (hit, Hotfix). Other mobs keep the 4 m rule.\n  The owner's case (an Ashe shooting and chasing from 10+ m after the 1.3 s reveal ended): a hit reveals her 1.3 s, Ashe fires\n  every 1.2 s, and a target was only dropped every half second, so an Ashe mid-aim could still fire just after the reveal\n  ended, and that hit revealed her again. Minecraft's own target goal also put a cleared target straight back\n  (TargetGoal.canContinueToUse falls back to the one it remembers). Now an enemy hero drops a hidden Sombra the tick she's\n  hidden, and no target goal keeps one it can't see.\n- Played, one dev client, real keys and mouse:\n  - MIT: Sigma from the select screen, a bow skeleton 14 m out at night, RMB barrier in front; the barrier took its arrows;\n    Tab: MIT 238, the other columns as before. Not tried: Brigitte's barrier, Defense Matrix, Kinetic Grasp (same counter,\n    one line each), a second player's row.\n  - Sombra (a fresh flat world, noon, no mob spawns): an enemy Cassidy summoned frozen; E to throw the Translocator, E to\n    teleport (stealth), then the Cassidy moved 3 m from her and let go. Before: he shot at once and kept on (18 -> 2.9 in 10 s).\n    After: no shot for the rest of stealth, his first ~7 s after the teleport (as it ended). From 18-22 m he didn't shoot on\n    either build. Revealed: 1 damage while stealthed with him 3 m away, he fired within half a second. Not tried: the enemy\n    turret (changed from reading its code), Hotfix's reveal, other enemy heroes.\n  - Ashe (owner's follow-up): an active enemy Ashe 13 m out, Sombra teleported into stealth, then 1 damage to reveal her.\n    Before (the 4 m change only): the reveal ended at :39.14 and Ashe still hit her at :39.48. After: two trials, no Ashe hit\n    from the reveal until stealth's end (~7 s after the teleport). The exact chase-and-shoot loop the owner saw wasn't\n    reproduced end to end here; its cause was found in the timings and Minecraft's TargetGoal source.\n  - Seen in passing: closing the first client hung on \"Saving world\" (the shutdown watchdog fired; its stack is Minecraft's\n    chunk tickets, no mod frames); not looked into further.\n\n\n---\nBuilt from `bfcab45` on `main`: Merge next: 0.3.136 (MIT on the Tab scoreboard, enemy heroes don't see stealthed Sombra)"
+		},
 		{
 			"tag": "v0.3.135-test.389",
 			"published": "2026-11-21T21:52:52Z",
@@ -16,7 +118,7 @@
 					"name": "Overcraft-0.3.135.jar",
 					"url": "https://github.com/Thrasherop/overcraft/releases/download/v0.3.135-test.389/Overcraft-0.3.135.jar",
 					"size": 2921838,
-					"downloads": 2,
+					"downloads": 11,
 					"inspection": 2,
 					"sha256": "7275d05972f2588c07fbc5d473519452c9ad0dfedc4441557a09753edc2e084c",
 					"mods": [

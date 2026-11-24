@@ -6,8 +6,80 @@
 	"archived": false,
 	"license": "LGPL-3.0",
 	"created": "2013-11-08T18:09:38Z",
-	"pushed": "2026-11-23T02:15:07Z",
+	"pushed": "2026-11-24T00:36:05Z",
 	"releases": [
+		{
+			"tag": "v2.5.0",
+			"published": "2026-11-24T00:19:29Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 785100238,
+					"name": "voxelcam-2.5.0.jar",
+					"url": "https://github.com/thatapplefreak/VoxelCam/releases/download/v2.5.0/voxelcam-2.5.0.jar",
+					"size": 277185,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "28e3fffb81ea678bb5cf1b896df27d93bf91bfccd8245b38084ebd00850ee0e5",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "voxelcam",
+							"version": "2.5.0",
+							"name": "VoxelCam",
+							"description": "An in-game screenshot manager. Browse, rename, star and delete your screenshots, hold F2 for a capture menu with big screenshots and bursts, and share them without an account.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 108,
+						"jars": [],
+						"capabilities": {
+							"exec": {
+								"com/thatapplefreak/voxelcam/client/share/NativeShare.class": [
+									"java/lang/ProcessBuilder.<init> in runReveal",
+									"java/lang/ProcessBuilder.redirectOutput in runReveal",
+									"java/lang/ProcessBuilder.redirectError in runReveal",
+									"java/lang/ProcessBuilder.start in runReveal"
+								]
+							},
+							"network": {
+								"com/thatapplefreak/voxelcam/client/upload/CatboxUploader.class": [
+									"java/net/http/HttpClient.sendAsync in upload",
+									"java/net/http/HttpClient.newBuilder in <clinit>"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"catbox.moe": [
+								"com/thatapplefreak/voxelcam/client/upload/CatboxUploader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "A burst is now a few seconds of play you can turn into an animation, capture feedback has its own\nstatus line instead of chat, and VoxelCam moves to Minecraft 26.3.\n\n## Requirements\n\n- Minecraft 26.3\n- Fabric Loader 0.20.1+, Fabric API\n- Java 25, the runtime the Minecraft launcher already ships with (no launcher changes needed)\n\n## Bursts you can play back\n\nA burst is now two to five seconds of play at ten frames a second, rather than as many frames as\nthe game could turn out. Pick the length from the capture menu's outer ring or the settings screen.\n\n**Export Animation** turns a burst into one looping animation, at full quality and at the speed it\nwas captured, and it plays right in the manager. Sharing it hands out an animated WebP copy, which\nplays on Discord, and offers a smaller copy when the full one is over Discord's 10 MB limit.\n\nA burst that is cut short, by a menu opening or by dying, now says so and says how many frames it\nkept. Burst frames are also about a third smaller on disk.\n\n## A status line instead of chat\n\nA small line in the top corner says what a capture is doing: saving, saved and under what name, or\nwhy it could not. It replaces the chat messages, stays visible with the HUD hidden (`F1`), never\nshows up in the screenshots it is reporting on, and can be switched off in the settings.\n\n## Automatic captures that show the moment\n\n- Arriving in a new dimension is captured once the world has come into view, not on the first\n  frame of fog or portal overlay. Stand still for a moment on arrival; if you run straight out, the\n  capture is dropped rather than taken somewhere else.\n- Killing a Wither is captured. It usually was not before.\n- Winning a raid no longer produces a \"boss defeated\" screenshot thirty seconds after the fight.\n- Nothing is captured automatically while you are holding the capture menu open.\n\n## Capture menu\n\n- The menu now works with the HUD hidden (`F1`): it is drawn, and it can be aimed.\n- At the default window size the outer ring's labels no longer sit on the hotbar, and aiming at a\n  label picks that option.\n- Clicking or scrolling while the menu is open no longer does anything in the world.\n- `/bigscreenshot` refuses sizes under 16 pixels a side instead of accepting them.\n\n## Manager\n\n- Opens at the top of the list, on your newest screenshot under the default sort, rather than on\n  whatever was selected last time.\n- `F2` renames the selected screenshot, as its tooltip always said, and the keyboard shortcuts keep\n  working after you back out of a popup.\n- Rows and the details line show whole facts instead of text cut off mid-number, screenshots from\n  the same minute are told apart by the second, and an automatic capture's details lead with what\n  caused it.\n- After a delete the selection stays beside the deleted screenshot instead of jumping to the top.\n- Setting a burst's key frame keeps its star. Renaming can no longer hide one burst inside another.\n- A file that is not really a PNG no longer shows nonsense dimensions, and starring a broken or\n  empty `.png` no longer crashes the game.\n- At the smallest window sizes the longest button labels have a short wording so they fit.\n\n## Sharing\n\n- A share link no longer gives up after sixty seconds on a large screenshot, and files over\n  catbox's limit are refused up front with a reason.\n- A link that arrives after you have closed the popup no longer replaces what is on your clipboard.\n- **Save a copy** no longer overwrites a file the save dialog did not ask you about.\n\n## Fixes\n\nA damaged PNG could freeze the manager, and a hand-edited `voxelcam.json` could stop the game from\nstarting; both are fixed, and settings are now written so that two quick changes cannot corrupt the\nfile. Resizing the window or going fullscreen while a big screenshot is being taken no longer leaves\nthe game rendering at the old size.\n\n---\n\nThese notes, like most of VoxelCam's code since 2.0.0, were drafted with Claude Code. See\n\n..."
+		},
 		{
 			"tag": "v2.4.0",
 			"published": "2026-09-07T15:46:51Z",
@@ -86,7 +158,7 @@
 					"name": "voxelcam-2.3.0.jar",
 					"url": "https://github.com/thatapplefreak/VoxelCam/releases/download/v2.3.0/voxelcam-2.3.0.jar",
 					"size": 120307,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "30265e445ec27d824c5fac794bf45a63c3f09267587e7e84586a1493a525f10d",
 					"mods": [
