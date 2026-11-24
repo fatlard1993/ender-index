@@ -21,12 +21,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -54,5 +51,15 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ender-index/client/build
+  # A job of its own, as GitHub's Pages workflow has it: the deploy looks the build's artifact up as it starts, and in
+  # the build's own job it was not always listed yet, so the deploy failed with nothing to deploy
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
