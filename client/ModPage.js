@@ -490,22 +490,28 @@ const modPageUrl = mod => hrefOf(modPath(mod));
 
 const authors = new Map();
 
-/** An owner's mods as tiles, from beside the pages, kept once a page; none for an owner with none there. */
-const authorTiles = key => {
+/**
+ * An owner's mods as tiles, from beside the pages, kept once a page; none for an owner with none there. A failed answer
+ * shows none and is forgotten, so the next mod of theirs opened asks again.
+ */
+export const authorTiles = key => {
 	const file = authorFile(key);
 
 	if (!file) return Promise.resolve([]);
 
 	if (!authors.has(file)) {
-		authors.set(
-			file,
-			fetch(hrefOf(`/${file}`))
-				.then(response => (response.ok ? response.json() : []))
-				.catch(() => []),
-		);
+		const asked = fetch(hrefOf(`/${file}`)).then(response => {
+			if (response.status === 404) return [];
+			if (!response.ok) throw new Error(`${file} answered ${response.status}`);
+
+			return response.json();
+		});
+
+		authors.set(file, asked);
+		asked.catch(() => authors.delete(file));
 	}
 
-	return authors.get(file);
+	return authors.get(file).catch(() => []);
 };
 
 /** What it needs that the index has no repository it can trust for, each linked to its source when that is known. */

@@ -594,6 +594,31 @@ describe('a pack page', () => {
 });
 
 describe("a mod's page on GitHub Pages", () => {
+	test("asks for an author's other mods again after a failed answer, and takes a missing file as none", async () => {
+		const { authorTiles } = await import('../client/ModPage');
+		const real = globalThis.fetch;
+		const answers = [new Response('', { status: 503 }), Response.json([{ repo: 'flaky/one' }])];
+		let asked = 0;
+
+		globalThis.fetch = async () => {
+			asked += 1;
+
+			return answers.shift() ?? new Response('', { status: 404 });
+		};
+
+		try {
+			expect(await authorTiles('github:flaky')).toEqual([]);
+			expect(await authorTiles('github:flaky')).toEqual([{ repo: 'flaky/one' }]);
+			expect(await authorTiles('github:flaky')).toEqual([{ repo: 'flaky/one' }]);
+			expect(asked).toBe(2);
+			expect(await authorTiles('github:lonely')).toEqual([]);
+			expect(await authorTiles('github:lonely')).toEqual([]);
+			expect(asked).toBe(3);
+		} finally {
+			globalThis.fetch = real;
+		}
+	});
+
 	// A mod listed since the listing the page read: only its own data can show it
 	const fresh = entry('new/mod', [mod('newmod', 'New Mod')], {
 		description: 'Brand new',
