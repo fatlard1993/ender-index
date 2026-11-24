@@ -574,39 +574,139 @@ describe('a jar ender held back', () => {
 	});
 });
 
-describe("what an instance's pack offers as optional", () => {
-	test('shows beside each optional mod or pack whether it is on, what it adds, and turning it on or off', async () => {
-		const { optionalControls, packList } = await import('../client/InstancesPage');
+describe('what an instance installs, on its card', () => {
+	test('is grouped and counted, each said in full with where to read more, an optional one with its switch', async () => {
+		const { instanceList } = await import('../client/InstancesPage');
 		const toggled = [];
-		const manifest = {
-			mods: [],
+		const dropped = [];
+		const details = {
+			name: 'family',
+			mods: [
+				{ source: 'github', id: 'a/lib' },
+				{ source: 'modrinth', id: 'zoom', optional: true, description: 'Zoom with C' },
+				{ source: 'curseforge', id: 'jei', version: '19.0' },
+			],
+			installed: [
+				{ key: 'github:a/lib', source: 'github', id: 'a/lib', name: 'a/lib 2.0', version: '2.0', requested: true },
+				{
+					key: 'curseforge:jei',
+					source: 'curseforge',
+					id: 'jei',
+					name: 'Just Enough Items',
+					version: '19.0',
+					requested: true,
+				},
+				{
+					key: 'github:FabricMC/fabric',
+					source: 'github',
+					id: 'FabricMC/fabric',
+					name: 'Fabric API',
+					version: '0.100',
+					requested: false,
+				},
+			],
 			chosen: ['modrinth:zoom'],
 			resourcepacks: [{ source: 'modrinth', id: 'faithful', optional: true, description: 'Sharper textures' }],
 			shaderpacks: [{ source: 'modrinth', id: 'bsl' }],
+			pack: { source: 'gh:me/pack', mods: ['github:a/lib'] },
 		};
+		const listing = [
+			{
+				host: 'github',
+				repo: 'a/lib',
+				description: 'The library everything leans on',
+				latest: { mods: [{ id: 'lib', name: 'A Lib' }] },
+			},
+		];
 		const holder = document.createElement('div');
 
-		for (const part of optionalControls(manifest, { source: 'modrinth', id: 'zoom', optional: true }, (...args) =>
-			toggled.push(args),
-		))
+		for (const part of instanceList(details, listing, {
+			onToggle: (...args) => toggled.push(args),
+			onDrop: spec => dropped.push(spec),
+		}))
 			holder.append(part.elem);
 
-		expect(holder.textContent).toContain('optional, on');
-		[...holder.querySelectorAll('button')].find(button => button.textContent === 'Turn off').click();
-		expect(toggled).toEqual([['modrinth:zoom', false]]);
-		expect(optionalControls(manifest, { source: 'modrinth', id: 'sodium' }, () => {})).toEqual([]);
+		const text = holder.textContent;
 
-		const packs = document.createElement('div');
+		expect(text).toContain('From its pack (1)');
+		expect(text).toContain('A Lib');
+		expect(text).toContain('The library everything leans on');
+		expect(text).toContain('Added to it (1)');
+		expect(text).toContain('Just Enough Items');
+		expect(text).toContain('pinned at 19.0');
+		expect(text).toContain('Optional, offered by its pack (2)');
+		expect(text).toContain('Zoom with C');
+		expect(text).toContain('Sharper textures');
+		expect(text).toContain('Resource and shader packs (1)');
+		expect(text).toContain('Brought in for what the others need (1)');
+		expect(text).toContain('Fabric API');
 
-		for (const row of packList(manifest, (...args) => toggled.push(args))) packs.append(row.elem);
+		const links = [...holder.querySelectorAll('a')].map(link => [link.textContent, link.getAttribute('href')]);
 
-		expect(packs.textContent).toContain('faithful');
-		expect(packs.textContent).toContain('resource pack');
-		expect(packs.textContent).toContain('Sharper textures');
-		expect(packs.textContent).toContain('bsl');
-		expect(packs.textContent).toContain('shader pack');
-		[...packs.querySelectorAll('button')].find(button => button.textContent === 'Turn on').click();
-		expect(toggled.at(-1)).toEqual(['modrinth:faithful', true]);
+		expect(links).toContainEqual(['Read more', './mod/github/a/lib']);
+		expect(links).toContainEqual(['Read more on CurseForge', 'https://www.curseforge.com/minecraft/mc-mods/jei']);
+		expect(links).toContainEqual(['Read more on Modrinth', 'https://modrinth.com/project/zoom']);
+
+		const button = label => [...holder.querySelectorAll('button')].find(found => found.textContent === label);
+
+		button('Turn off').click();
+		button('Turn on').click();
+		[...holder.querySelectorAll('button')].find(found => found.getAttribute('title') === 'Remove cf:jei').click();
+
+		expect(toggled).toEqual([
+			['modrinth:zoom', false],
+			['modrinth:faithful', true],
+		]);
+		expect(dropped).toEqual(['cf:jei']);
+	});
+
+	test("shows a Modrinth mod by Modrinth's name, picture and words, the pack's own words first", async () => {
+		const { instanceList } = await import('../client/InstancesPage');
+		const holder = document.createElement('div');
+		const details = {
+			mods: [
+				{ source: 'modrinth', id: 'sodium-extra' },
+				{ source: 'modrinth', id: 'zoomify', optional: true, description: 'Zoom with C' },
+			],
+			installed: [],
+			chosen: [],
+		};
+		const published = new Map([
+			[
+				'sodium-extra',
+				{ title: 'Sodium Extra', description: 'Options Sodium leaves out', icon: 'https://cdn.example/se.png' },
+			],
+			['zoomify', { title: 'Zoomify', description: 'A zoom mod', icon: 'https://cdn.example/z.png' }],
+		]);
+
+		for (const part of instanceList(details, [], {}, published)) holder.append(part.elem);
+
+		expect(holder.textContent).toContain('Sodium Extra');
+		expect(holder.textContent).toContain('Options Sodium leaves out');
+		expect(holder.textContent).toContain('Zoom with C');
+		expect(holder.textContent).not.toContain('A zoom mod');
+		expect([...holder.querySelectorAll('img')].map(image => image.getAttribute('src'))).toEqual([
+			'https://cdn.example/se.png',
+			'https://cdn.example/z.png',
+		]);
+	});
+
+	test('names what it installs from ender alone while the listing has not loaded, and says so when there is nothing', async () => {
+		const { instanceList } = await import('../client/InstancesPage');
+		const holder = document.createElement('div');
+		const details = {
+			mods: [{ source: 'github', id: 'a/lib' }],
+			installed: [
+				{ key: 'github:a/lib', source: 'github', id: 'a/lib', name: 'a/lib 2.0', version: '2.0', requested: true },
+			],
+		};
+
+		for (const part of instanceList(details, [], {})) holder.append(part.elem);
+
+		expect(holder.textContent).toContain('Its mods (1)');
+		expect(holder.textContent).toContain('a/lib2.0 · from GitHub');
+		expect([...holder.querySelectorAll('a')].map(link => link.textContent)).toContain('Its repository on GitHub');
+		expect(instanceList({ mods: [], installed: [] }, [], {})).toEqual([]);
 	});
 });
 

@@ -18,16 +18,16 @@ import {
 import { specFor } from 'ender-launcher/spec';
 
 import { collection } from './collection';
-import { loadVersions } from './data';
+import { loadListing, loadVersions } from './data';
+import { GROUPS, instanceItems, modrinthNamed } from './instanceMods';
+import { modrinthProjects } from './modrinthProjects';
 import { heldBack, heldBuilds, lastSaid, local } from './local';
 import { confirmHeldBuilds, listingButton } from './controls';
 import { instanceNameOf, packDialog } from './packMaker';
 import { packOrMods, readPasted } from './pasted';
 import { playerChoice } from './playersPanel';
 import { LOADERS } from './search';
-import { Alarm, Chip, Command, LAUNCHER, Meta, Row, Stack, Title, Warning, siteBar, siteFooter } from './ui';
-
-const NAMEABLE_SOURCES = new Set(['github', 'codeberg', 'gitlab', 'modrinth', 'curseforge']);
+import { Alarm, Chip, Command, LAUNCHER, Meta, Row, Stack, Title, Warning, avatar, siteBar, siteFooter } from './ui';
 
 const INSTANCE_LOADERS = { ...LOADERS, vanilla: 'Vanilla' };
 
@@ -116,71 +116,110 @@ const openedFor = name => {
 	return opened.get(name);
 };
 
-const keyOf = entry => `${entry.source}:${entry.id ?? entry.path ?? entry.url}`;
+/** What an item's facts line says: what kind it is, the version installed or pinned, and where it comes from. */
+const factsOf = item =>
+	[
+		item.kind === 'mod' ? undefined : item.kind,
+		item.version && (item.pinned ? `pinned at ${item.version}` : item.version),
+		!item.version && (item.optional && !item.optional.on ? 'left out' : 'not installed yet'),
+		`from ${item.source}`,
+	]
+		.filter(Boolean)
+		.join(' · ');
 
-/**
- * Beside an entry a pack offers as optional: what it adds, in the pack's words, and turning it on or off. Nothing for
- * an entry every player gets.
- */
-export const optionalControls = (manifest, entry, onToggle) => {
-	if (!entry.optional) return [];
+/** Beside an item: an optional one's state and the switch for it, and a way to remove one this instance declares. */
+const itemControls = (item, { onDrop, onToggle }) => {
+	if (item.optional) {
+		const { on } = item.optional;
 
-	const on = (manifest.chosen ?? []).includes(keyOf(entry));
+		return [
+			new Chip({ addClass: on ? 'installed' : undefined, textContent: on ? 'on' : 'off' }),
+			new Button({
+				variant: 'flat',
+				textContent: on ? 'Turn off' : 'Turn on',
+				title: on ? 'Leave it out at the next sync' : 'Install it at the next sync',
+				onPointerPress: () => onToggle(item.key, !on),
+			}),
+		];
+	}
+
+	if (item.group === 'dependency' || item.group === 'assets') return [];
+	if (!item.spec) return [new Meta({ textContent: 'built or kept on this machine' })];
 
 	return [
-		new Chip({ addClass: on ? 'installed' : undefined, textContent: on ? 'optional, on' : 'optional, off' }),
-		...(entry.description ? [new Meta({ textContent: entry.description })] : []),
 		new Button({
+			icon: 'xmark',
 			variant: 'flat',
-			textContent: on ? 'Turn off' : 'Turn on',
-			title: on ? 'Leave it out at the next sync' : 'Install it at the next sync',
-			onPointerPress: () => onToggle(keyOf(entry), !on),
+			title: `Remove ${item.spec}`,
+			onPointerPress: () => onDrop(item.spec),
 		}),
 	];
 };
 
-/** The resource and shader packs an instance declares, each with its kind and, when optional, its controls. */
-export const packList = (manifest, onToggle) =>
-	[
-		['resourcepacks', 'resource pack'],
-		['shaderpacks', 'shader pack'],
-	].flatMap(([kind, word]) =>
-		(manifest[kind] ?? []).map(
-			entry =>
+/** Something an instance installs, in a few lines: what it is and is about, its facts, where to read more, and its controls. */
+const itemCard = (item, handlers) => {
+	const { readMore } = item;
+	const away = readMore?.away ? { target: '_blank', attributes: { rel: 'noopener noreferrer' } } : {};
+
+	const controls = itemControls(item, handlers);
+
+	// The controls sit beside the words where there is room and drop beneath them on a phone, so neither is squeezed
+	return new Card(
+		{},
+		new Row({
+			style: { alignItems: 'flex-start', gap: theme.space.md },
+			append: [
 				new Row({
+					style: {
+						flex: '1 1 260px',
+						flexWrap: 'nowrap',
+						alignItems: 'flex-start',
+						gap: theme.space.md,
+						minWidth: '0',
+					},
 					append: [
-						new Chip({ textContent: entry.id ?? entry.url }),
-						new Meta({ textContent: word }),
-						...optionalControls(manifest, entry, onToggle),
+						avatar(item.picture, 40),
+						new Stack({
+							style: { flex: '1', minWidth: '0', gap: theme.space.xs },
+							append: [
+								new Title({ textContent: item.title }),
+								...(item.about ? [new Meta({ textContent: item.about })] : []),
+								new Meta({ textContent: factsOf(item) }),
+								...(readMore ? [new Link({ href: readMore.href, textContent: readMore.label, ...away })] : []),
+							],
+						}),
 					],
 				}),
-		),
-	);
-
-const modList = (manifest, onDrop, onToggle = () => {}) =>
-	(manifest.mods ?? []).map(mod => {
-		const shareable = NAMEABLE_SOURCES.has(mod.source);
-		const spec = shareable ? specFor(mod.source, mod.id) : undefined;
-		const shown = manifest.installed?.find(found => found.key === keyOf(mod));
-
-		return new Row({
-			append: [
-				new Chip({ textContent: shown?.name ?? spec ?? mod.path ?? mod.url ?? mod.id }),
-				...(mod.version ? [new Meta({ textContent: `pinned at ${mod.version}` })] : []),
-				...optionalControls(manifest, mod, onToggle),
-				...(shareable
-					? [
-							new Button({
-								icon: 'xmark',
-								variant: 'flat',
-								title: `Remove ${spec}`,
-								onPointerPress: () => onDrop(spec),
-							}),
-						]
-					: [new Meta({ textContent: 'built or kept on this machine' })]),
+				...(controls.length > 0
+					? [new Row({ style: { flex: 'none', marginLeft: 'auto', alignItems: 'center' }, append: controls })]
+					: []),
 			],
-		});
+		}),
+	);
+};
+
+/**
+ * Everything an instance installs, grouped as GROUPS orders them and counted: what its pack brings, what was added to
+ * it, what its pack offers as optional with each one's switch, its resource and shader packs, and what came in for what
+ * the rest need. `listing` names and describes what the index has; without it, names come from what is installed.
+ */
+export const instanceList = (details, listing, handlers, published) => {
+	const items = instanceItems(details, listing, published);
+
+	return GROUPS.flatMap(group => {
+		const found = items.filter(item => item.group === group.id);
+
+		if (found.length === 0) return [];
+
+		const label = group.id === 'own' && !details.pack ? 'Its mods' : group.label;
+
+		return [
+			new SectionLabel({ textContent: `${label} (${found.length})` }),
+			...(group.note ? [new Meta({ textContent: group.note })] : []),
+			...found.map(item => itemCard(item, handlers)),
+		];
 	});
+};
 
 /**
  * What a finished job that held jars back says beside its instance, in place of ender's own refusal: the offer below it
@@ -324,29 +363,44 @@ const instanceCard = (instance, signal) => {
 		mods.content(new EmptyState({ loading: true, title: 'Reading its mods' }));
 
 		try {
-			const manifest = await local.details(instance.name);
+			const details = await local.details(instance.name);
+			const handlers = {
+				onToggle: (key, on) =>
+					runJob(() => local.setOptional(instance.name, key, on), {
+						done: `${on ? 'Turned on' : 'Turned off'} ${key}`,
+					}).then(showMods),
+				onDrop: spec => runJob(() => local.dropFrom(instance.name, [spec]), { done: `Removed ${spec}` }).then(showMods),
+			};
+			// Drawn at once from what ender says, then again as the listing names and describes what the index has and
+			// Modrinth what it publishes
+			const known = { listing: [], published: new Map() };
+			const draw = () => {
+				const listed = instanceList(details, known.listing, handlers, known.published);
 
-			const toggle = (key, on) =>
-				runJob(() => local.setOptional(instance.name, key, on), {
-					done: `${on ? 'Turned on' : 'Turned off'} ${key}`,
-				}).then(showMods);
-
-			mods.content([
-				...((manifest.mods ?? []).length === 0
-					? [
-							new EmptyState({
+				mods.content(
+					listed.length > 0
+						? listed
+						: new EmptyState({
 								icon: 'puzzle-piece',
 								title: 'No mods chosen yet',
 								message: 'Add them from the Mods page',
 							}),
-						]
-					: modList(
-							manifest,
-							spec => runJob(() => local.dropFrom(instance.name, [spec]), { done: `Removed ${spec}` }).then(showMods),
-							toggle,
-						)),
-				...packList(manifest, toggle),
-			]);
+				);
+			};
+
+			draw();
+			loadListing()
+				.then(listing => {
+					known.listing = listing;
+					if (!signal.aborted && open.mods) draw();
+				})
+				.catch(() => {});
+			modrinthProjects(modrinthNamed(details))
+				.then(published => {
+					known.published = published;
+					if (!signal.aborted && open.mods) draw();
+				})
+				.catch(() => {});
 		} catch (error) {
 			mods.content(
 				new EmptyState({
