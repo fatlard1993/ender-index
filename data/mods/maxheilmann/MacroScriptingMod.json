@@ -35,10 +35,18 @@
 								"fabric",
 								"minecraft"
 							],
+							"dependsVersions": {
+								"fabricloader": ">=0.14.10",
+								"minecraft": "1.19.2"
+							},
 							"provides": [
 								"org_luaj_luaj-jse",
 								"org_java-websocket_java-websocket"
-							]
+							],
+							"bundled": {
+								"org_luaj_luaj-jse": "3.0.1",
+								"org_java-websocket_java-websocket": "1.5.3"
+							}
 						}
 					],
 					"icon": null,
@@ -49,62 +57,85 @@
 						"shaders": false
 					},
 					"scan": {
+						"version": 3,
 						"classes": 606,
 						"jars": [
 							"META-INF/jars/luaj-jse-3.0.1.jar",
 							"META-INF/jars/Java-WebSocket-1.5.3.jar"
 						],
 						"capabilities": {
+							"exec": {
+								"net/matixmedia/macroscriptingmod/commandsystem/commands/CommandScriptsDir.class": [
+									"java/awt/Desktop.open in execute"
+								],
+								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/lib/jse/JseIoLib.class": [
+									"java/lang/Runtime.exec in openProgram"
+								],
+								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/lib/jse/JseProcess.class": [
+									"java/lang/Runtime.exec in <init>"
+								]
+							},
 							"network": {
 								"net/matixmedia/macroscriptingmod/scripting/libs/LibHttp.class": [
-									"java/net/URL.openConnection"
+									"java/net/URL.openConnection in openConnection"
 								],
 								"META-INF/jars/Java-WebSocket-1.5.3.jar!org/java_websocket/SSLSocketChannel.class": [
-									"java/nio/channels/SocketChannel.close",
-									"java/nio/channels/SocketChannel.read",
-									"java/nio/channels/SocketChannel.write",
-									"java/nio/channels/SocketChannel.isBlocking",
-									"java/nio/channels/SocketChannel.isOpen"
+									"java/nio/channels/SocketChannel.close in <init>, closeConnection",
+									"java/nio/channels/SocketChannel.read in read, doHandshake",
+									"java/nio/channels/SocketChannel.write in write, doHandshake",
+									"java/nio/channels/SocketChannel.isBlocking in isBlocking",
+									"java/nio/channels/SocketChannel.isOpen in isOpen"
 								],
 								"META-INF/jars/Java-WebSocket-1.5.3.jar!org/java_websocket/AbstractWrappedByteChannel.class": [
-									"java/nio/channels/SocketChannel.isBlocking"
+									"java/nio/channels/SocketChannel.isBlocking in isBlocking"
 								],
 								"META-INF/jars/Java-WebSocket-1.5.3.jar!org/java_websocket/SSLSocketChannel2.class": [
-									"java/nio/channels/SocketChannel.write",
-									"java/nio/channels/SocketChannel.read",
-									"java/nio/channels/SocketChannel.isConnected",
-									"java/nio/channels/SocketChannel.isOpen",
-									"java/nio/channels/SocketChannel.close",
-									"java/nio/channels/SocketChannel.configureBlocking",
-									"java/nio/channels/SocketChannel.connect",
-									"java/nio/channels/SocketChannel.finishConnect",
-									"java/nio/channels/SocketChannel.socket",
-									"java/nio/channels/SocketChannel.isBlocking"
+									"java/nio/channels/SocketChannel.write in <init>, processHandshake, write, close",
+									"java/nio/channels/SocketChannel.read in processHandshake, read",
+									"java/nio/channels/SocketChannel.isConnected in isConnected",
+									"java/nio/channels/SocketChannel.isOpen in close, isOpen",
+									"java/nio/channels/SocketChannel.close in close",
+									"java/nio/channels/SocketChannel.configureBlocking in configureBlocking",
+									"java/nio/channels/SocketChannel.connect in connect",
+									"java/nio/channels/SocketChannel.finishConnect in finishConnect",
+									"java/nio/channels/SocketChannel.socket in socket",
+									"java/nio/channels/SocketChannel.isBlocking in isBlocking"
 								],
 								"META-INF/jars/Java-WebSocket-1.5.3.jar!org/java_websocket/client/WebSocketClient$WebsocketWriteThread.class": [
-									"java/net/Socket.close"
+									"java/net/Socket.close in closeSocket"
 								],
 								"META-INF/jars/Java-WebSocket-1.5.3.jar!org/java_websocket/client/WebSocketClient.class": [
-									"java/net/Socket.close",
-									"java/net/Socket.setTcpNoDelay",
-									"java/net/Socket.setReuseAddress",
-									"java/net/Socket.isConnected",
-									"java/net/Socket.connect",
-									"java/net/Socket.getInputStream",
-									"java/net/Socket.getOutputStream",
-									"java/net/Socket.<init>",
-									"java/net/Socket.isClosed",
-									"java/net/Socket.getLocalSocketAddress",
-									"java/net/Socket.getRemoteSocketAddress"
+									"java/net/Socket.close in reset",
+									"java/net/Socket.setTcpNoDelay in run",
+									"java/net/Socket.setReuseAddress in run",
+									"java/net/Socket.isConnected in run",
+									"java/net/Socket.connect in run",
+									"java/net/Socket.getInputStream in run",
+									"java/net/Socket.getOutputStream in run",
+									"java/net/Socket.<init> in prepareSocket",
+									"java/net/Socket.isClosed in prepareSocket",
+									"java/net/Socket.getLocalSocketAddress in getLocalSocketAddress",
+									"java/net/Socket.getRemoteSocketAddress in getRemoteSocketAddress"
 								],
 								"META-INF/jars/Java-WebSocket-1.5.3.jar!org/java_websocket/server/WebSocketServer.class": [
-									"java/nio/channels/SocketChannel.configureBlocking",
-									"java/nio/channels/SocketChannel.socket",
-									"java/net/Socket.setTcpNoDelay",
-									"java/net/Socket.setKeepAlive",
-									"java/nio/channels/SocketChannel.register",
-									"java/net/Socket.getLocalSocketAddress",
-									"java/net/Socket.getRemoteSocketAddress"
+									"java/nio/channels/ServerSocketChannel.socket in getPort, doSetupSelectorAndServerThread",
+									"java/net/ServerSocket.getLocalPort in getPort",
+									"java/nio/channels/ServerSocketChannel.accept in doAccept",
+									"java/nio/channels/SocketChannel.configureBlocking in doAccept",
+									"java/nio/channels/SocketChannel.socket in doAccept, getSocket",
+									"java/net/Socket.setTcpNoDelay in doAccept",
+									"java/net/Socket.setKeepAlive in doAccept",
+									"java/nio/channels/SocketChannel.register in doAccept",
+									"java/nio/channels/ServerSocketChannel.open in doSetupSelectorAndServerThread",
+									"java/nio/channels/ServerSocketChannel.configureBlocking in doSetupSelectorAndServerThread",
+									"java/net/ServerSocket.setReceiveBufferSize in doSetupSelectorAndServerThread",
+									"java/net/ServerSocket.setReuseAddress in doSetupSelectorAndServerThread",
+									"java/net/ServerSocket.bind in doSetupSelectorAndServerThread",
+									"java/nio/channels/ServerSocketChannel.validOps in doSetupSelectorAndServerThread",
+									"java/nio/channels/ServerSocketChannel.register in doSetupSelectorAndServerThread",
+									"java/nio/channels/ServerSocketChannel.close in doServerShutdown",
+									"java/net/Socket.getLocalSocketAddress in getLocalSocketAddress",
+									"java/net/Socket.getRemoteSocketAddress in getRemoteSocketAddress"
 								]
 							},
 							"classloading": {
@@ -115,19 +146,14 @@
 									"extends java/lang/ClassLoader"
 								],
 								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/server/LuajClassLoader.class": [
-									"java/lang/ClassLoader.defineClass",
+									"java/lang/ClassLoader.defineClass in loadAsUserClass",
 									"extends java/lang/ClassLoader"
-								]
-							},
-							"exec": {
-								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/lib/jse/JseIoLib.class": [
-									"java/lang/Runtime.exec"
-								],
-								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/lib/jse/JseProcess.class": [
-									"java/lang/Runtime.exec"
 								]
 							}
 						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
 						"hosts": {
 							"github.com": [
 								"META-INF/jars/Java-WebSocket-1.5.3.jar!org/java_websocket/AbstractWebSocket.class"
@@ -166,9 +192,16 @@
 								"fabric",
 								"minecraft"
 							],
+							"dependsVersions": {
+								"fabricloader": ">=0.14.10",
+								"minecraft": "1.19.2"
+							},
 							"provides": [
 								"org_luaj_luaj-jse"
-							]
+							],
+							"bundled": {
+								"org_luaj_luaj-jse": "3.0.1"
+							}
 						}
 					],
 					"icon": null,
@@ -179,6 +212,7 @@
 						"shaders": false
 					},
 					"scan": {
+						"version": 3,
 						"classes": 495,
 						"jars": [
 							"META-INF/jars/luaj-jse-3.0.1.jar"
@@ -192,19 +226,22 @@
 									"extends java/lang/ClassLoader"
 								],
 								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/server/LuajClassLoader.class": [
-									"java/lang/ClassLoader.defineClass",
+									"java/lang/ClassLoader.defineClass in loadAsUserClass",
 									"extends java/lang/ClassLoader"
 								]
 							},
 							"exec": {
 								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/lib/jse/JseIoLib.class": [
-									"java/lang/Runtime.exec"
+									"java/lang/Runtime.exec in openProgram"
 								],
 								"META-INF/jars/luaj-jse-3.0.1.jar!org/luaj/vm2/lib/jse/JseProcess.class": [
-									"java/lang/Runtime.exec"
+									"java/lang/Runtime.exec in <init>"
 								]
 							}
 						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
 						"hosts": {},
 						"unreadable": []
 					}
@@ -213,36 +250,5 @@
 		}
 	],
 	"readme": null,
-	"funding": [
-		{
-			"platform": "custom",
-			"url": "https://matix-media.net/donate",
-			"from": "owner-repositories"
-		},
-		{
-			"platform": "patreon",
-			"url": "https://patreon.com/matix_media",
-			"from": "owner-repositories"
-		}
-	],
-	"pictures": [],
-	"contributors": {
-		"commits": 94,
-		"more": 0,
-		"people": [
-			{
-				"login": "maxheilmann",
-				"commits": 85,
-				"name": "Max Heilmann",
-				"funding": []
-			},
-			{
-				"login": "C-R-Y-S-T-A-L",
-				"commits": 9,
-				"name": "CRYSTAL",
-				"funding": []
-			}
-		]
-	},
 	"history": 1
 }

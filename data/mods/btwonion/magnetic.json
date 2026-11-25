@@ -1,13 +1,461 @@
 {
 	"repo": "btwonion/magnetic",
 	"host": "github",
-	"description": "Magnetic enchantment: Drops and XP fly straight into your inventory",
+	"description": "Auto-pickup for Minecraft: block drops, mob loot, and XP go straight into your inventory.",
 	"stars": 7,
 	"archived": false,
 	"license": "GPL-3.0",
 	"created": "2022-10-18T22:00:34Z",
 	"pushed": "2026-11-23T22:11:48Z",
 	"releases": [
+		{
+			"tag": "3.16.0-26.1+paper",
+			"published": "2026-11-25T15:09:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 792014882,
+					"name": "magnetic-3.16.0-26.1+paper.jar",
+					"url": "https://github.com/btwonion/magnetic/releases/download/3.16.0-26.1%2Bpaper/magnetic-3.16.0-26.1%2Bpaper.jar",
+					"size": 375279,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "ab1248ef45e3e26b511f4493d0fc338b107ebfecc808adcc0919105064d6639e",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 186,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"repo.nyon.dev": [
+								"dev/nyon/magnetic/MagneticLoader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v3.16.0-26.1+paper\n## Fabric, NeoForge & Paper\n\n- ignore the ender dragon by default, so its experience drops normally\n  - only applies to new configs; to get this on an existing config, add `minecraft:ender_dragon` to `ignoreEntities`\n- add compatibility with **Smelting Enchantment**, **Veinmine & Autosmelt Enchantments**, **Smelt Mining** and **Smelt Enchant**\n- make `animation.blocksPerSecond` follow the server tick rate set with `/tick rate`, and apply it after `/magnetic reload` instead of only after a restart\n- report an invalid `conditionStatement` to each player at most once a minute instead of on every drop\n\n## Fabric & NeoForge\n\n- support Minecraft **26.4-pre-1** on Fabric\n- add compatibility with **Sophisticated Backpacks**, **FiltPick** and [**Server Tree Feller**](https://modrinth.com/mod/server-tree-feller)\n- improve [**HT's TreeChop**](https://modrinth.com/mod/treechop) compatibility: every felled block is now checked against `ignoreBlocks`, not only the chopped log\n- fix the pull animation on Fabric speeding up with every loaded dimension\n- fix drops and experience of ignored entities being collected when they die during another player action, such as a melee hit on 1.21.x\n- fix full inventory alerts showing raw translation keys when the mod is only installed on the server ([**#114**](https://github.com/btwonion/magnetic/pull/114))\n- fix the Fabric version crashing on startup under **Sinytra Connector** ([**#77**](https://github.com/btwonion/magnetic/issues/77))\n- fix \"Reset to default\" in the config screen restoring wrong values for `expAllowed`, `itemsAllowed`, `ignoredEntitiesRangeMin` and the title alert\n\n## Paper\n\n- support Minecraft **1.21 – 1.21.11** alongside 26.1 – 26.3\n- collect every block that breaks with the block you mine, such as torches, flowers, carpets, signs and banners on top of it, as well as whole **big dripleaf** plants and **pointed dripstone** stalagmites\n  - these blocks now drop exactly what vanilla drops; the tool no longer applies to them, so shears no longer collect every vine of a column\n- add compatibility with **AutoSmelt**, **ExcellentEnchants**, **SuperEnchants**, [**ThizzyZ Tree Feller**](https://modrinth.com/plugin/thizzyz-tree-feller) and [**TimberZ**](https://modrinth.com/plugin/timberz) ([**#62**](https://github.com/btwonion/magnetic/issues/62))\n- fix **Veinminer** drops that only partly fit into the inventory being dropped in full, duplicating items\n- fix the plugin failing to enable when a different plugin named \"Veinminer\" is installed\n- fix several Folia issues, including bucket drops being handled on the wrong region thread and the pull animation speeding up with the number of active regions\n- fix `buckets.abilityTimeout` being read as seconds instead of milliseconds\n- fix a misspelled condition in `conditionStatement` enabling Magnetic for every player; invalid statements now disable it and are reported, as on Fabric and NeoForge\n- fix full inventory alert settings not applying after `/magnetic reload`\n- fix blank lines and values containing `=` in translation files breaking or truncating translations\n- fix the Magnetic enchantment being registered or skipped based on the wrong config file when the server uses a custom plugins folder"
+		},
+		{
+			"tag": "3.16.0-1.21.6+paper",
+			"published": "2026-11-25T15:09:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 792014623,
+					"name": "magnetic-3.16.0-1.21.6+paper.jar",
+					"url": "https://github.com/btwonion/magnetic/releases/download/3.16.0-1.21.6%2Bpaper/magnetic-3.16.0-1.21.6%2Bpaper.jar",
+					"size": 375214,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "c0da4dd5f7c13854574f6dfd157a38c111ce2cc44879d212ab47ea7591c7ae30",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 186,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"repo.nyon.dev": [
+								"dev/nyon/magnetic/MagneticLoader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v3.16.0-1.21.6+paper\n## Fabric, NeoForge & Paper\n\n- ignore the ender dragon by default, so its experience drops normally\n  - only applies to new configs; to get this on an existing config, add `minecraft:ender_dragon` to `ignoreEntities`\n- add compatibility with **Smelting Enchantment**, **Veinmine & Autosmelt Enchantments**, **Smelt Mining** and **Smelt Enchant**\n- make `animation.blocksPerSecond` follow the server tick rate set with `/tick rate`, and apply it after `/magnetic reload` instead of only after a restart\n- report an invalid `conditionStatement` to each player at most once a minute instead of on every drop\n\n## Fabric & NeoForge\n\n- support Minecraft **26.4-pre-1** on Fabric\n- add compatibility with **Sophisticated Backpacks**, **FiltPick** and [**Server Tree Feller**](https://modrinth.com/mod/server-tree-feller)\n- improve [**HT's TreeChop**](https://modrinth.com/mod/treechop) compatibility: every felled block is now checked against `ignoreBlocks`, not only the chopped log\n- fix the pull animation on Fabric speeding up with every loaded dimension\n- fix drops and experience of ignored entities being collected when they die during another player action, such as a melee hit on 1.21.x\n- fix full inventory alerts showing raw translation keys when the mod is only installed on the server ([**#114**](https://github.com/btwonion/magnetic/pull/114))\n- fix the Fabric version crashing on startup under **Sinytra Connector** ([**#77**](https://github.com/btwonion/magnetic/issues/77))\n- fix \"Reset to default\" in the config screen restoring wrong values for `expAllowed`, `itemsAllowed`, `ignoredEntitiesRangeMin` and the title alert\n\n## Paper\n\n- support Minecraft **1.21 – 1.21.11** alongside 26.1 – 26.3\n- collect every block that breaks with the block you mine, such as torches, flowers, carpets, signs and banners on top of it, as well as whole **big dripleaf** plants and **pointed dripstone** stalagmites\n  - these blocks now drop exactly what vanilla drops; the tool no longer applies to them, so shears no longer collect every vine of a column\n- add compatibility with **AutoSmelt**, **ExcellentEnchants**, **SuperEnchants**, [**ThizzyZ Tree Feller**](https://modrinth.com/plugin/thizzyz-tree-feller) and [**TimberZ**](https://modrinth.com/plugin/timberz) ([**#62**](https://github.com/btwonion/magnetic/issues/62))\n- fix **Veinminer** drops that only partly fit into the inventory being dropped in full, duplicating items\n- fix the plugin failing to enable when a different plugin named \"Veinminer\" is installed\n- fix several Folia issues, including bucket drops being handled on the wrong region thread and the pull animation speeding up with the number of active regions\n- fix `buckets.abilityTimeout` being read as seconds instead of milliseconds\n- fix a misspelled condition in `conditionStatement` enabling Magnetic for every player; invalid statements now disable it and are reported, as on Fabric and NeoForge\n- fix full inventory alert settings not applying after `/magnetic reload`\n- fix blank lines and values containing `=` in translation files breaking or truncating translations\n- fix the Magnetic enchantment being registered or skipped based on the wrong config file when the server uses a custom plugins folder"
+		},
+		{
+			"tag": "3.16.0-1.21.1+paper",
+			"published": "2026-11-25T15:09:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 792014439,
+					"name": "magnetic-3.16.0-1.21.1+paper.jar",
+					"url": "https://github.com/btwonion/magnetic/releases/download/3.16.0-1.21.1%2Bpaper/magnetic-3.16.0-1.21.1%2Bpaper.jar",
+					"size": 375490,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "ed3233736aa6fc77f6ccc113abc74d77e5970871ee5ff7dd1ee7fe1b105cb12d",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 186,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"repo.nyon.dev": [
+								"dev/nyon/magnetic/MagneticLoader.class"
+							],
+							"maven-central.storage-download.googleapis.com": [
+								"dev/nyon/magnetic/MagneticLoader.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v3.16.0-1.21.1+paper\n## Fabric, NeoForge & Paper\n\n- ignore the ender dragon by default, so its experience drops normally\n  - only applies to new configs; to get this on an existing config, add `minecraft:ender_dragon` to `ignoreEntities`\n- add compatibility with **Smelting Enchantment**, **Veinmine & Autosmelt Enchantments**, **Smelt Mining** and **Smelt Enchant**\n- make `animation.blocksPerSecond` follow the server tick rate set with `/tick rate`, and apply it after `/magnetic reload` instead of only after a restart\n- report an invalid `conditionStatement` to each player at most once a minute instead of on every drop\n\n## Fabric & NeoForge\n\n- support Minecraft **26.4-pre-1** on Fabric\n- add compatibility with **Sophisticated Backpacks**, **FiltPick** and [**Server Tree Feller**](https://modrinth.com/mod/server-tree-feller)\n- improve [**HT's TreeChop**](https://modrinth.com/mod/treechop) compatibility: every felled block is now checked against `ignoreBlocks`, not only the chopped log\n- fix the pull animation on Fabric speeding up with every loaded dimension\n- fix drops and experience of ignored entities being collected when they die during another player action, such as a melee hit on 1.21.x\n- fix full inventory alerts showing raw translation keys when the mod is only installed on the server ([**#114**](https://github.com/btwonion/magnetic/pull/114))\n- fix the Fabric version crashing on startup under **Sinytra Connector** ([**#77**](https://github.com/btwonion/magnetic/issues/77))\n- fix \"Reset to default\" in the config screen restoring wrong values for `expAllowed`, `itemsAllowed`, `ignoredEntitiesRangeMin` and the title alert\n\n## Paper\n\n- support Minecraft **1.21 – 1.21.11** alongside 26.1 – 26.3\n- collect every block that breaks with the block you mine, such as torches, flowers, carpets, signs and banners on top of it, as well as whole **big dripleaf** plants and **pointed dripstone** stalagmites\n  - these blocks now drop exactly what vanilla drops; the tool no longer applies to them, so shears no longer collect every vine of a column\n- add compatibility with **AutoSmelt**, **ExcellentEnchants**, **SuperEnchants**, [**ThizzyZ Tree Feller**](https://modrinth.com/plugin/thizzyz-tree-feller) and [**TimberZ**](https://modrinth.com/plugin/timberz) ([**#62**](https://github.com/btwonion/magnetic/issues/62))\n- fix **Veinminer** drops that only partly fit into the inventory being dropped in full, duplicating items\n- fix the plugin failing to enable when a different plugin named \"Veinminer\" is installed\n- fix several Folia issues, including bucket drops being handled on the wrong region thread and the pull animation speeding up with the number of active regions\n- fix `buckets.abilityTimeout` being read as seconds instead of milliseconds\n- fix a misspelled condition in `conditionStatement` enabling Magnetic for every player; invalid statements now disable it and are reported, as on Fabric and NeoForge\n- fix full inventory alert settings not applying after `/magnetic reload`\n- fix blank lines and values containing `=` in translation files breaking or truncating translations\n- fix the Magnetic enchantment being registered or skipped based on the wrong config file when the server uses a custom plugins folder"
+		},
+		{
+			"tag": "3.16.0-26.4+fabric",
+			"published": "2026-11-25T15:08:55Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 792014221,
+					"name": "magnetic-3.16.0-26.4+fabric.jar",
+					"url": "https://github.com/btwonion/magnetic/releases/download/3.16.0-26.4%2Bfabric/magnetic-3.16.0-26.4%2Bfabric.jar",
+					"size": 301589,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "f5b3b25593043afa21b53cfbdf23a3434bebc5ef557cc49ff23fe56987447a5b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "magnetic",
+							"version": "3.16.0-26.4+fabric",
+							"name": "magnetic",
+							"description": "Auto-pickup for Minecraft: block drops, mob loot, and XP go straight into your inventory.",
+							"minecraft": ">=26.4-",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-language-kotlin",
+								"fabric-api",
+								"yet_another_config_lib_v3",
+								"minecraft"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.5",
+								"fabric-language-kotlin": ">=1.13.9+kotlin.2.3.10",
+								"fabric-api": ">=0.167.1+26.4",
+								"yet_another_config_lib_v3": ">=3.9.10+26.4-fabric",
+								"minecraft": ">=26.4-"
+							},
+							"provides": [
+								"dev_nyon_konfig"
+							],
+							"bundled": {
+								"dev_nyon_konfig": "3.0.1"
+							},
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "9d04886d969ffd69b9a1b4927cf7c5f09c9f4d366b88b3619e81135e482671a2.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"enchantment": [
+								"Magnetic"
+							]
+						},
+						"data": [
+							"enchantment"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 117,
+						"jars": [
+							"META-INF/jars/konfig-3.0.1.jar"
+						],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v3.16.0-26.4+fabric\n## Fabric, NeoForge & Paper\n\n- ignore the ender dragon by default, so its experience drops normally\n  - only applies to new configs; to get this on an existing config, add `minecraft:ender_dragon` to `ignoreEntities`\n- add compatibility with **Smelting Enchantment**, **Veinmine & Autosmelt Enchantments**, **Smelt Mining** and **Smelt Enchant**\n- make `animation.blocksPerSecond` follow the server tick rate set with `/tick rate`, and apply it after `/magnetic reload` instead of only after a restart\n- report an invalid `conditionStatement` to each player at most once a minute instead of on every drop\n\n## Fabric & NeoForge\n\n- support Minecraft **26.4-pre-1** on Fabric\n- add compatibility with **Sophisticated Backpacks**, **FiltPick** and [**Server Tree Feller**](https://modrinth.com/mod/server-tree-feller)\n- improve [**HT's TreeChop**](https://modrinth.com/mod/treechop) compatibility: every felled block is now checked against `ignoreBlocks`, not only the chopped log\n- fix the pull animation on Fabric speeding up with every loaded dimension\n- fix drops and experience of ignored entities being collected when they die during another player action, such as a melee hit on 1.21.x\n- fix full inventory alerts showing raw translation keys when the mod is only installed on the server ([**#114**](https://github.com/btwonion/magnetic/pull/114))\n- fix the Fabric version crashing on startup under **Sinytra Connector** ([**#77**](https://github.com/btwonion/magnetic/issues/77))\n- fix \"Reset to default\" in the config screen restoring wrong values for `expAllowed`, `itemsAllowed`, `ignoredEntitiesRangeMin` and the title alert\n\n## Paper\n\n- support Minecraft **1.21 – 1.21.11** alongside 26.1 – 26.3\n- collect every block that breaks with the block you mine, such as torches, flowers, carpets, signs and banners on top of it, as well as whole **big dripleaf** plants and **pointed dripstone** stalagmites\n  - these blocks now drop exactly what vanilla drops; the tool no longer applies to them, so shears no longer collect every vine of a column\n- add compatibility with **AutoSmelt**, **ExcellentEnchants**, **SuperEnchants**, [**ThizzyZ Tree Feller**](https://modrinth.com/plugin/thizzyz-tree-feller) and [**TimberZ**](https://modrinth.com/plugin/timberz) ([**#62**](https://github.com/btwonion/magnetic/issues/62))\n- fix **Veinminer** drops that only partly fit into the inventory being dropped in full, duplicating items\n- fix the plugin failing to enable when a different plugin named \"Veinminer\" is installed\n- fix several Folia issues, including bucket drops being handled on the wrong region thread and the pull animation speeding up with the number of active regions\n- fix `buckets.abilityTimeout` being read as seconds instead of milliseconds\n- fix a misspelled condition in `conditionStatement` enabling Magnetic for every player; invalid statements now disable it and are reported, as on Fabric and NeoForge\n- fix full inventory alert settings not applying after `/magnetic reload`\n- fix blank lines and values containing `=` in translation files breaking or truncating translations\n- fix the Magnetic enchantment being registered or skipped based on the wrong config file when the server uses a custom plugins folder"
+		},
+		{
+			"tag": "3.16.0-26.3+neoforge",
+			"published": "2026-11-25T15:08:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 792014031,
+					"name": "magnetic-3.16.0-26.3+neoforge.jar",
+					"url": "https://github.com/btwonion/magnetic/releases/download/3.16.0-26.3%2Bneoforge/magnetic-3.16.0-26.3%2Bneoforge.jar",
+					"size": 296668,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "6fffa599e709cd310a8504aba19ea3524e4325c97dcce72cc10562cac37b6b54",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "magnetic",
+							"version": "3.16.0-26.3+neoforge",
+							"name": "magnetic",
+							"description": "Auto-pickup for Minecraft: block drops, mob loot, and XP go straight into your inventory.",
+							"minecraft": "[26.3]",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"yet_another_config_lib_v3"
+							],
+							"dependsVersions": {
+								"minecraft": "[26.3]",
+								"yet_another_config_lib_v3": "[3.9.7+26.3-neoforge,)"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"enchantment": [
+								"Magnetic"
+							]
+						},
+						"data": [
+							"enchantment"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 115,
+						"jars": [
+							"META-INF/jarjar/konfig-3.0.1.jar"
+						],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v3.16.0-26.3+neoforge\n## Fabric, NeoForge & Paper\n\n- ignore the ender dragon by default, so its experience drops normally\n  - only applies to new configs; to get this on an existing config, add `minecraft:ender_dragon` to `ignoreEntities`\n- add compatibility with **Smelting Enchantment**, **Veinmine & Autosmelt Enchantments**, **Smelt Mining** and **Smelt Enchant**\n- make `animation.blocksPerSecond` follow the server tick rate set with `/tick rate`, and apply it after `/magnetic reload` instead of only after a restart\n- report an invalid `conditionStatement` to each player at most once a minute instead of on every drop\n\n## Fabric & NeoForge\n\n- support Minecraft **26.4-pre-1** on Fabric\n- add compatibility with **Sophisticated Backpacks**, **FiltPick** and [**Server Tree Feller**](https://modrinth.com/mod/server-tree-feller)\n- improve [**HT's TreeChop**](https://modrinth.com/mod/treechop) compatibility: every felled block is now checked against `ignoreBlocks`, not only the chopped log\n- fix the pull animation on Fabric speeding up with every loaded dimension\n- fix drops and experience of ignored entities being collected when they die during another player action, such as a melee hit on 1.21.x\n- fix full inventory alerts showing raw translation keys when the mod is only installed on the server ([**#114**](https://github.com/btwonion/magnetic/pull/114))\n- fix the Fabric version crashing on startup under **Sinytra Connector** ([**#77**](https://github.com/btwonion/magnetic/issues/77))\n- fix \"Reset to default\" in the config screen restoring wrong values for `expAllowed`, `itemsAllowed`, `ignoredEntitiesRangeMin` and the title alert\n\n## Paper\n\n- support Minecraft **1.21 – 1.21.11** alongside 26.1 – 26.3\n- collect every block that breaks with the block you mine, such as torches, flowers, carpets, signs and banners on top of it, as well as whole **big dripleaf** plants and **pointed dripstone** stalagmites\n  - these blocks now drop exactly what vanilla drops; the tool no longer applies to them, so shears no longer collect every vine of a column\n- add compatibility with **AutoSmelt**, **ExcellentEnchants**, **SuperEnchants**, [**ThizzyZ Tree Feller**](https://modrinth.com/plugin/thizzyz-tree-feller) and [**TimberZ**](https://modrinth.com/plugin/timberz) ([**#62**](https://github.com/btwonion/magnetic/issues/62))\n- fix **Veinminer** drops that only partly fit into the inventory being dropped in full, duplicating items\n- fix the plugin failing to enable when a different plugin named \"Veinminer\" is installed\n- fix several Folia issues, including bucket drops being handled on the wrong region thread and the pull animation speeding up with the number of active regions\n- fix `buckets.abilityTimeout` being read as seconds instead of milliseconds\n- fix a misspelled condition in `conditionStatement` enabling Magnetic for every player; invalid statements now disable it and are reported, as on Fabric and NeoForge\n- fix full inventory alert settings not applying after `/magnetic reload`\n- fix blank lines and values containing `=` in translation files breaking or truncating translations\n- fix the Magnetic enchantment being registered or skipped based on the wrong config file when the server uses a custom plugins folder"
+		},
+		{
+			"tag": "3.16.0-26.2+neoforge",
+			"published": "2026-11-25T15:08:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 792013624,
+					"name": "magnetic-3.16.0-26.2+neoforge.jar",
+					"url": "https://github.com/btwonion/magnetic/releases/download/3.16.0-26.2%2Bneoforge/magnetic-3.16.0-26.2%2Bneoforge.jar",
+					"size": 296668,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "0847fabc63ee056a3e1365495711c002f9ccbf77bfee8b38f12759991314fc6a",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "magnetic",
+							"version": "3.16.0-26.2+neoforge",
+							"name": "magnetic",
+							"description": "Auto-pickup for Minecraft: block drops, mob loot, and XP go straight into your inventory.",
+							"minecraft": "[26.2]",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"yet_another_config_lib_v3"
+							],
+							"dependsVersions": {
+								"minecraft": "[26.2]",
+								"yet_another_config_lib_v3": "[3.9.5+26.2-neoforge,)"
+							}
+						}
+					],
+					"icon": "9d04886d969ffd69b9a1b4927cf7c5f09c9f4d366b88b3619e81135e482671a2.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"enchantment": [
+								"Magnetic"
+							]
+						},
+						"data": [
+							"enchantment"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 115,
+						"jars": [
+							"META-INF/jarjar/konfig-3.0.1.jar"
+						],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v3.16.0-26.2+neoforge\n## Fabric, NeoForge & Paper\n\n- ignore the ender dragon by default, so its experience drops normally\n  - only applies to new configs; to get this on an existing config, add `minecraft:ender_dragon` to `ignoreEntities`\n- add compatibility with **Smelting Enchantment**, **Veinmine & Autosmelt Enchantments**, **Smelt Mining** and **Smelt Enchant**\n- make `animation.blocksPerSecond` follow the server tick rate set with `/tick rate`, and apply it after `/magnetic reload` instead of only after a restart\n- report an invalid `conditionStatement` to each player at most once a minute instead of on every drop\n\n## Fabric & NeoForge\n\n- support Minecraft **26.4-pre-1** on Fabric\n- add compatibility with **Sophisticated Backpacks**, **FiltPick** and [**Server Tree Feller**](https://modrinth.com/mod/server-tree-feller)\n- improve [**HT's TreeChop**](https://modrinth.com/mod/treechop) compatibility: every felled block is now checked against `ignoreBlocks`, not only the chopped log\n- fix the pull animation on Fabric speeding up with every loaded dimension\n- fix drops and experience of ignored entities being collected when they die during another player action, such as a melee hit on 1.21.x\n- fix full inventory alerts showing raw translation keys when the mod is only installed on the server ([**#114**](https://github.com/btwonion/magnetic/pull/114))\n- fix the Fabric version crashing on startup under **Sinytra Connector** ([**#77**](https://github.com/btwonion/magnetic/issues/77))\n- fix \"Reset to default\" in the config screen restoring wrong values for `expAllowed`, `itemsAllowed`, `ignoredEntitiesRangeMin` and the title alert\n\n## Paper\n\n- support Minecraft **1.21 – 1.21.11** alongside 26.1 – 26.3\n- collect every block that breaks with the block you mine, such as torches, flowers, carpets, signs and banners on top of it, as well as whole **big dripleaf** plants and **pointed dripstone** stalagmites\n  - these blocks now drop exactly what vanilla drops; the tool no longer applies to them, so shears no longer collect every vine of a column\n- add compatibility with **AutoSmelt**, **ExcellentEnchants**, **SuperEnchants**, [**ThizzyZ Tree Feller**](https://modrinth.com/plugin/thizzyz-tree-feller) and [**TimberZ**](https://modrinth.com/plugin/timberz) ([**#62**](https://github.com/btwonion/magnetic/issues/62))\n- fix **Veinminer** drops that only partly fit into the inventory being dropped in full, duplicating items\n- fix the plugin failing to enable when a different plugin named \"Veinminer\" is installed\n- fix several Folia issues, including bucket drops being handled on the wrong region thread and the pull animation speeding up with the number of active regions\n- fix `buckets.abilityTimeout` being read as seconds instead of milliseconds\n- fix a misspelled condition in `conditionStatement` enabling Magnetic for every player; invalid statements now disable it and are reported, as on Fabric and NeoForge\n- fix full inventory alert settings not applying after `/magnetic reload`\n- fix blank lines and values containing `=` in translation files breaking or truncating translations\n- fix the Magnetic enchantment being registered or skipped based on the wrong config file when the server uses a custom plugins folder"
+		},
+		{
+			"tag": "3.16.0-26.1.2+neoforge",
+			"published": "2026-11-25T15:08:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 792013164,
+					"name": "magnetic-3.16.0-26.1.2+neoforge.jar",
+					"url": "https://github.com/btwonion/magnetic/releases/download/3.16.0-26.1.2%2Bneoforge/magnetic-3.16.0-26.1.2%2Bneoforge.jar",
+					"size": 296673,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "810062f4e17c2d9449c9350e3151f7dca315bab7a46a93b847ded44b39099e8f",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "magnetic",
+							"version": "3.16.0-26.1.2+neoforge",
+							"name": "magnetic",
+							"description": "Auto-pickup for Minecraft: block drops, mob loot, and XP go straight into your inventory.",
+							"minecraft": "[26.1,26.1.2]",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"yet_another_config_lib_v3"
+							],
+							"dependsVersions": {
+								"minecraft": "[26.1,26.1.2]",
+								"yet_another_config_lib_v3": "[3.9.5+26.1-neoforge,)"
+							}
+						}
+					],
+					"icon": "9d04886d969ffd69b9a1b4927cf7c5f09c9f4d366b88b3619e81135e482671a2.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"enchantment": [
+								"Magnetic"
+							]
+						},
+						"data": [
+							"enchantment"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 115,
+						"jars": [
+							"META-INF/jarjar/konfig-3.0.1.jar"
+						],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v3.16.0-26.1.2+neoforge\n## Fabric, NeoForge & Paper\n\n- ignore the ender dragon by default, so its experience drops normally\n  - only applies to new configs; to get this on an existing config, add `minecraft:ender_dragon` to `ignoreEntities`\n- add compatibility with **Smelting Enchantment**, **Veinmine & Autosmelt Enchantments**, **Smelt Mining** and **Smelt Enchant**\n- make `animation.blocksPerSecond` follow the server tick rate set with `/tick rate`, and apply it after `/magnetic reload` instead of only after a restart\n- report an invalid `conditionStatement` to each player at most once a minute instead of on every drop\n\n## Fabric & NeoForge\n\n- support Minecraft **26.4-pre-1** on Fabric\n- add compatibility with **Sophisticated Backpacks**, **FiltPick** and [**Server Tree Feller**](https://modrinth.com/mod/server-tree-feller)\n- improve [**HT's TreeChop**](https://modrinth.com/mod/treechop) compatibility: every felled block is now checked against `ignoreBlocks`, not only the chopped log\n- fix the pull animation on Fabric speeding up with every loaded dimension\n- fix drops and experience of ignored entities being collected when they die during another player action, such as a melee hit on 1.21.x\n- fix full inventory alerts showing raw translation keys when the mod is only installed on the server ([**#114**](https://github.com/btwonion/magnetic/pull/114))\n- fix the Fabric version crashing on startup under **Sinytra Connector** ([**#77**](https://github.com/btwonion/magnetic/issues/77))\n- fix \"Reset to default\" in the config screen restoring wrong values for `expAllowed`, `itemsAllowed`, `ignoredEntitiesRangeMin` and the title alert\n\n## Paper\n\n- support Minecraft **1.21 – 1.21.11** alongside 26.1 – 26.3\n- collect every block that breaks with the block you mine, such as torches, flowers, carpets, signs and banners on top of it, as well as whole **big dripleaf** plants and **pointed dripstone** stalagmites\n  - these blocks now drop exactly what vanilla drops; the tool no longer applies to them, so shears no longer collect every vine of a column\n- add compatibility with **AutoSmelt**, **ExcellentEnchants**, **SuperEnchants**, [**ThizzyZ Tree Feller**](https://modrinth.com/plugin/thizzyz-tree-feller) and [**TimberZ**](https://modrinth.com/plugin/timberz) ([**#62**](https://github.com/btwonion/magnetic/issues/62))\n- fix **Veinminer** drops that only partly fit into the inventory being dropped in full, duplicating items\n- fix the plugin failing to enable when a different plugin named \"Veinminer\" is installed\n- fix several Folia issues, including bucket drops being handled on the wrong region thread and the pull animation speeding up with the number of active regions\n- fix `buckets.abilityTimeout` being read as seconds instead of milliseconds\n- fix a misspelled condition in `conditionStatement` enabling Magnetic for every player; invalid statements now disable it and are reported, as on Fabric and NeoForge\n- fix full inventory alert settings not applying after `/magnetic reload`\n- fix blank lines and values containing `=` in translation files breaking or truncating translations\n- fix the Magnetic enchantment being registered or skipped based on the wrong config file when the server uses a custom plugins folder"
+		},
+		{
+			"tag": "3.16.0-1.21.11+neoforge",
+			"published": "2026-11-25T15:08:26Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 792012664,
+					"name": "magnetic-3.16.0-1.21.11+neoforge.jar",
+					"url": "https://github.com/btwonion/magnetic/releases/download/3.16.0-1.21.11%2Bneoforge/magnetic-3.16.0-1.21.11%2Bneoforge.jar",
+					"size": 296842,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "448306af0d80b289d83e547883d192cad1ee89064867692605b21f699d50037f",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "magnetic",
+							"version": "3.16.0-1.21.11+neoforge",
+							"name": "magnetic",
+							"description": "Auto-pickup for Minecraft: block drops, mob loot, and XP go straight into your inventory.",
+							"minecraft": "[1.21.11]",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"yet_another_config_lib_v3"
+							],
+							"dependsVersions": {
+								"minecraft": "[1.21.11]",
+								"yet_another_config_lib_v3": "[3.8.1+1.21.11-neoforge,)"
+							}
+						}
+					],
+					"icon": "9d04886d969ffd69b9a1b4927cf7c5f09c9f4d366b88b3619e81135e482671a2.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"enchantment": [
+								"Magnetic"
+							]
+						},
+						"data": [
+							"enchantment"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 115,
+						"jars": [
+							"META-INF/jarjar/konfig-3.0.1.jar"
+						],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# v3.16.0-1.21.11+neoforge\n## Fabric, NeoForge & Paper\n\n- ignore the ender dragon by default, so its experience drops normally\n  - only applies to new configs; to get this on an existing config, add `minecraft:ender_dragon` to `ignoreEntities`\n- add compatibility with **Smelting Enchantment**, **Veinmine & Autosmelt Enchantments**, **Smelt Mining** and **Smelt Enchant**\n- make `animation.blocksPerSecond` follow the server tick rate set with `/tick rate`, and apply it after `/magnetic reload` instead of only after a restart\n- report an invalid `conditionStatement` to each player at most once a minute instead of on every drop\n\n## Fabric & NeoForge\n\n- support Minecraft **26.4-pre-1** on Fabric\n- add compatibility with **Sophisticated Backpacks**, **FiltPick** and [**Server Tree Feller**](https://modrinth.com/mod/server-tree-feller)\n- improve [**HT's TreeChop**](https://modrinth.com/mod/treechop) compatibility: every felled block is now checked against `ignoreBlocks`, not only the chopped log\n- fix the pull animation on Fabric speeding up with every loaded dimension\n- fix drops and experience of ignored entities being collected when they die during another player action, such as a melee hit on 1.21.x\n- fix full inventory alerts showing raw translation keys when the mod is only installed on the server ([**#114**](https://github.com/btwonion/magnetic/pull/114))\n- fix the Fabric version crashing on startup under **Sinytra Connector** ([**#77**](https://github.com/btwonion/magnetic/issues/77))\n- fix \"Reset to default\" in the config screen restoring wrong values for `expAllowed`, `itemsAllowed`, `ignoredEntitiesRangeMin` and the title alert\n\n## Paper\n\n- support Minecraft **1.21 – 1.21.11** alongside 26.1 – 26.3\n- collect every block that breaks with the block you mine, such as torches, flowers, carpets, signs and banners on top of it, as well as whole **big dripleaf** plants and **pointed dripstone** stalagmites\n  - these blocks now drop exactly what vanilla drops; the tool no longer applies to them, so shears no longer collect every vine of a column\n- add compatibility with **AutoSmelt**, **ExcellentEnchants**, **SuperEnchants**, [**ThizzyZ Tree Feller**](https://modrinth.com/plugin/thizzyz-tree-feller) and [**TimberZ**](https://modrinth.com/plugin/timberz) ([**#62**](https://github.com/btwonion/magnetic/issues/62))\n- fix **Veinminer** drops that only partly fit into the inventory being dropped in full, duplicating items\n- fix the plugin failing to enable when a different plugin named \"Veinminer\" is installed\n- fix several Folia issues, including bucket drops being handled on the wrong region thread and the pull animation speeding up with the number of active regions\n- fix `buckets.abilityTimeout` being read as seconds instead of milliseconds\n- fix a misspelled condition in `conditionStatement` enabling Magnetic for every player; invalid statements now disable it and are reported, as on Fabric and NeoForge\n- fix full inventory alert settings not applying after `/magnetic reload`\n- fix blank lines and values containing `=` in translation files breaking or truncating translations\n- fix the Magnetic enchantment being registered or skipped based on the wrong config file when the server uses a custom plugins folder"
+		},
 		{
 			"tag": "3.15.1-26.3+neoforge",
 			"published": "2026-09-16T15:58:46Z",
