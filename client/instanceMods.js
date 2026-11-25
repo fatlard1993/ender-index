@@ -20,11 +20,15 @@ const SOURCE_NAMES = {
 	gradle: 'a build on this machine',
 };
 
+/** Where CurseForge files a project named by its slug, by the folder it installs into. */
+const CURSEFORGE_CLASSES = { mods: 'mc-mods', resourcepacks: 'texture-packs', shaderpacks: 'shaders' };
+
 /**
- * Where to read more about something an instance installs: its page in the index when the index has it, else its
- * page where it is published. Undefined for a jar kept on this machine, which has no page.
+ * Where to read more about something an instance or a pack installs: its page in the index when the index has it,
+ * else its page where it is published. Undefined for a jar kept on this machine, which has no page. `folder` is the
+ * one it installs into, which a CurseForge slug's page depends on.
  */
-export const readMoreOf = (entry, indexed) => {
+export const readMoreOf = (entry, indexed, folder = 'mods') => {
 	if (indexed) return { href: hrefOf(modPath(indexed)), label: 'Read more' };
 	if (entry.source === 'modrinth')
 		return {
@@ -36,7 +40,7 @@ export const readMoreOf = (entry, indexed) => {
 		return {
 			href: /^\d+$/.test(entry.id)
 				? `https://www.curseforge.com/projects/${entry.id}`
-				: `https://www.curseforge.com/minecraft/mc-mods/${encodeURIComponent(entry.id)}`,
+				: `https://www.curseforge.com/minecraft/${CURSEFORGE_CLASSES[folder]}/${encodeURIComponent(entry.id)}`,
 			label: 'Read more on CurseForge',
 			away: true,
 		};
@@ -89,7 +93,7 @@ export const instanceItems = (details, listing = [], published = new Map()) => {
 	const installed = new Map((details.installed ?? []).map(found => [found.key, found]));
 	const chosen = new Set(details.chosen ?? []);
 	const fromPack = new Set(details.pack?.mods ?? []);
-	const item = (entry, group, kind = 'mod') => {
+	const item = (entry, group, kind = 'mod', folder = 'mods') => {
 		const key = keyOf(entry);
 		const indexed = INDEXED.has(entry.source) ? byKey.get(key) : undefined;
 		const project = entry.source === 'modrinth' ? published.get(entry.id) : undefined;
@@ -105,7 +109,7 @@ export const instanceItems = (details, listing = [], published = new Map()) => {
 			version: entry.version ?? lock?.version,
 			pinned: entry.version !== undefined,
 			source: SOURCE_NAMES[entry.source] ?? entry.source,
-			readMore: readMoreOf(entry, indexed),
+			readMore: readMoreOf(entry, indexed, folder),
 			...(NAMEABLE.has(entry.source) ? { spec: specFor(entry.source, entry.id) } : {}),
 			...(entry.optional ? { optional: { on: chosen.has(key) } } : {}),
 		};
@@ -115,7 +119,7 @@ export const instanceItems = (details, listing = [], published = new Map()) => {
 		['resourcepacks', 'resource pack'],
 		['shaderpacks', 'shader pack'],
 	].flatMap(([field, kind]) =>
-		(details[field] ?? []).map(entry => item(entry, entry.optional ? 'optional' : 'assets', kind)),
+		(details[field] ?? []).map(entry => item(entry, entry.optional ? 'optional' : 'assets', kind, field)),
 	);
 	const declared = new Set([...mods, ...assets].map(({ key }) => key));
 	const brought = (details.installed ?? [])

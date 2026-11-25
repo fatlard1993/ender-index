@@ -20,7 +20,18 @@ import { modrinthProjects } from './modrinthProjects';
 import { local } from './local';
 import { Prose, renderReadme } from './ModPage';
 import { installRow, packCard, packChips, packFace, packWarnings } from './packs';
-import { collectionKey, kindOf, similarPacks, readmeSources, repositoryUrl, writePackQuery } from './search';
+import { readMoreOf } from './instanceMods';
+import {
+	aboutOf,
+	collectionKey,
+	kindOf,
+	pictureUrl,
+	similarPacks,
+	readmeSources,
+	repositoryUrl,
+	titleOf,
+	writePackQuery,
+} from './search';
 import {
 	Chip,
 	LAUNCHER,
@@ -112,38 +123,63 @@ const coverage = mods => {
 	});
 };
 
-const JARS = { modrinth: 'jar from Modrinth', link: 'jar from its own link', none: 'no jar found' };
+const JARS = {
+	indexed: 'in the index',
+	modrinth: 'jar from Modrinth',
+	link: 'jar from its own link',
+	none: 'no jar found',
+};
+
+/** JARS, for a resource or shader pack, which is a zip rather than a jar. */
+const FILES = { modrinth: 'from Modrinth', link: 'from its own link', none: 'no file found' };
+
+const KIND_WORDS = { resourcepacks: 'resource pack', shaderpacks: 'shader pack' };
 
 const away = { target: '_blank', attributes: { rel: 'noopener noreferrer' } };
 
+/** The project a pack names something by, as readMoreOf takes it. */
+const publishedAs = mod => {
+	if (mod.modrinth) return { source: 'modrinth', id: mod.modrinth };
+	if (mod.curseforge) return { source: 'curseforge', id: mod.curseforge };
+
+	return {};
+};
+
 /**
- * A mod the index has not got, in a few lines as one it has: its picture, name and what it is about where Modrinth says
- * (modrinthProjects.js), where its jar comes from, and its Modrinth page and source where it has them.
+ * Something a pack installs, in a few lines as an instance's card shows it: its picture, name and what it is about,
+ * from the index where the index has it and else from Modrinth (modrinthProjects.js), with the pack's own words for an
+ * optional one; whether it is a resource or shader pack and whether it is optional; where its jar comes from; and where
+ * to read more and its source.
  */
-export const outsideMod = (mod, project) =>
-	new Card(
+export const entryCard = (mod, { project, indexed } = {}) => {
+	const kind = indexed ? 'indexed' : mod.jar;
+	const readMore = readMoreOf(publishedAs(mod), indexed, mod.kind);
+	const about = mod.description ?? (indexed ? aboutOf(indexed)?.text : project?.description);
+	const facts = [
+		KIND_WORDS[mod.kind],
+		mod.optional && (mod.default ? 'optional, on unless turned off' : 'optional, off unless turned on'),
+		(mod.kind ? FILES : JARS)[kind],
+	]
+		.filter(Boolean)
+		.join(' · ');
+
+	return new Card(
 		{},
 		new Row({
 			style: { flexWrap: 'nowrap', alignItems: 'flex-start', gap: theme.space.md },
 			append: [
-				avatar(project?.icon, 40),
+				avatar(indexed ? pictureUrl(indexed, 80) : project?.icon, 40),
 				new Stack({
 					style: { flex: '1', minWidth: '0', gap: theme.space.xs },
 					append: [
-						new Title({ textContent: project?.title ?? mod.name }),
-						...(project?.description ? [new Meta({ textContent: project.description })] : []),
-						new Meta({ append: [new Swatch({ tag: 'span', addClass: mod.jar }), JARS[mod.jar]] }),
+						new Title({ textContent: indexed ? titleOf(indexed) : (project?.title ?? mod.name) }),
+						...(about ? [new Meta({ textContent: about })] : []),
+						new Meta({ append: [...(kind ? [new Swatch({ tag: 'span', addClass: kind })] : []), facts] }),
 						new Row({
 							style: { columnGap: theme.space.md, rowGap: theme.space.xs },
 							append: [
-								...(mod.modrinth
-									? [
-											new Link({
-												href: `https://modrinth.com/project/${encodeURIComponent(mod.modrinth)}`,
-												textContent: 'Read more on Modrinth',
-												...away,
-											}),
-										]
+								...(readMore
+									? [new Link({ href: readMore.href, textContent: readMore.label, ...(readMore.away ? away : {}) })]
 									: []),
 								...(mod.source ? [new Link({ href: mod.source, textContent: 'Its source', ...away })] : []),
 							],
@@ -153,6 +189,7 @@ export const outsideMod = (mod, project) =>
 			],
 		}),
 	);
+};
 
 const group = (title, explained, content) =>
 	new Stack({
@@ -164,33 +201,23 @@ const group = (title, explained, content) =>
 		],
 	});
 
-const KIND_WORDS = { resourcepacks: 'resource pack', shaderpacks: 'shader pack' };
-
-/** A line naming an entry, with its optional mark and what it adds when the pack offers it as a choice. */
-const offeredLine = (name, entry, more = []) =>
-	new Row({
-		append: [
-			new Chip({ textContent: name }),
-			...more,
-			...(entry.optional
-				? [
-						new Meta({
-							textContent: entry.default ? 'optional, on unless turned off' : 'optional, off unless turned on',
-						}),
-						...(entry.description ? [new Meta({ textContent: entry.description })] : []),
-					]
-				: []),
-		],
-	});
+/** The Modrinth projects a pack names among what it installs and the index has not got. */
+const modrinthNamed = entries => entries.filter(entry => !entry.key && entry.modrinth).map(entry => entry.modrinth);
 
 /**
  * What a pack carries beside the mods every player gets: the mods it offers as a choice, its resource and shader
- * packs, and the servers it adds to the multiplayer list. Nothing for a pack with none of them.
+ * packs, each as entryCard draws it from `byKey` (the index's listing) and `published` (what Modrinth says), and the
+ * servers it adds to the multiplayer list. Nothing for a pack with none of them.
  */
-export const packExtras = pack => {
+export const packExtras = (pack, byKey = new Map(), published = new Map()) => {
 	const optional = pack.mods.filter(mod => mod.optional);
 	const extras = pack.extras ?? [];
 	const servers = pack.servers ?? [];
+	const card = mod =>
+		entryCard(mod, {
+			indexed: mod.key ? byKey.get(mod.key) : undefined,
+			project: mod.modrinth ? published.get(mod.modrinth) : undefined,
+		});
 
 	return [
 		...(optional.length > 0
@@ -198,7 +225,7 @@ export const packExtras = pack => {
 					group(
 						`Optional mods (${count(optional.length)})`,
 						'Each player chooses these: ender optional turns one on or off, and ender web has a switch for each.',
-						optional.map(mod => offeredLine(mod.name, mod)),
+						optional.map(card),
 					),
 				]
 			: []),
@@ -207,7 +234,7 @@ export const packExtras = pack => {
 					group(
 						`Resource and shader packs (${count(extras.length)})`,
 						'Installed beside its mods into their own folders, and turned on when they are new to an instance.',
-						extras.map(entry => offeredLine(entry.name, entry, [new Meta({ textContent: KIND_WORDS[entry.kind] })])),
+						extras.map(card),
 					),
 				]
 			: []),
@@ -216,11 +243,29 @@ export const packExtras = pack => {
 					group(
 						`Servers (${count(servers.length)})`,
 						"Added to the game's multiplayer list after a player's own, and taken off when the pack drops them.",
-						servers.map(server => offeredLine(server.name, {}, [new Meta({ textContent: server.address })])),
+						servers.map(
+							server =>
+								new Row({
+									append: [new Chip({ textContent: server.name }), new Meta({ textContent: server.address })],
+								}),
+						),
 					),
 				]
 			: []),
 	];
+};
+
+/** packExtras, drawn again once Modrinth has said what the pack's choices and resource and shader packs are. */
+const extrasPanel = (pack, byKey, signal) => {
+	const panel = new Stack({ append: packExtras(pack, byKey) });
+
+	modrinthProjects(modrinthNamed([...pack.mods.filter(mod => mod.optional), ...(pack.extras ?? [])]))
+		.then(published => {
+			if (!signal.aborted && published.size > 0) panel.content(packExtras(pack, byKey, published));
+		})
+		.catch(() => {});
+
+	return panel;
 };
 
 /** What a pack pins and asks for, beside its version: who made it, its loader's exact version, and its memory. */
@@ -272,7 +317,7 @@ const modsPanel = (pack, byKey) => {
 						group(
 							`Source known, not in the index (${count(sourced.length)})`,
 							'Their source is linked, but the index has no jar of theirs from it: their authors put their jars on Modrinth or elsewhere, or the crawl has not read them yet.',
-							sourced.map(mod => outsideMod(mod, projectOf(mod))),
+							sourced.map(mod => entryCard(mod, { project: projectOf(mod) })),
 						),
 					]
 				: []),
@@ -281,7 +326,7 @@ const modsPanel = (pack, byKey) => {
 						group(
 							`No source found (${count(noSource.length)})`,
 							'Nothing they are published with links a source the index can read.',
-							noSource.map(mod => outsideMod(mod, projectOf(mod))),
+							noSource.map(mod => entryCard(mod, { project: projectOf(mod) })),
 						),
 					]
 				: []),
@@ -299,7 +344,7 @@ const modsPanel = (pack, byKey) => {
 
 	filter.elem.addEventListener('input', draw);
 	draw();
-	modrinthProjects(pack.mods.filter(mod => !mod.key && mod.modrinth).map(mod => mod.modrinth))
+	modrinthProjects(modrinthNamed(pack.mods))
 		.then(found => {
 			published = found;
 			if (found.size > 0) draw();
@@ -445,7 +490,7 @@ export default class PackPage extends View {
 				],
 			}),
 			coverage(pack.mods),
-			...packExtras(pack),
+			extrasPanel(pack, byKey, signal),
 			tabs,
 			...Object.values(panels),
 		]);

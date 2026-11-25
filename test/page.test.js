@@ -528,7 +528,7 @@ test("closes a page with the index's license and whose work it shows", async () 
 
 describe('a pack page', () => {
 	test('a mod the index has not got is a card of what Modrinth says of it, or its name alone when Modrinth said nothing', async () => {
-		const { outsideMod } = await import('../client/PackPage');
+		const { entryCard } = await import('../client/PackPage');
 		const mod = {
 			name: 'Config Manager',
 			file: 'cm.jar',
@@ -536,10 +536,8 @@ describe('a pack page', () => {
 			jar: 'modrinth',
 			modrinth: 'configmanager',
 		};
-		const card = outsideMod(mod, {
-			title: 'Config Manager',
-			description: 'Keeps your configs',
-			icon: 'https://cdn.example/cm.png',
+		const card = entryCard(mod, {
+			project: { title: 'Config Manager', description: 'Keeps your configs', icon: 'https://cdn.example/cm.png' },
 		}).elem;
 		const links = [...card.querySelectorAll('a')].map(link => [link.textContent, link.getAttribute('href')]);
 
@@ -549,7 +547,25 @@ describe('a pack page', () => {
 			['Read more on Modrinth', 'https://modrinth.com/project/configmanager'],
 			['Its source', 'https://github.com/a/cm'],
 		]);
-		expect(outsideMod({ name: 'Lone', jar: 'none' }).elem.textContent).toContain('Lone');
+		expect(entryCard({ name: 'Lone', jar: 'none' }).elem.textContent).toContain('Lone');
+	});
+
+	test('a CurseForge mod links its page there, by its number or, for a resource or shader pack, by its kind', async () => {
+		const { entryCard } = await import('../client/PackPage');
+		const hrefOf = mod => entryCard(mod).elem.querySelector('a')?.getAttribute('href');
+
+		expect(entryCard({ name: 'JEI', jar: 'none', curseforge: '238222' }).elem.querySelector('a').textContent).toBe(
+			'Read more on CurseForge',
+		);
+		expect(hrefOf({ name: 'JEI', jar: 'none', curseforge: '238222' })).toBe(
+			'https://www.curseforge.com/projects/238222',
+		);
+		expect(hrefOf({ name: 'Stay True', kind: 'resourcepacks', jar: 'none', curseforge: 'stay-true' })).toBe(
+			'https://www.curseforge.com/minecraft/texture-packs/stay-true',
+		);
+		expect(hrefOf({ name: 'BSL', kind: 'shaderpacks', jar: 'none', curseforge: 'bsl-shaders' })).toBe(
+			'https://www.curseforge.com/minecraft/shaders/bsl-shaders',
+		);
 	});
 
 	test('says who made a pack, what it pins and asks for, and what it carries beside its mods', async () => {
@@ -564,7 +580,16 @@ describe('a pack page', () => {
 				{ name: 'gh:b/named', key: 'github:b/named' },
 				{ name: 'Zoomify', optional: true, description: 'Zoom with C' },
 			],
-			extras: [{ kind: 'shaderpacks', name: 'complementary', optional: true, default: true }],
+			extras: [
+				{
+					kind: 'shaderpacks',
+					name: 'complementary',
+					jar: 'modrinth',
+					modrinth: 'complementary',
+					optional: true,
+					default: true,
+				},
+			],
 			servers: [{ name: 'Ours', address: 'play.example.com' }],
 		};
 		const holder = document.createElement('div');
@@ -590,6 +615,18 @@ describe('a pack page', () => {
 		}
 
 		expect(packExtras({ mods: [{ name: 'a' }] })).toEqual([]);
+
+		const published = new Map([
+			['complementary', { title: 'Complementary Shaders', description: 'Shading', icon: 'https://cdn.example/c.png' }],
+		]);
+		const drawn = document.createElement('div');
+
+		for (const part of packExtras(pack, new Map(), published)) drawn.append(part.elem);
+
+		expect(drawn.textContent).toContain('Complementary Shaders');
+		expect(drawn.textContent).toContain('Shading');
+		expect(drawn.querySelector('img[src="https://cdn.example/c.png"]')).not.toBeNull();
+		expect([...drawn.querySelectorAll('a')].map(link => link.textContent)).toContain('Read more on Modrinth');
 	});
 });
 
