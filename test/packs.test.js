@@ -123,7 +123,7 @@ describe('the pack listing', () => {
 			{ name: 'Elsewhere', file: 'e.jar', source: 'https://git.sr.ht/~a/e', jar: 'modrinth', modrinth: 'el' },
 			{ name: 'Closed', file: 'c.jar', jar: 'modrinth', modrinth: 'cl' },
 			{ name: 'Fresh', file: 'f.jar', source: 'https://github.com/q/fresh', jar: 'link' },
-			{ name: 'Keyed', file: 'k.jar', jar: 'none' },
+			{ name: 'Keyed', file: 'k.jar', jar: 'none', curseforge: '238222' },
 		]);
 		expect(pack).toMatchObject({ count: 6, fromModrinth: 3, unsourced: 2, missing: 1 });
 	});
@@ -245,8 +245,12 @@ describe('the pack listing', () => {
 							mods: [
 								{ spec: 'gh:b/named' },
 								{ spec: 'mr:zoomify', optional: true, description: 'Zoom with C', chosen: true },
+								{ spec: 'cf:jei@4712' },
 							],
-							resourcepacks: [{ source: 'modrinth', id: 'faithful-32x', optional: true }],
+							resourcepacks: [
+								{ source: 'modrinth', id: 'faithful-32x', optional: true },
+								{ source: 'curseforge', id: 'stay-true' },
+							],
 							shaderpacks: [{ source: 'url', url: 'https://example.com/s.zip' }],
 							servers: [{ name: 'Ours', address: 'play.example.com' }],
 						},
@@ -264,7 +268,7 @@ describe('the pack listing', () => {
 							loaderVersion: '0.20.0',
 							mods: [
 								{ name: 'Minimap', file: 'map.jar', optional: true, default: true },
-								{ name: 'Faithful', file: 'f.zip', kind: 'resourcepacks' },
+								{ name: 'Faithful', file: 'f.zip', kind: 'resourcepacks', modrinth: 'faithful-32x' },
 							],
 						},
 					},
@@ -286,23 +290,29 @@ describe('the pack listing', () => {
 			records,
 		);
 
-		expect(ender).toMatchObject({ version: '3', author: 'Ada', loaderVersion: '0.20.1', memory: 6144, count: 2 });
+		expect(ender).toMatchObject({ version: '3', author: 'Ada', loaderVersion: '0.20.1', memory: 6144, count: 3 });
 		expect(ender.servers).toEqual([{ name: 'Ours', address: 'play.example.com' }]);
 		expect(ender.mods[1]).toMatchObject({
 			name: 'mr:zoomify',
+			jar: 'modrinth',
+			modrinth: 'zoomify',
 			optional: true,
 			description: 'Zoom with C',
 			default: true,
 		});
+		expect(ender.mods[2]).toEqual({ name: 'cf:jei@4712', jar: 'none', curseforge: 'jei' });
 		expect(ender.extras).toEqual([
-			{ kind: 'resourcepacks', name: 'faithful-32x', optional: true },
-			{ kind: 'shaderpacks', name: 'https://example.com/s.zip' },
+			{ kind: 'resourcepacks', name: 'faithful-32x', jar: 'modrinth', modrinth: 'faithful-32x', optional: true },
+			{ kind: 'resourcepacks', name: 'stay-true', jar: 'none', curseforge: 'stay-true' },
+			{ kind: 'shaderpacks', name: 'https://example.com/s.zip', jar: 'link' },
 		]);
 		expect(wiz).toMatchObject({ loaderVersion: '0.20.0', count: 1 });
 		expect(wiz.mods[0]).toMatchObject({ name: 'Minimap', optional: true, default: true });
-		expect(wiz.extras).toEqual([{ kind: 'resourcepacks', name: 'Faithful' }]);
+		expect(wiz.extras).toEqual([
+			{ kind: 'resourcepacks', name: 'Faithful', jar: 'modrinth', modrinth: 'faithful-32x' },
+		]);
 		expect(released.count).toBe(1);
-		expect(released.extras).toEqual([{ kind: 'resourcepacks', name: 'Look.zip', optional: true }]);
+		expect(released.extras).toEqual([{ kind: 'resourcepacks', name: 'Look.zip', jar: 'none', optional: true }]);
 	});
 
 	test('reads an ender pack published to a gist, installed and paged by the gist, not by a repository', async () => {

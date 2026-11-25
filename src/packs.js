@@ -404,6 +404,20 @@ const RELEASE = /^https:\/\/github\.com\/([^/]+\/[^/]+)\/releases\/download\//;
 /** The GitHub repository a pack's mod comes from by name: the release its jar downloads from, or its spec. */
 const namedRepository = mod => mod.url?.match(RELEASE)?.[1] ?? mod.spec?.match(/^(?:gh|github):(.+)$/)?.[1];
 
+const PROJECT_SPEC = /^(mr|modrinth|cf|curseforge):([^@\s]+)/;
+
+/** The Modrinth or CurseForge project a spec names, as `{ modrinth }` or `{ curseforge }`; nothing for any other spec. */
+const namedProject = spec => {
+	const [, host, id] = spec?.match(PROJECT_SPEC) ?? [];
+
+	if (!host) return {};
+
+	return host.startsWith('c') ? { curseforge: id } : { modrinth: id };
+};
+
+/** The Modrinth project a pack's mod is: as its pack names it, by the link it downloads from, or by its spec. */
+const modrinthOf = mod => mod.modrinth ?? mod.url?.match(MODRINTH_FILE)?.[1] ?? namedProject(mod.spec).modrinth;
+
 const keyOfLine = line => (line.includes(':') ? line : `github:${line}`);
 
 const LINE_URLS = { codeberg: 'https://codeberg.org/', gitlab: 'https://gitlab.com/' };
@@ -428,7 +442,7 @@ const matcher = (entries, records, modrinthIds) => {
 
 	return mod => {
 		const named = namedRepository(mod);
-		const project = mod.modrinth ?? mod.url?.match(MODRINTH_FILE)?.[1];
+		const project = modrinthOf(mod);
 		const linked = project && modrinthIds[project];
 		const key = named ? `github:${named}` : (byFile.get(mod.file) ?? (linked ? keyOfLine(linked) : undefined));
 
@@ -438,11 +452,12 @@ const matcher = (entries, records, modrinthIds) => {
 
 /**
  * Where a mod the index has not got comes from, as far as anyone says: its source (a release it downloads from, a spec
- * naming a repository, or the source its Modrinth project links), and where its jar is (Modrinth, another link, or
- * nowhere a client can fetch without a key, as for CurseForge).
+ * naming a repository, or the source its Modrinth project links), where its jar is (Modrinth, another link, or nowhere
+ * a client can fetch without a key, as for CurseForge), and the Modrinth or CurseForge project it is.
  */
 export const whereFrom = (mod, modrinthIds = {}) => {
-	const project = mod.modrinth ?? mod.url?.match(MODRINTH_FILE)?.[1];
+	const project = modrinthOf(mod);
+	const curseforge = mod.curseforge ?? namedProject(mod.spec).curseforge;
 	const released = namedRepository(mod);
 	const source =
 		(released && `https://github.com/${released}`) ??
@@ -450,14 +465,21 @@ export const whereFrom = (mod, modrinthIds = {}) => {
 		(project && modrinthIds[project] ? urlOfLine(modrinthIds[project]) : undefined) ??
 		(mod.spec?.startsWith('cb:') ? urlOfLine(`codeberg:${mod.spec.slice(3)}`) : undefined) ??
 		(mod.spec?.startsWith('gl:') ? urlOfLine(`gitlab:${mod.spec.slice(3)}`) : undefined);
-	const fromModrinth = project || mod.spec?.startsWith('mr:');
 	let jar = 'none';
 
-	if (fromModrinth) jar = 'modrinth';
+	if (project) jar = 'modrinth';
 	else if (mod.url || released) jar = 'link';
 
-	return { ...(source ? { source } : {}), jar, ...(project ? { modrinth: mod.slug ?? project } : {}) };
+	return {
+		...(source ? { source } : {}),
+		jar,
+		...(project ? { modrinth: mod.slug ?? project } : {}),
+		...(curseforge ? { curseforge } : {}),
+	};
 };
+
+/** A resource or shader pack an ender pack lists, as whereFrom reads a pack's mod. */
+const assetAsMod = entry => (entry.source === 'url' ? { url: entry.url } : { [entry.source]: entry.id });
 
 /**
  * The GitHub repositories packs download a mod's jar from by its release, or name by a spec: each has releases holding
@@ -485,7 +507,7 @@ export const packDemand = (packs, modrinthIds = {}) => {
 			for (const mod of format.mods ?? []) {
 				if (typeof mod !== 'object') continue;
 
-				const project = mod.modrinth ?? mod.url?.match(MODRINTH_FILE)?.[1];
+				const project = modrinthOf(mod);
 				const line =
 					mod.url?.match(RELEASE)?.[1] ?? (project && modrinthIds[project]) ?? (mod.source && lineOf(mod.source));
 
@@ -552,9 +574,19 @@ export const buildPacks = (packs, entries, records, modrinthIds = {}) => {
 			const extras = [
 				...listed
 					.filter(mod => mod.kind)
-					.map(mod => ({ kind: mod.kind, name: mod.title ?? mod.name ?? mod.file, ...offered(mod) })),
+					.map(mod => ({
+						kind: mod.kind,
+						name: mod.title ?? mod.name ?? mod.file,
+						...whereFrom(mod, modrinthIds),
+						...offered(mod),
+					})),
 				...['resourcepacks', 'shaderpacks'].flatMap(kind =>
-					(format[kind] ?? []).map(entry => ({ kind, name: entry.id ?? entry.url, ...offered(entry) })),
+					(format[kind] ?? []).map(entry => ({
+						kind,
+						name: entry.id ?? entry.url,
+						...whereFrom(assetAsMod(entry), modrinthIds),
+						...offered(entry),
+					})),
 				),
 			];
 			const others = mods.filter(mod => !mod.key);
