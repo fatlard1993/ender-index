@@ -365,13 +365,26 @@ describe('the instances page', () => {
 
 		const page = new InstancesPage({ appendTo: document.body });
 
-		await settle(() => document.body.textContent.includes('Make it') && document.body.textContent.includes('survival'));
+		await settle(
+			() => document.body.textContent.includes('New instance') && document.body.textContent.includes('survival'),
+		);
 
 		return page;
 	};
 
 	const buttonNamed = label =>
 		[...document.querySelectorAll('button')].find(found => found.textContent.trim() === label);
+
+	const openDialog = () => document.querySelector('dialog[open]');
+
+	const mountAsking = async () => {
+		const page = await mount();
+
+		buttonNamed('New instance').click();
+		await settle(() => openDialog()?.textContent.includes('Make it'));
+
+		return page;
+	};
 
 	const type = (field, value) => {
 		field.value = value;
@@ -403,7 +416,7 @@ describe('the instances page', () => {
 	});
 
 	test('says on the name field that a new instance needs one, and makes nothing', async () => {
-		const page = await mount();
+		const page = await mountAsking();
 
 		sent.length = 0;
 		buttonNamed('Make it').click();
@@ -415,7 +428,7 @@ describe('the instances page', () => {
 	});
 
 	test('says on the list that a pack goes in From a pack, and makes nothing', async () => {
-		const page = await mount();
+		const page = await mountAsking();
 		const [name] = document.querySelectorAll('input[placeholder="Its name"]');
 
 		type(name, 'family');
@@ -430,7 +443,7 @@ describe('the instances page', () => {
 	});
 
 	test('makes the instance from the fields once they are right', async () => {
-		const page = await mount();
+		const page = await mountAsking();
 
 		type(document.querySelector('input[placeholder="Its name"]'), 'My Family');
 		type(document.querySelector('textarea'), 'gh:CaffeineMC/lithium');
@@ -447,7 +460,7 @@ describe('the instances page', () => {
 	});
 
 	test('moves mods pasted as a pack into the list, through the field values', async () => {
-		const page = await mount();
+		const page = await mountAsking();
 		const source = document.querySelector('input[placeholder^="A pack\'s index page"]');
 
 		type(source, 'ender add gh:CaffeineMC/lithium');
@@ -457,6 +470,83 @@ describe('the instances page', () => {
 		expect(document.querySelector('textarea').value).toBe('gh:CaffeineMC/lithium');
 		expect(source.value).toBe('');
 		page.destroy();
+	});
+
+	test('keeps the new instance form off the page until New instance is pressed', async () => {
+		const page = await mount();
+
+		expect(document.body.textContent).not.toContain('Make it');
+		expect(openDialog()).toBeNull();
+
+		buttonNamed('New instance').click();
+		await settle(() => openDialog());
+
+		expect(openDialog().textContent).toContain('From a pack');
+		expect(openDialog().textContent).toContain('Make it');
+		page.destroy();
+	});
+
+	test('closes the new instance dialog once ender has made it', async () => {
+		const page = await mountAsking();
+		const answer = globalThis.fetch;
+
+		globalThis.fetch = async (address, options = {}) =>
+			options.method === 'POST' && String(address).endsWith('api/instances')
+				? Response.json({ job: { id: 'n1', title: 'Making my-family', state: 'done', lines: [] } })
+				: answer(address, options);
+
+		try {
+			type(document.querySelector('input[placeholder="Its name"]'), 'My Family');
+			buttonNamed('Make it').click();
+			await settle(() => !openDialog());
+
+			expect(openDialog()).toBeNull();
+		} finally {
+			globalThis.fetch = answer;
+			page.destroy();
+		}
+	});
+
+	test('says a failure as a toast when its new instance dialog was closed while ender worked', async () => {
+		const page = await mountAsking();
+		const answer = globalThis.fetch;
+		let respond;
+
+		globalThis.fetch = (address, options = {}) =>
+			options.method === 'POST' && String(address).endsWith('api/instances')
+				? new Promise(resolve => {
+						respond = () =>
+							resolve(
+								Response.json({
+									job: { id: 'n2', title: 'Making doomed', state: 'failed', code: 1, lines: ['xx No such loader'] },
+								}),
+							);
+					})
+				: answer(address, options);
+
+		try {
+			type(document.querySelector('input[placeholder="Its name"]'), 'Doomed');
+			buttonNamed('Make it').click();
+			await settle(() => respond);
+			buttonNamed('Close').click();
+			await settle(() => !openDialog());
+			respond();
+			await settle(() => document.body.textContent.includes('Making doomed did not finish'));
+
+			expect(document.body.textContent).toContain('Making doomed did not finish');
+		} finally {
+			globalThis.fetch = answer;
+			page.destroy();
+		}
+	});
+
+	test('closes the new instance dialog when the page goes', async () => {
+		const page = await mountAsking();
+
+		page.destroy();
+		await settle(() => !openDialog());
+
+		expect(openDialog()).toBeNull();
 	});
 
 	test("labels a card's mods and output buttons with what pressing them does", async () => {

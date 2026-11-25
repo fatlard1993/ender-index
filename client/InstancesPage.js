@@ -548,6 +548,7 @@ const instanceCard = (instance, signal) => {
 	return card;
 };
 
+/** Runs a job whose word goes on `status`, and answers whether it finished. */
 const runInto = async (status, starting, trusting) => {
 	status.elem.textContent = 'Asking ender';
 	trusting?.content([]);
@@ -565,12 +566,17 @@ const runInto = async (status, starting, trusting) => {
 		await local.finished(job);
 		// Long after the press: beside the status line it is about
 		told('success', `${job.title}: done`, { anchor: status });
+
+		return true;
 	} catch (error) {
 		status.elem.textContent =
 			(error.trusted ? error.message : heldBackLine(error.job)) ?? `It did not work: ${error.message}`;
 		trusting?.content([]);
 
 		if (trusting) trusting.content(heldOffer(error.job, again => runInto(status, again, trusting)));
+		if (!status.elem.isConnected) told('danger', status.elem.textContent, { timeout: 0 });
+
+		return false;
 	} finally {
 		controller.abort();
 	}
@@ -586,7 +592,10 @@ const listProblem = text => {
 	return undefined;
 };
 
-const newInstance = signal => {
+/** The way to a new instance, from a pack or a list, in a dialog that closes once ender has made it. */
+const newInstanceDialog = pageSignal => {
+	const lifetime = new AbortController();
+	const signal = lifetime.signal;
 	const status = new Meta({ style: { whiteSpace: 'pre-wrap' } });
 	const trusting = new Stack();
 	// Why what was pasted is not one pack to import, shown on the field until what is in it changes
@@ -652,7 +661,7 @@ const newInstance = signal => {
 		source.validate();
 
 		if (pack) {
-			runInto(status, () => local.importPack(pack), trusting);
+			runInto(status, () => local.importPack(pack), trusting).then(made => made && dialog.close());
 
 			return;
 		}
@@ -686,7 +695,7 @@ const newInstance = signal => {
 					specs: [...new Set(listed)],
 				}),
 			trusting,
-		);
+		).then(made => made && dialog.close());
 	};
 
 	const packOfCollected = new Component({ tag: 'span' });
@@ -713,12 +722,20 @@ const newInstance = signal => {
 		})
 		.catch(() => {});
 
-	return new Card(
-		{},
-		new Stack({
+	const closeWithPage = () => dialog.close();
+
+	pageSignal.addEventListener('abort', closeWithPage, { once: true });
+
+	const dialog = new Dialog({
+		header: 'New instance',
+		size: 'fit',
+		onClose: () => {
+			lifetime.abort();
+			pageSignal.removeEventListener('abort', closeWithPage);
+		},
+		body: new Stack({
 			style: { gap: theme.space.md },
 			append: [
-				new SectionLabel({ level: 2, textContent: 'New instance' }),
 				new Label(
 					{ label: 'From a pack', for: source },
 					new Row({
@@ -734,14 +751,18 @@ const newInstance = signal => {
 				),
 				new SectionLabel({ level: 3, textContent: 'From a list' }),
 				form,
-				new Row({
-					append: [new Button({ icon: 'plus', textContent: 'Make it', onPointerPress: make }), packOfCollected],
-				}),
+				packOfCollected,
 				status,
 				trusting,
 			],
 		}),
-	);
+		footer: [
+			new Button({ variant: 'flat', textContent: 'Close', onPointerPress: () => dialog.close() }),
+			new Button({ icon: 'plus', textContent: 'Make it', onPointerPress: make }),
+		],
+	});
+
+	return dialog;
 };
 
 export default class InstancesPage extends View {
@@ -778,7 +799,11 @@ export default class InstancesPage extends View {
 				);
 			else if (local.all.length === 0)
 				list.content(
-					new EmptyState({ icon: 'cube', title: 'No instances yet', message: 'Make one above, from a pack or a list' }),
+					new EmptyState({
+						icon: 'cube',
+						title: 'No instances yet',
+						message: 'Make one with New instance, from a pack or a list',
+					}),
 				);
 			else list.content(local.all.map(instance => instanceCard(instance, cards.signal)));
 		};
@@ -806,7 +831,16 @@ export default class InstancesPage extends View {
 				return;
 			}
 
-			body.content([newInstance(this.signal), list]);
+			body.content([
+				new Row({
+					append: new Button({
+						icon: 'plus',
+						textContent: 'New instance',
+						onPointerPress: () => newInstanceDialog(this.signal),
+					}),
+				}),
+				list,
+			]);
 			local.loadPlayers();
 			drawList();
 			local.subscribe(drawList, this.signal);
