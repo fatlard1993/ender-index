@@ -377,14 +377,17 @@ describe('the instances page', () => {
 
 	const openDialog = () => document.querySelector('dialog[open]');
 
-	const mountAsking = async () => {
+	const mountAsking = async (tab = 'From a list') => {
 		const page = await mount();
 
 		buttonNamed('New instance').click();
-		await settle(() => openDialog()?.textContent.includes('Make it'));
+		await settle(() => openDialog()?.textContent.includes('Import'));
+		buttonNamed(tab).click();
 
 		return page;
 	};
+
+	const packField = () => document.querySelector('input[placeholder="gh:owner/repo"]');
 
 	const type = (field, value) => {
 		field.value = value;
@@ -405,7 +408,9 @@ describe('the instances page', () => {
 
 	test("gives a client instance's update first as a checkbox field, its label tied to it", async () => {
 		const page = await mount();
-		const label = [...document.querySelectorAll('label')].find(found => found.textContent.includes('update first'));
+		const label = [...document.querySelectorAll('label')].find(found =>
+			found.textContent.includes('Update before launching'),
+		);
 		const box = document.getElementById(label.htmlFor);
 
 		expect(box.type).toBe('checkbox');
@@ -429,7 +434,7 @@ describe('the instances page', () => {
 
 	test('says on the list that a pack goes in From a pack, and makes nothing', async () => {
 		const page = await mountAsking();
-		const [name] = document.querySelectorAll('input[placeholder="Its name"]');
+		const [name] = document.querySelectorAll('input[placeholder="survival"]');
 
 		type(name, 'family');
 		type(document.querySelector('textarea'), 'ender import gh:me/family-pack');
@@ -437,7 +442,7 @@ describe('the instances page', () => {
 		buttonNamed('Make it').click();
 		await settle(() => document.body.textContent.includes('goes in From a pack'));
 
-		expect(document.body.textContent).toContain('gh:me/family-pack is a pack; it goes in From a pack above');
+		expect(document.body.textContent).toContain('gh:me/family-pack is a pack; it goes under From a pack');
 		expect(posted()).toEqual([]);
 		page.destroy();
 	});
@@ -445,7 +450,7 @@ describe('the instances page', () => {
 	test('makes the instance from the fields once they are right', async () => {
 		const page = await mountAsking();
 
-		type(document.querySelector('input[placeholder="Its name"]'), 'My Family');
+		type(document.querySelector('input[placeholder="survival"]'), 'My Family');
 		type(document.querySelector('textarea'), 'gh:CaffeineMC/lithium');
 		sent.length = 0;
 		buttonNamed('Make it').click();
@@ -459,31 +464,80 @@ describe('the instances page', () => {
 		page.destroy();
 	});
 
-	test('moves mods pasted as a pack into the list, through the field values', async () => {
-		const page = await mountAsking();
-		const source = document.querySelector('input[placeholder^="A pack\'s index page"]');
+	test('moves mods pasted as a pack into the list, through the field values, and shows the list', async () => {
+		const page = await mountAsking('From a pack');
 
-		type(source, 'ender add gh:CaffeineMC/lithium');
-		buttonNamed('Import').click();
-		await settle(() => document.querySelector('textarea').value.includes('lithium'));
+		try {
+			const source = packField();
 
-		expect(document.querySelector('textarea').value).toBe('gh:CaffeineMC/lithium');
-		expect(source.value).toBe('');
-		page.destroy();
+			type(source, 'ender add gh:CaffeineMC/lithium');
+			buttonNamed('Import').click();
+			await settle(() => document.querySelector('textarea').value.includes('lithium'));
+
+			expect(document.querySelector('textarea').value).toBe('gh:CaffeineMC/lithium');
+			expect(source.value).toBe('');
+			expect(buttonNamed('From a list').getAttribute('aria-selected')).toBe('true');
+			expect(buttonNamed('Make it')).toBeDefined();
+		} finally {
+			page.destroy();
+		}
+	});
+
+	test('gives the new instance dialog one action, the one for the way chosen', async () => {
+		const page = await mountAsking('From a pack');
+
+		try {
+			expect(buttonNamed('Import')).toBeDefined();
+			expect(buttonNamed('Make it')).toBeUndefined();
+
+			buttonNamed('From a list').click();
+			await settle(() => buttonNamed('Make it'));
+
+			expect(buttonNamed('Make it')).toBeDefined();
+			expect(buttonNamed('Import')).toBeUndefined();
+		} finally {
+			page.destroy();
+		}
+	});
+
+	test('opens the new instance dialog with the pack field ready to paste in', async () => {
+		const page = await mount();
+
+		try {
+			buttonNamed('New instance').click();
+			await settle(() => openDialog());
+
+			expect(document.activeElement?.getAttribute('placeholder')).toBe('gh:owner/repo');
+		} finally {
+			page.destroy();
+		}
+	});
+
+	test('offers no output to show before a job has run', async () => {
+		const page = await mount();
+
+		try {
+			expect(buttonNamed('Show output').style.display).toBe('none');
+		} finally {
+			page.destroy();
+		}
 	});
 
 	test('keeps the new instance form off the page until New instance is pressed', async () => {
 		const page = await mount();
 
-		expect(document.body.textContent).not.toContain('Make it');
-		expect(openDialog()).toBeNull();
+		try {
+			expect(document.body.textContent).not.toContain('Make it');
+			expect(openDialog()).toBeNull();
 
-		buttonNamed('New instance').click();
-		await settle(() => openDialog());
+			buttonNamed('New instance').click();
+			await settle(() => openDialog());
 
-		expect(openDialog().textContent).toContain('From a pack');
-		expect(openDialog().textContent).toContain('Make it');
-		page.destroy();
+			expect(openDialog().textContent).toContain('From a pack');
+			expect(openDialog().textContent).toContain('Import');
+		} finally {
+			page.destroy();
+		}
 	});
 
 	test('closes the new instance dialog once ender has made it', async () => {
@@ -496,7 +550,7 @@ describe('the instances page', () => {
 				: answer(address, options);
 
 		try {
-			type(document.querySelector('input[placeholder="Its name"]'), 'My Family');
+			type(document.querySelector('input[placeholder="survival"]'), 'My Family');
 			buttonNamed('Make it').click();
 			await settle(() => !openDialog());
 
@@ -525,7 +579,7 @@ describe('the instances page', () => {
 				: answer(address, options);
 
 		try {
-			type(document.querySelector('input[placeholder="Its name"]'), 'Doomed');
+			type(document.querySelector('input[placeholder="survival"]'), 'Doomed');
 			buttonNamed('Make it').click();
 			await settle(() => respond);
 			buttonNamed('Close').click();
@@ -547,6 +601,33 @@ describe('the instances page', () => {
 		await settle(() => !openDialog());
 
 		expect(openDialog()).toBeNull();
+	});
+
+	test('offers New instance where it says there are none yet', async () => {
+		const kept = responses['/api/instances'];
+
+		responses['/api/instances'] = [];
+		await local.local.reload();
+		document.body.innerHTML = '';
+
+		const page = new InstancesPage({ appendTo: document.body });
+
+		try {
+			await settle(() => document.body.textContent.includes('No instances yet'));
+
+			const offered = document.querySelector('button.action');
+
+			expect(offered.textContent.trim()).toBe('New instance');
+
+			offered.click();
+			await settle(() => openDialog());
+
+			expect(openDialog().textContent).toContain('From a pack');
+		} finally {
+			page.destroy();
+			responses['/api/instances'] = kept;
+			await local.local.reload();
+		}
 	});
 
 	test("labels a card's mods and output buttons with what pressing them does", async () => {

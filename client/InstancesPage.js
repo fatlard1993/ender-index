@@ -12,7 +12,9 @@ import {
 	Notify,
 	SectionLabel,
 	Select,
+	Tabs,
 	View,
+	styled,
 	theme,
 } from '@vanilla-bean/components';
 import { specFor } from 'ender-launcher/spec';
@@ -33,8 +35,23 @@ const INSTANCE_LOADERS = { ...LOADERS, vanilla: 'Vanilla' };
 
 const told = (intent, content, options) => new Notify({ intent, content, ...options });
 
+/** A checkbox beside the control it changes, on that control's row rather than a field's band of its own. */
 const checkbox = (label, checked, onChange) =>
-	new Label({ label, variant: 'inline-after' }, new Input({ type: 'checkbox', value: checked, onChange }));
+	new Label(
+		{
+			label,
+			variant: 'inline-after',
+			style: { width: 'auto', margin: 0, padding: 0, backgroundColor: 'transparent' },
+		},
+		new Input({ type: 'checkbox', value: checked, onChange }),
+	);
+
+/** Takes no room, and no gap in a Stack, until something is put in it. */
+const untilSaid = Base => styled(Base, () => '&:empty { display: none; }');
+
+const Said = untilSaid(Meta);
+
+const Offer = untilSaid(Stack);
 
 const STEP = /^:: (.+)$/;
 
@@ -319,8 +336,8 @@ export const trustOffer = (job, runJob) => {
 
 const instanceCard = (instance, signal) => {
 	const open = openedFor(instance.name);
-	const status = new Meta();
-	const trusting = new Stack();
+	const status = new Said();
+	const trusting = new Offer();
 	const bar = progressView();
 	const output = outputView();
 	const mods = new Stack({ style: { display: open.mods ? '' : 'none', gap: theme.space.xs } });
@@ -339,6 +356,7 @@ const instanceCard = (instance, signal) => {
 		for (const button of actions) button.options.disabled = working;
 
 		status.elem.textContent = heldBackLine(job) ?? jobLine(job);
+		outputToggle.elem.style.display = job ? '' : 'none';
 		trusting.content(heldOffer(job, (...args) => runJob(...args)));
 		showProgress(bar, job);
 		showOutput(output, job, open.output);
@@ -483,10 +501,11 @@ const instanceCard = (instance, signal) => {
 						}),
 					],
 				}),
-				new Row({
-					append: [
-						...(client
-							? [
+				...(client
+					? [
+							new Row({
+								style: { alignItems: 'center' },
+								append: [
 									action({
 										icon: 'play',
 										textContent: 'Launch',
@@ -495,12 +514,16 @@ const instanceCard = (instance, signal) => {
 												quietWhenDone: true,
 											}),
 									}),
-									checkbox('update first', open.updateFirst, ({ target: { checked } }) => {
+									checkbox('Update before launching', open.updateFirst, ({ target: { checked } }) => {
 										open.updateFirst = checked;
 									}),
 									...playerChoice(instance),
-								]
-							: []),
+								],
+							}),
+						]
+					: []),
+				new Row({
+					append: [
 						action({
 							icon: 'rotate',
 							variant: 'flat',
@@ -520,6 +543,7 @@ const instanceCard = (instance, signal) => {
 							icon: 'trash',
 							variant: 'flat',
 							textContent: 'Delete',
+							style: { marginLeft: 'auto' },
 							onPointerPress: async () => {
 								if (
 									await Dialog.confirm({
@@ -586,7 +610,7 @@ const runInto = async (status, starting, trusting) => {
 const listProblem = text => {
 	const { packs, unread } = readPasted(String(text ?? ''), { bare: 'mod' });
 
-	if (packs.length > 0) return `${packs.join(', ')} is a pack; it goes in From a pack above`;
+	if (packs.length > 0) return `${packs.join(', ')} is a pack; it goes under From a pack`;
 	if (unread.length > 0) return `Not a mod ender can read: ${unread.join(' ')}`;
 
 	return undefined;
@@ -596,13 +620,12 @@ const listProblem = text => {
 const newInstanceDialog = pageSignal => {
 	const lifetime = new AbortController();
 	const signal = lifetime.signal;
-	const status = new Meta({ style: { whiteSpace: 'pre-wrap' } });
-	const trusting = new Stack();
+	const status = new Said({ style: { whiteSpace: 'pre-wrap' } });
+	const trusting = new Offer();
 	// Why what was pasted is not one pack to import, shown on the field until what is in it changes
 	let refused;
 	const source = new Input({
-		placeholder: "A pack's index page or ender import line, a gist link, gh:owner/repo, or an https link to a pack",
-		style: { flex: '1' },
+		placeholder: 'gh:owner/repo',
 		validate: value => (refused && String(value ?? '') === refused.text ? refused.message : undefined),
 	});
 	const form = new Form({
@@ -621,7 +644,7 @@ const newInstanceDialog = pageSignal => {
 				inputs: [
 					{
 						key: 'name',
-						placeholder: 'Its name',
+						placeholder: 'survival',
 						validate: value => (String(value ?? '').trim() ? undefined : 'Give it a name first'),
 					},
 					{
@@ -673,6 +696,7 @@ const newInstanceDialog = pageSignal => {
 			form.options.data.specs = [listed, ...mods].filter(Boolean).join('\n');
 			source.options.value = '';
 			status.elem.textContent = said;
+			tabs.select('list');
 		}
 	};
 
@@ -698,7 +722,7 @@ const newInstanceDialog = pageSignal => {
 		).then(made => made && dialog.close());
 	};
 
-	const packOfCollected = new Component({ tag: 'span' });
+	const packOfCollected = new (untilSaid(Component))({ tag: 'span' });
 	const drawCollected = items => {
 		form.options.data.collected = items.length;
 		packOfCollected.content(
@@ -726,6 +750,39 @@ const newInstanceDialog = pageSignal => {
 
 	pageSignal.addEventListener('abort', closeWithPage, { once: true });
 
+	const ways = {
+		pack: { icon: 'download', textContent: 'Import', run: () => importPasted() },
+		list: { icon: 'plus', textContent: 'Make it', run: make },
+	};
+	const go = new Button({
+		icon: ways.pack.icon,
+		textContent: ways.pack.textContent,
+		onPointerPress: () => ways[tabs.options.selected].run(),
+	});
+	const tabs = new Tabs({
+		variant: 'segmented',
+		tabs: [
+			{ id: 'pack', label: 'From a pack' },
+			{ id: 'list', label: 'From a list' },
+		],
+		panels: {
+			pack: new Label(
+				{ label: 'Pack', for: source },
+				source,
+				new Meta({
+					tag: 'div',
+					textContent:
+						"A pack's index page, an ender import line, a gist link, gh:owner/repo, or an https link to a pack",
+				}),
+			),
+			list: new Stack({ style: { gap: theme.space.md }, append: [form, packOfCollected] }),
+		},
+		onChange: ({ value }) => {
+			go.options.icon = ways[value].icon;
+			go.options.textContent = ways[value].textContent;
+		},
+	});
+
 	const dialog = new Dialog({
 		header: 'New instance',
 		size: 'fit',
@@ -735,32 +792,13 @@ const newInstanceDialog = pageSignal => {
 		},
 		body: new Stack({
 			style: { gap: theme.space.md },
-			append: [
-				new Label(
-					{ label: 'From a pack', for: source },
-					new Row({
-						append: [
-							source,
-							new Button({
-								icon: 'download',
-								textContent: 'Import',
-								onPointerPress: () => importPasted(),
-							}),
-						],
-					}),
-				),
-				new SectionLabel({ level: 3, textContent: 'From a list' }),
-				form,
-				packOfCollected,
-				status,
-				trusting,
-			],
+			append: [tabs, ...Object.values(tabs.options.panels), status, trusting],
 		}),
-		footer: [
-			new Button({ variant: 'flat', textContent: 'Close', onPointerPress: () => dialog.close() }),
-			new Button({ icon: 'plus', textContent: 'Make it', onPointerPress: make }),
-		],
+		footer: [new Button({ variant: 'flat', textContent: 'Close', onPointerPress: () => dialog.close() }), go],
 	});
+
+	// Opening focuses the dialog's first control, the first tab, after any focus moved while it opens
+	dialog.elem.addEventListener('focusin', () => setTimeout(() => source.elem.focus()), { once: true });
 
 	return dialog;
 };
@@ -802,7 +840,8 @@ export default class InstancesPage extends View {
 					new EmptyState({
 						icon: 'cube',
 						title: 'No instances yet',
-						message: 'Make one with New instance, from a pack or a list',
+						message: 'Make one from a pack or a list',
+						action: { icon: 'plus', textContent: 'New instance', onPointerPress: () => newInstanceDialog(this.signal) },
 					}),
 				);
 			else list.content(local.all.map(instance => instanceCard(instance, cards.signal)));
