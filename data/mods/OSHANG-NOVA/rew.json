@@ -1,0 +1,341 @@
+{
+	"repo": "OSHANG-NOVA/rew",
+	"host": "github",
+	"description": "Visual GTCEu Modern recipe editor for modpack authors",
+	"stars": 0,
+	"archived": false,
+	"created": "2026-09-25T06:35:15Z",
+	"pushed": "2026-10-06T01:01:32Z",
+	"releases": [
+		{
+			"tag": "0.3.4",
+			"published": "2026-10-06T01:01:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 614055896,
+					"name": "rew-0.3.4.jar",
+					"url": "https://github.com/OSHANG-NOVA/rew/releases/download/0.3.4/rew-0.3.4.jar",
+					"size": 140175,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "1772c162fa515533b949065b4ab9e97eeb5a42b4419a0a8d9cf4bd42f9cd5362",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "rew",
+							"version": "0.3.4",
+							"name": "Recipe Editor Workshop",
+							"description": "Visual GTCEu recipe editor for modpack authors: browse, create, modify, disable and export recipes as KubeJS.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"gtceu",
+								"ldlib",
+								"configuration"
+							],
+							"dependsVersions": {
+								"forge": "[47,)",
+								"minecraft": "[1.20.1,1.21)",
+								"gtceu": "[7.5.3,)",
+								"ldlib": "[1.0.40,)",
+								"configuration": "[3.1.0,)"
+							},
+							"suggests": [
+								"kubejs"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 50,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 修复：滚动列表半滚出行拦截点击（事件穿透）\n\n**现象**：在物品/流体选择界面里先把列表往下滑，再点搜索框，会点到搜索框下方那一行物品。\n\n**根因**：LDLib 的 `DraggableScrollableWidgetGroup` 没有覆写 `isMouseOverElement`，继承了 `WidgetGroup` 的**子树命中测试**（逆序问遍所有 visible 子控件，任一命中即算命中）。而滚动时 `addWidget` 只把**完全滚出**视口的行设为不可见 —— 半截露在视口上沿的行（相对 y ∈ (-行高, 0)）仍然 visible。这些行虽被 scissor 裁掉看不见，命中测试却算数，其绝对矩形会向上探出视口、盖住搜索框。\n\n**几何复现**：搜索框在 y ∈ [20, 34)，列表视口从 y = 36 开始，行距 19。某行滚到相对 y = -10 时，其绝对矩形为 y ∈ [26, 44)，上半截（看不见）正好压住搜索框，下半截（看得见）就在搜索框下方 —— 与截图完全一致。这也解释了为什么只有\"下滑之后\"才出问题：未滚动时没有行能探出视口上沿。\n\n**修复**：新增 `ClippedScrollGroup extends DraggableScrollableWidgetGroup`，把 `isMouseOverElement` 收紧为**视口自身矩形**，与 scissor 的实际裁剪范围一致（看不见的地方点不到）。`mouseClicked` / `mouseWheelMove` / `drawInForeground` / `keyPressed` 共用这一个门禁，一处覆写全修。落点：\n\n- `ScrollListWidget`（物品/流体选择列表、配方列表）\n- `ContentTableWidget`（左输入表 / 右输出表）\n- `ConditionTableWidget`（条件表）\n\n**注意**：编译基线是 LDLib 1.0.50，实机跑的是 1.0.52.a，两边 `isMouseOverElement` 签名一致，覆写兼容。\n\n## 安装\n\n1. 需要 Minecraft 1.20.1 + Forge 47+\n2. 前置：GregTech CEu Modern ≥ 7.5.3、LDLib ≥ 1.0.40、Configuration ≥ 3.1.0（KubeJS 可选）\n3. 把 `rew-0.3.4.jar` 放进 `mods/`"
+		},
+		{
+			"tag": "0.3.3",
+			"published": "2026-09-26T07:42:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 590192761,
+					"name": "rew-0.3.3.jar",
+					"url": "https://github.com/OSHANG-NOVA/rew/releases/download/0.3.3/rew-0.3.3.jar",
+					"size": 139405,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "bed9653ff8cc80ec4b5e3fbd1da61635d567adb9fa899aae0a1ab23af4bfb317",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "rew",
+							"version": "0.3.3",
+							"name": "Recipe Editor Workshop",
+							"description": "Visual GTCEu recipe editor for modpack authors: browse, create, modify, disable and export recipes as KubeJS.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"gtceu",
+								"ldlib",
+								"configuration"
+							],
+							"dependsVersions": {
+								"forge": "[47,)",
+								"minecraft": "[1.20.1,1.21)",
+								"gtceu": "[7.5.3,)",
+								"ldlib": "[1.0.40,)",
+								"configuration": "[3.1.0,)"
+							},
+							"suggests": [
+								"kubejs"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 49,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 0.3.3 — 修复「新建配方保存后 /reload 不出现」\n\n### 根因\nGT 的配方注入只在 `AddPackFindersEvent`（世界加载/创建世界）里执行一次，\n而原版 `/reload` 走 `MinecraftServer#reloadResources`，不会重新触发该事件。\n于是内存里的 `GTDynamicDataPack.CONTENTS` 永远停在世界加载那一刻，\n之后保存的草稿没有机会写进去 —— 表现为「保存了但游戏里看不到」。\n\n### 修复\n- 新增 `RewReloadEvents`：监听 Forge 的 `AddReloadListenerEvent`。\n  该事件在任何监听器（含 `RecipeManager`）开始读资源之前同步触发，\n  且 `GTDynamicDataPack.listResources` 是惰性实时读取，\n  因此在此重建内容后，`/reload` 即可读到新配方。\n- 新增 `GtRecipeInjector`：整包重建（`clearServer` + `recipeRemoval` + `recipeAddition`），\n  带 SHA-256 内容指纹门控，内容未变则零开销跳过，避免每次 `/reload` 白等约 15.6 秒。\n- `/rew reload` 改为主动触发：落盘 → 服务端线程重建 → `reloadResources`，\n  配方同步回客户端后由 `RecipesUpdatedEvent` 自动重扫快照；连按两次会提示「无需重建」。\n\n### 产物\n- `rew-0.3.3.jar` — 模组本体（Forge 1.20.1 / GTCEu 7.5.3 / LDLib 1.0.40+ / Configuration 3.1.0）\n- `rew-0.3.3-sources.zip` — 完整源码\n\nSHA256: `BED9653FF8CC80EC4B5E3FBD1DA61635D567ADB9FA899AAE0A1AB23AF4BFB317`"
+		},
+		{
+			"tag": "0.3.1",
+			"published": "2026-09-25T08:42:23Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 587927301,
+					"name": "rew-0.3.1.jar",
+					"url": "https://github.com/OSHANG-NOVA/rew/releases/download/0.3.1/rew-0.3.1.jar",
+					"size": 132471,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "79397f9fd83ae201ff8a8e197c711457c5a67b71aae2272dc12175ddfad94f9a",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "rew",
+							"version": "0.3.1",
+							"name": "Recipe Editor Workshop",
+							"description": "Visual GTCEu recipe editor for modpack authors: browse, create, modify, disable and export recipes as KubeJS.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"gtceu",
+								"ldlib",
+								"configuration"
+							],
+							"dependsVersions": {
+								"forge": "[47,)",
+								"minecraft": "[1.20.1,1.21)",
+								"gtceu": "[7.5.3,)",
+								"ldlib": "[1.0.40,)",
+								"configuration": "[3.1.0,)"
+							},
+							"suggests": [
+								"kubejs"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 47,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "修复了部分已知bug"
+		},
+		{
+			"tag": "0.2.0",
+			"published": "2026-09-25T08:03:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 587858079,
+					"name": "rew-0.2.0.jar",
+					"url": "https://github.com/OSHANG-NOVA/rew/releases/download/0.2.0/rew-0.2.0.jar",
+					"size": 124929,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "cdda4f1e20fdc947356a3d1fd6a95cb48ddbbcd4d0a5b86c7035990bd53c16ef",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "rew",
+							"version": "0.2.0",
+							"name": "Recipe Editor Workshop",
+							"description": "Visual GTCEu recipe editor for modpack authors: browse, create, modify, disable and export recipes as KubeJS.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"gtceu",
+								"ldlib",
+								"configuration"
+							],
+							"dependsVersions": {
+								"forge": "[47,)",
+								"minecraft": "[1.20.1,1.21)",
+								"gtceu": "[7.5.3,)",
+								"ldlib": "[1.0.40,)",
+								"configuration": "[3.1.0,)"
+							},
+							"suggests": [
+								"kubejs"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 44,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "修复了在输入侧和输出侧项目过多的时候的显示问题"
+		},
+		{
+			"tag": "0.1.0",
+			"published": "2026-09-25T06:37:50Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 587715007,
+					"name": "rew-0.1.0.jar",
+					"url": "https://github.com/OSHANG-NOVA/rew/releases/download/0.1.0/rew-0.1.0.jar",
+					"size": 120493,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "279d81f172d599a0311fcfcdfd7e45ac7de855a2b1340d754395b7a010459731",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "rew",
+							"version": "0.1.0",
+							"name": "Recipe Editor Workshop",
+							"description": "Visual GTCEu recipe editor for modpack authors: browse, create, modify, disable and export recipes as KubeJS.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"gtceu",
+								"ldlib",
+								"configuration"
+							],
+							"dependsVersions": {
+								"forge": "[47,)",
+								"minecraft": "[1.20.1,1.21)",
+								"gtceu": "[7.5.3,)",
+								"ldlib": "[1.0.40,)",
+								"configuration": "[3.1.0,)"
+							},
+							"suggests": [
+								"kubejs"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 44,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "-第一个正式版发布\n 脱离了我自己的前置库，使得所有人均可使用"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [],
+	"contributors": {
+		"commits": 9,
+		"more": 0,
+		"people": [
+			{
+				"login": "OSHANG-NOVA",
+				"commits": 9,
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

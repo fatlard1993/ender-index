@@ -14,13 +14,13 @@
 			"prerelease": false,
 			"assets": [
 				{
-					"id": 766335614,
+					"id": 766576068,
 					"name": "spwallet-0.3.3-pbeta+1.21.11.jar",
 					"url": "https://github.com/Foxanto/SPWallet/releases/download/v0.3.3-pbeta/spwallet-0.3.3-pbeta%2B1.21.11.jar",
-					"size": 2094914,
-					"downloads": 2,
+					"size": 2107850,
+					"downloads": 0,
 					"inspection": 2,
-					"sha256": "e6c9430b8d1c67ba34100de981d79dc4dd39fe08b8d6cd4dd214a18f1dcaa311",
+					"sha256": "d5e6bb38d5a576727f8f7e941582d763a4b4a54901f1ce3b14f70eb08f9af28c",
 					"mods": [
 						{
 							"loader": "fabric",
@@ -37,11 +37,23 @@
 								"owo",
 								"yet_another_config_lib_v3"
 							],
+							"dependsVersions": {
+								"fabricloader": ">=0.18.0",
+								"fabric-api": ">=0.141.0",
+								"minecraft": "1.21.11",
+								"owo": ">=0.13.0",
+								"yet_another_config_lib_v3": ">=3.8.0"
+							},
 							"provides": [
 								"com_google_zxing_core",
 								"owo-sentinel",
 								"yet_another_config_lib_v3"
 							],
+							"bundled": {
+								"com_google_zxing_core": "3.5.3",
+								"owo-sentinel": "0.13.0+1.21.11",
+								"yet_another_config_lib_v3": "3.8.2+1.21.11-fabric"
+							},
 							"suggests": [
 								"modmenu",
 								"ears"
@@ -56,7 +68,8 @@
 						"shaders": false
 					},
 					"scan": {
-						"classes": 1206,
+						"version": 3,
+						"classes": 1209,
 						"jars": [
 							"META-INF/jars/core-3.5.3.jar",
 							"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar",
@@ -73,42 +86,58 @@
 						"capabilities": {
 							"network": {
 								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/OwoSentinel.class": [
-									"java/net/URL.openStream"
+									"java/net/URL.openStream in downloadAndInstall"
 								],
 								"META-INF/jars/yacl-3.8.2+1.21.11-fabric.jar!META-INF/jars/common-lang-3.12.0.jar!com/twelvemonkeys/util/service/ServiceRegistry.class": [
-									"java/net/URL.openStream"
+									"java/net/URL.openStream in registerSPIs"
 								],
 								"META-INF/jars/yacl-3.8.2+1.21.11-fabric.jar!META-INF/jars/imageio-core-3.12.0.jar!com/twelvemonkeys/imageio/stream/URLImageInputStreamSpi.class": [
-									"java/net/URL.openStream"
+									"java/net/URL.openStream in createInputStreamInstance"
 								],
 								"ru/foxanto/spwallet/api/SPWorldsApi.class": [
-									"java/net/http/HttpClient.sendAsync",
-									"java/net/http/HttpClient.newBuilder"
+									"java/net/http/HttpClient.sendAsync in raw",
+									"java/net/http/HttpClient.newBuilder in <clinit>"
 								],
 								"ru/foxanto/spwallet/connect/ConnectApi.class": [
-									"java/net/http/HttpClient.newBuilder",
-									"java/net/http/HttpClient.send"
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.send in send"
 								],
 								"ru/foxanto/spwallet/connect/ConnectRealtime.class": [
-									"java/net/http/HttpClient.newWebSocketBuilder"
+									"java/net/http/HttpClient.newWebSocketBuilder in lambda$connect$0"
+								],
+								"ru/foxanto/spwallet/connect/OrgIcons.class": [
+									"java/net/http/HttpClient.sendAsync in load",
+									"java/net/http/HttpClient.newBuilder in <clinit>"
 								],
 								"ru/foxanto/spwallet/update/Updater.class": [
-									"java/net/http/HttpClient.send",
-									"java/net/http/HttpClient.newBuilder"
+									"java/net/http/HttpClient.send in get, download",
+									"java/net/http/HttpClient.newBuilder in <clinit>"
 								]
 							},
 							"exec": {
+								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/SentinelWindow.class": [
+									"java/awt/Desktop.browse in lambda$open$3"
+								],
 								"META-INF/jars/yacl-3.8.2+1.21.11-fabric.jar!META-INF/jars/common-io-3.12.0.jar!com/twelvemonkeys/io/FileSystem.class": [
-									"java/lang/Runtime.exec"
+									"java/lang/Runtime.exec in exec"
 								],
 								"ru/foxanto/spwallet/update/Updater.class": [
-									"java/lang/ProcessBuilder.<init>",
-									"java/lang/ProcessBuilder.redirectErrorStream",
-									"java/lang/ProcessBuilder.redirectOutput",
-									"java/lang/ProcessBuilder.start"
+									"java/lang/ProcessBuilder.<init> in swapAfterExit",
+									"java/lang/ProcessBuilder.redirectErrorStream in swapAfterExit",
+									"java/lang/ProcessBuilder.redirectOutput in swapAfterExit",
+									"java/lang/ProcessBuilder.start in swapAfterExit"
 								]
 							}
 						},
+						"signals": {
+							"session": {
+								"ru/foxanto/spwallet/connect/ConnectApi.class": [
+									"net/minecraft/class_320.method_1674"
+								]
+							}
+						},
+						"secrets": {},
+						"hidden": [],
 						"hosts": {
 							"api.modrinth.com": [
 								"META-INF/jars/owo-sentinel-0.13.0+1.21.11.jar!io/wispforest/owosentinel/OwoSentinel.class"
@@ -168,7 +197,20 @@
 							]
 						},
 						"unreadable": []
-					}
+					},
+					"unsourced": {
+						"count": 1,
+						"classes": [
+							"ru/foxanto/spwallet/connect/OrgIcons.class"
+						]
+					},
+					"replaced": [
+						{
+							"id": 766335614,
+							"sha256": "e6c9430b8d1c67ba34100de981d79dc4dd39fe08b8d6cd4dd214a18f1dcaa311",
+							"until": "2026-11-26T06:48:04.799Z"
+						}
+					]
 				}
 			]
 		},
@@ -1007,5 +1049,6 @@
 			}
 		]
 	},
-	"history": 1
+	"history": 1,
+	"gone": "2026-11-26T16:42:10.928Z"
 }

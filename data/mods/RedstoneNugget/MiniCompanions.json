@@ -1,0 +1,354 @@
+{
+	"repo": "RedstoneNugget/MiniCompanions",
+	"host": "github",
+	"description": "Kleine Minecraft-Figuren als Overlay – mit Streamer-Modus für Twitch, YouTube, Kick und TikTok (Fabric 1.21.11)",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-10-13T07:20:35Z",
+	"pushed": "2026-10-14T15:44:30Z",
+	"releases": [
+		{
+			"tag": "v1.0.2",
+			"published": "2026-10-13T13:28:37Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 637122150,
+					"name": "minicompanions-1.0.2.jar",
+					"url": "https://github.com/RedstoneNugget/MiniCompanions/releases/download/v1.0.2/minicompanions-1.0.2.jar",
+					"size": 511652,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "26fd96547352be4655626c419054dfc21ff440f20e60bb88dd9597b371688451",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "minicompanions",
+							"version": "1.0.2",
+							"name": "Mini Companions",
+							"description": "Kleine Figuren laufen als 2D-Overlay über HUD, Inventar und Chat. Rein clientseitig – kein Server-Mod nötig. Mit verschiebbarem Mini-Zimmer und optionalem Streamer-Modus für Twitch, YouTube, Kick und TikTok (auch gleichzeitig).",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.0",
+								"minecraft": "~1.21.11",
+								"java": ">=21"
+							},
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"take-your-stream-chat"
+							]
+						}
+					],
+					"icon": "3dd6948b2e0d5a89741829c9922826df738cfa003aef205aa8f9115fa9f2f8db.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 177,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"de/minicompanions/skin/SkinManager.class": [
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.send in getJson, downloadOnce"
+								],
+								"de/minicompanions/streamer/ChatHttp.class": [
+									"java/net/http/HttpClient.send in send",
+									"java/net/http/HttpClient.newBuilder in <clinit>"
+								],
+								"de/minicompanions/streamer/KickChatSource.class": [
+									"java/net/http/HttpClient.newWebSocketBuilder in session"
+								],
+								"de/minicompanions/streamer/TikTokChatSource.class": [
+									"java/net/http/HttpClient.newWebSocketBuilder in session"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"api.mojang.com": [
+								"de/minicompanions/skin/SkinManager.class"
+							],
+							"api.minecraftservices.com": [
+								"de/minicompanions/skin/SkinManager.class"
+							],
+							"sessionserver.mojang.com": [
+								"de/minicompanions/skin/SkinManager.class"
+							],
+							"ws-us2.pusher.com": [
+								"de/minicompanions/streamer/KickChatSource.class"
+							],
+							"kick.com": [
+								"de/minicompanions/streamer/KickChatSource.class"
+							],
+							"api.eulerstream.com": [
+								"de/minicompanions/streamer/TikTokChatSource.class"
+							],
+							"www.tiktok.com": [
+								"de/minicompanions/streamer/TikTokChatSource.class"
+							],
+							"www.youtube.com": [
+								"de/minicompanions/streamer/YouTubeChatSource.class"
+							],
+							"www": [
+								"de/minicompanions/streamer/YouTubeChatSource.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Mini-Begleiter 1.0.2** für Minecraft 1.21.11 (Fabric, nur Client).\n\n### Neu & behoben\n- **Zuschauer werden gemerkt:** Ist die Figur eines Zuschauers nicht mehr da (z. B. nach einem Neustart des Spiels oder nachdem der Streamer-Modus aus war), kommt sie mit demselben Skin zurück, sobald er wieder schreibt, und sagt seine Nachricht. Abschaltbar unter „Befehl & Limits“ → „Zuschauer merken“. Gekickte und gesperrte Zuschauer werden vergessen.\n- **Gleiche Nachricht später wieder erlaubt:** Der Spam-Schutz blockiert dieselbe Nachricht nur noch innerhalb von 30 Sekunden (vorher für immer).\n- **Twitch:** Eine still abgerissene Verbindung wird nach ca. 90 Sekunden erkannt und neu aufgebaut (vorher erst nach 6 Minuten).\n- Sprechblasen bleiben sichtbar, wenn eine Figur ganz oben am Bildschirmrand ist.\n- **Skin-Cache:** Heruntergeladene Skins werden bei jedem Spielstart gelöscht und sammeln sich nicht mehr an.\n- **Figuren-Editor:** Beim Eintippen eines Minecraft-Namens wird der Skin erst geladen, wenn du fertig getippt hast (vorher wurde jeder halbe Name bei Mojang abgefragt).\n\n### Installation\n1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren\n2. `minicompanions-1.0.2.jar` (unten bei „Assets“) in den `mods`-Ordner legen (alte Version löschen)\n3. Im Spiel **K** drücken\n\n**English:** Viewers are now remembered: when a viewer whose figure is gone (e.g. after a game restart) writes again, their figure comes back with the same skin and says the message. The same message is only treated as spam within 30 seconds, and dropped Twitch connections are detected after about 90 seconds instead of 6 minutes. Downloaded skins are cleared on every game start, and the figure editor only loads a skin once you stop typing."
+		},
+		{
+			"tag": "v1.0.1",
+			"published": "2026-10-13T13:26:34Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 637117155,
+					"name": "minicompanions-1.0.1.jar",
+					"url": "https://github.com/RedstoneNugget/MiniCompanions/releases/download/v1.0.1/minicompanions-1.0.1.jar",
+					"size": 511651,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "053391401664f22b9d7944c1098551ca02cfc83b65b048aaf782dd57413ba71d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "minicompanions",
+							"version": "1.0.1",
+							"name": "Mini Companions",
+							"description": "Kleine Figuren laufen als 2D-Overlay über HUD, Inventar und Chat. Rein clientseitig – kein Server-Mod nötig. Mit verschiebbarem Mini-Zimmer und optionalem Streamer-Modus für Twitch, YouTube, Kick und TikTok (auch gleichzeitig).",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.0",
+								"minecraft": "~1.21.11",
+								"java": ">=21"
+							},
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"take-your-stream-chat"
+							]
+						}
+					],
+					"icon": "3dd6948b2e0d5a89741829c9922826df738cfa003aef205aa8f9115fa9f2f8db.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 177,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"de/minicompanions/skin/SkinManager.class": [
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.send in getJson, downloadOnce"
+								],
+								"de/minicompanions/streamer/ChatHttp.class": [
+									"java/net/http/HttpClient.send in send",
+									"java/net/http/HttpClient.newBuilder in <clinit>"
+								],
+								"de/minicompanions/streamer/KickChatSource.class": [
+									"java/net/http/HttpClient.newWebSocketBuilder in session"
+								],
+								"de/minicompanions/streamer/TikTokChatSource.class": [
+									"java/net/http/HttpClient.newWebSocketBuilder in session"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"api.mojang.com": [
+								"de/minicompanions/skin/SkinManager.class"
+							],
+							"api.minecraftservices.com": [
+								"de/minicompanions/skin/SkinManager.class"
+							],
+							"sessionserver.mojang.com": [
+								"de/minicompanions/skin/SkinManager.class"
+							],
+							"ws-us2.pusher.com": [
+								"de/minicompanions/streamer/KickChatSource.class"
+							],
+							"kick.com": [
+								"de/minicompanions/streamer/KickChatSource.class"
+							],
+							"api.eulerstream.com": [
+								"de/minicompanions/streamer/TikTokChatSource.class"
+							],
+							"www.tiktok.com": [
+								"de/minicompanions/streamer/TikTokChatSource.class"
+							],
+							"www.youtube.com": [
+								"de/minicompanions/streamer/YouTubeChatSource.class"
+							],
+							"www": [
+								"de/minicompanions/streamer/YouTubeChatSource.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Mini-Begleiter 1.0.1** für Minecraft 1.21.11 (Fabric, nur Client).\n\n### Neu & behoben\n- **Zuschauer werden gemerkt:** Ist die Figur eines Zuschauers nicht mehr da (z. B. nach einem Neustart des Spiels oder nachdem der Streamer-Modus aus war), kommt sie mit demselben Skin zurück, sobald er wieder schreibt, und sagt seine Nachricht. Abschaltbar unter „Befehl & Limits“ → „Zuschauer merken“. Gekickte und gesperrte Zuschauer werden vergessen.\n- **Gleiche Nachricht später wieder erlaubt:** Der Spam-Schutz blockiert dieselbe Nachricht nur noch innerhalb von 30 Sekunden (vorher für immer).\n- **Twitch:** Eine still abgerissene Verbindung wird nach ca. 90 Sekunden erkannt und neu aufgebaut (vorher erst nach 6 Minuten).\n- Sprechblasen bleiben sichtbar, wenn eine Figur ganz oben am Bildschirmrand ist.\n- **Skin-Cache:** Heruntergeladene Skins werden bei jedem Spielstart gelöscht und sammeln sich nicht mehr an.\n- **Figuren-Editor:** Beim Eintippen eines Minecraft-Namens wird der Skin erst geladen, wenn du fertig getippt hast (vorher wurde jeder halbe Name bei Mojang abgefragt).\n\n### Installation\n1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren\n2. `minicompanions-1.0.1.jar` (unten bei „Assets“) in den `mods`-Ordner legen (alte Version löschen)\n3. Im Spiel **K** drücken\n\n**English:** Viewers are now remembered: when a viewer whose figure is gone (e.g. after a game restart) writes again, their figure comes back with the same skin and says the message. The same message is only treated as spam within 30 seconds, and dropped Twitch connections are detected after about 90 seconds instead of 6 minutes. Downloaded skins are cleared on every game start, and the figure editor only loads a skin once you stop typing."
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-10-13T07:33:07Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 636279461,
+					"name": "minicompanions-1.0.0.jar",
+					"url": "https://github.com/RedstoneNugget/MiniCompanions/releases/download/v1.0.0/minicompanions-1.0.0.jar",
+					"size": 503892,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "75987db196c750d7b6d8bb8ab01208fedf09d1ce79ef0ef1c32be12f5c12b5b0",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "minicompanions",
+							"version": "1.0.0",
+							"name": "Mini Companions",
+							"description": "Kleine Figuren laufen als 2D-Overlay über HUD, Inventar und Chat. Rein clientseitig – kein Server-Mod nötig. Mit verschiebbarem Mini-Zimmer und optionalem Streamer-Modus für Twitch, YouTube, Kick und TikTok (auch gleichzeitig).",
+							"minecraft": "~1.21.11",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.0",
+								"minecraft": "~1.21.11",
+								"java": ">=21"
+							},
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"take-your-stream-chat"
+							]
+						}
+					],
+					"icon": "3dd6948b2e0d5a89741829c9922826df738cfa003aef205aa8f9115fa9f2f8db.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 173,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"de/minicompanions/skin/SkinManager.class": [
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.send in getJson, downloadOnce"
+								],
+								"de/minicompanions/streamer/ChatHttp.class": [
+									"java/net/http/HttpClient.send in send",
+									"java/net/http/HttpClient.newBuilder in <clinit>"
+								],
+								"de/minicompanions/streamer/KickChatSource.class": [
+									"java/net/http/HttpClient.newWebSocketBuilder in session"
+								],
+								"de/minicompanions/streamer/TikTokChatSource.class": [
+									"java/net/http/HttpClient.newWebSocketBuilder in session"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"api.mojang.com": [
+								"de/minicompanions/skin/SkinManager.class"
+							],
+							"api.minecraftservices.com": [
+								"de/minicompanions/skin/SkinManager.class"
+							],
+							"sessionserver.mojang.com": [
+								"de/minicompanions/skin/SkinManager.class"
+							],
+							"ws-us2.pusher.com": [
+								"de/minicompanions/streamer/KickChatSource.class"
+							],
+							"kick.com": [
+								"de/minicompanions/streamer/KickChatSource.class"
+							],
+							"api.eulerstream.com": [
+								"de/minicompanions/streamer/TikTokChatSource.class"
+							],
+							"www.tiktok.com": [
+								"de/minicompanions/streamer/TikTokChatSource.class"
+							],
+							"www.youtube.com": [
+								"de/minicompanions/streamer/YouTubeChatSource.class"
+							],
+							"www": [
+								"de/minicompanions/streamer/YouTubeChatSource.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Erste Version von **Mini-Begleiter** für Minecraft 1.21.11 (Fabric, nur Client).\n\n### Installation\n1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren\n2. `minicompanions-1.0.0.jar` (unten bei „Assets“) in den `mods`-Ordner legen\n3. Im Spiel **K** drücken\n\n### Funktionen\n- Kleine Figuren mit echten Minecraft-Skins laufen über HUD, Inventar, Chat und Menüs\n- Verschiebbares Mini-Zimmer (Taste **J**)\n- Streamer-Modus: Zuschauer schreiben `!skin <Minecraft-Name>` im Chat von Twitch, YouTube, Kick oder TikTok (auch gleichzeitig) und bekommen eine eigene Figur\n- Rüstung, Accessoires, Haustiere und Größe pro Figur einstellbar\n\n**English:** Tiny companions with real Minecraft skins walk over your screen. Streamer mode lets viewers spawn their own figure with `!skin <Minecraft name>` on Twitch, YouTube, Kick and TikTok. Client-side only."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [
+		"docs/inventory.png",
+		"docs/menu.png",
+		"docs/room.png",
+		"docs/social-preview.png",
+		"docs/streamer.png"
+	],
+	"contributors": {
+		"commits": 8,
+		"more": 0,
+		"people": [
+			{
+				"login": "RedstoneNugget",
+				"commits": 8,
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}
