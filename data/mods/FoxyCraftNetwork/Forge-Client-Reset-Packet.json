@@ -1,0 +1,451 @@
+{
+	"repo": "FoxyCraftNetwork/Forge-Client-Reset-Packet",
+	"host": "github",
+	"description": "1.18/1.19/1.20 fork of the Forge Client Reset Packet Updated",
+	"stars": 3,
+	"archived": false,
+	"license": "MIT",
+	"created": "2023-05-14T23:06:22Z",
+	"pushed": "2026-11-08T21:51:21Z",
+	"forkOf": "adde0109/Forge-Client-Reset-Packet",
+	"releases": [
+		{
+			"tag": "forge-1.18.2-v0.1.2",
+			"published": "2026-11-06T01:26:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 715474651,
+					"name": "ForgeClientResetPacket-0.1.2.jar",
+					"url": "https://github.com/FoxyCraftNetwork/Forge-Client-Reset-Packet/releases/download/forge-1.18.2-v0.1.2/ForgeClientResetPacket-0.1.2.jar",
+					"size": 18289,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "6d8dbec276bbb3c91f2bcff4c466de6d076098572cb08d20695b87eb06f0e72c",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "clientresetpacket",
+							"version": "0.1.2",
+							"name": "Client Reset Packet",
+							"description": "Adds a reset packet to Minecraft Forge to allow Modern Forge (1.13+) support on proxies.",
+							"minecraft": "[1.18.2,1.19)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"dependsVersions": {
+								"forge": "[40,41)",
+								"minecraft": "[1.18.2,1.19)"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 6,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## ForgeClientResetPacket 0.1.2 – Forge 1.18.2\n\nChanges since 0.1.1:\n\n### Oculus shaders workaround (#3, possibly #12)\n- Oculus shaders are switched off on the render thread just before the client reset, and turned back on about 2 seconds (40 ticks) after you land on the new server. This works around the \"Failed to clear, closing connection\" kick when switching servers with shaders on.\n- If the switch fails, shaders come back on at the title, multiplayer or disconnected screen.\n- Shaders are only turned back on if they're still off the way the mod left them. If you changed the shader setting during the switch, your choice is kept.\n- A shutdown hook restores your Oculus config if the game closes mid-switch.\n- The restore always runs on the render thread, and a failed restore is retried (up to 3 times) instead of silently leaving shaders off.\n- Soft dependency through the public Iris/Oculus API only (Oculus 1.2.5–1.6.4 for 1.18.2). Nothing changes when Oculus isn't installed.\n- Toasts appear when shaders are paused, restored, or when restore fails.\n\n### Fixes\n- The negotiating screen now uses the translated `connect.negotiating` string (the previous build used a 1.19.2-only type and could not compile).\n- The server resource pack is kept across the reset.\n- Leftover Forge packet filters (`forge:forge_fixes`, `forge:vanilla_filter`) are removed after clearing, and already-present filters are skipped on re-injection, so the next handshake doesn't fail.\n- If the connection drops mid-reset (e.g. mismatched mods), you get the disconnect reason instead of hanging on \"Negotiating...\".\n- The `isNecessary` invoker on Forge's packet filter is marked `remap = false`.\n\n### Packaging\n- mods.toml version comes from the build; Minecraft `[1.18.2,1.19)`, Forge `[40,41)`.\n- Project links point to FoxyCraftNetwork.\n- `pack.mcmeta` uses pack_format 8 (1.18.2 resource format).\n- English and Chinese (zh_cn) translations for player-facing text.\n\nClient-side only. Minecraft **1.18.2 only** (not 1.18 or 1.18.1). PR: https://github.com/FoxyCraftNetwork/Forge-Client-Reset-Packet/pull/35"
+		},
+		{
+			"tag": "forge-1.20.1-v0.3.2",
+			"published": "2026-10-31T23:53:29Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 696804266,
+					"name": "ForgeClientResetPacket-0.3.2.jar",
+					"url": "https://github.com/FoxyCraftNetwork/Forge-Client-Reset-Packet/releases/download/forge-1.20.1-v0.3.2/ForgeClientResetPacket-0.3.2.jar",
+					"size": 17089,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "42792f4289aecdd8ff0ea680802b6f90fb271eb430794a18398dfe2119c9ebf7",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "clientresetpacket",
+							"version": "0.3.2",
+							"name": "Client Reset Packet",
+							"description": "Adds a reset packet to Minecraft Forge to allow Modern Forge (1.13+) support on proxies.",
+							"minecraft": "[1.20,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"dependsVersions": {
+								"forge": "[46.0.14,48)",
+								"minecraft": "[1.20,1.20.2)"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 6,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## ForgeClientResetPacket 0.3.2 – Forge 1.20 / 1.20.1\n\nChanges since 0.3.1:\n\n### Oculus shaders workaround (#3, possibly #12)\n- Oculus shaders are switched off on the render thread just before the client reset, and turned back on about 2 seconds (40 ticks) after you land on the new server. This works around the \"Failed to clear, closing connection\" kick when switching servers with shaders on.\n- If the switch fails, shaders come back on at the title, multiplayer or disconnected screen.\n- Shaders are only turned back on if they're still off the way the mod left them. If you changed the shader setting during the switch, your choice is kept.\n- A shutdown hook restores your Oculus config if the game closes mid-switch.\n- The restore always runs on the render thread, and a failed restore is retried (up to 3 times) instead of silently leaving shaders off.\n- Soft dependency through the public Iris/Oculus API only. Nothing changes when Oculus isn't installed.\n\n### Fixes\n- mods.toml now declares Minecraft `[1.20,1.20.2)` and Forge `[46.0.14,48)`, so 1.20.2 no longer tries to load this jar and crash with `NoClassDefFoundError: NetworkConstants`.\n- The mod version in mods.toml now comes from the build, and the project links point to FoxyCraftNetwork.\n\nClient-side only. PR: https://github.com/FoxyCraftNetwork/Forge-Client-Reset-Packet/pull/14"
+		},
+		{
+			"tag": "forge-1.21.6-1.21.11-v0.4.0",
+			"published": "2026-10-31T23:51:56Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 696801334,
+					"name": "ForgeClientResetPacket-0.4.0-1.21.6-1.21.11.jar",
+					"url": "https://github.com/FoxyCraftNetwork/Forge-Client-Reset-Packet/releases/download/forge-1.21.6-1.21.11-v0.4.0/ForgeClientResetPacket-0.4.0-1.21.6-1.21.11.jar",
+					"size": 15278,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "f72f9e603525ad7575edd313e18ce603d68710da0f8b057907229233f2f5fdc8",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "clientresetpacket",
+							"version": "0.4.0",
+							"name": "Client Reset Packet",
+							"description": "Makes proxy server switches (Velocity and similar) behave like a clean reconnect on modern Forge clients.\n\nOn Minecraft 1.20.2+ the proxy switches servers through the vanilla configuration phase. This mod resets the client-side Forge state that a real disconnect would reset (registries, network channel state, logout/level-unload events) and pauses Oculus/Iris shaders across the switch.",
+							"minecraft": "[1.21.6,1.22)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"dependsVersions": {
+								"forge": "[56,)",
+								"minecraft": "[1.21.6,1.22)"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 6,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## ForgeClientResetPacket 0.4.0 – Forge 1.21.6 to 1.21.11\n\nFirst release of ForgeClientResetPacket for this Minecraft line.\n\nClient-side only: put it in the client `mods/` folder. The backend servers behind Velocity need [Proxy-Compatible-Forge](https://modrinth.com/mod/proxy-compatible-forge).\n\n### How it works on 1.20.2+\n- From 1.20.2, Velocity switches servers by sending the vanilla start-configuration packet, and Forge re-runs its handshake in the configuration phase. The old login-phase reset packet no longer exists.\n- When that happens, the mod does the cleanup Forge normally only does on a real disconnect: it fires the logout and level-unload events, reverts registries to their frozen state, and resets the connection's Forge network state so the next backend gets a clean handshake.\n- Each Forge `NetworkContext` member is reset on its own. A field missing on your Forge build is skipped instead of aborting the whole reset (e.g. `remoteChannelsSize`, missing on many builds).\n\n### Also included\n- Oculus/Iris shader pause from 0.3.2: shaders turn off before the switch and come back on after you land, or on the title/disconnected screen if the switch fails. Your own shader setting is respected. Nothing changes without Oculus.\n- English and Chinese (zh_cn) translations for player-facing text. The Chinese text still needs a native-speaker review.\n\n### This build\n- One jar for 1.21.6 through 1.21.11 (Forge 56+, Java 21), using Forge's EventBus 7 listeners.\n- The loading-terrain screen is matched by class name, so the jar works both before and after its 1.21.9 rename.\n- `pack.mcmeta` carries both the older format keys and the 1.21.9+ `min_format`/`max_format` keys.\n\nPR: https://github.com/FoxyCraftNetwork/Forge-Client-Reset-Packet/pull/27"
+		},
+		{
+			"tag": "forge-1.21.2-1.21.5-v0.4.0",
+			"published": "2026-10-31T23:51:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 696801270,
+					"name": "ForgeClientResetPacket-0.4.0-1.21.2-1.21.5.jar",
+					"url": "https://github.com/FoxyCraftNetwork/Forge-Client-Reset-Packet/releases/download/forge-1.21.2-1.21.5-v0.4.0/ForgeClientResetPacket-0.4.0-1.21.2-1.21.5.jar",
+					"size": 14989,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "8e1ceae5bc265f129f6189930dbd53f70114e9dcf61c373e0789ed1ba58e792c",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "clientresetpacket",
+							"version": "0.4.0",
+							"name": "Client Reset Packet",
+							"description": "Makes proxy server switches (Velocity and similar) behave like a clean reconnect on modern Forge clients.\n\nOn Minecraft 1.20.2+ the proxy switches servers through the vanilla configuration phase. This mod resets the client-side Forge state that a real disconnect would reset (registries, network channel state, logout/level-unload events) and pauses Oculus/Iris shaders across the switch.",
+							"minecraft": "[1.21.2,1.21.6)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"dependsVersions": {
+								"forge": "[53,)",
+								"minecraft": "[1.21.2,1.21.6)"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 6,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## ForgeClientResetPacket 0.4.0 – Forge 1.21.2 to 1.21.5\n\nFirst release of ForgeClientResetPacket for this Minecraft line.\n\nClient-side only: put it in the client `mods/` folder. The backend servers behind Velocity need [Proxy-Compatible-Forge](https://modrinth.com/mod/proxy-compatible-forge).\n\n### How it works on 1.20.2+\n- From 1.20.2, Velocity switches servers by sending the vanilla start-configuration packet, and Forge re-runs its handshake in the configuration phase. The old login-phase reset packet no longer exists.\n- When that happens, the mod does the cleanup Forge normally only does on a real disconnect: it fires the logout and level-unload events, reverts registries to their frozen state, and resets the connection's Forge network state so the next backend gets a clean handshake.\n- Each Forge `NetworkContext` member is reset on its own. A field missing on your Forge build is skipped instead of aborting the whole reset (e.g. `remoteChannelsSize`, missing on many builds).\n\n### Also included\n- Oculus/Iris shader pause from 0.3.2: shaders turn off before the switch and come back on after you land, or on the title/disconnected screen if the switch fails. Your own shader setting is respected. Nothing changes without Oculus.\n- English and Chinese (zh_cn) translations for player-facing text. The Chinese text still needs a native-speaker review.\n\n### This build\n- One jar for 1.21.2 through 1.21.5 (Forge 53–55, Java 21). Uses the 1.21.2+ toast manager API.\n- 1.21.6 moved to EventBus 7, so use the 1.21.6–1.21.11 file there.\n\nPR: https://github.com/FoxyCraftNetwork/Forge-Client-Reset-Packet/pull/22"
+		},
+		{
+			"tag": "forge-1.20.6-1.21.1-v0.4.0",
+			"published": "2026-10-31T23:51:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 696801199,
+					"name": "ForgeClientResetPacket-0.4.0-1.20.6-1.21.1.jar",
+					"url": "https://github.com/FoxyCraftNetwork/Forge-Client-Reset-Packet/releases/download/forge-1.20.6-1.21.1-v0.4.0/ForgeClientResetPacket-0.4.0-1.20.6-1.21.1.jar",
+					"size": 17314,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "04d4fc2f6884c2f5a3a378faae6a94e4499290f7e1b4938b3f211bf77adcf812",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "clientresetpacket",
+							"version": "0.4.0",
+							"name": "Client Reset Packet",
+							"description": "Makes proxy server switches (Velocity and similar) behave like a clean reconnect on modern Forge clients.\n\nOn Minecraft 1.20.2+ the proxy switches servers through the vanilla configuration phase. This mod resets the client-side Forge state that a real disconnect would reset (registries, network channel state, logout/level-unload events) and pauses Oculus/Iris shaders across the switch.",
+							"minecraft": "[1.20.6,1.21.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"dependsVersions": {
+								"forge": "[50,)",
+								"minecraft": "[1.20.6,1.21.2)"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 6,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## ForgeClientResetPacket 0.4.0 – Forge 1.20.6 to 1.21.1\n\nFirst release of ForgeClientResetPacket for this Minecraft line.\n\nClient-side only: put it in the client `mods/` folder. The backend servers behind Velocity need [Proxy-Compatible-Forge](https://modrinth.com/mod/proxy-compatible-forge).\n\n### How it works on 1.20.2+\n- From 1.20.2, Velocity switches servers by sending the vanilla start-configuration packet, and Forge re-runs its handshake in the configuration phase. The old login-phase reset packet no longer exists.\n- When that happens, the mod does the cleanup Forge normally only does on a real disconnect: it fires the logout and level-unload events, reverts registries to their frozen state, and resets the connection's Forge network state so the next backend gets a clean handshake.\n- Each Forge `NetworkContext` member is reset on its own. A field missing on your Forge build is skipped instead of aborting the whole reset (e.g. `remoteChannelsSize`, missing on many builds).\n\n### Also included\n- Oculus/Iris shader pause from 0.3.2: shaders turn off before the switch and come back on after you land, or on the title/disconnected screen if the switch fails. Your own shader setting is respected. Nothing changes without Oculus.\n- English and Chinese (zh_cn) translations for player-facing text. The Chinese text still needs a native-speaker review.\n\n### This build\n- One jar for 1.20.6, 1.21 and 1.21.1 (Forge 50–52, Java 21).\n- The display test and logout hook are looked up at runtime, so the same jar loads on every Forge build in that range.\n- The client tick listener is registered at runtime: `ClientTickEvent.Post` where it exists, otherwise `ClientTickEvent` at phase END (Forge 50.0.0–50.1.4 and 51.0.0–51.0.3).\n\nPR: https://github.com/FoxyCraftNetwork/Forge-Client-Reset-Packet/pull/19"
+		},
+		{
+			"tag": "forge-1.20.4-v0.4.0",
+			"published": "2026-10-31T23:51:48Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 696801135,
+					"name": "ForgeClientResetPacket-0.4.0-1.20.4.jar",
+					"url": "https://github.com/FoxyCraftNetwork/Forge-Client-Reset-Packet/releases/download/forge-1.20.4-v0.4.0/ForgeClientResetPacket-0.4.0-1.20.4.jar",
+					"size": 16350,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "fc8f986b82f8ebe3b3167bc27fb9585ba18a08b96743adf7cebe0a0d47bd3ea2",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "clientresetpacket",
+							"version": "0.4.0",
+							"name": "Client Reset Packet",
+							"description": "Makes proxy server switches (Velocity and similar) behave like a clean reconnect on modern Forge clients.\n\nOn Minecraft 1.20.2+ the proxy switches servers through the vanilla configuration phase. This mod resets the client-side Forge state that a real disconnect would reset (registries, network channel state, logout/level-unload events) and pauses Oculus/Iris shaders across the switch.",
+							"minecraft": "[1.20.3,1.20.5)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"dependsVersions": {
+								"forge": "[49,)",
+								"minecraft": "[1.20.3,1.20.5)"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 6,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## ForgeClientResetPacket 0.4.0 – Forge 1.20.3 / 1.20.4\n\nFirst release of ForgeClientResetPacket for this Minecraft line.\n\nClient-side only: put it in the client `mods/` folder. The backend servers behind Velocity need [Proxy-Compatible-Forge](https://modrinth.com/mod/proxy-compatible-forge).\n\n### How it works on 1.20.2+\n- From 1.20.2, Velocity switches servers by sending the vanilla start-configuration packet, and Forge re-runs its handshake in the configuration phase. The old login-phase reset packet no longer exists.\n- When that happens, the mod does the cleanup Forge normally only does on a real disconnect: it fires the logout and level-unload events, reverts registries to their frozen state, and resets the connection's Forge network state so the next backend gets a clean handshake.\n- Each Forge `NetworkContext` member is reset on its own. A field missing on your Forge build is skipped instead of aborting the whole reset (e.g. `remoteChannelsSize`, missing on many builds).\n\n### Also included\n- Oculus/Iris shader pause from 0.3.2: shaders turn off before the switch and come back on after you land, or on the title/disconnected screen if the switch fails. Your own shader setting is respected. Nothing changes without Oculus.\n- English and Chinese (zh_cn) translations for player-facing text. The Chinese text still needs a native-speaker review.\n\n### This build\n- Built against Forge 1.20.4 (Forge 49, Java 17). Declared for 1.20.3 as well.\n\nPR: https://github.com/FoxyCraftNetwork/Forge-Client-Reset-Packet/pull/17"
+		},
+		{
+			"tag": "forge-1.20.2-v0.4.0",
+			"published": "2026-10-31T23:51:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 696801059,
+					"name": "ForgeClientResetPacket-0.4.0-1.20.2.jar",
+					"url": "https://github.com/FoxyCraftNetwork/Forge-Client-Reset-Packet/releases/download/forge-1.20.2-v0.4.0/ForgeClientResetPacket-0.4.0-1.20.2.jar",
+					"size": 16514,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "53f5255d7099f804bf4c160fc107986b0ba3975c4b4ad891e97cb4538e00e7e7",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "clientresetpacket",
+							"version": "0.4.0",
+							"name": "Client Reset Packet",
+							"description": "Makes proxy server switches (Velocity and similar) behave like a clean reconnect on modern Forge clients.\n\nOn Minecraft 1.20.2+ the proxy switches servers through the vanilla configuration phase. This mod resets the client-side Forge state that a real disconnect would reset (registries, network channel state, logout/level-unload events) and pauses Oculus/Iris shaders across the switch.",
+							"minecraft": "[1.20.2,1.20.3)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"dependsVersions": {
+								"forge": "[48,)",
+								"minecraft": "[1.20.2,1.20.3)"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 6,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## ForgeClientResetPacket 0.4.0 – Forge 1.20.2\n\nFirst release of ForgeClientResetPacket for this Minecraft line.\n\nClient-side only: put it in the client `mods/` folder. The backend servers behind Velocity need [Proxy-Compatible-Forge](https://modrinth.com/mod/proxy-compatible-forge).\n\n### How it works on 1.20.2+\n- From 1.20.2, Velocity switches servers by sending the vanilla start-configuration packet, and Forge re-runs its handshake in the configuration phase. The old login-phase reset packet no longer exists.\n- When that happens, the mod does the cleanup Forge normally only does on a real disconnect: it fires the logout and level-unload events, reverts registries to their frozen state, and resets the connection's Forge network state so the next backend gets a clean handshake.\n- Each Forge `NetworkContext` member is reset on its own. A field missing on your Forge build is skipped instead of aborting the whole reset (e.g. `remoteChannelsSize`, missing on many builds).\n\n### Also included\n- Oculus/Iris shader pause from 0.3.2: shaders turn off before the switch and come back on after you land, or on the title/disconnected screen if the switch fails. Your own shader setting is respected. Nothing changes without Oculus.\n- English and Chinese (zh_cn) translations for player-facing text. The Chinese text still needs a native-speaker review.\n\n### This build\n- Built against Forge 1.20.2 (Forge 48, Java 17). 1.20.3/1.20.4 changed APIs this jar uses, so use the 1.20.3–1.20.4 file there.\n\nPR: https://github.com/FoxyCraftNetwork/Forge-Client-Reset-Packet/pull/16"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [],
+	"contributors": {
+		"commits": 44,
+		"more": 0,
+		"people": [
+			{
+				"login": "danorris709",
+				"commits": 17,
+				"name": "Daniel Norris",
+				"funding": []
+			},
+			{
+				"login": "wolflord212312",
+				"commits": 12,
+				"name": "DjJewl",
+				"funding": []
+			},
+			{
+				"login": "Just-Chaldea",
+				"commits": 6,
+				"name": "Chaldea",
+				"funding": []
+			},
+			{
+				"login": "shiburito",
+				"commits": 4,
+				"name": "Shiburito",
+				"funding": []
+			},
+			{
+				"login": "adde0109",
+				"commits": 1,
+				"funding": []
+			},
+			{
+				"login": "BredyAK",
+				"commits": 1,
+				"funding": []
+			},
+			{
+				"login": "FoxMcloud5655",
+				"commits": 1,
+				"funding": []
+			},
+			{
+				"login": "JustRed23",
+				"commits": 1,
+				"funding": []
+			},
+			{
+				"login": "Stampede2011",
+				"commits": 1,
+				"name": "Stampede",
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

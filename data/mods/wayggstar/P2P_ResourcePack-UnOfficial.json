@@ -4,8 +4,90 @@
 	"stars": 0,
 	"archived": false,
 	"created": "2026-09-26T22:01:43Z",
-	"pushed": "2026-11-17T14:09:45Z",
+	"pushed": "2026-11-27T05:35:33Z",
 	"releases": [
+		{
+			"tag": "0.3.0",
+			"published": "2026-11-27T05:35:34Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 798221968,
+					"name": "P2P_ResourcePack-26.3-0.3.0.jar",
+					"url": "https://github.com/wayggstar/P2P_ResourcePack-UnOfficial/releases/download/0.3.0/P2P_ResourcePack-26.3-0.3.0.jar",
+					"size": 41793,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "08625082bd112315d227d865337252deadebb40a0d25efc892dc9d294375861d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "p2p_resourcepack",
+							"version": "0.3.0",
+							"name": "P2P_ResourcePack",
+							"description": "Server resource packs for Instant P2P rooms.",
+							"minecraft": "26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"instant-p2p"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.20.1",
+								"minecraft": "26.3",
+								"java": ">=25",
+								"fabric-api": ">=0.166.2",
+								"instant-p2p": "1.7.3"
+							},
+							"provides": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 15,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/p2p/resourcepack/McPacksUploader.class": [
+									"java/net/http/HttpClient.newBuilder in upload",
+									"java/net/http/HttpClient.send in upload",
+									"java/net/http/HttpClient.close in upload"
+								],
+								"dev/p2p/resourcepack/PackVerifier.class": [
+									"java/net/URL.openConnection in download"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"mcpacks.dev": [
+								"dev/p2p/resourcepack/McPacksUploader.class"
+							],
+							"github.com": [
+								"dev/p2p/resourcepack/P2PResourcePack.class"
+							],
+							"example.com": [
+								"dev/p2p/resourcepack/ResourcePackScreen.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 변경 이력\n\n## 0.3.0\n\n### Compatibility\n\n- Added support for Instant P2P 1.7.3.\n- Updated Fabric Loader to 0.20.1.\n- Updated Fabric API to 0.166.2+26.3.\n- Retained Minecraft 26.3 and Java 25 support.\n\n### Resource pack sharing\n\n- Added four sharing modes: off, direct ZIP URL, ZIP file upload, and the host's active resource packs.\n- Added a refreshable list of active local packs from Minecraft's pack repository, with per-pack checkboxes, sizes, and priority.\n- Uploads keep the bytes of original ZIP files and compress folder packs into temporary ZIPs. The addon verifies the hosted download against the original SHA-1 and reuses verified download URLs for identical files.\n- Active sharing prepares up to three packs concurrently and shows the number ready. The host publishes changes with Apply. A failed update preserves the previous verified list.\n- When a guest accepts, the host's integrated server sends each pack's download URL and SHA-1 through vanilla resource-pack packets in the host's application order. The guest's client downloads each ZIP from its web host. Guests can join with Instant P2P alone.\n- Existing enabled settings are loaded in direct URL mode.\n\n### Guest resource pack choice\n\n- Added a Minecraft confirmation dialog on join and when the host changes the shared pack list. It shows pack names with the highest priority first. The choices apply to the entire list, and previous choices expire when the list changes.\n- Guest dialog and status messages use the guest's Minecraft language. Korean and English are supported, with English as the fallback.\n- Public rooms use optional packs. Guests can choose Apply or Skip and can stay connected without responding. Private rooms can require packs and present Apply or Leave.\n- Dialog buttons submit choices through Minecraft's dialog protocol without running chat commands.\n\n### Instant P2P integration\n\n- Migrated QUIC bridge integration to the g8 package.\n- Updated CustomRoomScreen mixin targets.\n- Updated GUI smoke tests for Instant P2P 1.7.3.\n- Updated version metadata and documentation.\n\n### Validation\n\n- The Gradle build and nine automated tests passed. Coverage includes settings migration, file names, folder ZIP changes, overlapping uploads, SHA-1 cache reuse over local HTTP, pack order, and one-time choices.\n- The Minecraft 26.3 smoke test passed for room settings, all four sharing modes, public and private required settings, localized dialogs and pack names, upload gating, and vanilla pack stack order.\n- Live uploads to mcpacks.dev and two-account P2P delivery and consent remain unverified."
+		},
 		{
 			"tag": "0.2.1",
 			"published": "2026-11-17T14:09:45Z",
