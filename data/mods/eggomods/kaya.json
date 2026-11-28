@@ -6,8 +6,84 @@
 	"archived": false,
 	"license": "MIT",
 	"created": "2025-02-11T10:28:18Z",
-	"pushed": "2026-11-26T17:31:45Z",
+	"pushed": "2026-11-28T04:27:43Z",
 	"releases": [
+		{
+			"tag": "0.2.1+mc.1.21.5",
+			"published": "2026-11-28T04:27:43Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 803213232,
+					"name": "kaya-0.2.1+mc.1.21.5.jar",
+					"url": "https://github.com/eggomods/kaya/releases/download/0.2.1%2Bmc.1.21.5/kaya-0.2.1%2Bmc.1.21.5.jar",
+					"size": 2285902,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "f88b2d632901bf1928e1eabbe51d87b0279f86105f027eb28f9c39b3701286ea",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "kaya",
+							"version": "0.2.1+mc.1.21.5",
+							"name": "Kaya",
+							"description": "Empower your game with this library that adds data-driven powers to entities via data packs.",
+							"minecraft": "1.21.5",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"yet_another_config_lib_v3"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.18.4",
+								"minecraft": "1.21.5",
+								"java": ">=21",
+								"fabric-api": ">=0.128.2+1.21.5",
+								"yet_another_config_lib_v3": ">=3.8.1+1.21.5-fabric"
+							},
+							"provides": [
+								"org_quiltmc_parsers_gson",
+								"org_quiltmc_parsers_json"
+							],
+							"bundled": {
+								"org_quiltmc_parsers_gson": "0.3.1",
+								"org_quiltmc_parsers_json": "0.3.1"
+							},
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "cecc934ac3dd31ce76e0b8b407fb598f7c35d0a5defae907839ab5ae3d303e76.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"loot_table"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 1066,
+						"jars": [
+							"META-INF/jars/gson-0.3.1.jar",
+							"META-INF/jars/json-0.3.1.jar"
+						],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "##  fixes\n- fixed `key/pressed_ticks` int provider type not checking if its pressed time value is greater than 0\n- fixed potential issue with [cached] blocks collected from a shape having the same positions\n- fixed players sometimes being kicked when command storages are synced\n- fixed handling of ignored keys when parsing sub-powers\n- fixed `modify/falling` power type resetting the entity's fall distance too early/eagerly\n- fixed players sometimes being kicked when kaya-related reloadable content is synced on reload/the player joins the server\n- fixed power recipes not being properly checked if craftable\n- fixed `modify/player/spawn` power type not properly checking whether the dimension exists when validated\n\n##  changes\n\n### for users\n- searching algorithm for `modify/player/spawn` power type has been changed to use the `OCEAN_FLOOR` heightmap type instead of `MOTION_BLOCKING`\n- the `callback/power/tick` power type now immediately invokes its rising/falling actions if its interval is `1` instead of deferring it to the subsequent tick\n\n### for developers\n- changed and simplified creation of managers and its keys;\n  - `Manager$Key` sub-class has been **deprecated (and marked for removal in the next minor version)**. use `Manager#createKey` to create a key for a manager\n  - added `AbstractManagers` with an inner immutable map\n- moved `RotateVec3Provider` to its proper package, from `io.github.eggohito.kaya.provider.custom.number.float` to `io.github.eggohito.kaya.provider.custom.vec3`\n- `TypeOrTagPredicate` class is now **deprecated (and marked for removal in the next minor version)**. use `EitherHolder` instead\n- `EntityRenderState`s no longer store a reference to an entity. this changes the following:\n  - `EntityRenderCache` is now **deprecated (and marked for removal in the next minor version)** and non-functional. **use the classes mentioned below**\n  - since Fabric's `FabricRenderState` and `RenderStateDataKey` API for putting arbitrary data on render states is currently not available in 1.21.5, you can use `KayaSharedStateData` and `SharedStateDataKey` (currently only available for `EntityRenderState`s)\n- changed `ParsedArgument` class where:\n  - the result is now parsed lazily\n  - using `CommandArgumentParser` (or `Grammar`) is now supported via `ParsedArgument$Parser`\n  - `ParsedArgument#argument` is now **deprecated (and marked for removal in the next minor version)**. you should use `ParsedArgument#result` or `ParsedArgument#optionalResult` to handle the lazily parsed result safely\n- `ReloadableServerResourcesEvents` is now **deprecated (and marked for removal in the next minor version)** in favor of the new `ServerResourceLoadingEvents`, which consists of the following events:\n  - `RELOAD`, which is called **after** tags and recipes are sent to the player\n  - `FINISH`, which is called **after** the contents of tags are bound (via `ReloadableServerResources#updateStaticRegistryTags`)"
+		},
 		{
 			"tag": "0.2.0+mc.1.21.5",
 			"published": "2026-11-18T04:57:16Z",
@@ -18,7 +94,7 @@
 					"name": "kaya-0.2.0+mc.1.21.5.jar",
 					"url": "https://github.com/eggomods/kaya/releases/download/0.2.0%2Bmc.1.21.5/kaya-0.2.0%2Bmc.1.21.5.jar",
 					"size": 2256397,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "4def69dae04f5857104ae7e4faee1abae712a5f75fc674207489ce2ca9896592",
 					"mods": [
@@ -94,7 +170,7 @@
 					"name": "kaya-0.1.2.jar",
 					"url": "https://github.com/eggomods/kaya/releases/download/0.1.2%2Bmc.1.21.5/kaya-0.1.2.jar",
 					"size": 2138980,
-					"downloads": 6,
+					"downloads": 7,
 					"inspection": 2,
 					"sha256": "3128e19a3e24085aaab5173ea4f8f380f8a85aa366421c87e08e949789a11b28",
 					"mods": [
@@ -170,7 +246,7 @@
 					"name": "kaya-0.1.1.jar",
 					"url": "https://github.com/eggomods/kaya/releases/download/0.1.1%2Bmc.1.21.5/kaya-0.1.1.jar",
 					"size": 2139016,
-					"downloads": 5,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "03d9391dc74350e0130733d97ac844be217bdb5361af26c8d4899a5ff50aed13",
 					"mods": [
@@ -246,7 +322,7 @@
 					"name": "kaya-0.1.0.jar",
 					"url": "https://github.com/eggomods/kaya/releases/download/0.1.0%2Bmc.1.21.5/kaya-0.1.0.jar",
 					"size": 2138614,
-					"downloads": 11,
+					"downloads": 12,
 					"inspection": 2,
 					"sha256": "8c521ccfea5071960a95639fb7ca196b3242c446f0b3cd0dc9501fa487e65a3a",
 					"mods": [

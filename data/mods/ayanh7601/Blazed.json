@@ -35,10 +35,18 @@
 								"minecraft",
 								"meteor-client"
 							],
+							"dependsVersions": {
+								"java": ">=21",
+								"minecraft": "26.1.2"
+							},
 							"provides": [
 								"exploitpreventer",
 								"mixinsquared"
-							]
+							],
+							"bundled": {
+								"exploitpreventer": "1.1.0",
+								"mixinsquared": "0.3.7-beta.1"
+							}
 						}
 					],
 					"icon": null,
@@ -49,6 +57,7 @@
 						"shaders": false
 					},
 					"scan": {
+						"version": 3,
 						"classes": 296,
 						"jars": [
 							"META-INF/jars/exploitpreventer-1.1.0.jar",
@@ -59,21 +68,21 @@
 						"capabilities": {
 							"network": {
 								"com/ayan7601/blazed/modules/esp/WanderingESP.class": [
-									"java/net/http/HttpClient.newBuilder",
-									"java/net/http/HttpClient.send"
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.send in lambda$sendWebhookNotification$0"
 								],
 								"com/ayan7601/blazed/utils/BlazedWebhook$Builder.class": [
-									"java/net/http/HttpClient.send"
+									"java/net/http/HttpClient.send in postJson, postMultipart"
 								],
 								"com/ayan7601/blazed/utils/BlazedWebhook.class": [
-									"java/net/http/HttpClient.newBuilder"
+									"java/net/http/HttpClient.newBuilder in <clinit>"
 								],
 								"com/ayan7601/blazed/utils/blazed/Utils.class": [
-									"java/net/URL.openConnection"
+									"java/net/URL.openConnection in overwriteFile"
 								],
 								"META-INF/jars/exploitpreventer-1.1.0.jar!com/nikoverflow/exploitpreventer/injection/mixin/vanilla/HttpUtilMixin.class": [
-									"java/net/URL.openConnection",
-									"java/net/Socket.<init>"
+									"java/net/URL.openConnection in ep$downloadFile",
+									"java/net/Socket.<init> in ep$downloadFile"
 								]
 							},
 							"classloading": {
@@ -81,11 +90,18 @@
 									"extends java/lang/ClassLoader"
 								],
 								"META-INF/jars/exploitpreventer-1.1.0.jar!META-INF/jars/opensesame-core-0.8.1.jar!dev/lukebemish/opensesame/runtime/ClassCreatorUtils.class": [
-									"java/lang/invoke/MethodHandles$Lookup.defineHiddenClass",
-									"java/lang/invoke/MethodHandles$Lookup.defineClass"
+									"java/lang/invoke/MethodHandles$Lookup.defineHiddenClass in defineHiddenClass",
+									"java/lang/invoke/MethodHandles$Lookup.defineClass in defineClass"
 								],
 								"META-INF/jars/exploitpreventer-1.1.0.jar!META-INF/jars/opensesame-core-0.8.1.jar!META-INF/versions/22/dev/lukebemish/opensesame/runtime/LookupProviderFFI$SpecialInformativeClassLoader.class": [
 									"extends java/lang/ClassLoader"
+								]
+							},
+							"native": {
+								"META-INF/jars/exploitpreventer-1.1.0.jar!META-INF/jars/opensesame-core-0.8.1.jar!META-INF/versions/22/dev/lukebemish/opensesame/runtime/LookupProviderFFI$Env.class": [
+									"java/lang/foreign/SymbolLookup.libraryLookup in <init>",
+									"java/lang/foreign/Linker.nativeLinker in <init>, callObjectMethod, callStaticMethod",
+									"java/lang/foreign/Linker.downcallHandle in <init>, callObjectMethod, callStaticMethod"
 								]
 							},
 							"unsafe": {
@@ -100,6 +116,22 @@
 								]
 							}
 						},
+						"signals": {
+							"webhook": {
+								"com/ayan7601/blazed/modules/main/PremiumTunnelBaseFinder.class": [
+									"https://discord.com/api/webhooks/",
+									"https://discordapp.com/api/webhooks/"
+								],
+								"com/ayan7601/blazed/utils/BlazedWebhook.class": [
+									"https://discord.com/api/webhooks/",
+									"https://discordapp.com/api/webhooks/",
+									"https://canary.discord.com/api/webhooks/",
+									"https://ptb.discord.com/api/webhooks/"
+								]
+							}
+						},
+						"secrets": {},
+						"hidden": [],
 						"hosts": {
 							"blazedclient.com": [
 								"com/ayan7601/blazed/BlazedAddon.class",
@@ -144,12 +176,12 @@
 	"funding": [],
 	"pictures": [],
 	"contributors": {
-		"commits": 9,
+		"commits": 10,
 		"more": 0,
 		"people": [
 			{
 				"login": "ayanh7601",
-				"commits": 9,
+				"commits": 10,
 				"name": "Ayan Halder",
 				"funding": []
 			}

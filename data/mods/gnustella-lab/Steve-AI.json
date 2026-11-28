@@ -4,34 +4,38 @@
 	"stars": 3,
 	"archived": false,
 	"created": "2026-05-13T17:52:27Z",
-	"pushed": "2026-09-17T18:46:38Z",
+	"pushed": "2026-11-28T01:49:36Z",
 	"releases": [
 		{
-			"tag": "v1.8.2",
-			"published": "2026-09-17T18:46:38Z",
+			"tag": "v1.9.0",
+			"published": "2026-11-28T01:51:02Z",
 			"prerelease": false,
 			"assets": [
 				{
-					"id": 570873136,
-					"name": "steve-ai-mod-1.8.2.jar",
-					"url": "https://github.com/gnustella-lab/Steve-AI/releases/download/v1.8.2/steve-ai-mod-1.8.2.jar",
-					"size": 1567166,
-					"downloads": 13,
+					"id": 802803946,
+					"name": "steve-ai-mod-1.9.0.jar",
+					"url": "https://github.com/gnustella-lab/Steve-AI/releases/download/v1.9.0/steve-ai-mod-1.9.0.jar",
+					"size": 1570571,
+					"downloads": 4,
 					"inspection": 2,
-					"sha256": "bc2a09ae8d5657e2e083c6be7595e43388a9908958b711aeb4eb9c96bcd07ac9",
+					"sha256": "dd9496ce74a29db73b45ce5a260a366c4d9a12ae094da21e556c4fe7e60bcb62",
 					"mods": [
 						{
 							"loader": "forge",
 							"id": "steve",
-							"version": "1.8.2",
+							"version": "1.9.0",
 							"name": "Steve AI Mod",
 							"description": "AI-controlled Steve entities that can follow natural language commands,\nmine resources, build structures, and use configurable OpenAI, Groq, or Gemini models.",
-							"minecraft": "[1.20.1,1.20.2)",
+							"minecraft": "[26.3,26.4,)",
 							"environment": "*",
 							"depends": [
 								"forge",
 								"minecraft"
-							]
+							],
+							"dependsVersions": {
+								"forge": "[66,)",
+								"minecraft": "[26.3,26.4,)"
+							}
 						}
 					],
 					"icon": null,
@@ -44,43 +48,47 @@
 						"shaders": false
 					},
 					"scan": {
+						"version": 3,
 						"classes": 1119,
 						"jars": [
 							"META-INF/jarjar/caffeine-3.1.8.jar",
+							"META-INF/jarjar/resilience4j-retry-2.1.0.jar",
 							"META-INF/jarjar/resilience4j-bulkhead-2.1.0.jar",
-							"META-INF/jarjar/resilience4j-circuitbreaker-2.1.0.jar",
-							"META-INF/jarjar/resilience4j-core-2.1.0.jar",
 							"META-INF/jarjar/resilience4j-ratelimiter-2.1.0.jar",
-							"META-INF/jarjar/resilience4j-retry-2.1.0.jar"
+							"META-INF/jarjar/resilience4j-circuitbreaker-2.1.0.jar",
+							"META-INF/jarjar/resilience4j-core-2.1.0.jar"
 						],
 						"capabilities": {
 							"network": {
 								"com/steve/ai/llm/GeminiClient.class": [
-									"java/net/http/HttpClient.newBuilder",
-									"java/net/http/HttpClient.send"
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.send in sendRequest"
 								],
 								"com/steve/ai/llm/GroqClient.class": [
-									"java/net/http/HttpClient.newBuilder",
-									"java/net/http/HttpClient.send"
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.send in sendRequest"
 								],
 								"com/steve/ai/llm/OpenAIClient.class": [
-									"java/net/http/HttpClient.newBuilder",
-									"java/net/http/HttpClient.send"
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.send in sendRequest"
 								],
 								"com/steve/ai/llm/async/AsyncGeminiClient.class": [
-									"java/net/http/HttpClient.newBuilder",
-									"java/net/http/HttpClient.sendAsync"
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.sendAsync in sendAsync"
 								],
 								"com/steve/ai/llm/async/AsyncGroqClient.class": [
-									"java/net/http/HttpClient.newBuilder",
-									"java/net/http/HttpClient.sendAsync"
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.sendAsync in sendAsync"
 								],
 								"com/steve/ai/llm/async/AsyncOpenAIClient.class": [
-									"java/net/http/HttpClient.newBuilder",
-									"java/net/http/HttpClient.sendAsync"
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.sendAsync in sendAsync"
 								]
 							}
 						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
 						"hosts": {
 							"generativelanguage.googleapis.com": [
 								"com/steve/ai/llm/GeminiClient.class",
@@ -99,6 +107,116 @@
 					}
 				}
 			],
+			"notes": "Steve AI 1.9.0 - Minecraft 26.3 port\n\nThis release moves the mod to Minecraft Java Edition 26.3 (Wilderness Bound) with Forge 66.1.9, Java 25, ForgeGradle 7 and Gradle 9.7.1. It replaces the previous 1.20.1 / Forge 47 / Java 17 toolchain and is not compatible with older Minecraft versions.\n\nChanged\n- Migrated Minecraft API usage (Identifier, GuiGraphicsExtractor, new input events, event bus, data components, synched data, NBT codecs, recipe displays) to the 26.3 API.\n- Updated mod metadata to loader [66,) and Minecraft [26.3,26.4,); pack format 121.\n- Updated the GitHub Actions build and release workflows to Java 25 / Gradle 9.7.1.\n- Updated the launcher script and technical documentation to the 26.3 toolchain.\n\nVerification\n- GitHub Actions compiled main and test sources against forge 26.3-66.1.9 with `./gradlew clean test build`.\n- The dedicated Forge GameTest server completed its test batch and initialized the mod runtime.\n- Jar-in-Jar verification confirmed the installable artifact and all required bundled libraries.\n\nInstallation\n- Install `steve-ai-mod-1.9.0.jar` in your `mods` folder.\n- Do not use the `-slim.jar` artifact; it cannot run by itself.\n- Verify the download with the accompanying `.sha256` file."
+		},
+		{
+			"tag": "v1.8.2",
+			"published": "2026-09-17T18:46:38Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 801966179,
+					"name": "steve-ai-mod-1.8.2.jar",
+					"url": "https://github.com/gnustella-lab/Steve-AI/releases/download/v1.8.2/steve-ai-mod-1.8.2.jar",
+					"size": 1570570,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "151c7933697f6d2bd871fcfe61fd9349b607d72975a561c8628025ecbc7ecd31",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "steve",
+							"version": "1.8.2",
+							"name": "Steve AI Mod",
+							"description": "AI-controlled Steve entities that can follow natural language commands,\nmine resources, build structures, and use configurable OpenAI, Groq, or Gemini models.",
+							"minecraft": "[26.3,26.4,)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"dependsVersions": {
+								"forge": "[66,)",
+								"minecraft": "[26.3,26.4,)"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [
+							"structure"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 1119,
+						"jars": [
+							"META-INF/jarjar/caffeine-3.1.8.jar",
+							"META-INF/jarjar/resilience4j-retry-2.1.0.jar",
+							"META-INF/jarjar/resilience4j-bulkhead-2.1.0.jar",
+							"META-INF/jarjar/resilience4j-ratelimiter-2.1.0.jar",
+							"META-INF/jarjar/resilience4j-circuitbreaker-2.1.0.jar",
+							"META-INF/jarjar/resilience4j-core-2.1.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"com/steve/ai/llm/GeminiClient.class": [
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.send in sendRequest"
+								],
+								"com/steve/ai/llm/GroqClient.class": [
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.send in sendRequest"
+								],
+								"com/steve/ai/llm/OpenAIClient.class": [
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.send in sendRequest"
+								],
+								"com/steve/ai/llm/async/AsyncGeminiClient.class": [
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.sendAsync in sendAsync"
+								],
+								"com/steve/ai/llm/async/AsyncGroqClient.class": [
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.sendAsync in sendAsync"
+								],
+								"com/steve/ai/llm/async/AsyncOpenAIClient.class": [
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.sendAsync in sendAsync"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"generativelanguage.googleapis.com": [
+								"com/steve/ai/llm/GeminiClient.class",
+								"com/steve/ai/llm/async/AsyncGeminiClient.class"
+							],
+							"api.groq.com": [
+								"com/steve/ai/llm/GroqClient.class",
+								"com/steve/ai/llm/async/AsyncGroqClient.class"
+							],
+							"api.openai.com": [
+								"com/steve/ai/llm/OpenAIClient.class",
+								"com/steve/ai/llm/async/AsyncOpenAIClient.class"
+							]
+						},
+						"unreadable": []
+					},
+					"replaced": [
+						{
+							"id": 570873136,
+							"sha256": "bc2a09ae8d5657e2e083c6be7595e43388a9908958b711aeb4eb9c96bcd07ac9",
+							"until": "2026-11-28T01:54:21.228Z"
+						}
+					]
+				}
+			],
 			"notes": "Release build for Steve AI.\n\nAsset:\n- `steve-ai-mod-1.8.2.jar`\n\nThe `.sha256` file can be used to verify the downloaded JAR."
 		},
 		{
@@ -111,7 +229,7 @@
 					"name": "steve-ai-mod-1.8.1.jar",
 					"url": "https://github.com/gnustella-lab/Steve-AI/releases/download/v1.8.1/steve-ai-mod-1.8.1.jar",
 					"size": 1539630,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "025332a375d77cfbc705fa046c5023381e518e4f93c387ff13e90a014045fa6c",
 					"mods": [
@@ -206,7 +324,7 @@
 					"name": "steve-ai-mod-1.8.0.jar",
 					"url": "https://github.com/gnustella-lab/Steve-AI/releases/download/v1.8.0/steve-ai-mod-1.8.0.jar",
 					"size": 1536512,
-					"downloads": 3,
+					"downloads": 4,
 					"inspection": 2,
 					"sha256": "ebd1b57cf1326d0fa73936cb3d0fcc6f0bdaf18e3164e1b2024b232e6a2822c5",
 					"mods": [

@@ -4,8 +4,108 @@
 	"stars": 5,
 	"archived": false,
 	"created": "2026-01-10T08:07:29Z",
-	"pushed": "2026-10-22T14:35:11Z",
+	"pushed": "2026-11-28T10:58:49Z",
 	"releases": [
+		{
+			"tag": "0.1.0",
+			"published": "2026-11-28T01:24:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 802736548,
+					"name": "repackaged-0.1.0.jar",
+					"url": "https://github.com/LIUKRAST/Repackaged/releases/download/0.1.0/repackaged-0.1.0.jar",
+					"size": 1126516,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "19acfd28d244ff1dfb7209155d3473382f46ea8f9b969553161dd46c3c4baa50",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "repackaged",
+							"version": "0.1.0",
+							"name": "Create: Repackaged",
+							"description": "Adds a new system to transport fluids and energy via packages",
+							"minecraft": "[1.21.1]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"create",
+								"deployer",
+								"compat_manager"
+							],
+							"dependsVersions": {
+								"neoforge": "[21.1.265,)",
+								"minecraft": "[1.21.1]",
+								"create": "[6.0.10,)",
+								"deployer": "[1.0.0,2.0.0)"
+							},
+							"breaks": [
+								"create_factory_logistics"
+							],
+							"breaksVersions": {
+								"create_factory_logistics": "*"
+							}
+						}
+					],
+					"icon": "4cb3e60d9f3f981ca022aec8105aee2c8803a04f22e048657f766580483285de.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Battery Charger",
+								"Fluid Packager",
+								"Package Shelf",
+								"Packager Connector"
+							],
+							"item": [
+								"Energy Gauge",
+								"Fluid Gauge"
+							],
+							"group": [
+								"Create: Repackaged"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 601,
+						"jars": [
+							"META-INF/jarjar/mixinextras-neoforge-0.5.5.jar"
+						],
+						"capabilities": {
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-neoforge-0.5.5.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe in <clinit>"
+								]
+							},
+							"network": {
+								"META-INF/jarjar/mixinextras-neoforge-0.5.5.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream in findBootstrapClass"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"github.com": [
+								"META-INF/jarjar/mixinextras-neoforge-0.5.5.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Fixes\n- [Package Shelves can be duplicated](https://github.com/LIUKRAST/Repackaged/issues/24)\n- [Fluid packagers do not use Fluid fill/drain correctly](https://github.com/LIUKRAST/Repackaged/issues/23)\n- [Battery charger creates empty batteries](https://github.com/LIUKRAST/Repackaged/issues/22)\n- [Package Shelves crash when wrenched](https://github.com/LIUKRAST/Repackaged/issues/15)\n- [Bottles & Batteries voiding on saws and when right-clicked](https://github.com/LIUKRAST/Repackaged/issues/7)\n- [Rare bottles are missing models and translation key](https://github.com/LIUKRAST/Repackaged/issues/21)\n- [Missing Packager Connector recipe](https://github.com/LIUKRAST/Repackaged/issues/25)\n- [Battery Charger model has Z-fighting](https://github.com/LIUKRAST/Repackaged/issues/29)\n- [Gauges do not send energy ingredient for recipes](https://github.com/LIUKRAST/Repackaged/issues/41)\n- [Alt+scroll does not work in the recipe menu for energy gauges](https://github.com/LIUKRAST/Repackaged/issues/42)\n- [Bottles and batteries can't be turned into Package Couriers planes](https://github.com/LIUKRAST/Repackaged/issues/44)\n- [Packager Connectors and Battery Chargers voided contents when the target could not accept them](https://github.com/LIUKRAST/Repackaged/issues/18)\n- Promise icon and amount of fluid and energy gauges (energy promises showed mB)\n\nFeatures\n- [Create Stock Bridge: fluids and energy (with Applied Flux) stored in AE2 can be ordered through a fluid packager or battery charger placed against the bridge](https://github.com/LIUKRAST/Repackaged/issues/19)\n- [Battery Chargers accept energy from outside into an internal buffer, so they work with Create: Power Grid's Device Connector](https://github.com/LIUKRAST/Repackaged/issues/43)\n- [Configurable bottle jar capacity](https://github.com/LIUKRAST/Repackaged/issues/16)\n- Batteries will now spawn a lightning when opened if they contain more than 100.000⚡ (configurable)\n- ValueEditBox implementation\n- Fluid gauges default to 100 mB per connection and scroll in steps; the fluid tab shows amounts in its tooltips\n- Packagers hand packages to Packager Connectors before Frogports\n- Bottles and batteries are tagged as `create:packages`, so mods that accept any package accept them too\n- New Chinese (simplified), Russian, Japanese and German localisation\n\nCompatibility\n- Create Factory Logistics is marked as incompatible: Deployer and Extra Gauges now work with it, Repackaged does not yet (support is planned, see [fl.md](https://github.com/LIUKRAST/Deployer/blob/master/fl.md))\n- Built against compat_manager 1.0.9, so the Create Stock Bridge mixins load only when that mod is installed\n- Requires Deployer 1.0.0\n\nOther changes\n- The `fluid_gauge_clear` and `energy_gauge_clear` recipes moved from the `minecraft` to the `repackaged` namespace (datapacks overriding them need the new id)"
+		},
 		{
 			"tag": "0.0.7",
 			"published": "2026-04-25T09:09:56Z",
@@ -16,7 +116,7 @@
 					"name": "repackaged-0.0.7.jar",
 					"url": "https://github.com/LIUKRAST/Repackaged/releases/download/0.0.7/repackaged-0.0.7.jar",
 					"size": 1079769,
-					"downloads": 7,
+					"downloads": 8,
 					"inspection": 2,
 					"sha256": "a327730162252ac55bb18087ed1383d12bfc2a1b111aaf0128a9b5b81d39e4e0",
 					"mods": [
@@ -100,7 +200,7 @@
 					"name": "repackaged-0.0.6.jar",
 					"url": "https://github.com/LIUKRAST/Repackaged/releases/download/0.0.6/repackaged-0.0.6.jar",
 					"size": 1079722,
-					"downloads": 5,
+					"downloads": 6,
 					"inspection": 2,
 					"sha256": "5d5fdf7f7fd98a00aef58d6d24d4f6cced81c30d2f4e48bd5966842e2d4f3747",
 					"mods": [
@@ -184,7 +284,7 @@
 					"name": "repackaged-0.0.5.jar",
 					"url": "https://github.com/LIUKRAST/Repackaged/releases/download/0.0.5/repackaged-0.0.5.jar",
 					"size": 1724269,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "b07c2f3c9d1c29b2033232dea9f8abb9312c1930e1f99b3c4e7a93f59ca322ab",
 					"mods": [
@@ -277,7 +377,7 @@
 					"name": "repackaged-0.0.4.jar",
 					"url": "https://github.com/LIUKRAST/Repackaged/releases/download/0.0.4/repackaged-0.0.4.jar",
 					"size": 1659295,
-					"downloads": 4,
+					"downloads": 5,
 					"inspection": 2,
 					"sha256": "4fce6187db7eef1e76a0e4bc5a60d0883cfbf09e4d850718709207dd5a9a9249",
 					"mods": [

@@ -6,8 +6,114 @@
 	"archived": false,
 	"license": "AGPL-3.0",
 	"created": "2026-08-05T07:06:39Z",
-	"pushed": "2026-08-27T06:42:22Z",
+	"pushed": "2026-11-28T01:55:34Z",
 	"releases": [
+		{
+			"tag": "v0.2.0",
+			"published": "2026-11-28T01:47:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 802794903,
+					"name": "shabao-ai-companion-0.2.0.jar",
+					"url": "https://github.com/txcxgzs/shabao-ai/releases/download/v0.2.0/shabao-ai-companion-0.2.0.jar",
+					"size": 677544,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "75fd6893332e14129f17f25c248afa10512217b30eebd56a85e616e436a9cc51",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "shabao_ai",
+							"version": "0.2.0",
+							"name": "Shabao AI Companion",
+							"description": "A real in-world AI companion with pluggable LLM, ASR, TTS and animated building.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"cloth-config"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.16.0",
+								"minecraft": "~1.21.1",
+								"java": ">=21",
+								"cloth-config": ">=15.0.0"
+							},
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "74eabb359add0185df0fcdbca92f4583a6a7bf821967c7eb478365453b4fc219.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"entity": [
+								"Shabao AI"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 149,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"cn/shabaoai/companion/ai/LlmClient.class": [
+									"java/net/http/HttpClient.sendAsync in chatStream, sendChat",
+									"java/net/http/HttpClient.newBuilder in <clinit>"
+								],
+								"cn/shabaoai/companion/ai/mcp/McpClientManager$HttpLink.class": [
+									"java/net/http/HttpClient.send in request",
+									"java/net/http/HttpClient.sendAsync in notify"
+								],
+								"cn/shabaoai/companion/ai/mcp/McpClientManager.class": [
+									"java/net/http/HttpClient.newBuilder in <clinit>"
+								],
+								"cn/shabaoai/companion/client/SpeechClient.class": [
+									"java/net/http/HttpClient.sendAsync in transcribe, speak",
+									"java/net/http/HttpClient.newBuilder in <clinit>"
+								]
+							},
+							"exec": {
+								"cn/shabaoai/companion/ai/mcp/McpClientManager$StdioLink.class": [
+									"java/lang/ProcessBuilder.<init> in <init>",
+									"java/lang/ProcessBuilder.redirectError in <init>",
+									"java/lang/ProcessBuilder.start in <init>"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"127.0.0.1": [
+								"cn/shabaoai/companion/ai/AutotestRunner.class"
+							],
+							"api.openai.com": [
+								"cn/shabaoai/companion/client/ShabaoConfigScreen.class"
+							],
+							"api.xiaomimimo.com": [
+								"cn/shabaoai/companion/client/ShabaoConfigScreen.class",
+								"cn/shabaoai/companion/config/ModConfig.class"
+							],
+							"your-provider.example": [
+								"cn/shabaoai/companion/config/ModConfig.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 沙包 AI v0.2.0（Minecraft 1.21.1 · Fabric）\n\n### 主要新增与优化\n- **对话 UI 与交互体验全面重构**\n  - 新增独立对话面板（默认快捷键 `G`）、极简快捷输入条（默认 `H`）以及 HUD 轻量状态胶囊，支持 `Telegram` 浅色/深色主题切换与实体右键直接发起对话。\n  - 引入 MIT 开源 `pixelarticons` 清晰图标与内置 4 套 Lumen 角色皮肤，气泡支持**可折叠的思考/工具执行过程卡片**、一键复制与跳转底部。\n  - 默认对话进度改为同步 HUD/对话窗口，不再刷屏原版左下角聊天框；断线自动重置客户端会话 UI 状态。\n- **3D 加权 A* 寻路与全自动动作链**\n  - 支持推门穿过封闭房间、梯子上下攀爬、跨越深沟免费自动搭桥，以及 `scan` / `ground_scan` 附带自我中心地形图（`egocentric_map`）与准星目标（`look_target`）感知。\n  - 前台多步执行支持中途插话 `STEER` 与 `stop` 物理断流（SSE/建造立即取消，零漏放方块），解决无路卡死时的自动脱困。\n- **外部 MCP 扩展工具集成与界面化管理**\n  - 内置零外部 SDK 依赖的轻量级 MCP 客户端（`http` Streamable HTTP 与 `stdio` 本地子进程），自动发现并暴露为可调用工具。\n  - 在配置界面（ModMenu → MCP 扩展工具页）直接增删改 MCP 服务、配置分号分隔 HTTP 请求头、支持单人集成服免 `/ai reload` 热重载；对话侧边栏 MCP 详情页支持直显服务连接失败原因。\n- **架构与命令行技术债清理**\n  - 将 `/ai` 指令精简收敛为玩家兜底（`/ai call` `/ai dismiss` `/ai stop`）+ OP 管理调试（`/ai reload` `/ai autotest` `/ai debug log|memory|undo`），移除遗留单轮入口 `LlmClient.ask`/`AiIntent` 与模板建造死代码 `StructureGenerator`。\n  - 拆分 `AgentExecutor` 与 `AgentAction` 为职责清晰的组件模块（`AgentToolSchemas`、`BuildGeometryChecker`、`BuildPathVerifier`、`CommandDispatcher`、`ShapeExpander`）。\n\n### 测试与构建说明\n- 运行环境：**Minecraft 1.21.1** + **Fabric Loader >= 0.16.0** + **Java 21+**\n- 依赖：**Fabric API**、**Cloth Config (`>=15.0.0`)**，建议安装 **ModMenu (`>=11.0.0`)**。\n- 本版本已通过 15 项纯 Java 单元测试及 12 项真机沙盒自动化集成测试（Mock SSE/MCP 模式 `PASS=12 FAIL=0`）。"
+		},
 		{
 			"tag": "v0.1.0",
 			"published": "2026-08-10T06:22:48Z",
@@ -18,7 +124,7 @@
 					"name": "shabao-ai-companion-0.1.0.jar",
 					"url": "https://github.com/txcxgzs/shabao-ai/releases/download/v0.1.0/shabao-ai-companion-0.1.0.jar",
 					"size": 481345,
-					"downloads": 43,
+					"downloads": 46,
 					"inspection": 2,
 					"sha256": "825603dbed6885579a07ce2626e5ed67b87a7a5b7e15c1fe8a2ee591fff4138e",
 					"mods": [

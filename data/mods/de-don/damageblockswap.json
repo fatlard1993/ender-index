@@ -5,8 +5,71 @@
 	"archived": false,
 	"license": "CC0-1.0",
 	"created": "2026-07-11T11:05:11Z",
-	"pushed": "2026-11-27T08:14:03Z",
+	"pushed": "2026-11-28T10:54:31Z",
 	"releases": [
+		{
+			"tag": "v1.1.0",
+			"published": "2026-11-28T10:55:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 804229545,
+					"name": "damageblockswap-1.1.0.jar",
+					"url": "https://github.com/de-don/damageblockswap/releases/download/v1.1.0/damageblockswap-1.1.0.jar",
+					"size": 298088,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "b4ef80465b2933b5e6457feb20c354f6dcc8c407d8d2ad856e805490dc504bf7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "damageblockswap",
+							"version": "1.1.0",
+							"name": "Damage Block Swap",
+							"description": "Every time you take damage, two random block types swap places. The rules pile up and the world descends into chaos as you explore. Includes a swap map, /dbs command, and config screen.",
+							"minecraft": "~26.1 || ~26.2 || ~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.3",
+								"minecraft": "~26.1 || ~26.2 || ~26.3",
+								"java": ">=25",
+								"fabric-api": ">=0.154.0+26.1.2"
+							},
+							"provides": [],
+							"suggests": [
+								"modmenu",
+								"cloth-config"
+							]
+						}
+					],
+					"icon": "69b714ad724df26b5b264cc04c840b681d73955fce9b37329b0c0b57f78d3b36.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 63,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Back up your world before updating. Downgrading to 1.0.x is not supported.**\n\n### Added\n- Operator commands (permission level 2): `/dbs status`, `/dbs pause` / `/dbs resume` (damage stops\n  adding rules until resumed or the server restarts), `/dbs add <block> <block>` (a rule by hand,\n  refusing air, block-entity, two-block and `never_swap` blocks), `/dbs undo` (cancels the newest rule\n  by adding it once more; nothing is erased from the journal) and `/dbs reload` (re-reads the config on\n  a running server; a broken or missing file keeps the current settings). `/dbs list` and `/dbs lookup` stay open\n  to everyone.\n- Chat messages and command replies are translatable (English, Russian), with an English fallback for\n  vanilla clients.\n- The swap map is synced to clients: the swap map screen and the Mod Menu \"Swap Map\" tab now work on\n  a dedicated server and for LAN guests, when both the server and the client have the mod. The server\n  sends the saved map when a player joins and after every new rule (a small packet of block ids).\n  Players without the mod get nothing and are not affected; on a server without the mod the screen\n  says so and points to `/dbs list`.\n- Settings screen: a collapsible \"Damage types that cause swaps\" section with a switch per damage\n  type of the current single player world (datapack and mod types too). It edits the\n  `ignoredDamageTypes` list, which stays what is saved; the config file format is unchanged and the\n  `#damageblockswap:ignored` tag keeps working until one of its own types is switched on. Then the tag\n  is replaced by its current types, so types added to it later (by a datapack or a future version of\n  the mod) are not picked up. On a server the section says that the server's config counts.\n- README: the mod runs on the server and vanilla clients can join; the swap map needs the mod on the client.\n\n### Compatibility\n- Works on Minecraft 26.1, 26.1.1, 26.1.2, 26.2 and 26.3 with one jar. CI builds the mod and runs all\n  unit tests and gametests on each of these versions.\n\n### Fixed\n- After the journal could not be saved for a long time, the rules are no longer announced one line\n  each once it saves again (in normal play too): at most 20 lines, then one \"...and N more new rules\" line. Hits waiting\n  for a save no longer pile up in memory without a limit.\n- Crashes and compatibility: Mod Menu works without Cloth Config, `/dbs lookup` accepts block\n  ids correctly, locale-independent id handling, fake players ignored, per-dimension player chunk tracking.\n- Swap map screen no longer reads the journal while the server thread writes it.\n- Multiplayer: a new rule now updates the area around **every** player right away, not only around\n  the player who got hurt (others used to see it only after crossing a chunk border).\n- Multiplayer: new rules are announced to every player and the server console, with the name of the\n  player who got hurt (`Steve got hurt: Stone ↔ Sand`). If the rule book could not be saved, the\n  message comes once a retry saves it instead of never.\n- The swap map screen and the Mod Menu \"Swap Map\" tab no longer say \"No blocks have been swapped yet\"\n  on a server they can't see the rules of (one without the mod); they point to `/dbs list` instead.\n\n### Changed\n- Reliable swap journal: atomic writes with fsync, corrupt files set aside as `.corrupt-<date>`,\n  journal ids, placeholders for blocks that no longer exist, quarantine for chunks that do not\n  match the journal. Worlds from 1.0.x are converted automatically (`.v1-backup` is kept).\n- Chunk processing: per-chunk progress cursor (a chunk is never swapped twice, even after a crash\n  or unload), chunks wait for their neighbours, swaps no longer trigger neighbour updates or drops,\n  nearest chunks first, much cheaper block scan.\n- Safe rules: new rules never pick blocks in the block tag `damageblockswap:never_swap` (bedrock,\n  portals and end portal frames, barriers, light, fire, command/structure blocks, infested blocks,\n\n\n..."
+		},
 		{
 			"tag": "v1.0.1",
 			"published": "2026-07-11T11:47:25Z",
@@ -17,7 +80,7 @@
 					"name": "damageblockswap-1.0.1.jar",
 					"url": "https://github.com/de-don/damageblockswap/releases/download/v1.0.1/damageblockswap-1.0.1.jar",
 					"size": 192336,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "f257add9297861c142dc4f015e09781a5589e71e7c508302ff79040b1a1a14b1",
 					"mods": [
@@ -70,7 +133,7 @@
 					"name": "damageblockswap-1.0.0.jar",
 					"url": "https://github.com/de-don/damageblockswap/releases/download/v1.0.0/damageblockswap-1.0.0.jar",
 					"size": 41160,
-					"downloads": 1,
+					"downloads": 2,
 					"inspection": 2,
 					"sha256": "6c8297aeff55d1b168f44b601f98b63a3b9f72262a54bfaa1b86ea4f0454b4da",
 					"mods": [

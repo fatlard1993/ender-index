@@ -9,6 +9,92 @@
 	"pushed": "2026-11-27T01:45:15Z",
 	"releases": [
 		{
+			"tag": "1.4.0",
+			"published": "2026-11-28T14:21:43Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 804823804,
+					"name": "DeadSun-1.4.0-universal.jar",
+					"url": "https://github.com/G10W5/dead-sun/releases/download/1.4.0/DeadSun-1.4.0-universal.jar",
+					"size": 857253,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "6a94ff97db7d190a7ba1cb128c20e3ed3cf1005e8f6074cac1af280aa89e94af",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "deadsun",
+							"version": "1.4.0",
+							"name": "Dead Sun",
+							"description": "Hardcore daytime zombie survival with torch safety mechanics.",
+							"minecraft": ">=26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.3",
+								"minecraft": ">=26.1.2",
+								"java": ">=25"
+							},
+							"provides": [],
+							"suggests": [
+								"cloth-config2",
+								"modmenu"
+							]
+						},
+						{
+							"loader": "neoforge",
+							"id": "deadsun",
+							"version": "1.4.0",
+							"name": "Dead Sun",
+							"description": "Hardcore daytime zombie survival with torch safety mechanics.",
+							"minecraft": "[26.1.2,)",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"neoforge"
+							],
+							"dependsVersions": {
+								"minecraft": "[26.1.2,)",
+								"neoforge": "[26.1,)"
+							},
+							"suggests": [
+								"cloth_config"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Loot Bag"
+							]
+						},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 31,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Dead Sun v1.4.0\n\n**Universal JAR** supporting **Fabric** and **NeoForge** across **Minecraft 26.1.2, 26.2, and 26.3**.\n\n### What's New\n- **Allow Other Hostile Mobs (`allowOtherHostileMobs`, default `false`):** New Spawn Settings toggle (with Fabric & NeoForge config UI support) to let vanilla and modded hostile mobs—and pillager patrols—spawn alongside Dead Sun zombies. Only zombies remain sun-immune when enabled, and `daysBeforeActivation` now applies consistently across spawning, patrols, and sunburn.\n- **Multi-Version Compatibility (MC 26.1.2 – 26.3):** Single universal JAR verified across Minecraft 26.1.2, 26.2, and 26.3 (replaced removed `BlockState.blocksMotion()`, `Entity.hurtMarked`, `Player.drop()`, `PoseStack.mulPose(Quaternionfc)`, guarded `LivingEntity.swing()`, and replaced `EntityTypeIds` with `Identifier.withDefaultNamespace`).\n\n### Crawling & Swimming Overhaul\n- **True Crawling Hitbox & Rotation:** Zombies in `Pose.SWIMMING` now shrink to a centered `0.8 × 0.8` hitbox and pitch horizontally so they can physically crawl through 1-block gaps while remaining fair to hit.\n- **Path-Aware, Slower Crawling:** Zombies only drop to a crawl when blocked with no normal walk-around path (instead of cutting under bushy trees) and move at a realistic slow crawl speed.\n- **Balanced, Head-First Swimming:** Swimming zombies now swim in both shallow and deep water facing head-first toward their target at an outswimmable speed.\n- **Drowned Fix:** Excluded Drowned from custom zombie swimming/ankle hitbox overrides so they use their native aquatic AI and full hitbox.\n\n### Balance & Pacing\n- **Anti-Clutter Spawning:** Enforced `minSpawnDistance` against all players for both group centers and followers, added crowd-spacing checks so packs don't stack on the same spot, widened group scatter (`10×10`), and toned down per-cycle waves.\n- **Default Config Tuning:** `ticksBetweenSpawns` (`20` → `80`), `spawnDensity` (`50` → `30`), `maxZombiesOverworld` (`20` → `24`), `maxZombiesNether` (`70` → `50`), `maxZombiesEnd` (`150` → `100`), `minGroupSize`/`maxGroupSize` (`3–8` → `2–4`), `runnerSpeedBoost` (`+100%` → `+45%`), `exploderFuseTime` (`40` → `50` ticks), `leapCooldown` (`120` → `140` ticks), `noisyZombieCooldown` (`200` → `300` ticks), plus slightly lower variant/alpha rates.\n- **Combat Pacing:** Noisy zombie calls always require line of sight and alert at most 6 nearby zombies; zombie leaps always require line of sight and use staggered cooldown jitter.\n\n### Bug Fixes\n- Fixed inverted light check in `ZombieSpawnHandler.spawnGroup` that blocked group followers by default, wired group sizes to `minGroupSize`/`maxGroupSize`, checked empty fluids, and removed the 8-block cap on `torchRadius`.\n- Fixed inverted night check and brightness normalization in `LightTrackingHandler`, and stopped active chasers from being pulled away by light or wandering hordes.\n- Fixed Exploder fuses pausing when players move >16 blocks away and cleaned up `FUSE_TIMERS` on death.\n- Fixed `SoundTrackingHandler` leaking levels (`WeakHashMap`), ignored zombie/weather/ambient sound sources, and applied crouch scaling to block-break noise.\n- Fixed `NoisyZombieHandler` unsafe `ServerPlayer` cast and map growth, added a 60-tick pile-up climb timeout safety, and fixed `LootBagItem` dropping rewards when inventory is full."
+		},
+		{
 			"tag": "1.3.1",
 			"published": "2026-07-17T11:38:50Z",
 			"prerelease": false,
