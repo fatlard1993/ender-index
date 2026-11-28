@@ -1,0 +1,476 @@
+{
+	"repo": "JMLambo/vframegen",
+	"host": "github",
+	"description": "Frame generation for Minecraft 26.3 (Fabric) on the Vulkan renderer, with Iris shader packs, Sodium and Distant Horizons. Includes render scale upscaling.",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-11-20T03:29:34Z",
+	"pushed": "2026-11-26T06:24:43Z",
+	"releases": [
+		{
+			"tag": "v1.0.0-beta.9",
+			"published": "2026-11-26T06:22:00Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 794590102,
+					"name": "vframegen-1.0.0-beta.9+mc26.3.jar",
+					"url": "https://github.com/JMLambo/vframegen/releases/download/v1.0.0-beta.9/vframegen-1.0.0-beta.9%2Bmc26.3.jar",
+					"size": 308568,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "930a44ddcee91fdecb4994c8b4a7662b31f515e0eefa8e9593f6b141ad9a62ac",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "vframegen",
+							"version": "1.0.0-beta.9+mc26.3",
+							"name": "VFrameGen",
+							"description": "Frame generation for Minecraft's Vulkan (and OpenGL) renderer: shows generated frames between real ones, built by depth-aware interpolation. Works with Sodium, Iris and Vitrail shader packs, and Distant Horizons. Includes render scale upscaling.",
+							"minecraft": ">=26.3 <26.4-",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.5",
+								"minecraft": ">=26.3 <26.4-",
+								"java": ">=25"
+							},
+							"provides": [],
+							"suggests": [
+								"cloth-config",
+								"modmenu",
+								"controlify",
+								"sodium"
+							]
+						}
+					],
+					"icon": "45a18aba4a2e4a69e44bbdde5b91695cc909989fa0dbe636c24266c1cddbc5b5.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"version": 3,
+						"classes": 61,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Frame generation works with **Vitrail** shader packs on Vulkan (tested with Vitrail 0.13.0-beta,\n  Sodium 0.9.2 and Complementary Reimagined r5.10 on an RTX 4050). Joining a world no longer crashes\n  with \"Close the existing render pass before creating a new one\", mobs no longer disappear and the\n  held item no longer leaves artifacts. Blocks seen through water stay put between generated frames,\n  and moving mobs no longer drag the blocks behind them. A pack's own motion blur gets the same\n  warning as with Iris.\n\n\n**Full Changelog**: https://github.com/JMLambo/vframegen/compare/v1.0.0-beta.8...v1.0.0-beta.9"
+		},
+		{
+			"tag": "v1.0.0-beta.8",
+			"published": "2026-11-25T17:05:24Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 792382873,
+					"name": "vframegen-1.0.0-beta.8+mc26.3.jar",
+					"url": "https://github.com/JMLambo/vframegen/releases/download/v1.0.0-beta.8/vframegen-1.0.0-beta.8%2Bmc26.3.jar",
+					"size": 307456,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "29a5e78785a6d1fcfedb642fa032457d9fb286ef7929b0c044d8ed347c1832cc",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "vframegen",
+							"version": "1.0.0-beta.8+mc26.3",
+							"name": "VFrameGen",
+							"description": "Frame generation for Minecraft's Vulkan (and OpenGL) renderer: shows generated frames between real ones, built by depth-aware interpolation. Works with Sodium, Iris shader packs and Distant Horizons. Includes render scale upscaling.",
+							"minecraft": ">=26.3 <26.4-",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.5",
+								"minecraft": ">=26.3 <26.4-",
+								"java": ">=25"
+							},
+							"provides": [],
+							"suggests": [
+								"cloth-config",
+								"modmenu",
+								"controlify",
+								"sodium"
+							]
+						}
+					],
+					"icon": "45a18aba4a2e4a69e44bbdde5b91695cc909989fa0dbe636c24266c1cddbc5b5.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"version": 3,
+						"classes": 61,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Sharper generated frames with the Temporal upscaler: they read its image with a sharp filter\n  instead of a plain blend between pixels, which made them about 5% softer than the real frames\n  around them (fine textures such as grass shimmered between sharp and soft while moving). Now they\n  match.\n- New experimental setting, off by default: **Follow mobs turning** (Mod Menu → VFrameGen →\n  Quality). Generated frames also turn moving mobs with their body, not only move them. Uses the\n  game's own body rotation, so it works with model mods such as Entity Model Features. No visible\n  difference in tests yet.\n- On OpenGL (or with the present thread off), when the GPU has no time to spare between frames\n  (typical on integrated graphics), generated frames reach the screen late, right before the next\n  real frame: motion judders, moving mobs can look torn and the screen can flicker in brightness.\n  Vulkan with the present thread on (the default) is not affected. VFrameGen now says so once in the\n  game log when it happens, and the README lists it under known issues.\n- Debug: with F8 captures and the frame log both on, F8 also saves the next 24 frames in a row.\n- Correction to the 1.0.0-beta.7 notes: the optical-flow edge fix applies to both kinds of optical\n  flow (NVIDIA hardware and the shader version on other GPUs), not only NVIDIA. It was measured on\n  NVIDIA.\n\n\n**Full Changelog**: https://github.com/JMLambo/vframegen/compare/v1.0.0-beta.7...v1.0.0-beta.8"
+		},
+		{
+			"tag": "v1.0.0-beta.7",
+			"published": "2026-11-24T16:38:28Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 787983334,
+					"name": "vframegen-1.0.0-beta.7+mc26.3.jar",
+					"url": "https://github.com/JMLambo/vframegen/releases/download/v1.0.0-beta.7/vframegen-1.0.0-beta.7%2Bmc26.3.jar",
+					"size": 303915,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "fafc1f643f9572e14bc23bb752958283ba8f1774091204d3c4f0dca81a916c15",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "vframegen",
+							"version": "1.0.0-beta.7+mc26.3",
+							"name": "VFrameGen",
+							"description": "Frame generation for Minecraft's Vulkan (and OpenGL) renderer: shows generated frames between real ones, built by depth-aware interpolation. Works with Sodium, Iris shader packs and Distant Horizons. Includes render scale upscaling.",
+							"minecraft": ">=26.3 <26.4-",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.5",
+								"minecraft": ">=26.3 <26.4-",
+								"java": ">=25"
+							},
+							"provides": [],
+							"suggests": [
+								"cloth-config",
+								"modmenu",
+								"controlify",
+								"sodium"
+							]
+						}
+					],
+					"icon": "45a18aba4a2e4a69e44bbdde5b91695cc909989fa0dbe636c24266c1cddbc5b5.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"version": 3,
+						"classes": 61,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- More real fps with frame generation on a GPU that is already busy. The auto frame cap lowered the\n  real frame rate whenever generated frames came out off time, and kept lowering it, down to half,\n  even when that didn't help (the GPU, not the cap, was the limit). It now checks each step down,\n  goes back up when it didn't help, and waits longer before each new try. On a Radeon 660M at 1080p\n  (2x) real fps went from 44 to about 52.\n- Motion blur is cheaper with the same look: whether a pixel is GUI or the held item is worked out\n  once per real frame instead of again for every blur sample on every shown frame, and short smears\n  take fewer samples. Together about 9 more real fps on the 660M with motion blur on.\n- Cleaner edges in generated frames with optical flow on (NVIDIA): the edges of nearby blocks, such\n  as a tree trunk you walk past, no longer bulge or leave dark streaks. Optical flow is now left out\n  right at the edge of a nearby block, where depth already moves it exactly; mobs keep it. No\n  measurable cost.\n\n\n**Full Changelog**: https://github.com/JMLambo/vframegen/compare/v1.0.0-beta.6...v1.0.0-beta.7"
+		},
+		{
+			"tag": "v1.0.0-beta.6",
+			"published": "2026-11-23T20:10:39Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 784379525,
+					"name": "vframegen-1.0.0-beta.6+mc26.3.jar",
+					"url": "https://github.com/JMLambo/vframegen/releases/download/v1.0.0-beta.6/vframegen-1.0.0-beta.6%2Bmc26.3.jar",
+					"size": 301393,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "83b43c9640d35f1e7522f9ff47a06214dbc0d7dfff6634bd7c76b9dcf5428890",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "vframegen",
+							"version": "1.0.0-beta.6+mc26.3",
+							"name": "VFrameGen",
+							"description": "Frame generation for Minecraft's Vulkan (and OpenGL) renderer: shows generated frames between real ones, built by depth-aware interpolation. Works with Sodium, Iris shader packs and Distant Horizons. Includes render scale upscaling.",
+							"minecraft": ">=26.3 <26.4-",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.5",
+								"minecraft": ">=26.3 <26.4-",
+								"java": ">=25"
+							},
+							"provides": [],
+							"suggests": [
+								"cloth-config",
+								"modmenu",
+								"controlify",
+								"sodium"
+							]
+						}
+					],
+					"icon": "45a18aba4a2e4a69e44bbdde5b91695cc909989fa0dbe636c24266c1cddbc5b5.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"version": 3,
+						"classes": 61,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Fixed frame generation failing on the first generated frame (and the game then crashing) on OpenGL\n  without Sodium. The game's own OpenGL renderer lets a draw read only 12 textures, and a generated\n  frame read 14. VFrameGen now checks the limit: without enough slots, optical flow and drawing\n  generated frames at the render scale are left off by themselves, and a failure can no longer crash\n  the game afterwards. Sodium raises the limit, so nothing changes with Sodium installed, or on\n  Vulkan.\n- Fixed a crash on joining a world with the official Iris release and shaders off (\"Use of a disposed\n  LocalRef\").\n\n\n**Full Changelog**: https://github.com/JMLambo/vframegen/compare/v1.0.0-beta.5...v1.0.0-beta.6"
+		},
+		{
+			"tag": "v1.0.0-beta.5",
+			"published": "2026-11-22T20:30:12Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 780367031,
+					"name": "vframegen-1.0.0-beta.5+mc26.3.jar",
+					"url": "https://github.com/JMLambo/vframegen/releases/download/v1.0.0-beta.5/vframegen-1.0.0-beta.5%2Bmc26.3.jar",
+					"size": 299379,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "62f8ff4b748a95a512beb7acd8e201956daf9522abeb30921f4967a9e46b75ad",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "vframegen",
+							"version": "1.0.0-beta.5+mc26.3",
+							"name": "VFrameGen",
+							"description": "Frame generation for Minecraft's Vulkan (and OpenGL) renderer: shows generated frames between real ones, built by depth-aware interpolation. Works with Sodium, Iris shader packs and Distant Horizons. Includes render scale upscaling.",
+							"minecraft": ">=26.3 <26.4-",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.5",
+								"minecraft": ">=26.3 <26.4-",
+								"java": ">=25"
+							},
+							"provides": [],
+							"suggests": [
+								"cloth-config",
+								"modmenu",
+								"controlify",
+								"sodium"
+							]
+						}
+					],
+					"icon": "45a18aba4a2e4a69e44bbdde5b91695cc909989fa0dbe636c24266c1cddbc5b5.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"version": 3,
+						"classes": 60,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Coming up: better compatibility with other mods will be the main focus of the next few betas,\n  along with smoothing out the experience on more hardware setups.\n- Generated frames are cheaper to make: the second real frame is only searched where it is used,\n  and each search stops once it has found its pixel. On a Radeon 660M at 1080p a generated frame\n  went from about 9 ms to about 4.3 ms of GPU time, with the same picture.\n- Below 100% render scale, generated frames are drawn at the render scale and upscaled like the real\n  frames (same upscaler, sharpening and anti-aliasing), with the GUI and held item kept at full\n  resolution. With the Temporal upscaler, which generated frames can't use, the new\n  \"Generated-frame upscaler\" setting picks Full resolution, Bicubic or Edge-adaptive.\n- Adaptive mode keeps generated frames within a share of the GPU's time. On GPUs where a generated\n  frame is expensive (a laptop iGPU at 1080p), asking for more of them to reach the target slowed\n  the real frames, which then asked for even more: real fps could fall from 60 to 15.\n\n\n**Full Changelog**: https://github.com/JMLambo/vframegen/compare/v1.0.0-beta.4...v1.0.0-beta.5"
+		},
+		{
+			"tag": "v1.0.0-beta.4",
+			"published": "2026-11-22T15:15:38Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 779464304,
+					"name": "vframegen-1.0.0-beta.4+mc26.3.jar",
+					"url": "https://github.com/JMLambo/vframegen/releases/download/v1.0.0-beta.4/vframegen-1.0.0-beta.4%2Bmc26.3.jar",
+					"size": 293048,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "299805af45251575dde893cb004d03e3a1500f743c127d2cd293a60d092fe4e5",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "vframegen",
+							"version": "1.0.0-beta.4+mc26.3",
+							"name": "VFrameGen",
+							"description": "Frame generation for Minecraft's Vulkan (and OpenGL) renderer: shows generated frames between real ones, built by depth-aware interpolation. Works with Sodium, Iris shader packs and Distant Horizons. Includes render scale upscaling.",
+							"minecraft": ">=26.3 <26.4-",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.5",
+								"minecraft": ">=26.3 <26.4-",
+								"java": ">=25"
+							},
+							"provides": [],
+							"suggests": [
+								"cloth-config",
+								"modmenu",
+								"controlify",
+								"sodium"
+							]
+						}
+					],
+					"icon": "45a18aba4a2e4a69e44bbdde5b91695cc909989fa0dbe636c24266c1cddbc5b5.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"version": 3,
+						"classes": 59,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Shader optical flow ignores blocks with almost no texture (sky, fog, plain walls), where its matches were noise.\n- Optical flow on every GPU (experimental where there is no optical flow hardware: AMD, Intel, or\n  NVIDIA on OpenGL). It is measured with shaders, as a coarse-to-fine block search in the spirit of\n  FSR 3's optical flow (draw passes, since the game's renderer has no compute shaders), with a\n  median filter against wrong matches. Its measuring resolution follows its GPU time (about 1 ms at\n  most), so slower GPUs measure smaller. NVIDIA RTX on Vulkan keeps using its optical flow hardware.\n  The setting is now \"Optical flow (beta)\"; its tooltip says which kind your GPU uses.\n- The Quality preset turns optical flow on, and the Low-end preset turns it off (its GPU time goes to\n  the real frames instead).\n\n\n**Full Changelog**: https://github.com/JMLambo/vframegen/compare/v1.0.0-beta.3...v1.0.0-beta.4"
+		},
+		{
+			"tag": "v1.0.0-beta.3",
+			"published": "2026-11-22T13:18:41Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 779133145,
+					"name": "vframegen-1.0.0-beta.3+mc26.3.jar",
+					"url": "https://github.com/JMLambo/vframegen/releases/download/v1.0.0-beta.3/vframegen-1.0.0-beta.3%2Bmc26.3.jar",
+					"size": 279075,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "e6868297bf9b723bf136ac0c2bd81e1f5f93448225521188701c47b190c490a7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "vframegen",
+							"version": "1.0.0-beta.3+mc26.3",
+							"name": "VFrameGen",
+							"description": "Frame generation for Minecraft's Vulkan (and OpenGL) renderer: shows generated frames between real ones, built by depth-aware interpolation. Works with Sodium, Iris shader packs and Distant Horizons. Includes render scale upscaling.",
+							"minecraft": ">=26.3 <26.4-",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.5",
+								"minecraft": ">=26.3 <26.4-",
+								"java": ">=25"
+							},
+							"provides": [],
+							"suggests": [
+								"cloth-config",
+								"modmenu",
+								"controlify",
+								"sodium"
+							]
+						}
+					],
+					"icon": "45a18aba4a2e4a69e44bbdde5b91695cc909989fa0dbe636c24266c1cddbc5b5.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"version": 3,
+						"classes": 57,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "- Hardware optical flow on NVIDIA RTX (20 series and newer, Vulkan), in beta: the GPU's optical flow unit\n  measures how the picture moved between the two real frames, and generated frames follow the part\n  depth reprojection cannot see (mob limbs, fire, particles, water, animated textures). Camera and\n  whole-entity motion still come from depth; the flow is used only where both directions agree and\n  it differs from depth by more than a couple of pixels. On by default where supported (setting\n  \"Hardware optical flow\", greyed out on other GPUs); interpolated mode only. About 0.25 ms of\n  render-thread time per real frame. Beta: tested on an RTX 4050 only so far; turn it off if\n  generated frames look wrong.\n- Screenshots (F2) with render scale below 100% (for example dynamic render scale with a shader\n  pack) were the small world image without the GUI. They are the full-size picture again.\n- Adaptive frame generation can go up to 8x (fixed multipliers stay at 2x to 6x), for very low\n  real frame rates.\n- Adaptive mode asks for fewer generated frames whenever some get dropped (drawn, but no swapchain\n  image free when due): they cost GPU time and were never shown. The ceiling moves in tenths and\n  recovers within seconds once drops stop.\n- Fixed input lag and the game slowing down and catching up in waves with the present queue: frames\n  could queue two or three real frames deep. The queue is now kept about one real frame deep\n  (generated frames beyond that are not drawn), which also gave real frames their GPU time back.\n\n- Generated frames no longer go missing with a GPU-heavy shader pack on Vulkan (NVIDIA): each one\n  now takes a swapchain image only when it is due, on a second queue of its own, instead of holding\n  one while it waits. Before, with the render thread a frame ahead, the swapchain ran out of images\n  and adaptive mode fell well short of its target (for example ~130 of 180 fps). Used only with a\n  plain 8-bit sRGB swapchain (not with an HDR mod) and when the GPU has a spare graphics queue;\n  otherwise frames go through the swapchain as before.\n\n\n**Full Changelog**: https://github.com/JMLambo/vframegen/compare/v1.0.0-beta.2...v1.0.0-beta.3"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [],
+	"contributors": {
+		"commits": 86,
+		"more": 0,
+		"people": [
+			{
+				"login": "JMLambo",
+				"commits": 86,
+				"name": "JM Lambo",
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

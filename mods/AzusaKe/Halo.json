@@ -1,0 +1,797 @@
+{
+	"repo": "AzusaKe/Halo",
+	"host": "github",
+	"description": "add halo to minecraft",
+	"stars": 5,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-06-17T05:57:35Z",
+	"pushed": "2026-11-07T07:35:10Z",
+	"releases": [
+		{
+			"tag": "v2.6.0-fabric-26.3-adapter.1",
+			"published": "2026-11-07T07:37:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 719993668,
+					"name": "halo-26.3-fabric-2.6.0+adapter.1.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.6.0-fabric-26.3-adapter.1/halo-26.3-fabric-2.6.0%2Badapter.1.jar",
+					"size": 861589,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "3d279245efe0cc0e9d2657c78b161ac5782c08458a214920ad7c8f519743236a",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "halo",
+							"version": "2.6.0+adapter.1",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "=26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 417,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.1-fabric-26.3-adapter.1...v2.6.0-fabric-26.3-adapter.1)\n\n---\n\n- Add optional official replay integration for **Minecraft 26.3 Fabric**: ReplayMod **26.3-2.6.28** and Flashback **0.43.6** using their Minecraft 26.3 files. Reuse one core API v2 host and schema 1 recording track for equipment, startup/shutdown progress and actual scepter UI state.\n- Advance playback and export by recording source time, including speed changes. Pause and repeated views do not advance simulation; continuous playback retains inertia across covered periodic snapshots, while seeks restore phase and clear future motion.\n- Keep ReplayMod Full/Quick indexing, marker-baseline rewriting and export boundaries, plus Flashback snapshot and output-frame hooks.\n- Hide replay scepter UI by default. Opt in with the client JSON boolean `replayScepterUiEnabled=true` and restart; ESC/the close button work during playback or pause without immediate reopening. The next recorded opening or seek may restore the screen; export always hides it. Playback blocks live ownership/C2S write-back and recursive recording.\n- Preserve this platform's existing rendering/input architecture and existing definitions, saves, online packets and API v2 signatures. Players install one Halo JAR; recorder mods are optional and are not bundled.\n- Pin HaloCore to **2.6.0 / 03f84db5**, adapter revision **1**. The maintainer explicitly accepted the corresponding development build on **2026-11-07**. Behavior source/configuration hashes match that accepted build; release version and commit provenance are regenerated from the clean committed tree.\n- Formal local builds passed all **364 core tests** and **159/159 adapter tests** with no failures, errors or skips. The two targeted official-recorder ABI cases actually executed and passed. Codec, UI/config, legacy API, core boundaries, distribution and clean commit provenance checks passed. Earlier accepted development-build checks covered isolated client startup and dedicated-server client-class isolation. CI without these external recorder fixtures reports its ABI skips separately and does not replace the local ABI results.\n- Recordings do not embed resources or recover information missing from old recordings. Original gameplay physics trajectories and frame-identical results across FPS are not guaranteed. Unreported marker, multiview, Iris/LabPBR and third-party model combinations retain separate validation scope.\n- Known startup observation: the first concurrent-client run hit a native `jvm.dll / 0xc0000005` crash. The same package initialized and passed required hooks on an isolated retry; the cause remains unlocated and is not claimed fixed.\n\nRequires **Java 25** or newer and Fabric API for **Minecraft 26.3 Fabric**. Built with Fabric Loader **0.19.5** / Fabric API **0.160.6+26.3**. Install and test the two recorder mods separately.\n\nThe setting is in `config/halo-azusake/halo_mod_config.json`; only the JSON boolean `true` enables replay UI.\n\n---\n\n- 为 **Minecraft 26.3 Fabric** 接入可选官方回放兼容：ReplayMod **26.3-2.6.28** 与 Flashback **0.43.6**，使用各自对应 MC 文件。共用 core API v2 宿主和 schema 1 轨道，记录佩戴、启动／关闭进度及权杖实际开关状态。\n- 普通回放和导出按录像源时间推进，随倍速变化；暂停和重复视角不额外推进。连续经过已覆盖周期快照保留惯性，seek 恢复相位并清除未来运动。\n- 保留 ReplayMod Full／Quick 索引、marker 起点快照重写与导出边界，并接入 Flashback 快照和输出帧 hook。\n- 默认隐藏回放权杖 UI。客户端 JSON 布尔配置 `replayScepterUiEnabled=true` 并重启可显式启用；播放／暂停均可 ESC／按钮关闭，不会立即重开，下一次录制打开或 seek 可恢复显示。导出始终隐藏，回放隔离实时佩戴／C2S 写回及递归录制。\n- 保留本平台既有绘制和输入架构，旧定义、存档、在线数据包及公开 API v2 保持兼容。玩家只安装一个 Halo JAR；录制器可选且不内嵌。\n- 固定 HaloCore **2.6.0 / 03f84db5**，适配修订 **1**。维护者已于 **2026-11-07** 明确确认对应开发包测试通过；行为源码／配置哈希与该验收包一致，正式版本标识和来源信息从干净提交重新生成。\n- 正式本地构建通过 **364 项 core 测试**；适配器 **159 项中 159 项通过**，无失败、错误或跳过。两个目标官方录制器 ABI 用例均实际执行通过；codec、UI／配置、旧 API、core 边界、合包和干净提交来源检查通过。此前已验收开发包完成隔离客户端启动和专服客户端类隔离检查。云端未提供外部录制器 fixture 时的 ABI 跳过单独保留，不能替代本地实际执行结果。\n- 录像不内嵌资源，旧录像缺失的信息无法补录；不保证原游玩物理轨迹或跨 FPS 逐帧一致。未逐项报告的 marker、多视角、Iris/LabPBR 及第三方模型组合保留独立验收边界。\n\n..."
+		},
+		{
+			"tag": "v2.6.0-fabric-26.2-adapter.1",
+			"published": "2026-11-07T07:36:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 719992660,
+					"name": "halo-26.2-fabric-2.6.0+adapter.1.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.6.0-fabric-26.2-adapter.1/halo-26.2-fabric-2.6.0%2Badapter.1.jar",
+					"size": 848511,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "a6717f77641ab99c487c5611c9f5bdb917021f23447f22932e0502106dbe173c",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "halo",
+							"version": "2.6.0+adapter.1",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "=26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 408,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.1-fabric-26.2-adapter.1...v2.6.0-fabric-26.2-adapter.1)\n\n---\n\n- Add optional official replay integration for **Minecraft 26.2 Fabric**: ReplayMod **26.2-2.6.28** and Flashback **0.43.6** using their Minecraft 26.2 files. Reuse one core API v2 host and schema 1 recording track for equipment, startup/shutdown progress and actual scepter UI state.\n- Advance playback and export by recording source time, including speed changes. Pause and repeated views do not advance simulation; continuous playback retains inertia across covered periodic snapshots, while seeks restore phase and clear future motion.\n- Keep ReplayMod Full/Quick indexing, marker-baseline rewriting and export boundaries, plus Flashback snapshot and output-frame hooks.\n- Hide replay scepter UI by default. Opt in with the client JSON boolean `replayScepterUiEnabled=true` and restart; ESC/the close button work during playback or pause without immediate reopening. The next recorded opening or seek may restore the screen; export always hides it. Playback blocks live ownership/C2S write-back and recursive recording.\n- Preserve this platform's existing rendering/input architecture and existing definitions, saves, online packets and API v2 signatures. Players install one Halo JAR; recorder mods are optional and are not bundled.\n- Pin HaloCore to **2.6.0 / 03f84db5**, adapter revision **1**. The maintainer explicitly accepted the corresponding development build on **2026-11-07**. Behavior source/configuration hashes match that accepted build; release version and commit provenance are regenerated from the clean committed tree.\n- Formal local builds passed all **364 core tests** and **155/155 adapter tests** with no failures, errors or skips. The two targeted official-recorder ABI cases actually executed and passed. Codec, UI/config, legacy API, core boundaries, distribution and clean commit provenance checks passed. Earlier accepted development-build checks covered isolated client startup and dedicated-server client-class isolation. CI without these external recorder fixtures reports its ABI skips separately and does not replace the local ABI results.\n- Recordings do not embed resources or recover information missing from old recordings. Original gameplay physics trajectories and frame-identical results across FPS are not guaranteed. Unreported marker, multiview, Iris/LabPBR and third-party model combinations retain separate validation scope.\n\nRequires **Java 25** or newer and Fabric API for **Minecraft 26.2 Fabric**. Built with Fabric Loader **0.19.3** / Fabric API **0.157.0+26.2**. Install and test the two recorder mods separately.\n\nThe setting is in `config/halo-azusake/halo_mod_config.json`; only the JSON boolean `true` enables replay UI.\n\n---\n\n- 为 **Minecraft 26.2 Fabric** 接入可选官方回放兼容：ReplayMod **26.2-2.6.28** 与 Flashback **0.43.6**，使用各自对应 MC 文件。共用 core API v2 宿主和 schema 1 轨道，记录佩戴、启动／关闭进度及权杖实际开关状态。\n- 普通回放和导出按录像源时间推进，随倍速变化；暂停和重复视角不额外推进。连续经过已覆盖周期快照保留惯性，seek 恢复相位并清除未来运动。\n- 保留 ReplayMod Full／Quick 索引、marker 起点快照重写与导出边界，并接入 Flashback 快照和输出帧 hook。\n- 默认隐藏回放权杖 UI。客户端 JSON 布尔配置 `replayScepterUiEnabled=true` 并重启可显式启用；播放／暂停均可 ESC／按钮关闭，不会立即重开，下一次录制打开或 seek 可恢复显示。导出始终隐藏，回放隔离实时佩戴／C2S 写回及递归录制。\n- 保留本平台既有绘制和输入架构，旧定义、存档、在线数据包及公开 API v2 保持兼容。玩家只安装一个 Halo JAR；录制器可选且不内嵌。\n- 固定 HaloCore **2.6.0 / 03f84db5**，适配修订 **1**。维护者已于 **2026-11-07** 明确确认对应开发包测试通过；行为源码／配置哈希与该验收包一致，正式版本标识和来源信息从干净提交重新生成。\n- 正式本地构建通过 **364 项 core 测试**；适配器 **155 项中 155 项通过**，无失败、错误或跳过。两个目标官方录制器 ABI 用例均实际执行通过；codec、UI／配置、旧 API、core 边界、合包和干净提交来源检查通过。此前已验收开发包完成隔离客户端启动和专服客户端类隔离检查。云端未提供外部录制器 fixture 时的 ABI 跳过单独保留，不能替代本地实际执行结果。\n- 录像不内嵌资源，旧录像缺失的信息无法补录；不保证原游玩物理轨迹或跨 FPS 逐帧一致。未逐项报告的 marker、多视角、Iris/LabPBR 及第三方模型组合保留独立验收边界。\n\n需要 **Java 25** 或更高版本，以及适用于 **Minecraft 26.2 Fabric** 的 Fabric API。构建使用 Fabric Loader **0.19.3** / Fabric API **0.157.0+26.2**。 两个录制器分开安装与测试。\n\n配置路径为 `config/halo-azusake/halo_mod_config.json`，只有 JSON 布尔值 `true` 启用回放 UI。\n\n\n..."
+		},
+		{
+			"tag": "v2.6.0-fabric-26.1-adapter.1",
+			"published": "2026-11-07T07:36:45Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 719992594,
+					"name": "halo-26.1.2-fabric-2.6.0+adapter.1.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.6.0-fabric-26.1-adapter.1/halo-26.1.2-fabric-2.6.0%2Badapter.1.jar",
+					"size": 847252,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "00da6ef64bb25ddcfb6db7688b87f38487c7b40089f8770e681919e52a17803e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "halo",
+							"version": "2.6.0+adapter.1",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": ">=26.1 <26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 407,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.1-fabric-26.1-adapter.1...v2.6.0-fabric-26.1-adapter.1)\n\n---\n\n- Add optional official replay integration for **Minecraft 26.1.2 Fabric**: ReplayMod **26.1-2.6.28** and Flashback **0.43.3** using their Minecraft 26.1.2 files. Reuse one core API v2 host and schema 1 recording track for equipment, startup/shutdown progress and actual scepter UI state.\n- Advance playback and export by recording source time, including speed changes. Pause and repeated views do not advance simulation; continuous playback retains inertia across covered periodic snapshots, while seeks restore phase and clear future motion.\n- Keep ReplayMod Full/Quick indexing, marker-baseline rewriting and export boundaries, plus Flashback snapshot and output-frame hooks.\n- Hide replay scepter UI by default. Opt in with the client JSON boolean `replayScepterUiEnabled=true` and restart; ESC/the close button work during playback or pause without immediate reopening. The next recorded opening or seek may restore the screen; export always hides it. Playback blocks live ownership/C2S write-back and recursive recording.\n- Preserve this platform's existing rendering/input architecture and existing definitions, saves, online packets and API v2 signatures. Players install one Halo JAR; recorder mods are optional and are not bundled.\n- Pin HaloCore to **2.6.0 / 03f84db5**, adapter revision **1**. The maintainer explicitly accepted the corresponding development build on **2026-10-30**. Behavior source/configuration hashes match that accepted build; release version and commit provenance are regenerated from the clean committed tree.\n- Formal local builds passed all **364 core tests** and **150/150 adapter tests** with no failures, errors or skips. The two targeted official-recorder ABI cases actually executed and passed. Codec, UI/config, legacy API, core boundaries, distribution and clean commit provenance checks passed. Earlier accepted development-build checks covered isolated client startup and dedicated-server client-class isolation. CI without these external recorder fixtures reports its ABI skips separately and does not replace the local ABI results.\n- Recordings do not embed resources or recover information missing from old recordings. Original gameplay physics trajectories and frame-identical results across FPS are not guaranteed. Unreported marker, multiview, Iris/LabPBR and third-party model combinations retain separate validation scope.\n- This round's explicit in-game replay acceptance covers **26.1.2** only. The retained 26.1/26.1.1 CI matrix checks API linkage and does not extend that acceptance. The tag keeps the existing `fabric-26.1` naming format.\n\nRequires **Java 25** or newer and Fabric API for **Minecraft 26.1.2 Fabric**. Built with Fabric Loader **0.19.3** / Fabric API **0.155.3+26.1.2**. Install and test the two recorder mods separately.\n\nThe setting is in `config/halo-azusake/halo_mod_config.json`; only the JSON boolean `true` enables replay UI.\n\n---\n\n- 为 **Minecraft 26.1.2 Fabric** 接入可选官方回放兼容：ReplayMod **26.1-2.6.28** 与 Flashback **0.43.3**，使用各自对应 MC 文件。共用 core API v2 宿主和 schema 1 轨道，记录佩戴、启动／关闭进度及权杖实际开关状态。\n- 普通回放和导出按录像源时间推进，随倍速变化；暂停和重复视角不额外推进。连续经过已覆盖周期快照保留惯性，seek 恢复相位并清除未来运动。\n- 保留 ReplayMod Full／Quick 索引、marker 起点快照重写与导出边界，并接入 Flashback 快照和输出帧 hook。\n- 默认隐藏回放权杖 UI。客户端 JSON 布尔配置 `replayScepterUiEnabled=true` 并重启可显式启用；播放／暂停均可 ESC／按钮关闭，不会立即重开，下一次录制打开或 seek 可恢复显示。导出始终隐藏，回放隔离实时佩戴／C2S 写回及递归录制。\n- 保留本平台既有绘制和输入架构，旧定义、存档、在线数据包及公开 API v2 保持兼容。玩家只安装一个 Halo JAR；录制器可选且不内嵌。\n- 固定 HaloCore **2.6.0 / 03f84db5**，适配修订 **1**。维护者已于 **2026-10-30** 明确确认对应开发包测试通过；行为源码／配置哈希与该验收包一致，正式版本标识和来源信息从干净提交重新生成。\n- 正式本地构建通过 **364 项 core 测试**；适配器 **150 项中 150 项通过**，无失败、错误或跳过。两个目标官方录制器 ABI 用例均实际执行通过；codec、UI／配置、旧 API、core 边界、合包和干净提交来源检查通过。此前已验收开发包完成隔离客户端启动和专服客户端类隔离检查。云端未提供外部录制器 fixture 时的 ABI 跳过单独保留，不能替代本地实际执行结果。\n- 录像不内嵌资源，旧录像缺失的信息无法补录；不保证原游玩物理轨迹或跨 FPS 逐帧一致。未逐项报告的 marker、多视角、Iris/LabPBR 及第三方模型组合保留独立验收边界。\n\n..."
+		},
+		{
+			"tag": "v2.6.0-fabric-1.21.1-adapter.2",
+			"published": "2026-11-07T07:34:12Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 719987444,
+					"name": "halo-1.21.1-fabric-2.6.0+adapter.2.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.6.0-fabric-1.21.1-adapter.2/halo-1.21.1-fabric-2.6.0%2Badapter.2.jar",
+					"size": 877465,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "08d210e0c0de314b49cab3192d225bb81c2413a65d5e1241199d3cd257717cec",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "halo",
+							"version": "2.6.0+adapter.2",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 413,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.6.0-fabric-1.21.1-adapter.1...v2.6.0-fabric-1.21.1-adapter.2)\n\n---\n\n- Hide the replay scepter UI by default. Set the client JSON boolean `replayScepterUiEnabled` to `true` and restart to opt in; normal gameplay screens and recording of UI state are unchanged.\n- Allow ESC and the close button during both paused and running playback. A manual dismissal suppresses the current recorded UI session, including after playback resumes; the next recorded opening or a new seek epoch may restore it. Export always hides the interactive screen.\n- Keep the fix in the client adapter. HaloCore 2.6.0, API v2, replay schema 1, definitions, saves and online packets are unchanged; existing Halo replay tracks do not need to be re-recorded.\n- Pin HaloCore to **2.6.0 / 03f84db5**, adapter revision **2**. The maintainer explicitly accepted the corresponding development build on **2026-10-30**. Behavior source/configuration hashes match that accepted build; release version and commit provenance are regenerated from the clean committed tree.\n- Formal local builds passed all **364 core tests** and **146/147 adapter tests**; the one external YSM-fixture signature test was skipped because its fixture was not supplied. The two targeted official-recorder ABI cases actually executed and passed. Codec, UI/config, legacy API, core boundaries, distribution and clean commit provenance checks passed. Earlier accepted development-build checks covered isolated client startup and dedicated-server client-class isolation. CI without these external recorder fixtures reports its ABI skips separately and does not replace the local ABI results.\n- Recordings do not embed resources or recover information missing from old recordings. Original gameplay physics trajectories and frame-identical results across FPS are not guaranteed. Unreported marker, multiview, Iris/LabPBR and third-party model combinations retain separate validation scope.\n\nRequires **Java 21** or newer and Fabric API for **Minecraft 1.21.1 Fabric**. Built with Fabric Loader **0.16.14** / Fabric API **0.116.15+1.21.1**. The accepted isolated production startup used Loader 0.19.3. Install and test the two recorder mods separately.\n\nThe setting is in `config/halo-azusake/halo_mod_config.json`; only the JSON boolean `true` enables replay UI.\n\n---\n\n- 默认隐藏回放权杖 UI。可将客户端 JSON 布尔配置 `replayScepterUiEnabled` 设为 `true` 后重启启用；普通游玩界面和 UI 状态录制保持原行为。\n- 播放和暂停时都允许 ESC／关闭按钮。手动关闭会抑制当前录制 UI 会话，恢复播放不会强制重开；下一次录制的打开事件或 seek 新 epoch 可恢复显示。导出始终隐藏交互界面。\n- 修复位于客户端适配层。HaloCore 2.6.0、API v2、录像 schema 1、定义、存档和在线数据包均不变；已有 Halo 录像轨道无需重录。\n- 固定 HaloCore **2.6.0 / 03f84db5**，适配修订 **2**。维护者已于 **2026-10-30** 明确确认对应开发包测试通过；行为源码／配置哈希与该验收包一致，正式版本标识和来源信息从干净提交重新生成。\n- 正式本地构建通过 **364 项 core 测试**；适配器 **147 项中 146 项通过**，仅 1 项未提供外部 YSM 测试包的签名检查跳过。两个目标官方录制器 ABI 用例均实际执行通过；codec、UI／配置、旧 API、core 边界、合包和干净提交来源检查通过。此前已验收开发包完成隔离客户端启动和专服客户端类隔离检查。云端未提供外部录制器 fixture 时的 ABI 跳过单独保留，不能替代本地实际执行结果。\n- 录像不内嵌资源，旧录像缺失的信息无法补录；不保证原游玩物理轨迹或跨 FPS 逐帧一致。未逐项报告的 marker、多视角、Iris/LabPBR 及第三方模型组合保留独立验收边界。\n\n需要 **Java 21** 或更高版本，以及适用于 **Minecraft 1.21.1 Fabric** 的 Fabric API。构建使用 Fabric Loader **0.16.14** / Fabric API **0.116.15+1.21.1**。 已验收开发包的隔离成品启动使用 Loader 0.19.3。 两个录制器分开安装与测试。\n\n配置路径为 `config/halo-azusake/halo_mod_config.json`，只有 JSON 布尔值 `true` 启用回放 UI。\n\nHalo commit: `2074bb168d1b7d921455ac5083e241aba533c5ed`. Core commit: `03f84db58dc677f405796b422a8897fcf556bda1`."
+		},
+		{
+			"tag": "v2.6.0-fabric-1.20.1-adapter.2",
+			"published": "2026-11-07T07:32:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 719983609,
+					"name": "halo-1.20.1-fabric-2.6.0+adapter.2.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.6.0-fabric-1.20.1-adapter.2/halo-1.20.1-fabric-2.6.0%2Badapter.2.jar",
+					"size": 836281,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "45c42fa5b70df1d6442b6c3542904b0e7f803eb75e112f1112604c97adf9f087",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "halo",
+							"version": "2.6.0+adapter.2",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "1.20.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 389,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.1-fabric-1.20.1-adapter.1...v2.6.0-fabric-1.20.1-adapter.2)\n\n---\n\n- Add optional official replay integration for **Minecraft 1.20.1 Fabric**: ReplayMod **1.20.1-2.6.28**; also check the official 1.20.1-2.6.23 file. Reuse one core API v2 host and schema 1 recording track for equipment, startup/shutdown progress and actual scepter UI state.\n- Advance playback and export by recording source time, including speed changes. Pause and repeated views do not advance simulation; continuous playback retains inertia across covered periodic snapshots, while seeks restore phase and clear future motion.\n- Keep ReplayMod Full/Quick indexing, marker-baseline rewriting and export boundaries.\n- Hide replay scepter UI by default. Opt in with the client JSON boolean `replayScepterUiEnabled=true` and restart; ESC/the close button work during playback or pause without immediate reopening. The next recorded opening or seek may restore the screen; export always hides it. Playback blocks live ownership/C2S write-back and recursive recording.\n- Preserve this platform's existing rendering/input architecture and existing definitions, saves, online packets and API v2 signatures. Players install one Halo JAR; recorder mods are optional and are not bundled.\n- There is no official Flashback release for this platform; Flashback support is not claimed.\n- Pin HaloCore to **2.6.0 / 03f84db5**, adapter revision **2**. The maintainer explicitly accepted the corresponding development build on **2026-10-30**. Behavior source/configuration hashes match that accepted build; release version and commit provenance are regenerated from the clean committed tree.\n- Formal local builds passed all **364 core tests** and **145/146 adapter tests**; the one external YSM-fixture signature test was skipped because its fixture was not supplied. The two targeted official-recorder ABI cases actually executed and passed. Codec, UI/config, legacy API, core boundaries, distribution and clean commit provenance checks passed. Earlier accepted development-build checks covered isolated client startup and dedicated-server client-class isolation. CI without these external recorder fixtures reports its ABI skips separately and does not replace the local ABI results.\n- Recordings do not embed resources or recover information missing from old recordings. Original gameplay physics trajectories and frame-identical results across FPS are not guaranteed. Unreported marker, multiview, Iris/LabPBR and third-party model combinations retain separate validation scope.\n\nRequires **Java 17** or newer and Fabric API for **Minecraft 1.20.1 Fabric**. Built with Fabric Loader **0.15.11** / Fabric API **0.92.0+1.20.1**. The accepted isolated production startup used Loader 0.19.3 / Fabric API 0.92.11+1.20.1.\n\nThe setting is in `config/halo-azusake/halo_mod_config.json`; only the JSON boolean `true` enables replay UI.\n\n---\n\n- 为 **Minecraft 1.20.1 Fabric** 接入可选官方回放兼容：ReplayMod **1.20.1-2.6.28**，另检查官方 1.20.1-2.6.23 文件。共用 core API v2 宿主和 schema 1 轨道，记录佩戴、启动／关闭进度及权杖实际开关状态。\n- 普通回放和导出按录像源时间推进，随倍速变化；暂停和重复视角不额外推进。连续经过已覆盖周期快照保留惯性，seek 恢复相位并清除未来运动。\n- 保留 ReplayMod Full／Quick 索引、marker 起点快照重写与导出边界。\n- 默认隐藏回放权杖 UI。客户端 JSON 布尔配置 `replayScepterUiEnabled=true` 并重启可显式启用；播放／暂停均可 ESC／按钮关闭，不会立即重开，下一次录制打开或 seek 可恢复显示。导出始终隐藏，回放隔离实时佩戴／C2S 写回及递归录制。\n- 保留本平台既有绘制和输入架构，旧定义、存档、在线数据包及公开 API v2 保持兼容。玩家只安装一个 Halo JAR；录制器可选且不内嵌。\n- 本平台没有 Flashback 官方发布交集，不声明 Flashback 支持。\n- 固定 HaloCore **2.6.0 / 03f84db5**，适配修订 **2**。维护者已于 **2026-10-30** 明确确认对应开发包测试通过；行为源码／配置哈希与该验收包一致，正式版本标识和来源信息从干净提交重新生成。\n- 正式本地构建通过 **364 项 core 测试**；适配器 **146 项中 145 项通过**，仅 1 项未提供外部 YSM 测试包的签名检查跳过。两个目标官方录制器 ABI 用例均实际执行通过；codec、UI／配置、旧 API、core 边界、合包和干净提交来源检查通过。此前已验收开发包完成隔离客户端启动和专服客户端类隔离检查。云端未提供外部录制器 fixture 时的 ABI 跳过单独保留，不能替代本地实际执行结果。\n- 录像不内嵌资源，旧录像缺失的信息无法补录；不保证原游玩物理轨迹或跨 FPS 逐帧一致。未逐项报告的 marker、多视角、Iris/LabPBR 及第三方模型组合保留独立验收边界。\n\n\n..."
+		},
+		{
+			"tag": "v2.6.0-fabric-1.21.1-adapter.1",
+			"published": "2026-10-27T15:25:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 681994930,
+					"name": "halo-1.21.1-fabric-2.6.0+adapter.1.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.6.0-fabric-1.21.1-adapter.1/halo-1.21.1-fabric-2.6.0%2Badapter.1.jar",
+					"size": 875418,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "a0aa5f9da974ea2f3eee2c7d7d609fa9a9605b5c88ecc5a6b0fc58aac48a3eac",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "halo",
+							"version": "2.6.0+adapter.1",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 412,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.1-fabric-1.21.1-adapter.1...v2.6.0-fabric-1.21.1-adapter.1)\n\n---\n\n- Added optional Flashback and ReplayMod compatibility for **Minecraft 1.21.1 Fabric**, using one shared API v2 replay contract and recording track. Record effective equipment, startup/shutdown progress and the scepter's actual open/close lifecycle.\n- Playback and offline export advance animation/physics by recording source time, including speed changes, independently of real rendering time. Paused sources and repeated views stay stationary; seeks restore relative progress and rebuild physics at the target anchor.\n- Added ReplayMod Full/Quick indexing and marker-baseline rewriting, plus Flashback snapshot and output-frame hooks. Playback isolates local ownership/C2S writes; export suppresses Halo's interactive UI.\n- Fixed periodic Halo snapping/resetting in ReplayMod playback and export when passing full checkpoints. Continuous playback now retains physical inertia; seeks and missing-event recovery still restore snapshots. Existing recordings containing the Halo track can be reused. Older recordings lack a complete initial state/UI track and retain best-effort behavior.\n- Pinned HaloCore to **2.6.0 / 03f84db5**, adapter revision **1**. Existing halo definitions, saves, online packets and API v2 signatures remain compatible. Players install only the Halo mod JAR; recorder mods are optional and not bundled.\n- All **364 core tests passed**. Local adapter checks covered **136 tests: 135 passed, 1 external YSM-fixture check skipped**, including actual ABI checks against ReplayMod **1.21-2.6.28** and Flashback **0.39.10** separately. The maintainer confirmed the snap fix and no further observed anomalies. Unreported trimming, multiview, shader and other mod combinations are not claimed as fully validated; 1.20.1 shared integration is committed separately without a release.\n\nRequires **Java 21** or newer and Fabric API for **Minecraft 1.21.1 Fabric**. Built with Fabric Loader 0.16.14 / Fabric API 0.116.15+1.21.1; isolated production startup checks used Fabric Loader 0.19.3. Test the two recorder mods separately.\n\n---\n\n- 为 **Minecraft 1.21.1 Fabric** 添加可选 Flashback 与 ReplayMod 兼容，两个后端共用 API v2 回放契约及录像轨道，记录最终佩戴、启动/关闭进度和权杖实际开关。\n- 普通回放与离线导出都按录像源时间推进动画和物理，随录像倍速变化且独立于实际渲染耗时；暂停及同帧重复视角不额外推进，跳转恢复相对进度并在目标锚点重建物理。\n- 接入 ReplayMod Full/Quick 索引和 marker 起点快照重写，以及 Flashback 快照/输出帧边界。回放隔离本地恢复和 C2S 写回，导出抑制 Halo 交互界面。\n- 修复 ReplayMod 回放/导出经过周期完整快照时光环 snap 或复位：连续播放保留物理惯性，跳转和缺失事件补齐仍恢复快照。已有 Halo 轨道的录像无需重录；旧录像缺少完整初始状态/UI 轨道，仍只能尽力回放。\n- 固定 HaloCore **2.6.0 / 03f84db5**，适配修订为 **1**。既有定义、存档、在线数据包及 API v2 签名保持兼容。玩家只安装 Halo 模组成品；回放模组可选且不内嵌。\n- **364 项 core 测试通过**；本地适配器共 **136 项，135 通过、1 项外部 YSM 测试包检查跳过**，包含分别针对 ReplayMod **1.21-2.6.28** 和 Flashback **0.39.10** 官方 JAR 实际运行的 ABI 检查。维护者确认 snap 消失且未观察到其它异常；未逐项报告的裁剪、多视角、光影及其它模组组合不扩大声明。1.20.1 只另行保存共享接入提交，不发布成品。\n\n需要 **Java 21** 或更高版本，以及适用于 **Minecraft 1.21.1 Fabric** 的 Fabric API。构建使用 Fabric Loader 0.16.14 / Fabric API 0.116.15+1.21.1；隔离成品启动检查使用 Fabric Loader 0.19.3。两个回放模组分别测试。"
+		},
+		{
+			"tag": "v2.5.1-neoforge-1.21.1-adapter.1",
+			"published": "2026-10-22T14:36:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 666128964,
+					"name": "halo-1.21.1-neoforge-2.5.1+adapter.1.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.5.1-neoforge-1.21.1-adapter.1/halo-1.21.1-neoforge-2.5.1%2Badapter.1.jar",
+					"size": 773499,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "297d349f40f7fec245f2aff7f1d0a4af859cee12b935db0ba2f053b02602b9f0",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "halo",
+							"version": "2.5.1+adapter.1",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "[1.21.1,1.21.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"yes_steve_model",
+								"entity_model_features"
+							]
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 361,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.0-neoforge-1.21.1-adapter.2...v2.5.1-neoforge-1.21.1-adapter.1)\n\n---\n\n- Fixed SYNC `sync_offset` being applied around the wrong axes when the initial head pose changes. Rotation offsets now use head-local axes while retaining first-frame capture, subsequent head following and identity-offset behavior.\n- Fixed LOCKED halos such as the bundled `mesh_demo` suddenly reversing around their normal during slow, tiny pitch changes near straight ahead and remaining reversed at rest. Polar offsets now use head-forward as their reference; the existing nonpolar orientation rules and damping are preserved.\n- Changing the effective offset, orientation mode or `sync_offset` on resource reload now reinitializes motion on the next valid frame. Equipped halos and animation progress are retained; unrelated resource changes keep existing motion.\n- Applied the shared orientation correction to world rendering and previews. Halo definitions, saves, network payloads and public API v2 remain compatible.\n- Pinned HaloCore to **2.5.1 / 59e3bb2e** and restarted this core version's adapter revision at **1**. Players still install a single Halo JAR for **Minecraft 1.21.1 NeoForge**.\n- All 347 core tests passed. This platform passed 129 automated adapter tests, with 1 explicitly skipped external-fixture check, plus all 15 targeted native singleplayer scenarios and its cloud build. Dedicated-server and third-party mod combinations were not revalidated in this round.\n\nRequires **Java 21** or newer for **Minecraft 1.21.1 NeoForge**. Built and tested with NeoForge 21.1.248.\n\n---\n\n- 修复 SYNC 在不同初始头部姿态下将 `sync_offset` 应用到错误旋转轴的问题。偏移现按头部局部轴组合，保留首帧捕获、后续随头部旋转及单位偏移的既有语义。\n- 修复内置 `mesh_demo` 等 LOCKED 光环在正视前方附近缓慢、小幅俯仰时突然沿法线反向，且静止后持续反向的问题。极点偏移改用头部前向作为参考，保留非极点朝向规则和原有阻尼。\n- 资源重载改变有效定位偏移、朝向模式或 `sync_offset` 后，在下一有效帧重新初始化运动状态；保留佩戴关系与动画进度，无关资源变化继续保留原有运动状态。\n- 世界渲染和预览共用修正后的朝向计算。既有光环定义、存档、网络载荷及公开 API v2 保持兼容。\n- 固定 HaloCore **2.5.1 / 59e3bb2e**，并将该 core 版本的 adapter revision 从 **1** 重新开始。**Minecraft 1.21.1 NeoForge** 玩家仍只需安装一个 Halo JAR。\n- core 的 347 项测试通过；本平台 129 项适配器自动测试、15 个原生单人专项场景及云端构建通过，另有 1 项外部测试包检查明确跳过。本轮未重新验收专用服及第三方模组组合。\n\n**Minecraft 1.21.1 NeoForge** 需要 **Java 21** 或更高版本。本轮构建与游戏验证使用 NeoForge 21.1.248。"
+		},
+		{
+			"tag": "v2.5.1-fabric-1.21.1-adapter.1",
+			"published": "2026-10-22T14:34:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 666124786,
+					"name": "halo-1.21.1-fabric-2.5.1+adapter.1.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.5.1-fabric-1.21.1-adapter.1/halo-1.21.1-fabric-2.5.1%2Badapter.1.jar",
+					"size": 781583,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "cca87290c7cf35236ac38249ea2634a317478968374a8ce6cf8715b8e6956884",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "halo",
+							"version": "2.5.1+adapter.1",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 360,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.0-fabric-1.21.1-adapter.2...v2.5.1-fabric-1.21.1-adapter.1)\n\n---\n\n- Fixed SYNC `sync_offset` being applied around the wrong axes when the initial head pose changes. Rotation offsets now use head-local axes while retaining first-frame capture, subsequent head following and identity-offset behavior.\n- Fixed LOCKED halos such as the bundled `mesh_demo` suddenly reversing around their normal during slow, tiny pitch changes near straight ahead and remaining reversed at rest. Polar offsets now use head-forward as their reference; the existing nonpolar orientation rules and damping are preserved.\n- Changing the effective offset, orientation mode or `sync_offset` on resource reload now reinitializes motion on the next valid frame. Equipped halos and animation progress are retained; unrelated resource changes keep existing motion.\n- Applied the shared orientation correction to world rendering and previews. Halo definitions, saves, network payloads and public API v2 remain compatible.\n- Pinned HaloCore to **2.5.1 / 59e3bb2e** and restarted this core version's adapter revision at **1**. Players still install a single Halo JAR for **Minecraft 1.21.1 Fabric**.\n- All 347 core tests passed. This platform passed 128 automated adapter tests, with 1 explicitly skipped external-fixture check, plus all 15 targeted native singleplayer scenarios and its cloud build. Dedicated-server and third-party mod combinations were not revalidated in this round.\n\nRequires **Java 21** or newer and Fabric API for **Minecraft 1.21.1 Fabric**. Built and tested with Fabric Loader 0.16.14 and Fabric API 0.116.15+1.21.1.\n\n---\n\n- 修复 SYNC 在不同初始头部姿态下将 `sync_offset` 应用到错误旋转轴的问题。偏移现按头部局部轴组合，保留首帧捕获、后续随头部旋转及单位偏移的既有语义。\n- 修复内置 `mesh_demo` 等 LOCKED 光环在正视前方附近缓慢、小幅俯仰时突然沿法线反向，且静止后持续反向的问题。极点偏移改用头部前向作为参考，保留非极点朝向规则和原有阻尼。\n- 资源重载改变有效定位偏移、朝向模式或 `sync_offset` 后，在下一有效帧重新初始化运动状态；保留佩戴关系与动画进度，无关资源变化继续保留原有运动状态。\n- 世界渲染和预览共用修正后的朝向计算。既有光环定义、存档、网络载荷及公开 API v2 保持兼容。\n- 固定 HaloCore **2.5.1 / 59e3bb2e**，并将该 core 版本的 adapter revision 从 **1** 重新开始。**Minecraft 1.21.1 Fabric** 玩家仍只需安装一个 Halo JAR。\n- core 的 347 项测试通过；本平台 128 项适配器自动测试、15 个原生单人专项场景及云端构建通过，另有 1 项外部测试包检查明确跳过。本轮未重新验收专用服及第三方模组组合。\n\n需要 **Java 21** 或更高版本，以及适用于 **Minecraft 1.21.1 Fabric** 的 Fabric API。本轮构建与游戏验证使用 Fabric Loader 0.16.14 和 Fabric API 0.116.15+1.21.1。"
+		},
+		{
+			"tag": "v2.5.1-neoforge-26.2-adapter.1",
+			"published": "2026-10-22T14:34:41Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 666124572,
+					"name": "halo-26.2-neoforge-2.5.1+adapter.1.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.5.1-neoforge-26.2-adapter.1/halo-26.2-neoforge-2.5.1%2Badapter.1.jar",
+					"size": 760962,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "b50b9afff1c22261a8e0a1e524ceeb9e24330f7227253dd3831c868855fee986",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "halo",
+							"version": "2.5.1+adapter.1",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "[26.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"entity_model_features"
+							]
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 361,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.0-neoforge-26.2-adapter.2...v2.5.1-neoforge-26.2-adapter.1)\n\n---\n\n- Fixed SYNC `sync_offset` being applied around the wrong axes when the initial head pose changes. Rotation offsets now use head-local axes while retaining first-frame capture, subsequent head following and identity-offset behavior.\n- Fixed LOCKED halos such as the bundled `mesh_demo` suddenly reversing around their normal during slow, tiny pitch changes near straight ahead and remaining reversed at rest. Polar offsets now use head-forward as their reference; the existing nonpolar orientation rules and damping are preserved.\n- Changing the effective offset, orientation mode or `sync_offset` on resource reload now reinitializes motion on the next valid frame. Equipped halos and animation progress are retained; unrelated resource changes keep existing motion.\n- Applied the shared orientation correction to world rendering and previews. Halo definitions, saves, network payloads and public API v2 remain compatible.\n- Pinned HaloCore to **2.5.1 / 59e3bb2e** and restarted this core version's adapter revision at **1**. Players still install a single Halo JAR for **Minecraft 26.2 NeoForge**.\n- All 347 core tests passed. This platform passed 142 automated adapter tests, plus all 15 targeted native singleplayer scenarios and its cloud build. Dedicated-server and third-party mod combinations were not revalidated in this round.\n\nRequires **Java 25** or newer for **Minecraft 26.2 NeoForge**. Built and tested with NeoForge 26.2.0.59.\n\n---\n\n- 修复 SYNC 在不同初始头部姿态下将 `sync_offset` 应用到错误旋转轴的问题。偏移现按头部局部轴组合，保留首帧捕获、后续随头部旋转及单位偏移的既有语义。\n- 修复内置 `mesh_demo` 等 LOCKED 光环在正视前方附近缓慢、小幅俯仰时突然沿法线反向，且静止后持续反向的问题。极点偏移改用头部前向作为参考，保留非极点朝向规则和原有阻尼。\n- 资源重载改变有效定位偏移、朝向模式或 `sync_offset` 后，在下一有效帧重新初始化运动状态；保留佩戴关系与动画进度，无关资源变化继续保留原有运动状态。\n- 世界渲染和预览共用修正后的朝向计算。既有光环定义、存档、网络载荷及公开 API v2 保持兼容。\n- 固定 HaloCore **2.5.1 / 59e3bb2e**，并将该 core 版本的 adapter revision 从 **1** 重新开始。**Minecraft 26.2 NeoForge** 玩家仍只需安装一个 Halo JAR。\n- core 的 347 项测试通过；本平台 142 项适配器自动测试、15 个原生单人专项场景及云端构建通过。本轮未重新验收专用服及第三方模组组合。\n\n**Minecraft 26.2 NeoForge** 需要 **Java 25** 或更高版本。本轮构建与游戏验证使用 NeoForge 26.2.0.59。"
+		},
+		{
+			"tag": "v2.5.1-fabric-26.1-adapter.1",
+			"published": "2026-10-22T14:32:00Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 666118105,
+					"name": "halo-26.1.2-fabric-2.5.1+adapter.1.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.5.1-fabric-26.1-adapter.1/halo-26.1.2-fabric-2.5.1%2Badapter.1.jar",
+					"size": 752227,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "dae9049ba620140c2d75f61f62966d41989674e8761dc58d10ce24966069a94d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "halo",
+							"version": "2.5.1+adapter.1",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": ">=26.1 <26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 354,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.0-fabric-26.1-adapter.2...v2.5.1-fabric-26.1-adapter.1)\n\n---\n\n- Fixed SYNC `sync_offset` being applied around the wrong axes when the initial head pose changes. Rotation offsets now use head-local axes while retaining first-frame capture, subsequent head following and identity-offset behavior.\n- Fixed LOCKED halos such as the bundled `mesh_demo` suddenly reversing around their normal during slow, tiny pitch changes near straight ahead and remaining reversed at rest. Polar offsets now use head-forward as their reference; the existing nonpolar orientation rules and damping are preserved.\n- Changing the effective offset, orientation mode or `sync_offset` on resource reload now reinitializes motion on the next valid frame. Equipped halos and animation progress are retained; unrelated resource changes keep existing motion.\n- Applied the shared orientation correction to world rendering and previews. Halo definitions, saves, network payloads and public API v2 remain compatible.\n- Pinned HaloCore to **2.5.1 / 59e3bb2e** and restarted this core version's adapter revision at **1**. Players still install a single Halo JAR for **Minecraft 26.1.2 Fabric**.\n- All 347 core tests passed. This platform passed 131 automated adapter tests, plus all 15 targeted native singleplayer scenarios and its cloud build. Dedicated-server and third-party mod combinations were not revalidated in this round.\n\nRequires **Java 25** or newer and Fabric API for **Minecraft 26.1.2 Fabric**. Built and tested with Fabric Loader 0.19.3 and Fabric API 0.155.3+26.1.2.\n\n---\n\n- 修复 SYNC 在不同初始头部姿态下将 `sync_offset` 应用到错误旋转轴的问题。偏移现按头部局部轴组合，保留首帧捕获、后续随头部旋转及单位偏移的既有语义。\n- 修复内置 `mesh_demo` 等 LOCKED 光环在正视前方附近缓慢、小幅俯仰时突然沿法线反向，且静止后持续反向的问题。极点偏移改用头部前向作为参考，保留非极点朝向规则和原有阻尼。\n- 资源重载改变有效定位偏移、朝向模式或 `sync_offset` 后，在下一有效帧重新初始化运动状态；保留佩戴关系与动画进度，无关资源变化继续保留原有运动状态。\n- 世界渲染和预览共用修正后的朝向计算。既有光环定义、存档、网络载荷及公开 API v2 保持兼容。\n- 固定 HaloCore **2.5.1 / 59e3bb2e**，并将该 core 版本的 adapter revision 从 **1** 重新开始。**Minecraft 26.1.2 Fabric** 玩家仍只需安装一个 Halo JAR。\n- core 的 347 项测试通过；本平台 131 项适配器自动测试、15 个原生单人专项场景及云端构建通过。本轮未重新验收专用服及第三方模组组合。\n\n需要 **Java 25** 或更高版本，以及适用于 **Minecraft 26.1.2 Fabric** 的 Fabric API。本轮构建与游戏验证使用 Fabric Loader 0.19.3 和 Fabric API 0.155.3+26.1.2。"
+		},
+		{
+			"tag": "v2.5.1-fabric-26.3-adapter.1",
+			"published": "2026-10-22T14:29:22Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 666112534,
+					"name": "halo-26.3-fabric-2.5.1+adapter.1.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.5.1-fabric-26.3-adapter.1/halo-26.3-fabric-2.5.1%2Badapter.1.jar",
+					"size": 766556,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "8f8968e2c9c9836e1080a14a9c92e76f1c931b88b8fd3085b4635dea86420f8f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "halo",
+							"version": "2.5.1+adapter.1",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "=26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"fabric-api",
+								"minecraft",
+								"java"
+							],
+							"provides": []
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 364,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.0-fabric-26.3-adapter.2...v2.5.1-fabric-26.3-adapter.1)\n\n---\n\n- Fixed SYNC `sync_offset` being applied around the wrong axes when the initial head pose changes. Rotation offsets now use head-local axes while retaining first-frame capture, subsequent head following and identity-offset behavior.\n- Fixed LOCKED halos such as the bundled `mesh_demo` suddenly reversing around their normal during slow, tiny pitch changes near straight ahead and remaining reversed at rest. Polar offsets now use head-forward as their reference; the existing nonpolar orientation rules and damping are preserved.\n- Changing the effective offset, orientation mode or `sync_offset` on resource reload now reinitializes motion on the next valid frame. Equipped halos and animation progress are retained; unrelated resource changes keep existing motion.\n- Applied the shared orientation correction to world rendering and previews. Halo definitions, saves, network payloads and public API v2 remain compatible.\n- Pinned HaloCore to **2.5.1 / 59e3bb2e** and restarted this core version's adapter revision at **1**. Players still install a single Halo JAR for **Minecraft 26.3 Fabric**.\n- All 347 core tests passed. This platform passed 140 automated adapter tests, plus all 15 targeted native singleplayer scenarios and its cloud build. Dedicated-server and third-party mod combinations were not revalidated in this round.\n\nRequires **Java 25** or newer and Fabric API for **Minecraft 26.3 Fabric**. Built and tested with Fabric Loader 0.19.5 and Fabric API 0.160.6+26.3.\n\n---\n\n- 修复 SYNC 在不同初始头部姿态下将 `sync_offset` 应用到错误旋转轴的问题。偏移现按头部局部轴组合，保留首帧捕获、后续随头部旋转及单位偏移的既有语义。\n- 修复内置 `mesh_demo` 等 LOCKED 光环在正视前方附近缓慢、小幅俯仰时突然沿法线反向，且静止后持续反向的问题。极点偏移改用头部前向作为参考，保留非极点朝向规则和原有阻尼。\n- 资源重载改变有效定位偏移、朝向模式或 `sync_offset` 后，在下一有效帧重新初始化运动状态；保留佩戴关系与动画进度，无关资源变化继续保留原有运动状态。\n- 世界渲染和预览共用修正后的朝向计算。既有光环定义、存档、网络载荷及公开 API v2 保持兼容。\n- 固定 HaloCore **2.5.1 / 59e3bb2e**，并将该 core 版本的 adapter revision 从 **1** 重新开始。**Minecraft 26.3 Fabric** 玩家仍只需安装一个 Halo JAR。\n- core 的 347 项测试通过；本平台 140 项适配器自动测试、15 个原生单人专项场景及云端构建通过。本轮未重新验收专用服及第三方模组组合。\n\n需要 **Java 25** 或更高版本，以及适用于 **Minecraft 26.3 Fabric** 的 Fabric API。本轮构建与游戏验证使用 Fabric Loader 0.19.5 和 Fabric API 0.160.6+26.3。"
+		},
+		{
+			"tag": "v2.5.1-neoforge-26.1.2-adapter.1",
+			"published": "2026-10-22T14:29:21Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 666112522,
+					"name": "halo-26.1.2-neoforge-2.5.1+adapter.1.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.5.1-neoforge-26.1.2-adapter.1/halo-26.1.2-neoforge-2.5.1%2Badapter.1.jar",
+					"size": 782843,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "efe7c6c5d3dc6be09f1ed6ab648628f4e3e0dc91e09c2e93bbd61d09be1ae3ef",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "halo",
+							"version": "2.5.1+adapter.1",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "[26.1.2]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"yes_steve_model",
+								"entity_model_features"
+							]
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 371,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.0-neoforge-26.1.2-adapter.2...v2.5.1-neoforge-26.1.2-adapter.1)\n\n---\n\n- Fixed SYNC `sync_offset` being applied around the wrong axes when the initial head pose changes. Rotation offsets now use head-local axes while retaining first-frame capture, subsequent head following and identity-offset behavior.\n- Fixed LOCKED halos such as the bundled `mesh_demo` suddenly reversing around their normal during slow, tiny pitch changes near straight ahead and remaining reversed at rest. Polar offsets now use head-forward as their reference; the existing nonpolar orientation rules and damping are preserved.\n- Changing the effective offset, orientation mode or `sync_offset` on resource reload now reinitializes motion on the next valid frame. Equipped halos and animation progress are retained; unrelated resource changes keep existing motion.\n- Applied the shared orientation correction to world rendering and previews. Halo definitions, saves, network payloads and public API v2 remain compatible.\n- Pinned HaloCore to **2.5.1 / 59e3bb2e** and restarted this core version's adapter revision at **1**. Players still install a single Halo JAR for **Minecraft 26.1.2 NeoForge**.\n- All 347 core tests passed. This platform passed 140 automated adapter tests, with 1 explicitly skipped external-fixture check, plus all 15 targeted native singleplayer scenarios and its cloud build. Dedicated-server and third-party mod combinations were not revalidated in this round.\n\nRequires **Java 25** or newer for **Minecraft 26.1.2 NeoForge**. Built and tested with NeoForge 26.1.2.95.\n\n---\n\n- 修复 SYNC 在不同初始头部姿态下将 `sync_offset` 应用到错误旋转轴的问题。偏移现按头部局部轴组合，保留首帧捕获、后续随头部旋转及单位偏移的既有语义。\n- 修复内置 `mesh_demo` 等 LOCKED 光环在正视前方附近缓慢、小幅俯仰时突然沿法线反向，且静止后持续反向的问题。极点偏移改用头部前向作为参考，保留非极点朝向规则和原有阻尼。\n- 资源重载改变有效定位偏移、朝向模式或 `sync_offset` 后，在下一有效帧重新初始化运动状态；保留佩戴关系与动画进度，无关资源变化继续保留原有运动状态。\n- 世界渲染和预览共用修正后的朝向计算。既有光环定义、存档、网络载荷及公开 API v2 保持兼容。\n- 固定 HaloCore **2.5.1 / 59e3bb2e**，并将该 core 版本的 adapter revision 从 **1** 重新开始。**Minecraft 26.1.2 NeoForge** 玩家仍只需安装一个 Halo JAR。\n- core 的 347 项测试通过；本平台 140 项适配器自动测试、15 个原生单人专项场景及云端构建通过，另有 1 项外部测试包检查明确跳过。本轮未重新验收专用服及第三方模组组合。\n\n**Minecraft 26.1.2 NeoForge** 需要 **Java 25** 或更高版本。本轮构建与游戏验证使用 NeoForge 26.1.2.95。"
+		},
+		{
+			"tag": "v2.5.1-forge-1.20.1-adapter.1",
+			"published": "2026-10-22T14:28:43Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 666111302,
+					"name": "halo-1.20.1-forge-2.5.1+adapter.1.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.5.1-forge-1.20.1-adapter.1/halo-1.20.1-forge-2.5.1%2Badapter.1.jar",
+					"size": 776415,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "b756b408eb79436ec73c33c464c4060c4b082872ba05664f088fe2135c80d6c3",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "halo",
+							"version": "2.5.1+adapter.1",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "[1.20.1,1.20.2)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							]
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 358,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.0-forge-1.20.1-adapter.4...v2.5.1-forge-1.20.1-adapter.1)\n\n---\n\n- Fixed SYNC `sync_offset` being applied around the wrong axes when the initial head pose changes. Rotation offsets now use head-local axes while retaining first-frame capture, subsequent head following and identity-offset behavior.\n- Fixed LOCKED halos such as the bundled `mesh_demo` suddenly reversing around their normal during slow, tiny pitch changes near straight ahead and remaining reversed at rest. Polar offsets now use head-forward as their reference; the existing nonpolar orientation rules and damping are preserved.\n- Changing the effective offset, orientation mode or `sync_offset` on resource reload now reinitializes motion on the next valid frame. Equipped halos and animation progress are retained; unrelated resource changes keep existing motion.\n- Applied the shared orientation correction to world rendering and previews. Halo definitions, saves, network payloads and public API v2 remain compatible.\n- Pinned HaloCore to **2.5.1 / 59e3bb2e** and restarted this core version's adapter revision at **1**. Players still install a single Halo JAR for **Minecraft 1.20.1 Forge**.\n- All 347 core tests passed. This platform passed 130 automated adapter tests, with 2 explicitly skipped external-fixture checks, plus all 15 targeted native singleplayer scenarios and its cloud build. Dedicated-server and third-party mod combinations were not revalidated in this round.\n\nRequires **Java 17** or newer for **Minecraft 1.20.1 Forge**. Built and tested with Forge 47.4.0.\n\n---\n\n- 修复 SYNC 在不同初始头部姿态下将 `sync_offset` 应用到错误旋转轴的问题。偏移现按头部局部轴组合，保留首帧捕获、后续随头部旋转及单位偏移的既有语义。\n- 修复内置 `mesh_demo` 等 LOCKED 光环在正视前方附近缓慢、小幅俯仰时突然沿法线反向，且静止后持续反向的问题。极点偏移改用头部前向作为参考，保留非极点朝向规则和原有阻尼。\n- 资源重载改变有效定位偏移、朝向模式或 `sync_offset` 后，在下一有效帧重新初始化运动状态；保留佩戴关系与动画进度，无关资源变化继续保留原有运动状态。\n- 世界渲染和预览共用修正后的朝向计算。既有光环定义、存档、网络载荷及公开 API v2 保持兼容。\n- 固定 HaloCore **2.5.1 / 59e3bb2e**，并将该 core 版本的 adapter revision 从 **1** 重新开始。**Minecraft 1.20.1 Forge** 玩家仍只需安装一个 Halo JAR。\n- core 的 347 项测试通过；本平台 130 项适配器自动测试、15 个原生单人专项场景及云端构建通过，另有 2 项外部测试包检查明确跳过。本轮未重新验收专用服及第三方模组组合。\n\n**Minecraft 1.20.1 Forge** 需要 **Java 17** 或更高版本。本轮构建与游戏验证使用 Forge 47.4.0。"
+		},
+		{
+			"tag": "v2.5.1-neoforge-26.3-adapter.1",
+			"published": "2026-10-22T14:27:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 666108212,
+					"name": "halo-26.3-neoforge-2.5.1+adapter.1.jar",
+					"url": "https://github.com/AzusaKe/Halo/releases/download/v2.5.1-neoforge-26.3-adapter.1/halo-26.3-neoforge-2.5.1%2Badapter.1.jar",
+					"size": 775365,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "b6922d422fbba72fd360eb01ad9f60fd50a9b1df1709f6265a78cf1830624d3b",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "halo",
+							"version": "2.5.1+adapter.1",
+							"name": "Halo Mod",
+							"description": "Halo ring rendering mod for Minecraft",
+							"minecraft": "[26.3]",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"suggests": [
+								"entity_model_features"
+							]
+						}
+					],
+					"icon": "4b4669d089d3a854cfbce2f9842c7a8b3913d1e31c69260c17f5a94a049ef63b.webp",
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Halo Scepter"
+							]
+						},
+						"data": [
+							"recipe"
+						],
+						"shaders": true
+					},
+					"scan": {
+						"classes": 369,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Full Changelog**: [Here](https://github.com/AzusaKe/Halo/compare/v2.5.0-neoforge-26.2-adapter.2...v2.5.1-neoforge-26.3-adapter.1)\n\n---\n\n- First Minecraft 26.3 NeoForge release, adapting the existing renderer to RenderPearl while retaining halo definitions, ownership and API v2 behavior. The comparison starts at the previous 26.2 NeoForge release.\n- Fixed SYNC `sync_offset` being applied around the wrong axes when the initial head pose changes. Rotation offsets now use head-local axes while retaining first-frame capture, subsequent head following and identity-offset behavior.\n- Fixed LOCKED halos such as the bundled `mesh_demo` suddenly reversing around their normal during slow, tiny pitch changes near straight ahead and remaining reversed at rest. Polar offsets now use head-forward as their reference; the existing nonpolar orientation rules and damping are preserved.\n- Changing the effective offset, orientation mode or `sync_offset` on resource reload now reinitializes motion on the next valid frame. Equipped halos and animation progress are retained; unrelated resource changes keep existing motion.\n- Applied the shared orientation correction to world rendering and previews. Halo definitions, saves, network payloads and public API v2 remain compatible.\n- Pinned HaloCore to **2.5.1 / 59e3bb2e** and restarted this core version's adapter revision at **1**. Players still install a single Halo JAR for **Minecraft 26.3 NeoForge**.\n- All 347 core tests passed. This platform passed 146 automated adapter tests, plus all 15 targeted native singleplayer scenarios and its cloud build. Dedicated-server and third-party mod combinations were not revalidated in this round.\n\nRequires **Java 25** or newer for **Minecraft 26.3 NeoForge**. Built and tested with NeoForge 26.3.0.64-beta. Cloud CI also checks NeoForge 26.3.0.76. Existing Sodium 0.9.2 / 0.9.3-alpha.1 shader combinations require 26.3.0.64-beta; they are incompatible with 26.3.0.65 and later.\n\n---\n\n- 首次发布 Minecraft 26.3 NeoForge 版本，将现有绘制接入 RenderPearl，保留光环定义、佩戴关系与 API v2 行为；完整变更链接从此前 26.2 NeoForge 发布版本开始比较。\n- 修复 SYNC 在不同初始头部姿态下将 `sync_offset` 应用到错误旋转轴的问题。偏移现按头部局部轴组合，保留首帧捕获、后续随头部旋转及单位偏移的既有语义。\n- 修复内置 `mesh_demo` 等 LOCKED 光环在正视前方附近缓慢、小幅俯仰时突然沿法线反向，且静止后持续反向的问题。极点偏移改用头部前向作为参考，保留非极点朝向规则和原有阻尼。\n- 资源重载改变有效定位偏移、朝向模式或 `sync_offset` 后，在下一有效帧重新初始化运动状态；保留佩戴关系与动画进度，无关资源变化继续保留原有运动状态。\n- 世界渲染和预览共用修正后的朝向计算。既有光环定义、存档、网络载荷及公开 API v2 保持兼容。\n- 固定 HaloCore **2.5.1 / 59e3bb2e**，并将该 core 版本的 adapter revision 从 **1** 重新开始。**Minecraft 26.3 NeoForge** 玩家仍只需安装一个 Halo JAR。\n- core 的 347 项测试通过；本平台 146 项适配器自动测试、15 个原生单人专项场景及云端构建通过。本轮未重新验收专用服及第三方模组组合。\n\n**Minecraft 26.3 NeoForge** 需要 **Java 25** 或更高版本。本轮构建与游戏验证使用 NeoForge 26.3.0.64-beta。 云端 CI 另检查 NeoForge 26.3.0.76。现有 Sodium 0.9.2／0.9.3-alpha.1 光影组合须使用 26.3.0.64-beta，与 26.3.0.65 及以后版本不兼容。"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [],
+	"contributors": {
+		"commits": 203,
+		"more": 0,
+		"people": [
+			{
+				"login": "AzusaKe",
+				"commits": 203,
+				"name": "Azusa_Ke",
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

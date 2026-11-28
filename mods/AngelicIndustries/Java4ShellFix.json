@@ -1,0 +1,165 @@
+{
+	"repo": "AngelicIndustries/Java4ShellFix",
+	"host": "github",
+	"description": "Minecraft mod fixing CVE-2026-114938.",
+	"stars": 1,
+	"archived": false,
+	"created": "2026-11-18T10:37:44Z",
+	"pushed": "2026-11-18T16:48:51Z",
+	"releases": [
+		{
+			"tag": "1.0.0",
+			"published": "2026-11-18T16:46:36Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 764178747,
+					"name": "Java4ShellFix-1.0.0-legacy.jar",
+					"url": "https://github.com/AngelicIndustries/Java4ShellFix/releases/download/1.0.0/Java4ShellFix-1.0.0-legacy.jar",
+					"size": 30216,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "a91ad8fbb32601f3bb3d3484dc9f6200d40350ee71852b42814644f380bcf5ba",
+					"mods": [],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 18,
+						"jars": [],
+						"capabilities": {
+							"classloading": {
+								"industries/angelic/java4shellfix/Agent.class": [
+									"java/lang/instrument/Instrumentation.retransformClasses in agentmain"
+								],
+								"industries/angelic/java4shellfix/AttachLauncher.class": [
+									"\"com.sun.tools.attach.VirtualMachine\" by name"
+								]
+							},
+							"exec": {
+								"industries/angelic/java4shellfix/SelfAttach.class": [
+									"java/lang/ProcessBuilder.<init> in loadAgentIntoSelf",
+									"java/lang/ProcessBuilder.redirectErrorStream in loadAgentIntoSelf",
+									"java/lang/ProcessBuilder.start in loadAgentIntoSelf"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 764178842,
+					"name": "Java4ShellFix-1.0.0.jar",
+					"url": "https://github.com/AngelicIndustries/Java4ShellFix/releases/download/1.0.0/Java4ShellFix-1.0.0.jar",
+					"size": 33709,
+					"downloads": 13,
+					"inspection": 2,
+					"sha256": "b222ddac93aa3571f766da9f18300cfec2ad8c1b0a53f0fc1797de1f7a1646c5",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "java4shellfix",
+							"version": "1.0.0",
+							"name": "Java4ShellFix",
+							"description": "Mitigates CVE-2026-114938 (\"Java4Shell\"), the OpenJDK AVX-512 VBMI Base64 decode heap overflow, at runtime.",
+							"environment": "*",
+							"depends": [],
+							"provides": []
+						},
+						{
+							"loader": "neoforge",
+							"id": "java4shellfix",
+							"version": "1.0.0",
+							"name": "Java4ShellFix",
+							"description": "Mitigates CVE-2026-114938 (\"Java4Shell\"), the OpenJDK AVX-512 VBMI Base64 decode heap overflow, at runtime.",
+							"environment": "*",
+							"depends": []
+						},
+						{
+							"loader": "forge",
+							"id": "java4shellfix",
+							"version": "1.0.0",
+							"name": "Java4ShellFix",
+							"description": "Mitigates CVE-2026-114938 (\"Java4Shell\"), the OpenJDK AVX-512 VBMI Base64 decode heap overflow, at runtime.",
+							"environment": "*",
+							"depends": []
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 21,
+						"jars": [],
+						"capabilities": {
+							"classloading": {
+								"industries/angelic/java4shellfix/Agent.class": [
+									"java/lang/instrument/Instrumentation.retransformClasses in agentmain"
+								],
+								"industries/angelic/java4shellfix/AttachLauncher.class": [
+									"\"com.sun.tools.attach.VirtualMachine\" by name"
+								]
+							},
+							"exec": {
+								"industries/angelic/java4shellfix/SelfAttach.class": [
+									"java/lang/ProcessBuilder.<init> in loadAgentIntoSelf",
+									"java/lang/ProcessBuilder.redirectErrorStream in loadAgentIntoSelf",
+									"java/lang/ProcessBuilder.start in loadAgentIntoSelf"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Java4ShellFix 1.0.0\n\n- First release. Mitigates CVE-2026-114938 (\"Java4Shell\"), the OpenJDK AVX-512 VBMI Base64 decode heap overflow, at runtime.\n- On startup the mod reports whether this JVM and CPU are exposed, then, if they are, installs a HotSpot compiler directive that keeps the vulnerable `Base64$Decoder.decode0` stub out of optimised code. If the method was already compiled before the mod ran, it discards that code through a self-attach class retransform.\n- By default an exposed JVM that could not be mitigated refuses to start, so a vulnerable server fails fast instead of running unprotected. Set `-Djava4shellfix.onFailure=warn` to run anyway. A JVM that is already safe (patched JDK, non-x86, no AVX-512 VBMI, or `-XX:-UseBASE64Intrinsics`/`-XX:UseAVX=2` already set) is never affected.\n- One jar runs on Fabric, Quilt, Forge (1.7.10 through 1.21, including lwjgl3ify) and NeoForge. A `-legacy` jar is included for Cleanroom and other hardened FML forks that reject the modern mod metadata.\n- The in-memory change is lost on restart. Add `-XX:-UseBASE64Intrinsics` to the JVM startup options, or update to a fixed JDK (17.0.21.1 / 21.0.13.1 / 25.0.5.1 / 27.0.1.1 or later), to stay protected.\n- The runtime mitigation technique is reimplemented from Theori/Xint's [runtime patch for this CVE](https://github.com/theori-io/java4shell-runtime-patch-CVE-2026-114938)."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [
+		"images/badges/67.png",
+		"images/badges/cord.png",
+		"images/badges/curse.png",
+		"images/badges/github.png",
+		"images/badges/maven.png",
+		"images/badges/mcmodcn.png",
+		"images/badges/modrinth.png",
+		"images/icons/67.png",
+		"images/icons/curse.png",
+		"images/icons/git.png",
+		"images/icons/modrinth.png",
+		"images/license_small.png"
+	],
+	"contributors": {
+		"commits": 4,
+		"more": 0,
+		"people": [
+			{
+				"login": "JackOfNoneTrades",
+				"commits": 4,
+				"name": "jack",
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

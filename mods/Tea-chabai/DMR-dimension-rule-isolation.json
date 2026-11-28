@@ -1,0 +1,126 @@
+{
+	"repo": "Tea-chabai/DMR-dimension-rule-isolation",
+	"host": "github",
+	"description": "Per-dimension /gamerule isolation for Minecraft 26.3 (Fabric). AI-generated implementation, human-tested.",
+	"stars": 0,
+	"archived": false,
+	"license": "NOASSERTION",
+	"created": "2026-11-17T03:57:22Z",
+	"pushed": "2026-11-17T13:27:03Z",
+	"releases": [
+		{
+			"tag": "v0.1.2-beta",
+			"published": "2026-11-17T13:30:32Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 759184835,
+					"name": "dimension-rule-isolation-0.1.2-beta.jar",
+					"url": "https://github.com/Tea-chabai/DMR-dimension-rule-isolation/releases/download/v0.1.2-beta/dimension-rule-isolation-0.1.2-beta.jar",
+					"size": 70779,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "b9feed588e1025c4a5f53b69ff19847554b03cda7e575f4a4b48578f44fa94b7",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dimensional_rule_isolation",
+							"version": "0.1.2-beta",
+							"name": "Dimensional Rule Isolation",
+							"description": "Every dimension keeps its own /gamerule values (including datapack dimensions), with named groups that share one rule set. Server-side only; vanilla clients can join. Implementation generated with AI assistance.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "52612b2a1c3fef16586a141b416a901f98daa1eac2ae631e6a8e6c8b891639c3.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 24,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## 0.1.2-beta — 2026-11-17\n\n### Added\n\n- **Per-dimension difficulty** (`/dmr difficulty <dimension> [value]`). Mob damage, spawn\n  checks and the client HUD follow the dimension's own value.\n- **Per-dimension weather** (`/dmr weather <dimension> [clear|rain|thunder] [duration]`).\n  Weather state changes are broadcast only inside the dimension that changed.\n- **Per-dimension recipes** (`/dmr recipe <dimension> add|remove|list|rebuild|check`).\n  A dimension claims datapack namespaces; crafting tables, furnaces, stonecutters, smithing\n  tables and brewing stands only see the claimed namespaces. Dimensions without claims see\n  only unclaimed namespaces.\n- **Per-dimension time offset** (`/dmr time <dimension> query|set|add|reset`). Time keeps\n  flowing; displayed time = global clock + offset. Undead burning, villager schedules and sky\n  darkening follow the offset.\n\n### Fixed\n\n- The client difficulty HUD showed the global value even in dimensions with their own\n  difficulty. The dimension's value is now sent on join, respawn and dimension change.\n- Vanilla weather packets (`START_RAINING` / `STOP_RAINING` / rain level) were broadcast to\n  every player; they are now filtered per dimension, so rain sound no longer leaks into\n  other worlds.\n- Difficulty is preloaded before level creation (`SERVER_STARTING`), so saved hostile mobs in\n  a non-peaceful dimension are no longer discarded when the global difficulty is peaceful.\n\n### Known limitations\n\n- Time is an **offset**, not an independent clock: sleeping through the night still moves the\n  global clock, and vanilla `/time` still operates globally.\n- The recipe book and `/recipe` still list every namespace; crafting validation is per\n  dimension.\n- Loot tables, advancements and item/block tags remain global.\n- The vanilla `/difficulty` command still writes the global difficulty; use `/dmr difficulty`.\n- Do not install alongside another mod that also overrides `ServerLevel.getGameRules()`.\n\n### Compatibility\n\n- Minecraft 26.3, Fabric Loader 0.19.5+, Fabric API, Java 25.\n- Server-side only; vanilla clients can join."
+		},
+		{
+			"tag": "v0.1.0",
+			"published": "2026-11-17T04:00:10Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 757544342,
+					"name": "dimension-rule-isolation-0.1.0.jar",
+					"url": "https://github.com/Tea-chabai/DMR-dimension-rule-isolation/releases/download/v0.1.0/dimension-rule-isolation-0.1.0.jar",
+					"size": 40223,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "b593d1c0114c8bf99999b7ffc224f693ad02bce05247bf4c9334b103216e8515",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "dimensional_rule_isolation",
+							"version": "0.1.0",
+							"name": "Dimensional Rule Isolation",
+							"description": "Every dimension keeps its own /gamerule values (including datapack dimensions), with named groups that share one rule set. Server-side only; vanilla clients can join. Implementation generated with AI assistance.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"provides": []
+						}
+					],
+					"icon": "52612b2a1c3fef16586a141b416a901f98daa1eac2ae631e6a8e6c8b891639c3.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 8,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "awa"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [],
+	"contributors": {
+		"commits": 2,
+		"more": 0,
+		"people": [
+			{
+				"login": "Tea-chabai",
+				"commits": 2,
+				"name": "Tea_Zero",
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

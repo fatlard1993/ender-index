@@ -1,0 +1,609 @@
+{
+	"repo": "lhy512103/AE2-WCWT",
+	"host": "github",
+	"description": "A comprehensive work terminal for AE2.",
+	"stars": 4,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-05-17T14:31:41Z",
+	"pushed": "2026-11-27T20:57:40Z",
+	"releases": [
+		{
+			"tag": "v1.3.12",
+			"published": "2026-11-27T20:57:40Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 802041469,
+					"name": "wcwt-1.3.12.jar",
+					"url": "https://github.com/lhy512103/AE2-WCWT/releases/download/v1.3.12/wcwt-1.3.12.jar",
+					"size": 1340556,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "0a3c81721bb90b87a3c88b86c53a2317efbed1c61aea7df90836aa543f433b29",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "wcwt",
+							"version": "1.3.12",
+							"name": "AE2 WCWT",
+							"description": "A comprehensive work terminal for AE2.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"ae2",
+								"ae2wtlib"
+							],
+							"dependsVersions": {
+								"neoforge": "[21.1.215,)",
+								"minecraft": "[1.21.1,1.22)",
+								"ae2": "[19.2.17,)",
+								"ae2wtlib": "[19.4.1,)"
+							},
+							"suggests": [
+								"extendedae",
+								"advanced_ae",
+								"emi",
+								"extendedae_plus",
+								"ae2importexportcard",
+								"megacells",
+								"polymorph",
+								"ae2helpers",
+								"inventoryprofilesnext",
+								"create",
+								"jei",
+								"ae2jeiintegration",
+								"jecharacters",
+								"extremesoundmuffler",
+								"invtweaks",
+								"gtlcore",
+								"curios",
+								"cosmeticarmorreworked",
+								"ae2cs",
+								"ae2lt",
+								"useless_mod",
+								"neoecoae",
+								"neo_favorite_items",
+								"mekanism",
+								"appmek",
+								"bettercombat"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"AE2 WCWT"
+							],
+							"item": [
+								"Advanced Coding Card",
+								"Cosmetic Armor Card",
+								"Curios Card",
+								"ME WCWT",
+								"ME Wireless Comprehensive Non-Universal Terminal",
+								"Network Tool Slot Box Card",
+								"Resonating Overload Encoder Card",
+								"Toolkit Card"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 345,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### English\n\n1. Fixed: Create basin recipes are only referenced while Create is loaded, so transferring a recipe whose displayed inputs or outputs cannot be converted no longer crashes the client without Create.\n2. Fixed: The toolkit network tool locator and toolbox lookup read the shared toolkit directly instead of building a full terminal menu host on every AE2 menu tick.\n3. Fixed: The extended panel requested by the toolkit hotkey is only consumed when the opened terminal reads it, so temporary hosts no longer discard it.\n4. Fixed: Recipe pulls take one network snapshot and resolve each ingredient's candidate items once instead of rescanning every stored key per ingredient and per transfer set, and a request is capped in total alternatives and to one per tick.\n5. Fixed: Pattern providers are sorted with keys computed once per provider instead of resolving the terminal group on every comparison, the per-tick scan no longer sorts unless a list is needed, and provider slots resolve through an id map.\n6. Fixed: Provider list requests are only served to the terminal that shows the list, management actions are throttled and reuse the menu's per-tick provider cache, and several actions in one tick share a single list refresh.\n7. Fixed: Enum ordinals in seven packets are range-checked while decoding and reported as decoder errors instead of array index errors.\n8. Fixed: Provider search text, mapping text and dimension ids carried in packets are capped in length on both sides, so a client can no longer bloat encoded patterns with oversized search text.\n9. Fixed: The Better Combat and EMI mixins no longer refuse to start or hard-crash when those mods change shape; a mismatch now only loses the paired feature, and the EMI button reads EMI internals reflectively.\n10. Fixed: The client recomputes the pattern preview only when the encoding inputs, mode or selected stonecutting recipe change, instead of running a full crafting or smithing recipe lookup every frame.\n11. Fixed: The stonecutting recipe list is cached per input and only consulted in stonecutting mode, instead of scanning every stonecutting recipe each frame whenever the first encoding slot held an item.\n12. Fixed: The EMI fill button rebuilds the set of available network items at most once per client tick instead of once per recipe per frame.\n13. Fixed: JEI previews of Useless Mod alloy furnace and multiblock recipes no longer build the full transfer, which sorted the whole client inventory every tick; the slot counts a preview needs are computed once per recipe.\n14. Fixed: The advanced coding panel reads the cell's config inventory from a copy parsed once per cell item instead of re-parsing it about twenty times per frame, and the MEGA compression cutoff is only resolved when the cell changes; a cell without a config inventory no longer crashes the panel.\n15. Fixed: The terminal screen checks the installed upgrade cards once per client tick instead of rebuilding the upgrade inventory seven times per frame.\n16. Fixed: Favorite lookups use a hash set instead of a linear search per slot per frame, and the favorites-first view is skipped entirely while no item is favorited.\n17. Fixed: Rebuilding the pattern management rows computes each provider's sort key once and keeps the translated input and output names of every pattern, instead of decoding every pattern and re-resolving names on each keystroke and list refresh.\n18. Fixed: The provider list sent to the terminal is capped in total synced patterns (new server option maxSyncedSlotsTotal) and providers, so very large networks can no longer produce a packet that disconnects the player.\n19. Fixed: The pattern multiplier overflow check no longer overflows itself, and two pattern decoding calls no longer assume the client level exists.\n20. Fixed: The terminal hotkey path only consults JEI's search focus when JEI is loaded, and JEI's internal info recipe classes are matched by name instead of being referenced directly.\n\n..."
+		},
+		{
+			"tag": "v1.3.11",
+			"published": "2026-11-01T13:27:34Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 698432424,
+					"name": "wcwt-1.3.11.jar",
+					"url": "https://github.com/lhy512103/AE2-WCWT/releases/download/v1.3.11/wcwt-1.3.11.jar",
+					"size": 1296213,
+					"downloads": 11,
+					"inspection": 2,
+					"sha256": "78a3c3cc61582a2c0a71ffb95308dd4e3eb5cd0f6a16316f469f02075be2dfcb",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "wcwt",
+							"version": "1.3.11",
+							"name": "AE2 WCWT",
+							"description": "A comprehensive work terminal for AE2.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"ae2",
+								"ae2wtlib"
+							],
+							"suggests": [
+								"extendedae",
+								"advanced_ae",
+								"emi",
+								"extendedae_plus",
+								"ae2importexportcard",
+								"megacells",
+								"polymorph",
+								"ae2helpers",
+								"inventoryprofilesnext"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"AE2 WCWT"
+							],
+							"item": [
+								"Advanced Coding Card",
+								"Cosmetic Armor Card",
+								"Curios Card",
+								"ME WCWT",
+								"ME Wireless Comprehensive Non-Universal Terminal",
+								"Network Tool Slot Box Card",
+								"Resonating Overload Encoder Card",
+								"Toolkit Card"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 333,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "### English\n\n1. Added: Support for Useless Mod 2.4.6 omniversal pattern encoding, automatic upload and duplicate returns (#34).\n2. Fixed: Refreshed inventory counts after transfers to prevent overflow and infinite-storage cache drift (#35).\n3. Fixed: Compressed empty-slot click targeting and stale patterns after remapping (#37).\n4. Fixed: Pick block skips Neo Favorite Items locked slots to prevent network item loss (#32).\n5. Fixed: The recipe-pull button now appears with EMI's default settings (#30).\n6. Fixed: Toolkit hotbars recognize terminals held in the offhand (#31).\n7. Fixed: Reading toolkit hotbar settings before config loading no longer crashes startup (#36).\n8. Fixed: Better Combat dual wield attacks no longer duplicate toolkit items or overwrite hotbar slots.\n9. Fixed: Default recipe mappings use the same client language as EAEP.\n10. Fixed: Partial-component recipes encode full ingredient data to prevent stalled core crafting.\n11. Fixed: Automatic uploads respect EAEP settings and retain patterns when multiple crafting systems are available.\n12. Fixed: Pattern clearing and substitution toggles now synchronize through the server to prevent AE2LT crashes (#38).\n13. Fixed: Adapted to the EAEP 1.6.4 upload API split and moved auto-upload setting while retaining older-version support (#39).\n\n### 中文\n\n1. 新增：兼容无用之物 2.4.6 万象样板编码、自动上传及重复退还（#34）。\n2. 修复：存取后重新读取库存数量，避免大数溢出和无限库存缓存漂移（#35）。\n3. 修复：压缩空槽点击定位及重新映射后的样板残影（#37）。\n4. 修复：选取方块时跳过 Neo Favorite Items 锁定槽位，避免网络物品丢失（#32）。\n5. 修复：EMI 默认配置下不显示拉取物品按钮（#30）。\n6. 修复：工具包快捷栏无法识别副手中的终端（#31）。\n7. 修复：配置加载前访问工具包快捷栏导致启动崩溃（#36）。\n8. 修复：Better Combat 双持攻击复制工具并覆盖快捷栏物品。\n9. 修复：配方默认映射与 EAEP 使用相同的客户端语言。\n10. 修复：部分组件配方编码优先保留真实材料的完整数据，避免核心样板卡合成。\n11. 修复：自动上传遵循 EAEP 开关，存在多个可上传合成系统时保留样板。\n12. 修复：清除样板和切换替换选项改由服务端统一同步，避免 AE2LT 崩溃（#38）。\n13. 修复：兼容 EAEP 1.6.4 上传接口拆分和自动上传配置迁移，并保留旧版支持（#39）。"
+		},
+		{
+			"tag": "v1.20.1.11",
+			"published": "2026-10-02T09:28:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 605259114,
+					"name": "wcwt-1.20.1.11.jar",
+					"url": "https://github.com/lhy512103/AE2-WCWT/releases/download/v1.20.1.11/wcwt-1.20.1.11.jar",
+					"size": 1173356,
+					"downloads": 11,
+					"inspection": 2,
+					"sha256": "4bdfa5cd0f2d778fd57cb020e88b56c4eaf6a14ef85c7ade808906021f5d7864",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "wcwt",
+							"version": "1.20.1.11",
+							"name": "AE2 WCWT",
+							"description": "A comprehensive work terminal for AE2.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"ae2",
+								"ae2wtlib"
+							],
+							"suggests": [
+								"emi",
+								"advanced_ae",
+								"expatternprovider",
+								"extendedae_plus",
+								"polymorph",
+								"ae2importexportcard"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Advanced Coding Card",
+								"Cosmetic Armor Card",
+								"Curios Card",
+								"ME WCWT",
+								"Network Tool Slot Box Card",
+								"Resonating Overload Encoder Card",
+								"Toolkit Card"
+							],
+							"group": [
+								"WCWT"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 354,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## English\n\n1. Added: toolkit extended hotbars on both sides of the vanilla hotbar (requires the toolkit card).\n2. Fixed: terminals in the extended hotbars could not be opened with right-click.\n3. Fixed: extended hotbars were hidden when a Wireless Universal Terminal without the toolkit card was worn.\n4. Fixed: crash on mouse click when TooManyRecipeViewers and ExtendedAE Plus are both installed (#15).\n5. Removed: type restrictions and gray placeholder icons on the first 11 toolkit slots.\n6. Fixed: GT tool ingredients (e.g. saws) could not be auto-filled when crafting in the WCWT terminal unless the material matched the one shown in JEI/EMI.\n\n## 中文\n\n1. 新增：原版快捷栏两侧的工具包扩展快捷栏（需安装工具包卡）。\n2. 修复：扩展快捷栏中的终端无法右键打开。\n3. 修复：佩戴未装工具包卡的无线通用终端时扩展快捷栏不显示。\n4. 修复：同时安装 TooManyRecipeViewers 与 ExtendedAE Plus 时点击鼠标崩溃（#15）。\n5. 移除：工具包前 11 格的类型限制与灰色底图。\n6. 修复：WCWT 终端合成时 GT 工具类标签物品（如锯子）材质与 JEI/EMI 当前显示不一致时无法自动填充。"
+		},
+		{
+			"tag": "v1.3.10",
+			"published": "2026-09-25T09:13:20Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 588021635,
+					"name": "wcwt-1.3.10.jar",
+					"url": "https://github.com/lhy512103/AE2-WCWT/releases/download/v1.3.10/wcwt-1.3.10.jar",
+					"size": 1258756,
+					"downloads": 12,
+					"inspection": 2,
+					"sha256": "555e208f4a06f38e3cc5d152bc5a104d35a1b6a1cea94bbaaaa3d79897ffa960",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "wcwt",
+							"version": "1.3.10",
+							"name": "AE2 WCWT",
+							"description": "A comprehensive work terminal for AE2.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"ae2",
+								"ae2wtlib"
+							],
+							"suggests": [
+								"extendedae",
+								"advanced_ae",
+								"emi",
+								"extendedae_plus",
+								"ae2importexportcard",
+								"megacells",
+								"polymorph",
+								"ae2helpers",
+								"inventoryprofilesnext"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"AE2 WCWT"
+							],
+							"item": [
+								"Advanced Coding Card",
+								"Cosmetic Armor Card",
+								"Curios Card",
+								"ME WCWT",
+								"ME Wireless Comprehensive Non-Universal Terminal",
+								"Network Tool Slot Box Card",
+								"Resonating Overload Encoder Card",
+								"Toolkit Card"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 316,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## v1.3.10\n\n### English\n\n1. Fixed: Oversized counts in client packets are rejected before allocation, so crafted packets can no longer exhaust server memory.\n2. Fixed: Pattern providers are tracked by a stable id, so adding or removing a provider no longer sends clicks and uploads to the wrong machine.\n3. Fixed: The EMI hammer button no longer overlaps EMI Recipe Sharing's share button (#23).\n4. Fixed: Using an item with a GUI from the toolkit extra bar no longer kicks the player from the server (#26).\n5. Fixed: Scrolling the toolkit extra bar in multiplayer no longer disconnects players (#25).\n6. Fixed: The toolkit extra bar no longer takes Shift+scroll or scrolls handled by other mods (#24).\n7. Fixed: The extra bar and terminals share one toolkit inventory, so items can no longer be duplicated or lost.\n8. Changed: The extra bar now works like MEST: number keys pick a slot in the current page and clicking a cell only selects it.\n9. Fixed: Equipping armor, pouring buckets, swapping hands and dropping from the extra bar now update the right cell.\n10. Fixed: Pick block selects a matching extra-bar cell, otherwise switches back to the vanilla hotbar.\n11. Fixed: Lowering `toolkitSlotCount` returns items in removed slots to the player.\n12. Added: Unit tests and a GitHub Actions build workflow.\n13. Changed: Moved pattern-upload and toolkit-storage code out of the terminal menu classes.\n14. Chore: Removed unused code and replaced deprecated API calls to keep the project warning-free.\n15. Fixed: Toolkit quick bars now use a dedicated layer above the vanilla hotbar, preventing offhand HUD overlap.\n16. Fixed: Advanced AE pattern inputs keep their encoded order, text-entry keys no longer trigger terminal shortcuts, empty terminals no longer refresh pinned rows during initialization, resonant conversion icons stay inside their buttons, and toolkit cards work with universal terminals.\n17. Fixed: Toolkit quick bars now reserve the vanilla offhand well and adapt their cell width like MEST, preventing overlap when the offhand is occupied.\n18. Added: Publishing a GitHub Release can automatically publish the matching NeoForge build to CurseForge and Modrinth.\n\n### 中文\n\n1. 修复：客户端数据包中过大的数量会在分配前被拒绝，伪造的数据包不能再耗尽服务端内存。\n2. 修复：样板供应器改用稳定 ID 标识，增删供应器后点击和上传不会再落到别的机器上。\n3. 修复：EMI 锤子按钮不再与 EMI Recipe Sharing 的分享按钮重叠（#23）。\n4. 修复：在工具包扩展栏中使用带界面的物品不再把玩家踢出服务器（#26）。\n5. 修复：联机时滚动工具包扩展栏不再导致玩家掉线（#25）。\n6. 修复：工具包扩展栏不再抢占 Shift+滚轮和其他模组已处理的滚轮操作（#24）。\n7. 修复：扩展栏与终端共用同一份工具包库存，不会再刷物品或丢物品。\n8. 调整：扩展栏参考 MEST 实现，数字键在当前页内选格，点击格子只做选中。\n9. 修复：从扩展栏装备盔甲、倒水桶、交换主副手和丢弃物品时会更新正确的格子。\n10. 修复：鼠标中键选取方块时优先选中扩展栏中相同的物品，否则切回原版快捷栏。\n11. 修复：调小 `toolkitSlotCount` 后，被移除格子里的物品会退还给玩家。\n12. 新增：单元测试和 GitHub Actions 构建工作流。\n13. 调整：将样板上传和工具包存储代码从终端菜单类中拆出。\n14. 清理：删除未使用代码并替换过时 API，清理 IDE 警告。\n15. 修复：工具包扩展快捷栏改用原版快捷栏上方的独立图层，避免与副手 HUD 重叠。\n16. 修复：高级 AE 样板保留编码顺序;\n17. 修复：输入文字时不会触发终端快捷键;\n18. 修复：空终端初始化不再刷新置顶行;\n19. 修复：谐振转换图标保持在按钮范围内;\n20. 修复：通用终端也能识别工具包卡。\n21. 修复：工具包扩展快捷栏参考 MEST 预留原版副手槽，并自适应格子宽度，副手有物品时不再重叠。\n22. 新增：发布 GitHub Release 后，GitHub Actions 可自动将对应版本的 NeoForge 构建发布到 CurseForge 和 Modrinth。"
+		},
+		{
+			"tag": "v1.3.9",
+			"published": "2026-09-01T15:13:05Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 539727927,
+					"name": "wcwt-1.3.9.jar",
+					"url": "https://github.com/lhy512103/AE2-WCWT/releases/download/v1.3.9/wcwt-1.3.9.jar",
+					"size": 1242724,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "043fa291449e807afd06ef61fecd1b462afc11f92662ae7eb41cc298bb41bee1",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "wcwt",
+							"version": "1.3.9",
+							"name": "AE2 WCWT",
+							"description": "A comprehensive work terminal for AE2.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"ae2",
+								"ae2wtlib"
+							],
+							"suggests": [
+								"extendedae",
+								"advanced_ae",
+								"emi",
+								"extendedae_plus",
+								"ae2importexportcard",
+								"megacells",
+								"polymorph",
+								"ae2helpers",
+								"inventoryprofilesnext"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"AE2 WCWT"
+							],
+							"item": [
+								"Advanced Coding Card",
+								"Cosmetic Armor Card",
+								"Curios Card",
+								"ME WCWT",
+								"ME Wireless Comprehensive Non-Universal Terminal",
+								"Network Tool Slot Box Card",
+								"Resonating Overload Encoder Card",
+								"Toolkit Card"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 303,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## English\n\n**Added**\n\n- Added a JEI/EMI hammer button that pulls items into the crafting grid and returns to the terminal; the + button now always encodes the recipe.\n- Added Ctrl+hammer on crafting recipes to arm ae2helpers auto-insert for missing craftable slots.\n- Added Shift+Encode to return the last pattern uploaded through ExtendedAE Plus.\n- Added Shift+Encode return for non-processing patterns uploaded to ECO or Lightning Tech.\n- Added an optional toolkit HUD with left/right hotbars for slots 0-8 and 9-17 for quick tool switching; toolkit capacity is now at least 18 slots and can be disabled in wireless-terminal settings.\n\n**Fixed**\n\n- Fixed pattern-management UI and slot hover highlights being cropped.\n- Fixed F-key fill-search into the provider search field when EAEP's JEI proxy is missing.\n- Fixed the ingredient list and bookmarks not showing correctly on newer JEI.\n- Fixed some processing patterns not being returnable after a unique-match upload through ExtendedAE Plus.\n\n**Improved**\n\n- Improved encoding auto-upload to call ExtendedAE Plus public APIs instead of WCWT's own matching logic.\n- Improved encoding upload so it only runs on a unique provider-name match; zero or multiple matches fall back to the editor or cache.\n- Improved pattern encoding to follow AE2's encode flow: write the encoded slot first, then upload. Stonecutting requires a selected recipe, and Advanced AE directional patterns use its public encoder.\n- Improved pattern-management mapping add/reload/delete to call ExtendedAE Plus public mapping APIs; Cancel now opens the mapping manager.\n- Improved pattern-management search and mapping fields to use ExtendedAE Plus's Chinese-capable text field when it is present.\n- Improved world-highlight to call ExtendedAE's public highlight APIs instead of reflection, and resized the pin button.\n- Improved overload-pattern conversion to use Lightning Tech / Thunderbolt public APIs.\n- Improved resonating-pattern conversion to call Crystal Science's public encode API instead of reflection.\n- Improved JEI ingredient conversion to use AE2 JEI Integration's public converter API, with converters cached by ingredient type.\n- Improved optional Curios, Applied Mekanistics, MEGA Cells, AE2WTLib magnet-range, JECH, and Advanced AE input/output direction editor calls to use public APIs instead of reflection.\n- Improved Inventory Profiles Next support by removing the reflection/hints writer and using IPN's public screen annotations so sort buttons sit at the player-inventory top-right.\n- Improved the wireless-terminal settings screen to size itself to its options instead of using a fixed background.\n- Improved optional upgrade-card recipes to require their companion mods; JEI/EMI hide those cards and their recipes when the mods are missing.\n\n**Removed**\n\n- Removed the option to open the ExtendedAE Plus provider selector for duplicate names.\n- Removed the unused crafting-grid lock button, hotkey, config, and related transfer-border mixin.\n\n**Changed**\n\n- Changed the ExtendedAE Plus requirement to 1.6.0 or newer.\n\n## 中文\n\n**新增**\n\n- 新增 JEI/EMI 锤子按钮：从网络拉取物品到合成格并返回终端；原 + 按钮固定编码配方。\n- 新增 Ctrl+锤子：拉取工作台配方时接入 ae2helpers 模组，对缺料可合成格自动填入。\n- 新增 Shift+编写撤回：安装 ExtendedAE Plus 时可撤回上次上传的样板。\n- 新增对 ECO / 闪电科技非处理样板的 Shift+编写撤回。\n- 新增工具包左右 HUD 扩展快捷栏（0-8 / 9-17 格），用于快速切换工具，工具包容量下限调整为 18 格，可在无线终端设置中关闭。\n\n**修复**\n\n- 修复样板管理区部分 UI 和槽位悬停高亮被裁切问题。\n- 修复 F 键填充搜索到供应器搜索框在 EAEP JEI 代理缺失时无法工作的问题。\n- 修复新版 JEI 原料列表与书签无法正常显示的问题。\n- 修复 ExtendedAE Plus 唯一匹配上传时部分处理样板无法撤回的问题。\n\n**优化**\n\n- 优化编码自动上传，改为调用 ExtendedAE Plus 公开 API，不再使用 WCWT 自研匹配上传。\n- 优化编码上传条件：仅在供应器名称唯一匹配时上传；0 个或多名则回退到编辑槽或缓存区。\n- 优化样板编码流程，对齐 AE2 原版：先写入编码槽再上传；切石机必须选手动配方；Advanced AE 方向样板改用其公开编码器。\n- 优化样板管理区映射：增加/重载/删除改为调用 ExtendedAE Plus 公开 API，取消按钮改为打开映射管理界面。\n- 优化样板管理区输入框：安装 ExtendedAE Plus 时，搜索框和映射框改用其可输入中文的输入框。\n- 优化世界高亮，改为直接调用 ExtendedAE 公开 API，调整定位针按钮大小。\n- 优化过载样板转换，改用闪电科技 / Thunderbolt 公开 API。\n- 优化谐振样板转换，改为调用水晶科技公开 encode API，不再反射。\n- 优化 JEI 原料转换，改为调用 AE2 JEI Integration 公开 converter API，并按原料类型缓存。\n\n..."
+		},
+		{
+			"tag": "v1.3.8",
+			"published": "2026-08-20T16:09:53Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 522476247,
+					"name": "wcwt-1.3.8.jar",
+					"url": "https://github.com/lhy512103/AE2-WCWT/releases/download/v1.3.8/wcwt-1.3.8.jar",
+					"size": 1190658,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "effab8054d01a97d6142958078e1a1bd09e4b3ab7c3d731625bd3a2d971fed60",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "wcwt",
+							"version": "1.3.8",
+							"name": "AE2 WCWT",
+							"description": "A comprehensive work terminal for AE2.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"ae2",
+								"ae2wtlib"
+							],
+							"suggests": [
+								"extendedae",
+								"advanced_ae",
+								"emi",
+								"extendedae_plus",
+								"ae2importexportcard",
+								"megacells",
+								"polymorph"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"group": [
+								"AE2 WCWT"
+							],
+							"item": [
+								"Advanced Coding Card",
+								"Cosmetic Armor Card",
+								"Curios Card",
+								"ME WCWT",
+								"ME Wireless Comprehensive Non-Universal Terminal",
+								"Network Tool Slot Box Card",
+								"Resonating Overload Encoder Card",
+								"Toolkit Card"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 266,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## English\n\n- Fixed automatic upload treating manually typed Provider Search text as an upload target.\n- Added automatic crafting-pattern upload support for Lightning Tech's Tianshu Supercomputing Array.\n- Assembler-matrix duplicate detection now uses PatternContainer APIs, and matrix upload calls ExtendedAE Plus's public upload method instead of reflection.\n- Added a red border around JEI/EMI recipe-transfer buttons when the crafting grid is locked. This can be disabled in client config.\n- Fixed pattern-provider list names showing in English on dedicated servers.\n- Shift+left-clicking an EMI bookmarked or recipe-context stack now fills the full recipe into the terminal.\n- Fixed EMI crafting transfers not following the recipe's on-screen ingredient order.\n- Fixed duplicate tooltips on the EMI fill button when the crafting grid is locked.\n\n## 中文\n\n- 修复自动上传把供应器搜索框里手动输入的文本当作上传目标的问题。\n- 新增合成样板自动上传兼容闪电科技天枢超算阵列。\n- 装配矩阵查重改为 PatternContainer API，写入改为直接调用 ExtendedAE Plus 公开上传方法，不再使用反射。\n- 新增合成网格锁定时，JEI/EMI 在转移物品按钮边框额外绘制红色边框。可在客户端配置中关闭。\n- 修复样板供应器列表名称在专用服务器环境下显示英文名称的问题。\n- 新增 Shift+左键 点击带配方上下文的 EMI 书签/物品会把整份配方填入终端。\n- 修复 EMI 合成转移物品顺序与配方顺序不符的问题。\n- 修复 EMI 锁定网格时填充按钮出现重复tooltip的问题。"
+		},
+		{
+			"tag": "v1.20.1.10",
+			"published": "2026-08-15T12:20:12Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 515665032,
+					"name": "wcwt-1.20.1.10.jar",
+					"url": "https://github.com/lhy512103/AE2-WCWT/releases/download/v1.20.1.10/wcwt-1.20.1.10.jar",
+					"size": 1138721,
+					"downloads": 5,
+					"inspection": 2,
+					"sha256": "c9478616169dedd4cd060dee72ea653b1fd85d9d532b2a084bbc25c7ac3989b3",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "wcwt",
+							"version": "1.20.1.10",
+							"name": "AE2 WCWT",
+							"description": "A comprehensive work terminal for AE2.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"ae2",
+								"ae2wtlib"
+							],
+							"suggests": [
+								"emi",
+								"advanced_ae",
+								"expatternprovider",
+								"extendedae_plus",
+								"polymorph",
+								"ae2importexportcard"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"item": [
+								"Advanced Coding Card",
+								"Cosmetic Armor Card",
+								"Curios Card",
+								"ME WCWT",
+								"Network Tool Slot Box Card",
+								"Resonating Overload Encoder Card",
+								"Toolkit Card"
+							],
+							"group": [
+								"WCWT"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 333,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## English\n\n1. Fixed duplicate patterns when uploading crafting patterns to the Neo ECO AE Extension matrix.\n\n\n## 中文\n\n1. 修复上传合成样板至 Neo ECO AE Extension 矩阵时重复样板的问题。"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [],
+	"contributors": {
+		"commits": 133,
+		"more": 0,
+		"people": [
+			{
+				"login": "lhy512103",
+				"commits": 125,
+				"name": "hy l",
+				"funding": []
+			},
+			{
+				"login": "GoodCarnival386",
+				"commits": 2,
+				"funding": []
+			},
+			{
+				"login": "WhitePhant0m",
+				"commits": 2,
+				"name": "Phantom",
+				"funding": [
+					{
+						"platform": "github",
+						"url": "https://github.com/sponsors/WhitePhant0m"
+					}
+				]
+			},
+			{
+				"login": "rianfalltwilight-lab",
+				"commits": 2,
+				"funding": []
+			},
+			{
+				"login": "foxwhite25",
+				"commits": 1,
+				"name": "Fox_white",
+				"funding": []
+			},
+			{
+				"login": "yanxiatao",
+				"commits": 1,
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

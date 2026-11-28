@@ -1,0 +1,450 @@
+{
+	"repo": "SYSTEM-RAM-OP/LuckyBlockTACZ",
+	"host": "github",
+	"description": "一个LuckyBlockTACZ的源代码仓库",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-11-16T09:01:50Z",
+	"pushed": "2026-11-24T12:39:47Z",
+	"releases": [
+		{
+			"tag": "1.0.5",
+			"published": "2026-11-24T12:42:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 787158821,
+					"name": "LuckyBlockTACZ-1.0.5.jar",
+					"url": "https://github.com/SYSTEM-RAM-OP/LuckyBlockTACZ/releases/download/1.0.5/LuckyBlockTACZ-1.0.5.jar",
+					"size": 709863,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "face203b754ca9e6f57be4c5416fb87bb94b68de8ffbb25d588df289337dba0f",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "luckyblocktacz",
+							"version": "1.0.5",
+							"name": "LuckyBlockTACZ",
+							"description": "A lightweight Lucky Block add-on for TACZ. It's not a Lucky Block add-on mod, so you don't have to include the Lucky Block mod. Break the block to get a random gun from 70+ default TACZ firearms, along with its perfectly matched ammo. Ready to fire, no mismatches!",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"tacz"
+							],
+							"dependsVersions": {
+								"minecraft": "[1.20.1]",
+								"tacz": "[1.2.0,)"
+							},
+							"suggests": [
+								"lrtactical",
+								"delta_wt"
+							]
+						}
+					],
+					"icon": "5084f26897c52efee018ba41728f43d4f66702df220751ca06354acab5bd1cee.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Lucky Block TACZ"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe",
+							"structure",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 531,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.5.0.jar",
+							"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream in findBootstrapClass"
+								]
+							},
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe in <clinit>"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"github.com": [
+								"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## LuckyBlock TACZ 1.0.5\n\n**Minecraft 1.20.1 · Forge**\n\n### Overview\n\nLuckyBlock TACZ is a lightweight lucky-block add-on for TaCZ. It does **not** require the original Lucky Block mod. Break the block to roll a random TaCZ firearm together with perfectly matched ammo, ready to fire, no mismatches.\n\n### Added\n\n- **Config file with hot reload.** A new `config/luckyblocktacz-common.toml` exposes every tuning knob: per-tier drop chances, per-rarity weights, how many drop sets per break, scatter radius, jackpot trigger and reward, advancement toggles, and render options. Edit the file and it applies automatically, or run `/lbtacz reload` (op level 2) to refresh the cached loot table without restarting.\n- **Five rarity tiers with two-layer weighting.** Drops are now rolled in two passes — first a tier (1–4), then a rarity inside that tier. Default distribution: Common 44.0%, Uncommon 32.1%, Rare 17.0%, Epic 5.9%, Legendary 1.0%. All tunable in the config. Gun + ammo + attachment bundles still drop together in a single tick, never mismatched.\n- **Multi-block jackpot.** Breaking several lucky blocks within a short window inside a small radius triggers a jackpot that drops 6 top-tier sets. Configurable threshold, radius, window and reward. A server-wide announcement and a level-up sound play when it fires.\n- **Advancements.** Five new achievements — 幸运方块 TACZ (root), First Gun, First Epic, Jackpot and Collector (break 100 blocks) — fully localized in both English and Chinese.\n- **Block-entity renderer.** The block now hosts a block entity that renders a slowly spinning, gently bobbing lucky-block item floating in the middle of the block, purely client-side.\n\n### Improved\n\n- Empty-drop protection: every weighted pool falls back gracefully (re-normalize, then skip to the next non-empty rarity bucket) instead of dropping nothing or throwing.\n\n### Carried over from 1.0.4\n\n70 guns with matched ammo, 117 individual attachments, 50 gun + ammo + attachment bundles, consumables with Green Grape Tactical Gear, the 11 Delta WT knives, underground ore generation (Y 60–120), ~24 chest loot tables at 10% chance, a 9-dirt crafting recipe, Simplified Chinese localization, and the reworked stone-brick shrine structure.\n\n### Requirements\n\n- **Required**: TaCZ (`tacz`) 1.2.0\n- **Optional**: Green Grape Tactical Gear (`lrtactical`)\n- **Optional**: Delta WT (`delta_wt`)\n\n### Update\n\nReplace the old jar in your `mods` folder with `LuckyBlockTACZ-1.0.5.jar` and restart the game. On your first launch a default `config/luckyblocktacz-common.toml` is generated.\n\n### Maven (for developers)\n\n```gradle\nrepositories { maven { url \"https://jitpack.io\" } }\ndependencies { implementation \"com.github.SYSTEM-RAM-OP:LuckyBlockTACZ:1.0.5\" }\n```\n\n---\n\n## LuckyBlock TACZ 1.0.5（中文）\n\n**Minecraft 1.20.1 · Forge**\n\n### 模组简介\n\nLuckyBlock TACZ 是一个轻量级的 TaCZ 幸运方块模组，**不依赖原版 Lucky Block 模组**。挖开幸运方块，随机获得一把 TaCZ 枪械，并同时掉落与之口径完全匹配的弹药，开箱即射，不会枪弹错配。\n\n### 1.0.5 新增\n\n- **配置文件 + 热重载。** 新增 `config/luckyblocktacz-common.toml`，把所有可调参数都暴露出来：各 tier 掉落概率、各稀有度权重、每次破坏掉几组、散落半径、大奖触发条件与奖励、进度开关、渲染开关。改完文件自动生效；也可以执行 `/lbtacz reload`（OP 等级 2）立刻刷新缓存战利品表，无需重启游戏。\n- **五档稀有度 + 两层加权。** 掉落改为两层抽取——先抽 tier（1–4），再在该 tier 内抽稀有度。默认分布：Common 44.0%、Uncommon 32.1%、Rare 17.0%、Epic 5.9%、Legendary 1.0%，全部可在配置里调整。「枪 + 弹药 + 配件」仍在一个 tick 内一起掉落，绝不枪弹错配。\n- **多方块大奖。** 在很短的时间窗口内、很小的范围内连续挖开多个幸运方块，即可触发大奖，一次掉落 6 组最高 tier 奖励。阈值、范围、时间窗、奖励数量都可在配置里调整。触发时全服公告并播放升级音效。\n- **进度（成就）。** 新增五个进度——幸运方块 TACZ（根）、第一把枪、第一件史诗、大奖、收藏家（累计挖 100 块）——中英双语完整本地化。\n- **方块实体渲染。** 方块现在带一个方块实体，在方块正中央渲染一个缓缓自转、微微上下浮动的幸运方块物品，纯客户端表现，不影响服务器。\n\n### 1.0.5 改进\n\n- 空掉落防护：每个加权池都做了优雅回退（归一化后跳到下一个非空稀有度桶），宁可换奖品也绝不掉出空气或抛异常。\n\n### 沿用 1.0.4 的能力\n\n70 把枪械 + 配套弹药、117 种单件附件、50 组「枪 + 弹药 + 附件」三件套、绿葡萄战术装备消耗品、11 把三角洲近战刀、地下矿脉生成（Y 60–120）、约 24 种箱子 10% 概率开出、9 个泥土合成配方、简体中文语言文件、重做后的石砖神殿结构。\n\n### 前置依赖\n\n- **必须**：TaCZ（`tacz`），版本 1.2.0\n- **可选**：绿葡萄战术装备（`lrtactical`）\n- **可选**：Delta WT（`delta_wt`）\n\n### 更新方法\n\n\n..."
+		},
+		{
+			"tag": "1.0.4",
+			"published": "2026-11-22T08:32:44Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 778405970,
+					"name": "LuckyBlockTACZ-1.0.4.jar",
+					"url": "https://github.com/SYSTEM-RAM-OP/LuckyBlockTACZ/releases/download/1.0.4/LuckyBlockTACZ-1.0.4.jar",
+					"size": 677836,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "8e9b845b9aa36a15e4cbd056dffbf558ef27224109bea4245f2fe6f191ba973d",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "luckyblocktacz",
+							"version": "1.0.4",
+							"name": "LuckyBlockTACZ",
+							"description": "A lightweight Lucky Block add-on for TACZ. It's not a Lucky Block add-on mod, so you don't have to include the Lucky Block mod. Break the block to get a random gun from 70+ default TACZ firearms, along with its perfectly matched ammo. Ready to fire, no mismatches!",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"tacz"
+							],
+							"dependsVersions": {
+								"minecraft": "[1.20.1]",
+								"tacz": "[1.2.0,)"
+							},
+							"suggests": [
+								"lrtactical",
+								"delta_wt"
+							]
+						}
+					],
+					"icon": "5084f26897c52efee018ba41728f43d4f66702df220751ca06354acab5bd1cee.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Lucky Block TACZ"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe",
+							"structure",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 516,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.5.0.jar",
+							"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream in findBootstrapClass"
+								]
+							},
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe in <clinit>"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"github.com": [
+								"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## LuckyBlock TACZ 1.0.4\n\n**Minecraft 1.20.1 · Forge**\n\n### Overview\n\nLuckyBlock TACZ is a lightweight lucky-block add-on for TaCZ. It does **not** require the original Lucky Block mod. Break the block to roll a random TaCZ firearm together with perfectly matched ammo, ready to fire, no mismatches.\n\n### Fixed\n\n- **Consumables, melee and throwables were dropping as nothing.** The mod registered them as items like `lrtactical:ai2` or `lrtactical:karambit`, but Green Grape Tactical Gear only registers five generic items (`consumable`, `melee`, `throwable`, `flash_shield`, `detonator`) and distinguishes the actual content through NBT. Every consumable, melee and throwable entry therefore produced an empty drop. They now use the correct item plus `ConsumableId` / `MeleeWeaponId` / `ThrowableId` tags.\n- **One attachment in the AK-74M bundle did not exist.** `scope_okp7` is not a valid attachment id (the real one is `sight_okp7`), so that bundle always dropped a gun and ammo without the attachment. Fixed.\n\n### Added\n\n- **Simplified Chinese localization.** The block and its creative tab now show as 幸运方块 TACZ in a Chinese client.\n- **Mod metadata.** `issueTrackerURL`, a 128×128 `logoFile`, and `displayTest=\"IGNORE_ALL_VERSION\"` are now declared in `mods.toml`, so version mismatches with TaCZ no longer show a red warning.\n- **Loot id validation.** A `validateLootIds` Gradle task now cross-checks every drop id against a generated reference snapshot (`tools/reference-ids.json`) and runs as part of `check`. A typo in a gun, ammo, attachment or consumable id now fails the build instead of silently dropping nothing.\n\n### Improved\n\n- **Reworked surface shrine.** The generated structure is now a 5×3×5 stone-brick platform with four corner pillars, the lucky block in the centre and a dungeon loot chest beside it, instead of a single floating block.\n\n### Carried over from 1.0.3\n\n70 guns with matched ammo, 117 individual attachments, 50 gun + ammo + attachment bundles, consumables with Green Grape Tactical Gear, the 11 Delta WT knives, underground ore generation (Y 60–120), ~24 chest loot tables at 10% chance, and a 9-dirt crafting recipe.\n\n### Requirements\n\n- **Required**: TaCZ (`tacz`) 1.2.0\n- **Optional**: Green Grape Tactical Gear (`lrtactical`)\n- **Optional**: Delta WT (`delta_wt`)\n\n### Update\n\nReplace the old jar in your `mods` folder with `LuckyBlockTACZ-1.0.4.jar` and restart the game.\n\n### Maven (for developers)\n\n```gradle\nrepositories { maven { url \"https://jitpack.io\" } }\ndependencies { implementation \"com.github.SYSTEM-RAM-OP:LuckyBlockTACZ:1.0.4\" }\n```\n\n---\n\n## LuckyBlock TACZ 1.0.4（中文）\n\n**Minecraft 1.20.1 · Forge**\n\n### 模组简介\n\nLuckyBlock TACZ 是一个轻量级的 TaCZ 幸运方块模组，**不依赖原版 Lucky Block 模组**。挖开幸运方块，随机获得一把 TaCZ 枪械，并同时掉落与之口径完全匹配的弹药，开箱即射，不会枪弹错配。\n\n### 1.0.4 修复\n\n- **消耗品、近战、投掷物此前掉出来是空气。** 模组把它们写成了 `lrtactical:ai2`、`lrtactical:karambit` 这类物品名，但绿葡萄战术装备只注册了五个通用物品（`consumable`、`melee`、`throwable`、`flash_shield`、`detonator`），具体是哪个医疗包、哪把刀靠 NBT 区分。所以每一条消耗品/近战/投掷物掉落都是空的。现已改为「通用物品 + `ConsumableId` / `MeleeWeaponId` / `ThrowableId`」的正确写法。\n- **AK-74M 三件套里的配件不存在。** `scope_okp7` 不是有效附件 ID（正确的是 `sight_okp7`），导致这组永远只掉枪和子弹、配件是空的。已修正。\n\n### 1.0.4 新增\n\n- **简体中文语言文件。** 中文客户端下方块名与创造模式物品栏显示为「幸运方块 TACZ」。\n- **模组元数据补全。** `mods.toml` 新增 `issueTrackerURL`、128×128 的 `logoFile`、`displayTest=\"IGNORE_ALL_VERSION\"`，与 TaCZ 版本不完全一致时不再显示红色警告。\n- **掉落 ID 校验。** 新增 `validateLootIds` Gradle 任务，把代码里每一处掉落 ID 与自动生成的权威清单（`tools/reference-ids.json`）逐一比对，并挂进 `check`。以后枪、弹、附件、消耗品 ID 写错会**直接构建失败**，而不是静默掉出空气。\n\n### 1.0.4 改进\n\n- **地表神殿重做。** 生成的结构从单个悬空方块改为 5×3×5 的石砖平台：四角两根石砖柱、中央幸运方块、旁边一个地牢战利品箱。\n\n### 沿用 1.0.3 的能力\n\n70 把枪械 + 配套弹药、117 种单件附件、50 组「枪 + 弹药 + 附件」三件套、绿葡萄战术装备消耗品、11 把三角洲近战刀、地下矿脉生成（Y 60–120）、约 24 种箱子 10% 概率开出、9 个泥土合成配方。\n\n### 前置依赖\n\n- **必须**：TaCZ（`tacz`），版本 1.2.0\n- **可选**：绿葡萄战术装备（`lrtactical`）\n- **可选**：Delta WT（`delta_wt`）\n\n### 更新方法\n\n用本页的 `LuckyBlockTACZ-1.0.4.jar` 替换 `mods` 目录中的旧版本，重启游戏。\n\n### 开发参考（Maven）\n\n```gradle\nrepositories { maven { url \"https://jitpack.io\" } }\n\n..."
+		},
+		{
+			"tag": "1.0.3",
+			"published": "2026-11-22T07:07:36Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 778215878,
+					"name": "LuckyBlockTACZ-1.0.3.jar",
+					"url": "https://github.com/SYSTEM-RAM-OP/LuckyBlockTACZ/releases/download/1.0.3/LuckyBlockTACZ-1.0.3.jar",
+					"size": 673459,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "70eb8a99acda627349c09142d792cf147f4da405102cb942d0eb41de3f1fd5b8",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "luckyblocktacz",
+							"version": "1.0.3",
+							"name": "LuckyBlockTACZ",
+							"description": "A lightweight Lucky Block add-on for TACZ. It's not a Lucky Block add-on mod, so you don't have to include the Lucky Block mod. Break the block to get a random gun from 70+ default TACZ firearms, along with its perfectly matched ammo. Ready to fire, no mismatches!",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"tacz"
+							],
+							"dependsVersions": {
+								"minecraft": "[1.20.1]",
+								"tacz": "[1.2.0,)"
+							},
+							"suggests": [
+								"lrtactical",
+								"delta_wt"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Lucky Block TACZ"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe",
+							"structure",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 516,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.5.0.jar",
+							"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream in findBootstrapClass"
+								]
+							},
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe in <clinit>"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"github.com": [
+								"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## LuckyBlock TACZ 1.0.3\n\n**Minecraft 1.20.1 · Forge**\n\n### Overview\n\nLuckyBlock TACZ is a lightweight lucky-block add-on for TaCZ. It does **not** require the original Lucky Block mod. Break the block to roll a random TaCZ firearm together with perfectly matched ammo, ready to fire, no mismatches.\n\n### Added\n\n- **Individual attachment drops**: 117 TaCZ attachments (scopes, magazines, muzzles, grips, lasers) can now drop directly from the lucky block.\n- **Gun + ammo + attachment bundles**: 50 new drop sets that give a gun, 90 rounds of matching ammo, and a scope/attachment suited to that gun in a single break.\n- **Consumables**: with Green Grape Tactical Gear (`lrtactical`) installed, 15 consumables (bandages, painkillers, grenades, etc.) also drop.\n\n### Fixed\n\n- **Delta WT melee weapons dropping as empty shells**: the 11 Delta melee knives previously only checked `lrtactical`, so players without `delta_wt` received unusable items. They now require both mods and are excluded from the drop pool when `delta_wt` is missing.\n\n### Carried over from 1.0.2\n\n70 guns with perfectly matched ammo, surface structure generation, underground ore generation (Y 60–120), ~24 chest loot tables at 10% chance, and a 9-dirt crafting recipe.\n\n### Requirements\n\n- **Required**: TaCZ (`tacz`) 1.2.0\n- **Optional**: Green Grape Tactical Gear (`lrtactical`)\n- **Optional**: Delta WT (`delta_wt`)\n\n### Update\n\nReplace the old jar in your `mods` folder with `LuckyBlockTACZ-1.0.3.jar` and restart the game.\n\n### Maven (for developers)\n\n```gradle\nrepositories { maven { url \"https://jitpack.io\" } }\ndependencies { implementation \"com.github.SYSTEM-RAM-OP:LuckyBlockTACZ:1.0.3\" }\n```\n\n---\n\n## LuckyBlock TACZ 1.0.3（中文）\n\n**Minecraft 1.20.1 · Forge**\n\n### 模组简介\n\nLuckyBlock TACZ 是一个轻量级的 TaCZ 幸运方块模组，**不依赖原版 Lucky Block 模组**。挖开幸运方块，随机获得一把 TaCZ 枪械，并同时掉落与之口径完全匹配的弹药，开箱即射，不会枪弹错配。\n\n### 1.0.3 新增\n\n- **枪械附件单件掉落**：新增 117 种 TaCZ 附件（瞄具、弹匣、枪口、握把、镭射等），挖开方块有概率直接开出附件。\n- **「枪 + 弹药 + 附件」三件套**：新增 50 组配套掉落，一次开出枪械、90 发匹配弹药和该枪型适配的瞄具/配件。\n- **消耗品掉落**：安装绿葡萄战术装备（`lrtactical`）后，额外掉落 15 种消耗品（绷带、止痛药、手雷等）。\n\n### 1.0.3 修复\n\n- **修复 Delta WT 近战刀掉出「空刀」坏物品**：11 把三角洲近战刀此前只校验 `lrtactical`，未安装 `delta_wt` 时会掉出无法使用的空壳。现在同时校验两个模组，未安装 `delta_wt` 时该组不再进入掉落池。\n\n### 沿用 1.0.2 的能力\n\n70 把枪械 + 配套弹药成对掉落、地表结构生成、地下矿脉生成（Y 60–120）、约 24 种箱子 10% 概率开出、9 个泥土合成配方。\n\n### 前置依赖\n\n- **必须**：TaCZ（`tacz`），版本 1.2.0\n- **可选**：绿葡萄战术装备（`lrtactical`）\n- **可选**：Delta WT（`delta_wt`）\n\n### 更新方法\n\n用本页的 `LuckyBlockTACZ-1.0.3.jar` 替换 `mods` 目录中的旧版本，重启游戏。\n\n### 开发参考（Maven）\n\n```gradle\nrepositories { maven { url \"https://jitpack.io\" } }\ndependencies { implementation \"com.github.SYSTEM-RAM-OP:LuckyBlockTACZ:1.0.3\" }\n```"
+		},
+		{
+			"tag": "1.0.2",
+			"published": "2026-11-21T07:49:55Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 774843330,
+					"name": "LuckyBlockTACZ-1.0.jar",
+					"url": "https://github.com/SYSTEM-RAM-OP/LuckyBlockTACZ/releases/download/1.0.2/LuckyBlockTACZ-1.0.jar",
+					"size": 670191,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "48fc055d70846d8238d3175069eb9ad0d4bc79cdb8d0f4ab9870433a3c53610b",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "luckyblocktacz",
+							"version": "1.0.2",
+							"name": "LuckyBlockTACZ",
+							"description": "A lightweight Lucky Block add-on for TACZ. It's not a Lucky Block add-on mod, so you don't have to include the Lucky Block mod. Break the block to get a random gun from 70+ default TACZ firearms, along with its perfectly matched ammo. Ready to fire, no mismatches!",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"tacz"
+							],
+							"dependsVersions": {
+								"minecraft": "[1.20.1]",
+								"tacz": "[1.2.0,)"
+							},
+							"suggests": [
+								"lrtactical",
+								"delta_wt"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Lucky Block TACZ"
+							]
+						},
+						"data": [
+							"advancement",
+							"loot_table",
+							"recipe",
+							"structure",
+							"worldgen"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 516,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.5.0.jar",
+							"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream in findBootstrapClass"
+								]
+							},
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe in <clinit>"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"github.com": [
+								"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## LuckyBlock TACZ 1.0.2\n\nMinecraft 1.20.1 · Forge\n\n### 模组简介\n\nLuckyBlock TACZ 是一个轻量级的 TaCZ 幸运方块模组，**不依赖原版 Lucky Block 模组**，无需额外安装即可使用。挖开幸运方块，即可随机获得一把 TaCZ 枪械，并同时掉落与之口径完全匹配的弹药，开箱即射，不会枪弹错配。\n\n### 增加特性\n\n- 枪械 + 配套弹药成对掉落：从 70+ 把 TaCZ 枪械中随机抽取一把，同时掉出对应的 60 发弹药。\n\n- 近战与投掷物：安装绿葡萄战术装备（lrtactical）后，掉落池额外包含 11 件近战武器与 5 件投掷物。\n\n- 地表结构生成：幸运方块以地表结构（luckyblocktacz:lucky_block_tacz_surface）形式自然生成于主世界。\n\n- 地下矿脉生成：方块同时像矿石一样生成在 Y 60–120 之间的地下。\n\n- 箱子战利品：约 24 种地牢、神庙、矿道等箱子有 10% 几率开出幸运方块。\n\n- 合成配方：9 个泥土合成 1 个幸运方块。\n\n### 修复项\n\n- 修复枪械与弹药**无法同时掉落**的问题，现在枪与配套弹药必定成对掉落。\n\n- 修复挖掉方块后**仍会掉落方块自身**的问题。\n\n- 修复箱子战利品修改器**完全未生效**的问题（缺少 Forge 全局战利品修改器的注册清单）。\n\n- 修正战利品条件类型 minecraft:alternative → minecraft:any_of。\n\n### 前置依赖\n\n- 必须：TaCZ（tacz），版本 1.2.0\n\n- 可选：绿葡萄战术装备（lrtactical）\n\n- 可选：Delta WT（delta_wt）\n\n### 下载说明\n\n1. 点击本 Release 下方的 LuckyBlockTACZ-1.0.jar 下载模组文件。\n\n2. 将 jar 放入客户端或服务端的 mods 目录。\n\n3. 确保已安装前置依赖 TaCZ。\n\n4. 重启游戏，在世界中挖开幸运方块即可获得随机枪械与配套弹药。\n\nGithub:https://github.com/SYSTEM-RAM-OP/LuckyBlockTACZ\n\nModrinth:https://modrinth.com/project/J1g7TRaI\n\nCurseForge:https://www.curseforge.com/minecraft/mc-mods/lucky-block-tacz"
+		},
+		{
+			"tag": "1.0.1",
+			"published": "2026-11-20T11:02:33Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 771493933,
+					"name": "LuckyBlockTACZ-1.0.1.jar",
+					"url": "https://github.com/SYSTEM-RAM-OP/LuckyBlockTACZ/releases/download/1.0.1/LuckyBlockTACZ-1.0.1.jar",
+					"size": 659948,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "dfe562ce7c3e066bcaab5cc4d1b5189a766ffef97787029de96ef98be5b5d6e4",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "luckyblocktacz",
+							"version": "1.0.1",
+							"name": "LuckyBlockTACZ",
+							"description": "A lightweight Lucky Block add-on for TACZ. It's not a Lucky Block add-on mod, so you don't have to include the Lucky Block mod. Break the block to get a random gun from 70+ default TACZ firearms, along with its perfectly matched ammo. Ready to fire, no mismatches!",
+							"minecraft": "[1.20.1]",
+							"environment": "*",
+							"depends": [
+								"minecraft",
+								"tacz"
+							],
+							"dependsVersions": {
+								"minecraft": "[1.20.1]",
+								"tacz": "[0,)"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {
+							"block": [
+								"Lucky Block TACZ"
+							]
+						},
+						"data": [
+							"advancement",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 514,
+						"jars": [
+							"META-INF/jarjar/mixinextras-forge-0.5.0.jar",
+							"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar"
+						],
+						"capabilities": {
+							"network": {
+								"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar!com/llamalad7/mixinextras/utils/MixinAPVersion.class": [
+									"java/net/URL.openStream in findBootstrapClass"
+								]
+							},
+							"unsafe": {
+								"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar!com/llamalad7/mixinextras/utils/ClassGenUtils.class": [
+									"sun/misc/Unsafe in <clinit>"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"github.com": [
+								"META-INF/jarjar/mixinextras-forge-0.5.0.jar!META-INF/jars/MixinExtras-0.5.0.jar!com/llamalad7/mixinextras/lib/gson/internal/TroubleshootingGuide.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**本次解决了不安装前置mod就提示”未安装XXXmod“的问题。**\n**将版本号改成1.0.1。**\n\n**This time, it fixed the issue where it would prompt 'XXX mod not installed' without installing the prerequisite mods.**\n**Changed the version number to 1.0.1.**\n\n~~Not much has changed.~~"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [],
+	"contributors": {
+		"commits": 42,
+		"more": 0,
+		"people": [
+			{
+				"login": "SYSTEM-RAM-OP",
+				"commits": 42,
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

@@ -1,0 +1,101 @@
+{
+	"repo": "demonyka/EMILegacy",
+	"host": "github",
+	"description": "Unofficial port of EMI (item and recipe viewer) to Minecraft 1.16.5 Forge",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-11-10T22:24:44Z",
+	"pushed": "2026-11-10T22:45:00Z",
+	"releases": [
+		{
+			"tag": "v1.1.24-legacy.1",
+			"published": "2026-11-10T23:01:43Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 733291882,
+					"name": "emi-1.1.24-legacy.1+1.16.5+forge.jar",
+					"url": "https://github.com/demonyka/EMILegacy/releases/download/v1.1.24-legacy.1/emi-1.1.24-legacy.1%2B1.16.5%2Bforge.jar",
+					"size": 1116599,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "86697f1a986e5784049c3ca3171f766558f377264a4ae36fe259c88d032c04b1",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "emi",
+							"version": "1.1.24-legacy.1+1.16.5+forge",
+							"name": "EMI",
+							"description": "A featureful and accessible item and recipe viewer.\n\nUnofficial port of EMI to Minecraft 1.16.5 (Forge). Install JEI next to EMI to see recipes\nfrom other mods: EMI reads every JEI recipe category and hides JEI's own interface.\n\nThis is not the original mod: please do not report issues with this port to the EMI issue tracker.",
+							"minecraft": "[1.16.5,1.17)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft"
+							],
+							"dependsVersions": {
+								"forge": "[36.2,)",
+								"minecraft": "[1.16.5,1.17)"
+							},
+							"suggests": [
+								"jei"
+							]
+						}
+					],
+					"icon": "f0a8037abeafbf01a55f5555091be98c996233e46ab64bb7832a1ac4d46a8685.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 443,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"dev/emi/emi/com/unascribed/qdcss/QDCSS.class": [
+									"java/net/URL.openStream in load"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First release of the port of EMI 1.1.24 to Minecraft 1.16.5.\n\nWorks:\n- Item list overlay, search (`@mod`, `#tag`, `$tooltip`, regex), favorites, recipe screen, recipe tree, config screen.\n- Vanilla recipes: crafting, smelting/blasting/smoking/campfire, stonecutting, smithing, anvil, brewing, fuel, composting, world interactions.\n- Recipes of other mods through JEI (install JEI 7.7+ next to EMI, tested with 7.7.1.153 and 7.8.1.1018): every JEI category is shown in EMI and drawn by the mod's own JEI code; JEI's own interface is hidden, and requests to open JEI's recipe screen (progress arrows of machine screens, JEI key binds) open EMI instead.\n- Recipe filling (\"+\" button, shift for max): vanilla crafting/furnaces natively, modded machines through their JEI transfer handlers.\n- Tags: tag ingredients, `#tag` search, tag recipes.\n- Dedicated servers. EMI is optional on both sides (servers without EMI are not shown as incompatible).\n\nCompatibility (tested with a 37-mod production pack, see docs/COMPATIBILITY.md):\n- Item tooltips drawn by EMI fire Forge tooltip events, so AppleSkin, Quark and similar mods still draw on them.\n- The mod name is not added twice when another mod (Jade, ...) already adds it.\n- Roughly Enough Items replaces JEI with a stub and draws its own item list: use EMI + JEI or REI alone. EMI logs a warning and skips the JEI bridge when REI is present.\n\nNew compared to EMI 1.1.24:\n- Recipe tree: an \"expand the whole tree\" button (bottom right, next to help). It resolves the tree down to base resources, level by level. It follows the recipes of the mod an item comes from, prefers the crafting table, and does not follow loops, ore processing or unpacking of storage blocks; a tag is resolved only when all of its items have to be crafted. Shift-click goes back to the default recipes.\n- Applied Energistics 2: inscriber presses are not used up, the recipe tree counts them once.\n- Tags without a translation get a readable name (\"Quartz Dusts\") instead of the raw id.\n\nHardening compared to EMI 1.1.24:\n- The recipe fill packet bounds every list it reads (one packet from any player could exhaust server memory or stall the server tick), is ignored for spectators and for containers the player may not use, skips slots that do not give up their items (ghost slots of mods), takes partial stacks through the slot so modded inventories are told, and returns items to the player when a slot of a mod throws.\n- Chess invites are rate limited per player, creative item requests are clamped to the maximum stack size.\n- A reload requested right after leaving a world is no longer lost (EMI could stay empty or stuck on \"Loading\" after a quick rejoin).\n- Errors while drawing EMI over a container screen are logged instead of crashing the game.\n\nAdapted to 1.16.5:\n- The item on the cursor is kept when an EMI screen opens over a container.\n- Status effects stay where vanilla 1.16 draws them (left of the inventory) and EMI sidebars move out of their way; there is no \"effect location\" option.\n- Stripping, tilling and path recipes list every axe, hoe and shovel (1.16 has no tool tags).\n- Recipe tree line colors, button tint.\n\nDifferences from EMI on modern versions:\n- The batched item renderer is not available (uses the regular renderer; the config option is hidden).\n- Copper, waxing and mud world-interaction recipes do not exist in 1.16.5.\n- No mod tooltip components (1.16 has text-only tooltips).\n- JEI-only features without a JEI 7 equivalent: hiding stacks that are hidden in JEI, key presses inside JEI recipe areas."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [
+		"docs/screenshots/01-item-list.png",
+		"docs/screenshots/02-search.png",
+		"docs/screenshots/03-create-recipes.png",
+		"docs/screenshots/04-ae2-inscriber.png",
+		"docs/screenshots/05-mekanism-infuser.png",
+		"docs/screenshots/06-recipe-fill.png",
+		"docs/screenshots/07-recipe-tree.png",
+		"docs/screenshots/08-recipe-tree-expanded.png",
+		"docs/screenshots/09-config.png"
+	],
+	"contributors": {
+		"commits": 22,
+		"more": 0,
+		"people": [
+			{
+				"login": "demonyka",
+				"commits": 22,
+				"name": "Dmitrii Isaev",
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

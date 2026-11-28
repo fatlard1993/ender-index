@@ -1,0 +1,712 @@
+{
+	"repo": "Hemiize/mc-claude-mcp",
+	"host": "github",
+	"description": "Minecraft 26.3 Fabric client that Claude Code (or any MCP client) controls via an embedded MCP server: movement, mining, crafting, Java reflection, Groovy scripts, runtime method hooks, chat filter, NBT editor.",
+	"stars": 0,
+	"archived": false,
+	"license": "Apache-2.0",
+	"created": "2026-11-04T14:54:28Z",
+	"pushed": "2026-11-09T11:06:21Z",
+	"releases": [
+		{
+			"tag": "v0.1.0",
+			"published": "2026-11-04T14:58:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 709889144,
+					"name": "claude-mcp-0.1.0.jar",
+					"url": "https://github.com/Hemiize/mc-claude-mcp/releases/download/v0.1.0/claude-mcp-0.1.0.jar",
+					"size": 20699438,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "7c37b9ebb0970099d2ab1f4ec600b69d42762edd536148effcbbe17102efcd91",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "claudemcp",
+							"version": "0.1.0",
+							"name": "Claude MCP",
+							"description": "Lets Claude Code control the Minecraft client through an embedded MCP server (state, actions, tasks, memory, reflection, Groovy scripts).",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.20.1",
+								"minecraft": "~26.3",
+								"java": ">=25",
+								"fabric-api": ">=0.165.0"
+							},
+							"provides": [
+								"net_bytebuddy_byte-buddy",
+								"net_bytebuddy_byte-buddy-agent",
+								"org_apache_groovy_groovy",
+								"com_ethlo_time_itu",
+								"com_fasterxml_jackson_core_jackson-annotations",
+								"tools_jackson_core_jackson-core",
+								"tools_jackson_core_jackson-databind",
+								"tools_jackson_dataformat_jackson-dataformat-yaml",
+								"jakarta_servlet_jakarta_servlet-api",
+								"org_eclipse_jetty_ee11_jetty-ee11-servlet",
+								"org_eclipse_jetty_jetty-http",
+								"org_eclipse_jetty_jetty-io",
+								"org_eclipse_jetty_jetty-security",
+								"org_eclipse_jetty_jetty-server",
+								"org_eclipse_jetty_jetty-session",
+								"org_eclipse_jetty_jetty-util",
+								"com_networknt_json-schema-validator",
+								"io_modelcontextprotocol_sdk_mcp-core",
+								"io_modelcontextprotocol_sdk_mcp-json-jackson3",
+								"org_reactivestreams_reactive-streams",
+								"io_projectreactor_reactor-core",
+								"org_snakeyaml_snakeyaml-engine"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 13083,
+						"jars": [
+							"META-INF/jars/byte-buddy-1.18.17.jar",
+							"META-INF/jars/byte-buddy-agent-1.18.17.jar",
+							"META-INF/jars/groovy-5.1.3.jar",
+							"META-INF/jars/itu-1.14.0.jar",
+							"META-INF/jars/jackson-annotations-2.21.jar",
+							"META-INF/jars/jackson-core-3.1.4.jar",
+							"META-INF/jars/jackson-databind-3.1.4.jar",
+							"META-INF/jars/jackson-dataformat-yaml-3.1.4.jar",
+							"META-INF/jars/jakarta.servlet-api-6.1.0.jar",
+							"META-INF/jars/jetty-ee11-servlet-12.1.14.jar",
+							"META-INF/jars/jetty-http-12.1.14.jar",
+							"META-INF/jars/jetty-io-12.1.14.jar",
+							"META-INF/jars/jetty-security-12.1.14.jar",
+							"META-INF/jars/jetty-server-12.1.14.jar",
+							"META-INF/jars/jetty-session-12.1.14.jar",
+							"META-INF/jars/jetty-util-12.1.14.jar",
+							"META-INF/jars/json-schema-validator-3.0.6.jar",
+							"META-INF/jars/mcp-core-2.1.0.jar",
+							"META-INF/jars/mcp-json-jackson3-2.1.0.jar",
+							"META-INF/jars/reactive-streams-1.0.4.jar",
+							"META-INF/jars/reactor-core-3.7.0.jar",
+							"META-INF/jars/snakeyaml-engine-3.0.1.jar"
+						],
+						"capabilities": {
+							"classloading": {
+								"dev/leon/claudemcp/hook/JavaHooks.class": [
+									"java/lang/instrument/Instrumentation.isRetransformClassesSupported in instrumentation",
+									"java/lang/instrument/Instrumentation.isModifiableClass in add"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$Default$ExecutingTransformer.class": [
+									"java/lang/instrument/Instrumentation.removeTransformer in reset"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$Default.class": [
+									"java/lang/instrument/Instrumentation.addTransformer in doInstall",
+									"java/lang/instrument/Instrumentation.removeTransformer in doInstall"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$InstallationListener$StreamWriting.class": [
+									"java/lang/instrument/Instrumentation"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$Listener$ModuleReadEdgeCompleting.class": [
+									"java/lang/instrument/Instrumentation"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$PoolStrategy$WithTypePoolCache$Simple$BootstrapMarkerAction.class": [
+									"java/net/URLClassLoader.<init> in run"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$RedefinitionStrategy$2.class": [
+									"java/lang/instrument/Instrumentation.isRedefineClassesSupported in check"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$RedefinitionStrategy$Collector$ForRedefinition.class": [
+									"java/lang/instrument/Instrumentation.redefineClasses in doApply"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$RedefinitionStrategy$Collector.class": [
+									"java/lang/instrument/Instrumentation"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$RedefinitionStrategy$DiscoveryStrategy$Reiterating$ReiteratingIterator.class": [
+									"java/lang/instrument/Instrumentation.getAllLoadedClasses in hasNext"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$RedefinitionStrategy$DiscoveryStrategy$Reiterating$WithSortOrderAssumption$OrderedReiteratingIterator.class": [
+									"java/lang/instrument/Instrumentation.getAllLoadedClasses in hasNext"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$RedefinitionStrategy$DiscoveryStrategy$SinglePass.class": [
+									"java/lang/instrument/Instrumentation.getAllLoadedClasses in resolve"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$RedefinitionStrategy.class": [
+									"java/lang/instrument/Instrumentation"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/dynamic/ClassFileLocator$ForClassLoader$BootLoaderProxyCreationAction.class": [
+									"java/net/URLClassLoader.<init> in run"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/dynamic/ClassFileLocator$ForInstrumentation$ClassLoadingDelegate$Default$BootLoaderProxyCreationAction.class": [
+									"java/net/URLClassLoader.<init> in run"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/dynamic/ClassFileLocator$ForInstrumentation.class": [
+									"java/lang/instrument/Instrumentation.removeTransformer in locate"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/dynamic/ClassFileLocator$ForUrl$ClassLoaderCreationAction.class": [
+									"java/net/URLClassLoader.<init> in run"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/dynamic/loading/ClassInjector$UsingUnsafe$Factory.class": [
+									"java/lang/instrument/Instrumentation"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/dynamic/loading/ClassReloadingStrategy$Strategy$1.class": [
+									"java/lang/instrument/Instrumentation.redefineClasses in apply",
+									"java/lang/instrument/Instrumentation.isRedefineClassesSupported in validate"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/dynamic/loading/ClassReloadingStrategy$Strategy$2.class": [
+									"java/lang/instrument/Instrumentation.removeTransformer in apply, reset"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/dynamic/loading/ClassReloadingStrategy.class": [
+									"java/lang/instrument/Instrumentation.isRedefineClassesSupported in of",
+									"java/lang/instrument/Instrumentation.getInitiatedClasses in load"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/dynamic/loading/InjectionClassLoader.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/utility/dispatcher/JavaDispatcher$DynamicClassLoader.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/ByteBuddyAgent$AttachmentProvider$ForStandardToolsJarVm.class": [
+									"java/net/URLClassLoader.<init> in attempt"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/ByteBuddyAgent$AttachmentProvider$ForUserDefinedToolsJar.class": [
+									"java/net/URLClassLoader.<init> in attempt"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/ByteBuddyAgent.class": [
+									"java/lang/instrument/Instrumentation in doGetInstrumentation"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/Installer.class": [
+									"java/lang/instrument/Instrumentation"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!groovy/lang/GroovyClassLoader.class": [
+									"java/net/URLClassLoader.<init> in <init>",
+									"java/net/URLClassLoader.defineClass in defineClass",
+									"java/net/URLClassLoader.getPermissions in getPermissions",
+									"java/net/URLClassLoader.addURL in addURL",
+									"java/net/URLClassLoader.loadClass in loadClass",
+									"java/net/URLClassLoader.close in close",
+									"extends java/net/URLClassLoader"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!groovy/util/GroovyScriptEngine$1.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/apache/groovy/util/JavaShell$JavaShellClassLoader.class": [
+									"java/net/URLClassLoader.<init> in <init>",
+									"java/net/URLClassLoader.findClass in findClass",
+									"extends java/net/URLClassLoader"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/reflection/ClassLoaderForClassArtifacts.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/runtime/metaclass/ReflectorLoader.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/tools/RootLoader.class": [
+									"java/net/URLClassLoader.<init> in <init>",
+									"java/net/URLClassLoader.loadClass in <init>, loadClass",
+									"java/net/URLClassLoader.findClass in loadClass",
+									"java/net/URLClassLoader.getResource in getResource",
+									"java/net/URLClassLoader.addURL in addURL",
+									"extends java/net/URLClassLoader"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/tools/javac/JavacJavaCompiler.class": [
+									"java/net/URLClassLoader.getURLs in makeParameters"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/util/ReleaseInfo.class": [
+									"java/net/URLClassLoader.findResource in <clinit>"
+								],
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/handler/ContextHandler.class": [
+									"java/net/URLClassLoader in getClassPath"
+								],
+								"META-INF/jars/jetty-util-12.1.14.jar!org/eclipse/jetty/util/ClassLoadingObjectInputStream$ClassLoaderThreadLocal$1.class": [
+									"extends java/lang/ClassLoader"
+								],
+								"META-INF/jars/jetty-util-12.1.14.jar!org/eclipse/jetty/util/URIUtil.class": [
+									"java/net/URLClassLoader.getURLs in streamOf"
+								],
+								"META-INF/jars/jetty-util-12.1.14.jar!org/eclipse/jetty/util/component/ClassLoaderDump.class": [
+									"java/net/URLClassLoader.getURLs in dump"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$LambdaInstrumentationStrategy$LambdaInstanceFactory$LambdaMethodImplementation$Appender.class": [
+									"\"java.lang.invoke.MethodHandles$Lookup\" by name"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$LambdaInstrumentationStrategy$LambdaMetafactoryFactory$2.class": [
+									"\"java.lang.invoke.MethodHandles$Lookup\" by name"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$LambdaInstrumentationStrategy$LambdaMetafactoryFactory$Loader$UsingMethodHandleLookup.class": [
+									"\"java.lang.invoke.MethodHandles$Lookup\" by name"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$LambdaInstrumentationStrategy$LambdaMetafactoryFactory$Loader$UsingUnsafe.class": [
+									"\"java.lang.invoke.MethodHandles$Lookup\" by name"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$LambdaInstrumentationStrategy$LambdaMetafactoryFactory.class": [
+									"\"java.lang.invoke.MethodHandles$Lookup\" by name",
+									"\"java.lang.ClassLoader\" by name"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/dynamic/loading/ByteArrayClassLoader$SynchronizationStrategy$CreationAction.class": [
+									"\"java.lang.invoke.MethodHandles$Lookup\" by name"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/utility/JavaType.class": [
+									"\"java.lang.invoke.MethodHandles$Lookup\" by name"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/ByteBuddyAgent$AttachmentProvider$Accessor$Simple.class": [
+									"\"com.sun.tools.attach.VirtualMachine\" by name"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/ByteBuddyAgent$AttachmentProvider$Accessor.class": [
+									"\"com.sun.tools.attach.VirtualMachine\" by name"
+								]
+							},
+							"network": {
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/build/Plugin$Engine$Default.class": [
+									"java/net/URL.openStream in scan"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/VirtualMachine$ForOpenJ9.class": [
+									"java/net/ServerSocket.<init> in attach",
+									"java/net/ServerSocket.setSoTimeout in attach",
+									"java/net/ServerSocket.getLocalPort in attach",
+									"java/net/ServerSocket.accept in attach",
+									"java/net/ServerSocket.close in attach",
+									"java/net/Socket.close in attach, detach",
+									"java/net/Socket.getOutputStream in write",
+									"java/net/Socket.getInputStream in read"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!groovy/lang/GroovyClassLoader.class": [
+									"java/net/URL.openConnection in isSourceNewer"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!groovy/lang/GroovyCodeSource.class": [
+									"java/net/URL.openConnection in getContentEncoding"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!groovy/ui/GroovySocketServer$GroovyClientConnection.class": [
+									"java/net/Socket.getInputStream in <init>",
+									"java/net/Socket.getOutputStream in <init>",
+									"java/net/Socket.getInetAddress in <init>",
+									"java/net/Socket.close in run"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!groovy/ui/GroovySocketServer.class": [
+									"java/net/ServerSocket.<init> in run",
+									"java/net/ServerSocket.accept in run",
+									"java/net/ServerSocket.close in run"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!groovy/util/GroovyScriptEngine.class": [
+									"java/net/URL.openConnection in openConnection"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!groovyjarjarantlr4/runtime/debug/DebugEventSocketProxy.class": [
+									"java/net/ServerSocket.<init> in handshake",
+									"java/net/ServerSocket.accept in handshake",
+									"java/net/Socket.setTcpNoDelay in handshake",
+									"java/net/Socket.getOutputStream in handshake",
+									"java/net/Socket.getInputStream in handshake",
+									"java/net/Socket.close in terminate"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!groovyjarjarantlr4/runtime/debug/RemoteDebugEventSocketListener.class": [
+									"java/net/Socket.<init> in openConnection",
+									"java/net/Socket.setTcpNoDelay in openConnection",
+									"java/net/Socket.getOutputStream in openConnection",
+									"java/net/Socket.getInputStream in openConnection",
+									"java/net/Socket.close in closeConnection"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!groovyjarjarpicocli/CommandLine$PropertiesDefaultProvider.class": [
+									"java/net/URL.openStream in loadProperties"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/control/ClassNodeResolver.class": [
+									"java/net/URL.openConnection in isSourceNewer"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/runtime/ResourceGroovyMethods.class": [
+									"java/net/URL.openConnection in eachLine, getBytes, withReader, configuredInputStream, eachByte"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/runtime/SocketGroovyMethods.class": [
+									"java/net/Socket.getInputStream in withStreams, withObjectStreams",
+									"java/net/Socket.getOutputStream in withStreams, withObjectStreams, leftShift",
+									"java/net/ServerSocket.accept in accept",
+									"java/net/Socket.close in invokeClosureWithSocket"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/runtime/dgm$1552.class": [
+									"java/net/ServerSocket in invoke, doMethodInvoke"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/runtime/dgm$1553.class": [
+									"java/net/ServerSocket in invoke, doMethodInvoke"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/runtime/dgm$1554.class": [
+									"java/net/Socket in invoke, doMethodInvoke"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/runtime/dgm$1555.class": [
+									"java/net/Socket in invoke, doMethodInvoke"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/runtime/dgm$1556.class": [
+									"java/net/Socket in invoke, doMethodInvoke"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/runtime/dgm$1557.class": [
+									"java/net/Socket in invoke, doMethodInvoke"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/util/URLStreams.class": [
+									"java/net/URL.openConnection in openUncachedStream"
+								],
+								"META-INF/jars/jackson-core-3.1.4.jar!tools/jackson/core/TokenStreamFactory.class": [
+									"java/net/URL.openStream in _optimizedStreamFromURL"
+								],
+								"META-INF/jars/jetty-io-12.1.14.jar!org/eclipse/jetty/io/ClientConnector$ClientSelectorManager.class": [
+									"java/nio/channels/SocketChannel in connectionSucceeded"
+								],
+								"META-INF/jars/jetty-io-12.1.14.jar!org/eclipse/jetty/io/ClientConnector.class": [
+									"java/nio/channels/DatagramChannel in connect",
+									"java/nio/channels/SocketChannel.socket in connect",
+									"java/net/Socket.connect in connect",
+									"java/nio/channels/SocketChannel.configureBlocking in connect, accept",
+									"java/nio/channels/SocketChannel.connect in connect",
+									"java/nio/channels/SocketChannel.isConnected in accept"
+								],
+								"META-INF/jars/jetty-io-12.1.14.jar!org/eclipse/jetty/io/DatagramChannelEndPoint.class": [
+									"java/nio/channels/DatagramChannel.getRemoteAddress in getRemoteSocketAddress",
+									"java/nio/channels/DatagramChannel.receive in receive",
+									"java/nio/channels/DatagramChannel.send in send"
+								],
+								"META-INF/jars/jetty-io-12.1.14.jar!org/eclipse/jetty/io/NetworkTrafficSocketChannelEndPoint.class": [
+									"java/nio/channels/SocketChannel.socket in onOpen, onClose, notifyIncoming, notifyOutgoing"
+								],
+								"META-INF/jars/jetty-io-12.1.14.jar!org/eclipse/jetty/io/SelectorManager.class": [
+									"java/nio/channels/SocketChannel.finishConnect in doFinishConnect",
+									"java/nio/channels/SocketChannel.isConnectionPending in isConnectionPending",
+									"java/nio/channels/ServerSocketChannel.accept in doAccept"
+								],
+								"META-INF/jars/jetty-io-12.1.14.jar!org/eclipse/jetty/io/SocketChannelEndPoint.class": [
+									"java/nio/channels/SocketChannel.getRemoteAddress in getRemoteSocketAddress",
+									"java/nio/channels/SocketChannel.shutdownOutput in doShutdownOutput",
+									"java/nio/channels/SocketChannel.read in fill",
+									"java/nio/channels/SocketChannel.write in flush"
+								],
+								"META-INF/jars/jetty-io-12.1.14.jar!org/eclipse/jetty/io/Transport$TCPIP.class": [
+									"java/nio/channels/SocketChannel.open in newSelectableChannel"
+								],
+								"META-INF/jars/jetty-io-12.1.14.jar!org/eclipse/jetty/io/Transport$TCPUnix.class": [
+									"java/nio/channels/SocketChannel.open in newSelectableChannel"
+								],
+								"META-INF/jars/jetty-io-12.1.14.jar!org/eclipse/jetty/io/Transport$UDPIP.class": [
+									"java/nio/channels/DatagramChannel.open in newSelectableChannel"
+								],
+								"META-INF/jars/jetty-io-12.1.14.jar!org/eclipse/jetty/io/Transport$UDPUnix.class": [
+									"java/nio/channels/DatagramChannel.open in newSelectableChannel"
+								],
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/DatagramServerConnector$ServerDatagramSelectorManager.class": [
+									"java/nio/channels/DatagramChannel in newEndPoint"
+								],
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/DatagramServerConnector.class": [
+									"java/nio/channels/DatagramChannel.isOpen in isOpen",
+									"java/nio/channels/DatagramChannel.configureBlocking in open",
+									"java/nio/channels/DatagramChannel.socket in open",
+									"java/net/DatagramSocket.getLocalPort in open",
+									"java/nio/channels/DatagramChannel.open in openDatagramChannel",
+									"java/nio/channels/DatagramChannel.bind in openDatagramChannel"
+								],
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/ServerConnector$ServerConnectorManager.class": [
+									"java/nio/channels/SocketChannel in accepted, newEndPoint"
+								],
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/ServerConnector.class": [
+									"java/nio/channels/ServerSocketChannel.configureBlocking in doStart, open",
+									"java/nio/channels/ServerSocketChannel.isOpen in isOpen, accept",
+									"java/nio/channels/ServerSocketChannel.socket in open",
+									"java/net/ServerSocket.getLocalPort in open",
+									"java/nio/channels/ServerSocketChannel.open in openAcceptChannel",
+									"java/nio/channels/ServerSocketChannel.bind in openAcceptChannel",
+									"java/nio/channels/ServerSocketChannel.setOption in setSocketOption",
+									"java/nio/channels/ServerSocketChannel.accept in accept",
+									"java/nio/channels/SocketChannel.configureBlocking in accepted",
+									"java/nio/channels/SocketChannel.socket in accepted",
+									"java/net/Socket.setTcpNoDelay in configure",
+									"java/net/Socket.setReceiveBufferSize in configure",
+									"java/net/Socket.setSendBufferSize in configure"
+								],
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/ShutdownMonitor.class": [
+									"java/net/ServerSocket.isBound in bound",
+									"java/net/ServerSocket.getLocalPort in bound"
+								],
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/ShutdownService$ShutdownRunnable.class": [
+									"java/net/ServerSocket.accept in run",
+									"java/net/Socket.getInputStream in run",
+									"java/net/Socket.close in run",
+									"java/net/Socket.getOutputStream in run"
+								],
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/ShutdownService.class": [
+									"java/net/ServerSocket.getLocalPort in getLocalPort",
+									"java/net/ServerSocket.isBound in isListening",
+									"java/net/ServerSocket.isClosed in isListening",
+									"java/net/ServerSocket.setReuseAddress in configure",
+									"java/net/ServerSocket.<init> in listen",
+									"java/net/ServerSocket.bind in listen"
+								],
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/SocketCustomizationListener.class": [
+									"java/nio/channels/SocketChannel.socket in onOpened"
+								],
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/handler/ConnectHandler$1.class": [
+									"java/nio/channels/SocketChannel.isConnected in succeeded"
+								],
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/handler/ConnectHandler$ConnectManager.class": [
+									"java/nio/channels/SocketChannel.getRemoteAddress in newConnection"
+								],
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/handler/ConnectHandler.class": [
+									"java/nio/channels/SocketChannel.open in connectToServer",
+									"java/nio/channels/SocketChannel.socket in connectToServer",
+									"java/net/Socket.setTcpNoDelay in connectToServer",
+									"java/nio/channels/SocketChannel.configureBlocking in connectToServer",
+									"java/nio/channels/SocketChannel.connect in connectToServer"
+								],
+								"META-INF/jars/jetty-util-12.1.14.jar!org/eclipse/jetty/util/resource/MemoryResource.class": [
+									"java/net/URL.openStream in <init>"
+								],
+								"META-INF/jars/jetty-util-12.1.14.jar!org/eclipse/jetty/util/resource/URLResourceFactory$URLResource.class": [
+									"java/net/URL.openConnection in checkConnection"
+								],
+								"META-INF/jars/jetty-util-12.1.14.jar!org/eclipse/jetty/util/ssl/AliasedX509ExtendedKeyManager.class": [
+									"java/net/Socket"
+								],
+								"META-INF/jars/jetty-util-12.1.14.jar!org/eclipse/jetty/util/ssl/SniX509ExtendedKeyManager.class": [
+									"java/net/Socket"
+								],
+								"META-INF/jars/jetty-util-12.1.14.jar!org/eclipse/jetty/util/ssl/SslContextFactory.class": [
+									"java/net/ServerSocket"
+								],
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/resource/IriResourceLoader.class": [
+									"java/net/URL.openConnection in openConnectionCheckRedirects, lambda$getResource$0"
+								],
+								"META-INF/jars/mcp-core-2.1.0.jar!io/modelcontextprotocol/client/transport/HttpClientSseClientTransport$Builder.class": [
+									"java/net/http/HttpClient.newBuilder in <init>"
+								],
+								"META-INF/jars/mcp-core-2.1.0.jar!io/modelcontextprotocol/client/transport/ResponseBodyHandlers.class": [
+									"java/net/http/HttpClient.sendAsync in lambda$sendAsync$10"
+								],
+								"META-INF/jars/mcp-core-2.1.0.jar!io/modelcontextprotocol/client/transport/HttpClientStreamableHttpTransport.class": [
+									"java/net/http/HttpClient"
+								],
+								"META-INF/jars/mcp-core-2.1.0.jar!io/modelcontextprotocol/client/transport/HttpClientSseClientTransport.class": [
+									"java/net/http/HttpClient"
+								],
+								"META-INF/jars/mcp-core-2.1.0.jar!io/modelcontextprotocol/client/transport/HttpClientStreamableHttpTransport$HttpClientResponseInfo.class": [
+									"java/net/http/HttpClient"
+								],
+								"META-INF/jars/mcp-core-2.1.0.jar!io/modelcontextprotocol/client/transport/HttpClientStreamableHttpTransport$Builder.class": [
+									"java/net/http/HttpClient.newBuilder in <init>"
+								]
+							},
+							"native": {
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/dynamic/loading/ClassInjector$UsingJna$Dispatcher$CreationAction.class": [
+									"com/sun/jna/Native.loadLibrary in run"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/VirtualMachine$ForHotSpot$Connection$ForJnaPosixSocket$Factory.class": [
+									"com/sun/jna/Native.loadLibrary in <init>, withDefaultTemporaryFolder"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/VirtualMachine$ForHotSpot$Connection$ForJnaSolarisDoor$Factory.class": [
+									"com/sun/jna/Native.loadLibrary in <init>"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/VirtualMachine$ForHotSpot$Connection$ForJnaWindowsNamedPipe$Factory.class": [
+									"com/sun/jna/Native.loadLibrary in <init>",
+									"com/sun/jna/Native.getLastError in connect"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/VirtualMachine$ForHotSpot$Connection$ForJnaWindowsNamedPipe$NamedPipeResponse.class": [
+									"com/sun/jna/Native.getLastError in read, close"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/VirtualMachine$ForHotSpot$Connection$ForJnaWindowsNamedPipe.class": [
+									"com/sun/jna/Native.getLastError in execute, close",
+									"com/sun/jna/Native.getNativeSize in createSecurityAttributesToAllowMediumIntegrity"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/VirtualMachine$ForOpenJ9$Dispatcher$ForJnaPosixEnvironment.class": [
+									"com/sun/jna/Native.loadLibrary in <init>",
+									"com/sun/jna/Native.getLastError in notifySemaphore"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/VirtualMachine$ForOpenJ9$Dispatcher$ForJnaWindowsEnvironment.class": [
+									"com/sun/jna/Native.loadLibrary in <init>",
+									"com/sun/jna/Native.toString in getTemporaryFolder",
+									"com/sun/jna/Native.getLastError in openSemaphore"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$LambdaInstrumentationStrategy$LambdaMetafactoryFactory$2.class": [
+									"\"java.lang.System\" by name"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/implementation/HashCodeMethod$ValueTransformer$14.class": [
+									"\"java.lang.System\" by name"
+								]
+							},
+							"exec": {
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/ByteBuddyAgent.class": [
+									"java/lang/ProcessBuilder.<init> in installExternal",
+									"java/lang/ProcessBuilder.environment in installExternal",
+									"java/lang/ProcessBuilder.start in installExternal"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/VirtualMachine$ForOpenJ9$Dispatcher$ForJnaPosixEnvironment$PosixOwnerProvider$UsingIStat.class": [
+									"java/lang/Runtime.exec in getOwnerIdOf"
+								],
+								"META-INF/jars/byte-buddy-agent-1.18.17.jar!net/bytebuddy/agent/VirtualMachine$ForOpenJ9$Dispatcher$ForJnaPosixEnvironment$PosixOwnerProvider$UsingStat.class": [
+									"java/lang/Runtime.exec in getOwnerIdOf"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!groovyjarjarantlr4/v4/gui/TreeViewer.class": [
+									"java/awt/Desktop.open in generatePNGFile, generateSVGFile"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!groovyjarjarpicocli/CommandLine$Model$UsageMessageSpec$1.class": [
+									"java/lang/ProcessBuilder.<init> in run",
+									"java/lang/ProcessBuilder.command in run",
+									"java/lang/ProcessBuilder.start in run"
+								],
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/runtime/ProcessGroovyMethods.class": [
+									"java/lang/Runtime.exec in execute"
+								],
+								"META-INF/jars/mcp-core-2.1.0.jar!io/modelcontextprotocol/client/transport/StdioClientTransport.class": [
+									"java/lang/ProcessBuilder.<init> in getProcessBuilder",
+									"java/lang/ProcessBuilder.command in lambda$connect$1",
+									"java/lang/ProcessBuilder.environment in lambda$connect$1",
+									"java/lang/ProcessBuilder.start in lambda$connect$1"
+								]
+							},
+							"unsafe": {
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/agent/builder/AgentBuilder$LambdaInstrumentationStrategy$LambdaMetafactoryFactory$Loader$UsingUnsafe.class": [
+									"\"jdk.internal.misc.Unsafe\" by name",
+									"\"sun.misc.Unsafe\" by name"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/dynamic/loading/ClassInjector$UsingReflection$Dispatcher$UsingUnsafeInjection.class": [
+									"\"sun.misc.Unsafe\" by name"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/dynamic/loading/ClassInjector$UsingReflection$Dispatcher$UsingUnsafeOverride.class": [
+									"\"sun.misc.Unsafe\" by name"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/dynamic/loading/ClassInjector$UsingUnsafe$Dispatcher$CreationAction.class": [
+									"\"sun.misc.Unsafe\" by name",
+									"\"jdk.internal.misc.Unsafe\" by name"
+								],
+								"META-INF/jars/byte-buddy-1.18.17.jar!net/bytebuddy/dynamic/loading/ClassInjector$UsingUnsafe$Factory.class": [
+									"\"jdk.internal.misc.Unsafe\" by name"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"www.w3.org": [
+								"META-INF/jars/groovy-5.1.3.jar!groovyjarjarantlr4/v4/gui/TreeViewer.class",
+								"META-INF/jars/jetty-http-12.1.14.jar!org/eclipse/jetty/http/UriCompliance$Violation.class",
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/ResourceListing.class"
+							],
+							"picocli.info": [
+								"META-INF/jars/groovy-5.1.3.jar!groovyjarjarpicocli/AutoComplete.class"
+							],
+							"github.com": [
+								"META-INF/jars/groovy-5.1.3.jar!groovyjarjarpicocli/AutoComplete.class"
+							],
+							"stackoverflow.com": [
+								"META-INF/jars/groovy-5.1.3.jar!groovyjarjarpicocli/AutoComplete.class"
+							],
+							"tiswww.case.edu": [
+								"META-INF/jars/groovy-5.1.3.jar!groovyjarjarpicocli/AutoComplete.class"
+							],
+							"www.gnu.org": [
+								"META-INF/jars/groovy-5.1.3.jar!groovyjarjarpicocli/AutoComplete.class"
+							],
+							"zsh.sourceforge.net": [
+								"META-INF/jars/groovy-5.1.3.jar!groovyjarjarpicocli/AutoComplete.class"
+							],
+							"issues.apache.org": [
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/classgen/asm/indy/IndyCallSiteWriter.class",
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/classgen/asm/sc/StaticTypesCallSiteWriter.class"
+							],
+							"groovy-lang.org": [
+								"META-INF/jars/groovy-5.1.3.jar!org/codehaus/groovy/tools/FileSystemCompiler$VersionProvider.class"
+							],
+							"javax.xml.xmlconstants": [
+								"META-INF/jars/jackson-databind-3.1.4.jar!tools/jackson/databind/ext/DOMDeserializer.class",
+								"META-INF/jars/jackson-databind-3.1.4.jar!tools/jackson/databind/ext/DOMSerializer.class"
+							],
+							"apache.org": [
+								"META-INF/jars/jackson-databind-3.1.4.jar!tools/jackson/databind/ext/DOMDeserializer.class"
+							],
+							"tools.ietf.org": [
+								"META-INF/jars/jetty-http-12.1.14.jar!org/eclipse/jetty/http/CookieCompliance$Violation.class",
+								"META-INF/jars/jetty-http-12.1.14.jar!org/eclipse/jetty/http/HttpCompliance$Violation.class",
+								"META-INF/jars/jetty-http-12.1.14.jar!org/eclipse/jetty/http/MultiPartCompliance$Violation.class",
+								"META-INF/jars/jetty-http-12.1.14.jar!org/eclipse/jetty/http/UriCompliance$Violation.class"
+							],
+							"www.rfc-editor.org": [
+								"META-INF/jars/jetty-http-12.1.14.jar!org/eclipse/jetty/http/CookieCompliance$Violation.class",
+								"META-INF/jars/jetty-http-12.1.14.jar!org/eclipse/jetty/http/HttpCompliance$Violation.class",
+								"META-INF/jars/jetty-http-12.1.14.jar!org/eclipse/jetty/http/UriCompliance$Violation.class"
+							],
+							"datatracker.ietf.org": [
+								"META-INF/jars/jetty-http-12.1.14.jar!org/eclipse/jetty/http/HttpCompliance$Violation.class",
+								"META-INF/jars/jetty-http-12.1.14.jar!org/eclipse/jetty/http/UriCompliance$Violation.class"
+							],
+							"jakarta.ee": [
+								"META-INF/jars/jetty-http-12.1.14.jar!org/eclipse/jetty/http/UriCompliance$Violation.class"
+							],
+							"jetty.org": [
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/HomeBaseWarning.class",
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/Server.class",
+								"META-INF/jars/jetty-server-12.1.14.jar!org/eclipse/jetty/server/handler/DefaultHandler.class",
+								"META-INF/jars/jetty-util-12.1.14.jar!org/eclipse/jetty/util/Jetty.class"
+							],
+							"json-schema.org": [
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/SchemaRegistry.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/Specification.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/SpecificationVersion.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/DialectId.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/Draft201909$Holder.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/Draft201909.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/Draft202012$Holder.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/Draft202012.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/Draft4$Holder.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/Draft4.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/Draft6$Holder.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/Draft6.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/Draft7$Holder.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/Draft7.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/OpenApi31.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/format/BaseFormatValidator.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/resource/MetaSchemaIdResolver.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/vocabulary/Vocabulary.class",
+								"META-INF/jars/mcp-core-2.1.0.jar!io/modelcontextprotocol/spec/McpSchema.class",
+								"META-INF/jars/mcp-json-jackson3-2.1.0.jar!io/modelcontextprotocol/json/schema/jackson3/DefaultJsonSchemaValidator.class"
+							],
+							"spec.openapis.org": [
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/DialectId.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/OpenApi30$Holder.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/OpenApi30.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/OpenApi31$Holder.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/dialect/OpenApi31.class",
+								"META-INF/jars/json-schema-validator-3.0.6.jar!com/networknt/schema/vocabulary/Vocabulary.class"
+							],
+							"yaml.org": [
+								"META-INF/jars/snakeyaml-engine-3.0.1.jar!org/snakeyaml/engine/v2/api/DumpSettingsBuilder.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "First release of **Claude MCP**: a client-side Fabric mod that lets Claude Code, opencode and other MCP clients control your Minecraft client.\n\n## Requirements\n- Minecraft Java **26.3** with Fabric Loader **≥ 0.20.1**\n- [Fabric API](https://modrinth.com/mod/fabric-api) **≥ 0.165.0**\n- Java 25 (shipped by the launcher for 26.3)\n\n## Installation\n1. Download `claude-mcp-0.1.0.jar` and put it into your `mods/` folder together with Fabric API.\n2. Start Minecraft once. This creates `config/claudemcp/token.txt`.\n3. Register the server in Claude Code (`register.ps1` from the repo) or add it to opencode as a remote MCP server – see the [README](https://github.com/Hemiize/mc-claude-mcp#quick-start).\n\n## Included (73 tools)\n- **Perception:** state, blocks, entities, inventory, GUI, screenshots\n- **Actions:**\n  - A* pathfinder with drowning protection\n  - mining with automatic tool choice and pickup, placing, crafting via the recipe book, combat, GUI control\n- **Flow:** tasks with emergency stop (`End`) and player override\n- **Memory:** notes and waypoints per world or server\n- **Code inside the game:**\n  - reflection on every class and object of the game\n  - live Groovy scripts and event hooks\n  - runtime method hooks (Java agent + Byte Buddy)\n- **Chat and data:** chat filter for incoming and outgoing messages, NBT editor\n\n## Security\n- The server listens only on `127.0.0.1` and requires a bearer token.\n- Scripts and reflection can be disabled in `config/claudemcp/config.json`.\n- Anti-cheat bypasses are deliberately not included.\n\n## License\nApache 2.0 with **required attribution**: every redistribution must include the `NOTICE` file, which credits Hemiize as the author. It is also bundled in the jar at `META-INF/NOTICE`.\n\n**SHA-256** `claude-mcp-0.1.0.jar`: `7c37b9ebb0970099d2ab1f4ec600b69d42762edd536148effcbbe17102efcd91`"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [
+		"docs/screenshot-goto.png",
+		"docs/screenshot-hooks.png"
+	],
+	"contributors": {
+		"commits": 5,
+		"more": 0,
+		"people": [
+			{
+				"login": "Hemiize",
+				"commits": 5,
+				"name": "hemiize",
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

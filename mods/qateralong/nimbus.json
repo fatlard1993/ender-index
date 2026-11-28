@@ -1,0 +1,355 @@
+{
+	"repo": "qateralong/nimbus",
+	"host": "github",
+	"description": "All-in-one optimization mod for Minecraft 1.21.1 (Fabric): own terrain renderer, shader packs without Iris, Lithium-style server optimizations. Replaces Sodium, Lithium, FerriteCore, ModernFix and more.",
+	"stars": 1,
+	"archived": false,
+	"created": "2026-10-28T19:53:32Z",
+	"pushed": "2026-11-11T14:06:06Z",
+	"releases": [
+		{
+			"tag": "v4.0.3",
+			"published": "2026-11-11T14:02:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 735743670,
+					"name": "nimbus-4.0.3+1.21.1.jar",
+					"url": "https://github.com/qateralong/nimbus/releases/download/v4.0.3/nimbus-4.0.3%2B1.21.1.jar",
+					"size": 1042457,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "1bd2aeb5d912e33bab404ff7a02ad09cf42b44160541792ca679175777c36810",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "nimbus",
+							"version": "4.0.3+1.21.1",
+							"name": "Nimbus",
+							"description": "All-in-one optimization for client and server: its own terrain renderer (GPU culling, occlusion culling, instanced entities and particles, distant LOD), a shader pack loader that works without Iris, Lithium-style server optimizations, lower memory use and faster loading. Replaces Sodium, Lithium, FerriteCore, ModernFix, ImmediatelyFast and more; changes nothing visible by default.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.16.0",
+								"minecraft": "~1.21.1",
+								"java": ">=21"
+							},
+							"provides": [],
+							"breaks": [
+								"entityculling"
+							],
+							"breaksVersions": {
+								"entityculling": "*"
+							}
+						}
+					],
+					"icon": "da124248461188c1b81731bde09707388bc31a85a27746318b4182510a008d10.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"version": 3,
+						"classes": 501,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Final release of the 4.0 line.\n\n- Hi-Z occlusion culling on by default, combined with GPU frustum culling; it pauses itself in open views where it would not pay off (+30% FPS in occluded scenes).\n- Smooth chunk fade-in (optional).\n- Dynamic lights: torches and lanterns in hand, dropped light sources, burning mobs (optional; steps aside for LambDynamicLights).\n- \"Pick for my hardware\" button for graphics profiles.\n- Server: faster scheduled ticks, cached piston shapes, cheaper explosion exposure; entity fluid checks no longer wait for chunk generation.\n- About 30 MB less heap.\n- Async screenshots, precise frame limiter, frame-time graph, anisotropic filtering, Iris-style shader keys, new settings screen and a dedicated shader screen.\n\nRequires Minecraft 1.21.1, Fabric Loader 0.16+, Fabric API, Java 21."
+		},
+		{
+			"tag": "v4.0.2",
+			"published": "2026-11-10T14:41:26Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 731765169,
+					"name": "nimbus-4.0.2+1.21.1.jar",
+					"url": "https://github.com/qateralong/nimbus/releases/download/v4.0.2/nimbus-4.0.2%2B1.21.1.jar",
+					"size": 982145,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "9cbe22b2dc0ca304a49bb66383e4662d93a5231c0bfc29b987468a4b856deb73",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "nimbus",
+							"version": "4.0.2+1.21.1",
+							"name": "Nimbus",
+							"description": "Client and server optimization: per-type entity/block entity culling, async ray occlusion, far LOD, particle culling and per-type toggles, client tick LOD, world resolution scaling with CAS sharpening, adaptive quality, borderless fullscreen, CPU render-ahead limit, extended graphics settings with Sacrifice presets.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.16.0",
+								"minecraft": "~1.21.1",
+								"java": ">=21"
+							},
+							"provides": [],
+							"breaks": [
+								"entityculling"
+							],
+							"breaksVersions": {
+								"entityculling": "*"
+							}
+						}
+					],
+					"icon": "da124248461188c1b81731bde09707388bc31a85a27746318b4182510a008d10.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"version": 3,
+						"classes": 473,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Defaults now leave the picture exactly as in vanilla: Nimbus only adds FPS out of the box. Graphics profiles and manual settings are where visible trade-offs live.\n\n- Defaults change nothing visible:\n  - entity, block entity, sign text, frame content, name tag and detail distances are \"as in the game\";\n  - fog on, distant terrain (LOD) off, leaves keep their inner faces, no particle cap;\n  - existing configs that still had the old defaults move to the new ones; values changed by hand stay.\n- Graphics profile (formerly \"Sacrifices\") applies only with Apply, and Undo brings the old settings back. Before, one click on the arrow switched the whole profile, including vanilla options.\n- World resolution below 100% with sharpening is fast again: upscaling and sharpening run in one full-screen pass from the low-resolution image instead of three. On an APU, 80% with sharpening went from slower than 100% to +27% FPS.\n- Fast leaves look as in vanilla again: the transparent-texel fill only goes into mipmaps, and it is now an option (\"No dark fringes far away\"), off by default.\n- Settings screen:\n  - centered panel that scales with GUI scale; GUI scale applies at once;\n  - pages: Main (profile, render distance, graphics, world resolution, FPS limit) / Graphics / Shaders / Objects / Particles / Performance / Advanced (engine and low-level optimizations);\n  - long lists are collapsed, dependent settings hide once their parent is off (LOD distance, fog distance, sharpening at 100%, cloud height…);\n  - less clutter: no ON/OFF labels, no row lines, arrows on hover, Undo/Apply only with pending changes;\n  - Russian and English texts rewritten.\n- Resource reloads (packs, language, F3+T) keep the game on screen with a thin progress line instead of the Mojang screen (RRLS-like, off when RRLS is installed).\n- Memory, ~26 MB less in a 16-chunk world with the Nimbus engine:\n  - vanilla section layer buffers are created only when a layer gets geometry;\n  - section neighbour origins are derived on demand;\n  - block face shapes and block state cache arrays are shared by content (works next to Lithium too);\n  - small NBT compounds no longer reserve 33-slot maps.\n- Creative and recipe book search trees are built when those screens first open, not on every world join (Lazy item search)."
+		},
+		{
+			"tag": "v4.0.1",
+			"published": "2026-11-10T10:52:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 731083692,
+					"name": "nimbus-4.0.1+1.21.1.jar",
+					"url": "https://github.com/qateralong/nimbus/releases/download/v4.0.1/nimbus-4.0.1%2B1.21.1.jar",
+					"size": 959761,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "e5925390fa6e7c4a1139615e7f7d492c7b91c47937fc3fae38221b5bbe596c28",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "nimbus",
+							"version": "4.0.1+1.21.1",
+							"name": "Nimbus",
+							"description": "Client and server optimization: per-type entity/block entity culling, async ray occlusion, far LOD, particle culling and per-type toggles, client tick LOD, world resolution scaling with CAS sharpening, adaptive quality, borderless fullscreen, CPU render-ahead limit, extended graphics settings with Sacrifice presets.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.16.0",
+								"minecraft": "~1.21.1",
+								"java": ">=21"
+							},
+							"provides": [],
+							"breaks": [
+								"entityculling"
+							],
+							"breaksVersions": {
+								"entityculling": "*"
+							}
+						}
+					],
+					"icon": "da124248461188c1b81731bde09707388bc31a85a27746318b4182510a008d10.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"version": 3,
+						"classes": 460,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Client:\n\n- Fast world quit: leaving a singleplayer world returns to the menu in about 0.1 s instead of 3–6 s, while the world saves in the background.\n  - Opening that world again waits for the save to finish, and so does closing the game.\n  - Option: Interface → Fast world quit. Turned off when the FastQuit mod is installed.\n- Nether: about 750 → about 1000 FPS in the test scene, level with Sodium.\n  - LOD is off in dimensions with a roof (its height map there is just the bedrock ceiling).\n  - Repairing dark light spots no longer re-checks sections whose light data did not change.\n- Without Sodium, transparent texture pixels are filled with a darkened average colour before mipmaps are built: fast leaves no longer show black holes, and mipmaps lose their dark fringes.\n- Memory: about 30 MB less heap in a 16-chunk world.\n  - One shared threading detector instead of a detector, semaphore and lock per chunk palette (`paletteLocks`).\n  - Palette configurations are interned.\n  - Multipart model predicates are shared (`dedupModels`, unless FerriteCore is installed).\n  - Vanilla section buffers create their GL buffers and vertex arrays only on first use. With the Nimbus engine they are never used, so the driver keeps about 390 000 fewer objects.\n\nChecked with the non-performance mods of a typical optimized pack in place of Sodium, Lithium, FerriteCore, ModernFix, ImmediatelyFast, EntityCulling, MoreCulling, Dynamic FPS, EBE and FastQuit."
+		},
+		{
+			"tag": "v4.0.0",
+			"published": "2026-11-10T09:09:42Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 730798740,
+					"name": "nimbus-4.0.0+1.21.1.jar",
+					"url": "https://github.com/qateralong/nimbus/releases/download/v4.0.0/nimbus-4.0.0%2B1.21.1.jar",
+					"size": 948115,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "f9a2d6909c635f3d89839a3a0a0f71735d87fa0664908ee5b645b2d7eeb8ecf6",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "nimbus",
+							"version": "4.0.0+1.21.1",
+							"name": "Nimbus",
+							"description": "Client and server optimization: per-type entity/block entity culling, async ray occlusion, far LOD, particle culling and per-type toggles, client tick LOD, world resolution scaling with CAS sharpening, adaptive quality, borderless fullscreen, CPU render-ahead limit, extended graphics settings with Sacrifice presets.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.16.0",
+								"minecraft": "~1.21.1",
+								"java": ">=21"
+							},
+							"provides": [],
+							"breaks": [
+								"entityculling"
+							],
+							"breaksVersions": {
+								"entityculling": "*"
+							}
+						}
+					],
+					"icon": "da124248461188c1b81731bde09707388bc31a85a27746318b4182510a008d10.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"version": 3,
+						"classes": 450,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Nimbus now loads OptiFine/Iris-format shader packs on its own, without Sodium and Iris. With Sodium installed, Sodium + Iris are still used as before.\n\n- Shader packs: Complementary, BSL, Photon, Sildur's Vibrant and Mellow work and match the Iris look. On the test APU, FPS is level with Iris on Complementary, BSL and Photon.\n- Supported features:\n  - render targets and passes: gbuffers, shadow, deferred/composite/final;\n  - compute shaders, custom images, SSBOs (`bufferObject.N`);\n  - `block.properties`, `entity.properties`, `item.properties`, and the `entityId` / `blockEntityId` / `currentRenderedItemId` / `heldItemId` uniforms;\n  - custom uniforms and textures;\n  - `shaders.properties` keys (blend, alphaTest, scale, flip, `shadow.culling` incl. `reversed`, `clouds`/`sun`/`moon`/`vignette`/`underwaterOverlay`, `particles.ordering`);\n  - pack options screen with profiles, saved to `shaderpacks/<pack>.txt` like Iris.\n- Colored lighting: voxel-based colored lighting works, e.g. Complementary's `COLORED_LIGHTING`. It relies on `at_midBlock` (with block emission in `.w`) and `renderStage` in the shadow pass.\n- The shadow pass draws only the sections whose shadow can reach the camera's view: about 1270 → 450 draws, with no visible difference.\n- Packs see `IS_IRIS`, `IRIS_VERSION` and the `IRIS_FEATURE_*` flags for the features above, so they take their Iris code paths.\n- Not yet supported: Distant Horizons / Voxy programs, `voxelizeLightBlocks`, `separateEntityDraws`, `beacon.beam.depth`, `IRIS_FEATURE_FADE_VARIABLE`.\n- Without a shader pack, rendering is unchanged."
+		},
+		{
+			"tag": "v3.0.3",
+			"published": "2026-11-09T22:25:17Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 729205741,
+					"name": "nimbus-3.0.3+1.21.1.jar",
+					"url": "https://github.com/qateralong/nimbus/releases/download/v3.0.3/nimbus-3.0.3%2B1.21.1.jar",
+					"size": 775493,
+					"downloads": 0,
+					"inspection": 2,
+					"sha256": "a6215bb17d6c9f693356408515cd236452f22bc82e9c2b3e7abc9a42e72bdd97",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "nimbus",
+							"version": "3.0.3+1.21.1",
+							"name": "Nimbus",
+							"description": "Client and server optimization: per-type entity/block entity culling, async ray occlusion, far LOD, particle culling and per-type toggles, client tick LOD, world resolution scaling with CAS sharpening, adaptive quality, borderless fullscreen, CPU render-ahead limit, extended graphics settings with Sacrifice presets.",
+							"minecraft": "~1.21.1",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.16.0",
+								"minecraft": "~1.21.1",
+								"java": ">=21"
+							},
+							"provides": [],
+							"breaks": [
+								"entityculling"
+							],
+							"breaksVersions": {
+								"entityculling": "*"
+							}
+						}
+					],
+					"icon": "da124248461188c1b81731bde09707388bc31a85a27746318b4182510a008d10.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": true
+					},
+					"scan": {
+						"version": 3,
+						"classes": 407,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Server (and integrated server):\n\n- Every grounded entity looks for the block under its feet and \"falls\" 0.08 into the ground on each tick, standing still included. Both results are now kept per entity while its box, the move and the blocks around are the same and the blocks' collision shapes depend on the block state alone (water, powder snow, scaffolding and moving pistons always recompute). Self-check with `-Dnimbus.verifySupport=true` compares every reuse with a fresh vanilla computation: over a million reuses, no difference.\n- Mob AI scene (200 villagers with beds and job sites, 300 animals, 160 monsters): 11.0 → 8.6 ms per tick. Lithium: 12.6, vanilla: 18.5.\n- Switches in `config/nimbus-common.properties`: `supportCache`, `fallCache`. Checks against vanilla still pass bit for bit (hoppers, TNT, collisions, moves, POI, section packing)."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [
+		"docs/light-off.jpg",
+		"docs/light-on.jpg",
+		"docs/menu-graphics.png",
+		"docs/menu-main.png",
+		"docs/menu-shaders.png",
+		"docs/view-noon.jpg",
+		"docs/view-sunset-shaders.jpg"
+	],
+	"contributors": {
+		"commits": 33,
+		"more": 0,
+		"people": [
+			{
+				"login": "qateralong",
+				"commits": 33,
+				"name": "QaterAlong",
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

@@ -1,0 +1,339 @@
+{
+	"repo": "Liparakis/Chunkis",
+	"host": "github",
+	"description": "Chunkis is a high-performance, sparse storage engine for Minecraft. It slashes world save sizes by persisting player-made changes on top of custom chunk-snapshots, using a custom binary format (CIS) designed for speed and efficiency.",
+	"stars": 10,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-01-21T18:22:57Z",
+	"pushed": "2026-11-22T22:53:05Z",
+	"releases": [
+		{
+			"tag": "v4.2.1-mc26.3",
+			"published": "2026-11-11T20:58:04Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 736893214,
+					"name": "chunkis-4.2.1-mc26.3.jar",
+					"url": "https://github.com/Liparakis/Chunkis/releases/download/v4.2.1-mc26.3/chunkis-4.2.1-mc26.3.jar",
+					"size": 7320425,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "5d5dc1adc930df9507c8f1617bfe79edb7edc3132d421abab347478f6a6983ab",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "chunkis",
+							"version": "4.2.1",
+							"name": "Chunkis",
+							"description": "Chunkis is a mod that adds chunk saving and loading to Minecraft.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.20.1",
+								"minecraft": "~26.3",
+								"java": ">=25"
+							},
+							"provides": [
+								"com_github_luben_zstd-jni"
+							],
+							"bundled": {
+								"com_github_luben_zstd-jni": "1.5.7-25"
+							}
+						}
+					],
+					"icon": "4b2bcef4d92361031edd8a096595ec90123ec5aea466d5d4e3ccd1279a78bef2.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 401,
+						"jars": [
+							"META-INF/jars/zstd-jni-1.5.7-25.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/zstd-jni-1.5.7-25.jar!META-INF/versions/22/com/github/luben/zstd/ZstdBinding.class": [
+									"java/lang/foreign/Linker.nativeLinker in nativeLinker",
+									"java/lang/foreign/Linker.canonicalLayouts in cSizeT, <clinit>",
+									"java/lang/foreign/Linker.downcallHandle in downcall, downcallCritical"
+								],
+								"META-INF/jars/zstd-jni-1.5.7-25.jar!com/github/luben/zstd/util/Native$1.class": [
+									"java/lang/System.loadLibrary in run"
+								],
+								"META-INF/jars/zstd-jni-1.5.7-25.jar!com/github/luben/zstd/util/Native$2.class": [
+									"java/lang/System.load in run"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Fixed entity restoration — Minecraft 26.3\n\nChunkis **4.2.1 for Minecraft 26.3** fixes dropped items and mobs remaining absent after reopening a world even when their saved entity data was still present.\n\n### Fix\n\nThe replay queue shared one progress cursor across dimensions. Nether/End ticks could reset Overworld progress after its time budget expired, repeatedly retrying the same blocked entries and starving later entities. Progress is now tracked per dimension and resumes at the exact chunk/dimension/UUID key, including within a dense chunk. Cursor state clears on server shutdown.\n\nThe existing two-millisecond budget, readiness checks, spawn rules and duplicate handling remain in place. **No storage format changes or migration are required.** Existing saved pending entities can restore normally; this does not reconstruct data that was never saved or legitimately despawned.\n\n### Validation\n\n- **258 unit tests and 47 game tests** passed with the full build and Checkstyle.\n- All **47 game tests** passed with **C2ME 0.4.2-alpha.0.115+26.3 with Lithium/FerriteCore/ScalableLux** on Java 25.\n- A fresh C2ME server saved a pig and a 17-diamond dropped stack in each standard dimension. All **six UUIDs and item counts** survived a cold reopen.\n- Three quick benchmark pairs and the regression guard completed. No saved quick baseline was available; no performance improvement is claimed.\n\nThe original 26.3 investigation also restored all **454 sampled stored entity UUIDs** from a copied world and verified another save/cold reopen, with the original world unchanged. [Repair and validation details](https://github.com/Liparakis/Chunkis/blob/v4.2.1-mc26.3/docs/entity-replay-recovery.md).\n\n### Requirements and downloads\n\n- Minecraft **26.3**, Java **25+**, Fabric Loader **0.20.1+** and Fabric API for this Minecraft version.\n- Built and tested with Loader **0.20.1** and API **0.165.2+26.3**. Optional mods have their own runtime requirements.\n- Install `chunkis-4.2.1-mc26.3.jar`. The sources JAR is for development; `SHA256SUMS` verifies both downloads.\n\nThis patch replaces the affected earlier release(s) for this Minecraft target."
+		},
+		{
+			"tag": "v4.2.1-mc26.2",
+			"published": "2026-11-11T20:57:52Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 736892903,
+					"name": "chunkis-4.2.1-mc26.2.jar",
+					"url": "https://github.com/Liparakis/Chunkis/releases/download/v4.2.1-mc26.2/chunkis-4.2.1-mc26.2.jar",
+					"size": 7320494,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "47635941602ff91d322149504f498d931ec91f8af10fc56580a886effda97e3f",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "chunkis",
+							"version": "4.2.1",
+							"name": "Chunkis",
+							"description": "Chunkis is a mod that adds chunk saving and loading to Minecraft.",
+							"minecraft": "~26.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.20.1",
+								"minecraft": "~26.2",
+								"java": ">=25"
+							},
+							"provides": [
+								"com_github_luben_zstd-jni"
+							],
+							"bundled": {
+								"com_github_luben_zstd-jni": "1.5.7-25"
+							}
+						}
+					],
+					"icon": "4b2bcef4d92361031edd8a096595ec90123ec5aea466d5d4e3ccd1279a78bef2.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 401,
+						"jars": [
+							"META-INF/jars/zstd-jni-1.5.7-25.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/zstd-jni-1.5.7-25.jar!META-INF/versions/22/com/github/luben/zstd/ZstdBinding.class": [
+									"java/lang/foreign/Linker.nativeLinker in nativeLinker",
+									"java/lang/foreign/Linker.canonicalLayouts in cSizeT, <clinit>",
+									"java/lang/foreign/Linker.downcallHandle in downcall, downcallCritical"
+								],
+								"META-INF/jars/zstd-jni-1.5.7-25.jar!com/github/luben/zstd/util/Native$1.class": [
+									"java/lang/System.loadLibrary in run"
+								],
+								"META-INF/jars/zstd-jni-1.5.7-25.jar!com/github/luben/zstd/util/Native$2.class": [
+									"java/lang/System.load in run"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Fixed entity restoration — Minecraft 26.2\n\nChunkis **4.2.1 for Minecraft 26.2** fixes dropped items and mobs remaining absent after reopening a world even when their saved entity data was still present.\n\n### Fix\n\nThe replay queue shared one progress cursor across dimensions. Nether/End ticks could reset Overworld progress after its time budget expired, repeatedly retrying the same blocked entries and starving later entities. Progress is now tracked per dimension and resumes at the exact chunk/dimension/UUID key, including within a dense chunk. Cursor state clears on server shutdown.\n\nThe existing two-millisecond budget, readiness checks, spawn rules and duplicate handling remain in place. **No storage format changes or migration are required.** Existing saved pending entities can restore normally; this does not reconstruct data that was never saved or legitimately despawned.\n\n### Validation\n\n- **258 unit tests and 47 game tests** passed with the full build and Checkstyle.\n- All **47 game tests** passed with **C2ME 0.4.2-alpha.0.60+26.2** on Java 25.\n- A fresh C2ME server saved a pig and a 17-diamond dropped stack in each standard dimension. All **six UUIDs and item counts** survived a cold reopen.\n- Three quick benchmark pairs and the regression guard completed. No saved quick baseline was available; no performance improvement is claimed.\n\nThe original 26.3 investigation also restored all **454 sampled stored entity UUIDs** from a copied world and verified another save/cold reopen, with the original world unchanged. [Repair and validation details](https://github.com/Liparakis/Chunkis/blob/v4.2.1-mc26.2/docs/entity-replay-recovery.md).\n\n### Requirements and downloads\n\n- Minecraft **26.2**, Java **25+**, Fabric Loader **0.20.1+** and Fabric API for this Minecraft version.\n- Built and tested with Loader **0.20.1** and API **0.161.0+26.2**. Optional mods have their own runtime requirements.\n- Install `chunkis-4.2.1-mc26.2.jar`. The sources JAR is for development; `SHA256SUMS` verifies both downloads.\n\nThis patch replaces the affected earlier release(s) for this Minecraft target."
+		},
+		{
+			"tag": "v4.2.1",
+			"published": "2026-11-11T20:53:56Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 736888497,
+					"name": "chunkis-4.2.1-mc26.1.2.jar",
+					"url": "https://github.com/Liparakis/Chunkis/releases/download/v4.2.1/chunkis-4.2.1-mc26.1.2.jar",
+					"size": 7328144,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "06924133db918573177d11b8b157b961fad5438d72d8354c859f0643fc30e361",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "chunkis",
+							"version": "4.2.1",
+							"name": "Chunkis",
+							"description": "Chunkis is a mod that adds chunk saving and loading to Minecraft.",
+							"minecraft": "~26.1.2",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.20.1",
+								"minecraft": "~26.1.2",
+								"java": ">=25"
+							},
+							"provides": [
+								"com_github_luben_zstd-jni"
+							],
+							"bundled": {
+								"com_github_luben_zstd-jni": "1.5.7-25"
+							}
+						}
+					],
+					"icon": "4b2bcef4d92361031edd8a096595ec90123ec5aea466d5d4e3ccd1279a78bef2.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 399,
+						"jars": [
+							"META-INF/jars/zstd-jni-1.5.7-25.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/zstd-jni-1.5.7-25.jar!META-INF/versions/22/com/github/luben/zstd/ZstdBinding.class": [
+									"java/lang/foreign/Linker.nativeLinker in nativeLinker",
+									"java/lang/foreign/Linker.canonicalLayouts in cSizeT, <clinit>",
+									"java/lang/foreign/Linker.downcallHandle in downcall, downcallCritical"
+								],
+								"META-INF/jars/zstd-jni-1.5.7-25.jar!com/github/luben/zstd/util/Native$1.class": [
+									"java/lang/System.loadLibrary in run"
+								],
+								"META-INF/jars/zstd-jni-1.5.7-25.jar!com/github/luben/zstd/util/Native$2.class": [
+									"java/lang/System.load in run"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Fixed entity restoration — Minecraft 26.1.2\n\nChunkis **4.2.1 for Minecraft 26.1.2** fixes dropped items and mobs remaining absent after reopening a world even when their saved entity data was still present.\n\n### Fix\n\nThe replay queue shared one progress cursor across dimensions. Nether/End ticks could reset Overworld progress after its time budget expired, repeatedly retrying the same blocked entries and starving later entities. Progress is now tracked per dimension and resumes at the exact chunk/dimension/UUID key, including within a dense chunk. Cursor state clears on server shutdown.\n\nThe existing two-millisecond budget, readiness checks, spawn rules and duplicate handling remain in place. **No storage format changes or migration are required.** Existing saved pending entities can restore normally; this does not reconstruct data that was never saved or legitimately despawned.\n\n### Validation\n\n- **257 unit tests and 47 game tests** passed with the full build and Checkstyle.\n- All **47 game tests** passed with **C2ME 0.4.0-alpha.0.65+26.1.2** on Java 25.\n- A fresh C2ME server saved a pig and a 17-diamond dropped stack in each standard dimension. All **six UUIDs and item counts** survived a cold reopen.\n- Three quick benchmark pairs and the regression guard completed. No saved quick baseline was available; no performance improvement is claimed.\n\nThe original 26.3 investigation also restored all **454 sampled stored entity UUIDs** from a copied world and verified another save/cold reopen, with the original world unchanged. [Repair and validation details](https://github.com/Liparakis/Chunkis/blob/v4.2.1/docs/entity-replay-recovery.md).\n\n### Requirements and downloads\n\n- Minecraft **26.1.2**, Java **25+**, Fabric Loader **0.20.1+** and Fabric API for this Minecraft version.\n- Built and tested with Loader **0.20.1** and API **0.155.3+26.1.2**. Optional mods have their own runtime requirements.\n- Install `chunkis-4.2.1-mc26.1.2.jar`. The sources JAR is for development; `SHA256SUMS` verifies both downloads.\n\nThis patch replaces the affected earlier release(s) for this Minecraft target."
+		},
+		{
+			"tag": "v4.1.2",
+			"published": "2026-11-11T20:53:43Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 736888240,
+					"name": "chunkis-4.1.2-mc1.21.11.jar",
+					"url": "https://github.com/Liparakis/Chunkis/releases/download/v4.1.2/chunkis-4.1.2-mc1.21.11.jar",
+					"size": 8410307,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "7bffadfd1aa1ac1008335c846d8e63d428d79e27f9637f162100f363b1ec3dc3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "chunkis",
+							"version": "4.1.2",
+							"name": "Chunkis",
+							"description": "Chunkis is a mod that adds chunk saving and loading to Minecraft.",
+							"minecraft": "~1.21.11",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.16.5",
+								"minecraft": "~1.21.11",
+								"java": ">=21"
+							},
+							"provides": [
+								"com_github_luben_zstd-jni"
+							],
+							"bundled": {
+								"com_github_luben_zstd-jni": "1.5.7-12"
+							}
+						}
+					],
+					"icon": "4b2bcef4d92361031edd8a096595ec90123ec5aea466d5d4e3ccd1279a78bef2.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 380,
+						"jars": [
+							"META-INF/jars/zstd-jni-1.5.7-12.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/zstd-jni-1.5.7-12.jar!com/github/luben/zstd/util/Native$1.class": [
+									"java/lang/System.loadLibrary in run"
+								],
+								"META-INF/jars/zstd-jni-1.5.7-12.jar!com/github/luben/zstd/util/Native$2.class": [
+									"java/lang/System.load in run"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Fixed entity restoration — Minecraft 1.21.11\n\nChunkis **4.1.2 for Minecraft 1.21.11** fixes dropped items and mobs remaining absent after reopening a world even when their saved entity data was still present.\n\n### Fix\n\nThe replay queue shared one progress cursor across dimensions. Nether/End ticks could reset Overworld progress after its time budget expired, repeatedly retrying the same blocked entries and starving later entities. Progress is now tracked per dimension and resumes at the exact chunk/dimension/UUID key, including within a dense chunk. Cursor state clears on server shutdown.\n\nThe existing two-millisecond budget, readiness checks, spawn rules and duplicate handling remain in place. **No storage format changes or migration are required.** Existing saved pending entities can restore normally; this does not reconstruct data that was never saved or legitimately despawned.\n\n### Validation\n\n- **235 unit tests and 43 game tests** passed with the full build and Checkstyle.\n- All **43 game tests** passed with **C2ME 0.4.0-alpha.0.28+1.21.11** on Java 25.\n- A fresh C2ME server saved a pig and a 17-diamond dropped stack in each standard dimension. All **six UUIDs and item counts** survived a cold reopen.\n- Three quick benchmark pairs and the regression guard completed. No saved quick baseline was available; no performance improvement is claimed.\n\nThe original 26.3 investigation also restored all **454 sampled stored entity UUIDs** from a copied world and verified another save/cold reopen, with the original world unchanged. [Repair and validation details](https://github.com/Liparakis/Chunkis/blob/v4.1.2/docs/entity-replay-recovery.md).\n\n### Requirements and downloads\n\n- Minecraft **1.21.11**, Java **21+**, Fabric Loader **0.16.5+** and Fabric API for this Minecraft version.\n- Built and tested with Loader **0.18.3** and API **0.141.3+1.21.11**. Optional mods have their own runtime requirements.\n- Install `chunkis-4.1.2-mc1.21.11.jar`. The sources JAR is for development; `SHA256SUMS` verifies both downloads.\n\nThis patch replaces the affected earlier release(s) for this Minecraft target."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [],
+	"contributors": {
+		"commits": 269,
+		"more": 0,
+		"people": [
+			{
+				"login": "Liparakis",
+				"commits": 269,
+				"name": "Panayiotis Stylianopoulos",
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

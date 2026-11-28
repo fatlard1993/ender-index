@@ -1,0 +1,502 @@
+{
+	"repo": "logvex-sg/Baritone-AnarchyExpansion",
+	"host": "github",
+	"stars": 0,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-09-26T11:10:41Z",
+	"pushed": "2026-11-25T12:25:02Z",
+	"releases": [
+		{
+			"tag": "v2.9.0",
+			"published": "2026-11-13T11:14:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 743358614,
+					"name": "baritone-anarchy-expansion-2.9.0.jar",
+					"url": "https://github.com/logvex-sg/Baritone-AnarchyExpansion/releases/download/v2.9.0/baritone-anarchy-expansion-2.9.0.jar",
+					"size": 846440,
+					"downloads": 13,
+					"inspection": 2,
+					"sha256": "019df42220ed8591a06bf857dacb7ea2cd2f4620409aad2ceb5db95f7e30fef8",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baritone-anarchy-expansion",
+							"version": "2.9.0",
+							"name": "Baritone Anarchy Expansion",
+							"description": "Anarchy base-hunting toolkit. Firework-free elytra autopilot with automatic elytra management, adaptive exploration, stash and new-chunk detection, player tracking, mending and ender chest handling, a safe storage system (inventory sorting, chest sorting, a container network, shulker work and restocking), survival guardrails and fully configurable Discord webhook notifications.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f86199c6596cbcff498da5b9c42c0cf88099b157c265a8fa45c3238904c3fc81.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 304,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## [2.9.0]— 2026-11-13\n\nThe realistic-player release. A bot that snaps its camera and stands perfectly still is easy to spot, so\nthis release makes the client *move* the way a person does: the camera eases toward a target instead of\njumping to it, the player makes small idle gestures, and a profiler scores how human the result actually\nlooks. Each piece is a pure, headlessly tested core, so the suite grows from 939 to 997 assertions and\n`./gradlew build` is green (21 + 196 + 131 + 147 + 86 + 181 + 21 + 41 + 57 + 58 + 58).\n\n### Added — smooth look (`smooth-look`)\n\n- **The camera turns like a wrist, not a switch.** `LookSmoother` approaches a target along the shortest\n  arc at a bounded per-tick speed, eases in, and settles with a small seeded jitter that fades as the aim\n  arrives — so an aim request looks like a hand moving a mouse, not a coordinate being written.\n- **Correct angle maths.** Yaw takes the short way across the ±180° seam (170° → −170° is 20°, not 340°),\n  pitch is clamped to ±90°, and `yawTo` / `pitchTo` derive the aim from a world position in any quadrant.\n- **Arrival, not overshoot.** The smoother reports when it is within a tolerance of the target and can\n  release the camera; `face-player` keeps a continuous, smoothly-tracking aim on the nearest player.\n- **`/bh look …` and the terminal `look …`** aim at a player, a coordinate or a raw yaw/pitch, or clear\n  the target. It holds the `ROTATION` lease while turning, so it never fights another module for the camera.\n\n### Added — human behavior (`human-behavior`)\n\n- **Idle gestures a person would make.** `HumanBehavior` schedules short, bounded gestures — a glance, a\n  tiny strafe, a jump, a brief sneak, a look down at the hotbar — separated by random pauses, never twice\n  the same gesture in a row, so an idle client does not read as a statue.\n- **Deliberately timid.** Every duration is bounded, the module refuses to gesture while another automation\n  owns movement, and it takes the lowest priority so it can never preempt anything that matters. It presses\n  the same keys a player would and forges no packets.\n- **`/bh human on|off|status`** and the terminal `human …` toggle and inspect it.\n\n### Added — behavior monitor (`behavior-monitor`)\n\n- **A score, not a hope.** `BehaviorProfiler` watches a rolling window of yaw and position samples and\n  reduces it to how much the turn rate varies, how often the player pauses, and how straight the path is,\n  combined into a 0-100 human-likeness score. A flat 0 (\"this looks like a bot\") is visible on the HUD and\n  in `/bh human profile` instead of being taken on faith.\n- Read-only: it never writes the camera or the player, so it runs alongside anything.\n\n---\n\n### Install\n1. Minecraft 1.21.11 + Fabric Loader\n2. Meteor Client installed\n3. Drop `baritone-anarchy-expansion-2.9.0.jar` into `mods`\n\n_This release was prepared by an AI agent (OpenHands) on behalf of the repository owner._"
+		},
+		{
+			"tag": "v2.7.0",
+			"published": "2026-11-12T18:14:02Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 740556489,
+					"name": "baritone-anarchy-expansion-2.7.0.jar",
+					"url": "https://github.com/logvex-sg/Baritone-AnarchyExpansion/releases/download/v2.7.0/baritone-anarchy-expansion-2.7.0.jar",
+					"size": 787375,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "767528a365568ae468641f3bbf04a552873306ba17976da49effeafa961826fd",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baritone-anarchy-expansion",
+							"version": "2.7.0",
+							"name": "Baritone Anarchy Expansion",
+							"description": "Anarchy base-hunting toolkit. Firework-free elytra autopilot with automatic elytra management, adaptive exploration, stash and new-chunk detection, player tracking, mending and ender chest handling, a safe storage system (inventory sorting, chest sorting, a container network, shulker work and restocking), survival guardrails and fully configurable Discord webhook notifications.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f86199c6596cbcff498da5b9c42c0cf88099b157c265a8fa45c3238904c3fc81.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 287,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Baritone Anarchy Expansion 2.7.0 — the persistence release\n\nTwo things the addon advertised but did not actually do are now real, plus a route command that was\nmissing.\n\n## Importing a database written by a newer build is refused, not half-applied\n\n`DatabaseIO` wrote a `formatVersion` on export but never checked it on import, so a file from a later\nbuild was read with whatever this build happened to understand — and the fields it introduced were\nsilently dropped. The new pure `DatabaseVersion` classifies a whole-database tag:\n\n| Verdict | Meaning | Action |\n| --- | --- | --- |\n| `CURRENT` | same format | applied |\n| `LEGACY` | older format | applied, reported as upgraded |\n| `TOO_NEW` | newer format | **refused**, with a chat message and a log line |\n\nA file with no version header is treated as current, so a hand-made tag still imports. `/bh database\nversion` reports the format and the last verdict, and `/bh database status` prints the format too.\n\n## An unfinished route survives the session that started it\n\nBase Hunter V2's pending queue and in-flight target were memory-only, so quitting the game, switching\nserver or crossing a portal threw the route away and it had to be set up again by hand. The new\n`JourneyPlan` snapshots the target in flight and the remaining queue with the server address and\ndimension they belong to, persisted through `ExplorationStore`:\n\n- saved on disconnect, dimension change and pause (`BaseHunterV2 → remember-route`, on by default);\n- restored with `/bh resume`, or automatically at launch when `auto-start` is on — a saved route is\n  resumed before a fresh sweep is started;\n- only restored when the server *and* dimension still match, so a portal cannot send you toward\n  coordinates that mean nothing in the new world;\n- capped at 256 targets, and cleared when a route finishes or is stopped on purpose, so a stale route\n  is never replayed.\n\n## New commands\n\n- `/bh route remove <index>` — remove one waypoint by its 1-based index (matching `/bh route list`).\n- `/bh route saved` — show the route remembered from an earlier session.\n- `/bh route forget` — discard the remembered route.\n- `/bh database version` — show the database format version and the last import verdict.\n\n## Under the hood\n\n- New pure, headlessly tested classes: `core/logic/DatabaseVersion` and `core/logic/JourneyPlan`.\n- A test-caught bug fixed: the whole-database reader looked for the key `version`, but export writes\n  `formatVersion` (the per-store key `version` is a different thing). The reader now uses the right key.\n- 931 headless assertions passing (up from 900); `coreLogicTest` gains `databaseVersioning` and\n  `journeyPlan`.\n\n## Install\n\n1. Fabric Loader for Minecraft 1.21.11, [Meteor Client](https://meteorclient.com/) for 1.21.11.\n2. Drop `baritone-anarchy-expansion-2.7.0.jar` into `mods`. Baritone stays optional (v1 only).\n3. Full manual: [`docs/GUIDE.md`](docs/GUIDE.md)."
+		},
+		{
+			"tag": "v2.6.1",
+			"published": "2026-11-12T08:26:36Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 738680404,
+					"name": "baritone-anarchy-expansion-2.6.1.jar",
+					"url": "https://github.com/logvex-sg/Baritone-AnarchyExpansion/releases/download/v2.6.1/baritone-anarchy-expansion-2.6.1.jar",
+					"size": 768531,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "f7036d4ac0714d794a960f6d1aacab9e66c07dddc1a2571d46a412350ce95687",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "baritone-anarchy-expansion",
+							"version": "2.6.1",
+							"name": "Baritone Anarchy Expansion",
+							"description": "Anarchy base-hunting toolkit. Firework-free elytra autopilot with automatic elytra management, adaptive exploration, stash and new-chunk detection, player tracking, mending and ender chest handling, a safe storage system (inventory sorting, chest sorting, a container network, shulker work and restocking), survival guardrails and fully configurable Discord webhook notifications.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f86199c6596cbcff498da5b9c42c0cf88099b157c265a8fa45c3238904c3fc81.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 279,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Baritone Anarchy Expansion 2.6.1 — the rename release\n\nThe project is now **Baritone Anarchy Expansion**, matching the repository\n(`logvex-sg/Baritone-AnarchyExpansion`). This is an identity change only — no behaviour moved.\n\n### Changed\n\n- Mod id `basehunting` → `baritone-anarchy-expansion` (jar name, Fabric mod list entry and\n  resource namespace all follow).\n- Jar `basehunting-<version>.jar` → `baritone-anarchy-expansion-<version>.jar`.\n- Meteor module category, HUD group, control screen title, `/bh status` banner and the Discord\n  webhook username now read **Baritone Anarchy Expansion**.\n- Mod Menu repository link points at the renamed repository.\n\n### Your saved data is safe\n\nPersisted stores are keyed by their own names (`base-hunting-stashes`, `base-hunting-6b6t`, …)\ninside Meteor's folder, not by the mod id, so **upgrading in place keeps every stash, player record,\nloadout, ender-chest note and exploration region.** The database export stays `base-hunting-export.nbt`.\n\n### Verified\n\n- `./gradlew clean build` green — 41 + 147 + 30 + 196 + 21 + 21 + 181 + 131 + 86 headless\n  assertions, 0 failures.\n- Headless client load: `Loading 10 mods` → `- baritone-anarchy-expansion 2.6.1`, then\n  `Initializing Baritone Anarchy Expansion` and `(Meteor Client) Loading`, no addon errors.\n\nRequires Minecraft 1.21.11, Fabric, Meteor Client, Java 21. Baritone is optional.\n\n**Jar:** `baritone-anarchy-expansion-2.6.1.jar` — drop it in `mods/` alongside Meteor Client."
+		},
+		{
+			"tag": "v2.6.0",
+			"published": "2026-11-12T08:14:47Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 738645018,
+					"name": "basehunting-2.6.0.jar",
+					"url": "https://github.com/logvex-sg/Baritone-AnarchyExpansion/releases/download/v2.6.0/basehunting-2.6.0.jar",
+					"size": 768323,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "dbac4e1bfe6608fcc7e406bfa9169af06711ad0570d995301d65e6c537663b9e",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "basehunting",
+							"version": "2.6.0",
+							"name": "Base Hunting Client",
+							"description": "Anarchy base-hunting toolkit. Firework-free elytra autopilot with automatic elytra management, adaptive exploration, stash and new-chunk detection, player tracking, mending and ender chest handling, a safe storage system (inventory sorting, chest sorting, a container network, shulker work and restocking), survival guardrails and fully configurable Discord webhook notifications.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f86199c6596cbcff498da5b9c42c0cf88099b157c265a8fa45c3238904c3fc81.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 279,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Base Hunting Client 2.6.0 — the kit-maker release\n\nThe 6b6t kit maker learned to talk. Requests are answered with a private message, the bot's\npublic prefix is guarded by a whitelist, its replies are configurable, kits are sourced from\nstorage, and the delivery holds position after the drop so the requester can actually pick the\nkit up.\n\n### Highlights\n\n- **Configurable replies.** `KitMessages` holds an editable whisper catalogue —\n  `grabbing`, `not_whitelisted`, `unknown_kit`, `cooldown`, `queue_full`, `queued`,\n  `delivered`, `failed` — sent as `/msg <player> …`, with `{player} {kit} {place} {minutes} {max}`\n  placeholders. Edit from the module setting, the menu, `/bh kit message`, or `kit message`.\n- **Closed by default.** `KitRequestPolicy` allows a request only from the `whitelist` unless\n  `allow-anyone` is on; `blacklist` always wins. `KitRequestFlow` fixes the reply order (access,\n  then kit name, then queue state) so a stranger learns nothing about which kits exist.\n- **`>lxkit` prefix.** `>lxkit totem` and `>lxkit kit totem` both work (`bare-requests` on).\n- **Kit search in nearby chests.** `ChestKitSource` reads the inventory of loaded container block\n  entities plus the storage registry's last-observed contents. A never-opened chest cannot be read\n  by the client, so it is reported \"not stocked\", never as a false empty.\n- **5-second confirmation.** After the items hit the ground the bot holds position\n  (`confirm-delay`, default 5 s), then says \"delivered\" and `/kill`. A requester who leaves during\n  the window fails the delivery instead of being reported as served.\n- **Queue.** 3 queued, 10-minute cooldown; reports position, cooldown and capacity.\n\n### Verified\n\n- `./gradlew clean build` green.\n- `./gradlew verifyAddon` green: 41 + 147 + 30 + 196 + 21 + 21 + **181** + 131 + 86 headless\n  assertions (75 new in the 6b6t suite).\n- Headless client load verified: `Initializing Base Hunting Client` followed by\n  `(Meteor Client) Loading`, no addon errors.\n\nRequires Minecraft 1.21.11, Fabric, Meteor Client, Java 21. Baritone is optional.\n\n**Jar:** `basehunting-2.6.0.jar` — drop it in `mods/` alongside Meteor Client."
+		},
+		{
+			"tag": "v2.4.0",
+			"published": "2026-11-11T18:59:15Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 736606902,
+					"name": "basehunting-2.4.0.jar",
+					"url": "https://github.com/logvex-sg/Baritone-AnarchyExpansion/releases/download/v2.4.0/basehunting-2.4.0.jar",
+					"size": 615134,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "5cd44d02e227421be4472a372e50f9de83c313319c220cfb8438b4bcc2612de3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "basehunting",
+							"version": "2.4.0",
+							"name": "Base Hunting Client",
+							"description": "Anarchy base-hunting toolkit. Firework-free elytra autopilot with automatic elytra management, adaptive exploration, stash and new-chunk detection, player tracking, mending and ender chest handling, a safe storage system (inventory sorting, chest sorting, a container network, shulker work and restocking), survival guardrails and fully configurable Discord webhook notifications.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f86199c6596cbcff498da5b9c42c0cf88099b157c265a8fa45c3238904c3fc81.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 219,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Base Hunting Client 2.4.0 — the command-terminal release\n\nThis release adds an **in-game command terminal**: a real command line over the same managers the GUI\nand `/bh` use, with argument parsing, Tab completion, history, configurable shortcuts, per-command\npermissions and a confirmation step for anything that changes state.\n\n## The command terminal\n\nEnable `command-terminal` and open `/bh gui`; the **Terminal** section is at the bottom of the screen.\n\n- **Nineteen command groups** cover the whole addon: `status`, `modules`, `tasks`, `storage`,\n  `navigate`, `baritone`, `kit`, `elytra`, `echest`, `player`, `stash`, `route`, `explore`, `chat`,\n  `config`, `database`, `history`, `macro`, `clear`, `gui`.\n- **Per-subcommand permissions.** A subcommand can be stricter than its parent — `storage list` is\n  read-only, `storage withdraw` is not — and the registry checks the level of the subcommand actually\n  being run.\n- **Confirmation gate.** A destructive command prints what it is about to do and needs a second Enter;\n  any intervening command disarms it.\n- **Tab completion** for command names, subcommands and registered argument candidates, routed into\n  Meteor's own completion popup.\n- **History** with an Up/Down cursor that keeps the half-typed line as a draft, duplicate collapsing\n  and a size cap.\n- **Shortcuts** (`aliases` setting, `s=status`, `w=withdraw`) and **macros** (`macros` setting,\n  `name = step ; step`), replayed through the same registry so permissions still hold.\n\n`/bh terminal run <line>` runs one command from chat and echoes the output; `/bh terminal help` lists\nevery command.\n\n## Safety\n\nThe terminal's input comes from a text box you type into — never from a chat message — so it can offer\nthe state-changing commands the chat prefix system refuses by default. It has **no shell, no\nfilesystem access and no arbitrary code execution**: every command is an addon operation, and every\nstep of a macro goes through the same permission and confirmation checks as a typed command.\n\n## Architecture\n\n| Layer | File | Role |\n| --- | --- | --- |\n| Parser / registry / history / macros | `core/terminal/` | pure, no Minecraft types, headlessly tested |\n| Runtime + bindings | `modules/CommandTerminal.java` | builds the registry, binds handlers to the managers |\n| GUI | `gui/TerminalRenderer.java`, `gui/BaseHuntingScreen.java` | text box + completion + section |\n| Bridge | `commands/BaseHuntCommand.java` | `/bh terminal run <line>` and `/bh terminal help` |\n\nEvery handler calls the same public manager method the GUI button and the `/bh` command call, so the\nthree entry points cannot drift apart.\n\n## Verification\n\n```\n./gradlew clean build     # BUILD SUCCESSFUL\n./gradlew verifyAddon     # 8 suites, all green\n```\n\n| Suite | Assertions |\n| --- | --- |\n| `plannerTest` | 41 |\n| `coreLogicTest` | 147 |\n| `baritoneContractTest` | 30 |\n| `automationLogicTest` | 196 |\n| `hardeningTest` | 21 |\n| `storageLogicTest` | 21 |\n| `apiContractTest` | 131 |\n| `terminalLogicTest` (new) | 86 |\n\n`apiContractTest` now also pins the Meteor GUI members the terminal drives (`GuiTheme.textBox`/`view`,\n`WTextBox.action`, `WTextBox.Renderer.getCompletions`, `WView.maxHeight`), so a rename fails the build\ninstead of the client. Loaded in a real dev client headless (`Initializing Base Hunting Client` →\n`(Meteor Client) Loading`, version 2.4.0, no addon errors).\n\n## Asset\n\n`basehunting-2.4.0.jar` — sha256 `5cd44d02e227421be4472a372e50f9de83c313319c220cfb8438b4bcc2612de3`"
+		},
+		{
+			"tag": "v2.3.0",
+			"published": "2026-11-11T17:42:06Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 736367134,
+					"name": "basehunting-2.3.0.jar",
+					"url": "https://github.com/logvex-sg/Baritone-AnarchyExpansion/releases/download/v2.3.0/basehunting-2.3.0.jar",
+					"size": 566321,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "dceae32676bb343b245ef96cf24e87de625febb9fbc65c7bf21d8bab7b5eb713",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "basehunting",
+							"version": "2.3.0",
+							"name": "Base Hunting Client",
+							"description": "Anarchy base-hunting toolkit. Firework-free elytra autopilot with automatic elytra management, adaptive exploration, stash and new-chunk detection, player tracking, mending and ender chest handling, a safe storage system (inventory sorting, chest sorting, a container network, shulker work and restocking), survival guardrails and fully configurable Discord webhook notifications.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f86199c6596cbcff498da5b9c42c0cf88099b157c265a8fa45c3238904c3fc81.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 202,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Base Hunting Client 2.3.0 — stability hardening\n\nA bug-fix release. Every item below is a real defect found by reading the code, and each has a\nregression test that fails if it comes back. No features were removed.\n\n## Flight\n\n- **The v2 autopilot no longer retries a doomed takeoff forever.** `BaseHunterV2` re-asserts \"I want to\n  fly\" every tick, and that call used to reset the launch retry budget, so a takeoff that could never\n  succeed was retried indefinitely. The budget now resets only on a genuine off->on transition, a live\n  glide replenishes it, and when it is spent the controller reports the failure once and stops. The\n  policy lives in a new, pure `DeploymentGovernor` with a headless regression test.\n- `BaseHunterV2` re-arms its \"not flying\" warning after a resumed flight, so every interruption is\n  reported, not just the first.\n\n## Memory\n\n- `NewChunks` chunk sets and the `foundAt` timestamp map are now backed by a new `BoundedLongSet`\n  (200k cap, oldest-first eviction). A multi-hour flight can no longer grow memory without limit.\n- `StashFinder.lastScanned` is size-capped the same way.\n\n## Data\n\n- **`/bh database export` now covers all seven stores.** It previously wrote only four, silently\n  dropping the storage registry, storage workflows and kits — restoring such a backup on a fresh\n  machine wiped them. A headless test pins the section list so a new store cannot fall out unnoticed.\n\n## Alerts\n\n- `Embed.fingerprint()` now includes the footer and thumbnail, so distinct alerts are no longer\n  collapsed by the 3-second dedupe window.\n- A webhook dropped on a full queue no longer records its dedupe key, so its retry is not suppressed as\n  a duplicate.\n\n## Crashes and correctness\n\n- `ElytraManager.bestSpareRemaining()` guards `mc.player` (was an NPE from `/bh elytra status` before a\n  world is joined).\n- Task ids come from a single counter, so `cancel(id)` can no longer hit the wrong task.\n\n## Verification\n\n- `./gradlew clean build` is green; the jar is `build/libs/basehunting-2.3.0.jar`.\n- `verifyAddon` runs seven headless suites, 0 failures: plannerTest 36, coreLogicTest 196,\n  storageLogicTest 131, automationLogicTest 147, hardeningTest 21 (new), apiContractTest 21,\n  baritoneContractTest 30.\n- The addon loads in a real dev client under Xvfb with no addon exceptions.\n\n## Install\n\nDrop `basehunting-2.3.0.jar` into `.minecraft/mods` alongside Meteor Client and Fabric Loader (Baritone\noptional). Requires Minecraft 1.21.11, Fabric, JDK 21.\n\n**SHA-256:** `dceae32676bb343b245ef96cf24e87de625febb9fbc65c7bf21d8bab7b5eb713`"
+		},
+		{
+			"tag": "v2.2.0",
+			"published": "2026-11-11T16:36:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 736157310,
+					"name": "basehunting-2.2.0.jar",
+					"url": "https://github.com/logvex-sg/Baritone-AnarchyExpansion/releases/download/v2.2.0/basehunting-2.2.0.jar",
+					"size": 561096,
+					"downloads": 4,
+					"inspection": 2,
+					"sha256": "cdff39d6756c41d3ac0920d016cdbd5a55385106bad78756ced58576fa21fbeb",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "basehunting",
+							"version": "2.2.0",
+							"name": "Base Hunting Client",
+							"description": "Anarchy base-hunting toolkit. Firework-free elytra autopilot with automatic elytra management, adaptive exploration, stash and new-chunk detection, player tracking, mending and ender chest handling, a safe storage system (inventory sorting, chest sorting, a container network, shulker work and restocking), survival guardrails and fully configurable Discord webhook notifications.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f86199c6596cbcff498da5b9c42c0cf88099b157c265a8fa45c3238904c3fc81.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 199,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Base Hunting Client 2.2.0 — the Baritone hardening release\n\nA stability-focused release for the Baritone-powered autopilot (Base Hunter v1). The headline fix is\nthat a flight that could never start is no longer retried 20 times a second, forever. Baritone\ncompatibility was rechecked against the real jar and is now locked down by a build-time contract test.\n\n## Fixed\n\n- **Bounded flight deployment (v1).** `BaseHunter` used to call Baritone's elytra path every client tick\n  while not gliding, so a doomed takeoff (no firework, blocked launch, spent elytra) was retried\n  indefinitely at 20 Hz. It now classifies the player's physical state (`FlightState`) and drives\n  launches through a `RetryPolicy`: exponential backoff 1s → 20s, capped at `deploy-retries` attempts\n  (default 6), then a single clear report and a clean stop. Swimming or climbing waits without spending\n  an attempt; a new leg resets the budget.\n- **Baritone health, not just presence.** Baritone bundles its elytra pathfinder as a nested jar; if that\n  fails to load, `BaritoneAPI`'s static initialiser throws and every call into it throws too. The helper\n  now probes without initialising the class and caches whether the primary baritone actually answers, so\n  a half-broken Baritone degrades to \"not usable\" instead of crashing the addon.\n- **One owner of elytra replacement.** v1 set Baritone's `elytraAutoSwap = true`, racing `ElytraManager`\n  (the addon's single owner of the chest slot). It is now `false`.\n\n## Added\n\n- **Elytra travel in `NavigationManager`** — long-range navigation can fly instead of only walking.\n- **`/bh baritone status | terms | stop`** — see availability, version and flight state; accept Baritone's\n  elytra terms; cancel pathing.\n- **Baritone HUD line** (optional `show-baritone`).\n- **`baritoneContractTest`** — a headless test that reads the real Baritone jar and asserts every member\n  the addon drives still exists (30 assertions). Wired into `verifyAddon`, so a Baritone rename fails the\n  build instead of failing mid-flight.\n\n## Verification\n\n`./gradlew clean build` is green: 36 + 147 + 30 + 21 + 131 + 184 = **549 headless assertions**. The addon\nloads in a real dev client with Baritone present (10 mods, `Path Manager: Baritone`) and no exceptions.\n\n## Install\n\n1. Fabric Loader for Minecraft 1.21.11 + Meteor Client for 1.21.11.\n2. Optionally add [Baritone for Meteor](https://meteorclient.com/) — only Base Hunter v1 needs it.\n3. Drop `basehunting-2.2.0.jar` into `mods`.\n\nFull guide: [docs/GUIDE.md](https://github.com/logvex-sg/basehuntingclient-baritone/blob/main/docs/GUIDE.md).\n\n_This release was prepared by an AI agent (OpenHands) on behalf of logvex-sg._"
+		},
+		{
+			"tag": "v2.1.0",
+			"published": "2026-11-11T16:05:51Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 736071818,
+					"name": "basehunting-2.1.0.jar",
+					"url": "https://github.com/logvex-sg/basehuntingclient-baritone/releases/download/v2.1.0/basehunting-2.1.0.jar",
+					"size": 556907,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "3f360bb09924c06af9796920ec190a5b4f26aa4adc8c4f8c9f85a2e336a1b84d",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "basehunting",
+							"version": "2.1.0",
+							"name": "Base Hunting Client",
+							"description": "Anarchy base-hunting toolkit. Firework-free elytra autopilot with automatic elytra management, adaptive exploration, stash and new-chunk detection, player tracking, mending and ender chest handling, a safe storage system (inventory sorting, chest sorting, a container network, shulker work and restocking), survival guardrails and fully configurable Discord webhook notifications.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f86199c6596cbcff498da5b9c42c0cf88099b157c265a8fa45c3238904c3fc81.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 199,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# Base Hunting Client 2.1.0 — the automation release\n\nA coordinated automation layer on top of the existing addon. Long-running work is now queued and\nserialised by one engine instead of being run inline by disconnected modules, and a reactive brain\nlets modules influence each other without calling each other.\n\n**Artifact:** `basehunting-2.1.0.jar` — Minecraft 1.21.11, Fabric, Meteor Client, Java 21.\nBaritone stays optional (a `recommends`).\n\n## Highlights\n\n- **One priority task engine.** `AutomationEngine` + `TaskQueue` own every long-running action. Tasks\n  run one at a time, are deduplicated by name and category, are re-queued when a failure is retryable,\n  and always end in a definite state (completed / partial / failed / cancelled) instead of being\n  forgotten. Runners are built lazily from per-category factories.\n- **Reactive rules.** `automation-brain` evaluates edge-triggered, cooldown-limited rules over player\n  facts (health, hunger, elytra durability, free slots, totems, nearby players, queue depth). Built-in\n  reactions replace a failing elytra, pause exploration when the inventory fills or health drops, and\n  note player sightings. Rules only call a module's public method or submit a task.\n- **Chat commands.** `chat-commands` runs addon commands typed in chat behind a prefix (`!`, `.bh`).\n  Only a line the local player typed is ever executed; a message from another player is data and is\n  never parsed. Destructive commands are refused unless explicitly allowed.\n- **Server kits.** `kit-bot` claims server kits and tracks their cooldowns per server, adopting a\n  server-reported cooldown so the client never spams a claim the server will reject.\n- **Exact-quantity storage.** `auto-storage` runs withdrawals, deposits and restocks as queued tasks.\n  A partial move is a real, verified operation: pick up the source stack, place exactly N, put the\n  remainder back — modelled click-for-click in the simulator, so it is checked like any other move.\n- **Single owner of travel.** `NavigationManager` is the one place that walks the player to a position.\n\n## New modules\n\n`automation-brain`, `chat-commands`, `kit-bot`, `auto-storage`.\n\n## New commands\n\n`/bh automation status|start|stop|reactions`, `/bh tasks status`, `/bh withdraw <item> [amount]`,\n`/bh deposit <item> [amount]`, `/bh kit status|list|claim <name>|all`, `/bh chat run <line>`.\n\n## GUI, HUD and Discord\n\n- The management screen (`/bh gui`) gains an **Automation** section: engine, brain, auto-storage and\n  kit status, active and queued task counts, Brain / Storage / Kits toggles, **Claim Kits**,\n  **Cancel Tasks** and a recent-reactions view.\n- The HUD gains a `show-automation` line (active task, queue depth, kit status).\n- `webhook-notifier` gains `notify-tasks` and `notify-chat-commands` categories, with titles, colours\n  and per-type cooldowns for the task, kit and chat event types. The asynchronous queue, rate limiting\n  and deduplication are unchanged.\n\n## Stability\n\n- A failed-but-retryable task is genuinely re-queued.\n- A rule whose condition stays true through its cooldown now fires when the cooldown expires.\n- Protected-item matching is namespace-insensitive (`minecraft:elytra` == `elytra`).\n- Every task, chat command and kit action reports a real outcome; nothing pretends to succeed.\n\n## Tests\n\n510 headless assertions, all green (`./gradlew clean build`):\n\n| Suite | Assertions | Covers |\n| --- | --- | --- |\n| `plannerTest` | 21 | flight-planner maths |\n| `coreLogicTest` | 175 | elytra, deployment, scoring, scheduler, bus, recovery |\n| `storageLogicTest` | 131 | classification, sorting, transfers, protection, workflows |\n| `automationLogicTest` | 147 | tasks, queue, retry/cancel, quantity, chat, kits, rules |\n| `apiContractTest` | 36 | Meteor / Minecraft API contract |\n\nThe addon loads in a real dev client with no exceptions.\n\n## Docs\n\n`README.md`, `docs/GUIDE.md` (the full manual), `AGENTS.md` and `CHANGELOG.md` are updated for the new\n\n..."
+		},
+		{
+			"tag": "v2.0.0",
+			"published": "2026-11-11T14:35:56Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 735827030,
+					"name": "basehunting-2.0.0.jar",
+					"url": "https://github.com/logvex-sg/basehuntingclient-baritone/releases/download/v2.0.0/basehunting-2.0.0.jar",
+					"size": 433640,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "7f081076fb93062f6c47248ac19cab757959bccc595bddd73d3c9000b386437b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "basehunting",
+							"version": "2.0.0",
+							"name": "Base Hunting Client",
+							"description": "Anarchy base-hunting toolkit. Firework-free elytra autopilot with automatic elytra management, adaptive exploration, stash and new-chunk detection, player tracking, mending and ender chest handling, a safe storage system (inventory sorting, chest sorting, a container network, shulker work and restocking), survival guardrails and fully configurable Discord webhook notifications.",
+							"minecraft": "1.21.11",
+							"environment": "client",
+							"depends": [
+								"java",
+								"minecraft",
+								"fabricloader",
+								"meteor-client"
+							],
+							"provides": [],
+							"suggests": [
+								"baritone-meteor"
+							]
+						}
+					],
+					"icon": "f86199c6596cbcff498da5b9c42c0cf88099b157c265a8fa45c3238904c3fc81.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 148,
+						"jars": [],
+						"capabilities": {},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## Base Hunting Client 2.0.0 — the storage release\n\nA complete storage and inventory subsystem on top of the 1.1.0 exploration and equipment release.\nEvery storage action is planned by pure logic, queued to a single clicker, and only reported as done\nonce the live container actually matches the planned result.\n\n**Download:** `basehunting-2.0.0.jar` (below). Requires Minecraft 1.21.11, Fabric Loader, and Meteor\nClient. Baritone is optional (only Base Hunter v1 needs it).\n\n### New storage modules\n\n| Module | What it does |\n| --- | --- |\n| `inventory-manager` | Sorts your inventory into a stable category order — on activate, after closing a container, or on an interval. |\n| `chest-sorter` | Sorts any container, deposits/withdraws only the categories you select, and registers opened containers. |\n| `storage-network` | A per-server, per-dimension container directory with last-known contents, and travel to a container. |\n| `shulker-manager` | Fills, empties, sorts and searches shulker boxes. |\n| `restock-manager` | Tops up travel supplies from registered storage, walking there with Baritone when available. |\n| `storage-monitor` | Runs named workflows and is the storage status view. |\n\n### Safety first\n\n- **One thing clicks slots: `ContainerInteractionManager`.** Every feature plans moves as pure data and\n  submits them there. An operation holds the `INVENTORY` lease for its whole life and only one runs at a\n  time, so two features can never click at once.\n- **Every operation is verified, not assumed.** The plan is simulated against the live container before\n  the first click, and success is reported only once the container actually matches. A wrong settled\n  state, a missing slot, or a timeout is a failure with a reason.\n- **Deposits only move categories you selected.** A protection list and the reserve settings are a\n  second gate; the selected slot, hotbar reserve and protected items never move, and stacks are never\n  split.\n- **A shulker whose contents were never seen is reported unknown, never empty.**\n- **No packets are forged.** The player looks at a block, `interactBlock` runs, items move with normal\n  slot clicks. A server refusal is reported, not worked around.\n\n### Also in this release\n\n- Storage & Inventory section in the management screen (`/bh gui`).\n- Storage HUD lines (`show-storage`, `show-shulkers`).\n- Commands: `/bh storage …`, `/bh shulker …`, `/bh workflow …`, `/bh restock …`.\n- Storage notification categories with per-event cooldowns in the Discord notifier.\n- A failed operation publishes `CONTAINER_OP_FAILED`, so it shows in chat, the GUI and Discord.\n\n### Verification\n\n`./gradlew clean build` — BUILD SUCCESSFUL. All suites run headlessly via `./gradlew verifyAddon`:\n\n| Suite | Assertions |\n| --- | --- |\n| `plannerTest` | 21 |\n| `coreLogicTest` | 175 |\n| `storageLogicTest` | 131 (new) |\n| `apiContractTest` | 36 |\n\nThe addon also loads in a real dev client: `Initializing Base Hunting Client` → `(Meteor Client) Loading`,\nwith no addon exceptions.\n\n### Docs\n\n- [README](https://github.com/logvex-sg/basehuntingclient-baritone/blob/main/README.md)\n- [Full guide](https://github.com/logvex-sg/basehuntingclient-baritone/blob/main/docs/GUIDE.md)\n- [Changelog](https://github.com/logvex-sg/basehuntingclient-baritone/blob/main/CHANGELOG.md)\n\n### Known limitation\n\nThe storage system is verified by headless logic tests and a real client load. It has not been exercised\nagainst a live multiplayer server with real containers. The architecture reports a server refusal as a\nfailure with a reason rather than a silent false success.\n\n---\n\n_This release was prepared by an AI agent (OpenHands) on behalf of logvex-sg._"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "An autonomous base-hunting and equipment-management addon for Meteor Client, built for anarchy servers.",
+	"funding": [],
+	"pictures": [],
+	"contributors": {
+		"commits": 27,
+		"more": 0,
+		"people": [
+			{
+				"login": "openhands-agent",
+				"commits": 16,
+				"name": "OpenHands",
+				"funding": []
+			},
+			{
+				"login": "logvex-sg",
+				"commits": 11,
+				"name": "logvex",
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

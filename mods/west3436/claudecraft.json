@@ -1,0 +1,655 @@
+{
+	"repo": "west3436/claudecraft",
+	"host": "github",
+	"description": "Minecraft Forge mod that brings Claude AI into CC: Tweaked computers and turtles",
+	"stars": 1,
+	"archived": false,
+	"created": "2026-03-20T14:11:02Z",
+	"pushed": "2026-11-28T01:04:46Z",
+	"releases": [
+		{
+			"tag": "v1.3.0-1.21.1",
+			"published": "2026-11-28T01:04:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 802679698,
+					"name": "claudecraft-1.3.0-mc1.21.1.jar",
+					"url": "https://github.com/west3436/claudecraft/releases/download/v1.3.0-1.21.1/claudecraft-1.3.0-mc1.21.1.jar",
+					"size": 231094,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "8b2321905c0d6385fee37203f7c9c5183f639739d93328d764fb68832baa810c",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "claudecraft",
+							"version": "1.3.0",
+							"name": "ClaudeCraft",
+							"description": "Puts Claude Code inside your ComputerCraft computers.\nAdds a built-in 'claude' API to all CC: Tweaked computers with streaming support. In API key mode the key stays on the server (an environment variable or a file outside the world and config folders) and is never sent to clients.",
+							"minecraft": "[1.21.1,1.21.2)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"computercraft"
+							],
+							"dependsVersions": {
+								"neoforge": "[21.1,21.2)",
+								"minecraft": "[1.21.1,1.21.2)",
+								"computercraft": "[1.117.0,)"
+							}
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 37,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/claudecraft/api/ApiKeyBackend.class": [
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.send in lambda$sendMessage$1"
+								],
+								"com/claudecraft/api/ChannelBackend.class": [
+									"java/net/http/HttpClient.newBuilder in <init>",
+									"java/net/http/HttpClient.send in isConfigured, lambda$connectGlobalSSE$3, lambda$sendToolResult$2, lambda$sendMessage$1"
+								],
+								"com/claudecraft/channel/ChannelProcessManager.class": [
+									"java/net/ServerSocket.<init> in isPortFree",
+									"java/net/ServerSocket.setReuseAddress in isPortFree",
+									"java/net/ServerSocket.bind in isPortFree",
+									"java/net/ServerSocket.close in isPortFree",
+									"java/net/Socket.<init> in isPortReachable",
+									"java/net/Socket.connect in isPortReachable",
+									"java/net/Socket.close in isPortReachable"
+								]
+							},
+							"exec": {
+								"com/claudecraft/channel/ChannelProcessManager.class": [
+									"java/lang/ProcessBuilder.<init> in launch, launchWindows",
+									"java/lang/ProcessBuilder.directory in launch, launchWindows",
+									"java/lang/ProcessBuilder.redirectErrorStream in launch, launchWindows",
+									"java/lang/ProcessBuilder.redirectOutput in launch",
+									"java/lang/ProcessBuilder.environment in launch, launchWindows",
+									"java/lang/ProcessBuilder.start in launch, launchWindows"
+								],
+								"com/claudecraft/channel/ChannelResourceManager.class": [
+									"java/lang/ProcessBuilder.<init> in isBunInstalled, runBunInstall",
+									"java/lang/ProcessBuilder.redirectErrorStream in isBunInstalled, runBunInstall",
+									"java/lang/ProcessBuilder.environment in isBunInstalled, runBunInstall",
+									"java/lang/ProcessBuilder.start in isBunInstalled, runBunInstall",
+									"java/lang/ProcessBuilder.directory in runBunInstall"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {
+							"api.anthropic.com": [
+								"com/claudecraft/api/ApiKeyBackend.class"
+							],
+							"127.0.0.1": [
+								"com/claudecraft/api/ChannelBackend.class"
+							],
+							"bun.sh": [
+								"com/claudecraft/channel/ChannelResourceManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "ClaudeCraft 1.3.0 for Minecraft 1.21.1 (**NeoForge**)\n\n> **1.21.1 is now the only supported version.** The 1.16.5, 1.18.2, 1.19.2 and 1.20.1 Forge builds stopped at 1.2.1 and won't be updated, not even for security fixes. They still keep the API key in a server config that is sent to every player who joins. If you run one of them, move to 1.21.1.\n\n### Requirements\n- Minecraft 1.21.1\n- NeoForge 21.1.0+ (built against 21.1.234)\n- [CC: Tweaked](https://modrinth.com/mod/cc-tweaked) 1.117.1+\n- An Anthropic API key, **or** Claude Code + [Bun](https://bun.sh) for Channel mode\n\n### Install\nDrop `claudecraft-1.3.0-mc1.21.1.jar` into `mods/` on a NeoForge 1.21.1 instance with CC: Tweaked, replacing any older ClaudeCraft jar.\n\n### Upgrading from 1.2.x: read this first\n- **The API key has moved out of the synced config.** On first start, ClaudeCraft moves `apiKey` from `claudecraft-server.toml` to the server-only file `<game dir>/claudecraft/api-key` and scrubs NeoForge's `.bak` copies. It logs a warning when it does. The env var `CLAUDECRAFT_API_KEY` also works. **Rotate your key**: older versions sent that config to every player who joined.\n- **Channel mode is now off by default.** An operator must run `/claudecraft channel enable`, then `/claudecraft channel allow <computerId>` for each computer. The `allowAllInSingleplayer` config option covers private singleplayer worlds.\n- **Computer-to-computer messages are allow-listed.** A computer only accepts messages from computers its player has allowed by typing `/allow <id>` in `claude`. Chains are limited in length and each sender is rate limited.\n- **Anthropic server-side tools are blocked unless enabled.** Web search, web fetch and code execution need `allowServerTools = true`, and web access also needs `enableWebAccess`. The server enforces this for every Lua program, not just `claude`.\n\n### New\n- **Background jobs**: quarry, tree farm, crop farm and custom Lua jobs that keep running while you chat. Use `/jobs` to manage them. See [docs/background-jobs.md](https://github.com/west3436/claudecraft/blob/1.21.1/docs/background-jobs.md).\n- **Memory and base atlas**:\n  - per-computer notes (`remember` / `forget`, `/memory`);\n  - a world-saved atlas of waypoints shared by all computers;\n  - `atlas_search` (\"where are my diamonds?\") over past inventory scans.\n\n  See [docs/memory-and-atlas.md](https://github.com/west3436/claudecraft/blob/1.21.1/docs/memory-and-atlas.md).\n- **Item logistics tools** for moving and finding items across inventories, plus a bounded `get_recipes`.\n- **`build_structure` shapes**: box, hollow box, wall, floor, cylinder, sphere/dome and gable roof. `dry_run` reports materials and fuel against the turtle's inventory, and builds can restock from a chest, preview on a monitor and return home safely.\n- **Confirm mode and guardrails**: `/confirm` asks before risky tools run, and destructive tools have limits.\n- **Prompt caching** in API key mode (`enablePromptCaching`, on by default), with cost per model in `/stats`.\n- **One tool registry**: Channel mode now uses the same Lua tool definitions as API key mode.\n\n### Security\n- **Channel server:**\n  - each session has its own auth token;\n  - no CORS, and DNS-rebinding guards;\n  - messages from other computers are treated as untrusted data.\n- **Claude Code sessions** are locked down to the in-game tools, have a session limit, and are stopped reliably.\n- **New operator commands**: `/claudecraft channel list | sessions | kill <id> | deny <id>`, plus `/claudecraft clearkey`.\n\n### Fixes\n- **History:** a trimmed or interrupted conversation no longer breaks every later request. History saves are atomic.\n- **API key mode:**\n  - tools whose input was cut off by `max_tokens` aren't run;\n  - a stalled stream now fails after `requestTimeoutSeconds` instead of hanging;\n  - a `null` stop reason no longer hangs the request.\n- **Channel mode:**\n  - the incoming-message listener reconnects automatically;\n\n..."
+		},
+		{
+			"tag": "v1.2.2-1.21.1",
+			"published": "2026-06-24T15:38:06Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 456765725,
+					"name": "claudecraft-1.2.2-mc1.21.1.jar",
+					"url": "https://github.com/west3436/claudecraft/releases/download/v1.2.2-1.21.1/claudecraft-1.2.2-mc1.21.1.jar",
+					"size": 75075,
+					"downloads": 6,
+					"inspection": 2,
+					"sha256": "6fe6041a8fce08bb0eb12eb799bd825c5a186229e92cba06752fa9fa4e2fdb93",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "claudecraft",
+							"version": "1.2.2",
+							"name": "ClaudeCraft",
+							"description": "Puts Claude Code inside your ComputerCraft computers.\nAdds a built-in 'claude' API to all CC: Tweaked computers with streaming support and secure server-side API key storage.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft",
+								"computercraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 17,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/claudecraft/api/ApiKeyBackend.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/claudecraft/api/ChannelBackend.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/claudecraft/channel/ChannelProcessManager.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								]
+							},
+							"exec": {
+								"com/claudecraft/channel/ChannelProcessManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/claudecraft/channel/ChannelResourceManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start",
+									"java/lang/ProcessBuilder.directory"
+								]
+							}
+						},
+						"hosts": {
+							"api.anthropic.com": [
+								"com/claudecraft/api/ApiKeyBackend.class"
+							],
+							"127.0.0.1": [
+								"com/claudecraft/api/ChannelBackend.class"
+							],
+							"bun.sh": [
+								"com/claudecraft/channel/ChannelResourceManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "ClaudeCraft 1.2.2 for Minecraft 1.21.1 — **NeoForge**\n\nThis release ports the 1.21.1 build from Forge to **NeoForge**. The previous 1.21.1 jars were built for Forge, but ClaudeCraft's required dependency — CC: Tweaked — ships as a **NeoForge** mod on 1.21.1, so the old Forge jars could never load. This build runs on NeoForge.\n\n### Requirements\n- Minecraft 1.21.1\n- NeoForge 21.1.0+ (built and tested against 21.1.234)\n- [CC: Tweaked](https://modrinth.com/mod/cc-tweaked) 1.117.1+\n\n### Install\nDrop `claudecraft-1.2.2-mc1.21.1.jar` into your `mods/` folder, alongside CC: Tweaked, on a **NeoForge** 1.21.1 instance.\n\n### Changes\n- Build migrated from ForgeGradle to ModDevGradle (NeoForge 21.1.x).\n- `META-INF/mods.toml` → `META-INF/neoforge.mods.toml` (now depends on `neoforge`).\n- Mod sources ported from `net.minecraftforge.*` to `net.neoforged.*` (FML constructor, `NeoForge.EVENT_BUS`, `@EventBusSubscriber`, `ModConfigSpec`, `BuiltInRegistries`).\n\nVerified with a clean Gradle build and a NeoForge dedicated-server boot with the mod loaded against CC: Tweaked.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)"
+		},
+		{
+			"tag": "v1.2.1-1.16.5",
+			"published": "2026-03-25T00:26:31Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 380834228,
+					"name": "claudecraft-1.2.1-mc1.16.5.jar",
+					"url": "https://github.com/west3436/claudecraft/releases/download/v1.2.1-1.16.5/claudecraft-1.2.1-mc1.16.5.jar",
+					"size": 71848,
+					"downloads": 10,
+					"inspection": 2,
+					"sha256": "3990a9e63bad9434365210d1eec40e57892e16707668531de85feb004339c4d0",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "claudecraft",
+							"version": "1.2.1",
+							"name": "ClaudeCraft",
+							"description": "Puts Claude Code inside your ComputerCraft computers.\nAdds a built-in 'claude' API to all CC: Tweaked computers with streaming support and secure server-side API key storage.",
+							"minecraft": "[1.16.5,1.17)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"computercraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 17,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/claudecraft/api/ApiKeyBackend.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/claudecraft/api/ChannelBackend.class": [
+									"java/net/URL.openConnection"
+								],
+								"com/claudecraft/channel/ChannelProcessManager.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								]
+							},
+							"exec": {
+								"com/claudecraft/channel/ChannelProcessManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/claudecraft/channel/ChannelResourceManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start",
+									"java/lang/ProcessBuilder.directory"
+								]
+							}
+						},
+						"hosts": {
+							"api.anthropic.com": [
+								"com/claudecraft/api/ApiKeyBackend.class"
+							],
+							"127.0.0.1": [
+								"com/claudecraft/api/ChannelBackend.class"
+							],
+							"bun.sh": [
+								"com/claudecraft/channel/ChannelResourceManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's Changed\n* Fix channel SSE idle timeout (1.16.5)\n\n\n**Full Changelog**: https://github.com/west3436/claudecraft/compare/v1.2.0-1.16.5...v1.2.1-1.16.5"
+		},
+		{
+			"tag": "v1.2.1-1.19.2",
+			"published": "2026-03-25T00:26:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 380834311,
+					"name": "claudecraft-1.2.1-mc1.19.2.jar",
+					"url": "https://github.com/west3436/claudecraft/releases/download/v1.2.1-1.19.2/claudecraft-1.2.1-mc1.19.2.jar",
+					"size": 74984,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "b72219c7905b776f61fe43a70ce4f1866bac2d26edc1b25959945b1c5c4d3116",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "claudecraft",
+							"version": "1.2.1",
+							"name": "ClaudeCraft",
+							"description": "Puts Claude Code inside your ComputerCraft computers.\nAdds a built-in 'claude' API to all CC: Tweaked computers with streaming support and secure server-side API key storage.",
+							"minecraft": "[1.19.2,1.20)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"computercraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 17,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/claudecraft/api/ApiKeyBackend.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/claudecraft/api/ChannelBackend.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/claudecraft/channel/ChannelProcessManager.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								]
+							},
+							"exec": {
+								"com/claudecraft/channel/ChannelProcessManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/claudecraft/channel/ChannelResourceManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start",
+									"java/lang/ProcessBuilder.directory"
+								]
+							}
+						},
+						"hosts": {
+							"api.anthropic.com": [
+								"com/claudecraft/api/ApiKeyBackend.class"
+							],
+							"127.0.0.1": [
+								"com/claudecraft/api/ChannelBackend.class"
+							],
+							"bun.sh": [
+								"com/claudecraft/channel/ChannelResourceManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's Changed\n* Fix channel SSE idle timeout (1.19.2)\n\n\n**Full Changelog**: https://github.com/west3436/claudecraft/compare/v1.2.0-1.19.2...v1.2.1-1.19.2"
+		},
+		{
+			"tag": "v1.2.1-1.18.2",
+			"published": "2026-03-25T00:26:30Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 380834286,
+					"name": "claudecraft-1.2.1-mc1.18.2.jar",
+					"url": "https://github.com/west3436/claudecraft/releases/download/v1.2.1-1.18.2/claudecraft-1.2.1-mc1.18.2.jar",
+					"size": 75023,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "44fc02139530018940bf1343a3763e85d407c437ed1ee9f0e4cde6c7c3f3d2ba",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "claudecraft",
+							"version": "1.2.1",
+							"name": "ClaudeCraft",
+							"description": "Puts Claude Code inside your ComputerCraft computers.\nAdds a built-in 'claude' API to all CC: Tweaked computers with streaming support and secure server-side API key storage.",
+							"minecraft": "[1.18.2,1.19)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"computercraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 17,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/claudecraft/api/ApiKeyBackend.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/claudecraft/api/ChannelBackend.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/claudecraft/channel/ChannelProcessManager.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								]
+							},
+							"exec": {
+								"com/claudecraft/channel/ChannelProcessManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/claudecraft/channel/ChannelResourceManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start",
+									"java/lang/ProcessBuilder.directory"
+								]
+							}
+						},
+						"hosts": {
+							"api.anthropic.com": [
+								"com/claudecraft/api/ApiKeyBackend.class"
+							],
+							"127.0.0.1": [
+								"com/claudecraft/api/ChannelBackend.class"
+							],
+							"bun.sh": [
+								"com/claudecraft/channel/ChannelResourceManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's Changed\n* Fix channel SSE idle timeout (1.18.2)\n\n\n**Full Changelog**: https://github.com/west3436/claudecraft/compare/v1.2.0-1.18.2...v1.2.1-1.18.2"
+		},
+		{
+			"tag": "v1.2.1-1.20.1",
+			"published": "2026-03-25T00:26:29Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 380834331,
+					"name": "claudecraft-1.2.1-mc1.20.1.jar",
+					"url": "https://github.com/west3436/claudecraft/releases/download/v1.2.1-1.20.1/claudecraft-1.2.1-mc1.20.1.jar",
+					"size": 75545,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "4982d4b1bea81427c83b91e6df208ef36aa3d93bc2699872a908cefb0d45944a",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "claudecraft",
+							"version": "1.2.1",
+							"name": "ClaudeCraft",
+							"description": "Puts Claude Code inside your ComputerCraft computers.\nAdds a built-in 'claude' API to all CC: Tweaked computers with streaming support and secure server-side API key storage.",
+							"minecraft": "[1.20.1,1.21)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"computercraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 17,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/claudecraft/api/ApiKeyBackend.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/claudecraft/api/ChannelBackend.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/claudecraft/channel/ChannelProcessManager.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								]
+							},
+							"exec": {
+								"com/claudecraft/channel/ChannelProcessManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/claudecraft/channel/ChannelResourceManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start",
+									"java/lang/ProcessBuilder.directory"
+								]
+							}
+						},
+						"hosts": {
+							"api.anthropic.com": [
+								"com/claudecraft/api/ApiKeyBackend.class"
+							],
+							"127.0.0.1": [
+								"com/claudecraft/api/ChannelBackend.class"
+							],
+							"bun.sh": [
+								"com/claudecraft/channel/ChannelResourceManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's Changed\n* Fix channel SSE idle timeout (1.20.1)\n\n\n**Full Changelog**: https://github.com/west3436/claudecraft/compare/v1.2.0-1.20.1...v1.2.1-1.20.1"
+		},
+		{
+			"tag": "v1.2.1-1.21.1",
+			"published": "2026-03-25T00:26:28Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 380834355,
+					"name": "claudecraft-1.2.1-mc1.21.1.jar",
+					"url": "https://github.com/west3436/claudecraft/releases/download/v1.2.1-1.21.1/claudecraft-1.2.1-mc1.21.1.jar",
+					"size": 75094,
+					"downloads": 7,
+					"inspection": 2,
+					"sha256": "719e0e5abde61b5a2688cd59cab9ddb0dbe30e763d76c7113abeb1a7c5cdd8bd",
+					"mods": [
+						{
+							"loader": "forge",
+							"id": "claudecraft",
+							"version": "1.2.1",
+							"name": "ClaudeCraft",
+							"description": "Puts Claude Code inside your ComputerCraft computers.\nAdds a built-in 'claude' API to all CC: Tweaked computers with streaming support and secure server-side API key storage.",
+							"minecraft": "[1.21.1,1.22)",
+							"environment": "*",
+							"depends": [
+								"forge",
+								"minecraft",
+								"computercraft"
+							]
+						}
+					],
+					"icon": null,
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 17,
+						"jars": [],
+						"capabilities": {
+							"network": {
+								"com/claudecraft/api/ApiKeyBackend.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/claudecraft/api/ChannelBackend.class": [
+									"java/net/http/HttpClient.newBuilder",
+									"java/net/http/HttpClient.send"
+								],
+								"com/claudecraft/channel/ChannelProcessManager.class": [
+									"java/net/Socket.<init>",
+									"java/net/Socket.connect",
+									"java/net/Socket.close"
+								]
+							},
+							"exec": {
+								"com/claudecraft/channel/ChannelProcessManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.directory",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.redirectOutput",
+									"java/lang/ProcessBuilder.start"
+								],
+								"com/claudecraft/channel/ChannelResourceManager.class": [
+									"java/lang/ProcessBuilder.<init>",
+									"java/lang/ProcessBuilder.redirectErrorStream",
+									"java/lang/ProcessBuilder.start",
+									"java/lang/ProcessBuilder.directory"
+								]
+							}
+						},
+						"hosts": {
+							"api.anthropic.com": [
+								"com/claudecraft/api/ApiKeyBackend.class"
+							],
+							"127.0.0.1": [
+								"com/claudecraft/api/ChannelBackend.class"
+							],
+							"bun.sh": [
+								"com/claudecraft/channel/ChannelResourceManager.class"
+							]
+						},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "## What's Changed\n* Fix channel SSE idle timeout (1.21.1)\n\n\n**Full Changelog**: https://github.com/west3436/claudecraft/compare/v1.2.0-1.21.1...v1.2.1-1.21.1"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [],
+	"contributors": {
+		"commits": 29,
+		"more": 0,
+		"people": [
+			{
+				"login": "west3436",
+				"commits": 29,
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

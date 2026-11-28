@@ -1,0 +1,349 @@
+{
+	"repo": "TheBritishGun/Sandpaper-API-Minecraft",
+	"host": "github",
+	"description": "Frame time budget scheduler for mods of java Minecraft. A port of my steam version of Sandpaper API, which was created because i got mad at a VTOL VR Mod's performance, and decided to make an engine that cannot cause frame stutter if used properly.",
+	"stars": 0,
+	"archived": false,
+	"license": "GPL-3.0",
+	"created": "2026-09-27T21:01:01Z",
+	"pushed": "2026-11-26T08:32:16Z",
+	"releases": [
+		{
+			"tag": "v1.0.2+26.3",
+			"published": "2026-11-26T08:32:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 794962208,
+					"name": "sandpaper-1.0.2+26.3.jar",
+					"url": "https://github.com/TheBritishGun/Sandpaper-API-Minecraft/releases/download/v1.0.2%2B26.3/sandpaper-1.0.2%2B26.3.jar",
+					"size": 468210,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "6450fbbd14cc30ccaafe9883959b5261e9d7c3f9c3217de3c6420656d02a8e33",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "sandpaper",
+							"version": "1.0.2+26.3",
+							"name": "Sandpaper API",
+							"description": "A cooperative frame-budget scheduler and off-thread work pool for mods' periodic background work. Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.20.1",
+								"minecraft": "~26.3",
+								"java": ">=25"
+							},
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "324d20eb33c90ab79d70317d1a9e356842fc65e48f4f0f480ed34f55ffb35d66.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 174,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"dev/sandpaper/core/WindowsCores.class": [
+									"java/lang/foreign/Linker.nativeLinker in <init>",
+									"java/lang/foreign/SymbolLookup.libraryLookup in <init>",
+									"java/lang/foreign/Linker.downcallHandle in <init>"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Sandpaper 1.0.2 for Minecraft 26.2 (tag v1.0.2) and 26.3 (tag v1.0.2+26.3). Both builds have the same source apart from the Minecraft version.\n\n## For players\n1. Font safety. Sandpaper checks every TrueType font that a resource pack gives to the game, before the game reads it. It removes the hinting programs, refuses a variable font and a damaged font, and uses its own small typeface in place of a refused font. Text in a stripped font can look a little softer, and a line can be 1 to 3 percent wider.\n2. Section themes. A new setting, off by default. When it is on, each settings section can use its own theme. One placeholder theme, \"Joiner's Workbench\", with an \"Aero fallback\". The settings screen gains theme painting, a blend between section themes, smooth scrolling and menu sounds.\n3. Worker threads. The automatic count is now one worker for every processor except one, left for the render thread. Before, it was the processor count minus two, at most six. The workers now run at normal priority. Before, they ran below normal. The setting text now reads: \"Zero sizes it from the machine: one worker for every processor except one, left for the render thread. Needs a restart.\"\n4. Workers stay off the render thread's core (Windows only). Once a frame, Sandpaper reads which physical core the render thread is on. Each worker keeps itself off that core before its next task, SMT siblings included. It follows the render thread and never pins it. Other systems get the new worker count and priority without this. Turn it off with -Dsandpaper.keepWorkersOffRenderCore=off.\n5. Menu frame pump. The title screen and every other screen with no world now pump the scheduler's render lane once a frame, with a bounded budget. Before, only the in-world HUD did. Turn it off with -Dsandpaper.menuPump=off. Not covered: the Mojang splash and the resource reload.\n\n## For mod authors: removed and changed (a source break)\n- Removed: Background.MAX_THREADS and WorkPool.MAX_THREADS (both were 6). A source that names either does not compile against 1.0.2. A class built against 1.0.1 keeps the inlined 6.\n- Changed: Background.HEADROOM is 1 (was 2). Background.PRIORITY is Thread.NORM_PRIORITY (was two below normal). Background.threads() and WorkPool.defaultThreads() return the processor count minus one, never below one, with no upper cap. The settings slider still stops at 32, so on a machine with more than 33 processors the automatic count is above what the slider can set by hand.\n\n## For mod authors: new (additive)\n- Scheduler.registerValues, registerSlicedValues and tickValuesEngaged, with ValuesJob and ValuesStep. Start-up switch sandpaper.tickValues, off by default.\n- Scheduler.registerFrameSpread, frameSpreadEngaged, frameSpreadLate and frameSpreadCompletedParts, with FramePart and FrameSpreadHandle. Start-up switch sandpaper.frameSpread, off by default.\n- Theme API, package dev.sandpaper.api.theme. A mod adds a theme through the \"sandpaper-themes\" entry point in fabric.mod.json.\n- core.MenuFrame and core.RenderCoreGuard.\n- docs/CONTRACT.md has new rules 20 to 36. Rules 15 and 29 changed because the render lane is now pumped on menu screens too. Scheduler.pump is documented as not re-entrant."
+		},
+		{
+			"tag": "v1.0.2",
+			"published": "2026-11-26T08:32:14Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 794962054,
+					"name": "sandpaper-1.0.2+26.2.jar",
+					"url": "https://github.com/TheBritishGun/Sandpaper-API-Minecraft/releases/download/v1.0.2/sandpaper-1.0.2%2B26.2.jar",
+					"size": 468212,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "212d45fcbd2d5c7d0d16ef4a5427e2a536d89f327f034e80a847a00cf9b70e55",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "sandpaper",
+							"version": "1.0.2+26.2",
+							"name": "Sandpaper API",
+							"description": "A cooperative frame-budget scheduler and off-thread work pool for mods' periodic background work. Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.3",
+								"minecraft": "~26.2",
+								"java": ">=25"
+							},
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "324d20eb33c90ab79d70317d1a9e356842fc65e48f4f0f480ed34f55ffb35d66.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 174,
+						"jars": [],
+						"capabilities": {
+							"native": {
+								"dev/sandpaper/core/WindowsCores.class": [
+									"java/lang/foreign/Linker.nativeLinker in <init>",
+									"java/lang/foreign/SymbolLookup.libraryLookup in <init>",
+									"java/lang/foreign/Linker.downcallHandle in <init>"
+								]
+							}
+						},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Sandpaper 1.0.2 for Minecraft 26.2 (tag v1.0.2) and 26.3 (tag v1.0.2+26.3). Both builds have the same source apart from the Minecraft version.\n\n## For players\n1. Font safety. Sandpaper checks every TrueType font that a resource pack gives to the game, before the game reads it. It removes the hinting programs, refuses a variable font and a damaged font, and uses its own small typeface in place of a refused font. Text in a stripped font can look a little softer, and a line can be 1 to 3 percent wider.\n2. Section themes. A new setting, off by default. When it is on, each settings section can use its own theme. One placeholder theme, \"Joiner's Workbench\", with an \"Aero fallback\". The settings screen gains theme painting, a blend between section themes, smooth scrolling and menu sounds.\n3. Worker threads. The automatic count is now one worker for every processor except one, left for the render thread. Before, it was the processor count minus two, at most six. The workers now run at normal priority. Before, they ran below normal. The setting text now reads: \"Zero sizes it from the machine: one worker for every processor except one, left for the render thread. Needs a restart.\"\n4. Workers stay off the render thread's core (Windows only). Once a frame, Sandpaper reads which physical core the render thread is on. Each worker keeps itself off that core before its next task, SMT siblings included. It follows the render thread and never pins it. Other systems get the new worker count and priority without this. Turn it off with -Dsandpaper.keepWorkersOffRenderCore=off.\n5. Menu frame pump. The title screen and every other screen with no world now pump the scheduler's render lane once a frame, with a bounded budget. Before, only the in-world HUD did. Turn it off with -Dsandpaper.menuPump=off. Not covered: the Mojang splash and the resource reload.\n\n## For mod authors: removed and changed (a source break)\n- Removed: Background.MAX_THREADS and WorkPool.MAX_THREADS (both were 6). A source that names either does not compile against 1.0.2. A class built against 1.0.1 keeps the inlined 6.\n- Changed: Background.HEADROOM is 1 (was 2). Background.PRIORITY is Thread.NORM_PRIORITY (was two below normal). Background.threads() and WorkPool.defaultThreads() return the processor count minus one, never below one, with no upper cap. The settings slider still stops at 32, so on a machine with more than 33 processors the automatic count is above what the slider can set by hand.\n\n## For mod authors: new (additive)\n- Scheduler.registerValues, registerSlicedValues and tickValuesEngaged, with ValuesJob and ValuesStep. Start-up switch sandpaper.tickValues, off by default.\n- Scheduler.registerFrameSpread, frameSpreadEngaged, frameSpreadLate and frameSpreadCompletedParts, with FramePart and FrameSpreadHandle. Start-up switch sandpaper.frameSpread, off by default.\n- Theme API, package dev.sandpaper.api.theme. A mod adds a theme through the \"sandpaper-themes\" entry point in fabric.mod.json.\n- core.MenuFrame and core.RenderCoreGuard.\n- docs/CONTRACT.md has new rules 20 to 36. Rules 15 and 29 changed because the render lane is now pumped on menu screens too. Scheduler.pump is documented as not re-entrant."
+		},
+		{
+			"tag": "v1.0.1+26.3",
+			"published": "2026-11-10T23:49:49Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 733412147,
+					"name": "sandpaper-1.0.1+26.3.jar",
+					"url": "https://github.com/TheBritishGun/Sandpaper-API-Minecraft/releases/download/v1.0.1%2B26.3/sandpaper-1.0.1%2B26.3.jar",
+					"size": 349239,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "c3568730871d783c69a9820cd992178ca8b929e91d26f03ef2fe511e92a01907",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "sandpaper",
+							"version": "1.0.1+26.3",
+							"name": "Sandpaper API",
+							"description": "A cooperative frame-budget scheduler and off-thread work pool for mods' periodic background work. Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.20.1",
+								"minecraft": "~26.3",
+								"java": ">=25"
+							},
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "324d20eb33c90ab79d70317d1a9e356842fc65e48f4f0f480ed34f55ffb35d66.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 115,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Sandpaper 1.0.1 for Minecraft 26.3, with the same API and settings screen as 1.0.1 for Minecraft 26.2. For Minecraft 26.2, use v1.0.1."
+		},
+		{
+			"tag": "v1.0.1",
+			"published": "2026-10-15T13:49:36Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 644014579,
+					"name": "sandpaper-1.0.1+26.2.jar",
+					"url": "https://github.com/TheBritishGun/Sandpaper-API-Minecraft/releases/download/v1.0.1/sandpaper-1.0.1%2B26.2.jar",
+					"size": 349210,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "a7a2f2b131ae9e592ace52e3abd7950fa1b032b3179a77443fc96bf16ced5552",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "sandpaper",
+							"version": "1.0.1+26.2",
+							"name": "Sandpaper API",
+							"description": "A cooperative frame-budget scheduler and off-thread work pool for mods' periodic background work. Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.3",
+								"minecraft": "~26.2",
+								"java": ">=25"
+							},
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "324d20eb33c90ab79d70317d1a9e356842fc65e48f4f0f480ed34f55ffb35d66.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 115,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "The settings screen plays vanilla's button click."
+		},
+		{
+			"tag": "v1.0.0",
+			"published": "2026-09-27T21:12:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 593784420,
+					"name": "sandpaper-1.0.0+26.2.jar",
+					"url": "https://github.com/TheBritishGun/Sandpaper-API-Minecraft/releases/download/v1.0.0/sandpaper-1.0.0%2B26.2.jar",
+					"size": 348640,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "ff95fbb641e310709671f209f490ebb7d8abc029d3804fff9603fe0eb45bba25",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "sandpaper",
+							"version": "1.0.0+26.2",
+							"name": "Sandpaper API",
+							"description": "A cooperative frame-budget scheduler and off-thread work pool for mods' periodic background work. Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.19.3",
+								"minecraft": "~26.2",
+								"java": ">=25"
+							},
+							"provides": [],
+							"suggests": [
+								"modmenu"
+							]
+						}
+					],
+					"icon": "324d20eb33c90ab79d70317d1a9e356842fc65e48f4f0f480ed34f55ffb35d66.webp",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 115,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Sandpaper 1.0.0 for Minecraft 26.2 (Fabric): a cooperative frame-budget scheduler and off-thread work pool for mods' periodic background work."
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [],
+	"contributors": {
+		"commits": 3,
+		"more": 0,
+		"people": [
+			{
+				"login": "TheBritishGun",
+				"commits": 3,
+				"name": "BritishGun",
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

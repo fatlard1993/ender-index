@@ -1,0 +1,148 @@
+{
+	"repo": "triender/small-logic-tweaks",
+	"host": "github",
+	"stars": 1,
+	"archived": false,
+	"license": "MIT",
+	"created": "2026-05-10T16:38:21Z",
+	"pushed": "2026-11-24T10:00:58Z",
+	"releases": [
+		{
+			"tag": "v1.6.1-mc26.3",
+			"published": "2026-11-24T10:02:09Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 786628550,
+					"name": "small-logic-tweaks-fabric-1.6.1-mc26.3.jar",
+					"url": "https://github.com/triender/small-logic-tweaks/releases/download/v1.6.1-mc26.3/small-logic-tweaks-fabric-1.6.1-mc26.3.jar",
+					"size": 100280,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "f023f3ae347a48d23f3ac994884b0a39214400de217c60fdc5acd9f4033d73bf",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "small_logic_tweaks",
+							"version": "1.6.1-mc26.3",
+							"name": "Small Logic Tweaks",
+							"description": "Minecraft logic is weird. We’re making it make sense—one block at a time.",
+							"minecraft": "~26.3",
+							"environment": "*",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api"
+							],
+							"dependsVersions": {
+								"fabricloader": ">=0.18.6",
+								"minecraft": "~26.3",
+								"java": ">=25"
+							},
+							"provides": []
+						}
+					],
+					"icon": "ea9b083aa5bfb0c8920fbe7f28e09f41af5f1dc2c6e8b68dc722038ae7c6c683.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"enchantment": [
+								"Timber"
+							]
+						},
+						"data": [
+							"enchantment",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 43,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				},
+				{
+					"id": 786628623,
+					"name": "small-logic-tweaks-neoforge-1.6.1-mc26.3.jar",
+					"url": "https://github.com/triender/small-logic-tweaks/releases/download/v1.6.1-mc26.3/small-logic-tweaks-neoforge-1.6.1-mc26.3.jar",
+					"size": 96319,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "a3ff6c34f5a3b688547cbd5a4db1a3876d56413f6de86fa3c0c4edaf04651d5b",
+					"mods": [
+						{
+							"loader": "neoforge",
+							"id": "small_logic_tweaks",
+							"version": "1.6.1-mc26.3",
+							"name": "Small Logic Tweaks",
+							"description": "Minecraft logic is weird. We’re making it make sense—one block at a time.",
+							"minecraft": "[26.3,26.4)",
+							"environment": "*",
+							"depends": [
+								"neoforge",
+								"minecraft"
+							],
+							"dependsVersions": {
+								"neoforge": "[26.3.0.103,)",
+								"minecraft": "[26.3,26.4)"
+							}
+						}
+					],
+					"icon": "ea9b083aa5bfb0c8920fbe7f28e09f41af5f1dc2c6e8b68dc722038ae7c6c683.png",
+					"funding": [],
+					"content": {
+						"names": {
+							"enchantment": [
+								"Timber"
+							]
+						},
+						"data": [
+							"enchantment",
+							"loot_table",
+							"recipe"
+						],
+						"shaders": false
+					},
+					"scan": {
+						"version": 3,
+						"classes": 43,
+						"jars": [],
+						"capabilities": {},
+						"signals": {},
+						"secrets": {},
+						"hidden": [],
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 🐛 Bugfixes & Stability Update (Version 1.6.1)\n\n### 🔧 Fixed\n* **[Only for 26.3] Item Tag Path:** Migrated `#small_logic_tweaks:magma_cookable` tag to `tags/item/` and standardized raw meat item IDs to `minecraft:beef`, `minecraft:porkchop`, `minecraft:chicken`, `minecraft:mutton`, and `minecraft:rabbit` for full Minecraft 26.3 parity.\n* **Timber Region Protection Support:** Routed Timber multi-block tree felling through `ServerPlayerGameMode#destroyBlock` with a re-entrancy guard so region-protection mods and plugins can intercept or cancel chopped blocks.\n* **Adventure Mode Respect:** Added build-permission checks (`player.mayBuild()`) to Bone Meal propagation, Concrete Hydro-Hardening, and Dirt Reversion right-click interactions so players in Adventure mode cannot bypass build restrictions.\n* **Overworld Phantom Prevention:** Added a Phantom spawner guard to prevent Phantom spawns outside the End even when leftover `TIME_SINCE_REST` stats exist from prior vanilla saves, and reset leftover Overworld insomnia stats on player join.\n* **Jungle Sustainability Vanilla Fallback:** Replaced the static vanilla `jungle_leaves` loot override with a conditional runtime loot replacement hook (`JungleLootHelper`), preserving vanilla and third-party mod loot when `ENABLE_JUNGLE_SUSTAINABILITY` is disabled.\n* **Poisonous Potato Composter Fill Rate:** Fixed `DataComponents.COMPOSTABLE` for Poisonous Potatoes using `ContextIntProviders.COMPOSTABLE_MEDIUM` instead of a constant `65` layers, matching vanilla Potato's 65% chance per item instead of instantly filling the Composter.\n* **Unmodded Server Client Prediction:** Clients joining a vanilla or unmodded server now keep client-side tweak prediction disabled until a mod config sync packet is received, avoiding false client-side action predictions.\n* **Kitchen Registry Cleanup:** Cleared dimension-scoped cooking reservations in `KitchenRegistry` on server stop to prevent stale reservation state across world reloads.\n\n### 🛡️ Security\n* **Config Validation Hardening:** Added null-safety and `[1, 72000]` tick range clamping for `magmaCookTimes` entries in `SmallLogicTweaksConfig` during loading and validation.\n\n### ⚙️ Changed\n* **NeoForge & Quilt Platform Support:** Upgraded NeoForge target from `26.3.0.43-beta` to stable `26.3.0.103`, enabled Quilt (`0.30.2+`) and NeoForge `26.3` release distribution, and standardized per-loader release version suffixes (`-fabric` / `-neoforge`).\n* **Automated Testing:** Added standalone two-phase pipeline `scripts/test_clean_removal.ps1` to automatically verify clean mod removal and world integrity on both Fabric Loader and pure Vanilla servers, alongside expanded GameTest and unit test coverage for disabled tweaks, Adventure mode, Poisonous Potato composting/brewing behavior, and client config sync state.\n* **Documentation & Standards:** Renamed `CLAUDE.md` to `KNOWLEDGE.md`, updated `README.md` mechanics, compatibility, and roadmap notes, and established project-wide English-first documentation standards in `.agents/AGENTS.md`.\n\n**Status:** Release. Feedback is welcome!"
+		}
+	],
+	"readme": "README.md",
+	"readmeSummary": "Minecraft logic is weird. This mod makes it feel consistent—one interaction at a time.",
+	"funding": [],
+	"pictures": [],
+	"contributors": {
+		"commits": 88,
+		"more": 0,
+		"people": [
+			{
+				"login": "triender",
+				"commits": 88,
+				"name": "Nguyen Minh Tri",
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}

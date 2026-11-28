@@ -1,0 +1,716 @@
+{
+	"repo": "Igrium/CraftUI",
+	"host": "github",
+	"description": "An implementation of Dear ImGui on top of Minecraft for in-game editors.",
+	"stars": 6,
+	"archived": false,
+	"license": "LGPL-3.0",
+	"created": "2024-05-01T20:50:56Z",
+	"pushed": "2026-11-15T19:25:07Z",
+	"releases": [
+		{
+			"tag": "1.2.0",
+			"published": "2026-11-15T19:25:08Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 752089394,
+					"name": "craftui-1.2.0.jar",
+					"url": "https://github.com/Igrium/CraftUI/releases/download/1.2.0/craftui-1.2.0.jar",
+					"size": 11018618,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "5b4406955a93c55bfbbb0959265626f5ca6dfcb1ccd017ca69d31b9b32a0fb98",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "craftui",
+							"version": "1.2.0",
+							"name": "CraftUI",
+							"description": "An implementation of Dear ImGui on top of Minecraft for in-game editors.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-gui-imgui"
+							],
+							"provides": [
+								"fabric-gui-imgui",
+								"io_github_spair_imgui-java-binding",
+								"io_github_spair_imgui-java-lwjgl3",
+								"io_github_spair_imgui-java-natives-linux",
+								"io_github_spair_imgui-java-natives-macos",
+								"io_github_spair_imgui-java-natives-windows",
+								"org_lwjgl_lwjgl-nfd_natives-linux",
+								"org_lwjgl_lwjgl-nfd_natives-macos-arm64",
+								"org_lwjgl_lwjgl-nfd_natives-macos",
+								"org_lwjgl_lwjgl-nfd_natives-windows",
+								"org_lwjgl_lwjgl-nfd"
+							]
+						}
+					],
+					"icon": "7d4d8dc726fc67a8f09d9a0a5f35a9ad6bc4ab263d00f74f0f1e32890cf0d61e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 350,
+						"jars": [
+							"META-INF/jars/fabric-gui-imgui-26.3-1.2.0+imgui.1.92.7.1.jar",
+							"META-INF/jars/imgui-java-binding-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-lwjgl3-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-linux-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-macos-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-windows-1.92.7.1.jar",
+							"META-INF/jars/lwjgl-nfd-3.4.3-natives-linux.jar",
+							"META-INF/jars/lwjgl-nfd-3.4.3-natives-macos-arm64.jar",
+							"META-INF/jars/lwjgl-nfd-3.4.3-natives-macos.jar",
+							"META-INF/jars/lwjgl-nfd-3.4.3-natives-windows.jar",
+							"META-INF/jars/lwjgl-nfd-3.4.3.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/imgui-java-binding-1.92.7.1.jar!imgui/ImGui.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/lwjgl-nfd-3.4.3.jar!org/lwjgl/util/nfd/LibNFD.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "This is the first major API/content update since 1.0. It is backwards compatible with previous versions, but it adds new features, so you'll need to update the minimum version in your mod properties.\n\n## Additions\n\n### Industry-standard Viewport Controls\nA new `ViewportControlHelper` class adds support for industry-standard, 3D-editor-style orbit, pan, and zoom navigation. Its default control scheme is:\n- `Alt + M1`: Orbit\n- `Alt + M3`: Pan\n- `M3`: Zoom\n\nThese can be changed by overriding the helper class. Scroll-to-zoom is also supported.\n\n### Editor Gizmos\n[ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo) is now supported natively. While this was possible before by initializing it manually, CraftUI now manages the projection matrix automatically.\n\nTo use it, call `GizmoHelper.setupGizmos()` while drawing your viewport window, then use ImGuizmo as usual. Wrapper methods are provided that use JOML matrices instead of raw float arrays for convenience.\n\nNote that, due to the risk of floating-point precision errors at large world coordinates, gizmos are always drawn **relative to the camera**.\n\n### Camera State Cache\nCraftUI caches various elements of the world render state, such as camera position and projection matrices, each frame. These values are used internally by gizmos and viewport raycasting, and can be accessed via:\n\n- `CraftUI.getCameraPos()`\n- `CraftUI.getCameraRot()`\n- `CraftUI.getViewRotationMatrix()`\n- `CraftUI.getRawProjectionMatrix()`\n- `CraftUI.getProjectionMatrix()` (y-inverted for ImGuizmo and other standard math)\n- `CraftUI.getTickDelta()`\n\n### CraftUI Render Events\nVarious event-based callbacks (`CraftUIRenderEvents`) have been added to hook into the CraftUI render pipeline. These are powerful and could interfere with other mods, so use them with caution:\n\n- `PRE_RENDER`\n- `COMPUTE_VIEWPORT_BOUNDS` (can override the computed bounds)\n- `UPDATE_STYLE`\n- `POST_COMPOSITE`\n- `BEGIN_FRAME` and `END_FRAME`\n- `BEFORE_RENDER` and `AFTER_RENDER`\n- `BEGIN_RENDER` and `END_RENDER`\n\nEach event receives a context object that exposes the open apps, the viewport bounds, and whether it's a cleanup frame.\n\n## Fixes\n- Text input is now properly started and stopped through Minecraft's `TextInputManager`.\n- Mouse button releases are no longer swallowed when ImGui wants the mouse, so buttons aren't left \"held\". (Fix by MCJEModder2026)\n- Selectables in the NBT editor now use `NoAutoClosePopups`, so the NBT editor can now be used within app-provided popups.\n- LWJGL core is now excluded from transitive dependencies so CraftUI doesn't force a version on consumers. This was only a problem in dev.\n- Removed the unused `font-awesome-brands` icon font from `inter.json`.\n- Stopped Gson from complaining to the console every time a style was loaded."
+		},
+		{
+			"tag": "1.2.0-pre2",
+			"published": "2026-11-09T21:25:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 729042521,
+					"name": "craftui-1.2.0-pre2.jar",
+					"url": "https://github.com/Igrium/CraftUI/releases/download/1.2.0-pre2/craftui-1.2.0-pre2.jar",
+					"size": 11018401,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "2b3bcad839212f5620cace8d33b689ade62d67c2714ac61aa239701fd34ee657",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "craftui",
+							"version": "1.2.0-pre2",
+							"name": "CraftUI",
+							"description": "An implementation of Dear ImGui on top of Minecraft for in-game editors.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-gui-imgui"
+							],
+							"provides": [
+								"fabric-gui-imgui",
+								"io_github_spair_imgui-java-binding",
+								"io_github_spair_imgui-java-lwjgl3",
+								"io_github_spair_imgui-java-natives-linux",
+								"io_github_spair_imgui-java-natives-macos",
+								"io_github_spair_imgui-java-natives-windows",
+								"org_lwjgl_lwjgl-nfd_natives-linux",
+								"org_lwjgl_lwjgl-nfd_natives-macos-arm64",
+								"org_lwjgl_lwjgl-nfd_natives-macos",
+								"org_lwjgl_lwjgl-nfd_natives-windows",
+								"org_lwjgl_lwjgl-nfd"
+							]
+						}
+					],
+					"icon": "7d4d8dc726fc67a8f09d9a0a5f35a9ad6bc4ab263d00f74f0f1e32890cf0d61e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 350,
+						"jars": [
+							"META-INF/jars/fabric-gui-imgui-26.3-1.2.0+imgui.1.92.7.1.jar",
+							"META-INF/jars/imgui-java-binding-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-lwjgl3-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-linux-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-macos-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-windows-1.92.7.1.jar",
+							"META-INF/jars/lwjgl-nfd-3.4.3-natives-linux.jar",
+							"META-INF/jars/lwjgl-nfd-3.4.3-natives-macos-arm64.jar",
+							"META-INF/jars/lwjgl-nfd-3.4.3-natives-macos.jar",
+							"META-INF/jars/lwjgl-nfd-3.4.3-natives-windows.jar",
+							"META-INF/jars/lwjgl-nfd-3.4.3.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/imgui-java-binding-1.92.7.1.jar!imgui/ImGui.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/lwjgl-nfd-3.4.3.jar!org/lwjgl/util/nfd/LibNFD.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "More bugfixes and preparation for 1.2.0"
+		},
+		{
+			"tag": "1.2.0-pre1",
+			"published": "2026-11-09T06:10:04Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 726429755,
+					"name": "craftui-1.2.0-pre1.jar",
+					"url": "https://github.com/Igrium/CraftUI/releases/download/1.2.0-pre1/craftui-1.2.0-pre1.jar",
+					"size": 10993033,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "ab3915c92bf8a0d8717cb926fe1058a5a1dfd2d914c08b2ac744bd0674ed300b",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "craftui",
+							"version": "1.2.0-pre1",
+							"name": "CraftUI",
+							"description": "An implementation of Dear ImGui on top of Minecraft for in-game editors.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-gui-imgui"
+							],
+							"provides": [
+								"fabric-gui-imgui",
+								"io_github_spair_imgui-java-binding",
+								"io_github_spair_imgui-java-lwjgl3",
+								"io_github_spair_imgui-java-natives-linux",
+								"io_github_spair_imgui-java-natives-macos",
+								"io_github_spair_imgui-java-natives-windows",
+								"org_lwjgl_lwjgl-nfd_natives-linux",
+								"org_lwjgl_lwjgl-nfd_natives-macos-arm64",
+								"org_lwjgl_lwjgl-nfd_natives-macos",
+								"org_lwjgl_lwjgl-nfd_natives-windows",
+								"org_lwjgl_lwjgl-nfd"
+							]
+						}
+					],
+					"icon": "7d4d8dc726fc67a8f09d9a0a5f35a9ad6bc4ab263d00f74f0f1e32890cf0d61e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 342,
+						"jars": [
+							"META-INF/jars/fabric-gui-imgui-26.3-1.2.0+imgui.1.92.7.1.jar",
+							"META-INF/jars/imgui-java-binding-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-lwjgl3-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-linux-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-macos-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-windows-1.92.7.1.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-linux.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-macos-arm64.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-macos.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-windows.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/imgui-java-binding-1.92.7.1.jar!imgui/ImGui.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/lwjgl-nfd-3.3.3.jar!org/lwjgl/util/nfd/LibNFD.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Pre-release 1 of CraftUI 1.2.0 for testing"
+		},
+		{
+			"tag": "1.0.1",
+			"published": "2026-10-13T18:19:59Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 637870643,
+					"name": "craftui-1.0.1.jar",
+					"url": "https://github.com/Igrium/CraftUI/releases/download/1.0.1/craftui-1.0.1.jar",
+					"size": 10989863,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "9360c4635319ce317706568676b80dd09b492ab59378651b165e0661879bf2c3",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "craftui",
+							"version": "1.0.1",
+							"name": "CraftUI",
+							"description": "An implementation of Dear ImGui on top of Minecraft for in-game editors.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-gui-imgui"
+							],
+							"provides": [
+								"fabric-gui-imgui",
+								"io_github_spair_imgui-java-binding",
+								"io_github_spair_imgui-java-lwjgl3",
+								"io_github_spair_imgui-java-natives-linux",
+								"io_github_spair_imgui-java-natives-macos",
+								"io_github_spair_imgui-java-natives-windows",
+								"org_lwjgl_lwjgl-nfd_natives-linux",
+								"org_lwjgl_lwjgl-nfd_natives-macos-arm64",
+								"org_lwjgl_lwjgl-nfd_natives-macos",
+								"org_lwjgl_lwjgl-nfd_natives-windows",
+								"org_lwjgl_lwjgl-nfd"
+							]
+						}
+					],
+					"icon": "7d4d8dc726fc67a8f09d9a0a5f35a9ad6bc4ab263d00f74f0f1e32890cf0d61e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 324,
+						"jars": [
+							"META-INF/jars/fabric-gui-imgui-26.2-1.2.0+imgui.1.92.7.1.jar",
+							"META-INF/jars/imgui-java-binding-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-lwjgl3-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-linux-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-macos-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-windows-1.92.7.1.jar",
+							"META-INF/jars/lwjgl-nfd-3.4.1-natives-linux.jar",
+							"META-INF/jars/lwjgl-nfd-3.4.1-natives-macos-arm64.jar",
+							"META-INF/jars/lwjgl-nfd-3.4.1-natives-macos.jar",
+							"META-INF/jars/lwjgl-nfd-3.4.1-natives-windows.jar",
+							"META-INF/jars/lwjgl-nfd-3.4.1.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/imgui-java-binding-1.92.7.1.jar!imgui/ImGui.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/lwjgl-nfd-3.4.1.jar!org/lwjgl/util/nfd/LibNFD.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "Small bugfixes back on 1.0 for 26.2:\n\n* fixed incidental transitive dependency on the wrong version of lwjgl\n* fixed reference to non-existant font-awesome-brands ttf file"
+		},
+		{
+			"tag": "1.1.1",
+			"published": "2026-09-22T21:11:46Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 582259680,
+					"name": "craftui-1.1.1.jar",
+					"url": "https://github.com/Igrium/CraftUI/releases/download/1.1.1/craftui-1.1.1.jar",
+					"size": 10965115,
+					"downloads": 3,
+					"inspection": 2,
+					"sha256": "7f5eb37babca67976ca882f201d245308bb7f03289d525149313c940f7ba7ad2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "craftui",
+							"version": "1.1.1",
+							"name": "CraftUI",
+							"description": "An implementation of Dear ImGui on top of Minecraft for in-game editors.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-gui-imgui"
+							],
+							"provides": [
+								"fabric-gui-imgui",
+								"io_github_spair_imgui-java-binding",
+								"io_github_spair_imgui-java-lwjgl3",
+								"io_github_spair_imgui-java-natives-linux",
+								"io_github_spair_imgui-java-natives-macos",
+								"io_github_spair_imgui-java-natives-windows",
+								"org_lwjgl_lwjgl-nfd_natives-linux",
+								"org_lwjgl_lwjgl-nfd_natives-macos-arm64",
+								"org_lwjgl_lwjgl-nfd_natives-macos",
+								"org_lwjgl_lwjgl-nfd_natives-windows",
+								"org_lwjgl_lwjgl-nfd"
+							]
+						}
+					],
+					"icon": "7d4d8dc726fc67a8f09d9a0a5f35a9ad6bc4ab263d00f74f0f1e32890cf0d61e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 319,
+						"jars": [
+							"META-INF/jars/fabric-gui-imgui-26.3-1.2.0+imgui.1.92.7.1.jar",
+							"META-INF/jars/imgui-java-binding-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-lwjgl3-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-linux-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-macos-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-windows-1.92.7.1.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-linux.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-macos-arm64.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-macos.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-windows.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/imgui-java-binding-1.92.7.1.jar!imgui/ImGui.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/lwjgl-nfd-3.3.3.jar!org/lwjgl/util/nfd/LibNFD.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "**Fixed a critical issue preventing text input**"
+		},
+		{
+			"tag": "1.1.0",
+			"published": "2026-09-22T18:09:35Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 581958525,
+					"name": "craftui-1.1.0.jar",
+					"url": "https://github.com/Igrium/CraftUI/releases/download/1.1.0/craftui-1.1.0.jar",
+					"size": 10964733,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "ae234294ea426cbe18052d0edec24ea33be58dce9f84e14601310d34c6575c47",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "craftui",
+							"version": "1.1.0",
+							"name": "CraftUI",
+							"description": "An implementation of Dear ImGui on top of Minecraft for in-game editors.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-gui-imgui"
+							],
+							"provides": [
+								"fabric-gui-imgui",
+								"io_github_spair_imgui-java-binding",
+								"io_github_spair_imgui-java-lwjgl3",
+								"io_github_spair_imgui-java-natives-linux",
+								"io_github_spair_imgui-java-natives-macos",
+								"io_github_spair_imgui-java-natives-windows",
+								"org_lwjgl_lwjgl-nfd_natives-linux",
+								"org_lwjgl_lwjgl-nfd_natives-macos-arm64",
+								"org_lwjgl_lwjgl-nfd_natives-macos",
+								"org_lwjgl_lwjgl-nfd_natives-windows",
+								"org_lwjgl_lwjgl-nfd"
+							]
+						}
+					],
+					"icon": "7d4d8dc726fc67a8f09d9a0a5f35a9ad6bc4ab263d00f74f0f1e32890cf0d61e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 319,
+						"jars": [
+							"META-INF/jars/fabric-gui-imgui-26.3-1.2.0+imgui.1.92.7.1.jar",
+							"META-INF/jars/imgui-java-binding-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-lwjgl3-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-linux-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-macos-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-windows-1.92.7.1.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-linux.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-macos-arm64.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-macos.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-windows.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/imgui-java-binding-1.92.7.1.jar!imgui/ImGui.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/lwjgl-nfd-3.3.3.jar!org/lwjgl/util/nfd/LibNFD.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# 26.3 Update\n\nSooo... I wasn't paying attention, and I didn't realize that Minecraft 26.3 released right as I was gearing up to release CraftUI 1.0. So this update updates CraftUI to 26.3, which it really should have been on in the first place.\n\nThere are no public-facing API changes, although the implementation for sub-viewports has been completely rewritten and should be a little more stable."
+		},
+		{
+			"tag": "1.1.0-pre1",
+			"published": "2026-09-21T06:27:23Z",
+			"prerelease": true,
+			"assets": [
+				{
+					"id": 578410820,
+					"name": "craftui-1.1.0.jar",
+					"url": "https://github.com/Igrium/CraftUI/releases/download/1.1.0-pre1/craftui-1.1.0.jar",
+					"size": 10963778,
+					"downloads": 2,
+					"inspection": 2,
+					"sha256": "b30b0974b216ae62d1b2ed5403183cb9e6d07fc30260ae8da2702f0c767f4730",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "craftui",
+							"version": "1.1.0",
+							"name": "CraftUI",
+							"description": "An implementation of Dear ImGui on top of Minecraft for in-game editors.",
+							"minecraft": "~26.3",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-gui-imgui"
+							],
+							"provides": [
+								"fabric-gui-imgui",
+								"io_github_spair_imgui-java-binding",
+								"io_github_spair_imgui-java-lwjgl3",
+								"io_github_spair_imgui-java-natives-linux",
+								"io_github_spair_imgui-java-natives-macos",
+								"io_github_spair_imgui-java-natives-windows",
+								"org_lwjgl_lwjgl-nfd_natives-linux",
+								"org_lwjgl_lwjgl-nfd_natives-macos-arm64",
+								"org_lwjgl_lwjgl-nfd_natives-macos",
+								"org_lwjgl_lwjgl-nfd_natives-windows",
+								"org_lwjgl_lwjgl-nfd"
+							]
+						}
+					],
+					"icon": "7d4d8dc726fc67a8f09d9a0a5f35a9ad6bc4ab263d00f74f0f1e32890cf0d61e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 318,
+						"jars": [
+							"META-INF/jars/fabric-gui-imgui-26.3-1.2.0+imgui.1.92.7.1.jar",
+							"META-INF/jars/imgui-java-binding-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-lwjgl3-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-linux-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-macos-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-windows-1.92.7.1.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-linux.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-macos-arm64.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-macos.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-windows.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/imgui-java-binding-1.92.7.1.jar!imgui/ImGui.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/lwjgl-nfd-3.3.3.jar!org/lwjgl/util/nfd/LibNFD.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "I haven't gotten to test this on all platforms yet, so this is a pre-release"
+		},
+		{
+			"tag": "1.0.0",
+			"published": "2026-09-19T17:09:16Z",
+			"prerelease": false,
+			"assets": [
+				{
+					"id": 575152076,
+					"name": "craftui-1.0.0.jar",
+					"url": "https://github.com/Igrium/CraftUI/releases/download/1.0.0/craftui-1.0.0.jar",
+					"size": 10962844,
+					"downloads": 1,
+					"inspection": 2,
+					"sha256": "510ec2beb40d73150b4cff128e9823645b76f0375835735b7a9b601067febec2",
+					"mods": [
+						{
+							"loader": "fabric",
+							"id": "craftui",
+							"version": "1.0.0",
+							"name": "CraftUI",
+							"description": "An implementation of Dear ImGui on top of Minecraft for in-game editors.",
+							"minecraft": "~26.2",
+							"environment": "client",
+							"depends": [
+								"fabricloader",
+								"minecraft",
+								"java",
+								"fabric-api",
+								"fabric-gui-imgui"
+							],
+							"provides": [
+								"fabric-gui-imgui",
+								"io_github_spair_imgui-java-binding",
+								"io_github_spair_imgui-java-lwjgl3",
+								"io_github_spair_imgui-java-natives-linux",
+								"io_github_spair_imgui-java-natives-macos",
+								"io_github_spair_imgui-java-natives-windows",
+								"org_lwjgl_lwjgl-nfd_natives-linux",
+								"org_lwjgl_lwjgl-nfd_natives-macos-arm64",
+								"org_lwjgl_lwjgl-nfd_natives-macos",
+								"org_lwjgl_lwjgl-nfd_natives-windows",
+								"org_lwjgl_lwjgl-nfd"
+							]
+						}
+					],
+					"icon": "7d4d8dc726fc67a8f09d9a0a5f35a9ad6bc4ab263d00f74f0f1e32890cf0d61e.png",
+					"funding": [],
+					"content": {
+						"names": {},
+						"data": [],
+						"shaders": false
+					},
+					"scan": {
+						"classes": 314,
+						"jars": [
+							"META-INF/jars/fabric-gui-imgui-26.2-1.2.0+imgui.1.92.7.1.jar",
+							"META-INF/jars/imgui-java-binding-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-lwjgl3-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-linux-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-macos-1.92.7.1.jar",
+							"META-INF/jars/imgui-java-natives-windows-1.92.7.1.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-linux.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-macos-arm64.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-macos.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3-natives-windows.jar",
+							"META-INF/jars/lwjgl-nfd-3.3.3.jar"
+						],
+						"capabilities": {
+							"native": {
+								"META-INF/jars/imgui-java-binding-1.92.7.1.jar!imgui/ImGui.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								],
+								"META-INF/jars/lwjgl-nfd-3.3.3.jar!org/lwjgl/util/nfd/LibNFD.class": [
+									"java/lang/System.load",
+									"java/lang/System.loadLibrary"
+								]
+							}
+						},
+						"hosts": {},
+						"unreadable": []
+					}
+				}
+			],
+			"notes": "# CraftUI Stable Release\n\nNGL, creating a \"stable\" release is a little bit nerve-wracking, but I feel like the CraftUI API is at a point where I can finally consider it \"production-ready\".\n\nFrom here on out, CraftUI will maintain backwards-compatibility in line with Semantic Versioning. However,  Minecraft's API changes quite frequently. I'll strive to maintain backwards-compatibility across versions, and when that's not possible, a new major version will release.\n\nTo use this release, add this to your build script:\n\n```groovy\nrepositories {\n    // ...\n    maven { url = 'https://jitpack.io' }\n}\n```\n```\ndependencies {\n    // ...\n    modImplementation 'com.github.Igrium:CraftUI:1.0.0\"\n}\n```"
+		}
+	],
+	"readme": "README.md",
+	"funding": [],
+	"pictures": [
+		"doc/demo1.png",
+		"doc/demo2.png",
+		"iconsrc/CraftUI_Icon.png"
+	],
+	"contributors": {
+		"commits": 208,
+		"more": 0,
+		"people": [
+			{
+				"login": "Igrium",
+				"commits": 207,
+				"funding": []
+			},
+			{
+				"login": "MCJEModder2026",
+				"commits": 1,
+				"funding": []
+			}
+		]
+	},
+	"history": 1
+}
